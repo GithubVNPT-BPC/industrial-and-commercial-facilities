@@ -1,0 +1,95 @@
+<mat-card class="material">
+    <mat-card-header>
+        <mat-card-title>
+            <strong>
+                Danh sách doanh nghiệp
+            </strong>
+        </mat-card-title>
+        <mat-card-subtitle>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="name_select">Tên công ty</label>
+                    <input id="name_select" class="form-control" [(ngModel)]="tempFilter.ten_doanh_nghiep" type="text" placeholder="Tên Doanh nghiệp" aria-label="Doanh nghiệp">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="selected_Career">Ngành nghề</label>
+                    <input id="selected_Career" class="form-control" [(ngModel)]="tempFilter.ten_nganh_nghe" type="text" placeholder="" aria-label="Doanh nghiệp">
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <label for="selectedAddress">Địa chỉ</label>
+                    <select class="form-control" name="" id="selectedAddress" [(ngModel)]="tempFilter.ten_quan_huyen">
+                        <option *ngFor="let address of addresses" [ngValue]="address">{{address}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-lg-4 button-control my-auto">
+                <button mat-raised-button class="form-button" (click)="filter()">Tìm kiếm</button>
+                <button mat-raised-button class="form-button" (click)="cancel()">Hủy</button>
+                <button mat-raised-button (click)="exportTOExcel('DanhSachDoanhNghiep','danh sach')">Xuất Excel</button>
+            </div>
+        </div>
+        <div class="layout" #TABLE>
+            <!-- <mat-form-field>
+            <mat-label>Lọc dữ liệu</mat-label>
+            <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field> -->
+
+            <table mat-table matTableFilter [exampleEntity]="filterEntity" [filterType]="filterType" [dataSource]="dataSource" class="table-layout" id="small-table1">
+
+                <ng-container matColumnDef="index" >
+                    <th mat-header-cell *matHeaderCellDef> STT
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ten_doanh_nghiep" sticky>
+                    <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
+                    <td mat-cell *matCellDef="let element" (click)="openDetailCompany(element.mst)" id="jump" class="text">
+                        {{element.ten_doanh_nghiep}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="mst">
+                    <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
+                    <td mat-cell *matCellDef="let element" class="number"> {{element.mst}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="dia_chi">
+                    <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                    <td mat-cell *matCellDef="let element" class="text"> {{element.dia_chi_day_du}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="dien_thoai">
+                    <th mat-header-cell *matHeaderCellDef> Điện thoại </th>
+                    <td mat-cell *matCellDef="let element" class="number"> {{element.dien_thoai}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ten_nganh_nghe">
+                    <th mat-header-cell *matHeaderCellDef> Tên ngành nghề - ngành nghề kinh doanh</th>
+                    <td mat-cell *matCellDef="let element" class="text"> {{element.ten_nganh_nghe}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="chi_tiet_doanh_nghiep">
+                    <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
+                    <td mat-cell *matCellDef="let element" id="jump">
+                        <mat-icon (click)="openDetailCompany(element.mst)">search</mat-icon>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+        <mat-paginator #scheduledOrdersPaginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons>
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

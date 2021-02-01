@@ -1,0 +1,283 @@
+<mat-card class="material">
+    <mat-card-header>
+        <div class="row col-lg-12" style="left: -35px;">
+            <mat-card-title class="col-lg-5">
+                <h3>Thông tin doanh nghiệp </h3>
+            </mat-card-title>
+            <div class="col-lg-7" style="text-align:right;">
+
+                <button mat-raised-button color="primary" (click)="onSubmit()">Cập nhật thông tin</button>
+                <button mat-raised-button
+                    [ngStyle]="{'background-color': 'green', 'color': 'white', 'margin-left': '5px'}" title=""
+                    (click)="openDialog(company.mst)">Danh sách cơ sở trực thuộc</button>
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div *ngIf="company">
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}" title=""
+                        (click)="openDialog(company.mst)">Danh sách cơ sở trực thuộc</button> -->
+                </div>
+                <div class="col-lg-6" style="text-align:right;">
+                    <!-- <button mat-raised-button color="primary" (click)="onSubmit()">Cập nhật thông tin</button> -->
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên doanh nghiệp</mat-label>
+                        <input matInput [formControl]="vall" placeholder="" [(ngModel)]="company.ten_doanh_nghiep"
+                            required>
+                        <mat-error *ngIf="vall.hasError('required')">
+                            Vui lòng nhập tên doanh nghiệp!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mã số thuế</mat-label>
+                        <input matInput [formControl]="vall1" placeholder="" [(ngModel)]="company.mst" required>
+                        <mat-error *ngIf="vall1.hasError('required')">
+                            Vui lòng nhập mã số thuế!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-2">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tổng số cơ sở trực thuộc</mat-label>
+                        <input matInput placeholder="" [(value)]="SLCSTT" disabled>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Người đại diện</mat-label>
+                        <input matInput [formControl]="vall2" placeholder="" [(ngModel)]="company.nguoi_dai_dien"
+                            required>
+                        <mat-error *ngIf="vall2.hasError('required')">
+                            Vui lòng nhập người đại diện!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tiêu chuẩn kinh doanh</mat-label>
+                        <textarea matInput [(ngModel)]="company.tieu_chuan_san_pham"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngành nghề</mat-label>
+                        <mat-select [(ngModel)]="company.id_nganh_nghe" [formControl]="vall3" required>
+                            <mat-option *ngFor="let item of career" [value]="item.ma_nganh_nghe">
+                                {{ item.ten_nganh_nghe }}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="vall3.hasError('required')">Vui lòng chọn ngành nghề!</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngành nghề kinh doanh</mat-label>
+                        <input matInput [formControl]="vall4" placeholder="" [(ngModel)]="company.nganh_nghe_kd"
+                            required>
+                        <mat-error *ngIf="vall4.hasError('required')">
+                            Vui lòng nhập ngành nghề kinh doanh!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số giấy Chứng nhận Đăng ký Kinh doanh</mat-label>
+                        <input matInput [formControl]="vall11" placeholder="" [(ngModel)]="company.so_giay_cndkkd"
+                            required>
+                        <mat-error *ngIf="vall.hasError('required')">
+                            Vui lòng nhập Số giấy Chứng nhận Đăng ký Kinh doanh!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field color="accent" appearance="outline">
+                        <mat-label>Ngày cấp GCNĐKKD</mat-label>
+                        <input matInput [matDatepicker]="date1" [(ngModel)]="company.ngay_cap_gcndkkd">
+                        <mat-datepicker-toggle matSuffix [for]="date1"></mat-datepicker-toggle>
+                        <mat-datepicker #date1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field color="accent" appearance="outline">
+                        <mat-label>Ngày bắt đầu kinh doanh</mat-label>
+                        <input matInput [matDatepicker]="date2" [(ngModel)]="company.ngay_bat_dau_kd">
+                        <mat-datepicker-toggle matSuffix [for]="date2"></mat-datepicker-toggle>
+                        <mat-datepicker #date2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Loại hình kinh doanh</mat-label>
+                        <mat-select [(ngModel)]="company.id_loai_hinh" [formControl]="vall5" required>
+                            <mat-option></mat-option>
+                            <mat-option *ngFor="let item of Business" [value]="item.id">
+                                {{item.ten_loai_hinh}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="vall5.hasError('required')">Vui lòng chọn loại hình kinh doanh!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số điện thoại</mat-label>
+                        <span style="top: -1px;" matPrefix>+84 &nbsp;&nbsp;</span>
+                        <input [formControl]="vall6" type="tel" matInput placeholder="" [(ngModel)]="company.dien_thoai"
+                            required>
+                        <mat-error *ngIf="vall6.hasError('required')">
+                            Vui lòng nhập số điện thoại!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email (Doanh nghiệp khai báo)</mat-label>
+                        <input matInput [formControl]="vall7" placeholder="" [(ngModel)]="company.email" required>
+                        <mat-error *ngIf="vall7.hasError('email') && !vall7.hasError('required')">
+                            Vui lòng nhập đúng định dạng Email!
+                        </mat-error>
+                        <mat-error *ngIf="vall7.hasError('required')">
+                            Vui lòng nhập Email!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Địa chỉ đường</mat-label>
+                        <input matInput [formControl]="vall8" placeholder="" [(ngModel)]="company.dia_chi" required>
+                        <mat-error *ngIf="vall8.hasError('required')">
+                            Vui lòng nhập địa chỉ đường!
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Phường-Xã</mat-label>
+                        <mat-select [(ngModel)]="company.id_phuong_xa" [formControl]=" vall9" required>
+                            <mat-option *ngFor="let item of subdistrict" [value]="item.id">{{item.ten_phuong_xa}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="vall9.hasError('required')">Vui lòng chọn Phường-Xã!</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số lao động</mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.so_lao_dong">
+                        <span matPrefix>Người&nbsp;&nbsp;</span>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Giới thiệu nhu cầu bán sản phẩm, mặt hàng</mat-label>
+                        <textarea matInput [(ngModel)]="company.nhu_cau_ban"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Giới thiệu nhu cầu mua sản phẩm, mặt hàng</mat-label>
+                        <textarea matInput [(ngModel)]="company.nhu_cau_mua"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Giới thiệu nhu cầu muốn hợp tác</mat-label>
+                        <textarea matInput [(ngModel)]="company.nhu_cau_hop_tac"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Sản lượng (DN khai báo)
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.san_luong">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Vốn kinh doanh</mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.von_kinh_doanh">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Công suất thiết kế (DN khai báo)
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.cong_suat_thiet_ke">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quy mô tài sản
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.quy_mo_tai_san">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Doanh thu
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.doanh_thu">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-4">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Lợi nhuận
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.loi_nhuan">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

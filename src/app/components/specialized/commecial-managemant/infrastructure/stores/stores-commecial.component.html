@@ -1,0 +1,275 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-6 col-lg-6">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng số cửa hàng:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <span>{{tongCuaHang}} cửa hàng</span>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-6 col-lg-6" *ngIf="filterModel.ngaycapgcn!=0">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số cửa hàng đăng ký chưng nhận
+                                    <span>{{filterModel.ngaycapgcn}}</span>:
+                                    <span>{{filteredDataSource.data.length}}</span>
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <!-- <div class="col-6 col-lg-6">
+                        <mat-card class="card5">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng số cửa hàng trong huyện năm {{year}} là: <span>0
+                                        cửa hàng</span>
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                            </mat-card-content>
+                        </mat-card>
+                    </div> -->
+                </div>
+
+                <div class="row">
+                    <!-- <div class="col-6 col-lg-6">
+                        <mat-card class="card4">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Hình thức kinh doanh:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Tổng số cửa hàng tiện lợi: <span>{{soCuaHangTL}}</span>
+                                    </li>
+                                    <li>
+                                        Tổng số cửa hàng khác: <span>{{soCuaHangKhac}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div> -->
+                    <!-- <div class="col-6 col-lg-6">
+                        <mat-card class="card4">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Thống kê số lượng cửa hàng theo năm:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content style="font-size: 13px;">
+                                <ul>
+                                    <li>
+                                        Tổng số cửa hàng hoạt động trong năm <span>{{year}}</span> là:
+                                        <span>{{soCuaHangDauTuTrongNam}}</span>
+                                    </li>
+                                    <li>
+                                        Số cửa hàng hoạt động trong năm <span>{{year}}</span> so với năm trước là:
+                                        <span>{{soCuaHangDauTuTrongNam - soCuaHangDauTuNamTruoc}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div> -->
+                </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Thời gian đăng ký GCNATTP</mat-label>
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.ngaycapgcn">
+                                <mat-option *ngFor='let year of years' [value]='year.value'>{{year.text}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen"
+                                multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <!-- <div class="col-3 col-lg-3"> -->
+                    <!-- <mat-form-field appearance="outline">
+                            <mat-label>Kiểu sắp xếp</mat-label>
+                            <mat-select (selectionChange)="sortHeaderCondition($event.value)" [value]="'dientich'">
+                                <mat-option *ngFor='let header of headerArray' [value]='header'>{{header}}</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+                    <!-- </div> -->
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyFilter()" [(ngModel)]="isChecked">Cửa hàng hết hạn CNATTP
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div>
+
+                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
+                    <!-- <mat-form-field class="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
+                    </mat-form-field> -->
+
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
+
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell style="text-align: center;" *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tencuahang" sticky>
+                            <th mat-header-cell style="text-align: center;" *matHeaderCellDef>Tên cửa hàng tiện lợi</th>
+                            <td mat-cell *matCellDef="let element"> {{element.tencuahang}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sanphamkinhdoanh">
+                            <th mat-header-cell *matHeaderCellDef> Sản phẩm kinh doanh </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.sanphamkinhdoanh}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="scndkkd">
+                            <th mat-header-cell *matHeaderCellDef> Số CNĐKKD </th>
+                            <td mat-cell *matCellDef="let element">{{element.scndkkd}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngaycap">
+                            <th mat-header-cell *matHeaderCellDef> Ngày cấp</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ngaycap|date:'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="noicap">
+                            <th mat-header-cell *matHeaderCellDef> Nơi cấp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.noicap}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="diachi">
+                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.diachi}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sogcn">
+                            <th mat-header-cell *matHeaderCellDef> Số giấy chứng nhận </th>
+                            <td mat-cell *matCellDef="let element"> {{element.sogcn}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngaycapgcn">
+                            <th mat-header-cell *matHeaderCellDef> Ngày cấp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngaycapgcn|date:'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngayhethangcn">
+                            <th mat-header-cell *matHeaderCellDef> Ngày hết hạn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngayhethangcn|date:'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sdtlienhe">
+                            <th mat-header-cell *matHeaderCellDef> SĐT liên hệ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.sdtlienhe}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="stt1">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1">
+                        </ng-container>
+
+                        <ng-container matColumnDef="tch">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="spkd">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cndkkd">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="3">
+                                Chứng nhận đăng ký KD</th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="diachim">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1">
+                        </ng-container>
+
+                        <ng-container matColumnDef="cnddkattp">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="3">
+                                Giấy chứng nhận đủ điều kiện ATTP</th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="sdtm">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1">
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header"
+                            *matHeaderRowDef="['stt1','tch', 'spkd','cndkkd','diachim','cnddkattp','sdtm']; sticky: true">
+                        </tr>
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,9 @@
+<div mat-dialog-content>
+  <p>{{message}}?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button [ngStyle]="{'background-color': 'red', 'color': 'white'}"
+    [mat-dialog-close]="data_close.no_confirm">Bỏ qua</button>
+  <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
+    [mat-dialog-close]="data_close.confirm">Xác nhận</button>
+</div>

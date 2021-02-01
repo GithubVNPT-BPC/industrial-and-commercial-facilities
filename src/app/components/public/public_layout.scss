@@ -1,0 +1,194 @@
+.mat-card.material {
+  $blue: #1f7ed0;
+  $white: white;
+  .mat-card-header {
+    text-align: center;
+    display: initial;
+    .mat-card-title {
+      strong {
+        color: $blue;
+      }
+    }
+  }
+  .mat-card-content {
+    .mat-form-field {
+      width: 100%;
+    }
+    strong {
+      color: $blue;
+    }
+    .mat-paginator {
+      display: flex;
+      align-items: center;
+      // justify-content: flex-end;
+      min-height: 30px;
+      width: 100%;
+    }
+    .row {
+      .table td {
+        width: 100%;
+        vertical-align: middle;
+        input {
+          border: none;
+          font-size: 15px;
+          width: 100%;
+          height: 100%;
+          background-color: $white !important;
+        }
+        select {
+          border: none;
+          font-size: 15px;
+          width: 100%;
+          height: 100%;
+          background-color: $white !important;
+        }
+      }
+    }
+    .button-control {
+      text-align: right;
+      margin-bottom: 10px;
+      button.mat-raised-button {
+        background-color: $blue !important;
+        color: $white !important;
+        margin: auto 3px;
+        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+      }
+      button.mat-raised-button.reverse {
+        background-color: $white !important;
+        color: $blue !important;
+      }
+    }
+    .button-control.-align-left {
+      text-align: left;
+    }
+    .layout {
+      max-width: 100%;
+      max-height: 590px;
+      overflow: auto;
+      table.mat-table.table-layout {
+        width: 550%;
+        table-layout: initial;
+        th,
+        td {
+          padding-left: 5px !important;
+          padding-right: 5px !important;
+          max-width: 130px!important;
+        }
+        .text{
+          text-align: left!important;
+        }
+        .number{
+          text-align: right!important;
+          width: 110px !important;
+        }
+        .mat-header-cell {
+          background-color: $blue;
+          color: $white;
+          padding: 5px !important;
+          border: 1px solid black;
+          font-weight: bold;
+          font-size: 15px;
+          text-align: center;
+          height: 77.6px;
+        }
+        .mat-footer-cell {
+          border: 1px solid black;
+          padding: 5px !important;
+          text-align: center;
+          font-weight: bolder;
+        }
+        .left-cell {
+          text-align: left !important;
+        }
+        .right-cell {
+          text-align: right !important;
+        }
+        .mat-cell {
+          padding: 5px !important;
+          border: 1px solid black;
+          font-size: 14px;
+          text-align: center;
+          max-width: 350px;
+          height: 30px;
+          input {
+            border: none;
+            font-size: 15px;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+          }
+          input:focus {
+            background-color: $blue;
+            color: $white;
+            font-size: 1.5em;
+            text-align: center;
+          }
+        }
+        #jump {
+          cursor: zoom-in;
+          color: blue;
+        }
+        select {
+          border: none;
+          font-size: 15px;
+          width: 100%;
+          height: 100%;
+          text-align-last: center;
+        }
+      }
+    }
+  }
+  #import_excel {
+    background-color: $blue !important;
+    color: $white !important;
+    font-weight: 500 !important;
+    box-sizing: border-box;
+    position: relative;
+    outline: 0;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-block;
+    white-space: nowrap;
+    text-decoration: none;
+    vertical-align: baseline;
+    text-align: center;
+    min-width: 64px;
+    line-height: 36px;
+    padding: 0 16px;
+    border-radius: 4px;
+    overflow: visible;
+    transform: translate3d(0, 0, 0);
+    transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    .mat-icon {
+      vertical-align: middle;
+    }
+  }
+
+  .table-layout#small-table {
+    width: 100%;
+  }
+
+  .table-layout#small-table1 {
+    width: 150%;
+  }
+
+  .table-layout#small-table2 {
+    width: 200%;
+  }
+
+  #filter {
+    width: 100%;
+  }
+
+  #filter1 {
+    width: 150%;
+  }
+
+  #filter2 {
+    width: 200%;
+  }
+
+  #large-filter {
+    width: 550%;
+  }
+}

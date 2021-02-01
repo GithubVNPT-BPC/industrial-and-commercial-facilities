@@ -1,0 +1,178 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng doanh nghiệp:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{soLuongDoanhNghiep| number: '1.0-0':'vi'}} doanh nghiệp
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng doanh nghiệp hết hạn:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{soLuongDoanhNghiepExpired| number: '1.0-2':'vi'}} doanh nghiệp
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon>
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{congXuat| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon>
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{sanluongnam| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'> {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_doanh_nghiep" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_doanh_nghiep}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dia_diem">
+                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dia_chi}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="so_dien_thoai">
+                            <th mat-header-cell *matHeaderCellDef> Điện thoại </th>
+                            <td mat-cell *matCellDef="let element"> {{element.so_dien_thoai}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="so_giay_phep">
+                            <th mat-header-cell *matHeaderCellDef>Số Giấy phép</th>
+                            <td mat-cell *matCellDef="let element"> {{element.so_giay_phep}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngay_cap">
+                            <th mat-header-cell *matHeaderCellDef>Ngày cấp</th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_cap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngay_het_han">
+                            <th mat-header-cell *matHeaderCellDef>Ngày hết hạn</th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_het_han}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </mat-card-content>
+</mat-card>

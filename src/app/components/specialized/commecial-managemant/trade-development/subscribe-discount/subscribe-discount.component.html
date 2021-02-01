@@ -1,0 +1,194 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng số DN đăng ký KM trong năm:
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{countBusiness() | number: '1.0-0':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng số CTKM trong năm:
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{this.filteredDataSource.data.length | number: '1.0-0':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng giá trị KM trong năm:
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{sumvalues | number: '1.0-0':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select #dSelect (selectionChange)="applyFilter()" [(ngModel)]="filterModel.Id_quan_huyen" multiple>
+                                <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hình thức KM</mat-label>
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.Hinh_thuc_KM" multiple>
+                                <mat-option *ngFor='let sdtype of sdtypes' [value]='sdtype'>
+                                    {{sdtype}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div>
+
+                <div *ngIf="dataSource.data.length; else ShowEmpty" class="layout" #TABLE>
+                    <mat-form-field id="filter3">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Ten_doanh_nghiep" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Ten_doanh_nghiep}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Dia_chi">
+                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Dia_chi}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Ma_so_thue">
+                            <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Ma_so_thue}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Ten_chuong_trinh_KM">
+                            <th mat-header-cell *matHeaderCellDef> Tên chương trình KM </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Ten_chuong_trinh_KM}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Thoi_gian_KM">
+                            <th mat-header-cell *matHeaderCellDef> Thời gian KM </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Thoi_gian_KM}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Hang_hoa_dung_de_KM">
+                            <th mat-header-cell *matHeaderCellDef> Hàng hóa dùng để KM </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Hang_hoa_dung_de_KM}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Dia_diem_KM">
+                            <th mat-header-cell *matHeaderCellDef> Địa điểm KM </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Dia_diem_KM}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Hinh_thuc_KM">
+                            <th mat-header-cell *matHeaderCellDef> Hình thức KM </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Hinh_thuc_KM}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="So_Van_ban">
+                            <th mat-header-cell *matHeaderCellDef> Số văn bản </th>
+                            <td mat-cell *matCellDef="let element"> {{element.So_Van_ban}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Co_quan_ban_hanh">
+                            <th mat-header-cell *matHeaderCellDef> Cơ quan ban hành </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Co_quan_ban_hanh}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Ngay_thang_nam">
+                            <th mat-header-cell *matHeaderCellDef> Ngày tháng năm </th>
+                            <td mat-cell *matCellDef="let element"> {{element.Ngay_thang_nam}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="['index', 'Ten_doanh_nghiep', 'Dia_chi', 'Ma_so_thue', 'Ten_chuong_trinh_KM', 'Thoi_gian_KM',
+                            'Hang_hoa_dung_de_KM', 'Dia_diem_KM', 'Hinh_thuc_KM', 'So_Van_ban', 'Co_quan_ban_hanh', 'Ngay_thang_nam']; sticky : true">
+                        </tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100, 1000]" showFirstLastButtons></mat-paginator>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </mat-card-content>
+</mat-card>

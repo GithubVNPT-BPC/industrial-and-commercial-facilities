@@ -1,0 +1,213 @@
+<h3>Quản lý năng lượng - Tổng quan</h3>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z1 tble-common" style="width: 100%;">
+  <ng-container matColumnDef="stt">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder; padding: 0; text-align: center;"> STT </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; padding: 0; text-align: center;"> {{element.stt}}
+    </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef style="border: 1px solid; background-color: blue;font-weight: bolder"></th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: left; padding-left: 1em;">
+      {{element.name}} </td>
+  </ng-container>
+
+  <!-- T1 Column -->
+  <ng-container matColumnDef="t1">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 1 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t1}} </td>
+  </ng-container>
+  <!-- T2 Column -->
+  <ng-container matColumnDef="t2">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 2 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t2}} </td>
+  </ng-container>
+  <!-- T3 Column -->
+  <ng-container matColumnDef="t3">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 3 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t3}} </td>
+  </ng-container>
+  <!-- T4 Column -->
+  <ng-container matColumnDef="t4">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 4 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t4}} </td>
+  </ng-container>
+  <!-- T5 Column -->
+  <ng-container matColumnDef="t5">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 5 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t5}} </td>
+  </ng-container>
+  <!-- T6 Column -->
+  <ng-container matColumnDef="t6">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 6 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t6}} </td>
+  </ng-container>
+  <!-- T7 Column -->
+  <ng-container matColumnDef="t7">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 7 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t7}} </td>
+  </ng-container>
+  <!-- T8 Column -->
+  <ng-container matColumnDef="t8">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 8 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t8}} </td>
+  </ng-container>
+  <!-- T9 Column -->
+  <ng-container matColumnDef="t9">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 9 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t9}} </td>
+  </ng-container>
+  <!-- T10 Column -->
+  <ng-container matColumnDef="t10">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 10 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t10}} </td>
+  </ng-container>
+  <!-- T11 Column -->
+  <ng-container matColumnDef="t11">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 11 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t11}} </td>
+  </ng-container>
+  <!-- T12 Column -->
+  <ng-container matColumnDef="t12">
+    <th mat-header-cell *matHeaderCellDef
+      style="border: 1px solid; background-color: blue;font-weight: bolder;text-align: center;"> Tháng 12 </th>
+    <td mat-cell *matCellDef="let element" style="border: 1px solid; text-align: center;"> {{element.t12}} </td>
+  </ng-container>
+
+  <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<br />
+<div class="example-action-buttons" style="padding: 1em;">
+  <button mat-flat-button color="primary" (click)="accordion.openAll()" style="margin-right: 1em;">Xem tất cả</button>
+  <button mat-flat-button color="warn" (click)="accordion.closeAll()">Đóng lại</button>
+</div>
+<mat-accordion class="accord" multi>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        I. Lĩnh vực về Năng lượng - Thủy điện.
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          1. Thủy điện
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          2. Năng lượng mặt trời
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <div style="margin: 1em 0;">
+      <button mat-flat-button color="warn" [routerLink]="['../hydroelectric']">Chi tiết
+        <mat-icon>trending_flat</mat-icon>
+      </button>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        II. Phát triển điện
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          1. Tỷ lệ hộ sử dụng điện
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          2. Tiêu chí Phát triển điện
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+            ...
+            <mat-icon>trending_flat</mat-icon>
+          </mat-panel-description> -->
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          3. Hạ tầng Phát triển điện
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+            ...
+            <mat-icon>trending_flat</mat-icon>
+          </mat-panel-description> -->
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <div style="margin: 1em 0;">
+      <button mat-flat-button color="warn" [routerLink]="['../countryside_electric']">Chi tiết
+        <mat-icon>trending_flat</mat-icon>
+      </button>
+    </div>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        III. Cơ sở sử dụng năng lượng trọng điểm
+      </mat-panel-title>
+      <mat-panel-description>
+
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          1. Năng lượng tiêu thụ/Năng lượng quy đổi (theo ngành SX)
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+                ...
+                <mat-icon>trending_flat</mat-icon>
+              </mat-panel-description> -->
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          2. Suất năng lượng tiêu thụ/1 đơn vị sản phẩm.
+        </mat-panel-title>
+        <!-- <mat-panel-description>
+                ...
+                <mat-icon>trending_flat</mat-icon>
+              </mat-panel-description> -->
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <div style="margin: 1em 0;">
+      <button mat-flat-button color="warn" [routerLink]="['../focused_energy']">Chi tiết
+        <mat-icon>trending_flat</mat-icon>
+      </button>
+    </div>
+
+  </mat-expansion-panel>
+</mat-accordion>

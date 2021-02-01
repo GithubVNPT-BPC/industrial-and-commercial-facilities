@@ -1,0 +1,16 @@
+<div>
+    <app-topbar [sidebar]="sidebar" [typeOfUser]=4 [module]=MODULE04></app-topbar>
+
+<mat-sidenav-container class="sidenav-container">
+    
+    <mat-sidenav #sidebar mode="side" opened>
+        <app-sidebar [typeOfSideBar]=4></app-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'" style="margin-left: 200px;">
+        <div class="main_content" style="margin: 20px; height: 84vh;">
+            <router-outlet></router-outlet>
+            <app-footer></app-footer>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+</div>

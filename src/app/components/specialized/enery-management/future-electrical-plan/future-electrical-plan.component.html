@@ -1,0 +1,845 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng trạm biến áp 110KV:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tba110KVDataSource.data.length| number: '1.0-0':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng trạm biến áp 220KV:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tba220KVDataSource.data.length| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng trạm biến áp 500KV:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tba500KVDataSource.data.length| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng đường dây 110KV:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{dd110KVDataSource.data.length| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng đường dây 220KV:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{dd220KVDataSource.data.length| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-3">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Số lượng đường dây 500KV:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{dd500KVDataSource.data.length| number: '1.0-2':'vi'}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>Trạm biến áp 110KV</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+                    
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="tba110KVDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 1)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="tba110KVDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tram" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên trạm biến áp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_tram}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="duong_day_so_mach">
+                            <th mat-header-cell *matHeaderCellDef> Đường dây </th>
+                            <td mat-cell *matCellDef="let element"> {{element.duong_day_so_mach}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tba">
+                            <th mat-header-cell *matHeaderCellDef> TBA (MVA) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tba}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tiet_dien_day_dan">
+                            <th mat-header-cell *matHeaderCellDef> Tiết diện dây dẫn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tiet_dien_day_dan}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_ap">
+                            <th mat-header-cell *matHeaderCellDef> Điện áp (kV) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_ap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chieu_dai">
+                            <th mat-header-cell *matHeaderCellDef> Chiều dài (km) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chieu_dai}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_max">
+                            <th mat-header-cell *matHeaderCellDef> PMax (MW) </th>
+                            <td mat-cell *matCellDef="let element">{{element.p_max}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_min">
+                            <th mat-header-cell *matHeaderCellDef> PMin (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_min}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_tb">
+                            <th mat-header-cell *matHeaderCellDef> Ptb (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_tb }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mang_tai">
+                            <th mat-header-cell *matHeaderCellDef> Mang tải (%)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="trang_thai_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.trang_thai_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>Trạm biến áp 220KV</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+                    
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="tba220KVDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 2)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="tba220KVDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tram" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên trạm biến áp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_tram}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="duong_day_so_mach">
+                            <th mat-header-cell *matHeaderCellDef> Đường dây </th>
+                            <td mat-cell *matCellDef="let element"> {{element.duong_day_so_mach}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tba">
+                            <th mat-header-cell *matHeaderCellDef> TBA (MVA) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tba}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tiet_dien_day_dan">
+                            <th mat-header-cell *matHeaderCellDef> Tiết diện dây dẫn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tiet_dien_day_dan}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_ap">
+                            <th mat-header-cell *matHeaderCellDef> Điện áp (kV) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_ap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chieu_dai">
+                            <th mat-header-cell *matHeaderCellDef> Chiều dài (km) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chieu_dai}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_max">
+                            <th mat-header-cell *matHeaderCellDef> PMax (MW) </th>
+                            <td mat-cell *matCellDef="let element">{{element.p_max}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_min">
+                            <th mat-header-cell *matHeaderCellDef> PMin (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_min}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_tb">
+                            <th mat-header-cell *matHeaderCellDef> Ptb (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_tb }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mang_tai">
+                            <th mat-header-cell *matHeaderCellDef> Mang tải (%)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="trang_thai_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.trang_thai_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>Trạm biến áp 500KV</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+                    
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="tba500KVDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 3)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="tba500KVDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tram" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên trạm biến áp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_tram}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="duong_day_so_mach">
+                            <th mat-header-cell *matHeaderCellDef> Đường dây </th>
+                            <td mat-cell *matCellDef="let element"> {{element.duong_day_so_mach}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tba">
+                            <th mat-header-cell *matHeaderCellDef> TBA (MVA) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tba}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tiet_dien_day_dan">
+                            <th mat-header-cell *matHeaderCellDef> Tiết diện dây dẫn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tiet_dien_day_dan}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_ap">
+                            <th mat-header-cell *matHeaderCellDef> Điện áp (kV) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_ap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chieu_dai">
+                            <th mat-header-cell *matHeaderCellDef> Chiều dài (km) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chieu_dai}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_max">
+                            <th mat-header-cell *matHeaderCellDef> PMax (MW) </th>
+                            <td mat-cell *matCellDef="let element">{{element.p_max}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_min">
+                            <th mat-header-cell *matHeaderCellDef> PMin (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_min}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_tb">
+                            <th mat-header-cell *matHeaderCellDef> Ptb (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_tb }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mang_tai">
+                            <th mat-header-cell *matHeaderCellDef> Mang tải (%)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="trang_thai_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.trang_thai_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>Đường dây 110KV</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+                    
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="dd110KVDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 4)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="dd110KVDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tram" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên trạm biến áp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_tram}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="duong_day_so_mach">
+                            <th mat-header-cell *matHeaderCellDef> Số mạch </th>
+                            <td mat-cell *matCellDef="let element"> {{element.duong_day_so_mach}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tba">
+                            <th mat-header-cell *matHeaderCellDef> TBA (MVA) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tba}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tiet_dien_day_dan">
+                            <th mat-header-cell *matHeaderCellDef> Tiết diện dây dẫn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tiet_dien_day_dan}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_ap">
+                            <th mat-header-cell *matHeaderCellDef> Điện áp (kV) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_ap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chieu_dai">
+                            <th mat-header-cell *matHeaderCellDef> Chiều dài (km) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chieu_dai}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_max">
+                            <th mat-header-cell *matHeaderCellDef> PMax (MW) </th>
+                            <td mat-cell *matCellDef="let element">{{element.p_max}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_min">
+                            <th mat-header-cell *matHeaderCellDef> PMin (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_min}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_tb">
+                            <th mat-header-cell *matHeaderCellDef> Ptb (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_tb }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mang_tai">
+                            <th mat-header-cell *matHeaderCellDef> Mang tải (%)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="trang_thai_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.trang_thai_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>Đường dây 220KV</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+                    
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="dd220KVDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 5)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="dd220KVDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tram" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên trạm biến áp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_tram}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="duong_day_so_mach">
+                            <th mat-header-cell *matHeaderCellDef> Số mạch </th>
+                            <td mat-cell *matCellDef="let element"> {{element.duong_day_so_mach}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tba">
+                            <th mat-header-cell *matHeaderCellDef> TBA (MVA) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tba}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tiet_dien_day_dan">
+                            <th mat-header-cell *matHeaderCellDef> Tiết diện dây dẫn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tiet_dien_day_dan}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_ap">
+                            <th mat-header-cell *matHeaderCellDef> Điện áp (kV) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_ap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chieu_dai">
+                            <th mat-header-cell *matHeaderCellDef> Chiều dài (km) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chieu_dai}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_max">
+                            <th mat-header-cell *matHeaderCellDef> PMax (MW) </th>
+                            <td mat-cell *matCellDef="let element">{{element.p_max}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_min">
+                            <th mat-header-cell *matHeaderCellDef> PMin (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_min}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_tb">
+                            <th mat-header-cell *matHeaderCellDef> Ptb (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_tb }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mang_tai">
+                            <th mat-header-cell *matHeaderCellDef> Mang tải (%)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="trang_thai_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.trang_thai_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>Đường dây 500KV</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <!-- <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getValueOfHydroElectric($event.value)" [value]="2020">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3 checkbox">
+                        <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Thuỷ điện đang xây dựng
+                        </mat-checkbox>
+                    </div>
+                    
+                    <div class="col-3 col-lg-3 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div> -->
+
+                <div class="layout" *ngIf="dd500KVDataSource.data.length; else ShowEmpty" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event, 6)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="dd500KVDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tram" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên trạm biến áp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_tram}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="duong_day_so_mach">
+                            <th mat-header-cell *matHeaderCellDef> Số mạch </th>
+                            <td mat-cell *matCellDef="let element"> {{element.duong_day_so_mach}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tba">
+                            <th mat-header-cell *matHeaderCellDef> TBA (MVA) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tba}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tiet_dien_day_dan">
+                            <th mat-header-cell *matHeaderCellDef> Tiết diện dây dẫn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.tiet_dien_day_dan}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_ap">
+                            <th mat-header-cell *matHeaderCellDef> Điện áp (kV) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_ap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chieu_dai">
+                            <th mat-header-cell *matHeaderCellDef> Chiều dài (km) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.chieu_dai}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_max">
+                            <th mat-header-cell *matHeaderCellDef> PMax (MW) </th>
+                            <td mat-cell *matCellDef="let element">{{element.p_max}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_min">
+                            <th mat-header-cell *matHeaderCellDef> PMin (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_min}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="p_tb">
+                            <th mat-header-cell *matHeaderCellDef> Ptb (MW) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.p_tb }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mang_tai">
+                            <th mat-header-cell *matHeaderCellDef> Mang tải (%)</th>
+                            <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="trang_thai_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.trang_thai_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động' }}
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+
+                </div>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </mat-card-content>
+</mat-card>

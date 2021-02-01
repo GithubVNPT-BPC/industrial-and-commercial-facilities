@@ -1,0 +1,335 @@
+.mat-card.material {
+  margin-bottom: 30px;
+}
+.mat-card.material .mat-card-header {
+  text-align: center;
+  display: initial;
+}
+.mat-card.material .mat-card-header .mat-card-title strong {
+  color: #1f7ed0;
+}
+.mat-card.material .mat-card-content .bold {
+  font-weight: bold;
+}
+.mat-card.material .mat-card-content .card-default {
+  margin-top: 5px;
+}
+.mat-card.material .mat-card-content .card-default .mat-card-header .mat-card-title {
+  margin-bottom: 5px;
+  font-size: 15px;
+  text-align: left !important;
+}
+.mat-card.material .mat-card-content .card-default .mat-card-content {
+  font-size: 15px;
+}
+.mat-card.material .mat-card-content .card-default .mat-card-content ul {
+  list-style-type: square;
+  justify-content: center;
+}
+.mat-card.material .mat-card-content .card-default .mat-card-content span {
+  font-weight: bolder;
+  color: #1f7ed0;
+  text-align: center;
+}
+.mat-card.material .mat-card-content .card1 {
+  margin-top: 5px;
+  min-height: 115px;
+  height: fit-content;
+}
+.mat-card.material .mat-card-content .card1 .mat-card-header .mat-card-title {
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+.mat-card.material .mat-card-content .card1 .mat-card-content {
+  font-size: 22px;
+  text-align: center;
+  font-weight: bolder;
+  color: #1f7ed0;
+}
+.mat-card.material .mat-card-content .card1 .mat-card-subtitle {
+  font-size: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+.mat-card.material .mat-card-content .card2 {
+  margin-top: 5px;
+  height: 125px;
+}
+.mat-card.material .mat-card-content .card2 .mat-card-header .mat-card-title {
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+.mat-card.material .mat-card-content .card2 .mat-card-content {
+  font-size: 18px;
+  text-align: center;
+  font-weight: bolder;
+  color: #1f7ed0;
+}
+.mat-card.material .mat-card-content .card2 .mat-card-subtitle {
+  font-size: 10px;
+  text-align: center;
+  font-weight: bold;
+}
+.mat-card.material .mat-card-content .card3 {
+  margin-top: 5px;
+}
+.mat-card.material .mat-card-content .card3 .detail-img {
+  width: 500px;
+  height: 300px;
+}
+.mat-card.material .mat-card-content #card4-1 {
+  height: 120px !important;
+}
+.mat-card.material .mat-card-content #card4-2 {
+  height: 160px !important;
+}
+.mat-card.material .mat-card-content #card4-3 {
+  height: 140px !important;
+}
+.mat-card.material .mat-card-content .card4 {
+  margin-top: 5px;
+  height: 100px;
+}
+.mat-card.material .mat-card-content .card4 .mat-card-header .mat-card-title {
+  margin-bottom: 5px;
+  font-size: 15px;
+  text-align: left !important;
+}
+.mat-card.material .mat-card-content .card4 .mat-card-content {
+  font-size: 15px;
+}
+.mat-card.material .mat-card-content .card4 .mat-card-content ul {
+  list-style-type: square;
+  justify-content: center;
+}
+.mat-card.material .mat-card-content .card4 .mat-card-content span {
+  font-weight: bolder;
+  color: #1f7ed0;
+}
+.mat-card.material .mat-card-content .card4 .mat-card-subtitle {
+  font-size: 10px;
+  font-weight: bold;
+}
+.mat-card.material .mat-card-content .card5 {
+  margin-top: 5px;
+  height: 60px;
+}
+.mat-card.material .mat-card-content .card5 .mat-card-header .mat-card-title {
+  margin-bottom: 5px;
+  font-size: 15px;
+  text-align: left !important;
+}
+.mat-card.material .mat-card-content .card5 .mat-card-header .mat-card-title span {
+  font-weight: bolder;
+  color: #1f7ed0;
+}
+.mat-card.material .mat-card-content .mat-form-field {
+  width: 100%;
+}
+.mat-card.material .mat-card-content strong {
+  color: #1f7ed0;
+}
+.mat-card.material .mat-card-content .mat-paginator {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 30px;
+  width: 100%;
+}
+.mat-card.material .mat-card-content .checkbox {
+  margin-top: 17px;
+  text-align: center;
+}
+.mat-card.material .mat-card-content .button-control {
+  text-align: right;
+  margin-bottom: 10px;
+}
+.mat-card.material .mat-card-content .button-control button.mat-raised-button {
+  background-color: #1f7ed0 !important;
+  color: white !important;
+  margin-right: 5px;
+  margin-top: 10px;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.mat-card.material .mat-card-content .button-control button.mat-raised-button.reverse {
+  background-color: white !important;
+  color: #1f7ed0 !important;
+}
+.mat-card.material .mat-card-content .button-control.-align-left {
+  text-align: left;
+}
+.mat-card.material .mat-card-content .layout, .mat-card.material .mat-card-content .exist-data {
+  margin-bottom: 2em;
+  max-width: 100%;
+  max-height: 590px;
+  overflow: auto;
+}
+.mat-card.material .mat-card-content .layout .table-header, .mat-card.material .mat-card-content .exist-data .table-header {
+  height: 30px !important;
+}
+.mat-card.material .mat-card-content .layout .table-row, .mat-card.material .mat-card-content .exist-data .table-row {
+  height: 30px !important;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout {
+  border-collapse: separate;
+  width: 550%;
+  table-layout: initial;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout th,
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout td, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout th,
+.mat-card.material .mat-card-content .exist-data table.mat-table.table-layout td {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .img-zoom, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .img-zoom {
+  transition: transform 0.2s;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .img-zoom:hover, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .img-zoom:hover {
+  transform: scale(3);
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .mat-header-cell, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .mat-header-cell {
+  background-color: #1f7ed0;
+  color: white;
+  padding: 5px !important;
+  border: 0.01em solid silver;
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+  z-index: -5;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .mat-footer-cell, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .mat-footer-cell {
+  border: 0.01em solid silver;
+  padding: 5px !important;
+  text-align: center;
+  font-weight: bolder;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .center-cell, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .center-cell {
+  text-align: center !important;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .right-cell, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .right-cell {
+  text-align: right !important;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .mat-cell, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .mat-cell {
+  border-width: 1px;
+  border: 0.01em solid silver;
+  font-size: 12px;
+  text-align: left;
+  max-width: 350px;
+  padding: 5px !important;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .mat-cell input, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .mat-cell input {
+  border: none;
+  font-size: 15px;
+  width: 100%;
+  height: 100%;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout .mat-cell input:focus, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout .mat-cell input:focus {
+  background-color: #1f7ed0;
+  color: white;
+  font-size: 1.5em;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout #jump, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout #jump {
+  cursor: zoom-in;
+}
+.mat-card.material .mat-card-content .layout table.mat-table.table-layout select, .mat-card.material .mat-card-content .exist-data table.mat-table.table-layout select {
+  border: none;
+  font-size: 15px;
+  width: 100%;
+  height: 100%;
+  text-align-last: center;
+}
+.mat-card.material #import_excel {
+  background-color: #1f7ed0 !important;
+  color: white !important;
+  font-weight: 500 !important;
+  box-sizing: border-box;
+  position: relative;
+  outline: 0;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  text-align: center;
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+  border-radius: 4px;
+  overflow: visible;
+  transform: translate3d(0, 0, 0);
+  transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mat-card.material #import_excel .mat-icon {
+  vertical-align: middle;
+}
+.mat-card.material .table-layout#small-table {
+  width: 100%;
+}
+.mat-card.material .table-layout#small-table1 {
+  width: 150%;
+}
+.mat-card.material .table-layout#small-table2 {
+  width: 200%;
+}
+.mat-card.material .table-layout#small-table3 {
+  width: 300%;
+}
+.mat-card.material #filter {
+  width: 100%;
+}
+.mat-card.material #filter1 {
+  width: 150%;
+}
+.mat-card.material #filter2 {
+  width: 200%;
+}
+.mat-card.material #filter3 {
+  width: 300%;
+}
+.mat-card.material #large-filter {
+  width: 550%;
+}
+.mat-card.material .hightlight {
+  font-weight: bolder;
+}
+
+.label-upload {
+  background-color: #1f7ed0;
+  color: white;
+  padding: 0.5em;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin: 1em;
+  display: inline-flex;
+}
+
+table.sjs-table > tbody > tr > td {
+  border: 1px solid;
+}
+
+.button-close {
+  margin: 1em 0;
+  background-color: #1f7ed0;
+  color: white;
+  font-family: sans-serif;
+  box-shadow: none;
+}
+
+.no-data {
+  display: none;
+}
+
+.exist-data {
+  display: block;
+}
+
+.content-dialog {
+  display: block;
+  margin: 0px -24px;
+  padding: 0 24px;
+  max-height: 80vh;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}

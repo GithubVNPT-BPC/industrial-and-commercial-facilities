@@ -1,0 +1,41 @@
+th,
+td {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}
+
+.mat-header-cell {
+    background-color: deepskyblue;
+    text-align: center;
+    border: 1px solid black;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.mat-cell {
+    text-align: center;
+    border: 1px solid black;
+}
+
+.mat-table {
+    border: 1px solid black;
+}
+
+::selection {
+    color: blue;
+    background: greenyellow;
+}
+
+.mat-form-field {
+    font-size: 15px;
+    width: 100%;
+}
+
+.form-button {
+    top: 33%;
+    position: absolute;
+    // width: 75%;
+}
+a{
+    cursor: pointer;
+}

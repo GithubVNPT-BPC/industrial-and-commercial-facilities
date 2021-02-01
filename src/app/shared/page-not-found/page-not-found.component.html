@@ -1,0 +1,21 @@
+<div id="notfound">
+    <div class="notfound-bg"></div>
+    <div class="notfound">
+        <div class="notfound-404">
+            <h1>404</h1>
+        </div>
+        <h2>Oh! Trang bạn đang truy cập <br> không tồn tại</h2>
+        <form class="notfound-search">
+            <input type="text" placeholder="Gửi thông tin đến Quản trị">
+            <button type="button" (click)="SendRequest()">Gửi</button>
+        </form>
+        <div class="notfound-social">
+           <i class="fa fa-facebook"></i> 
+            <i class="fa fa-twitter"></i> 
+             <i class="fa fa-pinterest"></i> 
+             <i class="fa fa-google-plus"></i> 
+        </div>
+        <button mat-raised-button [ngStyle]="{'background-color': 'blue', 'color': 'white'}"
+        (click)="GoBack()">Quay lại</button>
+    </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="row">
+
+</div>
+<div class="row">
+    <p-treeTable #tt [value]="tableRows" [columns]="cols">
+        <ng-template pTemplate="caption">
+            <div class="row">
+                <div class="col-xl">
+                    <div class="form-group">
+                        <label for="type_select">Loại báo cáo</label>
+                        <select class="form-control" name="" id="type_select" (change)="changeReportType()" [(ngModel)]="selectedType">
+                            <option *ngFor="let type of reportTypes" [ngValue]="type?.obj_id">{{type?.obj_name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xl">
+                    <div class="form-group">
+                        <label for="period_select">Kỳ báo cáo</label>
+                        <select class="form-control" name="" id="period_select" (change)="changePeriod()" [(ngModel)]="selectedPeriod">
+                            <option *ngFor="let period of periods" [ngValue]="period">{{period.kybaocao}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
+                    {{col.header}}
+                </th>
+            </tr>
+            <tr>
+                <th *ngFor="let col of columns">
+                    <input pInputText *ngIf="col.field != 'IND_NAME'" type="text" (input)="tt.filter($event.target.value, col.field, filterMode)">
+                    <!-- <input pInputText *ngIf="col.field == 'IND_NAME'" type="text" (ngModel)="searchIndex" (ngModelChange)="tt.filter(searchIndex, col.field, filterMode)" [matAutocomplete]="auto" [formControl]="control" style="width: 80%;">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                            {{option}}
+                        </mat-option>
+                    </mat-autocomplete> -->
+                    <p-multiSelect *ngIf="col.field == 'IND_NAME'" [options]="options" [(ngModel)]="filteredOptions" (ngModelChange)="tt.filter(getListString(filteredOptions), col.field, 'in')" defaultLabel="Chọn chỉ tiêu cần hiển thị" optionLabel="name" [style]="{'width' : '80%'}"></p-multiSelect>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+            <tr>
+                <td *ngFor="let col of cols; let i = index">
+                    <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+                    {{rowData[col.field]}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td [attr.colspan]="cols.length">Không có chỉ tiêu.</td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+</div>
+<div class="row">
+    <div class="" *ngIf="dataSource.data.length" #PRINT_TABLE style="display: none;">
+        <table mat-table [dataSource]="dataSource">
+
+            <ng-container matColumnDef="index" sticky>
+                <th mat-header-cell *matHeaderCellDef >STT</th>
+                <td mat-cell *matCellDef="let element; let i = index" class="stt1">{{ i + 1 }}</td>
+            </ng-container>
+
+            <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
+                column.attr_code.toLowerCase() : 
+                column.fld_code.toLowerCase()">
+                <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
+                    ngược lại thì lấy cột fld_code (cột dữ liệu) -->
+                <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
+                <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
+                'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
+                    <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
+                    nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
+                    <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                        {{row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]}}
+                    </div>
+                    <!-- && indicators[rowIndex].ind_type_id != '1' -->
+                    <!-- <ng-template #other_content>
+                        <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                    </ng-template> -->
+                </td>
+            </ng-container>
+
+            <div *ngFor="let table of tableMergeHader">
+                <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
+                    <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                </ng-container>
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName;"> </tr>
+            </div>
+
+            <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
+            <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index"></tr>
+        </table>
+    </div>
+</div>

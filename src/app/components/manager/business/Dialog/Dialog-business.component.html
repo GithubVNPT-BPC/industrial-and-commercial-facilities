@@ -1,0 +1,76 @@
+<mat-dialog-content>
+    <mat-card class="material">
+        <mat-card-header>
+            <mat-card-title><strong>Danh sách cơ sở trực thuộc</strong></mat-card-title>
+            <mat-card-subtitle>
+            </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="layout ">
+                <mat-form-field id="filter1">
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
+
+                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table1">
+
+                    <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef class="cbconfig">
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                            </mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row" class="cbconfig1">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef> STT </th>
+                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ten_co_so">
+                        <th mat-header-cell *matHeaderCellDef class="ten_co_so"> Tên cơ sở </th>
+                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                            {{element.ten_co_so}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="dia_chi_day_du">
+                        <th mat-header-cell *matHeaderCellDef class="ten_co_so"> Đia chỉ </th>
+                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                            {{element.dia_chi_day_du}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="so_gpgcn">
+                        <th mat-header-cell *matHeaderCellDef class="ten_co_so"> Mã giấy phép kinh doanh </th>
+                        <td mat-cell *matCellDef="let element"> {{element.so_gpgcn}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ngay_cap">
+                        <th mat-header-cell *matHeaderCellDef class="ten_co_so"> Ngày cấp </th>
+                        <td mat-cell *matCellDef="let element"> {{element.ngay_cap}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="ngay_het_han">
+                        <th mat-header-cell *matHeaderCellDef class="ten_co_so"> Ngày hết hạn </th>
+                        <td mat-cell *matCellDef="let element"> {{element.ngay_het_han}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;"></tr>
+                    <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"
+                        (click)="selection.toggle(row)"></tr>
+                </table>
+                <div *ngIf="dataSource.data.length === 0" style="font-size: 20px;
+                color: red;
+                text-align: center;
+                padding: 10px;">Không có dữ liệu</div>
+                <mat-paginator [pageSizeOptions]="[20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Đóng</button>
+    <!-- <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Lưu</button> -->
+</mat-dialog-actions>

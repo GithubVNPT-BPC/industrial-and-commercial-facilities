@@ -1,0 +1,23 @@
+<div class="container-fluid">
+  <!-- <div class="row">
+    <mat-form-field appearance="fill">
+      <mat-label>Loại biểu đồ</mat-label>
+      <mat-select [(ngModel)]="selectedType" name="chartType" id="chartType" (selectionChange)="ChangeChartType()">
+        <mat-option *ngFor="let type of listChartType" [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div> -->
+
+  <div class="row">
+    <a class="col" *ngIf="showChart">
+      <div style="display: block;">
+        <canvas #CHART baseChart *ngIf="data" [datasets]="barChartData" [labels]="labelChart"
+          [options]="barChartOptions" [plugins]="chartPlugins" [legend]="chartLegend" [chartType]="chartType">
+        </canvas>
+      </div>
+    </a>
+  </div>
+
+</div>

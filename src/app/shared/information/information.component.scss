@@ -1,0 +1,23 @@
+.hot {
+    color: white;
+    text-align: center;
+    font-size: 150%;
+}
+::ng-deep snack-bar-container.error{
+    padding: 20px;
+    background-color: red;
+    color: white;
+  }
+
+  ::ng-deep snack-bar-container.success{
+    padding: 20px;
+    background-color: green;
+    color: white;
+  }
+
+  
+  ::ng-deep snack-bar-container.warning{
+    padding: 20px;
+    background-color: yellow;
+    color: black;
+  }

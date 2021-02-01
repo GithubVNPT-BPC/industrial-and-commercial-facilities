@@ -1,0 +1,68 @@
+<mat-card class="material">
+    <mat-card-header>
+        <mat-card-title>
+            <strong>
+                Thông tin về tình hình sản xuất
+            </strong>
+        </mat-card-title>
+        <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Thời gian</mat-label>
+                    <input matInput [matDatepicker]="dp" [formControl]="date" (dateChange)="addEvent('change', $event)" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                    <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)" (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-10 button-control my-auto">
+                <button mat-raised-button (click)="exportTOExcel('Thông tin sản xuất',timeDomesticPrice)">Xuất
+                    Excel</button>
+            </div>
+        </div>
+        <div class="layout" #TABLE>
+            <!-- <mat-form-field id="filter">
+                <mat-label>Lọc dữ liệu</mat-label>
+                <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
+            </mat-form-field> -->
+
+            <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell style="text-align: center;" *matHeaderCellDef> STT </th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <ng-container matColumnDef="ten_san_pham">
+                    <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ten_san_pham}} </td>
+                    <td mat-footer-cell *matFooterCellDef> Tổng cộng </td>
+                </ng-container>
+                <ng-container matColumnDef="san_luong">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng sản xuất, chế biến <br> (Tấn) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.san_luong | number: '1.0-2':'vi'| ZeroAsSub}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{sumSL() | number:'1.0-4'| ZeroAsSub}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tri_gia">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá <br> (Triệu đồng) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tri_gia | number: '1.0-2':'vi'| ZeroAsSub}} </td>
+                    <td mat-footer-cell *matFooterCellDef> {{sumTG() | number:'1.0-4'| ZeroAsSub}} </td>
+                </ng-container>
+                <ng-container matColumnDef="top_san_xuat">
+                    <th mat-header-cell *matHeaderCellDef> TOP DN<br>Sản xuất</th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon (click)="openCompanyTopPopup(element)">emoji_events</mat-icon>
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

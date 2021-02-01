@@ -1,0 +1,345 @@
+.mat-card.material {
+    .mat-paginator {
+        margin-top: 10px;
+        display: flex;
+        align-items: left;
+        justify-content: flex-end;
+        height: 30px !important;
+        width: 100%;
+    }
+    .accord {
+        .mat-expansion-panel-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 5px;
+            border-radius: inherit;
+            height: 35px !important;
+        }
+        .mat-expansion-panel-body {
+            padding: 0 5px 5px !important;
+        }
+    }
+    padding: 5px 10px;
+    margin: 5px;
+    $blue: #1f7ed0;
+    $white: white;
+    .mat-card-header {
+        text-align: center;
+        display: initial;
+        .mat-card-title {
+            strong {
+                color: $blue;
+            }
+        }
+    }
+    .mat-card-content {
+        ::ng-deep .mat-form-field-wrapper {
+            margin-bottom: -0.75em;
+        }
+        padding-bottom: 10px !important;
+        .bold {
+            font-weight: bold;
+        }
+        .card-default {
+            margin-top: 5px;
+            .mat-card-header .mat-card-title {
+                margin-bottom: 5px;
+                font-size: 15px;
+                text-align: left !important;
+            }
+            .mat-card-content {
+                font-size: 15px;
+                ul {
+                    list-style-type: square;
+                    // display: flex;
+                    justify-content: center;
+                }
+                span {
+                    font-weight: bolder;
+                    color: $blue;
+                    text-align: center;
+                }
+            }
+        }
+
+        //card1 dùng 3 cards mỗi dòng
+        .card1 {
+            margin-top: 5px;
+            min-height: 90px;
+            .mat-card-header .mat-card-title {
+                margin-bottom: 15px;
+                font-size: 17px;
+            }
+            .mat-card-content {
+                font-size: 17px;
+                text-align: center;
+                font-weight: bolder;
+                color: $blue;
+            }
+            .mat-card-subtitle {
+                font-size: 10px;
+                text-align: center;
+                font-weight: bold;
+            }
+            span {
+                font-weight: bolder;
+                color: $blue;
+                text-align: center;
+            }
+        }
+
+        //card2 dùng 4 cards mỗi dòng
+        .card2 {
+            margin-top: 5px;
+            min-height: 95px;
+            .mat-card-header .mat-card-title {
+                margin-bottom: 5px;
+                font-size: 15px;
+            }
+            .mat-card-content {
+                font-size: 15px;
+                text-align: center;
+                font-weight: bolder;
+                color: $blue;
+            }
+            .mat-card-subtitle {
+                font-size: 10px;
+                text-align: center;
+                font-weight: bold;
+            }
+            span {
+                font-weight: bolder;
+                color: $blue;
+                text-align: center;
+            }
+        }
+
+        .card3 {
+            margin-top: 5px;
+            .detail-img {
+                width: 500px;
+                height: 300px;
+            }
+        }
+
+        .mat-form-field {
+            width: 100%;
+        }
+        strong {
+            color: $blue;
+        }
+        .checkbox {
+            margin-top: 17px;
+            text-align: center;
+        }
+        .button-control {
+            text-align: right;
+            margin-bottom: 10px;
+            button.mat-raised-button {
+                background-color: $blue !important;
+                color: $white !important;
+                margin-right: 5px;
+                margin-top: 10px;
+                box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            }
+            button.mat-raised-button.reverse {
+                background-color: $white !important;
+                color: $blue !important;
+            }
+        }
+        .button-control.-align-left {
+            text-align: left;
+        }
+        .layout, .exist-data {
+            .table-header {
+                height: 30px !important;
+            }
+            .table-row {
+                height: 30px !important;
+            }
+            max-width: 100%;
+            max-height: 100%;
+            overflow: auto;
+            height: 460px;
+            table.mat-table.table-layout {
+                // .mat-table-sticky:first-child {
+                //     border-right: 1px solid blue;
+                // }
+
+                // .mat-table-sticky:last-child {
+                //     border-left: 1px solid blue;
+                // }
+                border-collapse: separate;
+
+                width: 550%;
+                table-layout: initial;
+                th,
+                td {
+                    padding-left: 0px !important;
+                    padding-right: 0px !important;
+                }
+                .img-zoom {
+                    transition: transform 0.2s;
+                }
+                .img-zoom:hover {
+                    transform: scale(3);
+                }
+                .mat-header-cell {
+                    background-color: $blue;
+                    color: $white;
+                    padding: 5px !important;
+                    border: 0.01em solid rgb(192, 192, 192);
+                    font-weight: bold;
+                    font-size: 12px;
+                    text-align: center;
+                    z-index: -5;
+                }
+                .mat-footer-cell {
+                    border: 0.01em solid rgb(192, 192, 192);
+                    padding: 5px !important;
+                    text-align: center;
+                    font-weight: bolder;
+                }
+                .center-cell {
+                    text-align: center !important;
+                }
+                .right-cell {
+                    text-align: right !important;
+                }
+                .mat-cell {
+                    border-width: 1px;
+                    border: 0.01em solid rgb(192, 192, 192);
+                    font-size: 12px;
+                    text-align: left;
+                    max-width: 350px;
+                    padding: 5px !important;
+                    input {
+                        border: none;
+                        font-size: 15px;
+                        width: 100%;
+                        height: 100%;
+                    }
+                    input:focus {
+                        background-color: $blue;
+                        color: $white;
+                        font-size: 1.5em;
+                    }
+                }
+                #jump {
+                    cursor: zoom-in;
+                }
+                select {
+                    border: none;
+                    font-size: 15px;
+                    width: 100%;
+                    height: 100%;
+                    text-align-last: center;
+                }
+            }
+        }
+    }
+    #import_excel {
+        background-color: $blue !important;
+        color: $white !important;
+        font-weight: 500 !important;
+        box-sizing: border-box;
+        position: relative;
+        outline: 0;
+        border: none;
+        -webkit-tap-highlight-color: transparent;
+        display: inline-block;
+        white-space: nowrap;
+        text-decoration: none;
+        vertical-align: baseline;
+        text-align: center;
+        min-width: 64px;
+        line-height: 36px;
+        padding: 0 16px;
+        border-radius: 4px;
+        overflow: visible;
+        transform: translate3d(0, 0, 0);
+        transition: background 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+        .mat-icon {
+            vertical-align: middle;
+        }
+    }
+
+    .table-layout#small-table {
+        width: 100%;
+    }
+
+    .table-layout#small-table1 {
+        width: 150%;
+    }
+
+    .table-layout#small-table2 {
+        width: 200%;
+    }
+
+    .table-layout#small-table3 {
+        width: 300%;
+    }
+
+    #filter {
+        width: 100%;
+    }
+
+    #filter1 {
+        width: 150%;
+    }
+
+    #filter2 {
+        width: 200%;
+    }
+
+    #filter3 {
+        width: 300%;
+    }
+
+    #large-filter {
+        width: 550%;
+    }
+}
+
+.label-upload{
+    background-color: #1f7ed0;
+    color: white;
+    padding: 0.5em;
+    font-family: sans-serif;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    margin: 1em;
+    display: inline-flex;
+}
+
+table.sjs-table > tbody > tr > td {
+    // background-color: lightgreen;
+    border: 1px solid;
+}
+
+.button-close{
+    margin: 1em 1em;
+    background-color: #1f7ed0;
+    color: white;
+    font-family: sans-serif;
+    box-shadow: none;
+}
+
+.no-data{
+    display: none;
+}
+
+.exist-data{
+    display: block;
+}
+
+.content-dialog {
+    display: block;
+    margin: 0px -24px;
+    padding: 0 24px;
+    max-height: 80vh;
+    overflow: hidden;
+    -webkit-overflow-scrolling: touch;
+}

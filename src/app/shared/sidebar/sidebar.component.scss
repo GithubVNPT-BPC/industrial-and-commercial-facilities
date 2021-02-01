@@ -1,0 +1,112 @@
+.material {
+  $blue: #1f7ed0;
+  $white: white;
+  $black: #000000;
+  .sidenav_container .mat-elevation-z5 {
+    min-width: 60px;
+    height: 100%;
+    border-right: 3px;
+    z-index: -1 !important;
+    .sct-sidebar {
+      height: 100%;
+      background-color: $white;
+    }
+  }
+
+  .line {
+    border-top-width: 1px;
+    // border-top-style: dashed;
+  }
+
+  .mat-list-item {
+    font-size: 1em;
+    background-color: $white;
+    color: $black;
+    .submenu {
+      color: $black;
+      background-color: $white;
+    }
+  }
+  .mat-list-base {
+    padding-top: 0px !important;
+  }
+  .mat-list-item.parent {
+    text-transform: uppercase;
+    color: $blue;
+    font-weight: bold;
+  }
+
+  .mat-list-item.child {
+    font-size: 1em;
+    // padding-left: 28px;
+  }
+
+  .mat-list-item.child {
+    font-size: 1em;
+    font-weight: bold;
+  }
+  .mat-icon {
+    margin-right: 5px;
+  }
+  .mat-list-base .mat-list-item .mat-list-icon, .mat-list-base .mat-list-option .mat-list-icon{
+    margin-right: 5px;
+    padding:0px;
+  }
+  .mat-list-item:hover {
+    background-color: $blue;
+    color: $white;
+  }
+
+  .mat-list-item:active {
+    font-weight: bold;
+    transition: 1s ease all;
+    -moz-transition: 1s ease all;
+    -webkit-transition: 1s ease all;
+    background-color: $blue;
+    color: $black;
+  }
+
+  .mat-list-item:focus {
+    background-color: $blue;
+    color: $white;
+  }
+
+  .mat-list-item-active {
+    color: #fc0808;
+  }
+  img.jim {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  #thongtinUser {
+    display: block;
+    opacity: 1;
+    text-overflow: ellipsis;
+    padding: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .menu-button {
+    transition: 300ms ease-in-out;
+    transform: rotate(0deg);
+  }
+
+  .menu-button.rotated {
+    transform: rotate(180deg);
+  }
+  .showTitle {
+    height: 50px !important;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    padding-left: 20px;
+    padding-top: 13px;
+    text-transform: uppercase;
+  }
+  .submenu.expanded {
+    transform: scaleY(1);
+  }
+}

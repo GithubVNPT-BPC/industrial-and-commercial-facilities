@@ -1,0 +1,75 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
+            <form #f="ngForm" novalidate (ngSubmit)="Register()">
+                <h1>Đăng ký</h1>
+                <p class="text-muted">Điền thông tin doanh nghiệp tại đây. Yêu cầu mở tài khoản sẽ được Sở Công thương
+                    phản hồi qua email đăng ký.</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-home"></i></span>
+                    </div>
+                    <input autofocus type="text" class="form-control" placeholder="Tên doanh nghiệp"
+                        [(ngModel)]="registerModel.full_name" name="name" required #nameVar="ngModel" />
+                </div>
+                <div *ngIf="!nameVar.valid  && (nameVar.dirty || nameVar.touched)" class="alert alert-danger mb-3">
+                    <div [hidden]="!nameVar.errors.required">
+                        Cần khai báo tên doanh nghiệp
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-briefcase"></i></span>
+                    </div>
+                    <input autofocus type="text" class="form-control" placeholder="Mã số thuế"
+                        [(ngModel)]="registerModel.org_id" name="maSoThue" required #MSTVar="ngModel" />
+                </div>
+                <div *ngIf="!MSTVar.valid  && (MSTVar.dirty || MSTVar.touched)" class="alert alert-danger mb-3">
+                    <div [hidden]="!MSTVar.errors.required">
+                        Cần khai báo mã số thuế
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-envelope"></i></span>
+                    </div>
+                    <input autofocus type="text" class="form-control" placeholder="Email liên hệ"
+                        [(ngModel)]="registerModel.email" name="phone" required #emailVar="ngModel" />
+                </div>
+                <div *ngIf="!emailVar.valid  && (emailVar.dirty || emailVar.touched)" class="alert alert-danger mb-3">
+                    <div [hidden]="!emailVar.errors.required">
+                        Cần nhập email
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input autofocus type="text" class="form-control" placeholder="Tên đăng nhập"
+                        [(ngModel)]="registerModel.user_name" name="username" required #usernameVar="ngModel" />
+                </div>
+                <div *ngIf="!usernameVar.valid  && (usernameVar.dirty || usernameVar.touched)"
+                    class="alert alert-danger mb-3">
+                    <div [hidden]="!usernameVar.errors.required">
+                        Cần nhập tên đăng nhập
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input type="password" class="form-control" placeholder="Mật khẩu"
+                        [(ngModel)]="registerModel.password" name="password" required #passwordVar="ngModel" />
+                </div>
+                <div *ngIf="!passwordVar.valid  && (passwordVar.dirty || passwordVar.touched)"
+                    class="alert alert-danger mb-3">
+                    <div [hidden]="!passwordVar.errors.required">
+                        Cần nhập mật khẩu
+                    </div>
+                </div>
+                <button type="submit" [disabled]="!f.form.valid" class="btn btn-lg btn-success btn-block">Yêu cầu mở tài
+                    khoản</button>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,363 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 1. Tổng số chợ: <span>{{tong_SoCho}} chợ</span>
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 2. Phân theo địa bàn:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Chợ nông thôn: <span>{{diaban_NongThon}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ thành thị: <span>{{diaban_ThanhThi}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ đầu mối: <span>{{diaban_DauMoi}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ trong quy hoạch: <span>{{diaban_TrongQuyHoach}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ tự phát: <span>{{diaban_TuPhat}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ khac: <span>{{diaban_Khac}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 3. Phân theo hạng chợ:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Chợ hạng 1: <span>{{hang_HangI}} chợ</span>
+                                    </li>
+                                    <li>
+                                        Chợ hạng 2: <span>{{hang_HangII}} chợ</span>
+                                    </li>
+                                    <li>
+                                        Chợ hạng 3: <span>{{hang_HangIII}} chợ</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 4. Tính chất công trình:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Chợ Kiên cố: <span>{{congtrinh_KienCo}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ bán kiên cố: <span>{{congtrinh_BanKienCo}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ tạm: <span>{{congtrinh_Tam}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 5. Phân theo tính chất kinh doanh:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Chợ đầu mối chuyên doanh: <span>{{kinhdoanh_choDauMoiChuyenDoanh}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ đầu mối tổng hợp: <span>{{kinhdoanh_choDauMoiTongHop}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ bán lẻ: <span>{{kinhdoanh_choBanLe}}</span>
+                                    </li>
+
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 6. Phân theo hình thức quản lý:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Ban quản lý/Tổ quản lý: <span>{{quanly_BanTo}}</span>
+                                    </li>
+                                    <li>
+                                        Doanh nghiệp: <span>{{quanly_DoanhNghiep}}</span>
+                                    </li>
+                                    <li>
+                                        Hợp tác xã: <span>{{quanly_HopTacXa}}</span>
+                                    </li>
+                                    <li>
+                                        Hộ kinh doanh: <span>{{quanly_HoKinhDoanh}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 7. Tổng vốn đầu tư chợ:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Vốn ngân sách Trung ương: <span>{{tongvon_VonNganSachTW}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn ngân sách địa phương: <span>{{tongvon_VonNganSachDiaPhuong}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn doanh nghiệp, hợp tác xã, hộ kinh doanh: <span>{{tongvon_DNHTXH}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn khác: <span>{{tongvon_Khac}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 8. Thống kê xây dựng:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Chợ xây dựng mới năm {{year}}: <span>{{xaydung_Moi}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ nâng cấp, cải tạo năm {{year}}: <span>{{xaydung_CaiTao}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ đầu tư kiên cố, bán kiên không không hoạt động năm {{year}}:
+                                        <span>{{xaydung_KhongHoatDong}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ đầu tư kiên cố, bán kiên kinh doanh dưới 30% năm {{year}}:<span>
+                                            {{xaydung_KhongHoatDong70}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ chuyển đổi chức năng hoạt động năm
+                                        {{year}}:<span>{{xaydung_ChuyenDoi}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-4 col-lg-4">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 9. Chợ khác:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Chợ ngoài quy hoạch: <span>{{chokhac_NgoaiQuyHoach}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ đêm: <span>{{chokhac_ChoDem}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ biên giới:<span>{{chokhac_BienGioi}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-2 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyCondictionFilter('1',$event)" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.name'>
+                                    {{district.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hạng chợ</mat-label>
+                            <mat-select (selectionChange)="applyCondictionFilter('2', $event)" multiple>
+                                <mat-option *ngFor='let marketRank of marketRanks' [value]='marketRank.key'>
+                                    {{marketRank.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tính chất công trình</mat-label>
+                            <mat-select (selectionChange)="applyCondictionFilter('3',$event)" multiple>
+                                <mat-option *ngFor='let business of businesses' [value]='business.name'>
+                                    {{business.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hình thức quản lý</mat-label>
+                            <mat-select (selectionChange)="applyCondictionFilter('4',$event)" multiple>
+                                <mat-option *ngFor='let managerType of managerTypes' [value]='managerType.key'>
+                                    {{managerType.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-2 col-lg-2 button-control">
+                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    </div>
+                </div>
+
+                <div *ngIf="dataSource.data.length; else ShowEmpty" #TABLE class="layout">
+                    <!-- <mat-form-field id="large-filter">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
+                    </mat-form-field> -->
+
+                    <table mat-table [dataSource]="dataSource" class="table-layout">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>STT</th>
+                            <td mat-cell *matCellDef="let element; let i = index" class="center-cell">{{ i + 1 }}</td>
+                        </ng-container>
+                        <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
+                                column.attr_code.toLowerCase() : 
+                                column.fld_code.toLowerCase()">
+                            <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
+                                    ngược lại thì lấy cột fld_code (cột dữ liệu) -->
+                            <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
+                            <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
+                                'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
+                                <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
+                                    nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
+                                <div
+                                    [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                                    {{row[column.is_default === 1? column.attr_code.toLowerCase():
+                                    column.fld_code.toLowerCase()]}}
+                                </div>
+                            </td>
+                        </ng-container>
+                        <div *ngFor="let table of tableMergeHader">
+                            <ng-container *ngFor="let mergeHeader of table.headerMerge;"
+                                [cdkColumnDef]="mergeHeader.colName">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;"
+                                    [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                            </ng-container>
+                            <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName; sticky: true"> </tr>
+                        </div>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index">
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

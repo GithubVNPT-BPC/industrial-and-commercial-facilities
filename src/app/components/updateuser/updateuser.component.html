@@ -1,0 +1,86 @@
+<div class="update-page">
+    <div class="container dkm-form">
+        <h1>Cập nhật thông tin tài khoản</h1>
+        <div class="container body">
+            <div class="container">
+                <form [formGroup]="profileForm">
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Tên đăng nhập</mat-label>
+                                <input matInput placeholder="" formControlName="user_name" />
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Họ và tên</mat-label>
+                                <input matInput placeholder="" formControlName="full_name" />
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Email</mat-label>
+                                <input matInput placeholder="" formControlName="email" />
+                            </mat-form-field>
+                            <span *ngIf="this.profileForm.controls.email.status === 'INVALID'" class="errorMess">
+                    Sai email, mời nhập lại !!
+                  </span>
+                        </div>
+                        <div class="col-6">
+                            <!-- <span *ngIf="this.profileForm.value.password === ''" class="errorMess">
+                  Mời nhập mật khẩu !!
+                </span> -->
+                            <mat-form-field appearance="fill">
+                                <mat-label>Mật khẩu</mat-label>
+                                <input matInput [type]="hiden_pass ? 'password' : 'text'" formControlName="password" />
+                                <button mat-icon-button matSuffix (click)="hiden_pass = !hiden_pass" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hiden_pass">
+                      <mat-icon>{{ hiden_pass ? "visibility_off" : "visibility" }}</mat-icon>
+                    </button>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6" *ngIf="!checkuser else bussTem">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Mã số thuế</mat-label>
+                                <input matInput placeholder="" formControlName="mst" />
+                            </mat-form-field>
+                        </div>
+                        <ng-template #bussTem>
+                            <div class="col-6">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Org ID</mat-label>
+                                    <input matInput placeholder="" formControlName="org_id" />
+                                </mat-form-field>
+                            </div>
+                        </ng-template>
+                        <div class="col-6" [ngStyle]="{'display': checked ? 'block' : 'none'}">
+
+                            <mat-form-field appearance="fill">
+                                <mat-label>Mật khẩu mới</mat-label>
+                                <input matInput [type]="hiden_new_pass ? 'password' : 'text'" formControlName="new_password" />
+                                <button mat-icon-button matSuffix (click)="hiden_new_pass = !hiden_new_pass" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hiden_new_pass">
+                  <mat-icon>{{ hiden_new_pass ? "visibility_off" : "visibility" }}</mat-icon>
+                </button>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="container">
+                <mat-checkbox class="example-margin" color="primary" [(ngModel)]="checked">Cập nhật mật khẩu mới</mat-checkbox>
+            </div>
+
+            <div class="text-center col">
+                <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="this.profileForm.status === 'INVALID'">Cập nhật</button>
+                <button mat-raised-button color="warn" (click)="cancel()">Hủy</button>
+            </div>
+
+        </div>
+    </div>
+</div>

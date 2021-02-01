@@ -1,0 +1,129 @@
+<mat-card class="material">
+    <div *ngIf="dataSource.data.length; else ShowEmpty">
+        <mat-card-content>
+            <h3><strong>Cụm công nghiệp: {{_clusterDetail.ten_cum_cong_nghiep}}</strong></h3>
+            <a href="{{_clusterDetail.downloadPDF}}" target="blank">Tải xuống tài liệu chi tiết</a>
+            <hr>
+            <div class="layout">
+                <table mat-table [dataSource]="dataSource" #table class="table-layout" id="small-table">
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef > STT </th>
+                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="chi_tieu">
+                        <th mat-header-cell *matHeaderCellDef class="indicator"> Chỉ tiêu </th>
+                        <td mat-cell *matCellDef="let element" class="indicator">
+                            {{element.chi_tieu}}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="dien_giai">
+                        <th mat-header-cell *matHeaderCellDef> Thông tin chi tiết</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div [innerHTML]="element.dien_giai"></div>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="topColumns">
+                    </tr>
+                    <tr mat-row class="table-row" *matRowDef="let row;columns: topColumns;let i = index; ">
+                </table>
+            </div>
+            <hr>
+            <div class="row">
+                <mat-card class="card3">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <mat-icon> business</mat-icon> Chi tiết quy hoạch:
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <img class="card-img-top" src="{{_clusterDetail.hinh_anhs[0]}}" alt="Qui hoạch">
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <hr>
+            <div class="row">
+                <mat-card class="card3">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <mat-icon> business</mat-icon> Sơ đồ quy hoạch:
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <img class="card-img-top" src="{{_clusterDetail.hinh_anhs[1]}}" alt="Sơ đồ">
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-lg-6">
+                    <mat-card class="card3">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <img class="detail-img" src="{{_clusterDetail.hinh_anhs[2]}}" alt="Chi tiết 1">
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="col-lg-6">
+                    <mat-card class="card3">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <img class="detail-img" src="{{_clusterDetail.hinh_anhs[3]}}" alt="Chi tiết 2">
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-lg-6">
+                    <mat-card class="card3">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <img class="detail-img" src="{{_clusterDetail.hinh_anhs[4]}}" alt="Chi tiết 3">
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+                <div class="col-lg-6">
+                    <mat-card class="card3">
+                        <mat-card-header>
+                            <mat-card-title>
+                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
+                            </mat-card-title>
+                            <mat-card-subtitle>
+                            </mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <img class="detail-img" src="{{_clusterDetail.hinh_anhs[5]}}" alt="Chi tiết 4">
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </mat-card-content>
+    </div>
+    <ng-template #ShowEmpty>
+        <h1>Chưa có quy hoạch chi tiết cho Cụm Công Nghiệp {{tenCumCongNghiep}}.</h1>
+    </ng-template>
+</mat-card>

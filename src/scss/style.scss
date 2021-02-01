@@ -1,0 +1,39 @@
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+// * * * * * * * * * * * The content below * * * * * * * * * * *
+// * * * * * * * * * * is only a placeholder * * * * * * * * * *
+// * * * * * * * * * * and can be replaced. * * * * * * * * * * *
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+// * * * * * * * * * Delete the template below * * * * * * * * * *
+// * * * * * * * to get started with your project! * * * * * * * *
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+// @import '~simplebar/dist/simplebar.css';
+@import "./custom";
+
+/* Responsive Styles */
+@media screen and (max-width: 767px) {
+  .card-container > *:not(.circle-link),
+  .terminal {
+    width: 100%;
+  }
+
+  .card:not(.highlight-card) {
+    height: 16px;
+    margin: 8px 0;
+  }
+
+  .card.highlight-card span {
+    margin-left: 72px;
+  }
+
+  svg#rocket-smoke {
+    right: 120px;
+    transform: rotate(-5deg);
+  }
+}
+
+@media screen and (max-width: 575px) {
+  svg#rocket-smoke {
+    display: none;
+    visibility: hidden;
+  }
+}

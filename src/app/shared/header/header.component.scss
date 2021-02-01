@@ -1,0 +1,17 @@
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  position: sticky;
+  z-index: 10;
+  top: 0px;
+  background-color: white;
+  color: #1f7ed0;
+  height: 48px;
+}
+
+.button-control {
+  background-color: #1f7ed0;
+  color: white;
+}

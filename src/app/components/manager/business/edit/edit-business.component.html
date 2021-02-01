@@ -1,0 +1,413 @@
+<mat-card class="material">
+    <mat-card-header>
+        <div class="row">
+            <div class="col-lg-12" style="text-align: left;">
+                <mat-card-title>
+                    <strong>{{company.ten_doanh_nghiep}}</strong>
+                </mat-card-title>
+                <mat-card-subtitle>Số điện thoại: {{company.dien_thoai}}</mat-card-subtitle>
+            </div>
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-4">
+                <img [src]="defaultLogo" class="img-fluid rounded">
+                <hr>
+                <div class="button-control my-auto">
+                    <button mat-raised-button (click)="back()">Trở về danh sách DN</button>
+                    <button mat-raised-button (click)="openDialog(company.mst)">Danh sách CSTT</button>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <mat-form-field appearance="outline">
+                    <mat-label>Tên doanh nghiệp</mat-label>
+                    <input matInput [formControl]="vall" placeholder="" [(ngModel)]="company.ten_doanh_nghiep" required>
+                    <mat-error *ngIf="vall.hasError('required')">
+                        Vui lòng nhập tên doanh nghiệp!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Mã số thuế</mat-label>
+                    <input matInput [formControl]="vall11" placeholder="" [(ngModel)]="company.mst" required>
+                    <mat-error *ngIf="vall1.hasError('required')">
+                        Vui lòng nhập mã số thuế!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Địa chỉ</mat-label>
+                    <input matInput [formControl]="vall4" placeholder="" [(ngModel)]="company.dia_chi_day_du" required>
+                    <mat-error *ngIf="vall8.hasError('required')">
+                        Vui lòng nhập địa chỉ đường!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Người đại diện theo pháp luật</mat-label>
+                    <input matInput [formControl]="vall9" placeholder="" [(ngModel)]="company.nguoi_dai_dien" required>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Điện thoại</mat-label>
+                    <span matPrefix style="position: relative;vertical-align: 3px;">+84 &nbsp;&nbsp;</span>
+                    <input [formControl]="vall10" type="tel" matInput placeholder="" [(ngModel)]="company.dien_thoai"
+                        required>
+                    <mat-error *ngIf="vall6.hasError('required')">
+                        Vui lòng nhập số điện thoại!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Mã ngành nghề kinh doanh chính</mat-label>
+                    <mat-select [(ngModel)]="company.id_nganh_nghe" [formControl]="vall2" required>
+                        <mat-option *ngFor="let item of career" [value]="item.ma_nganh_nghe">
+                            {{ item.ma_nganh_nghe }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Tên ngành nghề kinh doanh chính</mat-label>
+                    <input matInput [formControl]="vall3" placeholder="" [(ngModel)]="company.nganh_nghe_kd" required>
+                    <mat-error *ngIf="vall4.hasError('required')">
+                        Vui lòng nhập ngành nghề kinh doanh!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Loại hình kinh tế</mat-label>
+                    <mat-select [(ngModel)]="company.id_loai_hinh" [formControl]="vall13" required>
+                        <mat-option></mat-option>
+                        <mat-option *ngFor="let item of Business" [value]="item.id">
+                            {{item.ten_loai_hinh}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="vall5.hasError('required')">Vui lòng chọn loại hình kinh doanh!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Vốn điều lệ</mat-label>
+                    <input currencyMask matInput [(ngModel)]="company.von_kinh_doanh">
+                    <span matPrefix>đ&nbsp;&nbsp;</span>
+                </mat-form-field>
+
+                <mat-form-field color="accent" appearance="outline">
+                    <mat-label>Ngày bắt đầu kinh doanh</mat-label>
+                    <input matInput [matDatepicker]="dateNBDKD" [(ngModel)]="company.ngay_bat_dau_kd">
+                    <mat-datepicker-toggle matSuffix [for]="dateNBDKD"></mat-datepicker-toggle>
+                    <mat-datepicker #dateNBDKD></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Số lao động</mat-label>
+                    <input [formControl]="vall15" type="number" matInput placeholder=""
+                        [(ngModel)]="company.so_lao_dong">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Công xuất thiết kế/năm</mat-label>
+                    <input [formControl]="vall16" matInput placeholder="" [(ngModel)]="company.cong_suat_thiet_ke_sct">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Sản lượng/năm</mat-label>
+                    <input [formControl]="vall17" matInput placeholder="" [(ngModel)]="company.san_luong_sct">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Số Giấy phép/Giấy chứng nhận đủ điều kiện kinh doanh</mat-label>
+                    <input matInput [formControl]="vall11" placeholder="" [(ngModel)]="company.so_gpgcn" required>
+                    <mat-error *ngIf="vall.hasError('required')">
+                        Vui lòng nhập Số giấy phép kinh doanh!
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field color="accent" appearance="outline">
+                    <mat-label>Ngày cấp</mat-label>
+                    <input matInput [matDatepicker]="dateNCGPKD" [(ngModel)]="company.ngay_cap" [formControl]="vall7">
+                    <mat-datepicker-toggle matSuffix [for]="dateNCGPKD"></mat-datepicker-toggle>
+                    <mat-datepicker #dateNCGPKD></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field color="accent" appearance="outline">
+                    <mat-label>Thời hạn</mat-label>
+                    <input matInput [matDatepicker]="dateNHHGPKD" [(ngModel)]="company.ngay_het_han"
+                        [formControl]="vall12">
+                    <mat-datepicker-toggle matSuffix [for]="dateNHHGPKD"></mat-datepicker-toggle>
+                    <mat-datepicker #dateNHHGPKD></mat-datepicker>
+                </mat-form-field>
+
+                <div class="expand-more">
+                    <span>
+                        Mở rộng/Thu hẹp
+                    </span>
+                    <mat-icon *ngIf="!isOpen" aria-hidden="false" aria-label="Example home icon" (click)="toggle()">
+                        expand_less</mat-icon>
+                    <mat-icon *ngIf="isOpen" aria-hidden="false" aria-label="Example home icon" (click)="toggle()">
+                        expand_more</mat-icon>
+                </div>
+                <ng-container *ngIf="isOpen">
+                    <mat-form-field appearance="outline" *ngIf="isCompany">
+                        <mat-label>Tiêu chuẩn sản phẩm</mat-label>
+                        <textarea matInput [(ngModel)]="company.tieu_chuan_san_pham"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput [formControl]="vall14" placeholder="" [(ngModel)]="company.email" required>
+                        <mat-error *ngIf="vall14.hasError('email') && !vall14.hasError('required')">
+                            Vui lòng nhập đúng định dạng Email!
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Doanh thu
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.doanh_thu">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quy mô tài sản
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.quy_mo_tai_san">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Lợi nhuận
+                        </mat-label>
+                        <input currencyMask matInput [(ngModel)]="company.loi_nhuan">
+                        <span matPrefix>đ&nbsp;&nbsp;</span>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu bán</mat-label>
+                        <textarea matInput [(ngModel)]="company.nhu_cau_ban"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu mua</mat-label>
+                        <textarea matInput [(ngModel)]="company.nhu_cau_mua"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu muốn hợp tác</mat-label>
+                        <textarea matInput [(ngModel)]="company.nhu_cau_hop_tac"></textarea>
+                    </mat-form-field>
+                </ng-container>
+            </div>
+        </div>
+
+        <hr>
+        <h3><strong>KIM NGẠCH XUẤT KHẨU</strong></h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="period_select">Kỳ báo cáo</label>
+                            <select class="form-control" name="" id="period_select" (change)="changePeriod(false)"
+                                [(ngModel)]="selectedPeriodXK">
+                                <option *ngFor="let period of periodsXK" [ngValue]="period">{{period}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedPeriodXK === 'Tháng'">
+                        <div class="form-group">
+                            <label for="month_select">Tháng báo cáo</label>
+                            <select class="form-control" name="" id="month_select" [(ngModel)]="selectedMonthXK">
+                                <option *ngFor="let month of monthsXK" [ngValue]="month">{{month}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedPeriodXK === 'Quý'">
+                        <div class="form-group">
+                            <label for="quarter_select">Quý báo cáo</label>
+                            <select class="form-control" name="" id="quarter_select" [(ngModel)]="selectedQuarterXK">
+                                <option *ngFor="let quarter of quartersXK" [ngValue]="quarter.ma_so">{{quarter.ma_chu}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedPeriodXK === '6 Tháng'">
+                        <div class="form-group">
+                            <label for="half_select">Báo cáo 6 Tháng</label>
+                            <select class="form-control" name="" id="half_select" [(ngModel)]="selectedHalfXK">
+                                <option *ngFor="let half of halfsXK" [ngValue]="half">{{half}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedYearXK >0">
+                        <div class="form-group">
+                            <label for="year_select">Năm báo cáo</label>
+                            <select class="form-control" name="" id="year_select" [(ngModel)]="selectedYearXK">
+                                <option *ngFor="let year of yearsXK" [ngValue]="year">{{year}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 button-control -align-right my-auto">
+                <button mat-raised-button (click)="findKNXK()">Tìm kiếm</button>
+                <button mat-raised-button (click)="Them_dong_XK()">Thêm dòng</button>
+                <button mat-raised-button (click)="Save_XK()">Lưu</button>
+            </div>
+        </div>
+        <div class="layout">
+            <table mat-table [dataSource]="dataSourceKNXK" class="table-layout" id="small-table">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef> STT </th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='not-input'>{{i+1}}</td>
+                </ng-container>
+                <ng-container matColumnDef="SAN_PHAM">
+                    <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
+                    <td mat-cell *matCellDef="let element">
+                        <select class="form-control select-TSP" name="" id="period_select"
+                            [(ngModel)]="element.id_san_pham">
+                            <option *ngFor="let product of products" [ngValue]="product.ma_san_pham">
+                                {{product.ten_san_pham}} </option>
+                        </select>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="SAN_LUONG">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
+                    <td mat-cell *matCellDef="let element"><input class="text-right form-control" maxlength="15"
+                            [(ngModel)]="element.san_luong"></td>
+                </ng-container>
+                <ng-container matColumnDef="TRI_GIA">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <td mat-cell *matCellDef="let element"><input class="text-left form-control"
+                            [(ngModel)]="element.tri_gia"> </td>
+                </ng-container>
+                <ng-container matColumnDef="DOI_TAC">
+                    <th mat-header-cell *matHeaderCellDef> Đối tác </th>
+                    <td mat-cell *matCellDef="let element">
+                        <textarea [(ngModel)]="element.thi_truong" class="form-control"></textarea>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ACTION">
+                    <th mat-header-cell *matHeaderCellDef> Xóa </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-stroked-button (click)="DeleteXK(element)">
+                            <mat-icon class="icon-color">delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; "></tr>
+            </table>
+        </div>
+        <div *ngIf="messageXK" class="messError">{{messageXK}}</div>
+        <mat-paginator #ExportPaginators [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        <hr>
+        <h3><strong>KIM NGẠCH NHẬP KHẨU</strong></h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label for="period_select">Kỳ báo cáo</label>
+                            <select class="form-control" name="" id="period_select" (change)="changePeriod(true)"
+                                [(ngModel)]="selectedPeriodNK">
+                                <option *ngFor="let period of periodsNK" [ngValue]="period">{{period}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedPeriodNK === 'Tháng'">
+                        <div class="form-group">
+                            <label for="month_select">Tháng báo cáo</label>
+                            <select class="form-control" name="" id="month_select" [(ngModel)]="selectedMonthNK">
+                                <option *ngFor="let month of monthsNK" [ngValue]="month">{{month}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedPeriodNK === 'Quý'">
+                        <div class="form-group">
+                            <label for="quarter_select">Quý báo cáo</label>
+                            <select class="form-control" name="" id="quarter_select" [(ngModel)]="selectedQuarterNK">
+                                <option *ngFor="let quarter of quartersNK" [ngValue]="quarter.ma_so">{{quarter.ma_chu}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedPeriodNK === '6 Tháng'">
+                        <div class="form-group">
+                            <label for="half_select">Báo cáo 6 Tháng</label>
+                            <select class="form-control" name="" id="half_select" [(ngModel)]="selectedHalfNK">
+                                <option *ngFor="let half of halfsNK" [ngValue]="half">{{half}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" *ngIf="selectedYearNK >0">
+                        <div class="form-group">
+                            <label for="year_select">Năm báo cáo</label>
+                            <select class="form-control" name="" id="year_select" [(ngModel)]="selectedYearNK">
+                                <option *ngFor="let year of yearsNK" [ngValue]="year">{{year}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 button-control -align-right my-auto">
+                <button mat-raised-button (click)="findKNNK()">Tìm kiếm</button>
+                <button mat-raised-button (click)="Them_dong_NK()">Thêm dòng</button>
+                <button mat-raised-button (click)="Save_NK()">Lưu</button>
+            </div>
+        </div>
+
+        <div class="layout">
+            <table mat-table [dataSource]="dataSourceKNNK" class="table-layout" id="small-table">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef> STT </th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='not-input'>{{i+1}}</td>
+                </ng-container>
+                <ng-container matColumnDef="SAN_PHAM">
+                    <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
+                    <td mat-cell *matCellDef="let element">
+                        <select class="form-control select-TSP" name="" id="period_select"
+                            [(ngModel)]="element.id_san_pham">
+                            <option *ngFor="let product of products" [ngValue]="product.ma_san_pham">
+                                {{product.ten_san_pham}} </option>
+                        </select>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="SAN_LUONG">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
+                    <td mat-cell *matCellDef="let element">
+                        <input class="text-right form-control" [(ngModel)]="element.san_luong" type="number">
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="TRI_GIA">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <td mat-cell *matCellDef="let element"><input class="text-left form-control"
+                            [(ngModel)]="element.tri_gia" type="number"> </td>
+                </ng-container>
+                <ng-container matColumnDef="DOI_TAC">
+                    <th mat-header-cell *matHeaderCellDef> Đối tác </th>
+                    <td mat-cell *matCellDef="let element" class='not-input'>
+                        <textarea [(ngModel)]="element.thi_truong" class="form-control"></textarea>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ACTION">
+                    <th mat-header-cell *matHeaderCellDef> Xóa </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-stroked-button (click)="DeleteNK(element)">
+                            <mat-icon class="icon-color">delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; "></tr>
+            </table>
+        </div>
+        <div *ngIf="messageNK" class="messError">{{messageNK}}</div>
+        <mat-paginator #ImportPaginators [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

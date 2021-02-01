@@ -1,0 +1,274 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-3 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon> business</mat-icon> Số lượng doanh nghiệp trên địa bàn:
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{dataSource.data.length}} doanh nghiệp
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>equalizer</mat-icon> Tổng số lao động:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tongSoLaoDong | number: '1.0-0':'vi'}} lao động
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>equalizer</mat-icon> Tổng công suất thiết kế:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tongCongSuatThietKe | number: '1.0-0':'vi'}} m³/năm
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>equalizer</mat-icon> Tổng lượng sản lượng đá khai thác:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tongMucSanLuong | number: '1.0-0':'vi'}} m³/năm
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-2 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="getDanhSachQuanLyVatLieuNoCongNghiep($event.value)" [(value)]="year">
+                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select #dSelect (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen" multiple>
+                                <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tình trạng hoạt động</mat-label>
+                            <mat-select (selectionChange)="applySelectFilter()" [(ngModel)]="filterModel.id_tinh_trang_hoat_dong" multiple>
+                                <mat-option *ngFor='let tinhTrang of tinhTrangHoatDong' [value]='tinhTrang.id'>
+                                    {{tinhTrang.tinh_trang}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-2 col-lg-2 checkbox">
+                        <mat-checkbox (change)="applySelectFilter()" [(ngModel)]="filterModel.is_het_han">DN hết hạn
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="col-2 col-lg-2 button-control">
+                        <button mat-raised-button (click)="ExportTOExcel('QLCN - VLNCN',year.toString())">Xuất
+                            Excel</button>
+                    </div>
+                </div>
+
+                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #table>
+                    <mat-form-field id="filter3">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_doanh_nghiep" sticky>
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Tên doanh nghiệp
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_doanh_nghiep}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mst">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Mã số thuế </th>
+                            <td mat-cell *matCellDef="let element"> {{element.mst}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nganh_nghe_kd">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Ngành nghề KD </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nganh_nghe_kd}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_thoai">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> SĐT </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_thoai}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dia_chi">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Địa chỉ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dia_chi}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="so_lao_dong">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Số lao động </th>
+                            <td mat-cell *matCellDef="let element"> {{element.so_lao_dong | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cong_suat">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Công suất thiết kế/năm<br>(m³/năm)
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.so_lao_dong | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="san_luong">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Sản lượng/năm </th>
+                            <td mat-cell *matCellDef="let element"> {{element.san_luong | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="so_gp_gcn">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Số giấy phép </th>
+                            <td mat-cell *matCellDef="let element"> {{element.so_gp_gcn}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngay_cap">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Ngày cấp GP </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_cap| date:'dd/MM/yyyy'}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ngay_het_han">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Ngày hết hạn GP </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ngay_het_han| date:'dd/MM/yyyy'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tinh_hinh_6thang">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4"> Báo cáo 6 tháng </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tinh_hinh_ca_nam">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4"> Báo cáo cả năm </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dang_hoat_dong">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Tình trạng hoạt động </th>
+                            <td mat-cell *matCellDef="let element">{{element.dang_hoat_dong}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thuoc_no_6thang">
+                            <th mat-header-cell *matHeaderCellDef> Thuốc nổ (kg) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="kip_no_6thang">
+                            <th mat-header-cell *matHeaderCellDef> Kíp nổ (cái) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.kip_no_6thang | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="moi_no_6thang">
+                            <th mat-header-cell *matHeaderCellDef> Mồi nổ (cái) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.moi_no_6thang | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="day_no_6thang">
+                            <th mat-header-cell *matHeaderCellDef> Dây nổ (mét) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.day_no_6thang | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thuoc_no">
+                            <th mat-header-cell *matHeaderCellDef> Thuốc nổ (kg) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="kip_no">
+                            <th mat-header-cell *matHeaderCellDef> Kíp nổ (cái) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.kip_no | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="moi_no">
+                            <th mat-header-cell *matHeaderCellDef> Mồi nổ (cái) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.moi_no | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="day_no">
+                            <th mat-header-cell *matHeaderCellDef> Dây nổ (mét) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.day_no | number: '1.0-0':'vi'}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true"></tr>
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="['thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang','day_no_6thang','thuoc_no', 'kip_no', 'moi_no','day_no']; sticky : true;">
+                        </tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </mat-card-content>
+</mat-card>

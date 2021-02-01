@@ -1,0 +1,145 @@
+<mat-card class="material">
+    <mat-card-header>
+        <mat-card-title><strong>Cập nhật tình hình xuất khẩu</strong></mat-card-title>
+        <!-- <mat-card-subtitle><strong>Tháng cập nhật: </strong>{{timeExportManager}}</mat-card-subtitle> -->
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Tháng cập nhật giá</mat-label>
+                    <input matInput [matDatepicker]="dp" [formControl]="date">
+                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                    <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                        (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7 button-control -align-left">
+                <button mat-raised-button class="reverse" (click)="addRow()">
+                    <mat-icon>add_circle_outline</mat-icon>Thêm dòng
+                </button>
+                <button mat-raised-button class="reverse" (click)="insertRow()">
+                    <mat-icon>add_circle</mat-icon>Chèn dòng
+                </button>
+                <button mat-raised-button class="reverse" (click)="deleteRow()">
+                    <mat-icon>block</mat-icon>Xóa dòng
+                </button>
+                <button mat-raised-button class="reverse" (click)="createDefault()">
+                    <mat-icon>ballot</mat-icon>Khởi tạo mặc định
+                </button>
+            </div>
+
+            <div class="col-lg-5 button-control">
+
+                <button mat-raised-button
+                    (click)="downloadExcelTemplate('Mẫu tình hình xuất khẩu','Mẫu tình hình xuất khẩu')">
+                    <mat-icon>move_to_inbox</mat-icon> Tải tệp excel mẫu
+                </button>
+                <label id="import_excel">
+                    <mat-icon>cloud_upload</mat-icon> Nhập bằng Excel <input id="customFile" type="file"
+                        (change)="uploadExcel($event)" hidden #inputFile>
+                </label>
+                <button mat-raised-button (click)="save()">
+                    <mat-icon>save</mat-icon>Lưu
+                </button>
+                <!-- <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="customFile" (change)="uploadExcel($event)"
+                        #inputFile>
+                    <label class="custom-file-label" for="customFile">
+                        Nhập bằng excel
+                    </label>
+                    <button mat-raised-button 
+                    for="">
+                    <mat-icon>move_to_inbox</mat-icon> Tải tệp excel mẫu   
+                </button>
+                </div> -->
+            </div>
+        </div>
+        <div class="layout" #TABLE>
+            <!-- <mat-form-field id="filter">
+                <mat-label>Lọc dữ liệu</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+            </mat-form-field> -->
+
+            <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef> STT </th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ten_san_pham">
+                    <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
+                    <td mat-cell *matCellDef="let element">
+                        <select class="form-control" id="period_select" (change)="changeProduct(element)"
+                            [(ngModel)]="element.id_san_pham">
+                            <option *ngFor="let product of products" [ngValue]="product.ma_san_pham">
+                                {{product.ten_san_pham}} </option>
+                        </select>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="san_luong">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng <br> (nghìn tấn) </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input appReport currencyMask class="text-right" [(ngModel)]="element.san_luong" type="text">
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tri_gia">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá <br> (nghìn USD) </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input appReport currencyMask class="text-right" [(ngModel)]="element.tri_gia" type="text">
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="san_luong_ct">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng <br> (nghìn tấn) </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input appReport currencyMask class="text-right" [(ngModel)]="element.san_luong_ct" type="text">
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tri_gia_ct">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá <br> (nghìn USD) </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input appReport currencyMask class="text-right" [(ngModel)]="element.tri_gia_ct" type="text">
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="top_xuat_khau">
+                    <th mat-header-cell *matHeaderCellDef> TOP DN<br>Xuất khẩu </th>
+                    <td mat-cell *matCellDef="let element" id="jump">
+                        <mat-icon *ngIf="element.id != 0" (click)="openDialogSelectCompany(element)">emoji_events
+                        </mat-icon>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ten_sp">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"></th>
+                </ng-container>
+                <ng-container matColumnDef="so_lieu_tam_thoi">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+                        Số liệu tạm thời <br> (Nguồn số liệu từ Cục hải quan Bình Phước)</th>
+                </ng-container>
+                <ng-container matColumnDef="so_lieu_chinh_thuc">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">
+                        Số liệu chính thức<br> (Nguồn số liệu từ Tổng cục Hải quan)</th>
+                </ng-container>
+                <ng-container matColumnDef="top_xuat_khau_header">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
+                </ng-container>
+                <tr mat-header-row class="table-header"
+                    *matHeaderRowDef="['ten_sp','so_lieu_tam_thoi', 'so_lieu_chinh_thuc','top_xuat_khau_header']">
+                </tr>
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; "
+                    (click)="changeRow(i)">
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

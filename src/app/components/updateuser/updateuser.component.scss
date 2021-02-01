@@ -1,0 +1,41 @@
+.dkm-form h1{
+    text-align: center;
+    padding: 1em;
+}
+
+.body .form-nhap{
+    justify-content: center;
+}
+
+.update-page{
+    // background-image: url('../../../assets/img/example/planet.jpg');
+    height: 100%;
+    color: black;
+    font-size: x-large;
+    // background-color: cadetblue;
+}
+
+.mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    width: 500px;
+}
+
+
+
+.text-center{
+    width: 100%;
+    height: auto;
+}
+
+.text-center button{
+    margin-right: 3px;
+    width: 10em;
+    height: 3.5em;
+}
+
+.errorMess{
+    color: red;
+    font-size: 13px;
+}
