@@ -117,7 +117,7 @@ export class TRSManagementComponent implements OnInit {
 
   //Xuất excel
   ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    // this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   applyFilter(event) {
