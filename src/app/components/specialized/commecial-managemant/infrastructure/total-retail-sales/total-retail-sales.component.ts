@@ -42,6 +42,7 @@ export class TRSManagementComponent implements OnInit {
   @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild("table", { static: false }) table: ElementRef;
   //Variable for HTML&TS-------------------------------------------------------------------------
   //Variable for only TS-------------------------------------------------------------------------
 
