@@ -204,8 +204,10 @@ const routes: Routes = [
   ],
   exports: [RoutingComponent],
   providers: [
+    Manager,
     Energy,
     Industry,
+    Commercial,
     MessageService,
     SidebarService,
     //InformationService,
