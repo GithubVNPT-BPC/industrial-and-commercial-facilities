@@ -9,44 +9,50 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="row">
-            <div class="col-lg-3">
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6 col-sm-12 ">
                 <div class="form-group">
-                    <label for="selectedBusiness">Doanh Nghiệp</label>
-                    <mat-form-field>
-                        <input id="selectedBusiness" type="text" aria-label="Doanh nghiệp" class="form-control filter-input" placeholder="Nhập tên doanh nghiệp"
+                    <mat-form-field appearance="outline">
+                        <mat-label>Doanh Nghiệp</mat-label>
+                        <input id="selectedBusiness" type="text" aria-label="Doanh nghiệp" placeholder="Nhập tên doanh nghiệp"
                         mdInput matInput (keyup)="changeFilter('ten_doanh_nghiep', $event)" name="ten_doanh_nghiep" [(ngModel)]="selectedBusiness" />
                     </mat-form-field>
                     <!-- <label for="name_select">Tên công ty</label>
                     <input id="name_select" class="form-control" [(ngModel)]="tempFilter.ten_doanh_nghiep" type="text" placeholder="Tên Doanh nghiệp" aria-label="Doanh nghiệp"> -->
                 </div>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 col-md-6 col-sm-12 ">
                 <div class="form-group">
-                    <label for="selectedCarrier">Ngành nghề</label>
-                    <mat-form-field> 
-                        <input id="selectedCarrier" type="text" aria-label="Ngành nghề" class="form-control filter-input" placeholder="Nhập ngành nghề"
+                    <mat-form-field appearance="outline"> 
+                        <mat-label>Ngành nghề</mat-label>
+                        <input id="selectedCarrier" type="text" aria-label="Ngành nghề" placeholder="Nhập ngành nghề"
                         mdInput matInput (keyup)="changeFilter('ten_nganh_nghe', $event)" name="ten_nganh_nghe" [(ngModel)]="selectedCarrier" />
                     </mat-form-field>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-lg-3 col-md-6 col-sm-12 ">
                 <div class="form-group">
-                    <label for="selectedAddress">Địa chỉ</label>
-                    <mat-form-field>
-                        <select matNativeControl name="ten_quan_huyen" [(ngModel)]="selectedAddress" id="selectedAddress"
+                    <mat-form-field appearance="outline">
+                        <mat-label>Địa chỉ</mat-label>
+                        <!-- <select matNativeControl name="ten_quan_huyen" [(ngModel)]="selectedAddress" id="selectedAddress"
                                 (change)="changeFilter('ten_quan_huyen', $event)">
                             <option selected value="">Tất cả</option>
                             <option *ngFor="let address of addresses" [ngValue]="address" [value]="address" >{{address}}</option>
-                        </select>     
+                        </select>      -->
+                        <mat-select name="ten_quan_huyen" id="selectedAddress" [(ngModel)]="selectedAddress" (selectionChange)="changeFilter('ten_quan_huyen', $event)">
+                            <mat-option value=''>Tất cả</mat-option>
+                            <mat-option *ngFor='let address of addresses' [value]='address'>
+                                {{address}}
+                            </mat-option>
+                        </mat-select>
                     </mat-form-field>
                 </div>
             </div>
 
-            <div class="col-lg-4 button-control my-auto">
+            <div class="col-lg-3 col-md-6 col-sm-12 button-control text-center">
                 <!-- <button mat-raised-button class="form-button" (click)="filter()">Tìm kiếm</button> -->
-                <button mat-raised-button class="form-button" (click)="clearFilter()">Hủy</button>
-                <button mat-raised-button (click)="exportTOExcel('DanhSachDoanhNghiep','danh sach')">Xuất Excel</button>
+                <button mat-raised-button class="form-button mt-2" (click)="clearFilter()">Xóa bộ lọc</button>
+                <button mat-raised-button class="form-button mt-2" (click)="exportTOExcel('DanhSachDoanhNghiep','danh sach')">Xuất Excel</button>
             </div>
         </div>
 

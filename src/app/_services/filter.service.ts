@@ -5,7 +5,7 @@ import { normalizeValue , unicodeToAZ} from "src/app/_services/stringUtils.servi
     providedIn: 'root'
 })
 export class FilterService {
-    public filterValues = {};
+    private filterValues = {};
 
     public createFilter() {
         let filterFunction = function (data: any, filter: string): boolean {

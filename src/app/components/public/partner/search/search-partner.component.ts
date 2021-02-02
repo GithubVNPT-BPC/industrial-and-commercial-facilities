@@ -18,18 +18,9 @@ import { normalizeValue } from "src/app/_services/stringUtils.service";
 import { CompanyDetailModel, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { CareerModel, DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 
-import * as XLSX from 'xlsx';
-
 //Interface
 interface HashTableNumber<T> {
   [key: string]: T;
-}
-
-export class filterModel {
-  ten_doanh_nghiep: string = '';
-  ten_doanh_nghiep_alias: string = '';
-  ten_quan_huyen: string = '';
-  ten_nganh_nghe: string = '';
 }
 
 @Component({
@@ -157,6 +148,7 @@ export class SearchPartnerComponent implements AfterViewInit, OnInit {
   //Function for EVENT HTML     -------------------------------------------------------------------------------
   //Xuất excel
   public exportTOExcel(filename: string, sheetname: string) {
+    // TODO: Mofify HEADERS for the excel service
     let hashKeyDataSource: HashTableNumber<number> = {};
     let newDatas: any[] = [];
 
@@ -232,8 +224,9 @@ export class SearchPartnerComponent implements AfterViewInit, OnInit {
     }
   }
   
-  private changeFilter(columnProp, event)  {
-    this.dataSource.filter = this.filterService.getFilters(columnProp, event.target.value);
+  private changeFilter(col, event)  {
+    let value = event.target ? event.target.value : event.value;
+    this.dataSource.filter = this.filterService.getFilters(col, value);
   }
 
   private clearFilter() {
