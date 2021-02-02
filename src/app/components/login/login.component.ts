@@ -56,17 +56,17 @@ export class LoginComponent implements OnInit {
         }
         else if (response.data.user_role_id == 3) {
           this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
+          this.returnUrl = '/specialized/industry-management/chemical'
           this.router.navigateByUrl(this.returnUrl);
         }
         else if (response.data.user_role_id == 4) {
           this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
+          this.returnUrl = '/specialized/commecial-management/domestic'
           this.router.navigateByUrl(this.returnUrl);
         }
         else if (response.data.user_role_id == 5) {
           this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
+          this.returnUrl = '/specialized/enery-management/hydroelectric'
           this.router.navigateByUrl(this.returnUrl);
         }
       },

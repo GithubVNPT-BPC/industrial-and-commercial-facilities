@@ -54,15 +54,11 @@ export class SearchBusinessComponent implements OnInit {
 
   dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'ten_nganh_nghe', 'mst', 'dia_chi_day_du', 'nganh_nghe_kd',
-    'nguoi_dai_dien', 'dien_thoai', 'so_giay_cndkkd', 'ngay_cap_gcndkkd', 'loai_hinh_doanh_nghiep', 'von_kinh_doanh', 'ngay_bat_dau_kd', 'email', 'so_lao_dong',
-    'cong_suat_thiet_ke', 'san_luong', 'tieu_chuan_san_pham', 'doanh_thu', 'quy_mo_tai_san', 'loi_nhuan', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac',
-    'email_sct', 'so_lao_dong_sct', 'cong_suat_thiet_ke_sct', 'san_luong_sct', 'chi_tiet_doanh_nghiep'];
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+    'dia_chi_day_du'];
 
-  public displayedFields: string[] = ['ten_doanh_nghiep', 'ten_nganh_nghe', 'mst', 'dia_chi_day_du', 'nganh_nghe_kd',
-    'nguoi_dai_dien', 'dien_thoai', 'so_giay_cndkkd', 'ngay_cap_gcndkkd', 'loai_hinh_doanh_nghiep', 'von_kinh_doanh', 'ngay_bat_dau_kd',
-    'email', 'so_lao_dong', 'cong_suat_thiet_ke', 'san_luong', 'tieu_chuan_san_pham', 'doanh_thu', 'quy_mo_tai_san', 'loi_nhuan', 'nhu_cau_ban',
-    'nhu_cau_mua', 'nhu_cau_hop_tac', 'email_sct', 'so_lao_dong_sct', 'cong_suat_thiet_ke_sct', 'san_luong_sct', 'chi_tiet_doanh_nghiep'];
+  public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+    'dia_chi_day_du'];
 
   selected_field: string = 'ten_doanh_nghiep';
   countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
@@ -124,8 +120,8 @@ export class SearchBusinessComponent implements OnInit {
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        // console.log(allrecords.data);
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data[0]);
+        console.log(this.dataSource)
         this.temDataSource = allrecords.data;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

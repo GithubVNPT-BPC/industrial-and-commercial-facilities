@@ -27,8 +27,6 @@ export class MarketService {
     public urlTopImport = "/top-nhap-khau";
     public urlTopProduct = "/top-san-xuat";
     public urlAllCompany = "/danh-sach-doanh-nghiep";
-    public urlAllCompanyImport = "/danh-sach-doanh-nghiep";
-    public urlAllCompanyExport = "/danh-sach-doanh-nghiep";
     public urlCompanyInfo = "/thong-tin-doanh-nghiep";
 
     public apiProduct = environment.apiEndpoint + "api/san-pham";
@@ -36,8 +34,8 @@ export class MarketService {
     public urlProductNameById = "/ma-san-pham/";
 
     public apiHome = environment.apiEndpoint + "api";
-    public urlAllCareer = "/nganh-nghe";
-    public urlDistrict = "/quan-huyen";
+    public urlAllCareer = "/danh-sach/nganh-nghe";
+    public urlDistrict = "/danh-sach/quan-huyen";
     public urlSubDistrict = "/phuong-xa";
     public urlBT = "/loai-hinh";
     public urlCSTT = "/doanh-nghiep/co-so-truc-thuoc";
@@ -57,7 +55,7 @@ export class MarketService {
 
     token: any;
     username: any;
-    
+
     constructor(public http: HttpClient) {
         console.log("MarketService Contraction");
         // this.data = JSON.parse(localStorage.getItem('NormalUser'));
@@ -164,7 +162,7 @@ export class MarketService {
         );
     }
     public GetTopProduct(thang: number, nam: number, prodcutCode: number) {
-        console.log("GetTopProduct(thang: "+thang+", nam: "+nam+", prodcutCode: "+prodcutCode+") ");
+        console.log("GetTopProduct(thang: " + thang + ", nam: " + nam + ", prodcutCode: " + prodcutCode + ") ");
         var apiUrl = this.apiTopUrl + this.urlTopProduct;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('thang', thang.toString());
@@ -205,7 +203,7 @@ export class MarketService {
         );
     }
 
-    public GetAllCompanyExport(reportMode:number, year:number, period: number, isSCT:boolean){
+    public GetAllCompanyExport(reportMode: number, year: number, period: number, isSCT: boolean) {
         var apiUrl = this.apiImportExport + this.urlListExportedCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('report_mode', reportMode.toString());
@@ -214,12 +212,12 @@ export class MarketService {
         params = params.append('is_sct', isSCT.toString());
         console.log("+ Function: GetAllCompanyExport()");
         console.log("URL: ", apiUrl);
-        return this.http.get<any>(apiUrl, { headers: headers,params:params }).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public GetAllCompanyImport(reportMode:number, year:number, period: number, isSCT:boolean){
+    public GetAllCompanyImport(reportMode: number, year: number, period: number, isSCT: boolean) {
         var apiUrl = this.apiImportExport + this.urlListImportedCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('report_mode', reportMode.toString());
@@ -228,7 +226,7 @@ export class MarketService {
         params = params.append('is_sct', isSCT.toString());
         console.log("+ Function: GetAllCompanyExport()");
         console.log("URL: ", apiUrl);
-        return this.http.get<any>(apiUrl, { headers: headers,params:params }).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -294,15 +292,15 @@ export class MarketService {
             catchError(this.handleError)
         );
     }
-    public GetPriceByTimePeriod(productList : any[], from_date: string, to_date: string) {
+    public GetPriceByTimePeriod(productList: any[], from_date: string, to_date: string) {
         console.log(environment.apiEndpoint);
         var apiUrl = this.apiMarketUrl + this.urlProductTimePeriod;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('tu_ngay', from_date.toString());
-        params.append('den_ngay',to_date.toString());
+        params.append('den_ngay', to_date.toString());
         console.log("+ Function: GetPriceByTimePeriod(from_date: " + from_date.toString() + "; to_date: " + to_date.toString() + ")");
         console.log("URL: ", apiUrl);
-        return this.http.post<any>(apiUrl,productList, { headers: headers, params: params }).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, productList, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -320,47 +318,47 @@ export class MarketService {
         return throwError(errorMessage);
     }
 
-    GetKNXK(mst, report_mode, year, period){
+    GetKNXK(mst, report_mode, year, period) {
         let params = new HttpParams().set('report_mode', report_mode).set('ma_doanh_nghiep', mst).set('year', year).set('period', period);
         let url = this.apiHome + this.urlKNXK;
-        return this.http.get(url, {params: params}).pipe(tap(data => data), catchError(this.handleError));
+        return this.http.get(url, { params: params }).pipe(tap(data => data), catchError(this.handleError));
     }
 
-    GetKNNK(mst, report_mode, year, period){
+    GetKNNK(mst, report_mode, year, period) {
         let params = new HttpParams().set('report_mode', report_mode).set('ma_doanh_nghiep', mst).set('year', year).set('period', period);
         let url = this.apiHome + this.urlKNNK;
-        return this.http.get(url, {params: params}).pipe(tap(data => console.log(data)), catchError(this.handleError));
+        return this.http.get(url, { params: params }).pipe(tap(data => console.log(data)), catchError(this.handleError));
     }
 
-    GetAllNational(){
+    GetAllNational() {
         let url = this.apiHome + this.urlDSQG;
         return this.http.get(url).pipe(tap(data => data), catchError(this.handleError));
     }
 
-    UpdateKNNK(body, report_mode,ma_doanh_nghiep, year, period){
+    UpdateKNNK(body, report_mode, ma_doanh_nghiep, year, period) {
         let is_sct = JSON.parse(localStorage.getItem('currentUser')) === 3 ? 'true' : 'false';// role cua doanh nghiep
         console.log(is_sct['role'], is_sct)
         let url = this.apiHome + this.urlUpdateKNNK;
         let params = new HttpParams()
-        .set('report_mode', report_mode)
-        .set('ma_doanh_nghiep', ma_doanh_nghiep)
-        .set('year', year)
-        .set('period', period)
-        .set('is_sct', is_sct);
-        return this.http.post(url, body, {params: params}).pipe(tap(data=> data), catchError(this.handleError));
+            .set('report_mode', report_mode)
+            .set('ma_doanh_nghiep', ma_doanh_nghiep)
+            .set('year', year)
+            .set('period', period)
+            .set('is_sct', is_sct);
+        return this.http.post(url, body, { params: params }).pipe(tap(data => data), catchError(this.handleError));
     }
 
-    UpdateKNXK(body, report_mode,ma_doanh_nghiep, year, period){
+    UpdateKNXK(body, report_mode, ma_doanh_nghiep, year, period) {
         let is_sct = JSON.parse(localStorage.getItem('currentUser')) === 3 ? 'true' : 'false';// role cua doanh nghiep
         console.log(is_sct['role'], is_sct)
         let url = this.apiHome + this.urlUpdateKNXK;
         let params = new HttpParams()
-        .set('report_mode', report_mode)
-        .set('ma_doanh_nghiep', ma_doanh_nghiep)
-        .set('year', year)
-        .set('period', period)
-        .set('is_sct', is_sct);
-        return this.http.post(url, body, {params: params}).pipe(tap(data=> data), catchError(this.handleError));
+            .set('report_mode', report_mode)
+            .set('ma_doanh_nghiep', ma_doanh_nghiep)
+            .set('year', year)
+            .set('period', period)
+            .set('is_sct', is_sct);
+        return this.http.post(url, body, { params: params }).pipe(tap(data => data), catchError(this.handleError));
     }
 
 }

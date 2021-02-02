@@ -112,54 +112,25 @@ export class ProductModel {
     public ten_san_pham: string = "";
     public stt: number = null;
 }
-export class ImportExportValueModel{
+export class ImportExportValueModel {
     public tong_san_luong: number = 0;
     public tong_tri_gia: number = 0;
 }
 export class CompanyDetailModel {
     public id: number;
-    public ten_doanh_nghiep: string;
-
-    public id_nganh_nghe: string;
-    public ten_nganh_nghe: string;
+    public id_loai_hinh_hoat_dong: number;
+    public ten_loai_hinh_hoat_dong: string;
+    public mst: string;
+    public mst_cha: string;
+    public sct: boolean;
+    public hoat_dong: boolean;
     public dia_chi: string;
-    public dia_chi_day_du: string;
-    public nganh_nghe_kem_ma: string;
-
     public id_phuong_xa: number;
     public id_quan_huyen: number;
-    public ten_quan_huyen: string;
-    public nganh_nghe_kd: string;
+    public dia_chi_day_du: string;
     public nguoi_dai_dien: string;
-    public dien_thoai: string;
-    public mst: string;
-    public so_giay_cndkkd: string;
-    public ngay_cap_gcndkkd: Date;
-    public so_gpgcn : string;
-    public ngay_cap : Date;
-    public ngay_het_han : Date;
-
-    public id_loai_hinh: number;
-    public loai_hinh_doanh_nghiep: string;
-    public von_kinh_doanh: number;
-    public ngay_bat_dau_kd: Date;
-    public email: string;
-    public so_lao_dong: number;
-    public cong_suat_thiet_ke: number;
-    public san_luong: number;
-    public tieu_chuan_san_pham: string;
-
-    public id_danh_sach_co_so_truc_thuoc: number;
-    public doanh_thu: number;
-    public quy_mo_tai_san: number;
-    public loi_nhuan: number;
-    public nhu_cau_ban: string;
-    public nhu_cau_mua: string;
-    public nhu_cau_hop_tac: string;
-    public email_sct: string;
-    public so_lao_dong_sct: number;
-    public cong_suat_thiet_ke_sct: number;
-    public san_luong_sct: number;
+    public so_dien_thoai: string;
+    public ten_doanh_nghiep: String;
 }
 
 export class CareerModel {

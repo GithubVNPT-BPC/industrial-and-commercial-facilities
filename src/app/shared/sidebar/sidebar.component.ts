@@ -93,7 +93,6 @@ export class SidebarComponent implements OnInit {
       all => {
         this.navItems = this.createNavigation(all.data)
         // this.navItems = all.data as INavItem[];
-        console.log(this.navItems)
       }
     )
   }
@@ -120,7 +119,6 @@ export class SidebarComponent implements OnInit {
     if (countChild > 0) {
       let chilrentNavItems = navItems.filter(item => item.parent_id != null);
       reOutput.forEach(item => item.children = this.getChildNav(item, chilrentNavItems));
-      console.log(reOutput)
       return reOutput
     } else {
       return null;
@@ -160,7 +158,6 @@ export class SidebarComponent implements OnInit {
 
   // Open subchildren
   public OpenSubChildren(index: number, navItem_child) {
-    // console.log('xxx ', index, navItem_child)
     navItem_child['expand'] = !navItem_child['expand'];
   }
 
