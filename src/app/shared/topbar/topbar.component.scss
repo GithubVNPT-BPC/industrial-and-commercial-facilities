@@ -1,6 +1,9 @@
 .material {
   $blue: #1f7ed0;
   $white: white;
+  #username {
+    color: white;
+  }
   .mat-elevation-z5.main-contain {
     background-color: $blue;
     color: $white;

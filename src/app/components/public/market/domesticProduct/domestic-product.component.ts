@@ -11,8 +11,7 @@ import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepi
 //Import Model
 import { DomesticPriceModel, ProductValueModel } from '../../../../_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
-//Import Services
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+//Import Service
 import { MarketService } from '../../../../_services/APIService/market.service';
 //Import Component
 import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
@@ -78,11 +77,7 @@ export class DomesticProductComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(
-    public marketService: MarketService,
-    public excelService: ExcelService, 
-    public router: Router,
-    public dialog: MatDialog) {
+  constructor(public marketService: MarketService, public router: Router, public dialog: MatDialog) {
 
     //this.initialData();
   }
@@ -189,7 +184,13 @@ export class DomesticProductComponent implements OnInit {
   }
   //Event "Xuất excel"
   public exportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    sheetname = sheetname.replace('/', '_');
+    let excelFileName: string = filename + '.xlsx';
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, sheetname);
+    /* save to file */
+    XLSX.writeFile(wb, excelFileName);
   }
   //Event "Top doanh nghiệp"
   public openTopProduct(productId: string) {

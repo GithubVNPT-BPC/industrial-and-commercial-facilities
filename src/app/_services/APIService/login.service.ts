@@ -25,7 +25,8 @@ export class LoginService {
     public refreshTokenTimeout;
 
 
-    public apiUrl = environment.apiEndpoint + "api/dang-nhap/";
+    public apiUrl = environment.apiEndpoint + "api/dang-nhap/dang-nhap-sct";
+    // public apiUrl = environment.apiEndpoint + "api/dang-nhap";
     public apiRegister = environment.apiEndpoint + "api/dang-ky";
     public apiGetUserInfor = environment.apiEndpoint + "api/tai-khoan";
     public apiUpdateUser = environment.apiEndpoint + "api/tai-khoan";
@@ -57,9 +58,9 @@ export class LoginService {
         if (localStorage.getItem(this.LOCALSTORAGE_USER)) {
             let data = JSON.parse(localStorage.getItem(this.LOCALSTORAGE_USER));
             user.user_id = data.user_id;
-            user.user_role = data.role;
+            user.user_role_id = data.role;
             user.org_id = data.org_id;
-            user.user_name = data.user_name;
+            user.username = data.username;
             user.token = data.token;
             user.full_name = data.full_name;
             if (data.refresh_token != null) {
@@ -121,9 +122,9 @@ export class LoginService {
     public createUserFromRes(data: any): UserModel {
         let user: UserModel = new UserModel();
         user.user_id = data.user_id;
-        user.user_role = data.user_role;
+        user.user_role_id = data.user_role_id;
         user.org_id = data.org_id;
-        user.user_name = data.user_name;
+        user.username = data.username;
         user.token = data.token;
         user.full_name = data.full_name;
         if (data.refresh_token != null) {
@@ -143,9 +144,9 @@ export class LoginService {
         localStorage.setItem(this.LOCALSTORAGE_USER,
             JSON.stringify({
                 token: user.token,
-                role: user.user_role,
+                role: user.user_role_id,
                 user_id: user.user_id,
-                user_name: user.user_name,
+                username: user.username,
                 org_id: user.org_id,
                 full_name: user.full_name,
                 refresh_token: user.refresh_token,
@@ -203,8 +204,8 @@ export class LoginService {
     public updateUser(body, token) {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
         let params = new HttpParams();
-        params = params.append('isBusiness', body['user_name'] === 'admin' ? 'false' : 'true');
-        let url = `${this.apiGetUserInfor}/${body['user_name']}`
+        params = params.append('isBusiness', body['username'] === 'admin' ? 'false' : 'true');
+        let url = `${this.apiGetUserInfor}/${body['username']}`
         return this._http.post(url, body, { headers: headers, params: params });
     }
 
@@ -217,15 +218,15 @@ export class LoginService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.userValue.token });
         return this._http.post<any>(api, data, { headers: headers })//withCredentials: true
             .pipe(tap((response) => {
-                if (response)
-                {
-                //Kiểm tra response chỗ này, xem refresh có hết hạn luôn không. Nếu có thì báo hết hạn rồi logout.
-                let user = this.createUserFromRes(response.data);
-                this.userSubject.next(user);
-                this.updateUserToLocalstorage(user)
-                //this.startRefreshTokenTimer();
-                return response;}
-                else{
+                if (response) {
+                    //Kiểm tra response chỗ này, xem refresh có hết hạn luôn không. Nếu có thì báo hết hạn rồi logout.
+                    let user = this.createUserFromRes(response.data);
+                    this.userSubject.next(user);
+                    this.updateUserToLocalstorage(user)
+                    //this.startRefreshTokenTimer();
+                    return response;
+                }
+                else {
                     return throwError;
                 }
             }));

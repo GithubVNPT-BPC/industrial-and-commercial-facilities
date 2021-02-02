@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="col-lg-8">
-                <div class="row">
+                <div class="row info">
                     <table class="table" cellspacing="0">
                         <tbody>
                             <tr>
@@ -39,7 +39,8 @@
                             <tr>
                                 <th scope="row">Địa chỉ</th>
                                 <td>
-                                    <input [(ngModel)]="company.dia_chi_day_du" disabled>
+                                    <!-- <input [(ngModel)]="company.dia_chi_day_du" disabled> -->
+                                    <textarea [(ngModel)]="company.dia_chi_day_du" disabled></textarea>
                                 </td>
                             </tr>
 
@@ -283,12 +284,12 @@
                     </ng-container>
                     <ng-container matColumnDef="SAN_LUONG">
                         <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
-                        <td mat-cell *matCellDef="let element"><input [disabled]="true" [(ngModel)]="element.san_luong">
+                        <td mat-cell *matCellDef="let element"><input class="right-cell" [disabled]="true" [(ngModel)]="element.san_luong">
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="TRI_GIA">
                         <th mat-header-cell *matHeaderCellDef> Trị giá </th>
-                        <td mat-cell *matCellDef="let element"><input [disabled]="true" [(ngModel)]="element.tri_gia">
+                        <td mat-cell *matCellDef="let element"><input class="right-cell" [disabled]="true" [(ngModel)]="element.tri_gia">
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="DOI_TAC">
@@ -372,12 +373,12 @@
                     <ng-container matColumnDef="SAN_LUONG">
                         <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
                         <td mat-cell *matCellDef="let element">
-                            <input [(ngModel)]="element.san_luong" type="number" [disabled]="true">
+                            <input class="right-cell" [(ngModel)]="element.san_luong" type="number" [disabled]="true">
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="TRI_GIA">
                         <th mat-header-cell *matHeaderCellDef> Trị giá </th>
-                        <td mat-cell *matCellDef="let element"><input [(ngModel)]="element.tri_gia" type="number" [disabled]="true"> </td>
+                        <td mat-cell *matCellDef="let element"><input class="right-cell" [(ngModel)]="element.tri_gia" type="number" [disabled]="true"> </td>
                     </ng-container>
                     <ng-container matColumnDef="DOI_TAC">
                         <th mat-header-cell *matHeaderCellDef> Đối tác </th>

@@ -9,11 +9,8 @@ import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepi
 
 import { MatDialog } from '@angular/material';
 import { normalize } from 'path';
-
 //Import service
 import { MarketService } from '../../../../_services/APIService/market.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-
 //Import Model
 import { ExportMarketModel } from '../../../../_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
@@ -86,12 +83,7 @@ export class DomesticExportComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  constructor(
-    public marketService: MarketService, 
-    public router: Router, 
-    public dialog: MatDialog,
-    public excelService: ExcelService,
-    private scrollTop: ViewportScroller) {
+  constructor(public marketService: MarketService, public router: Router, public dialog: MatDialog,private scrollTop: ViewportScroller) {
     //this.initialData();
   }
 
@@ -217,40 +209,44 @@ export class DomesticExportComponent implements OnInit {
       }
     });
   }
-
   //Event "Xuất excel"
   public exportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    sheetname = sheetname.replace('/', '_');
+    let excelFileName: string = filename + '.xlsx';
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, sheetname);
+    /* save to file */
+    XLSX.writeFile(wb, excelFileName);
   }
-
   //Function EXTENTION -----------------------------------------------------------------------------------------------------------------
   public scroll(el: HTMLElement) {
     //el.scrollIntoView();
     el.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
   }
  
+
+  
   public getMonthAndYear(time: string) {
-    let year = time.substr(0, 4);
-    let month = time.substr(4, 2);
-    let day = time.substr(6, 2);
-    let result = day + "/" + month + "/" + year;
-    return result as string;
-  }
-
+  let year = time.substr(0, 4);
+  let month = time.substr(4, 2);
+  let day = time.substr(6, 2);
+  let result = day + "/" + month + "/" + year;
+  return result as string;
+}
   public getCurrentMonth(): number {
-    var currentDate = new Date();
-    return currentDate.getMonth() + 1;
-  }
-
+  var currentDate = new Date();
+  return currentDate.getMonth() + 1;
+}
   public initialYears() {
-    let returnYear: Array<any> = [];
-    let currentDate = new Date();
-    let nextYear = currentDate.getFullYear() + 1;
-    for (let index = 0; index < 11; index++) {
-      returnYear.push(nextYear - index);
-    }
-    return returnYear;
+  let returnYear: Array<any> = [];
+  let currentDate = new Date();
+  let nextYear = currentDate.getFullYear() + 1;
+  for (let index = 0; index < 11; index++) {
+    returnYear.push(nextYear - index);
   }
+  return returnYear;
+}
   public getCurrentYear() {
   var currentDate = new Date();
   return currentDate.getFullYear();

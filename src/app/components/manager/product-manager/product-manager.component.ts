@@ -305,14 +305,14 @@ export class ProductManagerComponent implements OnInit {
         this.dataSource = new MatTableDataSource<ProductManagerModel>();;
         this.addRow();
         this.addRow();
-        this.dataSource.data[0].ten_san_pham = this.products.filter(x => x.id_san_pham == HAT_DIEU)[0].ten_san_pham;
-        // this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.id_san_pham == HAT_TIEU)[0].ten_san_pham;
-        this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.id_san_pham == CAO_SU)[0].ten_san_pham;
-        // this.dataSource.data[3].ten_san_pham = this.products.filter(x => x.id_san_pham == CA_PHE)[0].ten_san_pham;
-        this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == HAT_DIEU)[0].id_san_pham;
-        // this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == HAT_TIEU)[0].id_san_pham;
-        this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == CAO_SU)[0].id_san_pham;
-        // this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == CA_PHE)[0].id_san_pham;
+        this.dataSource.data[0].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ten_san_pham;
+        // this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ten_san_pham;
+        this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ten_san_pham;
+        // this.dataSource.data[3].ten_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ten_san_pham;
+        this.dataSource.data[0].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ma_san_pham;
+        // this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ma_san_pham;
+        this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ma_san_pham;
+        // this.dataSource.data[3].id_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ma_san_pham;
         this.rows = this.dataSource.filteredData.length;
     }
     //Event "Thêm dòng"
@@ -382,7 +382,7 @@ export class ProductManagerComponent implements OnInit {
     }
     //Event "Select combobox"
     public changeProduct(element: any) {
-        element.ten_san_pham = this.products.filter(x => x.id_san_pham == element.id_san_pham)[0].ten_san_pham;
+        element.ten_san_pham = this.products.filter(x => x.ma_san_pham == element.id_san_pham)[0].ten_san_pham;
         element.thang = this.getCurrentMonth();
         element.nam = this.getCurrentYear();
     }

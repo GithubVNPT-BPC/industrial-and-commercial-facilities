@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { CreateBussinessComponent } from './business/create/create-business.component';
 import { DomesticManagerComponent } from './domestic-manager/domestic-manager.component';
-import { LoginAuthGuardService } from 'src/app/_authGuard/LoginAuthGuardService';
 import { ForeignManagerComponent } from './foreign-manager/foreign-manager.component';
 import { ImportManagerComponent } from './import-manager/import-manager.component';
 import { ExportManagerComponent } from './export-manager/export-manager.component';
@@ -15,6 +13,12 @@ import { BusinessExportImportComponent } from './business/business-export-import
 import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
+
+import { Industry } from '../../_authGuard/Industry';
+import { Energy } from '../../_authGuard/Energy';
+import { Commercial } from '../../_authGuard/Commercial';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { PageNotFoundComponent, LoaderInterceptor } from '../../shared';
 
 const routes: Routes = [
   {
@@ -93,7 +97,6 @@ const routes: Routes = [
               },
               {
                 path: 'price',
-                //canActivate: [LoginAuthGuardService],
                 component: DomesticManagerComponent,
                 data: {
                   title: 'Quản lý giá cả trong nước'
@@ -101,7 +104,6 @@ const routes: Routes = [
               },
               {
                 path: 'export',
-                // canActivate: [LoginAuthGuardService],
                 component: ExportManagerComponent,
                 data: {
                   title: 'Quản lý xuất khẩu'
@@ -109,7 +111,6 @@ const routes: Routes = [
               },
               {
                 path: 'import',
-                // canActivate: [LoginAuthGuardService],
                 component: ImportManagerComponent,
                 data: {
                   title: 'Quản lý nhập khẩu'
@@ -117,7 +118,6 @@ const routes: Routes = [
               },
               {
                 path: 'production',
-                // canActivate: [LoginAuthGuardService],
                 component: ProductManagerComponent,
                 data: {
                   title: 'Quản lý sản xuất'
@@ -137,7 +137,6 @@ const routes: Routes = [
               },
               {
                 path: 'price',
-                // canActivate: [LoginAuthGuardService],
                 component: ForeignManagerComponent,
                 data: {
                   title: 'Quản lý giá cả quốc tế'
@@ -152,6 +151,14 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [
+    Energy,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true
+    }
+  ],
 })
 export class ManagerRoutingModule { }

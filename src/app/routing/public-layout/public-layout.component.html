@@ -7,7 +7,7 @@
         <app-sidebar [typeOfSideBar]=1></app-sidebar>
     </mat-sidenav>
     <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'" style="margin-left: 200px;">
-        <div class="main_content" style="margin: 20px; height: 84vh;">
+        <div class="main_content" style="margin: 10px; height: 90vh;">
             <router-outlet></router-outlet>
             <app-footer></app-footer>
         </div>

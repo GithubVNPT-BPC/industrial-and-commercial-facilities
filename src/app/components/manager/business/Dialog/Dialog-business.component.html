@@ -1,4 +1,4 @@
-<mat-dialog-content>
+<mat-dialog-content style="max-height: 99vh; max-width: 99vw;">
     <mat-card class="material">
         <mat-card-header>
             <mat-card-title><strong>Danh sách cơ sở trực thuộc</strong></mat-card-title>
@@ -6,13 +6,13 @@
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <div class="layout ">
-                <mat-form-field id="filter1">
+            <div class="layout">
+                <mat-form-field id="filter">
                     <mat-label>Lọc dữ liệu</mat-label>
                     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                 </mat-form-field>
 
-                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table1">
+                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
 
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef class="cbconfig">
@@ -57,7 +57,7 @@
                         <td mat-cell *matCellDef="let element"> {{element.ngay_het_han}} </td>
                     </ng-container>
 
-                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;"></tr>
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"
                         (click)="selection.toggle(row)"></tr>
                 </table>
@@ -65,7 +65,7 @@
                 color: red;
                 text-align: center;
                 padding: 10px;">Không có dữ liệu</div>
-                <mat-paginator [pageSizeOptions]="[20]" showFirstLastButtons></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>
             </div>
         </mat-card-content>
     </mat-card>

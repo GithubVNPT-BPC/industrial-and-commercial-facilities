@@ -1,4 +1,4 @@
-<mat-dialog-content>
+<mat-dialog-content style="max-height: 99vh; max-width: 99vw;">
     <mat-card class="material">
         <mat-card-header>
             <mat-card-title><strong>{{field}}</strong></mat-card-title>
@@ -15,12 +15,12 @@
             </div>
             <hr>
             <div class="layout">
-                <mat-form-field id="filter1">
+                <mat-form-field id="filter">
                     <mat-label>Lọc dữ liệu</mat-label>
                     <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
                 </mat-form-field>
 
-                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table1">
+                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
 
                     <!-- <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef class="cbconfig">
@@ -55,7 +55,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="mst">
-                        <th mat-header-cell *matHeaderCellDef class="mst"> Mã số thuế </th>
+                        <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
                         <td mat-cell *matCellDef="let element"> {{element.mst}} </td>
                     </ng-container>
                     <ng-container matColumnDef="dia_chi">
@@ -67,8 +67,8 @@
                         <td mat-cell *matCellDef="let element"> {{element.dien_thoai}} </td>
                     </ng-container>
                     <ng-container matColumnDef="nganh_nghe_kd">
-                        <th mat-header-cell *matHeaderCellDef class="NGKD"> Ngành nghề kinh doanh </th>
-                        <td mat-cell *matCellDef="let element" class="NGKD"> {{element.nganh_nghe_kd}} </td>
+                        <th mat-header-cell *matHeaderCellDef> Ngành nghề kinh doanh </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nganh_nghe_kd}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="chi_tiet_doanh_nghiep">

@@ -355,7 +355,7 @@ export class EditBusinessComponent implements OnInit {
 
   kiemtraUser() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (!currentUser.user_name.includes("admin")) {
+    if (!currentUser.username.includes("admin")) {
       this.isCompany = true;
     }
   }

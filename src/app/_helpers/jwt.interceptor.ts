@@ -47,9 +47,9 @@ export class JwtInterceptor implements HttpInterceptor {
     public createUserFromRes(data: any): UserModel {
         let user: UserModel = new UserModel();
         user.user_id = data.user_id;
-        user.user_role = data.user_role;
+        user.user_role_id = data.user_role_id;
         user.org_id = data.org_id;
-        user.user_name = data.user_name;
+        user.username = data.username;
         user.token = data.token;
         user.full_name = data.full_name;
         if (data.refresh_token != null) {

@@ -33,42 +33,41 @@ export class LoginComponent implements OnInit {
     this.LogOut();
 
     // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    if((this.returnUrl.indexOf('specialized')) ==-1||(this.returnUrl.indexOf('manager') ==-1)){
-      this.returnUrl = 'specialized/home';
-    }
-    console.log("returnUrl", this.returnUrl);
+    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    // if ((this.returnUrl.indexOf('specialized')) == -1 || (this.returnUrl.indexOf('manager') == -1)) {
+    //   this.returnUrl = '';
+    // }
   }
   Login() {
     this.loading = true;
-    // console.log(this.userModel)
     this.loginService.validateLoginUser(this.userModel, this.isBusiness).subscribe({
       next: (response) => {
         if (response.data == null) {
           let config = new MatSnackBarConfig();
           config.duration = this.setAutoHide ? this.autoHide : 0;
           config.verticalPosition = this.verticalPosition;
-          //this.info.openSnackBar("Tài khoản hoặc mật khẩu không chính xác");
+          this.info.msgError("Tài khoản hoặc mật khẩu không chính xác");
           this.router.navigate(['login']);
         }
-        else {
-          if (response.data.user_role == 1) {
-            this.info.msgSuccess("Đăng nhập thành công với tư cách Sở Công thương");
-          }
-          if (response.data.user_role == 2) {
-            this.info.msgSuccess("Đăng nhập thành công với tư cách các Đơn vị thuộc Sở");
-          }
-          if (response.data.user_role == 3) {
-            this.info.msgSuccess("Đăng nhập thành công với tư cách Doanh nghiệp");
-          }
-          // if (document.referrer == "") {
-          //   this.router.navigate(['market/domestic/price']);
-          // } else {
-          //   this.location.back();
-          // }
-          // login successful so redirect to return url
+        else if (response.data.user_role_id == 1) {
+          this.info.msgSuccess("Đăng nhập thành công");
+          this.returnUrl = '/specialized/home'
           this.router.navigateByUrl(this.returnUrl);
- 
+        }
+        else if (response.data.user_role_id == 3) {
+          this.info.msgSuccess("Đăng nhập thành công");
+          this.returnUrl = '/specialized/home'
+          this.router.navigateByUrl(this.returnUrl);
+        }
+        else if (response.data.user_role_id == 4) {
+          this.info.msgSuccess("Đăng nhập thành công");
+          this.returnUrl = '/specialized/home'
+          this.router.navigateByUrl(this.returnUrl);
+        }
+        else if (response.data.user_role_id == 5) {
+          this.info.msgSuccess("Đăng nhập thành công");
+          this.returnUrl = '/specialized/home'
+          this.router.navigateByUrl(this.returnUrl);
         }
       },
       error: error => {
