@@ -133,13 +133,13 @@
                     <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
                 </ng-container>
                 <tr mat-header-row class="table-header"
-                    *matHeaderRowDef="['ten_sp','so_lieu_tam_thoi', 'so_lieu_chinh_thuc','top_xuat_khau_header']">
+                    *matHeaderRowDef="['ten_sp','so_lieu_tam_thoi', 'so_lieu_chinh_thuc','top_xuat_khau_header']; sticky: true">
                 </tr>
                 <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; "
                     (click)="changeRow(i)">
             </table>
         </div>
-        <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>
 </mat-card>

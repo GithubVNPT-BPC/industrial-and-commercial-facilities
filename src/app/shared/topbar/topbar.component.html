@@ -26,8 +26,8 @@
                         <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
                     <a (click)="openAccountDropdown()" class="user-menu">
-                        <img class="avatar" src="{{img_avatar}}" alt="{{userName}}">
-                        <span id='userName'>{{ userName }} </span>
+                        <img class="avatar" src="{{img_avatar}}" alt="{{username}}">
+                        <span id='username'>{{ username }} </span>
                     </a>
 
                     <div class="dropdown-content" [style.display]="this.open ? 'block' : 'none' ">
@@ -36,25 +36,25 @@
                             <span (click)="openForm()">Thông tin tài khoản</span>
                         </div>
                         <!-- <ng-container *ngIf="expression; else elseTemplate"> -->
-                        <ng-container>
+                        <!-- <ng-container>
                             <div id="text-btn">
                                 <mat-icon>wysiwyg</mat-icon>
                                 <span (click)="openManagerModule()">Quản lý thị trường</span>
                             </div>
-                        </ng-container>
+                        </ng-container> -->
                         <!-- <ng-template #elseTemplate> -->
-                        <ng-container>
+                        <!-- <ng-container>
                             <div id="text-btn">
                                 <mat-icon>wysiwyg</mat-icon>
                                 <span (click)="openSpecializedModule()">Dữ liệu chuyên ngành</span>
                             </div>
-                        </ng-container>
-                        <ng-container>
+                        </ng-container> -->
+                        <!-- <ng-container>
                             <div id="text-btn">
                                 <mat-icon>wysiwyg</mat-icon>
                                 <span (click)="openReportModule()">Quản lý báo cáo</span>
                             </div>
-                        </ng-container>
+                        </ng-container> -->
                         <!-- </ng-template> -->
                         <div id="text-btn">
                             <mat-icon>login</mat-icon>

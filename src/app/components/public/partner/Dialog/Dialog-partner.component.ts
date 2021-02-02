@@ -10,9 +10,6 @@ import { CSTTModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { MarketService } from '../../../../_services/APIService/market.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-// Services
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-
 @Component({
     selector: 'dialog-partner-component',
     templateUrl: './dialog-partner.component.html',
@@ -56,8 +53,7 @@ export class DialogPartnerComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public marketService: MarketService,
-        public route: ActivatedRoute,
-        public excelService: ExcelService,
+        public route: ActivatedRoute
     ) {
     }
 
@@ -67,7 +63,12 @@ export class DialogPartnerComponent implements OnInit {
     }
 
     ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+        sheetname = sheetname.replace('/', '_');
+        let excelFileName: string = filename + '.xlsx';
+        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, sheetname);
+        XLSX.writeFile(wb, excelFileName);
     }
 
     GetAllCSTT() {

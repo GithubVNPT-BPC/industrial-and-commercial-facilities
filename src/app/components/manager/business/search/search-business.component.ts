@@ -47,10 +47,8 @@ export class SearchBusinessComponent implements OnInit {
   filterCount: number = 1;
   arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'ten_nganh_nghe', 'mst', 'dia_chi_day_du', 'nganh_nghe_kd',
-    'nguoi_dai_dien', 'dien_thoai', 'so_giay_cndkkd', 'ngay_cap_gcndkkd', 'loai_hinh_doanh_nghiep', 'von_kinh_doanh', 'ngay_bat_dau_kd', 'email', 'so_lao_dong',
-    'cong_suat_thiet_ke', 'san_luong', 'tieu_chuan_san_pham', 'doanh_thu', 'quy_mo_tai_san', 'loi_nhuan', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac',
-    'email_sct', 'so_lao_dong_sct', 'cong_suat_thiet_ke_sct', 'san_luong_sct', 'chi_tiet_doanh_nghiep'];
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+    'dia_chi_day_du'];
 
   public displayFields = [
     {alias: 'ten_doanh_nghiep', name: 'Tên Doanh Nghiệp'},
@@ -103,17 +101,19 @@ export class SearchBusinessComponent implements OnInit {
   }
 
   ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
 
   OpenDetailCompany(mst: string) {
-    this.router.navigate(['manager/business/search/' + mst]);
+    let url = this.router.serializeUrl(
+      this.router.createUrlTree([encodeURI('#') + 'manager/business/search/' + mst]));
+    window.open(url.replace('%23', '#'), "_blank");
   }
 
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data[0]);
         this.temDataSource = allrecords.data;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

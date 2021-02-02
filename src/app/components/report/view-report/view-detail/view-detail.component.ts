@@ -1,9 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from '@angular/core';
 import * as XLSX from 'xlsx';
 
-// Services
 import { ReportService } from '../../../../_services/APIService/report.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from '../../../../_models/APIModel/report.model';
 import { MatTableDataSource } from '@angular/material/table';
@@ -86,8 +84,7 @@ export class ViewReportComponent implements OnInit {
     public route: ActivatedRoute,
     public keyboardservice: KeyboardService,
     public info: InformationService,
-    public location: Location,
-    public excelService: ExcelService,
+    public location: Location
   ) {
     this.route.queryParams.subscribe(params => {
       this.obj_id = params['obj_id'];
@@ -187,7 +184,12 @@ export class ViewReportComponent implements OnInit {
 
   //Xuất excel
   exportToExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    let excelFileName: string = filename + '.xlsx';
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, sheetname);
+    /* save to file */
+    XLSX.writeFile(wb, excelFileName);
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {

@@ -26,7 +26,7 @@ export class NotificationService {
         console.log("NotificationService Contraction");
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         //this.token = this.data.Token;
-        //this.username = this.data.Username;
+        //this.username = this.data.username;
     }
 
     public GetNotification(org_id: number) {

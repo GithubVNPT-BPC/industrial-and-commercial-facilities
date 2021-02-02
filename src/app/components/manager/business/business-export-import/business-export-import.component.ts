@@ -89,8 +89,8 @@ export class BusinessExportImportComponent implements OnInit {
   public isSCT: boolean = false;
   //Viewchild
   @ViewChild('TABLE1', { static: false }) table: ElementRef;
-  @ViewChild('scheduledOrdersPaginator', { static: true }) paginator: MatPaginator;
-  @ViewChild('scheduledOrdersPaginator1', { static: true }) paginator1: MatPaginator;
+  @ViewChild('page1', { static: true }) paginator: MatPaginator;
+  @ViewChild('page2', { static: true }) paginator1: MatPaginator;
   @ViewChild('selected_Career', { static: false }) careerEle: ElementRef;
 
   constructor(
@@ -109,7 +109,7 @@ export class BusinessExportImportComponent implements OnInit {
     this.selectedYear = this.getCurrentYear();
     this.selectedMonth = this.getCurrentMonth();
     this.years = this.initialYears();
-    this.isSCT = this._loginService.userValue.user_role < 3;
+    this.isSCT = this._loginService.userValue.user_role_id < 3;
     console.log(this._loginService.userValue);
     this.getAllCompanyExport();
     this.getAllCompanyImport();
@@ -271,12 +271,10 @@ export class BusinessExportImportComponent implements OnInit {
     XLSX.utils.book_append_sheet(wb, ws, sheetname);
     XLSX.writeFile(wb, excelFileName);
   }
-
   public _filter(value: string): CareerModel[] {
     const filterValue = this._normalizeValue(value);
     return this.careerList.filter(career => this._normalizeValue(career.ten_kem_ma).includes(filterValue));
   }
-  
   public openDetailCompany(mst: string) {
     let url = this.router.serializeUrl(
       this.router.createUrlTree([encodeURI('#') + 'manager/business/search/' + mst]));

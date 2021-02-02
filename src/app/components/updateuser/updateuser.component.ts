@@ -26,7 +26,7 @@ export class UpdateuserComponent implements OnInit {
   user: String = '';
   ngOnInit() {
     this.profileForm = this.fb.group({
-      user_name: [""],
+      username: [""],
       password: ["", Validators.required],
       full_name: [""],
       email: ["", Validators.email],
@@ -34,7 +34,7 @@ export class UpdateuserComponent implements OnInit {
       new_password: [""],
       org_id: [""]
     });
-    this.profileForm.controls['user_name'].disable();
+    this.profileForm.controls['username'].disable();
     this.profileForm.controls['mst'].disable();
     console.log("xxx", this.update_user());
     this.updateProfile();
@@ -51,14 +51,14 @@ export class UpdateuserComponent implements OnInit {
 
   updateProfile() {
     let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (!currentUser) currentUser = { user_name: "admin.sct", token: undefined };
+    if (!currentUser) currentUser = { username: "admin.sct", token: undefined };
     try {
       this.loginService
-        .getUser(currentUser.user_name, currentUser.token)
+        .getUser(currentUser.username, currentUser.token)
         .subscribe((data) => {
           this.userModel = new user_model(data.data);
           this.profileForm.patchValue({
-            user_name: this.userModel.user_name ? this.userModel.user_name : '',
+            username: this.userModel.username ? this.userModel.username : '',
             password: this.userModel.password ? this.userModel.password : '',
             email: this.userModel.email ? this.userModel.email : '',
             full_name: this.userModel.full_name ? this.userModel.full_name : '',
@@ -66,7 +66,7 @@ export class UpdateuserComponent implements OnInit {
             org_id: this.userModel.org_id ? this.userModel.org_id : ''
           });
           console.log(this.profileForm);
-          this.user = user_model['user_name'];
+          this.user = user_model['username'];
         });
 
       // debugger
@@ -75,7 +75,7 @@ export class UpdateuserComponent implements OnInit {
     }
 
     // this.profileForm.patchValue({
-    //   user_name: data.user_name,
+    //   username: data.username,
     //   pass_word: data.password,
     //   email: data.email,
     //   full_name: data.full_name,

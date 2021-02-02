@@ -13,10 +13,6 @@ import { ManagerService } from 'src/app/_services/APIService/manager.service';
 import { SAVE } from 'src/app/_enums/save.enum';
 import { InformationService } from 'src/app/shared/information/information.service';
 
-// Services
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-
-
 @Component({
     selector: 'company-top-popup',
     templateUrl: 'company-top-popup.component.html',
@@ -68,7 +64,6 @@ export class CompanyTopPopup implements OnInit {
         public dialogRef: MatDialogRef<CompanyTopPopup>,
         public marketService: MarketService,
         public managerService: ManagerService,
-        public excelService: ExcelService,
         public router: Router,
         public info: InformationService,
     ) {
@@ -107,7 +102,12 @@ export class CompanyTopPopup implements OnInit {
     }
 
     ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+        sheetname = sheetname.replace('/', '_');
+        let excelFileName: string = filename + '.xlsx';
+        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, sheetname);
+        XLSX.writeFile(wb, excelFileName);
     }
 
     // GetAllCompany() {

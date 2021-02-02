@@ -20,7 +20,7 @@ import { ConfirmationDialogService } from './shared/confirmation-dialog/confirma
 // import {ToastrModule} from 'ngx-toastr';
 import {MatPaginatorModule} from '@angular/material/paginator';
 // import { FormatNumberReportPipe } from './shared/pipes/formatNumber.pipe';
-import { dich } from 'src/app/components/specialized/commecial-managemant/border-trade/dich.pipe';
+// import { dich } from 'src/app/components/specialized/commecial-managemant/border-trade/dich.pipe';
 import { PipeModule } from './pipe.module';
 @NgModule({
   imports: [

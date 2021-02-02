@@ -250,7 +250,7 @@ export class ImportManagerComponent implements OnInit {
         let currentProduct;
         for (let i = 0; i < this.MAX_PRODUCT; i++) {
             this.addRow();
-            currentProduct = this.products.filter(x => x.id_san_pham == this.ARRAY_PRODUCT[i])[0];
+            currentProduct = this.products.filter(x => x.ma_san_pham == this.ARRAY_PRODUCT[i])[0];
             if (currentProduct) {
                 this.dataSource.data[i].ten_san_pham = currentProduct.ten_san_pham;
                 this.dataSource.data[i].id_san_pham = currentProduct.ma_san_pham;
@@ -265,7 +265,7 @@ export class ImportManagerComponent implements OnInit {
     }
     //Event "Thay đổi sản phẩm"
     public changeProduct(element: any) {
-        element.ten_san_pham = this.products.filter(x => x.id_san_pham == element.id_san_pham)[0].ten_san_pham;
+        element.ten_san_pham = this.products.filter(x => x.ma_san_pham == element.id_san_pham)[0].ten_san_pham;
         element.thang = this.getCurrentMonth();
         element.nam = this.getCurrentYear();
     }

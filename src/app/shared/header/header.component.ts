@@ -5,7 +5,6 @@ import { MatSidenav } from '@angular/material';
 import { NavigationEnd, Router } from '@angular/router';
 import { Location } from '@angular/common';
 //Import Service---------------------------------------------------------------------
-import { LoginAuthGuardService } from 'src/app/_authGuard/LoginAuthGuardService';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LoginService } from '../../_services/APIService/login.service';

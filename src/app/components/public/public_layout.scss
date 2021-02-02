@@ -1,4 +1,13 @@
 .mat-card.material {
+  .mat-paginator {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: left;
+    justify-content: flex-end;
+    height: 30px !important;
+    width: 100%;
+  }
   $blue: #1f7ed0;
   $white: white;
   .mat-card-header {
@@ -11,6 +20,9 @@
     }
   }
   .mat-card-content {
+    ::ng-deep .mat-form-field-wrapper {
+      margin-bottom: -0.5em;
+    }
     .mat-form-field {
       width: 100%;
     }
@@ -24,29 +36,9 @@
       min-height: 30px;
       width: 100%;
     }
-    .row {
-      .table td {
-        width: 100%;
-        vertical-align: middle;
-        input {
-          border: none;
-          font-size: 15px;
-          width: 100%;
-          height: 100%;
-          background-color: $white !important;
-        }
-        select {
-          border: none;
-          font-size: 15px;
-          width: 100%;
-          height: 100%;
-          background-color: $white !important;
-        }
-      }
-    }
     .button-control {
       text-align: right;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       button.mat-raised-button {
         background-color: $blue !important;
         color: $white !important;
@@ -62,39 +54,38 @@
       text-align: left;
     }
     .layout {
+      .table-header {
+        height: 40px !important;
+      }
+      .table-row {
+        height: 30px !important;
+      }
       max-width: 100%;
-      max-height: 590px;
+      max-height: 100%;
+      height: 460px;
       overflow: auto;
       table.mat-table.table-layout {
+        border-collapse: separate;
         width: 550%;
         table-layout: initial;
         th,
         td {
           padding-left: 5px !important;
           padding-right: 5px !important;
-          max-width: 130px!important;
-        }
-        .text{
-          text-align: left!important;
-        }
-        .number{
-          text-align: right!important;
-          width: 110px !important;
         }
         .mat-header-cell {
           background-color: $blue;
           color: $white;
           padding: 5px !important;
-          border: 1px solid black;
+          border: 0.01em solid rgb(192, 192, 192);
           font-weight: bold;
-          font-size: 15px;
+          font-size: 12px;
           text-align: center;
-          height: 77.6px;
         }
         .mat-footer-cell {
-          border: 1px solid black;
+          border: 0.01em solid rgb(192, 192, 192);
           padding: 5px !important;
-          text-align: center;
+          text-align: left;
           font-weight: bolder;
         }
         .left-cell {
@@ -105,35 +96,47 @@
         }
         .mat-cell {
           padding: 5px !important;
-          border: 1px solid black;
-          font-size: 14px;
-          text-align: center;
+          border-width: 1px;
+          border: 0.01em solid rgb(192, 192, 192);
+          font-size: 13px;
+          text-align: left;
           max-width: 350px;
-          height: 30px;
-          input {
-            border: none;
-            font-size: 15px;
-            width: 100%;
-            height: 100%;
-            text-align: center;
-          }
-          input:focus {
-            background-color: $blue;
-            color: $white;
-            font-size: 1.5em;
-            text-align: center;
-          }
+        }
+        .center-cell {
+          text-align: center !important;
+        }
+        .right-cell {
+          text-align: right !important;
         }
         #jump {
           cursor: zoom-in;
+          text-align: center;
           color: blue;
         }
-        select {
+
+        input {
           border: none;
-          font-size: 15px;
           width: 100%;
           height: 100%;
-          text-align-last: center;
+          background-color: white !important;
+          color: black;
+        }
+
+        select {
+          border: none;
+          width: 100%;
+          height: 100%;
+          background-color: white !important;
+          color: black !important;
+        }
+
+        select:invalid {
+          background-color: white !important;
+          color: black !important;
+        }
+
+        ::ng-deep .mat-select-disabled .mat-select-value {
+          color: black !important;
         }
       }
     }
@@ -190,5 +193,31 @@
 
   #large-filter {
     width: 550%;
+  }
+
+  .info {
+    input {
+      border: none;
+      width: 100%;
+      background-color: white !important;
+      color: black;
+    }
+
+    select {
+      border: none;
+      width: 100%;
+      background-color: white !important;
+    }
+
+    textarea {
+      border: none;
+      width: 100%;
+      background-color: white !important;
+      color: black;
+    }
+
+    ::ng-deep .mat-select-disabled .mat-select-value {
+      color: black !important;
+    }
   }
 }

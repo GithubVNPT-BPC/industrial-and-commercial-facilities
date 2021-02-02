@@ -14,8 +14,6 @@ import { SidebarService } from '../_services/sidebar.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { FilterByTextPipe } from './pipes/filterByText.pipe';
 import { HeaderComponent } from './header/header.component';
-import { ExcelServicesService } from './services/excel-services.service';
-import { MatTabComponent } from './mat-tab/mat-tab.component';
 // import { FlexLayoutModule } from '@angular/flex-layout';
 
 
@@ -27,8 +25,7 @@ import { MatTabComponent } from './mat-tab/mat-tab.component';
     PageNotFoundComponent,
     LoaderComponent,
     SidebarComponent,
-    FilterByTextPipe,
-    MatTabComponent
+    FilterByTextPipe
   ],
   imports: [
     CommonModule,
@@ -50,7 +47,6 @@ import { MatTabComponent } from './mat-tab/mat-tab.component';
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
     SidebarService,
-    ExcelServicesService
   ]
 })
 export class SharedModule { }
