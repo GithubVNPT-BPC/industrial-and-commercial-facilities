@@ -102,9 +102,12 @@ export class ExcelService {
     }
 
     private saveAsExcelFile(workbook: any, filename: string): void {
+        if (!filename.includes(EXCEL_EXTENSION)) {
+            filename = filename + EXCEL_EXTENSION
+        }
         workbook.xlsx.writeBuffer().then((data) => {
             let blob = new Blob([data], { type: EXCEL_TYPE });
-            FileSaver.saveAs(blob, filename + EXCEL_EXTENSION);
+            FileSaver.saveAs(blob, filename);
         });
     }
 
