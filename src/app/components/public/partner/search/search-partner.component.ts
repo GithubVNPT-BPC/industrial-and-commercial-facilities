@@ -226,7 +226,8 @@ export class SearchPartnerComponent implements AfterViewInit, OnInit {
   
   private changeFilter(col, event)  {
     let value = event.target ? event.target.value : event.value;
-    this.dataSource.filter = this.filterService.getFilters(col, value);
+    this.filterService.addFilter(col, value);
+    this.dataSource.filter = this.filterService.getFilters();
   }
 
   private clearFilter() {

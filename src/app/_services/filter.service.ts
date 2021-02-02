@@ -40,7 +40,7 @@ export class FilterService {
         return filterFunction
     };
 
-    public getFilters(col, value) {
+    public addFilter(col, value) {
         let val = unicodeToAZ(normalizeValue(value));
         this.filterValues[col] = val;
         return JSON.stringify(this.filterValues);
@@ -50,6 +50,22 @@ export class FilterService {
         for (let field in resetFields) {
             obj[resetFields[field]] = "";
         }
+        this.filterValues = {};
+    }
+
+    public removeCondition(condition) {
+        if (condition in this.filterValues) delete this.filterValues[condition];
+    }
+
+    public getFilters() {
+        return JSON.stringify(this.filterValues);
+    }
+
+    public getFilterVals() {
+        return this.filterValues;
+    }
+
+    public setFilterVals(value) {
         this.filterValues = {};
     }
 }
