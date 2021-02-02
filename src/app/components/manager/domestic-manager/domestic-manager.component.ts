@@ -59,7 +59,6 @@ export class DomesticManagerComponent implements OnInit {
 
   //Constant
   public readonly FORMAT = 'dd/MM/yyyy';
-  public readonly NEW_FORMAT = 'yyyyMMdd';
   public readonly LOCALE = 'en-GB';
   public readonly RANK_LABLE = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) { return `0 của ${length}`; }
@@ -99,7 +98,6 @@ export class DomesticManagerComponent implements OnInit {
   }
 
   public readonly format = 'dd/MM/yyyy';
-  public readonly newformat = 'yyyyMMdd';
   public readonly locale = 'en-US';
 
   /**
@@ -135,9 +133,10 @@ export class DomesticManagerComponent implements OnInit {
 
   public getListProduct(): void {
     console.log("+ Function: GetListProduct()");
-    this._managerService.GetListProduct_New().subscribe(
+    this._managerService.GetListProduct().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductManagerModelList[];
+        console.log(allrecords)
       },
       //error => this.errorMessage = <any>error
     );
@@ -149,8 +148,7 @@ export class DomesticManagerComponent implements OnInit {
 
   //Get domestic market price
   public getPreviousDomesticManager(time: Date): void {
-    let formattedDate = parseInt(formatDate(time, this.newformat, this.locale));
-    console.log(formattedDate)
+    let formattedDate = formatDate(time, this.format, this.locale);
     this._managerService.GetDomesticMarketByTime(formattedDate).subscribe(
       allrecords => {
         console.log(allrecords)
@@ -168,19 +166,19 @@ export class DomesticManagerComponent implements OnInit {
         }
         this._paginatorAgain();
       });
-    // error => this.errorMessage = <any>error
+    //error => this.errorMessage = <any>error
   }
 
   //FUNCTION USE FOR HTML/EVENT-----------------------------------------------------------------------------------------------------------------
   public save() {
     this._loginService.userValue.user_id;
     this.dataSource.data.forEach(element => {
-      if (element.gia_ca) {
-        let x: number = + element.gia_ca.toString().replace(',', '').replace(',', '').replace(',', '');
-        element.gia_ca = x;
+      if (element.gia) {
+        let x: number = + element.gia.toString().replace(',', '').replace(',', '').replace(',', '');
+        element.gia = x;
       }
-      if(element.ngay_cap_nhat){
-        let x = formatDate(this.pickedDate.date, this.NEW_FORMAT, this.LOCALE);
+      if (element.ngay_cap_nhat) {
+        let x = formatDate(this.pickedDate.date, this.FORMAT, this.LOCALE);
         element.ngay_cap_nhat = x;
       }
     });
@@ -273,9 +271,9 @@ export class DomesticManagerComponent implements OnInit {
           this.dataSource.data = [];
           data.forEach(item => {
             let datarow: DomesticManagerModel = new DomesticManagerModel();
-            datarow.gia_ca = item['Giá'];
+            datarow.gia = item['Giá'];
             datarow.nguon_so_lieu = item['Nguồn số liệu'];
-            // datarow.ten_san_pham = item['Tên sản phẩm'];
+            datarow.ten_san_pham = item['Tên sản phẩm'];
             datarow.id_san_pham = item['Mã sản phẩm'];
             datarow.ngay_cap_nhat = this.getCurrentDate();
             this.dataSource.data.push(datarow);
@@ -352,16 +350,16 @@ export class DomesticManagerComponent implements OnInit {
 
   //Event select combobox "Tên sản phẩm"
   public changeProduct(element: any) {
-    element.ten_san_pham = this.products.filter(x => x.id_san_pham == element.id_san_pham)[0].ten_san_pham;
+    element.ten_san_pham = this.products.filter(x => x.ma_san_pham == element.id_san_pham)[0].ten_san_pham;
   }
 
   //Event Add row "Thêm dòng"
   public addRow(): void {
     let newRow: DomesticManagerModel = new DomesticManagerModel();
-    newRow.gia_ca;
+    newRow.gia;
     newRow.ngay_cap_nhat = this.getCurrentDate();
     newRow.nguon_so_lieu = "";
-    // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+    newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
     this.dataSource.data.push(newRow);
     this._rows = this.dataSource.filteredData.length;
     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -380,10 +378,10 @@ export class DomesticManagerComponent implements OnInit {
     let data = this.dataSource.data.slice(this._currentRow);
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: DomesticManagerModel = new DomesticManagerModel();
-    newRow.gia_ca;
+    newRow.gia;
     newRow.ngay_cap_nhat = this.getCurrentDate();
     newRow.nguon_so_lieu = "";
-    // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+    newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
     this.dataSource.data.push(newRow);
     data.forEach(element => {
       this.dataSource.data.push(element);
@@ -412,14 +410,14 @@ export class DomesticManagerComponent implements OnInit {
     this.addRow();
     this.addRow();
     this.addRow();
-    // this.dataSource.data[0].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ten_san_pham;
-    // this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ten_san_pham;
-    // this.dataSource.data[2].ten_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ten_san_pham;
-    // this.dataSource.data[3].ten_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ten_san_pham;
-    this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == HAT_DIEU)[0].id_san_pham;
-    this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == HAT_TIEU)[0].id_san_pham;
-    this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == CAO_SU)[0].id_san_pham;
-    this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == CA_PHE)[0].id_san_pham;
+    this.dataSource.data[0].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ten_san_pham;
+    this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ten_san_pham;
+    this.dataSource.data[2].ten_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ten_san_pham;
+    this.dataSource.data[3].ten_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ten_san_pham;
+    this.dataSource.data[0].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ma_san_pham;
+    this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ma_san_pham;
+    this.dataSource.data[2].id_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ma_san_pham;
+    this.dataSource.data[3].id_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ma_san_pham;
     console.log(this.dataSource.data);
     this._rows = this.dataSource.filteredData.length;
   }

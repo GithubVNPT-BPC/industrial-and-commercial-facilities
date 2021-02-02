@@ -1,7 +1,7 @@
 <mat-card class="material">
     <mat-card-header>
         <mat-card-title>
-            <h3><strong>Thống kê danh sách Doanh nghiệp có hoạt động Xuất-Nhập khẩu</strong></h3>
+            <h4><strong>Thống kê danh sách Doanh nghiệp có hoạt động Xuất-Nhập khẩu</strong></h4>
         </mat-card-title>
         <mat-card-subtitle>
         </mat-card-subtitle>
@@ -29,7 +29,8 @@
                 <div class="form-group">
                     <label for="quarter_select">Quý báo cáo</label>
                     <select class="form-control" name="" id="quarter_select" [(ngModel)]="selectedQuarter">
-                        <option *ngFor="let quarter of quarters" [ngValue]="quarter.ma_so">{{quarter.ma_chu}}</option>
+                        <option *ngFor="let quarter of quarters" [ngValue]="quarter.ma_so">{{quarter.ma_chu}}
+                        </option>
                     </select>
                 </div>
             </div>
@@ -54,12 +55,11 @@
 
             </div>
         </div>
-        <hr>
         <div class="row">
             <div class="col-lg-6">
-                <h4>
+                <h5>
                     <strong>Danh sách doanh nghiệp có hoạt động xuất khẩu</strong>
-                </h4>
+                </h5>
             </div>
             <div class="col-lg-6 button-control">
                 <button mat-raised-button (click)="exportToExcel('DanhNghiepXuatKhau','danh sach', true)">Xuất
@@ -71,7 +71,7 @@
                 [dataSource]="dataSource" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index">
-                    <th mat-header-cell *matHeaderCellDef > STT
+                    <th mat-header-cell *matHeaderCellDef> STT
 
                     </th>
                     <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
@@ -119,31 +119,31 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;"></tr>
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky:true"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
             <div *ngIf="!dataSource.data.length">
                 <h1 class="text-center">Không có dữ liệu</h1>
             </div>
-            <mat-paginator #scheduledOrdersPaginator1 [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-            </mat-paginator>
         </div>
+        <mat-paginator #page1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+        </mat-paginator>
         <hr>
         <div class="row">
-            <h4 class="col-lg-6">
+            <h5 class="col-lg-6">
                 <strong>Danh sách doanh nghiệp có hoạt động nhập khẩu</strong>
-            </h4>
+            </h5>
             <div class="col-lg-6 button-control">
                 <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
                     (click)="exportToExcel('DanhNghiepNhapKhau','danh sach', false)">Xuất Excel</button>
             </div>
         </div>
-        <div class="layout " #TABLE2>
+        <div class="layout" #TABLE2>
             <table mat-table matTableFilter [exampleEntity]="filterEntity" [filterType]="filterType"
                 [dataSource]="dataSourceImport" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index">
-                    <th mat-header-cell *matHeaderCellDef > STT
+                    <th mat-header-cell *matHeaderCellDef> STT
 
                     </th>
                     <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
@@ -191,14 +191,14 @@
                     </td>
                 </ng-container>
 
-                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;"></tr>
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky:true"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
             <div *ngIf="!dataSourceImport.data.length">
                 <h1 class="text-center">Không có dữ liệu</h1>
             </div>
-            <mat-paginator #scheduledOrdersPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
-            </mat-paginator>
         </div>
+        <mat-paginator #page2 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons>
+        </mat-paginator>
     </mat-card-content>
 </mat-card>

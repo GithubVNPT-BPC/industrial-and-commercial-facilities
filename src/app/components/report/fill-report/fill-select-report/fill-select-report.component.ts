@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-// Services
 import { ReportService } from '../../../../_services/APIService/report.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject } from '../../../../_models/APIModel/report.model';
 import { MatPaginator } from '@angular/material/paginator';
@@ -45,7 +43,6 @@ export class FillSelectReportComponent implements OnInit {
 
   constructor(
     public reportSevice: ReportService,
-    public excelService: ExcelService,
     public router: Router,
   ) { }
 
@@ -61,7 +58,13 @@ export class FillSelectReportComponent implements OnInit {
   }
 
   ExportTOExcel(filename: string, sheetname: string) {
-    // this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    // sheetname = sheetname.replace('/', '_');
+    // let excelFileName: string = filename + '.xlsx';
+    // const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(wb, ws, sheetname);
+    // /* save to file */
+    // XLSX.writeFile(wb, excelFileName);
   }
 
   GetReportByPeriod(period: string, year: number, detailPeriod: number) {

@@ -15,8 +15,8 @@
                 <img [src]="defaultLogo" class="img-fluid rounded">
                 <hr>
                 <div class="button-control my-auto">
-                    <button mat-raised-button (click)="back()">Trở về danh sách DN</button>
-                    <button mat-raised-button (click)="openDialog(company.mst)">Danh sách CSTT</button>
+                    <!-- <button mat-raised-button (click)="back()">Trở về danh sách DN</button> -->
+                    <button mat-raised-button (click)="openDialog(company.mst)">Danh sách cơ sở trực thuộc</button>
                 </div>
             </div>
 
@@ -262,7 +262,8 @@
             <table mat-table [dataSource]="dataSourceKNXK" class="table-layout" id="small-table">
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
-                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='not-input'>{{i+1}}</td>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='not-input'>{{i+1}}
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="SAN_PHAM">
                     <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
@@ -365,7 +366,8 @@
             <table mat-table [dataSource]="dataSourceKNNK" class="table-layout" id="small-table">
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
-                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='not-input'>{{i+1}}</td>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='not-input'>{{i+1}}
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="SAN_PHAM">
                     <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>

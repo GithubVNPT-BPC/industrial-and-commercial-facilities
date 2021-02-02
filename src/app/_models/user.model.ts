@@ -1,7 +1,7 @@
 export class user_model{
     user_id: number;
         full_name: String;
-        user_name: String;
+        username: String;
         user_pwd_hash: String;
         user_pwd_salt: String;
         email: String;

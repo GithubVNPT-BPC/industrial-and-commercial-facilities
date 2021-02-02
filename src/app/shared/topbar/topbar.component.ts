@@ -3,7 +3,6 @@ import { Component, OnInit, Input, HostListener, Output } from '@angular/core';
 import { MatSidenav } from '@angular/material';
 import { Router } from '@angular/router';
 //Import Service---------------------------------------------------------------------
-import { LoginAuthGuardService } from 'src/app/_authGuard/LoginAuthGuardService';
 import { LoginService } from '../../_services/APIService/login.service';
 import { EventService } from '../services/evenet.service';
 //Import Model---------------------------------------------------------------------
@@ -19,13 +18,13 @@ export class TopbarComponent implements OnInit {
 
   //Constant---------------------------------------------------------------------
   public readonly AVATAR_DEFAULT: string = "../../../assets/img/avatars/1.jpg";
-  public readonly USERNAME_DEFAULT: string = "Tên người dùng";
+  public readonly username_DEFAULT: string = "Tên người dùng";
   public readonly NOTIFICATION_DEFAULT: number = 0;
   public readonly COLOR_USER_DEFUALT: string = "#ffc107";
   public readonly STYLE_SCSS_DEFAULTL: STYLESCSS_TYPE = STYLESCSS_TYPE.MATERIAL;
   //Variable for HTML & TS---------------------------------------------------------------------
   public img_avatar: string = this.AVATAR_DEFAULT;
-  public userName: string = this.USERNAME_DEFAULT;
+  public username: string = this.username_DEFAULT;
   public notificatios: number = this.NOTIFICATION_DEFAULT;
   public expression: boolean = true;
   public colorOfUser: string = this.COLOR_USER_DEFUALT;
@@ -36,10 +35,9 @@ export class TopbarComponent implements OnInit {
   @Input() open: boolean = this._eventService.open;
   @Input('typeOfUser') typeOfUser: TYPE_OF_NAV;
   @Input() sidebar: MatSidenav;
-  @Input('module') module_control: string; 
+  @Input('module') module_control: string;
   //Contructor & Oninit---------------------------------------------------------------------
   constructor(
-    public _loginAuthService: LoginAuthGuardService,
     public _loginService: LoginService,
     public _router: Router,
     public _eventService: EventService
@@ -61,7 +59,7 @@ export class TopbarComponent implements OnInit {
   public checkLogin() {
     if (localStorage.getItem('currentUser')) {
       let data: any = JSON.parse(localStorage.getItem('currentUser'));
-      this.userName = data.full_name;
+      this.username = data.full_name;
       return true;
     }
     else return
@@ -92,8 +90,8 @@ export class TopbarComponent implements OnInit {
     this.open = this._eventService.getValue();
   }
 
-  public openHome(){
-    
+  public openHome() {
+
   }
 
   public openDropdown() {
@@ -104,7 +102,7 @@ export class TopbarComponent implements OnInit {
     document.getElementById('account-dropdown').setAttribute('style', 'display: none');
   }
 
-  public logout(){
+  public logout() {
     this._router.navigate(['/logout']);
   }
   //Function in TS---------------------------------------------------------------------

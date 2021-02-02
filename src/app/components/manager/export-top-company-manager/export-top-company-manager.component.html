@@ -1,4 +1,4 @@
-<mat-dialog-content>
+<mat-dialog-content style="max-height: 99vh; max-width: 99vw;">
     <mat-card class="material">
         <mat-card-header>
             <mat-card-title><strong>{{field}}</strong></mat-card-title>
@@ -8,54 +8,66 @@
         </mat-card-header>
         <mat-card-content>
             <div class="layout ">
-                <mat-form-field id="filter1">
+                <mat-form-field id="filter">
                     <mat-label>Lọc dữ liệu</mat-label>
                     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                 </mat-form-field>
 
-                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table1">
+                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table" matSort
+                    matSortActive="select" matSortDisableClear matSortDirection="asc">
 
                     <ng-container matColumnDef="select">
-                        <th mat-header-cell *matHeaderCellDef class="cbconfig">
-                            <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
                             </mat-checkbox>
                         </th>
-                        <td mat-cell *matCellDef="let row" class="cbconfig1">
-                            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
                             </mat-checkbox>
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="index">
-                        <th mat-header-cell *matHeaderCellDef> STT </th>
-                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> STT </th>
+                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                            {{this.paginator.pageIndex == 0 ? i
+                            + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}} </td>
                     </ng-container>
+
                     <ng-container matColumnDef="ten_doanh_nghiep">
-                        <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên doanh nghiệp </th>
                         <td mat-cell *matCellDef="let element"> {{element.ten_doanh_nghiep}} </td>
                     </ng-container>
 
                     <ng-container matColumnDef="cong_suat">
-                        <th mat-header-cell *matHeaderCellDef [hidden]="typeOfSave != 'Sản xuất'"> Công suất </th>
+                        <th mat-header-cell *matHeaderCellDef [hidden]="typeOfSave != 'Sản xuất'" mat-sort-header> Công
+                            suất </th>
                         <td mat-cell *matCellDef="let element" [hidden]="typeOfSave != 'Sản xuất'">
-                            <input *ngIf="typeOfSave == 'Sản xuất'" appReport currencyMask class="text-right" [(ngModel)]="element.cong_suat"></td>
+                            <input *ngIf="typeOfSave == 'Sản xuất'" appReport currencyMask class="right-cell"
+                                [(ngModel)]="element.cong_suat">
+                        </td>
                     </ng-container>
 
                     <ng-container matColumnDef="mst">
-                        <th mat-header-cell *matHeaderCellDef class="mst"> Mã số thuế </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã số thuế </th>
                         <td mat-cell *matCellDef="let element"> {{element.mst}} </td>
                     </ng-container>
                     <ng-container matColumnDef="dia_chi">
-                        <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </th>
                         <td mat-cell *matCellDef="let element"> {{element.dia_chi}} </td>
                     </ng-container>
                     <ng-container matColumnDef="dien_thoai">
-                        <th mat-header-cell *matHeaderCellDef class="sdt"> Điện thoại </th>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Điện thoại </th>
                         <td mat-cell *matCellDef="let element"> {{element.dien_thoai}} </td>
                     </ng-container>
                     <ng-container matColumnDef="nganh_nghe_kd">
-                        <th mat-header-cell *matHeaderCellDef class="NGKD"> Ngành nghề kinh doanh </th>
-                        <td mat-cell *matCellDef="let element" class="NGKD"> {{element.nganh_nghe_kd}} </td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngành nghề kinh doanh </th>
+                        <td mat-cell *matCellDef="let element"> {{element.nganh_nghe_kd}} </td>
                     </ng-container>
                     <!-- <ng-container matColumnDef="chi_tiet_doanh_nghiep">
                         <th mat-header-cell *matHeaderCellDef> Chi tiết <br> Doanh nghiệp </th>
@@ -64,11 +76,12 @@
                         </td>
                     </ng-container> -->
 
-                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;"></tr>
-                    <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"></tr>
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"
+                        (click)="selection.toggle(row)"></tr>
                 </table>
             </div>
-            <mat-paginator [pageSizeOptions]="[20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator [pageSizeOptions]="[10,20,50]" showFirstLastButtons></mat-paginator>
         </mat-card-content>
     </mat-card>
 </mat-dialog-content>

@@ -1,18 +1,17 @@
 export class INavItem {
+    id?: number;
+    parent_id?: number;
+    navitems?: string;
     name?: string;
-    children?: INavItem[];
     url?: string;
-    title?: boolean;
     icon?: string;
-    variant?: string;
-    badge?: any;
-    manager?:boolean;
-    attributes?: Attribute;
-    id?: string;
-    isSCT?: boolean;
-    expand?: boolean;
-}
-export class Attribute {
-    disabled?: boolean;
-    color?: boolean;
+    manager?: boolean;
+    is_SCT?: boolean;
+    id_linh_vuc: number;
+    children?: INavItem[];
+    // expand?: boolean;
+    // title?: boolean;
+    // variant?: string;
+    // badge?: any;
+    // attributes?: Attribute;
 }

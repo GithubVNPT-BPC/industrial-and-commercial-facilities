@@ -2,15 +2,11 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { MessagesModule } from 'primeng/messages';
-
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-
 import { RoutingComponent } from './routing.component';
 import { PublicLayoutComponent } from './public-layout/public-layout.component';
 import { ManagerLayoutComponent } from './manager-layout/manager-layout.component';
 import { SharedModule } from '../shared/shared.module';
-import { PageNotFoundComponent, LoaderInterceptor } from '../shared';
 import { MaterialModule } from '../material.module';
 import { SidebarService } from '../_services/sidebar.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,9 +14,6 @@ import { P404Component } from '../components/error/404.component';
 import { P500Component } from '../components/error/500.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
-import { SCTBossAuthGuardService } from '../_authGuard/SCTBossAuthGuardService';
-import { BusinessAuthGuardService } from '../_authGuard/BusinessAuthGuardService';
-import { LoginAuthGuardService } from '../_authGuard/LoginAuthGuardService';
 import { FormsModule } from '@angular/forms';
 import { InformationService } from '../shared/information/information.service';
 import { LogoutComponent } from '../components/logout/logout.component';
@@ -34,8 +27,12 @@ import { EnergyLayoutComponent } from './energy-layout/energy-layout.component';
 import { ReportLayoutComponent } from './report-layout/report-layout.component';
 import { HomeSpecializedComponent } from '../components/specialized/home-specialized/home-specialized.component';
 
-// import {FlexLayoutModule} from '@angular/flex-layout';
-
+import { Industry } from '../_authGuard/Industry';
+import { Energy } from '../_authGuard/Energy';
+import { Commercial } from '../_authGuard/Commercial';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { PageNotFoundComponent, LoaderInterceptor } from '../shared';
+import { Manager } from '../_authGuard/Manager';
 
 const routes: Routes = [
   {//Default first page
@@ -60,7 +57,6 @@ const routes: Routes = [
   {//Login
     path: 'login',
     component: LoginComponent,
-    canActivate: [LoginAuthGuardService],
     data: {
       title: 'Đăng nhập'
     }
@@ -68,16 +64,13 @@ const routes: Routes = [
   {
     path: 'specialized/home',
     component: HomeSpecializedComponent,
-    canActivate: [LoginAuthGuardService],
     data: {
       title: 'Quản lý chuyên ngành'
     }
-    
   },
   {//Update user
     path: 'update_user',
     component: UpdateuserComponent,
-    canActivate: [LoginAuthGuardService],
     data: {
       title: 'Đăng nhập'
     }
@@ -92,7 +85,6 @@ const routes: Routes = [
   {//Register
     path: 'register',
     component: RegisterComponent,
-    canActivate: [LoginAuthGuardService],
     data: {
       title: 'Đăng ký doanh nghiệp'
     }
@@ -120,18 +112,20 @@ const routes: Routes = [
   },
   {//LayoutPage Specilized
     path: 'specialized',
-    canActivate: [SCTBossAuthGuardService],
     component: SpecializedLayoutComponent,
     children: [
       {
+        canActivate: [Commercial],
         path: 'commecial-management',
         loadChildren: () => import('../components/specialized/commecial-managemant/commecial-management.module').then(m => m.CommecialManagementModule),
       },
       {
+        canActivate: [Energy],
         path: 'enery-management',
         loadChildren: () => import('../components/specialized/enery-management/enery-management.module').then(m => m.EneryManagementModule),
       },
       {
+        canActivate: [Industry],
         path: 'industry-management',
         loadChildren: () => import('../components/specialized/industry-management/industry-management.module').then(m => m.IndustryManagement),
       },
@@ -140,12 +134,10 @@ const routes: Routes = [
   {//LayoutPge Report
     path: 'report',
     component: ReportLayoutComponent,
-    canActivate: [SCTBossAuthGuardService],
     loadChildren: () => import('../components/report/report.module').then(m => m.ReportModule)
     // children: [
     //   {//Report
     //     path: 'report',
-
     //   },
     //   {
     //     path: 'du_lieu_nganh/:id',
@@ -170,16 +162,10 @@ const routes: Routes = [
     // ],
   },
   {//Layout Manager
+    canActivate: [Manager],
     path: 'manager',
     component: ManagerLayoutComponent,
-    canActivate: [SCTBossAuthGuardService],
     loadChildren: () => import('../components/manager/manager.module').then(m => m.ManagerModule),
-    // children: [
-    //   {//Fulpath
-    //     path: '',
-
-    //   }
-    // ],
   },
   {//404
     path: '**',
@@ -218,9 +204,8 @@ const routes: Routes = [
   ],
   exports: [RoutingComponent],
   providers: [
-    SCTBossAuthGuardService,
-    BusinessAuthGuardService,
-    LoginAuthGuardService,
+    Energy,
+    Industry,
     MessageService,
     SidebarService,
     //InformationService,
