@@ -10,6 +10,8 @@ import { formatDate } from '@angular/common';
 
 //Import Service
 import { MarketService } from '../../../../_services/APIService/market.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+
 //Import Model
 import { DomesticPriceModel } from '../../../../_models/APIModel/domestic-market.model';
 //Imoport Component
@@ -86,7 +88,10 @@ export class DomesticPriceComponent implements OnInit {
 
 
 
-  constructor(public marketService: MarketService) {
+  constructor(
+    public marketService: MarketService,
+    public excelService: ExcelService,
+  ) {
     this.initialData();
   }
 
@@ -137,13 +142,7 @@ export class DomesticPriceComponent implements OnInit {
   }
   //Event for "Xuất Excel"
   public exportTOExcel(filename: string, sheetname: string) {
-    sheetname = sheetname.replace('/', '_').replace('/', '_');
-    let excelFileName: string = filename + '.xlsx';
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    /* save to file */
-    XLSX.writeFile(wb, excelFileName);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
   //Function for Extention-------------------------------------------------------------------------------------------
   public getMonthAndYear(time: string) {

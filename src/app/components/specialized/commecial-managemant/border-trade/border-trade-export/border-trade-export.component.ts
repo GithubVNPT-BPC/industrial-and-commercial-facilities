@@ -2,13 +2,15 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatAccordion, MatPaginator, MatSort, MatDialog, MatDialogConfig } from '@angular/material';
 import { ex_im_model } from 'src/app/_models/APIModel/export-import.model';
 import { LinkModel } from 'src/app/_models/link.model';
+// Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import { ModalComponent } from '../../export-import-management/dialog-import-export/modal.component';
 import { dataExport, dataExport2, dataExport3, dataExport4, dataExport5, dataExport6, dataExport7, dataExport8, dataExport9, dataExport10, dataExport11, dataExport12 } from '../../export-import-management/export-management/data';
 import { dataDialogM1, dataDialogM2, dataDialogM3, dataDialogM4, dataDialogM5, dataDialogM6, dataDialogM7, dataDialogM8, dataDialogM9, dataDialogM10, dataDialogM11, dataDialogM12 } from '../../export-import-management/export-management/dataDialog';
-import * as XLSX from "xlsx";
 import { data_xk_t11 } from '../border-trade-export/data';
 @Component({
     selector: 'app-border-trade-export',
@@ -93,6 +95,7 @@ export class BorderTradeExportComponent implements OnInit {
     isOnlyTongCucHQ: number = 2;
     constructor(
         public sctService: SCTService,
+        public excelService: ExcelService,
         public matDialog: MatDialog,
         public marketService: MarketService,
         private _breadCrumService: BreadCrumService
@@ -290,13 +293,7 @@ export class BorderTradeExportComponent implements OnInit {
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
-        const excelExtention: string = ".xlsx";
-        let excelFileName: string = filename + excelExtention;
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, sheetname);
-        /* save to file */
-        XLSX.writeFile(wb, excelFileName);
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
 }

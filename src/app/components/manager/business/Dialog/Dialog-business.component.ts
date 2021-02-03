@@ -1,5 +1,4 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, Inject } from '@angular/core';
-import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,6 +8,9 @@ import { CompanyDetailModel } from '../../../../_models/APIModel/domestic-market
 import { CSTTModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { MarketService } from '../../../../_services/APIService/market.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+// Services
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
     selector: 'dialog-business-component',
@@ -54,6 +56,7 @@ export class DialogBusinessComponent implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public marketService: MarketService,
+        public excelService: ExcelService,
         public route: ActivatedRoute
     ) {
     }
@@ -63,12 +66,7 @@ export class DialogBusinessComponent implements OnInit {
     }
 
     ExportTOExcel(filename: string, sheetname: string) {
-        sheetname = sheetname.replace('/', '_');
-        let excelFileName: string = filename + '.xlsx';
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, sheetname);
-        XLSX.writeFile(wb, excelFileName);
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     GetAllCSTT() {

@@ -6,6 +6,7 @@ import { ReportService } from '../../../../_services/APIService/report.service';
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from '../../../../_models/APIModel/report.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ReportDirective } from '../../../../shared/report.directive';
 import { KeyboardService } from '../../../../shared/services/keyboard.service';
@@ -84,6 +85,7 @@ export class FillReportComponent implements OnInit {
     public route: ActivatedRoute,
     public keyboardservice: KeyboardService,
     public info: InformationService,
+    public excelService: ExcelService,
     public location: Location
   ) {
     this.route.queryParams.subscribe(params => {
@@ -184,13 +186,7 @@ export class FillReportComponent implements OnInit {
 
   //Xuất excel
   ExportTOExcel(filename: string, sheetname: string) {
-    // sheetname = sheetname.replace('/', '_');
-    // let excelFileName: string = filename + '.xlsx';
-    // const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    // XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    // /* save to file */
-    // XLSX.writeFile(wb, excelFileName);
+    // this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {

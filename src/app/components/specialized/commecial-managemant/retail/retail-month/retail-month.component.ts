@@ -11,8 +11,7 @@ import { LinkModel } from 'src/app/_models/link.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Route } from '@angular/compiler/src/core';
 import { RetailModel, RetailMonthModel, RetailPercentModel } from 'src/app/_models/commecial.model';
-import * as XLSX from 'xlsx';
-
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
     selector: 'retail-month',
@@ -698,17 +697,13 @@ export class RetailMonthComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-    exportExcel() {
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Tổng mức bán lẻ hàng hóa');
-
-        XLSX.writeFile(wb, 'Tổng mức bán lẻ hàng hóa.xlsx');
-
+    ExportTOExcel(filename: string, sheetname: string) {
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     //Contructor + Init + Destroy
     constructor(
+        public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private _route: ActivatedRoute
     ) {

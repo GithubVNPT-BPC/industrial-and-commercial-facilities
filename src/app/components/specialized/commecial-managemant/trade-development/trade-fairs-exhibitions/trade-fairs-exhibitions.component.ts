@@ -6,8 +6,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
 import { TFE } from 'src/app/_models/APIModel/trade-development.model';
-import * as XLSX from 'xlsx';
-import * as moment from 'moment';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
   selector: 'app-trade-fairs-exhibitions',
@@ -374,16 +373,13 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Hội chợ triển lãm');
-
-    XLSX.writeFile(wb, 'Hội chợ triển lãm.xlsx');
-
+  ExportTOExcel(filename: string, sheetname: string) {
+      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
-  constructor(public sctService: SCTService) {
+  constructor(
+    public sctService: SCTService, 
+    public excelService: ExcelService, ) {
   }
 
   ngOnInit() {

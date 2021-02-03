@@ -14,7 +14,8 @@ import { ModalComponent } from "../dialog-import-export/modal.component";
 import { MatSort } from "@angular/material/sort";
 import { LinkModel } from "src/app/_models/link.model";
 import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
-import * as XLSX from "xlsx";
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+
 import { ImportDataComponent } from "../import-data/import-data.component";
 import { ExcelServicesService } from "src/app/shared/services/excel-services.service";
 import json_report_01 from "../test/report_export_01.json";
@@ -111,6 +112,7 @@ export class ExportManagementComponent implements OnInit {
         public sctService: SCTService,
         public matDialog: MatDialog,
         public marketService: MarketService,
+        public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private excelServices: ExcelServicesService
     ) { }
@@ -319,15 +321,7 @@ export class ExportManagementComponent implements OnInit {
 
 
     public ExportTOExcel(filename: string, sheetname: string) {
-        const excelExtention: string = ".xlsx";
-        let excelFileName: string = filename + excelExtention;
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
-            this.table.nativeElement
-        );
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, sheetname);
-        /* save to file */
-        XLSX.writeFile(wb, excelFileName);
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     public DowloadFile(filename: string, sheetname: string) {
