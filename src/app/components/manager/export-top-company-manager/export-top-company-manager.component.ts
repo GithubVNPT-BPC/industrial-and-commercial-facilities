@@ -143,63 +143,64 @@ export class ExportTopCompanyManager implements OnInit {
         XLSX.writeFile(wb, excelFileName);
     }
     //Event "Lưu"
-    public save() {
-        switch (this.typeOfSave) {
-            case SAVE.NONE:
-                break;
-            case SAVE.EXPORT:
-                this.managerService.PostTopExportManager(this.product.id, this.selection.selected).subscribe(
-                    next => {
-                        if (next.id == -1) {
-                            this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-                        }
-                        else {
-                            this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-                        }
-                        this.dialogRef.close(true);
-                    },
-                    error => {
-                        this._infor.msgError(error.message);
-                    }
-                )
-                break;
-            case SAVE.IMPORT:
-                this.managerService.PostTopImportManager(this.product.id, this.selection.selected).subscribe(
-                    next => {
-                        if (next.id == -1) {
-                            this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-                        }
-                        else {
-                            this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-                        }
-                        this.dialogRef.close(true);
-                    },
-                    error => {
-                        this._infor.msgError(error.message);
-                    }
-                )
-                break;
-            case SAVE.PRODUCT:
-                this.managerService.PostTopProductManager(this.product.id, this.selection.selected).subscribe(
-                    next => {
-                        if (next.id == -1) {
-                            this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-                        }
-                        else {
-                            this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-                        }
-                        this.dialogRef.close(true);
-                    },
-                    error => {
-                        this._infor.msgError(error.message);
-                    }
-                )
-                break;
-            default:
-                break;
-        }
+    // TODO : need to check the errors in 'this.selection.selected'
+    // public save() {
+    //     switch (this.typeOfSave) {
+    //         case SAVE.NONE:
+    //             break;
+    //         case SAVE.EXPORT:
+    //             this.managerService.PostTopExportManager(this.product.id, this.selection.selected).subscribe(
+    //                 next => {
+    //                     if (next.id == -1) {
+    //                         this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+    //                     }
+    //                     else {
+    //                         this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+    //                     }
+    //                     this.dialogRef.close(true);
+    //                 },
+    //                 error => {
+    //                     this._infor.msgError(error.message);
+    //                 }
+    //             )
+    //             break;
+    //         case SAVE.IMPORT:
+    //             this.managerService.PostTopImportManager(this.product.id, this.selection.selected).subscribe(
+    //                 next => {
+    //                     if (next.id == -1) {
+    //                         this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+    //                     }
+    //                     else {
+    //                         this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+    //                     }
+    //                     this.dialogRef.close(true);
+    //                 },
+    //                 error => {
+    //                     this._infor.msgError(error.message);
+    //                 }
+    //             )
+    //             break;
+    //         case SAVE.PRODUCT:
+    //             this.managerService.PostTopProductManager(this.product.id, this.selection.selected).subscribe(
+    //                 next => {
+    //                     if (next.id == -1) {
+    //                         this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+    //                     }
+    //                     else {
+    //                         this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+    //                     }
+    //                     this.dialogRef.close(true);
+    //                 },
+    //                 error => {
+    //                     this._infor.msgError(error.message);
+    //                 }
+    //             )
+    //             break;
+    //         default:
+    //             break;
+    //     }
 
-    }
+    // }
     //Function for EXTENTION-------------------------------------------------------------------------
 
 
