@@ -34,7 +34,6 @@ export class ReportService {
     username: any;
 
     constructor(public http: HttpClient, public logOutService: LoginService) {
-        // console.log("ReportService Contraction");
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
     }
@@ -47,7 +46,6 @@ export class ReportService {
         params = params.append('year', year.toString());
         params = params.append('org_id', org_id.toString());
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -196,7 +194,6 @@ export class ReportService {
     }
 
     public handleError(error: HttpErrorResponse) {
-        console.log(error);
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
             // client-side error

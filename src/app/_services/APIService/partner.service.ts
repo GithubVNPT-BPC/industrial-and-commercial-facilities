@@ -19,15 +19,12 @@ export class PartnerService {
 
 
     constructor(public http: HttpClient) {
-        console.log("PartnerService");
         // this.data = JSON.parse(localStorage.getItem('NormalUser'));
         // this.token = this.data.token;
     }
     public GetAllCompany() {
         var apiUrl = this.apiPartner + this.urlListPartner;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        console.log("+ Function: GetAllCompany()");
-        console.log("URL: ", apiUrl);
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );

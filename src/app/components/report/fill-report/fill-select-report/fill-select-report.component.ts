@@ -68,12 +68,10 @@ export class FillSelectReportComponent implements OnInit {
   }
 
   GetReportByPeriod(period: string, year: number, detailPeriod: number) {
-    console.log("+ Function GetReportByPeriod(period: " + period + ", year: " + year + ", detailPeriod: " + detailPeriod + ", org_id: " + this.org_id + ")");
     switch (period) {
       case "Tháng":
         this.reportSevice.GetList_ReportMonth(detailPeriod, year, this.org_id).subscribe(
           allrecords => {
-            console.log(allrecords);
             this.dataSource = new MatTableDataSource<ReportOject>(allrecords.data);
             this.dataSource.data.forEach(element => element.end_date = formatDate(element.end_date, this.format, this.locale));
             this.dataSource.data.forEach(element => element.start_date = formatDate(element.start_date, this.format, this.locale));
@@ -184,7 +182,6 @@ export class FillSelectReportComponent implements OnInit {
       default:
         break;
     }
-    console.log("Chu kì báo cáo: " + this.selectedPeriod + " - Năm: " + this.selectedYear + " - Tháng: " + this.selectedMonth + " - Quý: " + this.selectedQuarter)
   }
   // changeMonth() {
   //   this.GetReportByPeriod("Tháng", this.selectedYear, this.selectedMonth);

@@ -18,8 +18,6 @@ export class HomeComponent implements OnInit {
   request() {
     this.httpClient.get('https://api.github.com/users').subscribe(
       (res: Array<any>) => {
-        console.log('result', res);
-
         this.messageService.add({
           severity: 'success',
           summary: 'Operación exitosa',

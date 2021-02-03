@@ -283,7 +283,6 @@ export class SubscribeDiscountComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log(this.filterModel)
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
     if (!filteredData.length) {
       if (this.filterModel)
@@ -314,7 +313,6 @@ export class SubscribeDiscountComponent implements OnInit {
           if (filters[key].length) {
             filters[key].forEach(criteria => {
               temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-              console.log(temp2);
             });
             temp = [...temp2];
           }
@@ -326,7 +324,6 @@ export class SubscribeDiscountComponent implements OnInit {
 
   getSDList(): void {
     this.dataSource = new MatTableDataSource(this.DataSD);
-    console.log(this.dataSource)
     this.filteredDataSource.data = [...this.dataSource.data];
     this.sdtypes = [...new Set(this.dataSource.data.map(x => x.Hinh_thuc_KM))];
     this.dataSource.paginator = this.paginator;
@@ -338,7 +335,6 @@ export class SubscribeDiscountComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

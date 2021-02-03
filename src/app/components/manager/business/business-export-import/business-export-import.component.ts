@@ -407,19 +407,15 @@ export class BusinessExportImportComponent implements OnInit {
 
   //   this._currentFilter = newFilter;
   //   // filterValue = type + '|' + filterValue;
-  //   console.log(this._currentFilter);
   //   this.dataSource.filter = this._currentFilter;
   // }
 
   // removecompany(key: string) {
-  //   console.log(key);
   // }
 
   // addFavourite(company: Company) {
-  //   console.log(company);
   // }
 
   // addToCart(company: Company) {
-  //   console.log(company);
   // }
 }

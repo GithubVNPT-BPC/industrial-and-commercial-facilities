@@ -71,7 +71,6 @@ export class DataSCTComponent implements OnInit {
 
     // this.control.valueChanges.subscribe(value => {
     //   this.searchIndex = value;
-    //   // console.log(this.searchIndex);
     // });
 
     // this.id = this.getIdUrl();
@@ -79,7 +78,6 @@ export class DataSCTComponent implements OnInit {
     this.activeRoute.params.subscribe(params => {
       this.id = params.id
       // this.callReportService(this.selectedType, );
-      // console.log('lol', this.id)
       this.getLinhvucbaocao(this.id)
     });
     // this.getLinhvucbaocao(this.id)
@@ -99,33 +97,22 @@ export class DataSCTComponent implements OnInit {
         else
           this.cols.push({ field: element.attr_code, header: element.attr_name });
       });
-      // console.log(this.cols);
 
       this.tableRows = this.getNestedChildren(data.data[2], data.data[3], null);
-      // console.log(this.tableRows);
-      // console.log(this.options);
       this.attributes = data.data[1] as ReportAttribute[];
       this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
       this.indicators = data.data[2] as ReportIndicator[];
       this.datarows = data.data[3] as ReportDatarow[];
       this.object = data.data[0];
-      // console.log(this.attributes);
-      // console.log(this.indicators);
-      // console.log(this.datarows);
-      // console.log(this.object);
-      this.indicators.forEach(e => { console.log(e.ind_unit) });
       this.CreateMergeHeaderTable(this.attributes);
 
       this.CreateReportTable();
-      // console.log(this.dataSource);
     });
   }
 
   ngAfterViewChecked(): void {
     //Called after every check of the component's view. Applies to components only.
     //Add 'implements AfterViewChecked' to the class.
-    
-    // console.log('id url', this.id, this.getIdUrl(), typeof this.getIdUrl(), typeof this.id)
     // if(this.id !== this.getIdUrl())
     //   this.callReportService();
     // return;
@@ -136,7 +123,6 @@ export class DataSCTComponent implements OnInit {
     this.activeRoute.params.subscribe(data => {
       this.id = data.id;
       a = data.id;
-      // console.log(this.id, data)
     })
     return a;
   }
@@ -252,7 +238,6 @@ export class DataSCTComponent implements OnInit {
         out.push(temp);
       }
     }
-    console.log(out)
     return out
   }
 
@@ -262,7 +247,6 @@ export class DataSCTComponent implements OnInit {
 
   //   onIndicatorChange(field) {
   //     // this.table.filter(event.value, 'ind_name', 'in');
-  //     console.log(this.filteredOptions);
   //     if (this.filteredOptions.length)
   //       this.table.filter(this.filteredOptions, field, 'in');
   // }
@@ -355,7 +339,6 @@ export class DataSCTComponent implements OnInit {
       .map(c => c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase());
     this.attributeHeaders = this.attributeHeaders.filter(a => a.toLowerCase() != 'ind_code' && a.toLowerCase() != 'rn')
     this.attributeHeaders.unshift('index');
-    console.log(this.attributeHeaders);
     for (let index = 0; index < this.indicators.length; index++) {
       const elementDatarow = this.datarows[index];
       const elementIndicator = this.indicators[index];
@@ -494,16 +477,13 @@ export class DataSCTComponent implements OnInit {
   }
 
   changeReportType() {
-    console.log(this.selectedType)
   }
   selectedType(selectedType: any) {
     throw new Error("Method not implemented.");
   }
 
   changePeriod() {
-    console.log(this.selectedPeriod)
     this.reportSevice.GetReportByKey(this.selectedPeriod, this.selectedPeriod['ky_bao_cao'], this.selectedPeriod['org_id']).subscribe(data => {
-      console.log(data)
     })
   }
 }

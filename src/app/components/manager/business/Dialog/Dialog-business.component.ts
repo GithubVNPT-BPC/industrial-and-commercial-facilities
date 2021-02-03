@@ -22,7 +22,7 @@ export class DialogBusinessComponent implements OnInit {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
-    
+
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     dataSource: MatTableDataSource<CSTTModel> = new MatTableDataSource();
@@ -60,7 +60,6 @@ export class DialogBusinessComponent implements OnInit {
 
     ngOnInit(): void {
         this.GetAllCSTT();
-        console.log(this.data);
     }
 
     ExportTOExcel(filename: string, sheetname: string) {
@@ -76,7 +75,6 @@ export class DialogBusinessComponent implements OnInit {
         this.marketService.GetAllBasebyid(this.data).subscribe(
             allrecords => {
                 this.dataSource = new MatTableDataSource<CSTTModel>(allrecords.data);
-                console.log(this.dataSource, this.dataSource.data)
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";

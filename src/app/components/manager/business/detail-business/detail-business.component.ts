@@ -105,7 +105,6 @@ export class DetailBussinessComponent implements OnInit {
         const dialogRef = this.dialog.open(DialogBusinessComponent, { data: mst });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
         });
     }
 
@@ -167,7 +166,6 @@ export class DetailBussinessComponent implements OnInit {
         this.marketService.GetAllCompany().subscribe(
             allrecords => {
                 this.company = allrecords.data[0] as CompanyDetailModel;
-                console.log(allrecords)
             },
             error => this.errorMessage = <any>error
         );

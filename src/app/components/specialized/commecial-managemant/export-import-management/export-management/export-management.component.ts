@@ -177,12 +177,10 @@ export class ExportManagementComponent implements OnInit {
     tinh_tong(data) {
         this.initVariable();
         for (let item of data) {
-            // console.log(item)
             this.TongLuongThangThucHien += item["luong_thang"];
             this.TongGiaTriThangThucHien += item["gia_tri_thang"];
             this.TongLuongCongDon += item["luong_cong_don"];
             this.TongGiaTriCongDon += item["gia_tri_cong_don"];
-            // tổng cục hải quan
             this.tongluong_tc += item["luong_thang_tc"];
             this.tonggiatri_tc += item["gia_tri_thang_tc"];
             this.tongluongcongdon_tc += item["luong_cong_don_tc"];
@@ -198,7 +196,6 @@ export class ExportManagementComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     applyFilter(event: Event) {
@@ -223,7 +220,6 @@ export class ExportManagementComponent implements OnInit {
     // }
 
     applyExpireCheck(data) {
-        // console.log(data);
         let tem_data = [...data];
         this.dataSource = new MatTableDataSource<new_import_export_model>(
             tem_data.filter((item) =>
@@ -244,7 +240,6 @@ export class ExportManagementComponent implements OnInit {
         };
         dialogConfig.minHeight = "100%";
         dialogConfig.minWidth = "90%";
-        // console.log(this.handelDataDialog(id_mat_hang));
         // dialogConfig.panelClass = ['overflow-y: scroll;']
         this.matDialog.open(ModalComponent, dialogConfig);
         // }
@@ -331,7 +326,6 @@ export class ExportManagementComponent implements OnInit {
         );
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, sheetname);
-        console.log(this.table.nativeElement.querySelector("thead"));
         /* save to file */
         XLSX.writeFile(wb, excelFileName);
     }

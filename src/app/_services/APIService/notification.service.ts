@@ -23,7 +23,6 @@ export class NotificationService {
 
 
     constructor(public http: HttpClient) {
-        console.log("NotificationService Contraction");
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         //this.token = this.data.Token;
         //this.username = this.data.username;

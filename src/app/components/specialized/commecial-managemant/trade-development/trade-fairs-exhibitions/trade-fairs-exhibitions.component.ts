@@ -432,7 +432,6 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

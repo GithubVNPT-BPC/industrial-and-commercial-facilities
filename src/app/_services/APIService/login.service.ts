@@ -170,7 +170,6 @@ export class LoginService {
      * Logout
      */
     public LogoutUser(): void {
-        console.log("+ LogoutUser()");
         localStorage.removeItem(this.LOCALSTORAGE_USER);
         //this._http.post<any>(this.apiLogout, {}, { withCredentials: true }).subscribe(); //Wait for API
         //this.stopRefreshTokenTimer();
@@ -187,7 +186,6 @@ export class LoginService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
         let params = new HttpParams();
         params = params.append('isBusiness', userName.includes('admin') ? 'false' : 'true');
-        console.log(params);
         let url = `${this.apiGetUserInfor}/${userName}`;
         try {
             return this._http.get<any>(url, { headers: headers, params: params });

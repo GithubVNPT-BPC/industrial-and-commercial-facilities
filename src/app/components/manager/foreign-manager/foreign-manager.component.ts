@@ -91,7 +91,6 @@ export class ForeignManagerComponent implements OnInit {
   //FUNCTION FOR PROCESS FLOW ------------------------------------------------------------------------------------------------------------
   //Get products
   public getListProduct(): void {
-    console.log("+ Function: GetListProduct()");
     this._managerService.GetListProduct().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductManagerModelList[];
@@ -101,7 +100,6 @@ export class ForeignManagerComponent implements OnInit {
   }
   //get Nations
   public getListNation(): void {
-    console.log("+ Function: GetListNation()");
     this._managerService.GetListNation().subscribe(
       allrecords => {
         this.nations = allrecords.data as NationModel[];
@@ -112,7 +110,6 @@ export class ForeignManagerComponent implements OnInit {
   public getAllForegionManagerPrevious(time: Date) {
     this._managerService.GetForeignMarket(_moment(time).format('DD/MM/YYYY')).subscribe(
       allrecords => {
-        console.log(allrecords);
         allrecords.data.forEach(row => {
           row.ngay_cap_nhat = formatDate(row.ngay_cap_nhat, this.FORMAT, this.LOCALE).toString();
         });
@@ -239,10 +236,7 @@ export class ForeignManagerComponent implements OnInit {
     //     let ws: XLSX.WorkSheet = wb.Sheets[wsName];
 
     //     dataExcel = (XLSX.utils.sheet_to_json(ws, { header: 2 }));
-    //     console.log('Data: ', dataExcel);
     //     jsonFromExcel = JSON.stringify(dataExcel);
-
-    //     console.log('JsonData: ', jsonFromExcel);
 
     // };
 
@@ -276,7 +270,6 @@ export class ForeignManagerComponent implements OnInit {
           this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
         }
         else {
-          console.log(next);
           this._infor.msgSuccess("Dữ liệu được lưu thành công!");
         }
       },

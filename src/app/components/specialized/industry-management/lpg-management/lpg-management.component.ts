@@ -111,7 +111,6 @@ export class LPGManagementComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     getYears() {
@@ -143,7 +142,6 @@ export class LPGManagementComponent implements OnInit {
     // }
 
     applyExpireCheck(event) {
-        console.log(event);
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
 

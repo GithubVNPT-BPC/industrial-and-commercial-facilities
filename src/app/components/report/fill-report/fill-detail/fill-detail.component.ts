@@ -194,17 +194,13 @@ export class FillReportComponent implements OnInit {
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {
-    console.log("+ Function: GetReportById(obj_id:", + obj_id + ",time_id: ", +time_id + ", org_id:" + org_id + ")");
     this.reportSevice.GetReportByKey(obj_id, time_id, org_id).subscribe(
       allRecord => {
-        console.log(allRecord);
         this.attributes = allRecord.data[1] as ReportAttribute[];
         this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
-        // console.log(this.indicators);
-        // console.log(this.datarows);
         this.is_sent = !(allRecord.data[0][0].state_id == 101 || allRecord.data[0][0].state_id == 401);
         if (this.object[0]) {
           this.formatFrameReport(this.object[0]);
@@ -319,7 +315,6 @@ export class FillReportComponent implements OnInit {
     this.attributeHeaders.unshift('index');
     for (let index = 0; index < this.indicators.length; index++) {
       const elementIndicator = this.indicators[index];
-      console.log("item["+index+"]:",elementIndicator);
       const elementDatarow = this.datarows.find(e=>e.ind_id == elementIndicator.ind_id);
 
       let tableRow: ReportTable = new ReportTable();
@@ -405,7 +400,6 @@ export class FillReportComponent implements OnInit {
         tableRow.fd05 = new Date();
       }
       this.dataSource.data.push(tableRow);
-      console.log(tableRow);
     }
     this.dataSource.data.forEach(element => {
       if (element.ind_formula == null && element.ind_type == 1) this.rows++;
@@ -418,7 +412,6 @@ export class FillReportComponent implements OnInit {
   }
 
   SaveReport() {
-    console.log(this.dataSource.data);
     this.reportSevice.PostReportData(this.obj_id, this.time_id, this.org_id, this.dataSource.data).subscribe(response => {
       this.info.msgSuccess("Đã lưu báo cáo thành công!");
     },

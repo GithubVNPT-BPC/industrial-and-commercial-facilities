@@ -45,7 +45,6 @@ export class SCTService {
     username: any;
 
     constructor(public http: HttpClient, public logOutService: LoginService) {
-        // console.log("ReportService Contraction");
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
     }
@@ -54,7 +53,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachBuonBanThuocLa;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -64,7 +62,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachBanLeXangDau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -74,7 +71,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachBuonBanRuou;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -84,7 +80,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachBuonBanLPG;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -94,7 +89,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachQuanLyHoaChat;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -104,7 +98,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachQuanLyChietNapLPG;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -114,7 +107,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachQuanLyCongNghiepThucPham;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -124,7 +116,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachQuanLyVatLieuNoCongNghiep;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -134,7 +125,6 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlDanhSachQuanLyCumCongNghiep;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -145,7 +135,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachNhapKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -155,7 +145,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachNhapKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -165,7 +155,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachXuatKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -174,7 +164,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachXuatKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -185,7 +175,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachNhapKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -195,7 +185,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachNhapKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.post<any>(apiUrl,data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -205,7 +195,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachXuatKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.post<any>(apiUrl, data,  { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -214,7 +204,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDanhSachXuatKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        console.log(params);
+        
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -227,7 +217,7 @@ export class SCTService {
         var apiUrl = this.apiSCT + this.urlThuongMaiBienGioi;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString()).set('id_cua_khau', id_cua_khau.toString());
-        console.log(params);
+        
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -258,7 +248,6 @@ export class SCTService {
     }
 
     public handleError(error: HttpErrorResponse) {
-        console.log(error);
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
             // client-side error

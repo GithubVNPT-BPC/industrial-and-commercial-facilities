@@ -81,7 +81,6 @@ export class ManufacturingElectronicComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

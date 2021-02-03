@@ -335,7 +335,6 @@ export class IipMonthComponent implements OnInit {
             this.year = params["year"];
             this.month = params["month"];
         });
-        console.log(this._route.params);
     }
 
     exportExcel() {

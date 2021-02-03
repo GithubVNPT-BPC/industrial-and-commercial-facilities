@@ -111,7 +111,6 @@ export class DomesticManagerComponent implements OnInit {
     public _keyboardservice: KeyboardService,
     public _infor: InformationService,
     public _loginService: LoginService) {
-    console.log("* DomesticManagerComponent constructed!")
   }
 
   /**
@@ -132,11 +131,9 @@ export class DomesticManagerComponent implements OnInit {
   // FUNCION USE FOR PROCESS-FLOW -----------------------------------------------------------------------------------------------------
 
   public getListProduct(): void {
-    console.log("+ Function: GetListProduct()");
     this._managerService.GetListProduct().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductManagerModelList[];
-        console.log(allrecords)
       },
       //error => this.errorMessage = <any>error
     );
@@ -151,7 +148,6 @@ export class DomesticManagerComponent implements OnInit {
     let formattedDate = formatDate(time, this.format, this.locale);
     this._managerService.GetDomesticMarketByTime(formattedDate).subscribe(
       allrecords => {
-        console.log(allrecords)
         allrecords.data.forEach(row => {
           row.ngay_cap_nhat = formatDate(row.ngay_cap_nhat, this.FORMAT, this.LOCALE).toString();
         });
@@ -184,7 +180,6 @@ export class DomesticManagerComponent implements OnInit {
     });
     // // if(this._mode == MODE.INSERT)
     // // {
-    console.log(this.dataSource);
     this._managerService.PostDomesticManager(this.dataSource.data).subscribe(
       next => {
         if (next.id == -1) {
@@ -308,10 +303,7 @@ export class DomesticManagerComponent implements OnInit {
     //     let ws: XLSX.WorkSheet = wb.Sheets[wsName];
 
     //     dataExcel = (XLSX.utils.sheet_to_json(ws, { header: 2 }));
-    //     console.log('Data: ', dataExcel);
     //     jsonFromExcel = JSON.stringify(dataExcel);
-
-    //     console.log('JsonData: ', jsonFromExcel);
 
     // };
 
@@ -418,7 +410,6 @@ export class DomesticManagerComponent implements OnInit {
     this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ma_san_pham;
     this.dataSource.data[2].id_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ma_san_pham;
     this.dataSource.data[3].id_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ma_san_pham;
-    console.log(this.dataSource.data);
     this._rows = this.dataSource.filteredData.length;
   }
 
@@ -428,7 +419,6 @@ export class DomesticManagerComponent implements OnInit {
     let month = time.substr(4, 2);
     let day = time.substr(6, 2);
     let result = day + "/" + month + "/" + year;
-    console.log(result);
     return result as string;
   }
 
@@ -439,7 +429,6 @@ export class DomesticManagerComponent implements OnInit {
   //FUNCTION FOR ONLY TS
   private _paginatorAgain() {
     this.dataSource.paginator = this.paginator;
-    console.log("paginator", this.paginator);
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
     this.paginator._intl.firstPageLabel = "Trang Đầu";
     this.paginator._intl.lastPageLabel = "Trang Cuối";

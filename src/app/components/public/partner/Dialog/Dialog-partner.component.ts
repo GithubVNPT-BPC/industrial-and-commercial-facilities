@@ -59,7 +59,6 @@ export class DialogPartnerComponent implements OnInit {
 
     ngOnInit(): void {
         this.GetAllCSTT();
-        console.log(this.data);
     }
 
     ExportTOExcel(filename: string, sheetname: string) {
@@ -75,7 +74,6 @@ export class DialogPartnerComponent implements OnInit {
         this.marketService.GetAllBasebyid(this.data).subscribe(
             allrecords => {
                 this.dataSource = new MatTableDataSource<CSTTModel>(allrecords.data);
-                console.log(this.dataSource)
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";

@@ -17,7 +17,6 @@ export class ManagerLayoutComponent {
 
   constructor(public _sidenavService: SidebarService) {
     this._sidenavService.sideBarState$.subscribe( res => {
-      //console.log(res)
       this.onSideNavChange = res;
     })
   }

@@ -132,7 +132,6 @@ export class RetailComponent implements OnInit {
     //TS Function -----------------------------------------------------------------
     private initData(): void {
         this.year = this.getCurrentYear();
-        console.log("year:", this.year);
         this.dataSource = new MatTableDataSource(this.DATA_DEFAULT);
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
