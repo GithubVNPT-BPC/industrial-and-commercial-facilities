@@ -15,7 +15,7 @@
                         <div class="col-lg-5">
                             <mat-form-field appearance="outline">
                                 <mat-select [(ngModel)]="item.field_name" class="selected-condition" (selectionChange)="changeFilter($event)">
-                                    <mat-option *ngFor="let field of displayFields" [value]='field.alias' >{{field.name}}</mat-option>
+                                    <mat-option *ngFor="let field of displayFields | keyvalue" [value]='field.key' >{{field.value}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -36,7 +36,6 @@
             </div>
 
             <div class="col-lg-5 button-control float-right mt-2">
-                <!-- <button mat-raised-button (click)="filter()">Tìm kiếm</button> -->
                 <button mat-raised-button (click)="addMoreFilter()">
                     <mat-icon [inline]="true">add_circle_outline</mat-icon> &nbsp;Thêm bộ lọc
                 </button>
@@ -47,16 +46,7 @@
             
         </div>
         <hr>
-<<<<<<< HEAD
         <div class="layout" #TABLE>
-=======
-        <div class="layout">
-            <!-- <mat-form-field id="large-filter">
-                <mat-label>Lọc dữ liệu</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field> -->
-
->>>>>>> main
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 [filterType]="filterType" [dataSource]="dataSource" id="small-table1">
 
@@ -113,7 +103,12 @@
 
                 <ng-container matColumnDef="hoat_dong">
                     <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-                    <td mat-cell *matCellDef="let element"> {{element.hoat_dong}} </td>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="element.hoat_dong; else negActiveExp">Hoạt động</span>
+                        <ng-template #negActiveExp>
+                            <span>Ngừng hoạt động</span>
+                        </ng-template>
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="chi_tiet_doanh_nghiep">
