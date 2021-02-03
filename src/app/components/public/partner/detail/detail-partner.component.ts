@@ -202,15 +202,6 @@ export class CompanyDetailComponent implements OnInit {
 				default:
 					break;
 			}
-				"Chu kì báo cáo: " +
-				this.selectedPeriodNK +
-				" - Năm: " +
-				this.selectedYearNK +
-				" - Tháng: " +
-				this.selectedMonthNK +
-				" - Quý: " +
-				this.selectedQuarterNK
-			);
 		} else {
 			switch (this.selectedPeriodXK) {
 				case "Tháng":
@@ -231,15 +222,6 @@ export class CompanyDetailComponent implements OnInit {
 				default:
 					break;
 			}
-				"Chu kì báo cáo: " +
-				this.selectedPeriodXK +
-				" - Năm: " +
-				this.selectedYearXK +
-				" - Tháng: " +
-				this.selectedMonthXK +
-				" - Quý: " +
-				this.selectedQuarterXK
-			);
 		}
 	}
 
