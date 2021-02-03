@@ -78,7 +78,7 @@ export class SearchBusinessComponent implements OnInit {
     this.GetAllCompany();
     this.GetAllNganhNghe();
     this.GetAllDistrict();
-  }x
+  }
 
   ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
