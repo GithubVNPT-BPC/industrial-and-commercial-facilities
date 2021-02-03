@@ -65,7 +65,7 @@ export class FilterService {
         return this.filterValues;
     }
 
-    public setFilterVals(value) {
-        this.filterValues = {};
+    public setFilterVals(value = {}) {
+        this.filterValues = value;
     }
 }

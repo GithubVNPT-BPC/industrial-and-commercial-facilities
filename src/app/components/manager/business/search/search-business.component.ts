@@ -55,46 +55,26 @@ export class SearchBusinessComponent implements OnInit {
   }
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
-    'dia_chi_day_du'];
-
   public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
 
   selectedAdress;
-  selected_field: string = 'ten_doanh_nghiep';
-  filterConditions: any[] = [{ id: 1, field_name: 'ten_doanh_nghiep', field_value: '' }];
-  filterCount: number = 1;
   arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
 
-  public displayFields = [
-    {alias: 'ten_doanh_nghiep', name: 'Tên Doanh Nghiệp'},
-    {alias: 'ten_nganh_nghe', name: 'Tên Ngành Nghề'},
-    {alias: 'mst', name: 'Mã số thuế'},
-    {alias: 'dia_chi_day_du', name: 'Địa chỉ'},
-    {alias: 'nganh_nghe_kd', name: 'Ngành nghề kinh doanh'},
-    {alias: 'nguoi_dai_dien', name: 'Người đại diện'},
-    {alias: 'dien_thoai', name: 'Điện thoại'},
-    {alias: 'so_giay_cndkkd', name: 'Số giấy CNDKKD'},
-    {alias: 'ngay_cap_gcndkkd', name: 'Ngày cấp GCNDKKD'},
-    {alias: 'loai_hinh_doanh_nghiep', name: 'Loại hình doanh nghiệp'},
-    {alias: 'von_kinh_doanh', name: 'Vốn kinh doanh'},
-    {alias: 'email', name: 'Email'},
-    {alias: 'so_lao_dong', name: 'Số lao động'},
-    {alias: 'cong_suat_thiet_ke', name: 'Công suất'},
-    {alias: 'san_luong', name: 'Sản lượng'},
-    {alias: 'tieu_chuan_san_pham', name: 'Tiêu chuẩn sản phẩm	'},
-    {alias: 'doanh_thu', name: 'Doanh thu'},
-    {alias: 'quy_mo_tai_san', name: 'Quy mô tài sản'},
-    {alias: 'loi_nhuan', name: 'Lợi nhuận'},
-    {alias: 'nhu_cau_ban', name: 'Nhu cầu bán'},
-    {alias: 'nhu_cau_mua', name: 'Nhu cầu mua'},
-    {alias: 'email_sct', name: 'Email SCT'},
-    {alias: 'so_lao_dong_sct', name: 'Số lao động SCT'},
-    {alias: 'nhu_cau_hop_tac', name: 'Nhu cầu hợp tác'},
-    {alias: 'cong_suat_thiet_ke_sct', name: 'Công suất SCT	'},
-    {alias: 'san_luong_sct', name: 'Sản lượng SCT	'},
-  ]; 
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+    'dia_chi_day_du'];
+  public displayFields = {
+    ten_doanh_nghiep: 'Tên Doanh Nghiệp',
+    mst: 'Mã số thuế',
+    mst_cha: 'Mã số thuế cha',
+    so_dien_thoai: 'Số điện thoại',
+    nguoi_dai_dien: 'Người đại diện',
+    ten_loai_hinh_hoat_dong: 'Loại hình hoạt động',
+    hoat_dong: 'Hoạt động',
+  }
+  private DEFAULT_FIELD: string = 'ten_doanh_nghiep';
+  private filterConditions: any[] = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
+  private filterCount: number = 1;
 
   //Viewchild
   @ViewChild('new_element', { static: false }) ele: ElementRef;
@@ -105,7 +85,7 @@ export class SearchBusinessComponent implements OnInit {
     public router: Router,
     public excelService: ExcelService,
     public filterService: FilterService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.filterEntity = new CompanyDetailModel();
@@ -138,7 +118,7 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        
+
         // Overrride default filter behaviour of Material Datatable
         this.dataSource.filterPredicate = this.filterService.createFilter();
       });
@@ -173,11 +153,11 @@ export class SearchBusinessComponent implements OnInit {
 
   private addMoreFilter() {
     this.filterCount++;
-    this.filterConditions.push({ id: this.filterCount, field_name: 'ten_doanh_nghiep', field_value: '' });
+    this.filterConditions.push({ id: this.filterCount, field_name: this.DEFAULT_FIELD, field_value: '' });
   }
 
   private removeFilter() {
-    // TODO: Check error when remove the same filter immediately.
+    // TODO: Check error when remove the same filter immediately. Need to check!
     if (this.filterConditions.length != 1) {
       let cloneArray = [...this.filterConditions];
       this.filterConditions = cloneArray.filter(item => item.id !== parseInt(this.ele.nativeElement.id));
@@ -197,14 +177,13 @@ export class SearchBusinessComponent implements OnInit {
       filterCondition = event.currentTarget.closest(".filter-row").querySelector('.selected-condition').getAttribute('ng-reflect-model');
       filterValue = event.target.value;
     }
-    // let value = event.target ? event.target.value : event.value;
     this.filterService.addFilter(filterCondition, filterValue);
     this.dataSource.filter = this.filterService.getFilters();
   }
 
-  private clearFilter() { 
-    this.filterConditions = [{ id: 1, field_name: 'ten_doanh_nghiep', field_value: '' }];
-    this.filterService.setFilterVals({});
+  private clearFilter() {
+    this.filterConditions = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
+    this.filterService.setFilterVals();
     this.dataSource.filter = this.filterService.getFilters();
   }
 
