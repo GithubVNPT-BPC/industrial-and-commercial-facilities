@@ -2,6 +2,7 @@ import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angula
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
 
 import { CompanyDetailModel, CareerModel, ProductModel, DistrictModel } from '../../../../_models/APIModel/domestic-market.model';
 import { FormControl } from '@angular/forms';
@@ -23,11 +24,11 @@ import { normalizeValue } from "src/app/_services/stringUtils.service";
 })
 
 export class SearchBusinessComponent implements OnInit {
-  dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
+  public dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
+  public selection = new SelectionModel<CompanyDetailModel>(true, []);
+  
   isSearch_Advanced: boolean = true;
   control = new FormControl();
-  filterEntity: CompanyDetailModel;
-  tempFilter: CompanyDetailModel;
   filterType: MatTableFilter;
 
   careerList: Array<CareerModel> = new Array<CareerModel>();
@@ -72,8 +73,6 @@ export class SearchBusinessComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.filterEntity = new CompanyDetailModel();
-    this.tempFilter = new CompanyDetailModel();
     this.filterType = MatTableFilter.ANYWHERE;
     this.GetAllCompany();
     this.GetAllNganhNghe();
