@@ -94,7 +94,6 @@ export class SearchBusinessComponent implements OnInit {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data[0]);
-        console.log(this.dataSource)
         this.temDataSource = allrecords.data;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
