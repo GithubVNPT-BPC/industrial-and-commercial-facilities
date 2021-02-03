@@ -100,7 +100,6 @@ export class LiquorBusinessComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     applyFilter(event: Event) {
@@ -137,7 +136,6 @@ export class LiquorBusinessComponent implements OnInit {
     // }
 
     applyExpireCheck(event) {
-        console.log(event);
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
     

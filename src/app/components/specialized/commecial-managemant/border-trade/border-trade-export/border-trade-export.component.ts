@@ -200,12 +200,10 @@ export class BorderTradeExportComponent implements OnInit {
     tinh_tong(data) {
         this.initVariable();
         for (let item of data) {
-            // console.log(item)
             this.TongLuongThangThucHien += item['luong_thang'];
             this.TongGiaTriThangThucHien += item['gia_tri_thang'];
             this.TongLuongCongDon += item['luong_cong_don'];
             this.TongGiaTriCongDon += item['gia_tri_cong_don'];
-            // tổng cục hải quan
             this.tongluong_tc += item['luong_thang_tc'];
             this.tonggiatri_tc += item['gia_tri_thang_tc'];
             this.tongluongcongdon_tc += item['luong_cong_don_tc'];
@@ -221,7 +219,6 @@ export class BorderTradeExportComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     applyFilter(event: Event) {
@@ -246,7 +243,6 @@ export class BorderTradeExportComponent implements OnInit {
     // }
 
     applyExpireCheck(data) {
-        // console.log(data);
         let tem_data = [...data]
         this.dataSource = new MatTableDataSource<ex_im_model>(tem_data.filter(item => this.xuat_khau_chu_yeu.includes(item.id_mat_hang)));
         this.tinh_tong(this.dataSource.data)

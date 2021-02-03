@@ -70,7 +70,6 @@ export class CompanyTopPopup implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log(this.data);
         this.field = this.data.message;
         this.toptop = this.data.toptop;
         this.typeOfSave = this.data.typeOfSave;
@@ -126,7 +125,6 @@ export class CompanyTopPopup implements OnInit {
     GetTopCompanyExport() {
         this.marketService.GetTopExport(this.toptop.thang, this.toptop.nam, this.toptop.id_san_pham).subscribe(
             allrecords => {
-                console.log(allrecords)
                 this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -140,7 +138,6 @@ export class CompanyTopPopup implements OnInit {
     GetTopCompanyImport() {
         this.marketService.GetTopImport(this.toptop.thang, this.toptop.nam, this.toptop.id_san_pham).subscribe(
             allrecords => {
-                console.log(allrecords)
                 this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -154,7 +151,6 @@ export class CompanyTopPopup implements OnInit {
     GetTopCompanyProduct() {
         this.marketService.GetTopProduct(this.toptop.thang, this.toptop.nam, this.toptop.id_san_pham).subscribe(
             allrecords => {
-                console.log(allrecords)
                 this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';

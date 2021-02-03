@@ -36,7 +36,6 @@ export class UpdateuserComponent implements OnInit {
     });
     this.profileForm.controls['username'].disable();
     this.profileForm.controls['mst'].disable();
-    console.log("xxx", this.update_user());
     this.updateProfile();
   }
 
@@ -65,7 +64,6 @@ export class UpdateuserComponent implements OnInit {
             mst: this.userModel.mst ? this.userModel.mst : '',
             org_id: this.userModel.org_id ? this.userModel.org_id : ''
           });
-          console.log(this.profileForm);
           this.user = user_model['username'];
         });
 
@@ -95,7 +93,6 @@ export class UpdateuserComponent implements OnInit {
     }
     this.loginService.updateUser(body, undefined).subscribe(data => {
       if(data){
-        // console.log('xxx',data)
         alert(data['message']);
       }
     })

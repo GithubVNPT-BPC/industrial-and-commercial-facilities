@@ -108,7 +108,6 @@ export class DetailDataComponent implements OnInit {
 
         /* save data */
         const data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
-        console.log(data); // Data will be logged in array format containing objects
         
         if(this.dataDialog.data['isExport']) this.mapData(data);
         if(this.dataDialog.data['isImport']) this.mapDataToObject(data);
@@ -131,7 +130,6 @@ export class DetailDataComponent implements OnInit {
         tem.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so với kế hoạch năm'] ? item['ƯTH so với kế hoạch năm'] : 0;
         return tem;
       }));
-      console.log(this.dataSource.data);
     }
 
     // Nhap khau
@@ -150,7 +148,6 @@ export class DetailDataComponent implements OnInit {
         tem.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so KH năm'] ? item['ƯTH so KH năm'] : 0;
         return tem;
       }));
-      console.log(this.dataSource.data);
     }
 
     Save(){

@@ -105,7 +105,6 @@ export class DomesticPriceComponent implements OnInit {
     let formattedDate = formatDate(time, this.format, this.locale);
     this.marketService.GetDomesticMarketByTime(formattedDate).subscribe(
       allrecords => {
-        console.log(allrecords)
         allrecords.data.forEach(row => {
           row.ngay_cap_nhat = formatDate(row.ngay_cap_nhat, this.format, this.locale).toString();
         });
@@ -115,7 +114,6 @@ export class DomesticPriceComponent implements OnInit {
         } else {
           this.noData = false;
         }
-        console.log(this.noData);
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -135,7 +133,6 @@ export class DomesticPriceComponent implements OnInit {
   }
   //Event for "Thay đổi năm"
   public changeYear() {
-    console.log("Change Year Func.");
     //this.GetDataForChart(this.chartYearModelSelected);
   }
   //Event for "Xuất Excel"
@@ -273,7 +270,6 @@ export class DomesticPriceComponent implements OnInit {
   public getChartDataByTimePeriod(listProduct: any[], from_date: Date, to_date: Date) {
     // this.marketService.GetPriceByTimePeriod(listProduct,_moment(from_date).format('DD/MM/YYYY').toString(), _moment(to_date).format('DD/MM/YYYY').toString()).subscribe(
     //   result =>{
-    //     console.log(result);
     //   }
     // );
   }

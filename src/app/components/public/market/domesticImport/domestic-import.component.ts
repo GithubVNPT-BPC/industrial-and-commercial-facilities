@@ -195,7 +195,6 @@ export class DomesticImportComponent implements OnInit {
         typeOfSave: SAVE.IMPORT,
       }
     });
-    console.log(data)
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
       }
@@ -203,7 +202,6 @@ export class DomesticImportComponent implements OnInit {
   }
   //Event "Top doanh nghiệp"
   public openTopExport(productId: string) {
-    console.log("Top :" + productId);
     this.router.navigate(['/market/company'], {
       queryParams: {
         action: 'import', product: productId, month: this.theMonth,
@@ -223,7 +221,6 @@ export class DomesticImportComponent implements OnInit {
   }
   //Event "Chọn năm"
   public changeYear() {
-    console.log("changeYear");
   }
   //Function EXTENTION -------------------------------------------------------------------------------------------------------
   public getCurrentMonth(): number {
@@ -339,7 +336,6 @@ export class DomesticImportComponent implements OnInit {
     this.mainChartLegend = false;
   }
   public getDataForChart() {
-    console.log("+ Function: GetDataForChart()");
     let chartData1: Array<number> = new Array<number>();
     let chartName1: string;
     let productId: number;
@@ -360,7 +356,6 @@ export class DomesticImportComponent implements OnInit {
           chartData1.unshift(row.gia);
           if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
         });
-        console.log("chartData1: ", chartData1);
         productId = 3;
         periodTime = 10;
         this.marketService.GetPriceByProductId(productId, periodTime).subscribe(
@@ -370,7 +365,6 @@ export class DomesticImportComponent implements OnInit {
               chartData2.unshift(row.gia);
               if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
             });
-            console.log("chartData2: ", chartData2);
             productId = 4;
             periodTime = 10;
             this.marketService.GetPriceByProductId(productId, periodTime).subscribe(
@@ -380,7 +374,6 @@ export class DomesticImportComponent implements OnInit {
                   chartData3.unshift(row.gia);
                   if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
                 });
-                console.log("chartData3: ", chartData3);
                 productId = 5;
                 periodTime = 10;
                 this.marketService.GetPriceByProductId(productId, periodTime).subscribe(
@@ -390,7 +383,6 @@ export class DomesticImportComponent implements OnInit {
                       chartData4.unshift(row.gia);
                       if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
                     });
-                    console.log("chartData4: ", chartData4);
                     this.mainChartData = [
                       {
                         data: chartData1,

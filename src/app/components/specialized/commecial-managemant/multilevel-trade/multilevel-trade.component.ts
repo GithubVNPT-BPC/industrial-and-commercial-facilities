@@ -113,7 +113,6 @@ export class MultilevelTradeComponent implements OnInit {
 
 
   log(any) {
-    console.log(any);
   }
 
   applyFilter(event: Event) {
@@ -137,7 +136,6 @@ export class MultilevelTradeComponent implements OnInit {
   // }
 
   applyExpireCheck(event) {
-    // console.log(event);
     // let tem_data = [...this.dataSource.data]
     // event.checked ? this.dataSource.data = tem_data.filter(item => this.nhap_khau_chu_yeu.includes(item.id_mat_hang)) : this.dataSource.data = this.filteredDataSource.data;
   }

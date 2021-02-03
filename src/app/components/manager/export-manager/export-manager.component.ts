@@ -205,7 +205,6 @@ export class ExportManagerComponent implements OnInit {
             }
         }
         this.rows = this.dataSource.filteredData.length;
-        console.log(this.dataSource.data);
     }
     //Event for "Thêm dòng"
     public addRow() {
@@ -285,12 +284,9 @@ export class ExportManagerComponent implements OnInit {
     public save() {
         let month = this.getCurrentMonth();
         let year = this.getCurrentYear();
-        // console.log(this.dataSource.data);
         // let data: ExportManagerModel[] = this.dataSource.data.filter(x => x.id == 0);
-        console.log("dataSource", this.dataSource.data);
         this._managerService.PostExportManager(month, year, this.dataSource.data).subscribe(
             next => {
-                console.log(next);
                 if (next.id == -1) {
                     this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
                 }
@@ -411,10 +407,7 @@ export class ExportManagerComponent implements OnInit {
         //     let ws: XLSX.WorkSheet = wb.Sheets[wsName];
 
         //     dataExcel = (XLSX.utils.sheet_to_json(ws, { header: 2 }));
-        //     console.log('Data: ', dataExcel);
         //     jsonFromExcel = JSON.stringify(dataExcel);
-
-        //     console.log('JsonData: ', jsonFromExcel);
 
         // };
 

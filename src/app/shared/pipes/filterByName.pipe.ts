@@ -21,7 +21,6 @@ export class FilterByNamePipe implements PipeTransform {
       str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
       str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
       str = str.replace(/đ/g, "d");
-      console.log(str);
       return str;
   }
 }

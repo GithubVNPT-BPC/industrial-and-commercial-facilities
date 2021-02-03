@@ -487,7 +487,6 @@ export class ShoppingcentreComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log(this.filterModel)
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
     this._caculator(filteredData);
     if (!filteredData.length) {

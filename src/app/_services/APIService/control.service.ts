@@ -20,7 +20,6 @@ export class ControlService {
     username: any;
 
     constructor(public http: HttpClient) {
-        console.log("MarketService Contraction");
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         if(this.data){
             this.token = this.data.token;
@@ -29,7 +28,6 @@ export class ControlService {
     }
 
     public GetReportMarketControl(month: number, year: number) {
-        console.log("+ Function: GetReportMarketControl(month: " + month.toString() + ", year: ", +year.toString() +" )");
         var apiUrl = this.apiControlUrl + this.urlMarketControl;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('thang', month.toString());

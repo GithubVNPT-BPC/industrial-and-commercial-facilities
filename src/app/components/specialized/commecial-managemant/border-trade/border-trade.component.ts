@@ -185,11 +185,9 @@ export class BorderTradeComponent implements OnInit {
   ngOnInit() {
     // this.autoOpen();
     this.createGroup();
-    console.log(this.groupI)
     this.getThuongMaiBG(this.curentmonth);
     this.autoOpen();
     this.sendLinkToNext(true);
-    console.log("Border Trade:", this._linkOutput.title);
   }
 
   public sendLinkToNext(type: boolean) {
@@ -260,7 +258,6 @@ export class BorderTradeComponent implements OnInit {
     three_ck.forEach(item => {
       this.cua_khau = this.cua_khau.concat(item.cua_khau);
     });
-    console.log('zzzz', this.cua_khau, this.TongKimNgachxk, this.TongKimNgachnk)
   }
 
   getThuongMaiBG(thang) {
@@ -315,11 +312,9 @@ export class BorderTradeComponent implements OnInit {
     this.dataSourceI = [...result.data[0], ...result.data[1], ...result.data[2], ...result.data[3], ...result.data[4], ...result.data[5], ...result.data[6], ...result.data[7], ...result.data[8], ...result.data[9]];
     this.dataSource = this.dataSourceI
     this.AlldataSource.push({ data: this.dataSourceI, cua_khau: 'Hoa Lư' })
-    console.log(this.dataSourceI)
 
     this.TongKimNgachxk = this.TongKimNgachThangNhomIxk + this.TongKimNgachThangNhomIIxk + this.TongKimNgachThangNhomIIIxk + this.TongKimNgachThangNhomIVxk + this.TongKimNgachThangNhomVxk;
     this.TongKimNgachnk = this.TongKimNgachThangNhomInk + this.TongKimNgachThangNhomIInk + this.TongKimNgachThangNhomIIInk + this.TongKimNgachThangNhomIVnk + this.TongKimNgachThangNhomVnk;
-    console.log('tong xk', this.TongKimNgachxk)
   }
   xulyDulieunhomII(result) {
     this.getNhomI(result, this.dulieuI_gateII);
@@ -330,11 +325,9 @@ export class BorderTradeComponent implements OnInit {
     this.dataSourceII = [...result.data[0], ...result.data[1], ...result.data[2], ...result.data[3], ...result.data[4], ...result.data[5], ...result.data[6], ...result.data[7], ...result.data[8], ...result.data[9]]
     this.dataSource = this.dataSourceII
     this.AlldataSource.push({ data: this.dataSourceII, cua_khau: 'Hoang Diệu' })
-    console.log(this.dataSourceII)
 
     this.TongKimNgachxkII = this.TongKimNgachThangNhomIxk + this.TongKimNgachThangNhomIIxk + this.TongKimNgachThangNhomIIIxk + this.TongKimNgachThangNhomIVxk + this.TongKimNgachThangNhomVxk;
     this.TongKimNgachnkII = this.TongKimNgachThangNhomInk + this.TongKimNgachThangNhomIInk + this.TongKimNgachThangNhomIIInk + this.TongKimNgachThangNhomIVnk + this.TongKimNgachThangNhomVnk;
-    console.log('tong xk', this.TongKimNgachxk)
   }
 
   xulyDulieunhomIII(result) {
@@ -346,12 +339,9 @@ export class BorderTradeComponent implements OnInit {
     this.dataSourceIII = [...result.data[0], ...result.data[1], ...result.data[2], ...result.data[3], ...result.data[4], ...result.data[5], ...result.data[6], ...result.data[7], ...result.data[8], ...result.data[9]]
     this.dataSource = this.dataSourceIII
     this.AlldataSource.push({ data: this.dataSourceIII, cua_khau: 'Lộc Thịnh' })
-    console.log(this.dataSourceIII)
-    console.log(this.AlldataSource)
 
     this.TongKimNgachxkIII = this.TongKimNgachThangNhomIxk + this.TongKimNgachThangNhomIIxk + this.TongKimNgachThangNhomIIIxk + this.TongKimNgachThangNhomIVxk + this.TongKimNgachThangNhomVxk;
     this.TongKimNgachnkIII = this.TongKimNgachThangNhomInk + this.TongKimNgachThangNhomIInk + this.TongKimNgachThangNhomIIInk + this.TongKimNgachThangNhomIVnk + this.TongKimNgachThangNhomVnk;
-    console.log('tong xk', this.TongKimNgachxk)
   }
 
   initValueXNK() {
@@ -425,7 +415,6 @@ export class BorderTradeComponent implements OnInit {
     let dataGroupIxk = this.xulysolieu(resultDataXK);
     resultDataXK.splice(0, 0, gr[0]);
     resultDataXK.splice(1, 0, gr[1]);
-    // console.log(resultDataXK)
     resultDataXK.push(dataGroupIxk);
     switch (ind) {
       case 1:
@@ -447,8 +436,6 @@ export class BorderTradeComponent implements OnInit {
         break;
     }
     // this.TongKimNgachThangNhomIxk = dataGroupIxk.kim_ngach;
-    // console.log(resultDataXK)
-
   }
   sapxepNK(resulDatatNK, gr, ind) {
     let dataGroupIxk = this.xulysolieu(resulDatatNK);
@@ -499,7 +486,6 @@ export class BorderTradeComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {
@@ -513,7 +499,6 @@ export class BorderTradeComponent implements OnInit {
   }
 
   applyGroupFilter(id_array) {
-    console.log(id_array, this.Id_Array)
     this.dataSourceI = [];
     if (id_array.length == 0) {
       if (this.id_cua_khau === 1)

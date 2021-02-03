@@ -69,7 +69,7 @@ export class SearchBusinessComponent implements OnInit {
     public router: Router,
     public excelService: ExcelService,
     public filterService: FilterService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.filterEntity = new CompanyDetailModel();
@@ -102,7 +102,7 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        
+
         // Overrride default filter behaviour of Material Datatable
         this.dataSource.filterPredicate = this.filterService.createFilter();
       });

@@ -257,7 +257,6 @@ export class ImportManagerComponent implements OnInit {
             }
         }
         this.rows = this.dataSource.filteredData.length;
-        console.log(this.dataSource.data);
     }
     //Event "Change row"
     public changeRow(index: number) {
@@ -276,7 +275,6 @@ export class ImportManagerComponent implements OnInit {
         // let data: ImportManagerModel[] = this.dataSource.data.filter(x => x.id == 0);
         this.managerService.PostImportManager(month, year, this.dataSource.data).subscribe(
             next => {
-                console.log(next);
                 if (next.id == -1) {
                     this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
                 }

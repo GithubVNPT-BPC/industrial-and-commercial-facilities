@@ -5,7 +5,6 @@ import { Pipe, PipeTransform } from "@angular/core";
 })
 export class FilterByTextPipe implements PipeTransform {
   transform(items: any, itemName:string,  select?: any): any {
-    console.log(items[0][itemName]);
     if (select !== "") {
       return select
         ? items.filter(item => this.UnicodeToAZ(item[itemName].toLowerCase()).indexOf(this.UnicodeToAZ(select.toLowerCase()))> 0)
@@ -22,7 +21,6 @@ export class FilterByTextPipe implements PipeTransform {
       str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
       str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
       str = str.replace(/đ/g, "d");
-      console.log(str);
       return str;
   }
 }

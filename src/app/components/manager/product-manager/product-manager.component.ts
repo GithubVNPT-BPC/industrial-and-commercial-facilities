@@ -98,7 +98,6 @@ export class ProductManagerComponent implements OnInit {
     public getDomesticMarketProduct(month: number, year: number) {
         this.managerService.GetProductManager(month, year).subscribe(
             allrecords => {
-                console.log(allrecords)
                 if (allrecords.data.length > 0) {
                     this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data);
                     if (this.dataSource.data.length == 0) {
@@ -245,10 +244,7 @@ export class ProductManagerComponent implements OnInit {
         //     let ws: XLSX.WorkSheet = wb.Sheets[wsName];
 
         //     dataExcel = (XLSX.utils.sheet_to_json(ws, { header: 2 }));
-        //     console.log('Data: ', dataExcel);
         //     jsonFromExcel = JSON.stringify(dataExcel);
-
-        //     console.log('JsonData: ', jsonFromExcel);
 
         // };
 
@@ -391,10 +387,8 @@ export class ProductManagerComponent implements OnInit {
         let month = this.getCurrentMonth();
         let year = this.getCurrentYear();
         // let data: ProductManagerModel[] = this.dataSource.data.filter(x => x.id == 0);
-        // console.log(data)
         this.managerService.PostProductManager(month, year, this.dataSource.data).subscribe(
             next => {
-                console.log(next);
                 if (next.id == -1) {
                     this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
                 }

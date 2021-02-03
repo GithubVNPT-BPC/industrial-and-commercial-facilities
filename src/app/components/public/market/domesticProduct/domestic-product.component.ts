@@ -99,7 +99,6 @@ export class DomesticProductComponent implements OnInit {
   public getDomesticMarketProduct(month: number, year: number) {
     this.marketService.GetProductValue(month, year).subscribe(
       allrecords => {
-        console.log(allrecords)
         this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data);
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -155,7 +154,6 @@ export class DomesticProductComponent implements OnInit {
   }
   //Event "Change year"
   public changeYear() {
-    console.log("changeYear");
   }
   //Event "Chọn năm"
   public chosenYearHandler(normalizedYear: Moment) {
@@ -194,7 +192,6 @@ export class DomesticProductComponent implements OnInit {
   }
   //Event "Top doanh nghiệp"
   public openTopProduct(productId: string) {
-    console.log("Top :" + productId);
     let url: string = "/market/company?action=&product=" + productId + '&month=' + this.theMonth + '&year=' + this.theYear;
     this.router.navigate(['/market/company'], {
       queryParams: {
@@ -321,7 +318,6 @@ export class DomesticProductComponent implements OnInit {
     this.mainChartLegend = false;
   }
   public getDataForChart() {
-    console.log("+ Function: GetDataForChart()");
     let chartData1: Array<number> = new Array<number>();
     let chartName1: string;
     let productId: number;
@@ -342,7 +338,6 @@ export class DomesticProductComponent implements OnInit {
           chartData1.unshift(row.gia);
           if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
         });
-        console.log("chartData1: ", chartData1);
         productId = 3;
         periodTime = 10;
         this.marketService.GetPriceByProductId(productId, periodTime).subscribe(
@@ -352,7 +347,6 @@ export class DomesticProductComponent implements OnInit {
               chartData2.unshift(row.gia);
               if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
             });
-            console.log("chartData2: ", chartData2);
             productId = 4;
             periodTime = 10;
             this.marketService.GetPriceByProductId(productId, periodTime).subscribe(
@@ -362,7 +356,6 @@ export class DomesticProductComponent implements OnInit {
                   chartData3.unshift(row.gia);
                   if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
                 });
-                console.log("chartData3: ", chartData3);
                 productId = 5;
                 periodTime = 10;
                 this.marketService.GetPriceByProductId(productId, periodTime).subscribe(
@@ -372,7 +365,6 @@ export class DomesticProductComponent implements OnInit {
                       chartData4.unshift(row.gia);
                       if (row.gia > this.maxSizeChart) this.maxSizeChart = row.gia;
                     });
-                    console.log("chartData4: ", chartData4);
                     this.mainChartData = [
                       {
                         data: chartData1,
@@ -392,7 +384,6 @@ export class DomesticProductComponent implements OnInit {
                         label: chartName4
                       }
                     ];
-                    console.log("mainChartData: ", this.mainChartData);
                     this.initialChartOption();
                   },
                   //error => this.errorMessage = <any>error

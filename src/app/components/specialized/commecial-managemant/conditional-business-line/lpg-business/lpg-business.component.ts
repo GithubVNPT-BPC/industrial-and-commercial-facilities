@@ -76,8 +76,6 @@ export class LPGBusinessComponent implements OnInit {
     getDanhSachBuonBanLPG(time_id: number) {
         this.sctService.GetDanhSachBuonBanLPG(2020).subscribe(result => {
             this.dataSource = new MatTableDataSource<ConditionalBusinessLineModel>(result.data[0]);
-            console.log(this.dataSource);
-
             this.dataSource.data.forEach(element => {
                 element.is_het_han = new Date(element.ngay_het_han) < new Date();
                 result.data[1].forEach(businessman => {
@@ -105,7 +103,6 @@ export class LPGBusinessComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     getYears() {
@@ -136,7 +133,6 @@ export class LPGBusinessComponent implements OnInit {
     // }
 
     applyExpireCheck(event) {
-        console.log(event);
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
     

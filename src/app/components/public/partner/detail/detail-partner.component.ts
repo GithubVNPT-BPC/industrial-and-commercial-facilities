@@ -170,7 +170,6 @@ export class CompanyDetailComponent implements OnInit {
 	isOpen: boolean = false;
 	toggle() {
 		this.isOpen = !this.isOpen;
-		console.log(this.isOpen)
 	}
 
 	message: String = '';
@@ -203,16 +202,6 @@ export class CompanyDetailComponent implements OnInit {
 				default:
 					break;
 			}
-			console.log(
-				"Chu kì báo cáo: " +
-				this.selectedPeriodNK +
-				" - Năm: " +
-				this.selectedYearNK +
-				" - Tháng: " +
-				this.selectedMonthNK +
-				" - Quý: " +
-				this.selectedQuarterNK
-			);
 		} else {
 			switch (this.selectedPeriodXK) {
 				case "Tháng":
@@ -233,16 +222,6 @@ export class CompanyDetailComponent implements OnInit {
 				default:
 					break;
 			}
-			console.log(
-				"Chu kì báo cáo: " +
-				this.selectedPeriodXK +
-				" - Năm: " +
-				this.selectedYearXK +
-				" - Tháng: " +
-				this.selectedMonthXK +
-				" - Quý: " +
-				this.selectedQuarterXK
-			);
 		}
 	}
 
@@ -320,7 +299,6 @@ export class CompanyDetailComponent implements OnInit {
 		let report_mode = this.handleReportMode(this.selectedPeriodNK);
 		let year = this.selectedYearNK;
 		let period = this.handlePeriod(this.selectedPeriodNK, 'NK')
-		console.log('xxxx', report_mode, year, period)
 		this.marketService.GetKNNK(this.mst, report_mode, year, period)
 			.subscribe((data) => {
 				if (data["data"]) {
@@ -346,7 +324,6 @@ export class CompanyDetailComponent implements OnInit {
 		let report_mode = this.handleReportMode(this.selectedPeriodXK);
 		let year = this.selectedYearXK;
 		let period = this.handlePeriod(this.selectedPeriodXK, 'XK');
-		console.log('xxxx', report_mode, year, period)
 		this.marketService.GetKNXK(this.mst, report_mode, year, period)
 			.subscribe((data) => {
 				if (data["data"]) {
@@ -368,10 +345,8 @@ export class CompanyDetailComponent implements OnInit {
 
 	openDialog(mst: string) {
 		const dialogRef = this.dialog.open(DialogPartnerComponent, { data: mst });
-		console.log(mst);
 
 		dialogRef.afterClosed().subscribe(result => {
-			console.log(`Dialog result: ${result}`);
 		});
 	}
 
@@ -399,9 +374,7 @@ export class CompanyDetailComponent implements OnInit {
 	public GetCompanyInfoById() {
 		this.marketService.GetCompanyInfoById(this.mst).subscribe(
 			allrecords => {
-				console.log(allrecords);
 				this.company = allrecords.data[0] as CompanyDetailModel;
-				console.log(this.company);
 			},
 			error => this.errorMessage = <any>error
 		);
@@ -419,7 +392,6 @@ export class CompanyDetailComponent implements OnInit {
 		this.marketService.GetAllProduct().subscribe(data => {
 			if (data['data'].length !== 0) {
 				this.products = data['data'];
-				// console.log('products ', this.products)
 			}
 		})
 	}
@@ -427,7 +399,6 @@ export class CompanyDetailComponent implements OnInit {
 	getAllNational() {
 		this.marketService.GetAllNational().subscribe(data => {
 			this.nationals = data['data'];
-			// console.log('nationals ', this.nationals)
 		})
 	}
 
@@ -443,7 +414,6 @@ export class CompanyDetailComponent implements OnInit {
 	// 	};
 	// 	dataSource.push(new_ob);
 	// 	this.dataSourceKNNK = [...dataSource]
-	// 	// console.log('zzz', this.dataSourceKNNK)
 	// }
 
 	// Save_NK(){
@@ -475,12 +445,10 @@ export class CompanyDetailComponent implements OnInit {
 	// 		default:
 	// 			break;
 	// 	}
-	// 	console.log(report_mode, period);
 	// 	this.marketService.UpdateKNNK(data, report_mode, this.mst, this.selectedYearNK, period).subscribe(data => {
 	// 		alert(data['message']);
 	// 	})
 	// 	// let is_sct = JSON.parse(localStorage.getItem('currentUser')) === 3;
-	//     // console.log(is_sct['role'], is_sct)
 	// }
 
 	// Them_dong_XK(){

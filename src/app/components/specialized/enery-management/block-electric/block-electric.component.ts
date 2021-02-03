@@ -75,7 +75,6 @@ export class BlockElectricComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

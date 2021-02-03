@@ -94,8 +94,6 @@ export class FoodIndustryManagementComponent implements OnInit {
     getDanhSachQuanLyCongNghiepThucPham(time_id: number) {
         this.sctService.GetDanhSachQuanLyCongNghiepThucPham(time_id).subscribe(result => {
             this.dataSource = new MatTableDataSource<ChemicalLPGFoodManagementModel>(result.data);
-            console.log(this.dataSource);
-
             this.dataSource.data.forEach(element => {
                 element.is_het_han = new Date(element.ngay_het_han) < new Date();
             });
@@ -113,7 +111,6 @@ export class FoodIndustryManagementComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     getYears() {
@@ -145,7 +142,6 @@ export class FoodIndustryManagementComponent implements OnInit {
     // }
 
     applyExpireCheck(event) {
-        console.log(event);
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
 
