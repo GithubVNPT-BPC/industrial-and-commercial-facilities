@@ -46,13 +46,6 @@ export class FilterService {
         return JSON.stringify(this.filterValues);
     }
 
-    public clearFilter(obj, resetFields) {
-        for (let field in resetFields) {
-            obj[resetFields[field]] = "";
-        }
-        this.filterValues = {};
-    }
-
     public removeCondition(condition) {
         if (condition in this.filterValues) delete this.filterValues[condition];
     }

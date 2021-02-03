@@ -62,15 +62,6 @@ export class ReportExplosivesComponent implements OnInit {
 
     @ViewChild('TABLE', { static: false }) table: ElementRef;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-    exportExcel() {
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'HTTM - Chợ');
-    
-        XLSX.writeFile(wb, 'HTTM - Chợ.xlsx');
-    
-      }
     
       //Variable for HTML&TS-------------------------------------------------------------------------
       public year: number = 2019;
@@ -113,6 +104,7 @@ export class ReportExplosivesComponent implements OnInit {
       ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
       }
+
       cols: Array<any> = [];
       filteredOptions: any[];
       getListString(list: any[]) {

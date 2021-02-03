@@ -9,7 +9,7 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 import { IIPIndustrialModel } from 'src/app/_models/industry.model';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
     selector: 'iip-industrial',
@@ -61,18 +61,14 @@ export class IipIndustrialComponent implements OnInit {
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
-
-    exportExcel() {
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Chỉ số sản xuất công nghiệp');
-
-        XLSX.writeFile(wb, 'Chỉ số sản xuất công nghiệp.xlsx');
-
+    
+    ExportTOExcel(filename: string, sheetname: string) {
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     //Contructor + Init + Destroy
     constructor(
+        public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private _router: Router
     ) { }

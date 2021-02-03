@@ -7,7 +7,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MarketService } from '../../../../../_services/APIService/market.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
-import * as XLSX from 'xlsx';
 import { ExcelServicesService } from 'src/app/shared/services/excel-services.service';
 import report_import from "../test/report_import.json";
 import { ImportDataComponent } from '../import-data/import-data.component';
@@ -101,7 +100,8 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         public matDialog: MatDialog,
         public marketService: MarketService,
         private _breadCrumService: BreadCrumService,
-        private excelServices: ExcelServicesService
+        private excelServices: ExcelServicesService,
+        public excelService: ExcelService,
     ) { }
 
     handleGTXK() {
@@ -296,13 +296,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
-        const excelExtention: string = ".xlsx";
-        let excelFileName: string = filename + excelExtention;
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, sheetname);
-        /* save to file */
-        XLSX.writeFile(wb, excelFileName);
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     public DowloadFile(filename: string, sheetname: string) {

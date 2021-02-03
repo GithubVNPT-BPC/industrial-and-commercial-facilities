@@ -5,12 +5,12 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 //Import service
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 //Import Model
 import { IIPIndustrialModel, IIPIndustrialMonthModel } from 'src/app/_models/industry.model';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Route } from '@angular/compiler/src/core';
-import * as XLSX from 'xlsx';
+
 
 @Component({
     selector: 'iip-month',
@@ -328,6 +328,7 @@ export class IipMonthComponent implements OnInit {
 
     //Contructor + Init + Destroy
     constructor(
+        public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private _route: ActivatedRoute
     ) {
@@ -337,13 +338,8 @@ export class IipMonthComponent implements OnInit {
         });
     }
 
-    exportExcel() {
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Chỉ số sản xuất công nghiệp');
-
-        XLSX.writeFile(wb, 'Chỉ số sản xuất công nghiệp.xlsx');
-
+    ExportTOExcel(filename: string, sheetname: string) {
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     ngOnInit() {

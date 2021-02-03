@@ -11,7 +11,8 @@ import { each } from 'highcharts';
 import { Router } from '@angular/router';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+
 
 @Component({
     selector: 'cluster-management',
@@ -65,16 +66,12 @@ export class ClusterManagementComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-    exportExcel() {
-        const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Cụm công nghiệp');
-
-        XLSX.writeFile(wb, 'Cụm công nghiệp.xlsx');
-
+    ExportTOExcel(filename: string, sheetname: string) {
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     constructor(
+        public excelService: ExcelService,
         public sctService: SCTService,
         public router: Router,
         private _breadCrumService: BreadCrumService,

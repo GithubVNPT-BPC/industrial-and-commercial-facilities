@@ -105,15 +105,6 @@ export class MarketCommecialManagementComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'HTTM - Chợ');
-
-    XLSX.writeFile(wb, 'HTTM - Chợ.xlsx');
-
-  }
-
   //Variable for HTML&TS-------------------------------------------------------------------------
   public year: number = 2019;
   //Variable for Total---------------------------------------------------------------------------
@@ -197,6 +188,7 @@ export class MarketCommecialManagementComponent implements OnInit {
   ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
+
   cols: Array<any> = [];
   filteredOptions: any[];
   getListString(list: any[]) {

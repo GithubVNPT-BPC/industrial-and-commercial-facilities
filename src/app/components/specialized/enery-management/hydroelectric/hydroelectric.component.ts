@@ -2,9 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { HydroElectricManagementModel } from 'src/app/_models/APIModel/electric-management.module';
-import { LinkModel } from 'src/app/_models/link.model';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
   selector: 'app-hydroelectric',
@@ -17,14 +15,14 @@ export class HydroelectricComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Thủy điện');
-
-    XLSX.writeFile(wb, 'Thủy điện.xlsx');
-
+  constructor(
+    public excelService: ExcelService, ) {
   }
+
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+  
   //Constant variable
   public readonly displayedColumns: string[] = ['index', 'Tdn', 'Dd', 'Cx', 'Lnxbq', 'Dthc', 'Sl6tck', 'Slnck', 'Dt',
     'Paupttcctvhd', 'Pdpauptt', 'Paupvthkcdhctd', 'Qtvhhctd', 'Qtdhctd', 'Kdd', 'Ldhtcbvhd', 'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd'
@@ -429,8 +427,6 @@ export class HydroelectricComponent implements OnInit {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
-  constructor() {
-  }
 
   ngOnInit() {
     this.years = this.getYears();
