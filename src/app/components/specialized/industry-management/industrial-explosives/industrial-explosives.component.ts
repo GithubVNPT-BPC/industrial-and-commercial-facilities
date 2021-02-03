@@ -79,9 +79,7 @@ export class IndustrialExplosivesComponent implements OnInit {
     }
 
     applySelectFilter() {
-        // console.log(this.filterModel)
         let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-        // console.log(filteredData)
         if (!filteredData.length) {
             if (this.filterModel.id_quan_huyen.length || this.filterModel.id_tinh_trang_hoat_dong.length || this.filterModel.is_het_han)
                 this.filteredDataSource.data = [];
@@ -116,7 +114,6 @@ export class IndustrialExplosivesComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     getYears() {

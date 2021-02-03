@@ -51,7 +51,6 @@ export class DashboardComponent implements OnInit {
     }
   }
   public ChangeChartType() {
-    console.log(this.selectedType);
     this.chartType = this.selectedType;
     this.Chart.update();
   }
@@ -89,7 +88,6 @@ export class DashboardComponent implements OnInit {
 
         this.labelChart.forEach(data => {
           var temp = element.filter(x => this.GetDate(x.thoi_gian_cap_nhat) == data);
-          console.log(temp);
           if (temp.length == 0)
             tempGia.push(0)
             else
@@ -123,7 +121,6 @@ export class DashboardComponent implements OnInit {
   //   let result: string;
   //   let newDate = new Date(date);
   //   // result = date.substr(6, 2) + '/' + date.substr(4, 2) + '/' + date.substr(0, 4)
-  //   console.log('test' + result)
   //   return result;
   // }
 
@@ -137,7 +134,6 @@ export class DashboardComponent implements OnInit {
 
   GetDate(date: string) {
     let newDate = new Date(date);
-    console.log(newDate);
     //return this.GetMonthAndYear(newDate.toISOString().replace('-', '').replace('-', ''));
     return moment(newDate).format('DD/MM/YYYY');
   }

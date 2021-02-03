@@ -110,7 +110,6 @@ export class BusinessExportImportComponent implements OnInit {
     this.selectedMonth = this.getCurrentMonth();
     this.years = this.initialYears();
     this.isSCT = this._loginService.userValue.user_role_id < 3;
-    console.log(this._loginService.userValue);
     this.getAllCompanyExport();
     this.getAllCompanyImport();
     this.getAllDistrict();
@@ -125,7 +124,6 @@ export class BusinessExportImportComponent implements OnInit {
   // }
   //Function for PROCESS-FLOW   -------------------------------------------------------------------------------
   public getAllDistrict() {
-    console.log("+ Function: GetAllDistrict()");
     this._marketService.GetAllDistrict().subscribe(
       allrecords => {
         this.districtList = allrecords.data as DistrictModel[];
@@ -133,7 +131,6 @@ export class BusinessExportImportComponent implements OnInit {
       });
   }
   public getAllNganhNghe() {
-    console.log("+ Function: GetAllNganhNghe()");
     this._marketService.GetAllCareer().subscribe(
       allrecords => {
         this.careerList = allrecords.data as CareerModel[];
@@ -147,7 +144,6 @@ export class BusinessExportImportComponent implements OnInit {
   }
 
   public getAllCompanyImport() {
-    console.log("+ Function: getAllCompanyImport()");
     let valueOfPeriod: number = 0;
     let valueOfYear: number = 0;
     let valueOfPeriodDetail: number = 0;
@@ -166,7 +162,6 @@ export class BusinessExportImportComponent implements OnInit {
       valueOfPeriodDetail = 1;
     }
     valueOfYear = this.selectedYear;
-    console.log(valueOfPeriod, valueOfYear, valueOfPeriodDetail);
     this._marketService.GetAllCompanyImport(valueOfPeriod, valueOfYear, valueOfPeriodDetail, this.isSCT).subscribe(
       allrecords => {
         if (allrecords.data.length > 0) {
@@ -185,7 +180,6 @@ export class BusinessExportImportComponent implements OnInit {
     );
   }
   public getAllCompanyExport() {
-    console.log("+ Function: getAllCompanyExport()");
     let valueOfPeriod: number = 0;
     let valueOfYear: number = 0;
     let valueOfPeriodDetail: number = 0;
@@ -204,7 +198,6 @@ export class BusinessExportImportComponent implements OnInit {
       valueOfPeriodDetail = 1;
     }
     valueOfYear = this.selectedYear;
-    console.log(valueOfPeriod, valueOfYear, valueOfPeriodDetail);
     this._marketService.GetAllCompanyExport(valueOfPeriod, valueOfYear, valueOfPeriodDetail, this.isSCT).subscribe(
       allrecords => {
         if (allrecords.data.length > 0) {
@@ -223,7 +216,6 @@ export class BusinessExportImportComponent implements OnInit {
     );
   }
   public getAllProduct(allrecords) {
-    console.log("+ Function: GetAllProduct");
     this.productList = allrecords.data as Array<ProductModel>;
     if (this.typeShow == 1) {
       this.dataSource.paginator = this.paginator;
@@ -415,19 +407,15 @@ export class BusinessExportImportComponent implements OnInit {
 
   //   this._currentFilter = newFilter;
   //   // filterValue = type + '|' + filterValue;
-  //   console.log(this._currentFilter);
   //   this.dataSource.filter = this._currentFilter;
   // }
 
   // removecompany(key: string) {
-  //   console.log(key);
   // }
 
   // addFavourite(company: Company) {
-  //   console.log(company);
   // }
 
   // addToCart(company: Company) {
-  //   console.log(company);
   // }
 }

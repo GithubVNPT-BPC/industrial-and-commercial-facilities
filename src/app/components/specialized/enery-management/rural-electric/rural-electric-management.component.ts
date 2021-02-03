@@ -1420,7 +1420,6 @@ export class RuralElectricManagementComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

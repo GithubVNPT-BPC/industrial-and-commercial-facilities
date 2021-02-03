@@ -37,7 +37,6 @@ export class DashboardService {
     username: any;
 
     constructor(public http: HttpClient) {
-        console.log("MarketService Contraction");
         // this.data = JSON.parse(localStorage.getItem('NormalUser'));
         // this.token = this.data.token;
     }
@@ -105,7 +104,6 @@ export class DashboardService {
         let params = new HttpParams().set('ma_san_pham', prodcutCode.toString());
         params = params.append('thang', thang.toString());
         params = params.append('nam', nam.toString());
-        console.log("Function: GetTopExport. API: " + apiUrl + ". Params: " + params)
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
@@ -147,9 +145,6 @@ export class DashboardService {
         var apiUrl = this.apiTopUrl + this.urlCompanyInfo;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('ma_doanh_nghiep', id.toString());
-        console.log("+ Function: GetCompanyInfoById(" + id);
-        console.log("URL: ", apiUrl);
-        console.log("Param: ", params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -158,8 +153,6 @@ export class DashboardService {
     public GetAllCompany() {
         var apiUrl = this.apiTopUrl + this.urlAllCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        console.log("+ Function: GetAllCompany()");
-        console.log("URL: ", apiUrl);
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -167,9 +160,6 @@ export class DashboardService {
     public GetAllProduct() {
         var apiUrl = this.apiProduct + this.urlAllProduct;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        console.log("+ Function: GetAllProduct()");
-        console.log("URL: ", apiUrl);
-       
         return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -179,20 +169,14 @@ export class DashboardService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('ma_san_pham', id.toString());
         params = params.append('record', period.toString());
-        console.log("+ Function: GetPriceByProductId(" + id.toString() + "," + period.toString() + ")");
-        console.log("URL: ", apiUrl);
-        console.log("Param: ", params);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
     public GetPriceAllProduct(period: number, productList : any[]) {
-        console.log(environment.apiEndpoint);
         var apiUrl = this.apiMarketUrl + this.urlProductAll;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('so_dong', period.toString());
-        console.log("+ Function: GetPriceByProductId(period: " + period.toString() + ")");
-        console.log("URL: ", apiUrl);
         return this.http.post<any>(apiUrl,productList, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );

@@ -86,7 +86,6 @@ export class HeaderComponent implements OnInit {
     _router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
-        // console.log('prev:', event.url);
         this._previousUrl = event.url;
       });
   }
@@ -100,7 +99,6 @@ export class HeaderComponent implements OnInit {
   @HostListener('window:scroll', [])
 
   onWindowScroll() {
-    console.log("scroll");
     var header = document.getElementById("myHeader");
     var sticky = header.offsetTop;
     if (window.pageYOffset > sticky) {

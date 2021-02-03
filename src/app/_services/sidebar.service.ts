@@ -36,7 +36,6 @@ export class SidebarService {
       var apiUrl = this.apisidebar + 1;
     }
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    console.log(apiUrl)
     //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
     return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
       catchError(this.handleError)

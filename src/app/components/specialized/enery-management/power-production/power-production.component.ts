@@ -146,7 +146,6 @@ export class PowerProductionManagementComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

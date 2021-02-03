@@ -141,7 +141,6 @@ export class SolarEneryManagementComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

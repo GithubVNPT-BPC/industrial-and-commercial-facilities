@@ -19,7 +19,6 @@ export class PublicLayoutComponent implements OnInit {
   public onSideNavChange: boolean;
   constructor(public _sidenavService: SidebarService, public scrollTop: ViewportScroller) {
     this._sidenavService.sideBarState$.subscribe(res => {
-      //console.log(res)
       this.onSideNavChange = res;
     })
   }

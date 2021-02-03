@@ -119,7 +119,6 @@ export class ClusterManagementComponent implements OnInit {
     getDanhSachQuanLyCumCongNghiep(time_id: number) {
         this.sctService.GetDanhSachQuanLyCumCongNghiep(time_id).subscribe(result => {
             result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
-            console.log("result.data:", result.data);
             this.dataSource = new MatTableDataSource<ClusterModel>(result.data);
 
 
@@ -136,7 +135,6 @@ export class ClusterManagementComponent implements OnInit {
     }
 
     log(any) {
-        console.log(any);
     }
 
     getYears() {

@@ -204,7 +204,6 @@ export class MarketCommecialManagementComponent implements OnInit {
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {
-    console.log("+ Function: GetReportById(obj_id:", +obj_id + ",time_id: ", +time_id + ", org_id:" + org_id + ")");
     this.reportSevice
       .GetReportByKey(obj_id, time_id, org_id)
       .subscribe((allRecord) => {
@@ -228,7 +227,6 @@ export class MarketCommecialManagementComponent implements OnInit {
         this._indicators.sort((a, b) =>
           a.ind_code.toLocaleString().localeCompare(b.ind_code.toLocaleString())
         );
-        console.log(this._indicators);
         this._datarows = allRecord.data[3] as ReportDatarow[];
         this._object = allRecord.data[0];
         this.CreateMergeHeaderTable(this.attributes);
@@ -350,7 +348,6 @@ export class MarketCommecialManagementComponent implements OnInit {
       (a) => a.toLowerCase() != "ind_code" && a.toLowerCase() != "rn"
     );
     this.attributeHeaders.unshift("index");
-    console.log("Attribute Header:", this.attributeHeaders);
     for (let index = 0; index < this._indicators.length; index++) {
       const elementIndicator = this._indicators[index];
       const elementDatarow = this._datarows.find(
@@ -456,7 +453,6 @@ export class MarketCommecialManagementComponent implements OnInit {
       if (element.ind_formula == null && element.ind_type == 1) this._rows++;
     });
     this.dataSource.data = [...this._tableData.data];
-    console.log("attributes:", this.attributes);
     this._caculator(this.dataSource.data);
   }
 
@@ -486,8 +482,6 @@ export class MarketCommecialManagementComponent implements OnInit {
   private _conditionArray: HashTableNumber<number[]> = {};
   applyCondictionFilter(type, event: any) {
     this._conditionArray[type] = event.value;
-
-    console.log("Filter: ", this._conditionArray);
     this._filterDataSource();
   }
 

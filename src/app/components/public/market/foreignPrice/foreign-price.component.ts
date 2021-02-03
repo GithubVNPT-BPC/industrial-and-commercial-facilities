@@ -99,7 +99,6 @@ export class ForeignMarketPriceComponent implements OnInit {
   public getForeignMarketPriceByTime(time: Date) {
     this.marketService.GetForeignMarket(_moment(time).format('DD/MM/YYYY')).subscribe(
       allrecords => {
-        console.log(allrecords)
         allrecords.data.forEach(row => {
           row.ngay_cap_nhat = _moment(row.ngay_cap_nhat).format('DD/MM/YYYY')
         });
@@ -122,7 +121,6 @@ export class ForeignMarketPriceComponent implements OnInit {
   //Event for HTML -------------------------------------------------------------------------------------------------------------
   //Event for "Năm xem giá cả"
   public changeYear() {
-    console.log("changeYear");
   }
   // Evnet for "Ngày cập nhật giá"
   public getPriceChange(param: any) {
@@ -255,7 +253,6 @@ export class ForeignMarketPriceComponent implements OnInit {
     this._mainChartLegend = false;
   }
   public getDataForChart() {
-    console.log("+ Function: GetDataForChart()");
     let chartData1: Array<number> = new Array<number>();
     let chartName1: string;
     let productId: number;

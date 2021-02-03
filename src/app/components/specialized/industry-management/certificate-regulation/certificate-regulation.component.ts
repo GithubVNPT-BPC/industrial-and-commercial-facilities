@@ -135,7 +135,6 @@ export class CertificateRegulationComponent implements OnInit {
   }
 
   log(any) {
-    console.log(any);
   }
 
   getYears() {

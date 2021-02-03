@@ -85,7 +85,6 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
 
   GetDanhSachWebsiteTMDT() {
     this.sctService.GetDanhSachWebBH().subscribe(response => {
-      console.log(response)
       this.dataSource = new MatTableDataSource<SaleWebsite>(response.data);
       this.filteredDataSource.data = [...this.dataSource.data];
       this.filteredDataSource.paginator = this.paginator;
@@ -98,7 +97,6 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   }
 
   applyFilter() {
-    console.log(this.filterModel)
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
     if (!filteredData.length) {
       if (this.filterModel)

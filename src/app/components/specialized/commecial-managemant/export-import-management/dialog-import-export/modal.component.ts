@@ -49,7 +49,6 @@ export class ModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        console.log('xxx', this.data, this.table)
         this.handleData();
     }
 
@@ -65,9 +64,7 @@ export class ModalComponent implements OnInit {
         this.id = this.data['id'];
         if (this.id === 1) {
             this.dataSource = new MatTableDataSource<ex_im_model>(this.data['data']);
-            console.log('zxzxzxz', this.dataSource.data)
             for (let item of this.data['data']) {
-                // console.log(item)
                 this.TongLuongThangThucHien += item['luong_thang'];
                 this.TongGiaTriThangThucHien += item['gia_tri_thang'];
                 this.TongLuongCongDon += item['luong_cong_don'];
@@ -80,8 +77,6 @@ export class ModalComponent implements OnInit {
                 this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.data['data'])
             else
                 this.dataSource = new MatTableDataSource<CompanyDetailModel>()
-
-            console.log(this.dataSource)
         }
     }
 

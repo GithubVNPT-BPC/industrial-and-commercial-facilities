@@ -61,7 +61,6 @@ export class ViewSelectReportComponent implements OnInit {
     this.GetViewAllReport();
   }
   GetViewAllReport() {
-    console.log("+ Function GetAllReport()");
     this.reportSevice.GetViewAllReport().subscribe(response => {
       response.data.forEach(element => {
         element.time_id_text = this.TimeIDToText(element.time_id.toString());
@@ -69,8 +68,6 @@ export class ViewSelectReportComponent implements OnInit {
       this.dataSource = null;
       this.dataSource = new MatTableDataSource<ReportOject>(response.data);
       this.dataSource.paginator = this.paginator;
-      console.log("Data mới");
-      console.log(this.dataSource);
         if (this.paginator) {
           this.paginator._intl.itemsPerPageLabel = 'Số hàng';
           this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -82,20 +79,16 @@ export class ViewSelectReportComponent implements OnInit {
   }
 
   ApproveReport(obj : ReportOject){
-    console.log("+ Function ApproveReport(obj)");
     this.reportSevice.ApproveReport(obj.obj_id, obj.org_id, obj.time_id).subscribe(
       response =>{
-        console.log(response);
         this.GetViewAllReport();
       }
     );
   }
 
   DeclineReport(obj : ReportOject){
-    console.log("+ Function DeclineReport(obj)");
     this.reportSevice.DeclineReport(obj.obj_id, obj.org_id, obj.time_id).subscribe(
       response =>{
-        console.log(response);
         this.GetViewAllReport();
       }
     );
@@ -140,8 +133,6 @@ export class ViewSelectReportComponent implements OnInit {
 
   click() {
     this.filterObject = { ...this.tempObject };
-    console.log(this.filterObject);
-    console.log(this.dataSource);
   }
 
   changeReportType() {
@@ -173,7 +164,6 @@ export class ViewSelectReportComponent implements OnInit {
         break;
       default: this.tempObject.time_id = this.selectedYear.toString();
     }
-    console.log(this.tempObject.time_id);
   }
 
   OpenDetailObject(obj: ReportOject){
@@ -189,14 +179,11 @@ export class ViewSelectReportComponent implements OnInit {
     .then(confirm => {
       if (confirm)
       {
-        console.log('Phê duyệt báo cáo');
         this.ApproveReport(obj);
       }
       else{
-        console.log('Từ chối báo cáo');
         this.DeclineReport(obj);
       }
-      console.log("Cập nhật lại data");
     })
     .catch(() => console.log('Hủy không thao tác'));
   }

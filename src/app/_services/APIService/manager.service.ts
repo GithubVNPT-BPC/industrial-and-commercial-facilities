@@ -40,16 +40,13 @@ export class ManagerService {
     username: any;
 
     constructor(public http: HttpClient) {
-        console.log("MarketService Contraction");
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
     }
 
     public GetDomesticMarketByTime(ngay_lay_so_lieu) {
-        console.log("+ Function: GetDomesticMarketByTime(ngay_lay_so_lieu: " + ngay_lay_so_lieu.toString() + " )");
         var apiUrl = this.apiManager + this.newUrlPrice;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('time_id', ngay_lay_so_lieu);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
@@ -151,8 +148,6 @@ export class ManagerService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('ngay_lay_so_lieu', timeSelect);
-        console.log(params);
-        console.log(apiUrl);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -216,9 +211,6 @@ export class ManagerService {
         var apiUrl = this.apiManagerUrl + this.urlExportManager + "/" + id_xuat_khau.toString();
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        console.log(apiUrl);
-        console.log(headers);
-        console.log(exportArray);
         return this.http.post<any>(apiUrl, exportArray, { headers: headers }).pipe(tap(data => console.log(data)),
             catchError(this.handleError)
         );
@@ -228,9 +220,6 @@ export class ManagerService {
         var apiUrl = this.apiManagerUrl + this.urlImportManager + "/" + id_nhap_khau.toString();
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        console.log(apiUrl);
-        console.log(headers);
-        console.log(exportArray);
         return this.http.post<any>(apiUrl, exportArray, { headers: headers }).pipe(tap(data => console.log(data)),
             catchError(this.handleError)
         );
@@ -240,9 +229,6 @@ export class ManagerService {
         var apiUrl = this.apiManagerUrl + this.urlProductManager + "/" + id_san_xuat.toString();
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        console.log(apiUrl);
-        console.log(headers);
-        console.log(exportArray);
         return this.http.post<any>(apiUrl, exportArray, { headers: headers }).pipe(tap(data => console.log(data)),
             catchError(this.handleError)
         );

@@ -10,10 +10,10 @@ export class ConfirmDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {}
+  ) { }
 
   @Input()
-  message:string = 'Bạn muốn xóa dữ liệu ';
+  message: string = 'Bạn muốn xóa dữ liệu ';
   data_close: any = {
     confirm: 'Yes',
     no_confirm: 'No'
@@ -22,11 +22,10 @@ export class ConfirmDialogComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  ConfirmDelete(){
-    console.log('aaaa');
+  ConfirmDelete() {
   }
 
-  ngOnInit(){
+  ngOnInit() {
 
   }
 }

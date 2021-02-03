@@ -716,7 +716,6 @@ export class RetailMonthComponent implements OnInit {
             this.year = params["year"];
             this.month = params["month"];
         });
-        console.log(this._route.params);
     }
 
     ngOnInit() {
@@ -747,7 +746,6 @@ export class RetailMonthComponent implements OnInit {
 
     private getDataByMonth(month: number, year: number) {
         let data: Array<RetailMonthModel> = [];
-        console.log("year:", year, " and month: ", month);
         if (year != 2020 || month > 12) {
             return [];
         }
