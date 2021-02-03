@@ -231,8 +231,12 @@ export class SearchPartnerComponent implements AfterViewInit, OnInit {
   }
 
   private clearFilter() {
-    this.filterService.clearFilter(this, ['selectedBusiness', 'selectedCarrier', 'selectedAddress']);
-    this.dataSource.filter = "";
+    let resetFields = ['selectedBusiness', 'selectedCarrier', 'selectedAddress'];
+    for (let field in resetFields) {
+        this[resetFields[field]] = "";
+    }
+    this.filterService.setFilterVals();
+    this.dataSource.filter = this.filterService.getFilters();
   }
   
   //Function for EXTENTION      -------------------------------------------------------------------------------

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricityDevelopmentModel, HydroElectricManagementModel } from 'src/app/_models/APIModel/electric-management.module';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
   selector: 'app-electricity-development',
@@ -15,13 +15,8 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Phát triển điện');
-
-    XLSX.writeFile(wb, 'Phát triển điện.xlsx');
-
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   //Constant variable
@@ -56,7 +51,7 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   cong_xuat_bien_ap: number;
   isChecked: boolean;
 
-  constructor() {
+  constructor(public excelService: ExcelService,) {
   }
 
   ngOnInit() {

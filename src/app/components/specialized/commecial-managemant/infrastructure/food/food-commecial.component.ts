@@ -49,14 +49,9 @@ export class FoodManagementComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'HTTM - Thực phẩm');
-
-    XLSX.writeFile(wb, 'HTTM - Thực phẩm.xlsx');
-
-  }
+  ExportTOExcel(filename: string, sheetname: string) {
+      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  } 
 
   applyFilter1(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -160,11 +155,6 @@ export class FoodManagementComponent implements OnInit {
   }
   dataSourceHuyenThi: MatTableDataSource<FoodCommonModel> = new MatTableDataSource<FoodCommonModel>();
   filteredDataSource: MatTableDataSource<FoodCommonModel> = new MatTableDataSource<FoodCommonModel>();
-
-  //Xuất excel
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
 
   sortHeaderCondition(event) {
 

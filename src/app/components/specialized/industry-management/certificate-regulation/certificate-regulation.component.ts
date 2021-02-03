@@ -4,7 +4,7 @@ import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { certificate_regulation } from 'src/app/_models/APIModel/certificate-regulation';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
   selector: 'app-certificate-regulation',
@@ -18,14 +18,10 @@ export class CertificateRegulationComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Công bố hợp quy');
-
-    XLSX.writeFile(wb, 'Công bố hợp quy.xlsx');
-
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
+  
   //Constant variable
   public readonly displayedColumns: string[] = ['index', 'ma_so_thue', 'ten_doanh_nghiep', 'loai_san_pham', 'san_pham_cong_bo',
     'email', 'dien_thoai', 'ban_cong_bo_hop_quy', 'ngay_tiep_nhan_cong_bo', 'nhan_san_pham', 'tieu_chuan_san_pham_ap_dung', 'noi_cap',
@@ -108,7 +104,7 @@ export class CertificateRegulationComponent implements OnInit {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
-  constructor() {
+  constructor(public excelService: ExcelService,) {
   }
 
   ngOnInit() {

@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricityDevelopmentModel, HydroElectricManagementModel, PowerProductionModel } from 'src/app/_models/APIModel/electric-management.module';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
   selector: 'app-power-production',
@@ -14,15 +14,11 @@ export class PowerProductionManagementComponent implements OnInit {
   @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
-
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Điện thương phẩm');
-
-    XLSX.writeFile(wb, 'Điện thương phẩm.xlsx');
-
+  
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
+
   //Constant variable
   public readonly displayedColumns: string[] = ['index', 'ctcy', 'dvt', 't112019', 'lk11t2019', 'khn2020', 't102020',
     't112020', 'lk11t2020', 'tht11stt', 'tht11sck', 'lktsck', 'lktskh',
@@ -116,7 +112,7 @@ export class PowerProductionManagementComponent implements OnInit {
   cong_xuat_bien_ap: number;
   isChecked: boolean;
 
-  constructor() {
+  constructor(public excelService: ExcelService,) {
   }
 
   ngOnInit() {

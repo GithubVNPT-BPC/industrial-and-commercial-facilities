@@ -8,7 +8,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
   selector: 'app-informed-ecommerce-website',
@@ -26,21 +26,18 @@ export class InformedEcommerceWebsiteComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    // TODO: Check export excel here
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Dịch vụ TMDT');
-
-    XLSX.writeFile(wb, 'Dịch vụ TMDT.xlsx');
-
+  ExportTOExcel(filename: string, sheetname: string) {
+      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'dia_chi', 'dien_thoai', 'ten_mien', 'loai_hhdv', 'email', 'so_gian_hang'];
   dataSource: MatTableDataSource<ECommerceWebsite>;
   filteredDataSource: MatTableDataSource<ECommerceWebsite> = new MatTableDataSource<ECommerceWebsite>();
   filterModel: ECommerceWebsiteFilterModel = { id_quan_huyen: [] };
-  constructor(public sctService: SCTService, private _breadCrumService: BreadCrumService) { }
+  constructor(
+    public excelService: ExcelService,
+    public sctService: SCTService, 
+    private _breadCrumService: BreadCrumService) { }
 
   ngOnInit() {
     this.GetDanhSachWebsiteTMDT();

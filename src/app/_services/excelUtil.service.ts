@@ -17,7 +17,7 @@ export class ExcelService {
     constructor() { }
 
     public exportJsonAsExcelFile(filename: string, sheetname: string, datas: any) {
-        if (!datas && datas.length == 0 ) return;
+        if (!datas || datas.length == 0 ) throw new Error("Không có dữ liệu trên bảng");
 
         let parseDatas = XLSX.utils.json_to_sheet(datas);
 
@@ -36,10 +36,11 @@ export class ExcelService {
 
     public exportDomTableAsExcelFile(filename: string, sheetname: string, DOMtable: any) {
         // Get data from DOM and ignore data from source
+        if (!DOMtable || DOMtable === undefined ) throw new Error("Không có dữ liệu trên bảng");
         let datas = XLSX.utils.table_to_sheet(DOMtable);
         this.setDOMtable(DOMtable);
 
-        if (!datas && datas.length == 0 ) return;
+        if (!datas || datas.length == 0 ) throw new Error("Lỗi khi truy xuất thông tin trên bảng");
 
         sheetname = this.formatSheetname(sheetname);
         let workbook = new Workbook();

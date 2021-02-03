@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { BlockElectricModel } from 'src/app/_models/APIModel/electric-management.module';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 import {dataBlockElectric} from './data'
 @Component({
   selector: 'app-block-electric',
@@ -16,14 +16,10 @@ export class BlockElectricComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Điện sinh khối');
-
-    XLSX.writeFile(wb, 'Điện sinh khối.xlsx');
-
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
+
   //Constant variable
   public readonly displayedColumns: string[] = ['index', 'ten_du_an', 'ten_doanh_nghiep', 'dia_diem', 'cong_xuat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'trang_thai'];
   //TS & HTML Variable
@@ -48,7 +44,7 @@ export class BlockElectricComponent implements OnInit {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
-  constructor() {
+  constructor(public excelService: ExcelService,) {
   }
 
   ngOnInit() {
