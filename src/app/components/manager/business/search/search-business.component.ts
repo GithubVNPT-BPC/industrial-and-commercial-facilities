@@ -1,16 +1,20 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
-import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { MarketService } from '../../../../_services/APIService/market.service';
 import { CompanyDetailModel, CareerModel, ProductModel, DistrictModel } from '../../../../_models/APIModel/domestic-market.model';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatTableFilter } from 'mat-table-filter';
-import { Company_mock } from '../../../../_models/companyDetailModel_mock';
+
+// Services
+import { MarketService } from 'src/app/_services/APIService/market.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { FilterService } from 'src/app/_services/filter.service';
+import { normalizeValue } from "src/app/_services/stringUtils.service";
+
 
 @Component({
   selector: 'app-search-business',
@@ -19,7 +23,7 @@ import { Company_mock } from '../../../../_models/companyDetailModel_mock';
 })
 
 export class SearchBusinessComponent implements OnInit {
-
+  dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
   isSearch_Advanced: boolean = true;
   control = new FormControl();
   filterEntity: CompanyDetailModel;
@@ -32,11 +36,10 @@ export class SearchBusinessComponent implements OnInit {
   districtList: Array<DistrictModel> = new Array<DistrictModel>();
 
   filteredCareerList: Observable<CareerModel[]>;
+  temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
 
   loading = false;
   categories = [null];//['Tất cả', 'Hạt điều', 'Hạt tiêu', 'Hạt cà phê', 'Cao su'];
-
-  selectedAdress;
   addresses = [null];//['Tất cả', 'Đồng Xoài', 'Bình Long', 'Bù Gia Mập', 'Bù Đốp', 'Bù Đăng', 'Phú Riềng', 'Hớn Quản', 'Chơn Thành','Đồng Phú', 'Lộc Ninh', 'Phước Long'];
 
   applyFilter(filterValue) {
@@ -52,46 +55,57 @@ export class SearchBusinessComponent implements OnInit {
   }
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
-
   public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
 
   public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
 
+  selectedAdress;
   selected_field: string = 'ten_doanh_nghiep';
-  countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
-  count: number = 1;
-  temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
-  add_condition() {
-    this.count++;
-    let new_ob = { id: this.count, filed_name: 'ten_doanh_nghiep', filed_value: '' }
-    this.countNumberCondition.push(new_ob);
-    // console.log(this.countNumberCondition)
-  }
+  filterConditions: any[] = [{ id: 1, field_name: 'ten_doanh_nghiep', field_value: '' }];
+  filterCount: number = 1;
+  arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
 
-  Xoa_dong() {
-    if (this.countNumberCondition.length === 1) {
-      return;
-    } else {
-      let cloneArray = [...this.countNumberCondition];
-      this.countNumberCondition = cloneArray.filter(item => item.id !== parseInt(this.ele.nativeElement.id));
-      // console.log(this.ele.nativeElement.id, this.countNumberCondition, this.ele);
+  public displayFields = [
+    {alias: 'ten_doanh_nghiep', name: 'Tên Doanh Nghiệp'},
+    {alias: 'ten_nganh_nghe', name: 'Tên Ngành Nghề'},
+    {alias: 'mst', name: 'Mã số thuế'},
+    {alias: 'dia_chi_day_du', name: 'Địa chỉ'},
+    {alias: 'nganh_nghe_kd', name: 'Ngành nghề kinh doanh'},
+    {alias: 'nguoi_dai_dien', name: 'Người đại diện'},
+    {alias: 'dien_thoai', name: 'Điện thoại'},
+    {alias: 'so_giay_cndkkd', name: 'Số giấy CNDKKD'},
+    {alias: 'ngay_cap_gcndkkd', name: 'Ngày cấp GCNDKKD'},
+    {alias: 'loai_hinh_doanh_nghiep', name: 'Loại hình doanh nghiệp'},
+    {alias: 'von_kinh_doanh', name: 'Vốn kinh doanh'},
+    {alias: 'email', name: 'Email'},
+    {alias: 'so_lao_dong', name: 'Số lao động'},
+    {alias: 'cong_suat_thiet_ke', name: 'Công suất'},
+    {alias: 'san_luong', name: 'Sản lượng'},
+    {alias: 'tieu_chuan_san_pham', name: 'Tiêu chuẩn sản phẩm	'},
+    {alias: 'doanh_thu', name: 'Doanh thu'},
+    {alias: 'quy_mo_tai_san', name: 'Quy mô tài sản'},
+    {alias: 'loi_nhuan', name: 'Lợi nhuận'},
+    {alias: 'nhu_cau_ban', name: 'Nhu cầu bán'},
+    {alias: 'nhu_cau_mua', name: 'Nhu cầu mua'},
+    {alias: 'email_sct', name: 'Email SCT'},
+    {alias: 'so_lao_dong_sct', name: 'Số lao động SCT'},
+    {alias: 'nhu_cau_hop_tac', name: 'Nhu cầu hợp tác'},
+    {alias: 'cong_suat_thiet_ke_sct', name: 'Công suất SCT	'},
+    {alias: 'san_luong_sct', name: 'Sản lượng SCT	'},
+  ]; 
 
-    }
-
-  }
-
+  //Viewchild
   @ViewChild('new_element', { static: false }) ele: ElementRef;
-
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   constructor(
     public _marketService: MarketService,
     public router: Router,
-  ) {
-  }
+    public excelService: ExcelService,
+    public filterService: FilterService,
+  ) {}
 
   ngOnInit(): void {
     this.filterEntity = new CompanyDetailModel();
@@ -103,12 +117,7 @@ export class SearchBusinessComponent implements OnInit {
   }
 
   ExportTOExcel(filename: string, sheetname: string) {
-    sheetname = sheetname.replace('/', '_');
-    let excelFileName: string = filename + '.xlsx';
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    XLSX.writeFile(wb, excelFileName);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
 
   OpenDetailCompany(mst: string) {
@@ -129,20 +138,20 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        
+        // Overrride default filter behaviour of Material Datatable
+        this.dataSource.filterPredicate = this.filterService.createFilter();
       });
   }
 
   GetAllDistrict() {
-    console.log("+ Function: GetAllDistrict");
     this._marketService.GetAllDistrict().subscribe(
       allrecords => {
-        //console.log(allrecords);
         this.districtList = allrecords.data as DistrictModel[];
         this.districtList.forEach(element => this.addresses.push(element.ten_quan_huyen));
       });
   }
   GetAllNganhNghe() {
-    console.log("+ Function: GetAllNganhNghe");
     this._marketService.GetAllCareer().subscribe(
       allrecords => {
         this.careerList = allrecords.data as CareerModel[];
@@ -158,43 +167,45 @@ export class SearchBusinessComponent implements OnInit {
   }
 
   public _filter(value: string): CareerModel[] {
-    const filterValue = this._normalizeValue(value);
-    return this.careerList.filter(career => this._normalizeValue(career.ten_kem_ma).includes(filterValue));
+    const filterValue = normalizeValue(value);
+    return this.careerList.filter(career => normalizeValue(career.ten_kem_ma).includes(filterValue));
   }
 
-  public _normalizeValue(value: string): string {
-    return value.toLowerCase().replace(/\s/g, '');
+  private addMoreFilter() {
+    this.filterCount++;
+    this.filterConditions.push({ id: this.filterCount, field_name: 'ten_doanh_nghiep', field_value: '' });
   }
 
-  arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
-  filter() {
-    // this.filterEntity.ten_doanh_nghiep = this.selectedName? this.selectedName : null;
-    // this.filterEntity.dia_chi_day_du = this.selectedAddress == 'Tất cả'? null : this.selectedAddress;
-    // this.filterEntity.nganh_nghe_kd = this.selectedCategory == 'Tất cả'? null : this.selectedCategory;
-    // this.tempFilter.ten_nganh_nghe = (document.getElementById('category_select') as HTMLInputElement).value.toString();
-    // this.filterEntity = Object.assign({}, this.tempFilter);
-
-    this.tempFilter = new CompanyDetailModel();
-    let tem = [...this.countNumberCondition];
-    for (let i = 0; i < tem.length; i++) {
-      let element = tem[i];
-      if (element.filed_name === 'ngay_cap_gcndkkd' || element.filed_name === 'ngay_bat_dau_kd') {
-        this.tempFilter[element.filed_name] = this.formatDate(element.filed_value);
-      } else {
-        this.tempFilter[element.filed_name] = element.filed_value;
-      }
+  private removeFilter() {
+    // TODO: Check error when remove the same filter immediately.
+    if (this.filterConditions.length != 1) {
+      let cloneArray = [...this.filterConditions];
+      this.filterConditions = cloneArray.filter(item => item.id !== parseInt(this.ele.nativeElement.id));
+      this.filterService.removeCondition(this.ele.nativeElement.getAttribute('data-field-name'));
+      this.dataSource.filter = this.filterService.getFilters();
     }
-    console.log(this.tempFilter)
-    this.filterEntity = Object.assign({}, this.tempFilter);
   }
-  change() {
 
+  private changeFilter(event) {
+    let filterCondition, filterValue;
+    if (event.source) {
+      // Change Select 
+      filterCondition = event.value;
+      filterValue = event.source._elementRef.nativeElement.closest(".filter-row").querySelector('.filter-value').value;
+    } else {
+      // Change input
+      filterCondition = event.currentTarget.closest(".filter-row").querySelector('.selected-condition').getAttribute('ng-reflect-model');
+      filterValue = event.target.value;
+    }
+    // let value = event.target ? event.target.value : event.value;
+    this.filterService.addFilter(filterCondition, filterValue);
+    this.dataSource.filter = this.filterService.getFilters();
   }
-  cancel() {
-    this.tempFilter = new CompanyDetailModel();
-    this.filterEntity = new CompanyDetailModel();
-    console.log(this.filterEntity)
-    this.dataSource.filter = '';
+
+  private clearFilter() { 
+    this.filterConditions = [{ id: 1, field_name: 'ten_doanh_nghiep', field_value: '' }];
+    this.filterService.setFilterVals({});
+    this.dataSource.filter = this.filterService.getFilters();
   }
 
   formatDate(value) {
@@ -202,38 +213,6 @@ export class SearchBusinessComponent implements OnInit {
     let MM = value.slice(2, 4);
     let yyyy = value.slice(4, 8);
     let date = yyyy + '-' + MM + '-' + dd + 'T' + '00' + ':' + '00' + ':' + '00';
-    console.log(dd, MM, yyyy, date)
     return date
-  }
-
-  exportTableToExcel(tableID, filename = '') {
-    let downloadLink;
-    let dataType = 'application/vnd.ms-excel';
-    let tableSelect = document.getElementById(tableID);
-    let tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-
-    // Specify file name
-    filename = filename ? filename + '.xls' : 'excel_data.xls';
-
-    // Create download link element
-    downloadLink = document.createElement("a");
-
-    document.body.appendChild(downloadLink);
-
-    if (navigator.msSaveOrOpenBlob) {
-      let blob = new Blob(['\ufeff', tableHTML], {
-        type: dataType
-      });
-      navigator.msSaveOrOpenBlob(blob, filename);
-    } else {
-      // Create a link to the file
-      downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-
-      // Setting the file name
-      downloadLink.download = filename;
-
-      //triggering the function
-      downloadLink.click();
-    }
   }
 }

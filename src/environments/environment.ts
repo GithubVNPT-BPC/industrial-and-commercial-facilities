@@ -5,8 +5,9 @@
 
 export const environment = {
   production: false,
-  // apiEndpoint:  'http://apicongthongtin.vnptbinhphuoc.vn/',
-  apiEndpoint: 'http://10.77.129.40:8080/',
+  apiEndpoint:  'http://apicongthongtin.vnptbinhphuoc.vn/',
+  // apiEndpoint: 'http://10.77.129.40:8080/',
+  // apiEndpoint: 'http://192.168.110.66:8080/', 
   //apiEndpoint: 'http://localhost:8051/',
   // apiEndpoint: 'http://10.77.18.41/'
 };

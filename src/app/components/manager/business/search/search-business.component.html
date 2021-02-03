@@ -9,43 +9,54 @@
     <mat-card-content>
         <hr>
         <div class="row" *ngIf="isSearch_Advanced">
-            <div class="col-lg-5 button-control -align-left my-auto">
-                <button mat-raised-button (click)="exportTableToExcel('table-bussiness','Danh sách doanh nghiệp')">Xuất
-                    Excel</button>
-                <button mat-raised-button (click)="filter()">Tìm kiếm</button>
-                <button mat-raised-button (click)="cancel()">Hủy</button>
-                <button mat-raised-button (click)="add_condition()">
-                    <mat-icon>expand_more</mat-icon>Mở rộng
-                </button>
-            </div>
             <div class="col-lg-7">
-                <ng-container *ngFor="let item of countNumberCondition">
-                    <div class="row my-auto" id={{item.id}} #new_element>
-                        <div class="col-lg-4">
-                            <select class="form-control" [(ngModel)]="item.filed_name">
-                                <option *ngFor="let item of displayedFields" [ngValue]="item">{{item}}</option>
-                            </select>
+                <ng-container *ngFor="let item of filterConditions">
+                    <div class="row my-auto filter-row" id={{item.id}} attr.data-field-name="{{item.field_name}}" #new_element>
+                        <div class="col-lg-5">
+                            <mat-form-field appearance="outline">
+                                <mat-select [(ngModel)]="item.field_name" class="selected-condition" (selectionChange)="changeFilter($event)">
+                                    <mat-option *ngFor="let field of displayFields" [value]='field.alias' >{{field.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
                         <div class="col-lg-5">
-                            <input type="text" class="form-control" placeholder="Nhập giá trị"
-                                [(ngModel)]="item.filed_value">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nhập giá trị</mat-label>
+                                <input type="text" [(ngModel)]="item.field_value" class="filter-value"
+                                mdInput matInput (keyup)="changeFilter($event)">
+                            </mat-form-field>
                         </div>
-                        <div class="col-lg-3">
-                            <button class="btn btn-danger" mat-raised-button (click)="Xoa_dong()">
-                                <mat-icon>expand_less</mat-icon>Thu hẹp
+                        <div class="col-lg-2 mt-2">
+                            <button class="btn btn-danger" mat-raised-button (click)="removeFilter()">
+                                <mat-icon>remove_circle</mat-icon>
                             </button>
                         </div>
                     </div>
                 </ng-container>
             </div>
+
+            <div class="col-lg-5 button-control float-right mt-2">
+                <!-- <button mat-raised-button (click)="filter()">Tìm kiếm</button> -->
+                <button mat-raised-button (click)="addMoreFilter()">
+                    <mat-icon [inline]="true">add_circle_outline</mat-icon> &nbsp;Thêm bộ lọc
+                </button>
+                <button mat-raised-button (click)="clearFilter()">Xóa bộ lọc</button>
+                <button mat-raised-button (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
+                    Excel</button>
+            </div>
+            
         </div>
         <hr>
+<<<<<<< HEAD
+        <div class="layout" #TABLE>
+=======
         <div class="layout">
             <!-- <mat-form-field id="large-filter">
                 <mat-label>Lọc dữ liệu</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
             </mat-form-field> -->
 
+>>>>>>> main
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 [filterType]="filterType" [dataSource]="dataSource" id="small-table1">
 
