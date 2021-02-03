@@ -103,7 +103,12 @@
 
                 <ng-container matColumnDef="hoat_dong">
                     <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-                    <td mat-cell *matCellDef="let element"> {{element.hoat_dong}} </td>
+                    <td mat-cell *matCellDef="let element">
+                        <span *ngIf="element.hoat_dong; else negActiveExp">Hoạt động</span>
+                        <ng-template #negActiveExp>
+                            <span>Ngừng hoạt động</span>
+                        </ng-template>
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="chi_tiet_doanh_nghiep">
