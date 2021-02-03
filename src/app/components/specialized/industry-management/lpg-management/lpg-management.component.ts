@@ -150,7 +150,7 @@ export class LPGManagementComponent implements OnInit {
     }
     
     public ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+        if (this.table) this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
     
     @ViewChild('dSelect', { static: false }) dSelect: MatSelect;

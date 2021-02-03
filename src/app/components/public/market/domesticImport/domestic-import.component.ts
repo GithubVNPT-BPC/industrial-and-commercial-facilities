@@ -2,7 +2,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import * as XLSX from 'xlsx';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -11,7 +10,9 @@ import { MatDialog } from '@angular/material';
 import { DomesticPriceModel, ImportMarketModel } from '../../../../_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
 //Import Service
-import { MarketService } from '../../../../_services/APIService/market.service';
+import { MarketService } from 'src/app/_services/APIService/market.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+
 //Import Component
 import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
 
@@ -77,7 +78,9 @@ export class DomesticImportComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
 
-  constructor(public marketService: MarketService,
+  constructor(
+    public marketService: MarketService,
+    public excelService: ExcelService,
     public router: Router,
     public dialog: MatDialog) {
     //this.initialData();
@@ -211,13 +214,7 @@ export class DomesticImportComponent implements OnInit {
   }
   //Event "Xuất Excel"
   public exportTOExcel(filename: string, sheetname: string) {
-    sheetname = sheetname.replace('/', '_');
-    let excelFileName: string = filename + '.xlsx';
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    /* save to file */
-    XLSX.writeFile(wb, excelFileName);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
   //Event "Chọn năm"
   public changeYear() {

@@ -7,10 +7,12 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 // import { FormControl } from '@angular/forms';
-import * as XLSX from 'xlsx';
 import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material';
 import { typeSourceSpan } from '@angular/compiler';
+
+// Services
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 interface HashTableNumber<T> {
   [key: string]: T;
@@ -58,7 +60,8 @@ export class DataSCTComponent implements OnInit {
   constructor(
     public router: Router,
     public activeRoute: ActivatedRoute,
-    public reportSevice: ReportService
+    public reportSevice: ReportService,
+    public excelService: ExcelService,
   ) { 
     
   }
@@ -128,12 +131,7 @@ export class DataSCTComponent implements OnInit {
   }
 
   exportToExcel(filename: string, sheetname: string) {
-    let excelFileName: string = filename + '.xlsx';
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    /* save to file */
-    XLSX.writeFile(wb, excelFileName);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   getNestedChildren(indicators: Array<ReportIndicator>, values: Array<ReportDatarow>, parent) {

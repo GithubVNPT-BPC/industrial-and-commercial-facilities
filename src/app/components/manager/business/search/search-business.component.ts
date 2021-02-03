@@ -58,18 +58,19 @@ export class SearchBusinessComponent implements OnInit {
   public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
 
+  selectedAdress;
   arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
 
   public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
   public displayFields = {
     ten_doanh_nghiep: 'Tên Doanh Nghiệp',
-    mst: 'Mã số thuế',
+    mst : 'Mã số thuế',
     mst_cha: 'Mã số thuế cha',
     so_dien_thoai: 'Số điện thoại',
     nguoi_dai_dien: 'Người đại diện',
     ten_loai_hinh_hoat_dong: 'Loại hình hoạt động',
-    hoat_dong: 'Hoạt động',
+    hoat_dong : 'Hoạt động',
   }
   private DEFAULT_FIELD: string = 'ten_doanh_nghiep';
   private filterConditions: any[] = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
@@ -202,7 +203,7 @@ export class SearchBusinessComponent implements OnInit {
     this.dataSource.filter = this.filterService.getFilters();
   }
 
-  private clearFilter() {
+  private clearFilter() { 
     this.filterConditions = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
     this.filterService.setFilterVals();
     this.dataSource.filter = this.filterService.getFilters();

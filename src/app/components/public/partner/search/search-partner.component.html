@@ -9,6 +9,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+        <hr>
         <div class="row mt-5">
             <div class="col-lg-3 col-md-6 col-sm-12 ">
                 <div class="form-group">
@@ -34,11 +35,6 @@
                 <div class="form-group">
                     <mat-form-field appearance="outline">
                         <mat-label>Địa chỉ</mat-label>
-                        <!-- <select matNativeControl name="ten_quan_huyen" [(ngModel)]="selectedAddress" id="selectedAddress"
-                                (change)="changeFilter('ten_quan_huyen', $event)">
-                            <option selected value="">Tất cả</option>
-                            <option *ngFor="let address of addresses" [ngValue]="address" [value]="address" >{{address}}</option>
-                        </select>      -->
                         <mat-select name="ten_quan_huyen" id="selectedAddress" [(ngModel)]="selectedAddress" (selectionChange)="changeFilter('ten_quan_huyen', $event)">
                             <mat-option value=''>Tất cả</mat-option>
                             <mat-option *ngFor='let address of addresses' [value]='address'>
@@ -51,10 +47,10 @@
 
             <div class="col-lg-3 col-md-6 col-sm-12 button-control text-center">
                 <button mat-raised-button class="form-button mt-2" (click)="clearFilter()">Xóa bộ lọc</button>
-                <button mat-raised-button class="form-button mt-2" (click)="exportTOExcel('DanhSachDoanhNghiep','danh sach')">Xuất Excel</button>
+                <button mat-raised-button class="form-button mt-2" (click)="exportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất Excel</button>
             </div>
         </div>
-
+        <hr>
         <div class="layout" #TABLE>
             <!-- <mat-form-field *ngFor="let filter of filterSelectObj" style="margin-left: 15px;">
                 <mat-label>Filter {{filter.name}}</mat-label>

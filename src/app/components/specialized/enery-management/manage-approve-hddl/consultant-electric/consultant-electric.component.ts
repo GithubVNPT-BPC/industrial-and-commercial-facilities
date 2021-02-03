@@ -3,6 +3,7 @@ import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/materia
 import { ManageAproveElectronic } from 'src/app/_models/APIModel/electric-management.module';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { consualtantData } from '../dataMGN';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
 import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-consultant-electric',
@@ -25,6 +26,11 @@ export class ConsultantElectricComponent implements OnInit {
     XLSX.writeFile(wb, 'Quản lý cấp phép HĐĐL.xlsx');
 
   }
+
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+
   //Constant variable
   public readonly displayedColumns: string[] = 
   ['index', 'ten_doanh_nghiep', 'dia_diem', 
@@ -53,7 +59,8 @@ export class ConsultantElectricComponent implements OnInit {
   soLuongDoanhNghiep: number;
   soLuongDoanhNghiepExpired: number = 0;
   isChecked: boolean;
-  constructor() {
+  
+  constructor(public excelService: ExcelService,) {
   }
 
   ngOnInit() {

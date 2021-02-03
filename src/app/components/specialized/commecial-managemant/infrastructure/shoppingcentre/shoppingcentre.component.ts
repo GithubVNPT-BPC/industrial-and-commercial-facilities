@@ -11,13 +11,14 @@ import { MatTableFilter } from 'mat-table-filter';
 
 //Import Model
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
-//Import Service
+//Import Services
 import { ControlService } from '../../../../../_services/APIService/control.service';
 import { ReportDirective } from 'src/app/shared/report.directive';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ReportService } from 'src/app/_services/APIService/report.service';
-import * as moment from 'moment';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+
 import { CompanyDetailModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { TreeviewConfig, TreeviewItem, TreeviewModule } from 'ngx-treeview';
 import { element } from 'protractor';
@@ -78,14 +79,6 @@ export class ShoppingcentreComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'HTTM - Siêu thị');
-
-    XLSX.writeFile(wb, 'HTTM - Siêu thị.xlsx');
-
-  }
   //Variable for HTML&TS-------------------------------------------------------------------------
   public readonly districts: District[] = [{ id: 1, ten_quan_huyen: 'Phước Long' },
   { id: 2, ten_quan_huyen: 'Đồng Xoài' },
@@ -389,6 +382,7 @@ export class ShoppingcentreComponent implements OnInit {
     public reportSevice: ReportService,
     public route: ActivatedRoute,
     public keyboardservice: KeyboardService,
+    public excelService: ExcelService,
     public info: InformationService
   ) { }
 
@@ -402,13 +396,7 @@ export class ShoppingcentreComponent implements OnInit {
 
   //Xuất excel
   ExportTOExcel(filename: string, sheetname: string) {
-    sheetname = sheetname.replace('/', '_');
-    let excelFileName: string = filename + '.xlsx';
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    /* save to file */
-    XLSX.writeFile(wb, excelFileName);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
   //FUNCTION FOR ONLY TS _------------------------------
   // applyCondictionFilter(type, event: any) {

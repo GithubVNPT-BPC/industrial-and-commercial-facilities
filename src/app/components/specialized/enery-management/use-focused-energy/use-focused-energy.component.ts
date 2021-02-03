@@ -4,7 +4,8 @@ import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { UserForcusEnergy } from 'src/app/_models/APIModel/electric-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import * as XLSX from 'xlsx';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+
 
 @Component({
   selector: 'app-use-focused-energy',
@@ -17,14 +18,10 @@ export class UseFocusedEnergyComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Tiết kiệm năng lượng');
-
-    XLSX.writeFile(wb, 'Tiết kiệm năng lượng.xlsx');
-
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
+
   //Constant variable
   private readonly LINK_DEFAULT: string = "/specialized/enery-management/countryside_electric";
   private readonly TITLE_DEFAULT: string = "Tiết kiệm năng lượng";
@@ -58,7 +55,10 @@ export class UseFocusedEnergyComponent implements OnInit {
   doanhNghiep: number;
   isChecked: boolean;
   private _linkOutput: LinkModel = new LinkModel();
-  constructor(private _breadCrumService: BreadCrumService) { }
+  constructor(
+    private _breadCrumService: BreadCrumService,
+    public excelService: ExcelService,
+    ) { }
 
 
   ngOnInit() {
