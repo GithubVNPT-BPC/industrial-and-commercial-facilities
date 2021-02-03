@@ -41,14 +41,31 @@ export class SearchBusinessComponent implements OnInit {
   loading = false;
   categories = [null];//['Tất cả', 'Hạt điều', 'Hạt tiêu', 'Hạt cà phê', 'Cao su'];
   addresses = [null];//['Tất cả', 'Đồng Xoài', 'Bình Long', 'Bù Gia Mập', 'Bù Đốp', 'Bù Đăng', 'Phú Riềng', 'Hớn Quản', 'Chơn Thành','Đồng Phú', 'Lộc Ninh', 'Phước Long'];
+
+  applyFilter(filterValue) {
+    // const filterValue = (event.target as HTMLInputElement).value;
+    // this.dataSource.filterPredicate =
+    //   (data: CompanyDetailModel, filter: string) => ;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    console.log(filterValue, this.dataSource)
+  }
+
+  handle_btn_search_adv() {
+    this.isSearch_Advanced = !this.isSearch_Advanced;
+  }
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+    'dia_chi_day_du'];
+
+  public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+    'dia_chi_day_du'];
+
   selectedAdress;
   selected_field: string = 'ten_doanh_nghiep';
   filterConditions: any[] = [{ id: 1, field_name: 'ten_doanh_nghiep', field_value: '' }];
   filterCount: number = 1;
   arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
-
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
-    'dia_chi_day_du'];
 
   public displayFields = [
     {alias: 'ten_doanh_nghiep', name: 'Tên Doanh Nghiệp'},
@@ -80,7 +97,6 @@ export class SearchBusinessComponent implements OnInit {
   ]; 
 
   //Viewchild
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('new_element', { static: false }) ele: ElementRef;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
@@ -114,6 +130,7 @@ export class SearchBusinessComponent implements OnInit {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data[0]);
+        console.log(this.dataSource)
         this.temDataSource = allrecords.data;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
