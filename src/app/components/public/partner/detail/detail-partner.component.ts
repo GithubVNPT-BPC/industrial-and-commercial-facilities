@@ -87,9 +87,9 @@ export class CompanyDetailComponent implements OnInit {
 	SLCSTT: any;
 	dataSourceKNXK = new MatTableDataSource<any>();
 	dataSourceKNNK = new MatTableDataSource<any>();
-	date2:any;
-	date1:any;
-	date_thoi_han:any;
+	date2: any;
+	date1: any;
+	date_thoi_han: any;
 	// NK
 	periodsNK = ["Tháng", "Quý", "6 Tháng", "Năm"];
 	monthsNK: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -202,15 +202,6 @@ export class CompanyDetailComponent implements OnInit {
 				default:
 					break;
 			}
-				"Chu kì báo cáo: " +
-				this.selectedPeriodNK +
-				" - Năm: " +
-				this.selectedYearNK +
-				" - Tháng: " +
-				this.selectedMonthNK +
-				" - Quý: " +
-				this.selectedQuarterNK
-			);
 		} else {
 			switch (this.selectedPeriodXK) {
 				case "Tháng":
@@ -231,15 +222,6 @@ export class CompanyDetailComponent implements OnInit {
 				default:
 					break;
 			}
-				"Chu kì báo cáo: " +
-				this.selectedPeriodXK +
-				" - Năm: " +
-				this.selectedYearXK +
-				" - Tháng: " +
-				this.selectedMonthXK +
-				" - Quý: " +
-				this.selectedQuarterXK
-			);
 		}
 	}
 

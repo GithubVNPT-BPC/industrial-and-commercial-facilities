@@ -3,7 +3,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { CompanyDetailModel, CareerModel, ProductModel, DistrictModel } from '../../../../_models/APIModel/domestic-market.model';
+import { CompanyDetailModel, CareerModel, ProductModel, DistrictModel, Career } from '../../../../_models/APIModel/domestic-market.model';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FilterService } from 'src/app/_services/filter.service';
 import { normalizeValue } from "src/app/_services/stringUtils.service";
+import { isNgTemplate } from '@angular/compiler';
 
 
 @Component({
@@ -31,7 +32,6 @@ export class SearchBusinessComponent implements OnInit {
   filterType: MatTableFilter;
 
   careerList: Array<CareerModel> = new Array<CareerModel>();
-  companyList: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   productList: Array<ProductModel> = new Array<ProductModel>();
   districtList: Array<DistrictModel> = new Array<DistrictModel>();
 
@@ -55,13 +55,12 @@ export class SearchBusinessComponent implements OnInit {
   }
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+  public displayedFields: string[] = ['ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
 
-  selectedAdress;
   arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 'nguoi_dai_dien', 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'ten_loai_hinh_hoat_dong', 'hoat_dong',
     'dia_chi_day_du'];
   public displayFields = {
     ten_doanh_nghiep: 'Tên Doanh Nghiệp',
@@ -106,11 +105,33 @@ export class SearchBusinessComponent implements OnInit {
     window.open(url.replace('%23', '#'), "_blank");
   }
 
+  companyList1: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList2: Array<Career> = new Array<Career>();
+  companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
+        this.companyList1 = allrecords.data[0]
+        this.companyList2 = allrecords.data[1]
+        // let MNN = this.companyList2.map(function (item) {
+        //   return item.ma_nganh_nghe
+        // })
+
+        this.companyList3 = this.companyList1.map(x => {
+          let temp = this.companyList2.find(y => y.mst === x.mst)
+          if (temp) {
+            x.ma_nganh_nghe = temp.ma_nganh_nghe,
+              x.nganh_nghe_kd_chinh = temp.nganh_nghe_kd_chinh,
+              x.ten_nganh_nghe = temp.ten_nganh_nghe
+          }
+          else {
+            x.ma_nganh_nghe = null
+          }
+          return x
+        })
+
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data[0]);
-        console.log(this.dataSource)
         this.temDataSource = allrecords.data;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

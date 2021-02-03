@@ -53,6 +53,14 @@ const routes: Routes = [
 
           },
           {
+            path: 'create',
+            component: CreateBussinessComponent,
+            data: {
+              title: 'Thêm doanh nghiệp'
+            },
+
+          },
+          {
             path: 'search/:mst',
             component: EditBusinessComponent,
             data: {

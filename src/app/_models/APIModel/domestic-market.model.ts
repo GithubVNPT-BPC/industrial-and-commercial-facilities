@@ -131,7 +131,21 @@ export class CompanyDetailModel {
     public nguoi_dai_dien: string;
     public so_dien_thoai: string;
     public ten_doanh_nghiep: String;
-    public cong_suat_thiet_ke: number
+    public cong_suat_thiet_ke: number;
+    public nganh_nghe_kd_chinh: string;
+    public ma_nganh_nghe: string;
+    public ten_nganh_nghe: string;
+}
+
+export class Career {
+    public id: number;
+    public id_nganh_nghe_kd: number;
+    public nganh_nghe_kd_chinh: string;
+    public id_linh_vuc: number;
+    public mst: string;
+    public ma_nganh_nghe: string;
+    public ten_nganh_nghe: string;
+
 }
 
 export class CareerModel {

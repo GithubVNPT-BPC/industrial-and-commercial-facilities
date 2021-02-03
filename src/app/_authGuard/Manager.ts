@@ -14,7 +14,7 @@ export class Manager implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user = this.authenticationService.userValue;
         if (user) {
-            if (user.user_role_id == 1 || user.user_role_id == 3 || user.user_role_id == 4 || user.user_role_id == 5) {
+            if (user.user_role_id == 1 || user.user_role_id == 3 || user.user_role_id == 4) {
                 return true;
             }
             else {
