@@ -14,7 +14,7 @@ import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/co
 @Component({
   selector: 'app-select-report',
   templateUrl: 'select-report.component.html',
-  styleUrls: ['select-report.component.scss'],
+  styleUrls: ['../../report_layout.scss'],
 })
 
 export class ViewSelectReportComponent implements OnInit {
@@ -68,27 +68,27 @@ export class ViewSelectReportComponent implements OnInit {
       this.dataSource = null;
       this.dataSource = new MatTableDataSource<ReportOject>(response.data);
       this.dataSource.paginator = this.paginator;
-        if (this.paginator) {
-          this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-          this.paginator._intl.firstPageLabel = "Trang Đầu";
-          this.paginator._intl.lastPageLabel = "Trang Cuối";
-          this.paginator._intl.previousPageLabel = "Trang Trước";
-          this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        }
+      if (this.paginator) {
+        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
+      }
     })
   }
 
-  ApproveReport(obj : ReportOject){
+  ApproveReport(obj: ReportOject) {
     this.reportSevice.ApproveReport(obj.obj_id, obj.org_id, obj.time_id).subscribe(
-      response =>{
+      response => {
         this.GetViewAllReport();
       }
     );
   }
 
-  DeclineReport(obj : ReportOject){
+  DeclineReport(obj: ReportOject) {
     this.reportSevice.DeclineReport(obj.obj_id, obj.org_id, obj.time_id).subscribe(
-      response =>{
+      response => {
         this.GetViewAllReport();
       }
     );
@@ -166,25 +166,24 @@ export class ViewSelectReportComponent implements OnInit {
     }
   }
 
-  OpenDetailObject(obj: ReportOject){
+  OpenDetailObject(obj: ReportOject) {
     //window.open(this.router.url, '_blank');
     const url = this.router.serializeUrl(
       this.router.createUrlTree([encodeURI('#') + '/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
     );
-    window.open(url.replace('%23','#'), "_blank");
+    window.open(url.replace('%23', '#'), "_blank");
   }
 
-  OpenDialog(obj:ReportOject){
-    this.confirmationDialogService.confirm('Xác nhận', 'Bạn muốn phê duyệt hay từ chối báo cáo này?', 'Phê duyệt','Từ chối')
-    .then(confirm => {
-      if (confirm)
-      {
-        this.ApproveReport(obj);
-      }
-      else{
-        this.DeclineReport(obj);
-      }
-    })
-    .catch(() => console.log('Hủy không thao tác'));
+  OpenDialog(obj: ReportOject) {
+    this.confirmationDialogService.confirm('Xác nhận', 'Bạn muốn phê duyệt hay từ chối báo cáo này?', 'Phê duyệt', 'Từ chối')
+      .then(confirm => {
+        if (confirm) {
+          this.ApproveReport(obj);
+        }
+        else {
+          this.DeclineReport(obj);
+        }
+      })
+      .catch(() => console.log('Hủy không thao tác'));
   }
 }

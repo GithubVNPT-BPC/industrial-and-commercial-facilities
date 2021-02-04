@@ -113,17 +113,17 @@ export class CreateBussinessComponent implements OnInit {
         this.GetAllNganhNghe();
         this.GetAllPhuongXa();
         this.GetCompanyInfoTest();
-        this.GetAllLoaiHinh();
-        this.GetAllCSTT();
+        // this.GetAllLoaiHinh();
+        // this.GetAllCSTT();
     }
 
-    GetAllCSTT() {
-        this.marketService.GetAllBasebyid(this.mst).subscribe(
-            allrecords => {
-                this.CSTT = allrecords.data as CSTTModel[];
-                this.SLCSTT = this.CSTT.length;
-            });
-    }
+    // GetAllCSTT() {
+    //     this.marketService.GetAllBasebyid(this.mst).subscribe(
+    //         allrecords => {
+    //             this.CSTT = allrecords.data as CSTTModel[];
+    //             this.SLCSTT = this.CSTT.length;
+    //         });
+    // }
 
     GetAllNganhNghe() {
         this.marketService.GetAllCareer().subscribe(
@@ -148,12 +148,12 @@ export class CreateBussinessComponent implements OnInit {
     //     );
     // }
 
-    GetAllLoaiHinh() {
-        this.marketService.GetAllBusinessType().subscribe(
-            allrecords => {
-                this.Business = allrecords.data as BusinessTypeModel[];
-            });
-    }
+    // GetAllLoaiHinh() {
+    //     this.marketService.GetAllBusinessType().subscribe(
+    //         allrecords => {
+    //             this.Business = allrecords.data as BusinessTypeModel[];
+    //         });
+    // }
 
     public GetCompanyInfoTest() {
         this.marketService.GetAllCompany().subscribe(

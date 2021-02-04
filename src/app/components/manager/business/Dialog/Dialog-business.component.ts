@@ -62,23 +62,23 @@ export class DialogBusinessComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.GetAllCSTT();
+        // this.GetAllCSTT();
     }
 
     ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
-    GetAllCSTT() {
-        this.marketService.GetAllBasebyid(this.data).subscribe(
-            allrecords => {
-                this.dataSource = new MatTableDataSource<CSTTModel>(allrecords.data);
-                this.dataSource.paginator = this.paginator;
-                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                this.paginator._intl.firstPageLabel = "Trang Đầu";
-                this.paginator._intl.lastPageLabel = "Trang Cuối";
-                this.paginator._intl.previousPageLabel = "Trang Trước";
-                this.paginator._intl.nextPageLabel = "Trang Tiếp";
-            });
-    }
+    // GetAllCSTT() {
+    //     this.marketService.GetAllBasebyid(this.data).subscribe(
+    //         allrecords => {
+    //             this.dataSource = new MatTableDataSource<CSTTModel>(allrecords.data);
+    //             this.dataSource.paginator = this.paginator;
+    //             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    //             this.paginator._intl.firstPageLabel = "Trang Đầu";
+    //             this.paginator._intl.lastPageLabel = "Trang Cuối";
+    //             this.paginator._intl.previousPageLabel = "Trang Trước";
+    //             this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    //         });
+    // }
 }

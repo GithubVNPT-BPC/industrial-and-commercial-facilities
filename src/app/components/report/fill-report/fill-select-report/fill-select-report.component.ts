@@ -11,12 +11,12 @@ import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-fill-select-report',
   templateUrl: 'fill-select-report.component.html',
-  styleUrls: ['fill-select-report.component.scss'],
+  styleUrls: ['../../report_layout.scss'],
 })
 
 export class FillSelectReportComponent implements OnInit {
 
-  displayedColumns: string[] = ['index', "obj_code","obj_name", "org_name", "start_date", "end_date", "edit"];
+  displayedColumns: string[] = ['index', "obj_code", "obj_name", "org_name", "start_date", "end_date", "edit"];
   dataSource: MatTableDataSource<ReportOject> = new MatTableDataSource();
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -39,7 +39,7 @@ export class FillSelectReportComponent implements OnInit {
   selectedHalf: number = 0;
   errorMessage: any;
   org_id: number = 0;
-  orgarnizations : string[] = ['Sở Công thương']
+  orgarnizations: string[] = ['Sở Công thương']
 
   constructor(
     public reportSevice: ReportService,
@@ -218,7 +218,7 @@ export class FillSelectReportComponent implements OnInit {
     const url = this.router.serializeUrl(
       this.router.createUrlTree([encodeURI('#') + '/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
     );
-    window.open(url.replace('%23','#'), "_blank");
+    window.open(url.replace('%23', '#'), "_blank");
     //this.router.navigate(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } });
   }
 
@@ -246,10 +246,10 @@ export class FillSelectReportComponent implements OnInit {
   }
   filter() {
     if (this.selectedPeriod == 'Quý')
-    this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedQuarter);
+      this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedQuarter);
     if (this.selectedPeriod == '6 Tháng')
-    this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedHalf);
+      this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedHalf);
     else
-    this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);
+      this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);
   }
 }

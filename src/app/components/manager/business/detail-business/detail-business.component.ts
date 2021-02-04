@@ -116,7 +116,7 @@ export class DetailBussinessComponent implements OnInit {
         this.GetAllPhuongXa();
         // this.GetCompanyInfoTest();
         // this.GetAllLoaiHinh();
-        this.GetAllCSTT();
+        // this.GetAllCSTT();
     }
 
     setMST() {
@@ -124,13 +124,13 @@ export class DetailBussinessComponent implements OnInit {
         // this.mst = '3801083966';
     }
 
-    GetAllCSTT() {
-        this.marketService.GetAllBasebyid(this.mst).subscribe(
-            allrecords => {
-                this.CSTT = allrecords.data as CSTTModel[];
-                this.SLCSTT = this.CSTT.length;
-            });
-    }
+    // GetAllCSTT() {
+    //     this.marketService.GetAllBasebyid(this.mst).subscribe(
+    //         allrecords => {
+    //             this.CSTT = allrecords.data as CSTTModel[];
+    //             this.SLCSTT = this.CSTT.length;
+    //         });
+    // }
 
     GetAllNganhNghe() {
         this.marketService.GetAllCareer().subscribe(
@@ -155,12 +155,12 @@ export class DetailBussinessComponent implements OnInit {
         );
     }
 
-    GetAllLoaiHinh() {
-        this.marketService.GetAllBusinessType().subscribe(
-            allrecords => {
-                this.Business = allrecords.data as BusinessTypeModel[];
-            });
-    }
+    // GetAllLoaiHinh() {
+    //     this.marketService.GetAllBusinessType().subscribe(
+    //         allrecords => {
+    //             this.Business = allrecords.data as BusinessTypeModel[];
+    //         });
+    // }
 
     public GetCompanyInfoTest() {
         this.marketService.GetAllCompany().subscribe(
