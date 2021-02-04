@@ -25,7 +25,7 @@ interface HashTableNumber<T> {
 @Component({
   selector: 'app-view-report',
   templateUrl: 'view-detail.component.html',
-  styleUrls: ['view-detail.component.scss'],
+  styleUrls: ['../../report_layout.scss'],
 })
 
 
