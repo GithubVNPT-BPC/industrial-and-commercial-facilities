@@ -1,3 +1,9 @@
+<style>
+    .mat-checkbox-layout {
+        margin-bottom: 0px !important;
+    }
+</style>
+
 <mat-card class="material">
     <mat-card-header>
         <mat-card-title>
@@ -50,9 +56,34 @@
 
         </div>
         <hr>
-        <div class="layout" #TABLE>
+        <div class="row">
+            <div class="col-md-12">
+                <button class="btn btn-success" mat-raised-button (click)="openDialog(1)">
+                    <mat-icon>add_cicle</mat-icon>Thêm
+                </button>
+                <button *ngIf="selection.selected.length != 0" class="btn btn-danger ml-2" mat-raised-button (click)="openRemoveDialog()">Xóa</button>
+            </div>
+        </div>
+        <div class="layout mt-3" #TABLE>
             <table class="table-layout" mat-table matTableFilter
-                [filterType]="filterType" [dataSource]="dataSource" id="small-table1">
+                [filterType]="filterType" [dataSource]="dataSource" id="small-table1" matSort
+                matSortActive="select" matSortDisableClear matSortDirection="asc" >
+
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef disableClear>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)"
+                            [aria-label]="checkboxLabel(element)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
 
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
@@ -62,7 +93,7 @@
                 <ng-container matColumnDef="ten_doanh_nghiep">
                     <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
                     <td mat-cell *matCellDef="let element" class="text-center">
-                        <span (click)="OpenDetailCompany(element.mst)" id="jump">{{element.ten_doanh_nghiep}}</span>
+                        <span (click)="OpenDetailCompany(element.mst)" class="jump">{{element.ten_doanh_nghiep}}</span>
                     </td>
                 </ng-container>
 
@@ -133,7 +164,7 @@
 
                 <ng-container matColumnDef="chi_tiet_doanh_nghiep">
                     <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
-                    <td mat-cell *matCellDef="let element" id="jump">
+                    <td mat-cell *matCellDef="let element" class="jump">
                         <mat-icon (click)="OpenDetailCompany(element.mst)">search</mat-icon>
                     </td>
                 </ng-container>

@@ -3,12 +3,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
+import { MatDialog } from "@angular/material/dialog";
 
 import { CompanyDetailModel, CareerModel, ProductModel, DistrictModel } from '../../../../_models/APIModel/domestic-market.model';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatTableFilter } from 'mat-table-filter';
+import { ConfirmDialogComponent } from 'src/app/components/manager/business/confirm-dialog/confirm-dialog.component';
 
 // Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
@@ -48,7 +50,7 @@ export class SearchBusinessComponent implements OnInit {
   selectedAdress;
   arrayDate = ['ngay_cap_gcndkkd', 'ngay_bat_dau_kd'];
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 
+  public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'so_dien_thoai', 
   'nguoi_dai_dien', 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'ten_loai_hinh_hoat_dong', 'hoat_dong', 'dia_chi_day_du'];
 
   public displayFields = {
@@ -72,6 +74,7 @@ export class SearchBusinessComponent implements OnInit {
   constructor(
     public _marketService: MarketService,
     public router: Router,
+    public dialog: MatDialog,
     public excelService: ExcelService,
     public filterService: FilterService,
   ) { }
@@ -104,7 +107,7 @@ export class SearchBusinessComponent implements OnInit {
             x.ma_nganh_nghe = temp.ma_nganh_nghe
             x.ten_nganh_nghe = temp.ten_nganh_nghe
             x.nganh_nghe_kd_chinh = temp.nganh_nghe_kd_chinh
-          }
+          } 
           return x
         })
 
@@ -119,6 +122,7 @@ export class SearchBusinessComponent implements OnInit {
 
         // Overrride default filter behaviour of Material Datatable
         this.dataSource.filterPredicate = this.filterService.createFilter();
+        
       });
   }
 
@@ -129,6 +133,7 @@ export class SearchBusinessComponent implements OnInit {
         this.districtList.forEach(element => this.addresses.push(element.ten_quan_huyen));
       });
   }
+
   GetAllNganhNghe() {
     this._marketService.GetAllCareer().subscribe(
       allrecords => {
@@ -147,6 +152,26 @@ export class SearchBusinessComponent implements OnInit {
   public _filter(value: string): CareerModel[] {
     const filterValue = normalizeValue(value);
     return this.careerList.filter(career => normalizeValue(career.ten_kem_ma).includes(filterValue));
+  }
+
+  private remove() {
+    let selectedOptions = this.selection.selected;
+  }
+
+  public openRemoveDialog() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      height: '200px',
+      width: '400px',
+      data: {message: "Bạn muốn xóa dữ liệu ?"}
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 'Yes') this.remove();
+    });
+  }
+
+  public create() {
+
   }
 
   private addMoreFilter() {
@@ -183,6 +208,27 @@ export class SearchBusinessComponent implements OnInit {
     this.filterConditions = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
     this.filterService.setFilterVals();
     this.dataSource.filter = this.filterService.getFilters();
+  }
+
+  /* Events for toggle checkboxes */
+  //Event selected all
+  public isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+  //Event check
+  public masterToggle() {
+      this.isAllSelected() ?
+          this.selection.clear() :
+          this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+  //Event check item
+  public checkboxLabel(row?: CompanyDetailModel): string {
+      if (!row) {
+          return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+      }
+      return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
   formatDate(value) {

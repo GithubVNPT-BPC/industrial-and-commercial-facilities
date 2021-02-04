@@ -1,9 +1,21 @@
-<div mat-dialog-content>
-  <p>{{message}}?</p>
-</div>
-<div mat-dialog-actions>
-  <button mat-raised-button [ngStyle]="{'background-color': 'red', 'color': 'white'}"
+<div class="container-fluid">
+  <h2 mat-dialog-title>Xác nhận</h2>
+  <hr>
+  <div mat-dialog-content>
+    <span *ngIf="data.message; else notifyMessage" class="text-center">{{data.message}}</span>
+    <ng-template #notifyMessage>
+        <span class="text-center">Bạn có chắc chắn thực hiện hành động?</span>
+    </ng-template>
+  </div>
+
+  <div mat-dialog-actions class="row mt-3">
+    <div class="col-md-6">
+      <button mat-button class="btn btn-danger"
     [mat-dialog-close]="data_close.no_confirm">Bỏ qua</button>
-  <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
+    </div>
+    <div class="col-md-6">
+      <button mat-button class="btn btn-success float-right"
     [mat-dialog-close]="data_close.confirm">Xác nhận</button>
+    </div>
+  </div>
 </div>

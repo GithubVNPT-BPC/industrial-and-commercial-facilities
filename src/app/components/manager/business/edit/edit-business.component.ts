@@ -304,8 +304,8 @@ export class EditBusinessComponent implements OnInit {
 
   open_confirmDialog(element, dataSource) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      height: '150px',
-      width: '250px',
+      height: '200px',
+      width: '400px',
     });
 
     dialogRef.afterClosed().subscribe((result) => {
