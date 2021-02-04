@@ -3,11 +3,7 @@ import { ActivatedRoute } from "@angular/router";
 import { FormControl, Validators } from "@angular/forms";
 import { InformationService } from '../../../../shared/information/information.service';
 import { MarketService } from "../../../../_services/APIService/market.service";
-import {
-  CompanyDetailModel,
-  CompanyDetailModel1,
-  DomesticPriceModel,
-} from "../../../../_models/APIModel/domestic-market.model";
+import { CompanyDetailModel1, DomesticPriceModel } from "../../../../_models/APIModel/domestic-market.model";
 import {
   CareerModel,
   DistrictModel,
@@ -30,7 +26,6 @@ import {
 } from "@angular/material/core";
 import { MatTableDataSource, MatDatepicker, MatPaginator } from "@angular/material";
 import { formatDate } from "@angular/common";
-import { Moment } from "moment";
 import moment from "moment";
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { trigger, state, style, transition, animate, group } from '@angular/animations';
@@ -281,7 +276,8 @@ export class EditBusinessComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
     });
   }
-
+  
+  // TODO: re-use the confirmation
   open_confirmDialog(element, dataSource) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       height: '200px',
@@ -310,13 +306,11 @@ export class EditBusinessComponent implements OnInit {
   public readonly DEFAULT_PERIOD = "Tháng";
 
   ngOnInit() {
-    // this.kiemtraUser();
-    this.GetCompanyInfoById();
+    if (this.mst) this.GetCompanyInfoById();
     this.GetAllNganhNghe();
     this.GetAllPhuongXa();
     this.getQuan_Huyen();
     this.GetAllLoaiHinh();
-    // this.GetAllCSTT();
 
     this.selectedPeriodNK = this.DEFAULT_PERIOD;
     this.selectedPeriodXK = this.DEFAULT_PERIOD;
@@ -376,9 +370,8 @@ export class EditBusinessComponent implements OnInit {
         let temp2 = this.companyList5
         let temp3 = temp2.reduce(Object)
         this.company = temp3
-        console.log(this.company)
       },
-      (error) => (this.errorMessage = <any>error)
+      (error) => (console.log("Error when fetching data: \n" + error))
     );
   }
 
@@ -393,7 +386,6 @@ export class EditBusinessComponent implements OnInit {
   GetAllNganhNghe() {
     this.marketService.GetAllCareer().subscribe((allrecords) => {
       this.career = allrecords.data as CareerModel[];
-      console.log(this.career)
     });
   }
 
@@ -406,7 +398,6 @@ export class EditBusinessComponent implements OnInit {
   getQuan_Huyen() {
     this.marketService.GetAllDistrict().subscribe((allDistrict) => {
       this.district = allDistrict["data"] as DistrictModel[];
-
     });
   }
 

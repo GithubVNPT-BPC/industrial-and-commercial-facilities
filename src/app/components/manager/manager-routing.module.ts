@@ -45,12 +45,18 @@ const routes: Routes = [
             },
           },
           {
+            path: 'create',
+            component: EditBusinessComponent,
+            data: {
+              title: 'Tạo mới doanh nghiệp'
+            },
+          },
+          {
             path: 'search',
             component: SearchBusinessComponent,
             data: {
-              title: 'Chỉnh sửa doanh nghiệp'
+              title: 'Tìm kiếm doanh nghiệp'
             },
-
           },
           {
             path: 'search/:mst',

@@ -154,7 +154,9 @@ export class SearchBusinessComponent implements OnInit {
   }
 
   public create() {
-
+    let url = this.router.serializeUrl(
+      this.router.createUrlTree([encodeURI('#') + 'manager/business/create']));
+    window.open(url.replace('%23', '#'), "_blank");
   }
 
   private remove() {
