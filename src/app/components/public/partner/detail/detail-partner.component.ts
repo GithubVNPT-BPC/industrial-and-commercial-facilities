@@ -145,8 +145,8 @@ export class CompanyDetailComponent implements OnInit {
 		this.GetCompanyInfoById();
 		this.GetAllNganhNghe();
 		this.GetAllPhuongXa();
-		this.GetAllLoaiHinh();
-		this.GetAllCSTT();
+		// this.GetAllLoaiHinh();
+		// this.GetAllCSTT();
 
 		///
 		this.selectedPeriodNK = this.DEFAULT_PERIOD;
@@ -159,12 +159,12 @@ export class CompanyDetailComponent implements OnInit {
 		this.yearsXK = this.InitialYears();
 
 		/// get init information XNK with current time
-		this.getKNNK();
-		this.getKNXK();
+		// this.getKNNK();
+		// this.getKNXK();
 
 		// get list product and nationals
 		this.getAllProducts();
-		this.getAllNational();
+		// this.getAllNational();
 	}
 
 	isOpen: boolean = false;
@@ -249,13 +249,13 @@ export class CompanyDetailComponent implements OnInit {
 	}
 
 
-	findKNNK() {
-		this.getKNNK()
-	}
+	// findKNNK() {
+	// 	this.getKNNK()
+	// }
 
-	findKNXK() {
-		this.getKNXK();
-	}
+	// findKNXK() {
+	// 	this.getKNXK();
+	// }
 
 	handleReportMode(selectedPeriod) {
 		switch (selectedPeriod) {
@@ -295,53 +295,53 @@ export class CompanyDetailComponent implements OnInit {
 
 	}
 
-	getKNNK() {
-		let report_mode = this.handleReportMode(this.selectedPeriodNK);
-		let year = this.selectedYearNK;
-		let period = this.handlePeriod(this.selectedPeriodNK, 'NK')
-		this.marketService.GetKNNK(this.mst, report_mode, year, period)
-			.subscribe((data) => {
-				if (data["data"]) {
-					this.dataSourceKNNK = new MatTableDataSource<any>(data["data"]);
-					this.dataSourceKNNK.paginator = this.Importpaginator;
-					if (this.Importpaginator) {
-						this.Importpaginator._intl.itemsPerPageLabel = 'Số hàng';
-						this.Importpaginator._intl.firstPageLabel = "Trang Đầu";
-						this.Importpaginator._intl.lastPageLabel = "Trang Cuối";
-						this.Importpaginator._intl.previousPageLabel = "Trang Trước";
-						this.Importpaginator._intl.nextPageLabel = "Trang Tiếp";
-					}
-					this.messageNK = "";
-				}
-				if (data['data'].length === 0) {
-					this.messageNK = "Không tìm thấy dữ liệu !!";
-				}
+	// getKNNK() {
+	// 	let report_mode = this.handleReportMode(this.selectedPeriodNK);
+	// 	let year = this.selectedYearNK;
+	// 	let period = this.handlePeriod(this.selectedPeriodNK, 'NK')
+	// 	this.marketService.GetKNNK(this.mst, report_mode, year, period)
+	// 		.subscribe((data) => {
+	// 			if (data["data"]) {
+	// 				this.dataSourceKNNK = new MatTableDataSource<any>(data["data"]);
+	// 				this.dataSourceKNNK.paginator = this.Importpaginator;
+	// 				if (this.Importpaginator) {
+	// 					this.Importpaginator._intl.itemsPerPageLabel = 'Số hàng';
+	// 					this.Importpaginator._intl.firstPageLabel = "Trang Đầu";
+	// 					this.Importpaginator._intl.lastPageLabel = "Trang Cuối";
+	// 					this.Importpaginator._intl.previousPageLabel = "Trang Trước";
+	// 					this.Importpaginator._intl.nextPageLabel = "Trang Tiếp";
+	// 				}
+	// 				this.messageNK = "";
+	// 			}
+	// 			if (data['data'].length === 0) {
+	// 				this.messageNK = "Không tìm thấy dữ liệu !!";
+	// 			}
 
-			});
-	}
+	// 		});
+	// }
 
-	getKNXK() {
-		let report_mode = this.handleReportMode(this.selectedPeriodXK);
-		let year = this.selectedYearXK;
-		let period = this.handlePeriod(this.selectedPeriodXK, 'XK');
-		this.marketService.GetKNXK(this.mst, report_mode, year, period)
-			.subscribe((data) => {
-				if (data["data"]) {
-					this.dataSourceKNXK = new MatTableDataSource<any>(data["data"]);
-					this.dataSourceKNXK.paginator = this.Exportpaginator;
-					if (this.Exportpaginator) {
-						this.Exportpaginator._intl.itemsPerPageLabel = 'Số hàng';
-						this.Exportpaginator._intl.firstPageLabel = "Trang Đầu";
-						this.Exportpaginator._intl.lastPageLabel = "Trang Cuối";
-						this.Exportpaginator._intl.previousPageLabel = "Trang Trước";
-						this.Exportpaginator._intl.nextPageLabel = "Trang Tiếp";
-					}
-				}
-				if (data['data'].length === 0) {
-					this.messageXK = "Không tìm thấy dữ liệu !!";
-				}
-			});
-	}
+	// getKNXK() {
+	// 	let report_mode = this.handleReportMode(this.selectedPeriodXK);
+	// 	let year = this.selectedYearXK;
+	// 	let period = this.handlePeriod(this.selectedPeriodXK, 'XK');
+	// 	this.marketService.GetKNXK(this.mst, report_mode, year, period)
+	// 		.subscribe((data) => {
+	// 			if (data["data"]) {
+	// 				this.dataSourceKNXK = new MatTableDataSource<any>(data["data"]);
+	// 				this.dataSourceKNXK.paginator = this.Exportpaginator;
+	// 				if (this.Exportpaginator) {
+	// 					this.Exportpaginator._intl.itemsPerPageLabel = 'Số hàng';
+	// 					this.Exportpaginator._intl.firstPageLabel = "Trang Đầu";
+	// 					this.Exportpaginator._intl.lastPageLabel = "Trang Cuối";
+	// 					this.Exportpaginator._intl.previousPageLabel = "Trang Trước";
+	// 					this.Exportpaginator._intl.nextPageLabel = "Trang Tiếp";
+	// 				}
+	// 			}
+	// 			if (data['data'].length === 0) {
+	// 				this.messageXK = "Không tìm thấy dữ liệu !!";
+	// 			}
+	// 		});
+	// }
 
 	openDialog(mst: string) {
 		const dialogRef = this.dialog.open(DialogPartnerComponent, { data: mst });
@@ -364,12 +364,12 @@ export class CompanyDetailComponent implements OnInit {
 			});
 	}
 
-	GetAllLoaiHinh() {
-		this.marketService.GetAllBusinessType().subscribe(
-			allrecords => {
-				this.Business = allrecords.data as BusinessTypeModel[];
-			});
-	}
+	// GetAllLoaiHinh() {
+	// 	this.marketService.GetAllBusinessType().subscribe(
+	// 		allrecords => {
+	// 			this.Business = allrecords.data as BusinessTypeModel[];
+	// 		});
+	// }
 
 	public GetCompanyInfoById() {
 		this.marketService.GetCompanyInfoById(this.mst).subscribe(
@@ -380,13 +380,13 @@ export class CompanyDetailComponent implements OnInit {
 		);
 	}
 
-	GetAllCSTT() {
-		this.marketService.GetAllBasebyid(this.mst).subscribe(
-			allrecords => {
-				this.CSTT = allrecords.data as CSTTModel[];
-				this.SLCSTT = this.CSTT.length;
-			});
-	}
+	// GetAllCSTT() {
+	// 	this.marketService.GetAllBasebyid(this.mst).subscribe(
+	// 		allrecords => {
+	// 			this.CSTT = allrecords.data as CSTTModel[];
+	// 			this.SLCSTT = this.CSTT.length;
+	// 		});
+	// }
 
 	getAllProducts() {
 		this.marketService.GetAllProduct().subscribe(data => {
@@ -396,11 +396,11 @@ export class CompanyDetailComponent implements OnInit {
 		})
 	}
 
-	getAllNational() {
-		this.marketService.GetAllNational().subscribe(data => {
-			this.nationals = data['data'];
-		})
-	}
+	// getAllNational() {
+	// 	this.marketService.GetAllNational().subscribe(data => {
+	// 		this.nationals = data['data'];
+	// 	})
+	// }
 
 	// Them_dong_NK(){
 	// 	let dataSource = [...this.dataSourceKNNK];

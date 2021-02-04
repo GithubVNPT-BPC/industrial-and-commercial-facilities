@@ -109,7 +109,7 @@ export class SearchBusinessComponent implements OnInit {
           } 
           return x
         })
-
+        
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList1);
         this.temDataSource = allrecords.data;
         this.dataSource.paginator = this.paginator;

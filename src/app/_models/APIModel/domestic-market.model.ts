@@ -126,7 +126,7 @@ export class CompanyDetailModel {
     public hoat_dong: boolean;
     public dia_chi: string;
     public id_phuong_xa: number;
-    public id_quan_huyen: number;
+    public id_quan_huyen: string;
     public dia_chi_day_du: string;
     public nguoi_dai_dien: string;
     public so_dien_thoai: string;
@@ -137,8 +137,51 @@ export class CompanyDetailModel {
     public nganh_nghe_kd_chinh: string;
 }
 
+export class CompanyDetailModel1 {
+    public id: number;
+    public id_loai_hinh_hoat_dong: number;
+    public ten_loai_hinh_hoat_dong: string;
+    public mst: string;
+    public mst_cha: string;
+    public sct: boolean;
+    public hoat_dong: boolean;
+    public dia_chi: string;
+    public id_phuong_xa: number;
+    public id_quan_huyen: string;
+    public dia_chi_day_du: string;
+    public nguoi_dai_dien: string;
+    public so_dien_thoai: string;
+    public ten_doanh_nghiep: String;
+    public von_dieu_le: number;
+    public ngay_bd_kd: string;
+    public so_lao_dong: number;
+    public cong_suat_thiet_ke: number;
+    public san_luong: number;
+    public email: string;
+    public so_lao_dong_sct: number;
+    public cong_suat_thiet_ke_sct: number;
+    public san_luong_sct: number;
+    public email_sct: string;
+    public tieu_chuan_san_pham: string;
+    public doanh_thu: string;
+    public quy_mo_tai_san: string;
+    public loi_nhuan: string;
+    public nhu_cau_ban: string;
+    public nhu_cau_mua: string;
+    public nhu_cau_hop_tac: string;
+
+    public id_nganh_nghe_kd: number;
+    public ma_nganh_nghe: string;
+    public ten_nganh_nghe: string;
+    public nganh_nghe_kd_chinh: string;
+
+    public so_giay_phep: string;
+    public ngay_cap: string;
+    public ngay_het_han: string;
+}
+
 export class CareerModel {
-    id: number;
+    id_nganh_nghe_kinh_doanh: number;
     ma_nganh_nghe: string;
     ten_nganh_nghe: string;
     ten_kem_ma: string;
@@ -156,7 +199,7 @@ export class SubDistrictModel {
 }
 
 export class BusinessTypeModel {
-    id: number;
+    id_loai_hinh_hoat_dong: number;
     ten_loai_hinh: string;
 }
 
