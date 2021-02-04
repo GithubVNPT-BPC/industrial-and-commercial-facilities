@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container dialog-container" style="position: relative; height: 100%;">
   <h2 mat-dialog-title>Xác nhận</h2>
   <hr>
   <div mat-dialog-content>
@@ -7,15 +7,14 @@
         <span class="text-center">Bạn có chắc chắn thực hiện hành động?</span>
     </ng-template>
   </div>
-
-  <div mat-dialog-actions class="row mt-3">
+  <div mat-dialog-actions class="row dialog-actions" style="bottom: 5px; width: 100%; position: absolute;">
     <div class="col-md-6">
       <button mat-button class="btn btn-danger"
-    [mat-dialog-close]="data_close.no_confirm">Bỏ qua</button>
+              [mat-dialog-close]="data_close.no_confirm">Bỏ qua</button>
     </div>
     <div class="col-md-6">
       <button mat-button class="btn btn-success float-right"
-    [mat-dialog-close]="data_close.confirm">Xác nhận</button>
+              [mat-dialog-close]="data_close.confirm">Xác nhận</button>
     </div>
   </div>
 </div>

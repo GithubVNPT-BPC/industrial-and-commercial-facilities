@@ -18,7 +18,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 @Component({
     selector: 'create-business',
     templateUrl: 'create-business.component.html',
-    styleUrls: ['../../manager_layout.scss'],
+    styleUrls: [],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'vi-VI' },
 

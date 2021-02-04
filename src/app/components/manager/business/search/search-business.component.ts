@@ -3,14 +3,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatDialog } from "@angular/material/dialog";
 
 import { CompanyDetailModel, CareerModel, ProductModel, DistrictModel } from '../../../../_models/APIModel/domestic-market.model';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 import { MatTableFilter } from 'mat-table-filter';
-import { ConfirmDialogComponent } from 'src/app/components/manager/business/confirm-dialog/confirm-dialog.component';
+import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
 
 // Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
@@ -74,9 +73,9 @@ export class SearchBusinessComponent implements OnInit {
   constructor(
     public _marketService: MarketService,
     public router: Router,
-    public dialog: MatDialog,
     public excelService: ExcelService,
     public filterService: FilterService,
+    public confirmationDialogService: ConfirmationDialogService,
   ) { }
 
   ngOnInit(): void {
@@ -154,24 +153,22 @@ export class SearchBusinessComponent implements OnInit {
     return this.careerList.filter(career => normalizeValue(career.ten_kem_ma).includes(filterValue));
   }
 
+  public create() {
+
+  }
+
   private remove() {
     let selectedOptions = this.selection.selected;
   }
 
   public openRemoveDialog() {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      height: '200px',
-      width: '400px',
-      data: {message: "Bạn muốn xóa dữ liệu ?"}
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 'Yes') this.remove();
-    });
-  }
-
-  public create() {
-
+    this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý','Đóng')
+    .then(confirm => {
+      if (confirm) {
+        this.remove();
+      }
+    })
+    .catch((err) => console.log('Hủy không thao tác: \n' + err));
   }
 
   private addMoreFilter() {

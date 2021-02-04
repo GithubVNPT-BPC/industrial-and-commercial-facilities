@@ -6,12 +6,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
 import { ChemicalLPGFoodManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
+import { SelectionModel } from '@angular/cdk/collections';
 
 // Services
 import { ReportService } from 'src/app/_services/APIService/report.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
+import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
     selector: 'chemical-management',
@@ -27,10 +29,13 @@ export class ChemicalManagementComponent implements OnInit {
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
     displayedColumns: string[] = [];
-    displayedColumns1: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'dia_chi', 'nganh_nghe_kd', 'email', 'so_lao_dong', 'cong_suat', 'san_luong', 'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
-    displayedColumns2: string[] = ['index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe_kd', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
+    displayedColumns1: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'email_sct', 'so_lao_dong', 'so_lao_dong_sct', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    displayedColumns2: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'tinh_trang_hoat_dong'];
+    
     dataSource: MatTableDataSource<ChemicalLPGFoodManagementModel> = new MatTableDataSource<ChemicalLPGFoodManagementModel>();
     filteredDataSource: MatTableDataSource<ChemicalLPGFoodManagementModel> = new MatTableDataSource<ChemicalLPGFoodManagementModel>();
+    public selection = new SelectionModel<ChemicalLPGFoodManagementModel>(true, []);
+    
     years: number[] = [];
     districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
@@ -53,7 +58,8 @@ export class ChemicalManagementComponent implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     constructor(
-        public sctService: SCTService,
+        public industryManagementService: IndustryManagementService,
+        public confirmationDialogService: ConfirmationDialogService,
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService) {
     }
@@ -93,8 +99,9 @@ export class ChemicalManagementComponent implements OnInit {
     }
 
     getDanhSachQuanLyHoaChat(time_id: number) {
-        this.sctService.GetDanhSachQuanLyHoaChat(time_id).subscribe(result => {
-            this.dataSource = new MatTableDataSource<ChemicalLPGFoodManagementModel>(result.data);
+        this.industryManagementService.GetDanhSachQuanLyHoaChat(time_id).subscribe(result => {
+            let res = result.data[0];
+            this.dataSource = new MatTableDataSource<ChemicalLPGFoodManagementModel>(res);
 
             this.dataSource.data.forEach(element => {
                 element.is_het_han = new Date(element.ngay_het_han) < new Date();
@@ -110,9 +117,6 @@ export class ChemicalManagementComponent implements OnInit {
             this.paginator._intl.previousPageLabel = "Trang Trước";
             this.paginator._intl.nextPageLabel = "Trang Tiếp";
         })
-    }
-
-    log(any) {
     }
 
     getYears() {
@@ -167,4 +171,40 @@ export class ChemicalManagementComponent implements OnInit {
         }
         this.dSelect.close();
     }
+
+    public openRemoveDialog() {
+        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý','Đóng')
+        .then(confirm => {
+          if (confirm) {
+            // this.remove();
+            return;
+          }
+        })
+        .catch((err) => console.log('Hủy không thao tác: \n' + err));
+    }
+
+    /* Events for toggle checkboxes */
+    //Event selected all
+    public isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    // TODO: Need to check
+    //Event check
+    public masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+    //Event check item
+    public checkboxLabel(row?: ChemicalLPGFoodManagementModel): string {
+        
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_qlcn_hc + 1}`;
+    }
+
 }

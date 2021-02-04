@@ -1,20 +1,19 @@
 export class ChemicalLPGFoodManagementModel{
-    id : number;
-    ten_doanh_nghiep : string;
+    id_qlcn_hc : number;
     mst : string;
-    id_phuong_xa : number;
+    time_id : number;
+    tinh_trang_hoat_dong : number;
+    id_so_giay_phep: number;
+    ten_doanh_nghiep : string;
+    dia_chi_day_du: string;
     id_quan_huyen : number;
-    nganh_nghe_kd : string;
+    nganh_nghe_kd_chinh: string;
     email : string;
     so_lao_dong : number;
-    cong_suat : string;
-    san_luong : string;
-    id_giay_phep_kd : number;
-    so_gp_gcn : string;
+    email_sct: string;
+    so_lao_dong_sct: number;
+    so_giay_phep: string;
     ngay_cap : Date;
     ngay_het_han : Date;
     is_het_han : boolean;
-    time_id : number;
-    loai_sp: number;
-    tinh_trang_hoat_dong : number;
 }
