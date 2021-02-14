@@ -1,7 +1,7 @@
 import { Component, ViewEncapsulation, ElementRef, Input, OnInit, OnDestroy, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTableDataSource, MatTable, MatAccordion, MatPaginator } from '@angular/material';
-import { ex_im_model } from 'src/app/_models/APIModel/export-import.model';
+import { dialog_detail_model } from 'src/app/_models/APIModel/export-import.model';
 import { District } from 'src/app/_models/district.model';
 import { CompanyDetailModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { log } from 'util';
@@ -21,10 +21,9 @@ export class ModalComponent implements OnInit {
     public displayedColumns_business: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'chi_tiet_doanh_nghiep'];
     ten_san_pham: string = '';
     so_doanh_nghiep: number = 0;
-    displayedColumns: string[] = ['index', 'ten_san_pham', 'id_quoc_gia', 'luong_thang', 'gia_tri_thang', 'luong_cong_don', 'gia_tri_cong_don'];
+    displayedColumns: string[] = ['index', 'ten_san_pham', 'thi_truong', 'luong_thang', 'gia_tri_thang', 'luong_cong_don', 'gia_tri_cong_don'];
     dataSource;
     dataDialog: any[] = [];
-    filteredDataSource: MatTableDataSource<ex_im_model> = new MatTableDataSource<ex_im_model>();
     years: number[] = [];
     months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     sanLuongBanRa: number = 0;
@@ -60,15 +59,17 @@ export class ModalComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
+    so_quoc_gia: number = 0;
     handleData() {
         this.id = this.data['id'];
+        // id = 1 => Export
         if (this.id === 1) {
-            this.dataSource = new MatTableDataSource<ex_im_model>(this.data['data']);
+            this.dataSource = new MatTableDataSource<dialog_detail_model>(this.data['data']);
             for (let item of this.data['data']) {
-                this.TongLuongThangThucHien += item['luong_thang'];
-                this.TongGiaTriThangThucHien += item['gia_tri_thang'];
-                this.TongLuongCongDon += item['luong_cong_don'];
-                this.TongGiaTriCongDon += item['gia_tri_cong_don'];
+                this.ten_san_pham = item['ten_san_pham']
+                this.TongGiaTriThangThucHien += item['tri_gia_thang'];
+                this.TongGiaTriCongDon += item['tri_gia_cong_don'];
+                this.so_quoc_gia += 1;
             }
         } else {
             this.ten_san_pham = this.data['ten_san_pham'];

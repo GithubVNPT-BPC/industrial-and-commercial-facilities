@@ -68,11 +68,12 @@
                     </div>
 
                     <div class="col-9 col-lg-9 button-control">
+                        <button mat-raised-button (click)="ImportTOExcel()">Import</button>
                         <button mat-raised-button (click)="ExportTOExcel('Website bán hàng','Website bán hàng')">Xuất Excel</button>
                     </div>
                 </div>
-
-                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
+                <!-- *ngIf="filteredDataSource.data.length; else ShowEmpty" -->
+                <div class="layout" #TABLE>
                     <mat-form-field id="filter2">
                         <mat-label>Lọc dữ liệu</mat-label>
                         <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
@@ -86,7 +87,7 @@
 
                         <ng-container matColumnDef="ten_tc_cn" sticky>
                             <th mat-header-cell *matHeaderCellDef>Tên tổ chức/cá nhân </th>
-                            <td mat-cell *matCellDef="let element">{{element.ten_tc_cn}}</td>
+                            <td mat-cell *matCellDef="let element">{{element.ten_doanh_nghiep}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="mst">
@@ -101,7 +102,7 @@
 
                         <ng-container matColumnDef="dien_thoai">
                             <th mat-header-cell *matHeaderCellDef> Điện thoại </th>
-                            <td mat-cell *matCellDef="let element">{{element.dien_thoai}}</td>
+                            <td mat-cell *matCellDef="let element">{{element.so_dien_thoai}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_mien">

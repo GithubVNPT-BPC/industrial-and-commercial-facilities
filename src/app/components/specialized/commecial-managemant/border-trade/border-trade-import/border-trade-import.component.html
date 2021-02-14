@@ -227,14 +227,29 @@
                     </div>
 
                     <div class="col-lg-3 button-control">
+                        <button mat-raised-button (click)="ImportTOExcel()">Import</button>
                         <button mat-raised-button (click)="ExportTOExcel('Thương mại biên giới','Thương mại biên giới')">Xuất
                             Excel</button>
+                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete">Xóa</button>
+
                     </div>
                 </div>
 
                 <div class="layout" #table>
                     <ng-container>
                         <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
+                            <ng-container matColumnDef="delete_checkbox">
+
+                                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
+                                    <mat-checkbox [(ngModel)]="allComplete" (ngModelChange)="setAll()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox [(ngModel)]="element.isChecked" 
+                                    (ngModelChange)="setSomeIten(element)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
                                 <td mat-cell *matCellDef="let element; let i = index" >
@@ -243,12 +258,12 @@
                                 <!-- <td mat-footer-cell *matFooterCellDef></td> -->
                             </ng-container>
 
-                            <ng-container matColumnDef="ten_san_pham">
+                            <ng-container matColumnDef="ten_cua_khau">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                    Tên sản phẩm
+                                    Tên cửa khẩu
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="fillColor">
-                                    {{ element.ten_hang_hoa }}
+                                    {{ element.id_cua_khau }}
                                 </td>
                                 <!-- <td mat-footer-cell *matFooterCellDef class="fillColor">TỔNG</td> -->
                             </ng-container>
@@ -382,7 +397,6 @@
                 <ng-template #ShowEmpty>
                     <h1>Tháng thực hiện không có dữ liệu</h1>
                 </ng-template>
-
             </mat-expansion-panel>
         </mat-accordion>
 

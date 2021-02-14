@@ -130,17 +130,32 @@
                     </div>
 
                     <div class="col-lg-3 button-control">
+
                         <button mat-raised-button (click)="ImportTOExcel()">Import</button>
                         <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')">Xuất Excel</button>
+                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete">Xóa</button>
                     </div>
                 </div>
 
                 <div class="layout" #table *ngIf="dataSource.data.length; else ShowEmpty">
                     <ng-container>
-                        <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table" >
+                        <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
+                            <ng-container matColumnDef="delete_checkbox">
+
+                                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
+                                    <mat-checkbox [(ngModel)]="allComplete" (ngModelChange)="setAll()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox [(ngModel)]="element.isChecked" 
+                                    (ngModelChange)="setSomeIten(element)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
-                                <td mat-cell *matCellDef="let element; let i = index" >
+                                <td mat-cell *matCellDef="let element; let i = index">
                                     {{ i + 1 }}
                                 </td>
                                 <!-- <td mat-footer-cell *matFooterCellDef></td> -->
@@ -257,7 +272,8 @@
                                     Danh sách doanh nghiệp
                                 </th>
                                 <td mat-cell *matCellDef="let element" id="jump">
-                                    <mat-icon (click)="openDanh_sach_doanh_nghiep(element.id_mat_hang,element.ten_san_pham)">
+                                    <mat-icon
+                                        (click)="openDanh_sach_doanh_nghiep(element.id_mat_hang,element.ten_san_pham)">
                                         equalizer</mat-icon>
                                 </td>
                                 <!-- <td mat-footer-cell *matFooterCellDef></td> -->
@@ -268,16 +284,20 @@
                                     Chi tiết xuất khẩu
                                 </th>
                                 <td mat-cell *matCellDef="let element" id="jump">
-                                    <mat-icon (click)="openDialog(element.id_mat_hang)">
+                                    <mat-icon (click)="openDialog(element.id_san_pham)">
                                         business</mat-icon>
                                 </td>
                                 <!-- <td mat-footer-cell *matFooterCellDef></td> -->
                             </ng-container>
 
-                            <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow1Header; sticky: true"></tr>
-                            <tr mat-header-row class="table-header" *matHeaderRowDef="displaRow2Header; sticky: true"></tr>
-                            <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow3Header; sticky: true"></tr>
-                            <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+                            <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow1Header; sticky: true">
+                            </tr>
+                            <tr mat-header-row class="table-header" *matHeaderRowDef="displaRow2Header; sticky: true">
+                            </tr>
+                            <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow3Header; sticky: true">
+                            </tr>
+                            <tr mat-row class="table-row"
+                                *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
                         </table>
                     </ng-container>
                 </div>
