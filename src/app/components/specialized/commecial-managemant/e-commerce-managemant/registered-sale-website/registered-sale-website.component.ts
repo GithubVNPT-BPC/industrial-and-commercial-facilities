@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatOption, MatSelect, MatTableDataSource } from '@angular/material';
 import { SaleWebsite, SaleWebsiteFilterModel, ECommerceWebsite } from 'src/app/_models/APIModel/e-commerce.model';
 import { District } from 'src/app/_models/district.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
@@ -9,6 +9,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { DialogECommerceComponent } from '../dialog-e-commerce/dialog-e-commerce.component';
 
 @Component({
   selector: 'registered-sale-website',
@@ -29,8 +30,9 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   filterModel: SaleWebsiteFilterModel = { id_quan_huyen: [] };
   constructor(
     public excelService: ExcelService,
-    public sctService: SCTService, 
-    private _breadCrumService: BreadCrumService) { }
+    public sctService: SCTService,
+    private _breadCrumService: BreadCrumService,
+    public matDialog: MatDialog) { }
 
   ngOnInit() {
     this.GetDanhSachWebsiteTMDT();
@@ -76,7 +78,7 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   ExportTOExcel(filename: string, sheetname: string) {
-      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   GetDanhSachWebsiteTMDT() {
@@ -124,17 +126,27 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
     })
     return temp;
   }
-  
+
   @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
   allSelected = false;
   toggleAllSelection() {
-      this.allSelected = !this.allSelected;  // to control select-unselect
+    this.allSelected = !this.allSelected;  // to control select-unselect
 
-      if (this.allSelected) {
-          this.dSelect.options.forEach((item: MatOption) => item.select());
-      } else {
-          this.dSelect.options.forEach((item: MatOption) => item.deselect());
-      }
-      this.dSelect.close();
+    if (this.allSelected) {
+      this.dSelect.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.dSelect.options.forEach((item: MatOption) => item.deselect());
+    }
+    this.dSelect.close();
+  }
+
+  public ImportTOExcel() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      saleWebsite: true,
+    };
+    // dialogConfig.minWidth = window.innerWidth - 100;
+    // dialogConfig.minHeight = window.innerHeight - 300;
+    this.matDialog.open(DialogECommerceComponent, dialogConfig);
   }
 }

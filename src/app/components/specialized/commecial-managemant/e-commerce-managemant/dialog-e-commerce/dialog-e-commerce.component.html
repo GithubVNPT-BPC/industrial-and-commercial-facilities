@@ -1,0 +1,211 @@
+<!-- <mat-card class="material">
+    <mat-card-content>
+        <mat-accordion class="accord" multi>
+            <div class="button-control" style="display: flex; justify-content: center;">
+                <button mat-raised-button class="button-close">
+                    <mat-icon>flip_to_front</mat-icon>
+                    <a [href]="hrefReport" download="Bao_cao_mau.xlsx" style="color: white; text-decoration: underline;">
+                        File mẫu
+                    </a>
+                </button>
+                <button mat-raised-button (click)="Save()" class="button-close">
+                    <mat-icon>flip_to_front</mat-icon>Lưu
+                </button>
+                <span>
+                    <label for="upload" class="label-upload">
+                        <mat-icon>flip_to_front</mat-icon>Chọn file
+                    </label>
+                    <input id='upload' type="file" (change)="handleFile($event)" hidden />
+                </span>
+                <button mat-raised-button mat-dialog-close class="button-close">
+                    <mat-icon>flip_to_front</mat-icon>Đóng
+                </button>
+            </div>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    
+                </div>
+                *ngIf="filteredDataSource.data.length; else ShowEmpty"
+                <div class="layout" #TABLE>
+                    <mat-form-field id="filter2">
+                        <mat-label>Lọc dữ liệu</mat-label>
+                        <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
+                    </mat-form-field>
+
+                    <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_tc_cn" sticky>
+                            <th mat-header-cell *matHeaderCellDef>Tên tổ chức/cá nhân </th>
+                            <td mat-cell *matCellDef="let element">{{element.ten_doanh_nghiep}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mst">
+                            <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
+                            <td mat-cell *matCellDef="let element">{{element.mst}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dia_chi">
+                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                            <td mat-cell *matCellDef="let element">{{element.dia_chi}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dien_thoai">
+                            <th mat-header-cell *matHeaderCellDef> Điện thoại </th>
+                            <td mat-cell *matCellDef="let element">{{element.so_dien_thoai}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_mien">
+                            <th mat-header-cell *matHeaderCellDef> Tên miền </th>
+                            <td mat-cell *matCellDef="let element"><a
+                                    href="{{element.ten_mien.includes('http')? element.ten_mien : 'http://' + element.ten_mien}}"
+                                    target="_blank">{{element.ten_mien}}</a></td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="nganh_nghe">
+                            <th mat-header-cell *matHeaderCellDef> Ngành nghề </th>
+                            <td mat-cell *matCellDef="let element">{{element.nganh_nghe}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ma_so_nganh_nghe">
+                            <th mat-header-cell *matHeaderCellDef> Mã số ngành nghề </th>
+                            <td mat-cell *matCellDef="let element">{{element.ma_so_nganh_nghe}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true">
+                        </tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+
+                <ng-template #ShowEmpty>
+                    <h1>Không có dữ liệu</h1>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+
+    </mat-card-content>
+</mat-card> -->
+
+<div class="container" *ngIf="this.data.saleWebsite; else elseBlock">
+    <div class="row">
+        <div class="col-10">
+            <div class="jumbotron">
+                <h2>Thêm mới thông tin Website</h2>
+                <form name="form" [formGroup]="form" (ngSubmit)="form.valid && onSubmit()">
+                    <div class="form-group">
+                        <label for="mst">Mã số thuế</label>
+                        <input type="text" class="form-control" formControlName="mst"
+                            [ngClass]="{'is-invalid':form.get('mst').touched && form.get('mst').invalid}" required />
+                        <div class="invalid-feedback">
+                            <div>Mã số thuế là bắt buộc</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ten_mien">Tên miền</label>
+                        <input type="text" class="form-control" formControlName="ten_mien"
+                            [ngClass]="{'is-invalid':form.get('ten_mien').touched && form.get('ten_mien').invalid}"
+                            required />
+                        <div class="invalid-feedback">
+                            <div>Tên miền là bắt buộc</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nganh_nghe">Ngành nghề</label>
+                        <input type="text" class="form-control" formControlName="nganh_nghe"
+                            [ngClass]="{'is-invalid':form.get('nganh_nghe').touched && form.get('nganh_nghe').invalid}" />
+                        <div *ngIf="form.get('nganh_nghe').touched && form.get('nganh_nghe').invalid"
+                            class="invalid-feedback">
+                            <div *ngIf="form.get('nganh_nghe').errors.required">Ngành nghề là bắt buộc</div>
+                            <!-- <div *ngIf="form.get('email').errors.email">Email must be a valid email Address</div> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ma_so_nganh_nghe">Mã số ngành nghề</label>
+                        <input type="text" class="form-control" formControlName="ma_so_nganh_nghe"
+                            [ngClass]="{'is-invalid':form.get('ma_so_nganh_nghe').touched && form.get('ma_so_nganh_nghe').invalid}" />
+                        <div *ngIf="form.get('ma_so_nganh_nghe').touched && form.get('ma_so_nganh_nghe').invalid"
+                            class="invalid-feedback">
+                            <div *ngIf="form.get('ma_so_nganh_nghe').errors.required">Mã số ngành nghề là bắt buộc</div>
+                            <!-- <div *ngIf="form.get('password').errors.minlength">Password must be a letaset 6 charector
+                            </div> -->
+                        </div>
+                    </div>
+                    <div class="form-group" style="text-align: center;">
+                        <button mat-raised-button [disabled]="!form.valid" class="button-close">
+                            <mat-icon>flip_to_front</mat-icon>Thêm mới
+                        </button>
+                        <button mat-raised-button mat-dialog-close class="button-close" style="background-color: red;">
+                            <mat-icon>flip_to_front</mat-icon>Đóng
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #elseBlock>
+    <div class="container">
+        <div class="row">
+            <div class="col-10">
+                <div class="jumbotron">
+                    <h2>Thêm mới thông tin Website</h2>
+                    <form name="form" [formGroup]="form_TMDT" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <label for="mst">Mã số thuế</label>
+                            <input type="text" class="form-control" formControlName="mst"
+                                [ngClass]="{'is-invalid':form.get('mst').touched && form.get('mst').invalid}"
+                                required />
+                            <div class="invalid-feedback">
+                                <div>Mã số thuế là bắt buộc</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="ten_mien">Tên miền</label>
+                            <input type="text" class="form-control" formControlName="ten_mien" />
+                        </div>
+                        <div class="form-group">
+                            <label for="loai_hang_hoa">Loại hàng hóa</label>
+                            <input type="text" class="form-control" formControlName="loai_hang_hoa" />
+                        </div>
+                        <div class="form-group">
+                            <label for="so_gian_hang">Số gian hàng</label>
+                            <input type="text" class="form-control" formControlName="so_gian_hang" />
+                        </div>
+                        <!-- <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" class="form-control" formControlName="email" [ngClass]="{'is-invalid':form.get('email').touched && form.get('email').invalid}"   />
+                            <div *ngIf="form.get('email').errors.required">Email Name is required</div>
+                        </div> -->
+                        <div class="form-group" style="text-align: center;">
+                            <button mat-raised-button class="button-close">
+                                <mat-icon>flip_to_front</mat-icon>Thêm mới
+                            </button>
+                            <button mat-raised-button mat-dialog-close class="button-close"
+                                style="background-color: red;">
+                                <mat-icon>flip_to_front</mat-icon>Đóng
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

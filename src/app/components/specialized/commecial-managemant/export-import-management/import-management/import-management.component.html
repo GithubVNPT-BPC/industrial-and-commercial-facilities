@@ -134,12 +134,25 @@
                         <!-- <button mat-raised-button (click)="DowloadFile('file mẫu','sheet 1')">File mẫu</button> -->
                         <button mat-raised-button (click)="ImportTOExcel()">Import</button>
                         <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')">Xuất Excel</button>
+                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete">Xóa</button>
                     </div>
                 </div>
 
                 <div class="layout" #table *ngIf="dataSource?.data.length; else ShowEmpty">
                     <ng-container>
                         <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table" >
+                            <ng-container matColumnDef="delete_checkbox">
+
+                                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
+                                    <mat-checkbox [(ngModel)]="allComplete" (ngModelChange)="setAll()">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox [(ngModel)]="element.isChecked" 
+                                    (ngModelChange)="setSomeIten(element)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
                                 <td mat-cell *matCellDef="let element; let i = index" >

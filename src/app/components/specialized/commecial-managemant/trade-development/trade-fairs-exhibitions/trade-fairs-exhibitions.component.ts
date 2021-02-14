@@ -349,7 +349,11 @@ export class TradeFairsExhibitionsComponent implements OnInit {
     }
   ]
 
-  displayedColumns: string[] = ['index', 'Ten_doanh_nghiep', 'Dia_chi', 'Ma_so_thue', 'Ten_Hoi_cho', 'Thoi_gian_to_chuc', 'Dia_diem_to_chuc', 'Ke_hoach', 'So_luong_gian_hang_du_kien', 'San_pham_ban_tai_hoi_cho', 'So_Van_ban', 'Co_quan_ban_hanh', 'Ngay_thang_nam'];
+  displayedColumns: string[] = [
+    'index', 'Ten_doanh_nghiep', 'Dia_chi', 'Ma_so_thue', 'Ten_Hoi_cho', 'Thoi_gian_to_chuc', 
+    'Dia_diem_to_chuc', 'Ke_hoach', 
+    'So_luong_gian_hang_du_kien', 'San_pham_ban_tai_hoi_cho', 'So_Van_ban', 
+    'Co_quan_ban_hanh', 'Ngay_thang_nam'];
   dataSource: MatTableDataSource<TFE> = new MatTableDataSource<TFE>();
   filteredDataSource: MatTableDataSource<TFE> = new MatTableDataSource<TFE>();
 
