@@ -175,9 +175,9 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'multilevel_trade',
+    path: 'multilevel-trade',
     component: MultilevelTradeComponent
-  }
+  },
 ];
 
 @NgModule({

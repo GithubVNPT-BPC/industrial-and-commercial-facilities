@@ -106,7 +106,7 @@
                             <td mat-cell *matCellDef="let element" class="ten-hang">{{element.ten_dn}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dia_chi">
+                        <ng-container matColumnDef="dia_chi_doanh_nghiep">
                             <th mat-header-cell *matHeaderCellDef> Địa chỉ</th>
                             <td mat-cell *matCellDef="let element" class="luong"> {{element.dia_chi }}</td>
 
@@ -118,69 +118,70 @@
 
                         </ng-container>
 
-                        <ng-container matColumnDef="vb_xac_nhan_dp">
+                        <ng-container matColumnDef="so_giay_dkbhdc">
                             <th mat-header-cell *matHeaderCellDef> VB xác nhận </th>
-                            <td mat-cell *matCellDef="let element" class="luong"> {{element.vb_xac_nhan_dp }}</td>
-
+                            <td mat-cell *matCellDef="let element" class="luong"> {{element.so_giay_dkbhdc }}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="co_quan_bh_dp">
+                        <ng-container matColumnDef="co_quan_ban_hanh_giay_dkbhdc">
                             <th mat-header-cell *matHeaderCellDef> Cơ quan ban hành</th>
-                            <td mat-cell *matCellDef="let element" class="gia-tri"> {{element.co_quan_bh_dp}}</td>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"> {{element.co_quan_ban_hanh_giay_dkbhdc}}</td>
 
                         </ng-container>
 
-                        <ng-container matColumnDef="ngay_thang_dp">
+                        <ng-container matColumnDef="ngay_dang_ky_giay_dkbhdc">
                             <th mat-header-cell *matHeaderCellDef> Ngày tháng năm</th>
                             <td mat-cell *matCellDef="let element" class="luong">
-                                {{element.ngay_thang_nam_dp | date: 'dd/MM/yyyy'}}</td>
+                                {{element.ngay_dang_ky_giay_dkbhdc | date: 'dd/MM/yyyy'}}</td>
 
                         </ng-container>
 
-                        <ng-container matColumnDef="vb_xac_nhan_tc">
+                        <ng-container matColumnDef="so_giay_tchtbhdc">
                             <th mat-header-cell *matHeaderCellDef>VB xác nhận</th>
-                            <td mat-cell *matCellDef="let element" class="gia-tri"> {{element.vb_xac_nhan_tc}}</td>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"> {{element.so_giay_tchtbhdc}}</td>
 
                         </ng-container>
 
-                        <ng-container matColumnDef="co_quan_bh_tc">
+                        <ng-container matColumnDef="co_quan_ban_hanh_giay_tchtbhdc">
                             <th mat-header-cell *matHeaderCellDef> Cơ quan ban hành </th>
-                            <td mat-cell *matCellDef="let element" class="luong"> {{element.co_quan_bh_tc }}</td>
+                            <td mat-cell *matCellDef="let element" class="luong"> {{element.co_quan_ban_hanh_giay_tchtbhdc }}</td>
 
                         </ng-container>
 
-                        <ng-container matColumnDef="ngay_thang_tc">
+                        <ng-container matColumnDef="ngay_dang_ky_giay_tchtbhdc">
                             <th mat-header-cell *matHeaderCellDef> Ngày tháng năm</th>
                             <td mat-cell *matCellDef="let element" class="gia-tri">
-                                {{element.ngay_thang_nam_tc | date: 'dd/MM/yyyy'}}</td>
+                                {{element.ngay_dang_ky_giay_tchtbhdc | date: 'dd/MM/yyyy'}}</td>
 
                         </ng-container>
 
-                        <ng-container matColumnDef="tg_hoi_thao">
+                        <ng-container matColumnDef="thoi_gian_bat_dau">
                             <th mat-header-cell *matHeaderCellDef> Thời gian tổ chức hội thảo</th>
                             <td mat-cell *matCellDef="let element" class="gia-tri">
-                                {{element.tg_hoi_thao | date: 'dd/MM/yyyy'}}</td>
-
+                                {{element.thoi_gian_bat_dau | date: 'dd/MM/yyyy'}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dia_diem_hoi_thao">
+                        <ng-container matColumnDef="thoi_gian_ket_thuc">
+                            <th mat-header-cell *matHeaderCellDef> Thời gian tổ chức hội thảo</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri">
+                                {{element.thoi_gian_ket_thuc | date: 'dd/MM/yyyy'}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="dia_diem_to_chuc">
                             <th mat-header-cell *matHeaderCellDef> Địa điểm tổ chức hội thảo</th>
-                            <td mat-cell *matCellDef="let element" class="gia-tri">{{element.dia_diem}}</td>
+                            <td mat-cell *matCellDef="let element" class="gia-tri">{{element.dia_diem_to_chuc}}</td>
 
                         </ng-container>
 
-                        <tr mat-header-row class="table-header"
+                        <!-- <tr mat-header-row class="table-header"
                             *matHeaderRowDef="['index', 'thong_tin_dn', 'xac_nhan_dk', 'to_chuc_hoi_thao']; sticky: true">
-                        </tr>
+                        </tr> -->
                         <tr mat-header-row class="table-header"
-                            *matHeaderRowDef="['ten_doanh_nghiep','dia_chi','mst','vb_xac_nhan_dp','co_quan_bh_dp','ngay_thang_dp',
-                        'vb_xac_nhan_tc','co_quan_bh_tc',	'ngay_thang_tc', 'tg_hoi_thao', 'dia_diem_hoi_thao']; sticky: true"></tr>
-                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">
+                            *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index; ">
                     </table>
-
-                    <!-- <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[20, 50]"></mat-paginator> -->
                 </div>
-                <mat-paginator [pageSizeOptions]="[20, 50]"></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100, 500]" showFirstLastButtons></mat-paginator>
                 <ng-template #ShowEmpty>
                     <h1>Không có dữ liệu</h1>
                 </ng-template>
