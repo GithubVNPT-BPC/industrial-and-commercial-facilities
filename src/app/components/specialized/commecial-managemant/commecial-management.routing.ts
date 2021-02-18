@@ -175,7 +175,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'multilevel-trade',
+    path: 'multilevel_trade',
     component: MultilevelTradeComponent
   },
 ];

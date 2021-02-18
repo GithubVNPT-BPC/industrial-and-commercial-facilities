@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { MatAccordion } from '@angular/material/expansion';
@@ -9,6 +9,9 @@ import { TFEModel } from 'src/app/_models/APIModel/trade-development.model';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+import { InformationService } from 'src/app/shared/information/information.service';
+
+import moment from 'moment';
 
 @Component({
   selector: 'app-trade-fairs-exhibitions',
@@ -22,23 +25,26 @@ export class TradeFairsExhibitionsComponent implements OnInit {
     'dia_diem_to_chuc', 'so_luong_gian_hang', 'san_pham', 'so_van_ban', 
     'co_quan_ban_hanh', 'ngay_thang_nam_van_ban', 'id_trang_thai',];
   formData = this.formBuilder.group({
-    ten_doanh_nghiep: '',
-    dia_chi_doanh_nghiep: '',
-    mst: '',
-    ten_hoi_cho: '',
-    thoi_gian_bat_dau: '',
-    thoi_gian_ket_thuc: '',
-    dia_diem_to_chuc: '',
-    so_luong_gian_hang: '',
-    san_pham: '',
-    so_van_ban: '',
-    co_quan_ban_hanh: '',
-    ngay_thang_nam_van_ban: '',
+    ten_doanh_nghiep: new FormControl(),
+    dia_chi_doanh_nghiep: new FormControl(),
+    id_phuong_xa: new FormBuilder(),
+    mst: new FormControl(),
+    ten_hoi_cho: new FormControl(),
+    thoi_gian_bat_dau: new FormControl(),
+    thoi_gian_ket_thuc: new FormControl(),
+    dia_diem_to_chuc: new FormControl(),
+    so_luong_gian_hang: new FormControl(),
+    san_pham: new FormControl(),
+    so_van_ban: new FormControl(),
+    co_quan_ban_hanh: new FormControl(),
+    ngay_thang_nam_van_ban: new FormControl(),
   });
+
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
 
   years: number[] = [];
+  // Modify to get districts from API
   districts: District[] = [
     { id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
@@ -55,6 +61,7 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   sanLuongBanRa: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+  private currentDate = moment().format('yyyyMM');
   public errorMessage: any;
   private view = 'list';
 
@@ -67,8 +74,9 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   }
 
   constructor(
-    public sctService: SCTService,
     private formBuilder: FormBuilder,
+    public sctService: SCTService,
+    public _infor: InformationService,
     public commerceManagementService : CommerceManagementService,
     public excelService: ExcelService, ) {
   }
@@ -107,16 +115,16 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   // }
 
   getTFEList(): void {
-    this.commerceManagementService.getExpoData('202101').subscribe(
-      allrecords => {
-        if (allrecords.data && allrecords.data.length > 0) {
-          this.dataSource = new MatTableDataSource<TFEModel>(allrecords.data);
+    this.commerceManagementService.getExpoData(this.currentDate).subscribe(
+      result => {
+        if (result.data && result.data.length > 0) {
+          this.dataSource = new MatTableDataSource<TFEModel>(result.data);
           this.dataSource.paginator = this.paginator;
-          this.paginator._intl.itemsPerPageLabel = "Số hàng";
-          this.paginator._intl.firstPageLabel = "Trang Đầu";
-          this.paginator._intl.lastPageLabel = "Trang Cuối";
-          this.paginator._intl.previousPageLabel = "Trang Trước";
-          this.paginator._intl.nextPageLabel = "Trang Tiếp";
+          // this.paginator._intl.itemsPerPageLabel = "Số hàng";
+          // this.paginator._intl.firstPageLabel = "Trang Đầu";
+          // this.paginator._intl.lastPageLabel = "Trang Cuối";
+          // this.paginator._intl.previousPageLabel = "Trang Trước";
+          // this.paginator._intl.nextPageLabel = "Trang Tiếp";
         }
       },
       error => this.errorMessage = <any>error
@@ -157,9 +165,41 @@ export class TradeFairsExhibitionsComponent implements OnInit {
     this.view = this.view == 'list' ? 'form': 'list';
   }
 
-  onSubmit(): void {
-    // Process checkout data here
-    console.warn('Your order has been submitted', this.formData.value);
+  onCreate(): void {
+    // TODO: Check 'id_phuong_xa'
+    let data = this.formData.value;
+    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
+    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
+    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('DD/MM/yyyy');
+
+    data = {...data, ...{
+      id_trang_thai: 1,
+      time_id: this.currentDate,
+    }};
+    this.commerceManagementService.postExpoData([data]).subscribe(
+      next => {
+        if (next.id == -1) {
+          this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+        }
+        else {
+          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+          this.reset2Default();
+        }
+      },
+      error => {
+        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+      }
+    );
+  }
+
+  private clearTable(event) {
+    event.preventDefault();
     this.formData.reset();
+  }
+
+  reset2Default(): void {
+    this.formData.reset();
+    this.switchView();
+    this.ngOnInit();
   }
 }
