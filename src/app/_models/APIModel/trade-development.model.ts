@@ -17,10 +17,6 @@ export class TFEModel {
     san_pham : string;
 }
 
-export class TFEFilterModel{
-    Id_Quan_huyen : number[]=[];
-}
-
 export class SDModel {
     ten_doanh_nghiep: string;
     dia_chi_doanh_nghiep: string;
@@ -34,9 +30,4 @@ export class SDModel {
     so_van_ban: string;
     co_quan_ban_hanh: string;
     ngay_thang_nam_van_ban: string;
-}
-
-export class SDFilterModel{
-    Id_quan_huyen : number[]=[];
-    Hinh_thuc_KM : string[] = [];
 }

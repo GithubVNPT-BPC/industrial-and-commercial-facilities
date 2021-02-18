@@ -91,40 +91,32 @@ export class TradeFairsExhibitionsComponent implements OnInit {
     setTimeout(() => this.accordion.openAll(), 1000);
   }
 
-  applyFilterKeyInput(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(event) {
+    let filterValues = event.target ? event.target.value: event.value;
+    if (filterValues instanceof Array) {
+      let filteredData = [];
+      filterValues.forEach(element => {
+        this.dataSource.data.filter(x => x.id_phuong_xa == element).forEach(x => filteredData.push(x));
+      });
+      if (!filteredData.length) {
+        this.filteredDataSource.data = filterValues.length ? []: this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+    } 
+    else {
+      this.filteredDataSource.filter = filterValues.trim().toLowerCase();
+    }
   }
-
-  // applyDistrictFilter(event) {
-  //   let filteredData = [];
-
-  //   event.value.forEach(element => {
-  //     this.dataSource.data.filter(x => x.Id_quan_huyen == element).forEach(x => filteredData.push(x));
-  //   });
-
-  //   if (!filteredData.length) {
-  //     if (event.value.length)
-  //       this.filteredDataSource.data = [];
-  //     else
-  //       this.filteredDataSource.data = this.dataSource.data;
-  //   }
-  //   else {
-  //     this.filteredDataSource.data = filteredData;
-  //   }
-  // }
 
   getTFEList(): void {
     this.commerceManagementService.getExpoData(this.currentDate).subscribe(
       result => {
         if (result.data && result.data.length > 0) {
           this.dataSource = new MatTableDataSource<TFEModel>(result.data);
-          this.dataSource.paginator = this.paginator;
-          // this.paginator._intl.itemsPerPageLabel = "Số hàng";
-          // this.paginator._intl.firstPageLabel = "Trang Đầu";
-          // this.paginator._intl.lastPageLabel = "Trang Cuối";
-          // this.paginator._intl.previousPageLabel = "Trang Trước";
-          // this.paginator._intl.nextPageLabel = "Trang Tiếp";
+          this.filteredDataSource = new MatTableDataSource<TFEModel>(result.data);
+          this.filteredDataSource.paginator = this.paginator;
         }
       },
       error => this.errorMessage = <any>error

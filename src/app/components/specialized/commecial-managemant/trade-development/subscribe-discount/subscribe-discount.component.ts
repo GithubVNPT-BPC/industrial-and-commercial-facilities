@@ -5,7 +5,7 @@ import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
-import { SDModel, SDFilterModel} from 'src/app/_models/APIModel/trade-development.model';
+import { SDModel} from 'src/app/_models/APIModel/trade-development.model';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
@@ -41,7 +41,10 @@ export class SubscribeDiscountComponent implements OnInit {
 
   dataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
   filteredDataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
-  filterModel: SDFilterModel = new SDFilterModel();
+  filterComponents = {
+    id_phuong_xa: [],
+    ten_hinh_thuc: [],
+  }
   sumvalues: number = 0;
   years: number[] = [];
   // districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
@@ -83,21 +86,19 @@ export class SubscribeDiscountComponent implements OnInit {
     setTimeout(() => this.accordion.openAll(), 1000);
   }
 
-  applyFilterKeyInput(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
+  applyFilter(event) {
+    let filterValues = event.target ? event.target.value: event.value;
+    if (filterValues instanceof Array) {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterComponents);
+      if (!filteredData.length) {
+        this.filteredDataSource.data = this.filterComponents ? []: this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+    } 
     else {
-      this.filteredDataSource.data = filteredData;
+      this.filteredDataSource.filter = filterValues.trim().toLowerCase();
     }
   }
 
@@ -115,7 +116,7 @@ export class SubscribeDiscountComponent implements OnInit {
             temp = [...temp2];
           }
           break;
-          default: 
+        default: 
           if (filters[key].length) {
             filters[key].forEach(criteria => {
               temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
@@ -146,7 +147,8 @@ export class SubscribeDiscountComponent implements OnInit {
       result => {
         if (result.data && result.data.length > 0) {
           this.dataSource = new MatTableDataSource<SDModel>(result.data);
-          this.dataSource.paginator = this.paginator;
+          this.filteredDataSource = new MatTableDataSource<SDModel>(result.data);
+          this.filteredDataSource.paginator = this.paginator;
           // this.sdtypes = [...new Set(this.dataSource.data.map(x => x.ten_hinh_thuc))];
           // this.paginator._intl.itemsPerPageLabel = "Số hàng";
           // this.paginator._intl.firstPageLabel = "Trang Đầu";

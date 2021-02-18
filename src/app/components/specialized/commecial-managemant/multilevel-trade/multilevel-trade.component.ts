@@ -55,6 +55,7 @@ export class MultilevelTradeComponent implements OnInit {
   pagesize: number = 10;
   isChecked: boolean;
   curentmonth: number = new Date().getMonth() + 1;
+  numberCompanyHoldReference:number = 0;
 
   public errorMessage: any;
   private view = 'list';
@@ -74,8 +75,6 @@ export class MultilevelTradeComponent implements OnInit {
     
   ) {
   }
-
-  numberCompanyHoldReference:number = 0;
 
   kiem_tra(id_mat_hang) {
     if (this.nhap_khau_chu_yeu.includes(id_mat_hang))
@@ -118,7 +117,8 @@ export class MultilevelTradeComponent implements OnInit {
       allrecords => {
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<MultiLevelTradeModel>(allrecords.data);
-          this.dataSource.paginator = this.paginator;
+          this.filteredDataSource = new MatTableDataSource<MultiLevelTradeModel>(allrecords.data);
+          this.filteredDataSource.paginator = this.paginator;
           // this.paginator._intl.itemsPerPageLabel = "Số hàng";
           // this.paginator._intl.firstPageLabel = "Trang Đầu";
           // this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -128,13 +128,6 @@ export class MultilevelTradeComponent implements OnInit {
       },
       error => this.errorMessage = <any>error
     );
-  }
-
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
