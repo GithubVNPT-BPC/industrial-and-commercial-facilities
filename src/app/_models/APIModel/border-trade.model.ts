@@ -18,5 +18,5 @@ export class BorderTrade {
     ten_cua_khau?: string;
     ten_hang_hoa?:string;
 
-
+    isChecked?: boolean;
 }

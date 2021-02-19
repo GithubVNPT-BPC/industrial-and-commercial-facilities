@@ -48,6 +48,10 @@ import { MatTabComponent } from './export-import-management/mat-tab/mat-tab.comp
 import { DetailNationalComponent } from './export-import-management/detail-national/detail-national.component';
 import { DetailDataComponent } from './export-import-management/detail-data/detail-data.component';
 import { CommonDataComponent } from './export-import-management/common-data/common-data.component';
+import { DialogImportDataComponent } from './border-trade/dialog-import-data/dialog-import-data.component';
+import { DownloadService } from 'src/app/_services/injectable-service/dowloadFile.service';
+import { TranslateIdToNamePipe } from 'src/app/shared/pipes/translateIdToName.pipe';
+import { DialogECommerceComponent } from './e-commerce-managemant/dialog-e-commerce/dialog-e-commerce.component';
 
 @NgModule({
   imports: [
@@ -64,7 +68,8 @@ import { CommonDataComponent } from './export-import-management/common-data/comm
   exports: [
     MatPaginatorModule,
     MatSortModule,
-    FormatNumberReportPipe
+    FormatNumberReportPipe,
+    TranslateIdToNamePipe
   ],
   declarations: [
     MarketCommecialManagementComponent,
@@ -99,15 +104,21 @@ import { CommonDataComponent } from './export-import-management/common-data/comm
     MatTabComponent,
     DetailNationalComponent,
     DetailDataComponent,
-    CommonDataComponent
+    CommonDataComponent,
+    DialogImportDataComponent,
+    TranslateIdToNamePipe,
+    DialogECommerceComponent
   ],
   entryComponents: [
     ModalComponent,
-    ImportDataComponent
+    ImportDataComponent,
+    DialogImportDataComponent,
+    DialogECommerceComponent
   ],
   providers: [
     CommonFuntions,
-    ExcelServicesService
+    ExcelServicesService,
+    DownloadService
   ]
 })
 export class CommecialManagementModule { }

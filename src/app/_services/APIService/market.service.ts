@@ -17,8 +17,8 @@ export class MarketService {
 
     public urlDomesticMarket = "/gia-ca";
     public urlForeignMarket = "/gia-ca-quoc-te";
-    public urlExport = "/xuat-khau";
-    public urlImport = "/nhap-khau";
+    public urlExport = "xuat-khau";
+    public urlImport = "nhap-khau";
     public urlProdcut = "/san-xuat";
     public urlProductById = "/gia-ca-trong-nuoc-theo-san-pham";
     public urlProductTimePeriod = "/gia-ca-trong-khoang-thoi-gian";
@@ -40,7 +40,7 @@ export class MarketService {
     public urlUpdateKNXK = '/doanh-nghiep/kim-ngach-xuat-khau';
     public urlListExportedCompany = "/kim-ngach-xuat-khau";
     public urlListImportedCompany = "/kim-ngach-nhap-khau";
-    public urlDomesticMarket_New = "/gia-ca";
+    public urlDomesticMarket_New = "gia-ca";
 
     token: any;
     username: any;

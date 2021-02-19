@@ -8,7 +8,7 @@ import {
     MatDialogConfig,
 } from "@angular/material";
 import { SCTService } from "src/app/_services/APIService/sct.service";
-import { new_import_export_model } from "src/app/_models/APIModel/export-import.model";
+import { new_import_export_model, Task } from "src/app/_models/APIModel/export-import.model";
 import { MarketService } from "src/app/_services/APIService/market.service";
 import { ModalComponent } from "../dialog-import-export/modal.component";
 import { MatSort } from "@angular/material/sort";
@@ -25,7 +25,6 @@ import json_report_01 from "../test/report_export_01.json";
     templateUrl: "./export-management.component.html",
     styleUrls: ["../../../special_layout.scss"],
 })
-
 export class ExportManagementComponent implements OnInit {
     //Constant
     private readonly LINK_DEFAULT: string =
@@ -33,6 +32,7 @@ export class ExportManagementComponent implements OnInit {
     private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
     displayedColumns = [
+        "delete_checkbox",
         "index",
         "ten_san_pham",
         "luong_thang",
@@ -48,6 +48,7 @@ export class ExportManagementComponent implements OnInit {
         "chi_tiet_doanh_nghiep",
     ];
     displayRow1Header = [
+        "delete_checkbox",
         "index",
         "ten_san_pham",
         "thuc_hien_bao_cao_thang",
@@ -118,7 +119,7 @@ export class ExportManagementComponent implements OnInit {
     ) { }
 
     handleGTXK() {
-        
+
     }
 
     initVariable() {
@@ -233,23 +234,21 @@ export class ExportManagementComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    openDialog(id_mat_hang) {
+    openDialog(id_san_pham) {
         // if (this.kiem_tra(id_mat_hang)) {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
-            data: this.handelDataDialog(id_mat_hang),
-            id: 1,
+            data: this.handelDataDialog(id_san_pham),
+            id: 1, // xuat khau
         };
-        dialogConfig.minHeight = "100%";
+        dialogConfig.minHeight = window.innerHeight - 100;
         dialogConfig.minWidth = "90%";
-        // dialogConfig.panelClass = ['overflow-y: scroll;']
         this.matDialog.open(ModalComponent, dialogConfig);
-        // }
     }
 
-    handelDataDialog(id_mat_hang) {
+    handelDataDialog(id_san_pham) {
         let data = this.dataDialog.filter(
-            (item) => item.id_mat_hang === id_mat_hang
+            (item) => item.id_san_pham === id_san_pham
         );
         return data;
     }
@@ -293,6 +292,7 @@ export class ExportManagementComponent implements OnInit {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachXuatKhau(time_id).subscribe((result) => {
             this.setDataExport(result.data[0]);
+            this.setDataExportDetail(result.data[2]);
         });
     }
 
@@ -300,23 +300,27 @@ export class ExportManagementComponent implements OnInit {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachXuatKhauTC(time_id).subscribe((result) => {
             this.setDataExport(result.data[0]);
+            this.setDataExportDetail(result.data[2]);
         });
     }
 
-    setSumaryData(data){
+    setDataExportDetail(detail_export: any) {
+        this.dataDialog = [...detail_export];
+    }
+
+    setSumaryData(data) {
         this.TongGiaTriThangThucHien = data[15].tri_gia_thang ? data[15].tri_gia_thang : 0;
         this.uth_so_cungky = data[15].uoc_thang_so_voi_ki_truoc ? data[15].uoc_thang_so_voi_ki_truoc : 0;
         this.TongGiaTriCongDon = data[15].tri_gia_cong_don ? data[15].tri_gia_cong_don : 0;
         this.uth_so_khn = data[15].uoc_cong_don_so_voi_cong_don_truoc ? data[15].uoc_cong_don_so_voi_cong_don_truoc : 0;
     }
 
-    setDataExport(data){
+    setDataExport(data) {
         this.dataSource = new MatTableDataSource<new_import_export_model>(data);
-            if (data.length)
-            {
-                this.dataSource.paginator = this.paginator;
-                this.setSumaryData(data);
-            }
+        if (data.length) {
+            this.dataSource.paginator = this.paginator;
+            this.setSumaryData(data);
+        }
     }
 
 
@@ -341,5 +345,36 @@ export class ExportManagementComponent implements OnInit {
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 300;
         this.matDialog.open(ImportDataComponent, dialogConfig);
+    }
+
+    // checkbox delete
+    allComplete: boolean = false;
+    task: Task[] = [];
+    updateAllComplete() {
+        let dataNo = this.dataSource.data['data'][0].length
+        this.allComplete = this.task != null && this.task.length === dataNo;
+    }
+
+    // someComplete(): boolean {
+    //     if (this.task.subtasks == null) {
+    //         return false;
+    //     }
+    //     return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+    // }
+
+    setAll() {
+        this.dataSource.data.forEach(item => item.isChecked=!item.isChecked)
+        console.log(this.dataSource.data)
+    }
+
+    setSomeIten(element){
+        let temp_item: Task = Object.assign({}, element);
+        this.task.push(temp_item);
+        console.log(this.task);
+        // element.isChecked = !element.isChecked;
+    }
+
+    Delete(){
+        // waiting api
     }
 }
