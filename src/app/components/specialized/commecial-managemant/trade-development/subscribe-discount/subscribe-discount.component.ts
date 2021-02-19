@@ -224,6 +224,6 @@ export class SubscribeDiscountComponent implements OnInit {
   reset2Default(): void {
     this.formData.reset();
     this.switchView();
-    this.ngOnInit();
+    this.autoOpen();
   }
 }

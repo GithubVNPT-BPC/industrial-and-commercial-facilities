@@ -4,6 +4,11 @@ import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
+
+import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatDatepicker} from '@angular/material/datepicker';
+
 import { District } from 'src/app/_models/district.model';
 import { TFEModel } from 'src/app/_models/APIModel/trade-development.model';
 
@@ -13,10 +18,30 @@ import { InformationService } from 'src/app/shared/information/information.servi
 
 import moment from 'moment';
 
+export const DATE_FORMAT_DATEPICKER = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+}
+
 @Component({
   selector: 'app-trade-fairs-exhibitions',
   templateUrl: './trade-fairs-exhibitions.component.html',
   styleUrls: ['../../../special_layout.scss'],
+  providers: [{
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },{
+      provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DATEPICKER
+    },
+  ],
 })
 
 export class TradeFairsExhibitionsComponent implements OnInit {
@@ -43,7 +68,7 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
 
-  years: number[] = [];
+  filteredDate = new FormControl(moment());
   // Modify to get districts from API
   districts: District[] = [
     { id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
@@ -69,10 +94,6 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  ExportTOExcel(filename: string, sheetname: string) {
-      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
   constructor(
     private formBuilder: FormBuilder,
     public sctService: SCTService,
@@ -82,13 +103,30 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.years = this.getYears();
     this.autoOpen();
-    this.getTFEList();
+    this.getTFEList(this.currentDate);
   }
 
   autoOpen() {
     setTimeout(() => this.accordion.openAll(), 1000);
+  }
+
+  private chosenYearHandler(normalizedYear) {
+    let ctrlValue = this.filteredDate.value;
+    ctrlValue.year(normalizedYear.year());
+    this.filteredDate.setValue(ctrlValue);
+  }
+
+  private chosenMonthHandler(normalizedMonth, datepicker) {
+    let ctrlValue = this.filteredDate.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.filteredDate.setValue(ctrlValue);
+    datepicker.close();
+  }
+
+  public onFiltededDateChange(event): void {
+    let filteredDateInput = event.format('yyyyMM');
+    this.getTFEList(filteredDateInput);
   }
 
   applyFilter(event) {
@@ -110,8 +148,8 @@ export class TradeFairsExhibitionsComponent implements OnInit {
     }
   }
 
-  getTFEList(): void {
-    this.commerceManagementService.getExpoData(this.currentDate).subscribe(
+  getTFEList(date): void {
+    this.commerceManagementService.getExpoData(date).subscribe(
       result => {
         if (result.data && result.data.length > 0) {
           this.dataSource = new MatTableDataSource<TFEModel>(result.data);
@@ -121,10 +159,6 @@ export class TradeFairsExhibitionsComponent implements OnInit {
       },
       error => this.errorMessage = <any>error
     );
-  }
-
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
   }
 
   countBusiness(): number {
@@ -138,6 +172,10 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   formatMMDDYYYY(date: string): string {
     var datearray = date.split("/");
     return datearray[1] + '/' + datearray[0] + '/' + datearray[2];
+  }
+
+  ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
@@ -192,6 +230,6 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   reset2Default(): void {
     this.formData.reset();
     this.switchView();
-    this.ngOnInit();
+    this.autoOpen();
   }
 }

@@ -132,7 +132,7 @@ export class MultilevelTradeComponent implements OnInit {
 
   applyFilter(event: Event) {
     let filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getYears() {
@@ -187,6 +187,6 @@ export class MultilevelTradeComponent implements OnInit {
   public reset2Default(): void {
     this.formData.reset();
     this.switchView();
-    this.ngOnInit();
+    this.autoOpen();
   }
 }
