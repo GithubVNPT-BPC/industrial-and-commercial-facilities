@@ -177,7 +177,7 @@ const routes: Routes = [
   {
     path: 'multilevel_trade',
     component: MultilevelTradeComponent
-  }
+  },
 ];
 
 @NgModule({
