@@ -17,8 +17,7 @@ import moment from 'moment';
 export class SubscribeDiscountComponent extends BaseComponent {
   dataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
   filteredDataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
-  displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'mst', 'ten_chuong_trinh_km', 'thoi_gian_bat_dau', 'thoi_gian_ket_thuc',
-    'hang_hoa_km', 'dia_diem_km', 'ten_hinh_thuc', 'so_van_ban', 'co_quan_ban_hanh', 'ngay_thang_nam_van_ban'];
+  displayedColumns: string[] = ['select', 'index'];
 
   displayedFields = { 
     ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -63,6 +62,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
+    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
     this.getPromotionTypes();
     this.getSDList();
   }
