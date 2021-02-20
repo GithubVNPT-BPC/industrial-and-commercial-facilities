@@ -167,7 +167,6 @@ export class ViewSelectReportComponent implements OnInit {
   }
 
   OpenDetailObject(obj: ReportOject) {
-    //window.open(this.router.url, '_blank');
     const url = this.router.serializeUrl(
       this.router.createUrlTree([encodeURI('#') + '/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
     );

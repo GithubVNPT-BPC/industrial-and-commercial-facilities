@@ -18,7 +18,7 @@ export abstract class BaseComponent implements OnInit {
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
     protected excelService: ExcelService;
-    protected _infor: InformationService;
+    protected logger: InformationService;
     protected formBuilder: FormBuilder;
     protected confirmationDialogService: ConfirmationDialogService;
 
@@ -32,7 +32,7 @@ export abstract class BaseComponent implements OnInit {
     
     constructor(injector: Injector) {
         this.excelService = injector.get(ExcelService);
-        this._infor = injector.get(InformationService);
+        this.logger = injector.get(InformationService);
         this.formBuilder = injector.get(FormBuilder);
         this.confirmationDialogService = injector.get(ConfirmationDialogService);
     }
@@ -104,21 +104,6 @@ export abstract class BaseComponent implements OnInit {
         this.view = this.view == 'list' ? 'form': 'list';
     }
 
-    // Currently cannot find this._infor
-    public successNotify(response) {
-        if (response.id == -1) {
-          this._infor.msgError("Lưu lỗi! Lý do: " + response.message);
-        }
-        else {
-          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-          this.resetAll();
-        }
-    }
-
-    public errorNotify(error) {
-        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
-    }
-
     public prepareData(data) {}
 
     public callService(data) {}
@@ -148,5 +133,19 @@ export abstract class BaseComponent implements OnInit {
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    public successNotify(response) {
+        if (response.id == -1) {
+            this.logger.msgError("Lưu lỗi! Lý do: " + response.message);
+        }
+        else {
+            this.logger.msgSuccess("Dữ liệu được lưu thành công!");
+            this.resetAll();
+        }
+    }
+
+    public errorNotify(error) {
+        this.logger.msgError("Không thể thực thi! Lý do: \n" + error);
     }
 }

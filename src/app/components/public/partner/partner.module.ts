@@ -12,10 +12,7 @@ import { FilterByAddressPipe } from "../../../shared/pipes/filterByAddress.pipe"
 import { FilterByNamePipe } from "../../../shared/pipes/filterByName.pipe";
 import { FilterByCategoryPipe } from "../../../shared/pipes/filterbyCategory.pipe";
 import { WebsiteFormatPipe } from '../../../shared/pipes/formatWebsite.pipe';
-import { FilterByTextPipe } from '../../../shared/pipes/filterByText.pipe';
-import { PagerService } from 'src/app/_services/pagination.service';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
-import { DialogPartnerComponent } from './Dialog/Dialog-partner.component';
 import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
@@ -45,7 +42,6 @@ export const customCurrencyMaskConfig = {
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
   ],
   providers: [
-    PagerService,
   ],
   declarations: [
     SearchPartnerComponent,
@@ -54,7 +50,6 @@ export const customCurrencyMaskConfig = {
     FilterByCategoryPipe,
     WebsiteFormatPipe,
     CompanyDetailComponent,
-    DialogPartnerComponent,
   ],
   exports: [
     FilterByAddressPipe,
@@ -62,6 +57,6 @@ export const customCurrencyMaskConfig = {
     FilterByCategoryPipe,
     WebsiteFormatPipe,
   ],
-  entryComponents: [DialogPartnerComponent]
+  entryComponents: []
 })
 export class PartnerModule { }

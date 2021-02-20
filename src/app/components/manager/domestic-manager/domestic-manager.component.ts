@@ -1,4 +1,3 @@
-//Import library
 import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,20 +8,15 @@ import { formatDate } from '@angular/common';
 import * as XLSX from 'xlsx';
 import { Subject } from 'rxjs';
 
-//Import component
 import { ManagerDirective } from './../../../shared/manager.directive';
 
-//Import Service
 import { ManagerService } from '../../../_services/APIService/manager.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { KeyboardService } from './../../../shared/services/keyboard.service';
-import { MarketService } from 'src/app/_services/APIService/market.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 
-//Import Model
 import { ProductManagerModelList, DomesticManagerModel, MODE } from '../../../_models/APIModel/manager.model';
 
-//Moment
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import * as _moment from 'moment';
 import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
@@ -56,8 +50,6 @@ export const DDMMYY_FORMAT = {
 })
 
 export class DomesticManagerComponent implements OnInit {
-
-  //Constant
   public readonly FORMAT = 'dd/MM/yyyy';
   public readonly LOCALE = 'en-GB';
   public readonly RANK_LABLE = (page: number, pageSize: number, length: number) => {
@@ -75,7 +67,6 @@ export class DomesticManagerComponent implements OnInit {
     return `${startIndex + 1} - ${endIndex} của ${length}`;
   }
 
-  //Declare variable for only TS  
   public _rows: number = 0;
   public _currentRow: number = 0;
   public _mode: MODE = MODE.UPDATE;
@@ -100,42 +91,28 @@ export class DomesticManagerComponent implements OnInit {
   public readonly format = 'dd/MM/yyyy';
   public readonly locale = 'en-US';
 
-  /**
-   * Create service
-   * @param managerService Service call API get/post/put data
-   * @param keyboardservice Service support key arrown over report's fields
-   * @param marketService Service call API get data
-   * @param loginService Service check login of user
-   */
-  public constructor(public _managerService: ManagerService,
+  public constructor(
+    public _managerService: ManagerService,
     public _keyboardservice: KeyboardService,
     public _infor: InformationService,
     public _loginService: LoginService) {
   }
 
-  /**
-   * 1. Create current time on selector timer
-   * 2. Get all products to ListProduct
-   * 3. Get Domestic price on time of selector
-   * 4. Regist key arrown
-   */
   public ngOnInit() {
-    // this.timeDomesticManager = _moment(this.pickedDate.date).format('DD/MM/YYYY');
-    this.timeDomesticManager = this.getCurrentDate();
     this.getListProduct();
+    this.timeDomesticManager = this.getCurrentDate();
     this.getPreviousDomesticManager(this.pickedDate.date);
     this._keyboardservice.keyBoard.subscribe(res => {
       this.move(res)
     })
   }
-  // FUNCION USE FOR PROCESS-FLOW -----------------------------------------------------------------------------------------------------
 
   public getListProduct(): void {
     this._managerService.GetListProduct().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductManagerModelList[];
+        console.log(allrecords)
       },
-      //error => this.errorMessage = <any>error
     );
   }
 
@@ -143,7 +120,6 @@ export class DomesticManagerComponent implements OnInit {
     this.getPreviousDomesticManager(param._d);
   }
 
-  //Get domestic market price
   public getPreviousDomesticManager(time: Date): void {
     let formattedDate = formatDate(time, this.format, this.locale);
     this._managerService.GetDomesticMarketByTime(formattedDate).subscribe(
@@ -162,10 +138,8 @@ export class DomesticManagerComponent implements OnInit {
         }
         this._paginatorAgain();
       });
-    //error => this.errorMessage = <any>error
   }
 
-  //FUNCTION USE FOR HTML/EVENT-----------------------------------------------------------------------------------------------------------------
   public save() {
     this._loginService.userValue.user_id;
     this.dataSource.data.forEach(element => {
@@ -178,8 +152,6 @@ export class DomesticManagerComponent implements OnInit {
         element.ngay_cap_nhat = x;
       }
     });
-    // // if(this._mode == MODE.INSERT)
-    // // {
     this._managerService.PostDomesticManager(this.dataSource.data).subscribe(
       next => {
         if (next.id == -1) {
@@ -194,11 +166,6 @@ export class DomesticManagerComponent implements OnInit {
         this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
       }
     );
-    // }
-    // else{
-    //Thực hiện update
-    // }
-
   }
 
   //Event for "Tải template"
@@ -426,7 +393,7 @@ export class DomesticManagerComponent implements OnInit {
     let date = new Date();
     return date.toLocaleDateString(this.LOCALE);
   }
-  //FUNCTION FOR ONLY TS
+
   private _paginatorAgain() {
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';

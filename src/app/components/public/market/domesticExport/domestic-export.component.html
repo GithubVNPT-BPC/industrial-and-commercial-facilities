@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <strong>
-                Thông tin về tình hình xuất khẩu tháng {{theMonth}}/{{theYear}}
+                Thông tin về tình hình xuất khẩu
             </strong>
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
@@ -12,7 +12,7 @@
             <div class="col-lg-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
-                    <input matInput [matDatepicker]="dp" [formControl]="date" (dateChange)="addEvent('change', $event)">
+                    <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                     <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
                         (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
@@ -21,8 +21,7 @@
             </div>
 
             <div class="col-lg-10 button-control my-auto">
-                <button mat-raised-button (click)="scroll(TABLE)">Xem biểu</button>
-                <button mat-raised-button (click)="exportTOExcel('Thông tin xuất khẩu',timeDomesticPrice)">Xuất
+                <button mat-raised-button (click)="exportTOExcel('Thông tin xuất khẩu','Thông tin xuất khẩu')">Xuất
                     Excel</button>
             </div>
         </div>
@@ -45,37 +44,44 @@
                     <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
                     <td mat-cell *matCellDef="let element"> {{element.ten_san_pham}}
                     </td>
-                    <td mat-footer-cell *matFooterCellDef> Tổng cộng </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
                 </ng-container>
 
-                <ng-container matColumnDef="san_luong">
-                    <th mat-header-cell *matHeaderCellDef> Sản lượng <br> (nghìn tấn)</th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.san_luong | number:
+                <!-- <ng-container matColumnDef="don_vi_tinh">
+                    <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
+                    <td mat-cell *matCellDef="let element"> {{element.don_vi_tinh}}
+                    </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container> -->
+
+                <ng-container matColumnDef="san_luong_thang">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng </th>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.san_luong_thang | number:
                         '1.0-4':'vi'}}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSL() | number: '1.0-4':'vi'}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="tri_gia">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá <br> (nghìn USD) </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia | number:
+                <ng-container matColumnDef="tri_gia_thang">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia_thang | number:
                         '1.0-4':'vi'}}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTG() | number: '1.0-4':'vi'}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="san_luong_ct">
-                    <th mat-header-cell *matHeaderCellDef> Sản lượng <br> (nghìn tấn)</th>
+                <ng-container matColumnDef="san_luong_thang_tc">
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
                     <td mat-cell *matCellDef="let element" class="right-cell">
-                        {{element.san_luong_ct | number: '1.0-4':'vi'}}
+                        {{element.san_luong_thang_tc | number: '1.0-4':'vi'}}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSLCT() | number: '1.0-4':'vi'}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="tri_gia_ct">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá <br> (nghìn USD) </th>
+                <ng-container matColumnDef="tri_gia_thang_tc">
+                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
                     <td mat-cell *matCellDef="let element" class="right-cell">
-                        {{element.tri_gia_ct | number: '1.0-4':'vi'}}
+                        {{element.tri_gia_thang_tc | number: '1.0-4':'vi'}}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTGCT() | number: '1.0-4':'vi'}} </td>
                 </ng-container>

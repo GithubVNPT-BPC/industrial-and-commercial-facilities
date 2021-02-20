@@ -1,4 +1,3 @@
-import { Component } from '@angular/Core';
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from 'rxjs'
 import { catchError, tap } from 'rxjs/operators'
@@ -6,15 +5,20 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } 
 import { environment } from '../../../environments/environment';
 import { DomesticManagerModel, ImportManagerModel, ProductManagerModel, ForeignManagerModel, ExportManagerModel } from '../../_models/APIModel/manager.model';
 import { ExportMarketModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { CompanyDetailModel, TopBusinessModel } from '../../_models/APIModel/domestic-market.model'
+import { TopBusinessModel } from '../../_models/APIModel/domestic-market.model'
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class ManagerService {
-
+    public apiHome = environment.apiEndpoint;
     public data: any;
+    token: any;
+    username: any;
+    public urlProduct = "api/danh-sach/san-pham"
+
+    public apiDomesticMarket = "api/qltm/gia-ca";
     public apiManagerUrl = environment.apiEndpoint + "api/thi-truong";
     public apiProductUrl = environment.apiEndpoint + "api/san-pham";
     public urlDomesticManager = "/gia-ca";
@@ -27,75 +31,44 @@ export class ManagerService {
     public urlTopExportManager = "/xuat-khau/top";
     public urlTopImportManager = "/nhap-khau/top";
     public urlTopProdcutManager = "/san-xuat/top";
-    public urlListProduct = "/danh-sach-san-pham";
-    public urlListNation = "/danh-sach-quoc-gia";
-
-    public apiDomestic = environment.apiEndpoint + "api/danh-sach";
-    public apiManager = environment.apiEndpoint + "api/qltm/";
-    public newUrlListProduct = "/san-pham"
-    public newUrlPrice = "gia-ca";
-    public urlDomesticManager_new = "gia-ca";
-
-    token: any;
-    username: any;
 
     constructor(public http: HttpClient) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
     }
 
+    public GetListProduct() {
+        var apiUrl = this.apiHome + this.urlProduct;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     public GetDomesticMarketByTime(ngay_lay_so_lieu) {
-        var apiUrl = this.apiManager + this.newUrlPrice;
+        var apiUrl = this.apiHome + this.apiDomesticMarket;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', ngay_lay_so_lieu);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
+    public PostDomesticManager(domesticArray: Array<DomesticManagerModel>) {
+        var apiUrl = this.apiHome + this.apiDomesticMarket;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, domesticArray, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
 
-    //GET--------------------------------------------------------------------------------------
     public GetDomesticManager(time: string) {
         var apiUrl = this.apiManagerUrl + this.urlDomesticManagerPrice;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('ngay_lay_so_lieu', time.toString());
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public GetNation() {
-        var apiUrl = this.urlListNation;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public GetListProduct() {
-        var apiUrl = this.apiProductUrl + this.urlListProduct;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public GetListProduct_New() {
-        var apiUrl = this.apiDomestic + this.newUrlListProduct;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public GetListNation() {
-        var apiUrl = this.apiManagerUrl + this.urlListNation;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -153,17 +126,6 @@ export class ManagerService {
         );
     }
 
-    //GET
-
-    //POST-----------------------------------------------------------------------
-    public PostDomesticManager(domesticArray: Array<DomesticManagerModel>) {
-        var apiUrl = this.apiManager + this.urlDomesticManager_new;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.post<any>(apiUrl, domesticArray, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
 
     public PostExportManager(month: number, year: number, exportArray: Array<ExportManagerModel>) {
         var apiUrl = this.apiManagerUrl + this.urlExportManager;

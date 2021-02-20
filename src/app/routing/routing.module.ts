@@ -30,9 +30,9 @@ import { HomeSpecializedComponent } from '../components/specialized/home-special
 import { Industry } from '../_authGuard/Industry';
 import { Energy } from '../_authGuard/Energy';
 import { Commercial } from '../_authGuard/Commercial';
+import { Manager } from '../_authGuard/Manager';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent, LoaderInterceptor } from '../shared';
-import { Manager } from '../_authGuard/Manager';
 
 const routes: Routes = [
   {//Default first page
@@ -131,37 +131,12 @@ const routes: Routes = [
       },
     ]
   },
-  {//LayoutPge Report
+  {
     path: 'report',
     component: ReportLayoutComponent,
     loadChildren: () => import('../components/report/report.module').then(m => m.ReportModule)
-    // children: [
-    //   {//Report
-    //     path: 'report',
-    //   },
-    //   {
-    //     path: 'du_lieu_nganh/:id',
-    //     canActivate: [SCTBossAuthGuardService],
-    //     component: DataSCTComponent,
-    //   },
-
-    //   {//Notification
-    //     path: 'notifications',
-    //     canActivate: [SCTBossAuthGuardService],
-    //     loadChildren: () => import('../components/notifications/notifications.module').then(m => m.NotificationsModule)
-    //   },
-    //   {//Manager
-    //     path: 'manager',
-    //     canActivate: [SCTBossAuthGuardService],
-    //     loadChildren: () => import('../components/manager/manager.module').then(m => m.ManagerModule)
-    //   },
-    //   // {//NotFound
-    //   //   path: '**',
-    //   //   component: P404Component
-    //   // }
-    // ],
   },
-  {//Layout Manager
+  {
     canActivate: [Manager],
     path: 'manager',
     component: ManagerLayoutComponent,
