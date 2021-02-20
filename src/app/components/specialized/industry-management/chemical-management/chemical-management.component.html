@@ -81,7 +81,7 @@
                     <div class="col-sm-12 col-md-3 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="getDanhSachQuanLyHoaChat($event.value)" [(value)]="year">
+                            <mat-select (selectionChange)="getChemicalManagementData($event.value)" [(value)]="year">
                                 <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -116,25 +116,21 @@
                         </mat-checkbox>
                     </div>
                     <div class="col-md-8 col-lg-8 button-control">
-                        <button mat-raised-button (click)="ExportTOExcel('QLCN - Hóa chất',year.toString())">Xuất
-                            Excel</button>
+                        <button mat-raised-button
+                            matTooltip="Xuất Excel"
+                            (click)="ExportTOExcel('QLCN - Hóa chất',year.toString())"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button matTooltip="Thêm mới" 
+                        color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                        mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
                     </div>
                 </div>
                 <hr>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-success" mat-raised-button (click)="openDialog(1)">
-                            <mat-icon>add_cicle</mat-icon>Thêm
-                        </button>
-                        <button *ngIf="selection.selected.length != 0" class="btn btn-danger ml-2" mat-raised-button (click)="openRemoveDialog()">Xóa</button>
-                    </div>
-                </div>
-
-                <div class="layout mt-3" *ngIf="filteredDataSource.data.length; else ShowEmpty" #table>
+                <div class="layout mt-3" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
 
                     <table mat-table [dataSource]="filteredDataSource" 
-                            class="table-layout" id="{{displayedColumns.length == 5 ? 'small-table1': 'small-table3'}}" matSort
-                            matSortActive="select" matSortDisableClear matSortDirection="asc" >
+                            class="table-layout" id="small-table3" matSort
+                            matSortActive="select" >
                         
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear >
@@ -157,63 +153,32 @@
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'> {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="ten_doanh_nghiep" sticky>
-                            <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ten_doanh_nghiep}}</td>
-                        </ng-container>
+                        <div *ngFor="let field of displayedFields | keyvalue">
+                            <ng-container matColumnDef="{{field.key}}" [sticky]="field.key == 'ten_doanh_nghiep' ? true : null">
+                                <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
+                                <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
+                                    <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
+                                        <ng-container *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
+                                            <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
 
-                        <ng-container matColumnDef="mst">
-                            <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
-                            <td mat-cell *matCellDef="let element"> {{element.mst}}</td>
-                        </ng-container>
+                                <ng-template #activeFieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' : 'Hết hạn'}}</td>
+                                </ng-template>
 
-                        <ng-container matColumnDef="dia_chi_day_du">
-                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}}</td>
-                        </ng-container>
+                                <ng-template #qtyFieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | number:'1.0-4'}}</td>
+                                </ng-template>
 
-                        <ng-container matColumnDef="nganh_nghe_kd_chinh">
-                            <th mat-header-cell *matHeaderCellDef> Ngành nghề KD chính </th>
-                            <td mat-cell *matCellDef="let element"> {{element.nganh_nghe_kd_chinh}}</td>
-                        </ng-container>
+                                <ng-template #dateFieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy'}}</td>
+                                </ng-template>
 
-                        <ng-container matColumnDef="email">
-                            <th mat-header-cell *matHeaderCellDef> Email </th>
-                            <td mat-cell *matCellDef="let element"> {{element.email}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="email_sct">
-                            <th mat-header-cell *matHeaderCellDef> Email SCT</th>
-                            <td mat-cell *matCellDef="let element"> {{element.email_sct}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="so_lao_dong">
-                            <th mat-header-cell *matHeaderCellDef> Số lao động </th>
-                            <td mat-cell *matCellDef="let element"> {{element.so_lao_dong | number: '1.0-0':'vi'}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="so_lao_dong_sct">
-                            <th mat-header-cell *matHeaderCellDef> Số lao động SCT</th>
-                            <td mat-cell *matCellDef="let element"> {{element.so_lao_dong_sct | number: '1.0-0':'vi'}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="ngay_cap">
-                            <th mat-header-cell *matHeaderCellDef> Ngày cấp </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ngay_cap| date:'dd/MM/yyyy'}}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="ngay_het_han">
-                            <th mat-header-cell *matHeaderCellDef> Ngày hết hạn </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.ngay_het_han| date:'dd/MM/yyyy'}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="tinh_trang_hoat_dong">
-                            <th mat-header-cell *matHeaderCellDef> Tình trạng hoạt động </th>
-                            <td mat-cell *matCellDef="let element">{{element.tinh_trang_hoat_dong == 1? 'Đang hoạt động' : 'Ngừng hoạt động'}}</td>
-                        </ng-container>
-
+                            </ng-container>
+                        </div>
+                    
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true">
                         </tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; ">

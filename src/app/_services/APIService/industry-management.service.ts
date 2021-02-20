@@ -17,15 +17,34 @@ export class IndustryManagementService {
     private username: any;
 
     private endpoint = environment.apiEndpoint + "api/qlcn";
-    private urlDanhSachQuanLyHoaChat = '/hoa-chat';
+
+    private urlChemicalManagement = '/hoa-chat';
+    private urlGetFoodIndustry = '/cntp';
+    private urlGetLPGManagement = '/lpg';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
     }
 
-    public GetDanhSachQuanLyHoaChat(time_id: number) {
-        var apiUrl = this.endpoint + this.urlDanhSachQuanLyHoaChat;
+    public GetChemicalManagement(time_id) {
+        var apiUrl = this.endpoint + this.urlChemicalManagement;
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetFoodIndustry(time_id) {
+        var apiUrl = this.endpoint + this.urlGetFoodIndustry;
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetLPGManagement(time_id) {
+        var apiUrl = this.endpoint + this.urlGetLPGManagement;
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
