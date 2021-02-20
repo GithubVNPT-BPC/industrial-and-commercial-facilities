@@ -1,20 +1,15 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material';
 
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MatDatepicker} from '@angular/material/datepicker';
 
 import { District } from 'src/app/_models/district.model';
 import { TFEModel } from 'src/app/_models/APIModel/trade-development.model';
 
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
-import { InformationService } from 'src/app/shared/information/information.service';
 
 import moment from 'moment';
 
@@ -44,31 +39,29 @@ export const DATE_FORMAT_DATEPICKER = {
   ],
 })
 
-export class TradeFairsExhibitionsComponent implements OnInit {
-  displayedColumns: string[] = [
-    'index', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'mst', 'ten_hoi_cho', 'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 
-    'dia_diem_to_chuc', 'so_luong_gian_hang', 'san_pham', 'so_van_ban', 
-    'co_quan_ban_hanh', 'ngay_thang_nam_van_ban', 'id_trang_thai',];
-  formData = this.formBuilder.group({
-    ten_doanh_nghiep: new FormControl(),
-    dia_chi_doanh_nghiep: new FormControl(),
-    id_phuong_xa: new FormBuilder(),
-    mst: new FormControl(),
-    ten_hoi_cho: new FormControl(),
-    thoi_gian_bat_dau: new FormControl(),
-    thoi_gian_ket_thuc: new FormControl(),
-    dia_diem_to_chuc: new FormControl(),
-    so_luong_gian_hang: new FormControl(),
-    san_pham: new FormControl(),
-    so_van_ban: new FormControl(),
-    co_quan_ban_hanh: new FormControl(),
-    ngay_thang_nam_van_ban: new FormControl(),
-  });
+export class TradeFairsExhibitionsComponent extends BaseComponent {
+  displayedColumns: string[] = ['select', 'index'];
 
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
 
-  filteredDate = new FormControl(moment());
+  displayedFields = {
+    mst: "Mã số thuế",
+    ten_doanh_nghiep: "Tên doanh nghiệp",
+    dia_chi_doanh_nghiep: "Địa chỉ",
+    ten_hoi_cho: "Tên hội chợ",
+    thoi_gian_bat_dau: "Thời gian bắt đầu",
+    thoi_gian_ket_thuc: "Thời gian kết thúc",
+    dia_diem_to_chuc: "Địa điểm tổ chức",
+    so_luong_gian_hang: "Số lượng gian hàng",
+    san_pham: "Sản phẩm bán tại hội chợ",
+    so_van_ban: "Số văn bản",
+    co_quan_ban_hanh: "Cơ quan ban hành",
+    ngay_thang_nam_van_ban: "Ngày tháng năm",
+    id_trang_thai: "Tình trạng",
+
+}
+  
   // Modify to get districts from API
   districts: District[] = [
     { id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
@@ -86,29 +79,38 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   sanLuongBanRa: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+  filteredDate = new FormControl(moment());
   private currentDate = moment().format('yyyyMM');
-  public errorMessage: any;
-  private view = 'list';
-
-  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   constructor(
-    private formBuilder: FormBuilder,
-    public sctService: SCTService,
-    public _infor: InformationService,
-    public commerceManagementService : CommerceManagementService,
-    public excelService: ExcelService, ) {
+    private injector: Injector,
+    public commerceManagementService: CommerceManagementService,
+    ) {
+      super(injector);
   }
 
   ngOnInit() {
-    this.autoOpen();
+    super.ngOnInit();
+    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
     this.getTFEList(this.currentDate);
   }
 
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
+  getFormParams() {
+    return {
+      ten_doanh_nghiep: new FormControl(),
+      dia_chi_doanh_nghiep: new FormControl(),
+      id_phuong_xa: new FormBuilder(),
+      mst: new FormControl(),
+      ten_hoi_cho: new FormControl(),
+      thoi_gian_bat_dau: new FormControl(),
+      thoi_gian_ket_thuc: new FormControl(),
+      dia_diem_to_chuc: new FormControl(),
+      so_luong_gian_hang: new FormControl(),
+      san_pham: new FormControl(),
+      so_van_ban: new FormControl(),
+      co_quan_ban_hanh: new FormControl(),
+      ngay_thang_nam_van_ban: new FormControl(),
+    }
   }
 
   private chosenYearHandler(normalizedYear) {
@@ -169,35 +171,12 @@ export class TradeFairsExhibitionsComponent implements OnInit {
   //   return this.filteredDataSource.data.filter(x => new Date(this.formatMMDDYYYY(x.thoi_gian_bat_dau.split(' ')[x.thoi_gian_bat_dau.split(' ').length - 1])) < new Date()).length;
   // }
 
-  formatMMDDYYYY(date: string): string {
-    var datearray = date.split("/");
-    return datearray[1] + '/' + datearray[0] + '/' + datearray[2];
-  }
+  // formatMMDDYYYY(date: string): string {
+  //   var datearray = date.split("/");
+  //   return datearray[1] + '/' + datearray[0] + '/' + datearray[2];
+  // }
 
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
-  @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-  allSelected = false;
-  toggleAllSelection() {
-    this.allSelected = !this.allSelected;  // to control select-unselect
-
-    if (this.allSelected) {
-      this.dSelect.options.forEach((item: MatOption) => item.select());
-    } else {
-      this.dSelect.options.forEach((item: MatOption) => item.deselect());
-    }
-    this.dSelect.close();
-  }
-
-  private switchView() {
-    this.view = this.view == 'list' ? 'form': 'list';
-  }
-
-  onCreate(): void {
-    // TODO: Check 'id_phuong_xa'
-    let data = this.formData.value;
+  prepareData(data) {
     data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
     data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
     data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('DD/MM/yyyy');
@@ -206,30 +185,10 @@ export class TradeFairsExhibitionsComponent implements OnInit {
       id_trang_thai: 1,
       time_id: this.currentDate,
     }};
-    this.commerceManagementService.postExpoData([data]).subscribe(
-      next => {
-        if (next.id == -1) {
-          this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-        }
-        else {
-          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-          this.reset2Default();
-        }
-      },
-      error => {
-        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
-      }
-    );
   }
 
-  private clearTable(event) {
-    event.preventDefault();
-    this.formData.reset();
+  callService(data) {
+    this.commerceManagementService.postExpoData([data]).subscribe(this.successNotify, this.errorNotify);
   }
 
-  reset2Default(): void {
-    this.formData.reset();
-    this.switchView();
-    this.autoOpen();
-  }
 }
