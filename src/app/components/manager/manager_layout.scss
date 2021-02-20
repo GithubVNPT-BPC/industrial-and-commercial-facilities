@@ -8,18 +8,39 @@
     height: 30px !important;
     width: 100%;
   }
-  $blue: #1f7ed0;
-  $white: white;
   .mat-card-header {
     text-align: center;
     display: initial;
     .mat-card-title {
       strong {
-        color: $blue;
+        color: #1f7ed0;
       }
     }
   }
   .mat-card-content {
+    .cb-section {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      height: 60px;
+      .cb {
+        margin-left: 10px;
+      }
+    }
+
+    .mat-raised-button {
+      background-color: #1f7ed0 !important;
+      color: white !important;
+      margin: auto 3px;
+      margin-bottom: 5px;
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    hr.edit {
+      margin: 2px;
+      border: 0.5px solid blue;
+    }
+
     ::ng-deep .mat-form-field-wrapper {
       margin-bottom: -0.5em;
     }
@@ -27,7 +48,7 @@
       width: 100%;
     }
     strong {
-      color: $blue;
+      color: #1f7ed0;
     }
     .mat-paginator {
       display: flex;
@@ -36,18 +57,31 @@
       min-height: 30px;
       width: 100%;
     }
+    button.mat-raised-button {
+      background-color: #1f7ed0 !important;
+      color: white !important;
+      margin: auto 3px;
+      margin-bottom: 5px;
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
     .button-control {
       text-align: right;
       margin-bottom: 5px;
       button.mat-raised-button {
-        background-color: $blue !important;
-        color: $white !important;
+        background-color: #1f7ed0 !important;
+        color: white !important;
         margin: auto 3px;
+        margin-bottom: 5px;
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
       }
-      button.mat-raised-button.reverse {
-        background-color: $white !important;
-        color: $blue !important;
+      button.mat-raised-button.white {
+        background-color: white !important;
+      }
+      button.mat-raised-button.red {
+        background-color: red !important;
+      }
+      button.mat-raised-button.green {
+        background-color: green !important;
       }
     }
     .button-control.-align-left {
@@ -78,8 +112,8 @@
         }
         .mat-header-cell {
           border: 0.01em solid rgb(192, 192, 192);
-          background-color: $blue;
-          color: $white;
+          background-color: #1f7ed0;
+          color: white;
           padding: 5px !important;
           font-weight: bold;
           font-size: 12px;
@@ -111,8 +145,8 @@
             height: 30px;
           }
           input:focus {
-            background-color: $blue;
-            color: $white;
+            background-color: #1f7ed0;
+            color: white;
           }
         }
         .center-cell {
@@ -139,8 +173,8 @@
   }
   
   #import_excel {
-    background-color: $blue !important;
-    color: $white !important;
+    background-color: #1f7ed0 !important;
+    color: white !important;
     font-weight: 500 !important;
     box-sizing: border-box;
     position: relative;

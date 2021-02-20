@@ -263,21 +263,21 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         return data;
     }
 
-    openDanh_sach_doanh_nghiep(id_mat_hang, ten_san_pham) {
-        this.marketService
-            .GetTopExport(this.curentmonth, new Date().getFullYear(), id_mat_hang)
-            .subscribe((data) => {
-                const dialogConfig = new MatDialogConfig();
-                dialogConfig.data = {
-                    data: data["data"],
-                    id: 2,
-                    ten_san_pham: ten_san_pham,
-                    thang: this.curentmonth,
-                };
-                dialogConfig.minWidth = '80%'
-                this.matDialog.open(ModalComponent, dialogConfig);
-            });
-    }
+    // openDanh_sach_doanh_nghiep(id_mat_hang, ten_san_pham) {
+    //     this.marketService
+    //         .GetTopExport(this.curentmonth, new Date().getFullYear(), id_mat_hang)
+    //         .subscribe((data) => {
+    //             const dialogConfig = new MatDialogConfig();
+    //             dialogConfig.data = {
+    //                 data: data["data"],
+    //                 id: 2,
+    //                 ten_san_pham: ten_san_pham,
+    //                 thang: this.curentmonth,
+    //             };
+    //             dialogConfig.minWidth = '80%'
+    //             this.matDialog.open(ModalComponent, dialogConfig);
+    //         });
+    // }
 
     applyDataTarget() {
         // this.dataTargetId[0] = 2

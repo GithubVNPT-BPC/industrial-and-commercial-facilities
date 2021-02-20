@@ -1,61 +1,81 @@
-<mat-card>
+<mat-card class="material">
     <mat-card-header>
         <mat-card-title>
-            <h2>Xem báo cáo</h2>
+            <strong>
+                Xem báo cáo
+            </strong>
         </mat-card-title>
-        <mat-card-subtitle><br></mat-card-subtitle>
+        <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <div class="row">
-            <div class="col-xl-2">
-                <div class="form-group">
-                    <label for="name_search">Tên báo cáo</label>
-                    <input type="text" class="form-control" name="" id="name_search" [(ngModel)]="tempObject.obj_name">
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="form-group">
-                    <label for="period_select">Loại báo cáo</label>
-                    <select class="form-control" name="" id="period_select" (change)="changeReportType()" [(ngModel)]="tempObject.submit_type">
-                        <option *ngFor="let type of reportTypes" [ngValue]="type.ma_so">{{type.noi_dung}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="form-group">
-                    <label for="period_select">Kỳ báo cáo</label>
-                    <select class="form-control" name="" id="period_select" (change)="changePeriod()" [(ngModel)]="selectedPeriod">
-                        <option *ngFor="let period of periods" [ngValue]="period">{{period}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="form-group">
-                    <label for="year_select">Năm báo cáo</label>
-                    <select class="form-control" name="" id="year_select" (change)="changePeriod()" [(ngModel)]="selectedYear">
-                        <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="form-group">
-                    <label for="period_select">Đơn vị báo cáo</label>
-                    <select class="form-control" name="" id="organization_select" [(ngModel)]="tempObject.org_name">
-                        <option *ngFor="let orgarnization of orgarnizations" [ngValue]="orgarnization">{{orgarnization}}
-                        </option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-xl-2">
-                <div class="form-group" style="display: flex;justify-content: center;">
-                    <button class="form-button" mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}" (click)="click()">Tìm kiếm</button>
+            <div class="col-2 my-auto">
+                <div class="button-control -align-left">
+                    <button mat-raised-button (click)="click()">Tìm kiếm</button>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Tên báo cáo</mat-label>
+                    <input matInput placeholder="" [(ngModel)]="tempObject.obj_name">
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Loại báo cáo</mat-label>
+                    <mat-select [(ngModel)]="tempObject.submit_type" (change)="changeReportType()">
+                        <mat-option *ngFor="let item of reportTypes" [value]="item.ma_so">
+                            {{item.noi_dung}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
 
-        <div class="">
-            <table mat-table matTableFilter [exampleEntity]="filterObject" [filterType]="filterType" [dataSource]="dataSource" style="width: 100%;">
+                <!-- <div class="form-group">
+                    <label for="period_select">Loại báo cáo</label>
+                    <select class="form-control" name="" id="period_select" (change)="changeReportType()"
+                        [(ngModel)]="tempObject.submit_type">
+                        <option *ngFor="let type of reportTypes" [ngValue]="type.ma_so">{{type.noi_dung}}</option>
+                    </select>
+                </div> -->
+            </div>
+            <div class="col-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Kỳ báo cáo</mat-label>
+                    <mat-select [(ngModel)]="selectedPeriod" (change)="changePeriod()">
+                        <mat-option *ngFor="let item of periods" [value]="item">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Năm báo cáo</mat-label>
+                    <mat-select [(ngModel)]="selectedYear" (change)="changePeriod()">
+                        <mat-option *ngFor="let item of years" [value]="itme">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Đơn vị báo cáo</mat-label>
+                    <mat-select [(ngModel)]="tempObject.org_name">
+                        <mat-option *ngFor="let item of orgarnizations" [value]="item">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="layout">
+            <table mat-table matTableFilter [exampleEntity]="filterObject" [filterType]="filterType"
+                [dataSource]="dataSource" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
@@ -108,7 +128,7 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-            <mat-paginator #reportPaginators [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #reportPaginators [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
         </div>
     </mat-card-content>
     <mat-card-actions></mat-card-actions>

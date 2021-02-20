@@ -6,7 +6,6 @@ import { MarketService } from '../../../../_services/APIService/market.service';
 import { CompanyDetailModel } from '../../../../_models/APIModel/domestic-market.model';
 import { CareerModel, DistrictModel, SubDistrictModel, BusinessTypeModel, CSTTModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogPartnerComponent } from './../Dialog/Dialog-partner.component';
 
 import {
 	MAT_MOMENT_DATE_FORMATS,
@@ -87,9 +86,9 @@ export class CompanyDetailComponent implements OnInit {
 	SLCSTT: any;
 	dataSourceKNXK = new MatTableDataSource<any>();
 	dataSourceKNNK = new MatTableDataSource<any>();
-	date2:any;
-	date1:any;
-	date_thoi_han:any;
+	date2: any;
+	date1: any;
+	date_thoi_han: any;
 	// NK
 	periodsNK = ["Tháng", "Quý", "6 Tháng", "Năm"];
 	monthsNK: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -343,12 +342,12 @@ export class CompanyDetailComponent implements OnInit {
 	// 		});
 	// }
 
-	openDialog(mst: string) {
-		const dialogRef = this.dialog.open(DialogPartnerComponent, { data: mst });
+	// openDialog(mst: string) {
+	// 	const dialogRef = this.dialog.open(DialogPartnerComponent, { data: mst });
 
-		dialogRef.afterClosed().subscribe(result => {
-		});
-	}
+	// 	dialogRef.afterClosed().subscribe(result => {
+	// 	});
+	// }
 
 	GetAllNganhNghe() {
 		this.marketService.GetAllCareer().subscribe(

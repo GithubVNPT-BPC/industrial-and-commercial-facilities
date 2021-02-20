@@ -1,13 +1,8 @@
-import { Component } from '@angular/Core';
 import { Injectable } from "@angular/core";
 import { Observable, throwError } from 'rxjs'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
-import { DomesticMarketModel, CompanyDetailModel, ForeignMarketModel } from "../../_models/APIModel/domestic-market.model";
-import { ExportMarketModel, ImportMarketModel, ProductValueModel, TopExportModel, TopImportModel, TopProductModel } from "../../_models/APIModel/domestic-market.model";
-// import { environment } from "src/app/Shared/environment";
 import { environment } from '../../../environments/environment';
-import { error } from 'protractor';
 import { LoginService } from './login.service';
 
 @Injectable({
@@ -15,7 +10,6 @@ import { LoginService } from './login.service';
 })
 
 export class ReportService {
-    // declare variable
     public data: any;
     public apiReport = environment.apiEndpoint + "api/bao-cao";
     public apiOrganization = environment.apiEndpoint + "api/don-vi";
@@ -38,7 +32,6 @@ export class ReportService {
         this.token = this.data.token;
     }
 
-    // Get GetList_ReportMonth
     public GetList_ReportMonth(month: number, year: number, org_id: number) {
         var apiUrl = this.apiReport + this.urlReportMonth;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -51,22 +44,17 @@ export class ReportService {
         );
     }
 
-    // Get GetList_ReportYear
     public GetList_ReportYear(year: number, org_id: number) {
         var apiUrl = this.apiReport + this.urlReportYear;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('year', year.toString());
         params = params.append('org_id', org_id.toString());
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        // var object:any = [{data:{ojb_id : 123, obj_code:'BAO_CAO_01',obj_name:"Báo cáo 1", start_date: Date.now, end_date:Date.now}},{data:
-        // {ojb_id : 124, obj_code:'BAO_CAO_021',obj_name:"Báo cáo 21", start_date: Date.now, end_date:Date.now}},{data:
-        // {ojb_id : 125, obj_code:'BAO_CAO_031',obj_name:"Báo cáo 31", start_date: Date.now, end_date:Date.now}}]
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    // Get GetList_ReportQuarter
     public GetList_ReportQuarter(quarter: number, year: number, org_id: number) {
         var apiUrl = this.apiReport + this.urlReportQuarter;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -78,7 +66,7 @@ export class ReportService {
             catchError(this.handleError)
         );
     }
-    // Get GetList_ReportQuarter
+
     public GetList_ReportHalf(year: number, org_id: number) {
         var apiUrl = this.apiReport + this.urlReportHalf;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -173,7 +161,7 @@ export class ReportService {
         );
     }
 
-    public GetReportByField(id){
+    public GetReportByField(id) {
         var apiUrl = this.apiReport + this.urlLinhvucBaoCao;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('id_linh_vuc', id);
@@ -182,7 +170,7 @@ export class ReportService {
         );
     }
 
-    public Get12MonthReports(obj_id : number, year : number, attribute_code : string){
+    public Get12MonthReports(obj_id: number, year: number, attribute_code: string) {
         var apiUrl = this.apiReport + this.urlReport12Months;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('obj_id', obj_id.toString());
@@ -196,10 +184,8 @@ export class ReportService {
     public handleError(error: HttpErrorResponse) {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
-            // client-side error
             errorMessage = `Lỗi: ${error.error.message}`;
         } else {
-            // server-side error
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
         }
         return throwError(errorMessage);

@@ -82,7 +82,6 @@ export class ForeignManagerComponent implements OnInit {
   public ngOnInit() {
     this.timeForeignManager = this.getCurrentDate();
     this.getListProduct();
-    this.getListNation();
     this.getAllForegionManagerPrevious(this.pickedDate.date);
     this._keyboardservice.keyBoard.subscribe(res => {
       this.move(res)
@@ -95,14 +94,6 @@ export class ForeignManagerComponent implements OnInit {
       allrecords => {
         this.products = allrecords.data as ProductManagerModelList[];
         this.createDefault();
-      },
-    );
-  }
-  //get Nations
-  public getListNation(): void {
-    this._managerService.GetListNation().subscribe(
-      allrecords => {
-        this.nations = allrecords.data as NationModel[];
       },
     );
   }
@@ -259,7 +250,7 @@ export class ForeignManagerComponent implements OnInit {
     this.dataSource.data.forEach(element => {
       let x: number = + element.gia.toString().replace(',', '').replace(',', '').replace(',', '');
       element.gia = x;
-      if(element.ngay_cap_nhat){
+      if (element.ngay_cap_nhat) {
         let x = formatDate(this.pickedDate.date, this.FORMAT, this.LOCALE);
         element.ngay_cap_nhat = x;
       }

@@ -1,15 +1,12 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, Inject } from '@angular/core';
-import * as XLSX from 'xlsx';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
-import { SelectionModel } from '@angular/cdk/collections';
 
 import { MarketService } from './../../../../_services/APIService/market.service';
-import { CompanyDetailModel } from './../../../../_models/APIModel/domestic-market.model';
+import { TopCompanyModel, ProductValueModel, ExportMarketModel, ImportMarketModel } from './../../../../_models/APIModel/domestic-market.model';
+
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ExportManagerModel } from 'src/app/_models/APIModel/manager.model';
-import { ManagerService } from 'src/app/_services/APIService/manager.service';
 import { SAVE } from 'src/app/_enums/save.enum';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
@@ -21,50 +18,22 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 })
 
 export class CompanyTopPopup implements OnInit {
-
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
-    }
+    @ViewChild('TABLE', { static: false }) table: ElementRef;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-    dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
-    selection = new SelectionModel<CompanyDetailModel>(true, []);
-    field: string = "";
-    toptop: ExportManagerModel;
-    textSaveButton: string = "Lưu";
-    textCancelButton: string = "Hủy bỏ";
-    typeOfSave: SAVE = SAVE.NONE;
+    dataSource: MatTableDataSource<TopCompanyModel> = new MatTableDataSource();
+    public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'chi_tiet_doanh_nghiep'];
 
-    isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-    }
-
-    masterToggle() {
-        this.isAllSelected() ?
-            this.selection.clear() :
-            this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-
-    checkboxLabel(row?: CompanyDetailModel): string {
-        if (!row) {
-            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-        }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-    }
-
-    // public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'nganh_nghe_kd'];
-    public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'nganh_nghe_kd', 'chi_tiet_doanh_nghiep'];
-
-    @ViewChild('TABLE', { static: false }) table: ElementRef;
+    field: string;
+    public product_data: ProductValueModel;
+    public import_data: ImportMarketModel;
+    public export_data: ExportMarketModel;
+    typeOfSave: SAVE;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
         public dialogRef: MatDialogRef<CompanyTopPopup>,
         public marketService: MarketService,
-        public managerService: ManagerService,
         public router: Router,
         public info: InformationService,
         public excelService: ExcelService,
@@ -73,24 +42,20 @@ export class CompanyTopPopup implements OnInit {
 
     ngOnInit(): void {
         this.field = this.data.message;
-        this.toptop = this.data.toptop;
+        this.product_data = this.data.product_data;
+        this.import_data = this.data.import_data;
+        this.export_data = this.data.export_data;
+
         this.typeOfSave = this.data.typeOfSave;
-        if (this.data.buttonText) {
-            this.textCancelButton = this.data.buttonText.cancel;
-            this.textSaveButton = this.data.buttonText.ok;
-        }
-        // this.GetAllCompany();
         switch (this.typeOfSave) {
-            case SAVE.NONE:
-                break;
             case SAVE.EXPORT:
-                this.GetTopCompanyExport();
+                this.GetTopExport();
                 break;
             case SAVE.IMPORT:
-                this.GetTopCompanyImport();
+                this.GetTopImport();
                 break;
             case SAVE.PRODUCT:
-                this.GetTopCompanyProduct();
+                this.GetTopProduct();
                 break;
             default:
                 break;
@@ -102,27 +67,20 @@ export class CompanyTopPopup implements OnInit {
         this.dialogRef.close();
     }
 
-    ExportTOExcel(filename: string, sheetname: string) {
+    public exportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
-    // GetAllCompany() {
-    //     this.marketService.GetAllCompany().subscribe(
-    //         allrecords => {
-    //             this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
-    //             this.dataSource.paginator = this.paginator;
-    //             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    //             this.paginator._intl.firstPageLabel = "Trang Đầu";
-    //             this.paginator._intl.lastPageLabel = "Trang Cuối";
-    //             this.paginator._intl.previousPageLabel = "Trang Trước";
-    //             this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    //         });
-    // }
+    filtercompany: Array<TopCompanyModel> = new Array<TopCompanyModel>();
+    filtercompany1: Array<TopCompanyModel> = new Array<TopCompanyModel>();
 
-    GetTopCompanyExport() {
-        this.marketService.GetTopExport(this.toptop.thang, this.toptop.nam, this.toptop.id_san_pham).subscribe(
+    public GetTopProduct() {
+        this.marketService.GetProductValue(this.product_data.time_id).subscribe(
             allrecords => {
-                this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
+                this.filtercompany = allrecords.data[1]
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+
+                this.dataSource = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -132,10 +90,13 @@ export class CompanyTopPopup implements OnInit {
             });
     }
 
-    GetTopCompanyImport() {
-        this.marketService.GetTopImport(this.toptop.thang, this.toptop.nam, this.toptop.id_san_pham).subscribe(
+    public GetTopExport() {
+        this.marketService.GetExportValue(this.export_data.time_id).subscribe(
             allrecords => {
-                this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
+                this.filtercompany = allrecords.data[1]
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+
+                this.dataSource = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -145,10 +106,13 @@ export class CompanyTopPopup implements OnInit {
             });
     }
 
-    GetTopCompanyProduct() {
-        this.marketService.GetTopProduct(this.toptop.thang, this.toptop.nam, this.toptop.id_san_pham).subscribe(
+    public GetTopImport() {
+        this.marketService.GetImportValue(this.import_data.time_id).subscribe(
             allrecords => {
-                this.dataSource = new MatTableDataSource<CompanyDetailModel>(allrecords.data);
+                this.filtercompany = allrecords.data[1]
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+
+                this.dataSource = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -158,19 +122,9 @@ export class CompanyTopPopup implements OnInit {
             });
     }
 
-    // Save() {
-    //     switch (this.typeOfSave) {
-    //         case SAVE.NONE:
-    //             break;
-    //         case SAVE.EXPORT:
-    //             break;
-    //         case SAVE.IMPORT:
-    //             break;
-    //         case SAVE.PRODUCT:
-    //             break;
-    //         default:
-    //             break;
-    //     }
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
 
-    // }
 }

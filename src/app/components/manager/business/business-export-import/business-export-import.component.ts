@@ -1,4 +1,3 @@
-//Import library
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,17 +7,14 @@ import { tap, startWith, map } from 'rxjs/operators';
 import { MatTableFilter } from 'mat-table-filter';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
-//Import service
+
 import { MarketService } from '../../../../_services/APIService/market.service';
-import { PaginationService } from '../../../../_services/PaginationService';
-import { PagerService } from 'src/app/_services/pagination.service';
-//Import model
+
 import { CompanyDetailModel, ProductModel, ImportExportValueModel } from '../../../../_models/APIModel/domestic-market.model';
 import { CareerModel, DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { formatDate } from '@angular/common';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
-//Interface
 interface HashTableNumber<T> {
   [key: string]: T;
 }
@@ -36,13 +32,12 @@ export class filterModel {
 })
 
 export class BusinessExportImportComponent implements OnInit {
-  //Declare variable for CONSTANT
   public readonly SEPERATE_FILTER = ";";
   public readonly FORMAT = 'dd/MM/yyyy';
   public readonly LOCALE = 'en-GB';
   public readonly DEFAULT_IMAGE: string = '../../../../assets/img/brandlogo/company_ph01.jpg';
   public readonly DEFAULT_PERIOD = "6 Tháng";
-  //Declare variable for TS & HTML
+
   public filterEntity;
   public tempFilter;
   public filterType: MatTableFilter;
@@ -77,17 +72,16 @@ export class BusinessExportImportComponent implements OnInit {
   public years: Array<number> = [];
   public halfs: number[] = [1];
 
-  //Declare variable for ONLU TS
   public control = new FormControl();
   public _marketService: MarketService;
   public errorMessage: any;
   public careerList: Array<CareerModel> = new Array<CareerModel>();
   public districtList: Array<DistrictModel> = new Array<DistrictModel>();
-  public categories = [null];//['Tất cả', 'Hạt điều', 'Hạt tiêu', 'Hạt cà phê', 'Cao su'];
+  public categories = [null];
   public pagedItems: any[];
   public productList: any;
   public isSCT: boolean = false;
-  //Viewchild
+
   @ViewChild('TABLE1', { static: false }) table: ElementRef;
   @ViewChild('page1', { static: true }) paginator: MatPaginator;
   @ViewChild('page2', { static: true }) paginator1: MatPaginator;
@@ -95,7 +89,6 @@ export class BusinessExportImportComponent implements OnInit {
 
   constructor(
     public marketService: MarketService,
-    public paginationService: PaginationService,
     public _loginService: LoginService,
     public router: Router,
   ) {
@@ -114,15 +107,7 @@ export class BusinessExportImportComponent implements OnInit {
     this.getAllCompanyImport();
     this.getAllDistrict();
   }
-  // ngAfterViewInit(): void {
-  //   if (this.typeShow == 1)
-  //     this.paginator.page
-  //       .pipe(
-  //         tap(() => this.loadLessonsPage())
-  //       )
-  //       .subscribe();
-  // }
-  //Function for PROCESS-FLOW   -------------------------------------------------------------------------------
+
   public getAllDistrict() {
     this._marketService.GetAllDistrict().subscribe(
       allrecords => {
@@ -130,6 +115,7 @@ export class BusinessExportImportComponent implements OnInit {
         this.districtList.forEach(element => this.addresses.push(element.ten_quan_huyen));
       });
   }
+
   public getAllNganhNghe() {
     this._marketService.GetAllCareer().subscribe(
       allrecords => {
@@ -147,8 +133,7 @@ export class BusinessExportImportComponent implements OnInit {
     let valueOfPeriod: number = 0;
     let valueOfYear: number = 0;
     let valueOfPeriodDetail: number = 0;
-    //
-    if (this.selectedPeriod == "Tháng") {//"Tháng", "Quý", "6 Tháng", "Năm"{
+    if (this.selectedPeriod == "Tháng") {
       valueOfPeriod = 1;
       valueOfPeriodDetail = this.selectedMonth;
     } else if (this.selectedPeriod == 'Quý') {
@@ -179,12 +164,12 @@ export class BusinessExportImportComponent implements OnInit {
       error => this.errorMessage = <any>error
     );
   }
+
   public getAllCompanyExport() {
     let valueOfPeriod: number = 0;
     let valueOfYear: number = 0;
     let valueOfPeriodDetail: number = 0;
-    //
-    if (this.selectedPeriod == "Tháng") {//"Tháng", "Quý", "6 Tháng", "Năm"{
+    if (this.selectedPeriod == "Tháng") {
       valueOfPeriod = 1;
       valueOfPeriodDetail = this.selectedMonth;
     } else if (this.selectedPeriod == 'Quý') {
@@ -226,22 +211,19 @@ export class BusinessExportImportComponent implements OnInit {
       this.paginator._intl.nextPageLabel = "Trang Tiếp";
     }
   }
-  //Function for EVENT HTML     -------------------------------------------------------------------------------
+
   public timKiem() {
     this.getAllCompanyExport();
     this.getAllCompanyImport();
   }
-  //Xuất excel
   public exportToExcel(filename: string, sheetname: string, is_export: boolean) {
 
     let excelFileName: string;
     let newArray: any[] = [];
 
-    //Format name of Excel will be export
     sheetname = sheetname.replace('/', '_');
     excelFileName = filename + '.xlsx';
 
-    //Alias column name
     let data;
     if (is_export)
       data = Object.values(this.dataSource.data);
@@ -251,7 +233,6 @@ export class BusinessExportImportComponent implements OnInit {
     Object.keys(data).forEach((key, index) => {
       newArray.push({
         'Tên doanh nghiệp': this.formatString(data[key].ten_doanh_nghiep),
-        // 'Điện thoại': this.formatString(data[key].dien_thoai),
         'Mã số thuế': data[key].mst,
         'Sản lượng': data[key].tong_san_luong,
         'Trị giá': data[key].tong_tri_gia
@@ -259,7 +240,6 @@ export class BusinessExportImportComponent implements OnInit {
     });
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    /* save to file */
     XLSX.utils.book_append_sheet(wb, ws, sheetname);
     XLSX.writeFile(wb, excelFileName);
   }
@@ -279,7 +259,6 @@ export class BusinessExportImportComponent implements OnInit {
     }
     else {
       this.typeShow = 1;
-      //this.ngAfterViewInit();
       this.dataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = "Số hàng";
       this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -316,10 +295,7 @@ export class BusinessExportImportComponent implements OnInit {
         break;
     }
   }
-  //Function for EXTENTION      -------------------------------------------------------------------------------
   public loadLessonsPage() {
-    // this.dataSource;
-    // this.setPage(1);
   }
   public unicodeToAZ(str: string) {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -375,47 +351,4 @@ export class BusinessExportImportComponent implements OnInit {
     }
     return returnYear;
   }
-  // applyFilter(type: string, filterValue: string) {
-  //   let newFilter = "";
-  //   let checkAdded = false;
-  //   if (this._currentFilter.length > 0) {
-
-  //     let param = this._currentFilter.split(this.SEPERATE_FILTER);
-
-  //     param.forEach(element => {
-  //       if (element.length > 0) {
-  //         let newValueFilter = "";
-  //         let key = element.split("|")[0];
-  //         if (type == key) {
-  //           newValueFilter = key + "|" + filterValue;
-  //           if (newFilter.length > 0) newFilter += ";" + newValueFilter;
-  //           else newFilter = newValueFilter;
-  //           checkAdded = true;
-  //         }
-  //         else {
-  //           if (newFilter.length > 0) newFilter += ";" + element;
-  //           else newFilter = element;
-  //         }
-  //       }
-  //     });
-  //   }
-  //   if (!checkAdded) {
-  //     let newValueFilter = type + "|" + filterValue;
-  //     if (newFilter.length > 0) newFilter += ";" + newValueFilter;
-  //     else newFilter = newValueFilter;
-  //   }
-
-  //   this._currentFilter = newFilter;
-  //   // filterValue = type + '|' + filterValue;
-  //   this.dataSource.filter = this._currentFilter;
-  // }
-
-  // removecompany(key: string) {
-  // }
-
-  // addFavourite(company: Company) {
-  // }
-
-  // addToCart(company: Company) {
-  // }
 }

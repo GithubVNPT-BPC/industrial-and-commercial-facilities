@@ -9,19 +9,18 @@
     </mat-card-header>
     <mat-card-content>
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
-                    <input matInput [matDatepicker]="dp" [formControl]="date" (dateChange)="addEvent('change', $event)"
-                        readonly>
+                    <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                     <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
                         (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
                     </mat-datepicker>
                 </mat-form-field>
             </div>
-            <div class="col-lg-10 button-control my-auto">
-                <button mat-raised-button (click)="exportTOExcel('Thông tin sản xuất',timeDomesticPrice)">Xuất
+            <div class="col-10 button-control my-auto">
+                <button mat-raised-button (click)="exportTOExcel('Thông tin sản xuất','Thông tin sản xuất')">Xuất
                     Excel</button>
             </div>
         </div>
@@ -38,29 +37,42 @@
                     <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
                     <td mat-footer-cell *matFooterCellDef> </td>
                 </ng-container>
+
                 <ng-container matColumnDef="ten_san_pham">
                     <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
                     <td mat-cell *matCellDef="let element"> {{element.ten_san_pham}} </td>
-                    <td mat-footer-cell *matFooterCellDef> Tổng cộng </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
                 </ng-container>
+
+                <ng-container matColumnDef="don_vi_tinh">
+                    <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
+                    <td mat-cell *matCellDef="let element"> {{element.don_vi_tinh}} </td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
                 <ng-container matColumnDef="san_luong">
-                    <th mat-header-cell *matHeaderCellDef> Sản lượng sản xuất, chế biến <br> (Tấn) </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.san_luong | number: '1.0-4':'vi'}}
+                    <th mat-header-cell *matHeaderCellDef> Sản lượng </th>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.san_luong | number:
+                        '1.0-4':'vi'}}
                     </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSL() | number:'1.0-4':'vi'}} </td>
                 </ng-container>
+
                 <ng-container matColumnDef="tri_gia">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá <br> (Triệu đồng) </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia | number: '1.0-4':'vi'}} </td>
+                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia | number:
+                        '1.0-4':'vi'}} </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTG() | number:'1.0-4':'vi'}} </td>
                 </ng-container>
+
                 <ng-container matColumnDef="top_san_xuat">
                     <th mat-header-cell *matHeaderCellDef> TOP DN<br>Sản xuất</th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" class="center-cell" id="jump">
                         <mat-icon (click)="openCompanyTopPopup(element)">emoji_events</mat-icon>
                     </td>
                     <td mat-footer-cell *matFooterCellDef> </td>
                 </ng-container>
+
                 <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky:true"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
                 <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></tr>

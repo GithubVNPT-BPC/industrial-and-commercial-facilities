@@ -7,8 +7,54 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <hr>
+        <div class="row">
+            <div class="col-6"></div>
+            <div class="col-6 button-control -align-right my-auto">
+                <button mat-raised-button (click)="AddCompany()">Thêm doanh nghiệp</button>
+                <button mat-raised-button class="green"
+                    (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
+                    Excel</button>
+                <button mat-raised-button class="red" (click)="removeRows()">Xóa doanh nghiệp</button>
+            </div>
+        </div>
         <div class="row" *ngIf="isSearch_Advanced">
+            <div class="col-4 button-control -align-left my-auto">
+                <button mat-raised-button (click)="filter()">Tìm kiếm</button>
+                <button mat-raised-button (click)="cancel()">Hủy Tìm kiếm</button>
+                <button mat-raised-button (click)="add_condition()">
+                    <mat-icon>expand_more</mat-icon>Mở rộng
+                </button>
+            </div>
+            <div class="col-8">
+                <ng-container *ngFor="let item of countNumberCondition">
+                    <div class="row my-auto" id={{item.id}} #new_element>
+                        <div class="col-lg-5">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Dữ liệu cần lọc</mat-label>
+                                <mat-select [(ngModel)]="item.filed_name">
+                                    <mat-option *ngFor="let element of filter1" [value]="element.filed_name">
+                                        {{ element.detail_name }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-5">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nhập giá trị</mat-label>
+                                <input matInput placeholder="" [(ngModel)]="item.filed_value">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-2 button-control my-auto">
+                            <button mat-raised-button (click)="Xoa_dong()">
+                                <mat-icon>expand_less</mat-icon>Thu hẹp
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+        <!-- <div class="row" *ngIf="isSearch_Advanced">
             <div class="col-lg-7">
                 <ng-container *ngFor="let item of filterConditions">
                     <div class="row my-auto filter-row" id={{item.id}} attr.data-field-name="{{item.field_name}}"
@@ -37,7 +83,6 @@
                     </div>
                 </ng-container>
             </div>
-
             <div class="col-lg-5 button-control float-right mt-2">
                 <button mat-raised-button (click)="addMoreFilter()" class="reverse">
                     <mat-icon>add_circle_outline</mat-icon> &nbsp;Thêm bộ lọc
@@ -47,120 +92,206 @@
                     (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
                     Excel</button>
             </div>
-
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-success" mat-raised-button (click)="create()">
-                    <mat-icon>add_cicle</mat-icon>Thêm
-                </button>
-                <button *ngIf="selection.selected.length != 0" class="btn btn-danger ml-2" mat-raised-button (click)="openRemoveDialog()">Xóa</button>
-            </div>
-        </div>
-        <div class="layout mt-3" #TABLE>
-            <table class="table-layout" mat-table matTableFilter
-                [filterType]="filterType" [dataSource]="dataSource" id="small-table1" matSort
-                matSortActive="select" matSortDisableClear matSortDirection="asc" >
+        </div> -->
+        <div class="layout" #TABLE>
+            <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
+                [filterType]="filterType" [dataSource]="dataSource" matSort matSortDisableClear matSortDirection="asc">
 
                 <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef disableClear>
+                    <th mat-header-cell *matHeaderCellDef>
                         <mat-checkbox (change)="$event ? masterToggle() : null"
                             [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()"
-                            [aria-label]="checkboxLabel()"> 
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                         </mat-checkbox>
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let row" class="center-cell">
                         <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)"
-                            [aria-label]="checkboxLabel(element)">
+                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)">
                         </mat-checkbox>
                     </td>
                 </ng-container>
 
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
-                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                        {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex *
+                        this.paginator.pageSize}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="ten_doanh_nghiep">
-                    <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
-                    <td mat-cell *matCellDef="let element" class="text-center">
-                        <span (click)="OpenDetailCompany(element.mst)" class="jump">{{element.ten_doanh_nghiep}}</span>
-                    </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tên doanh nghiệp </th>
+                    <td (click)="OpenDetailCompany(element.mst)" mat-cell *matCellDef="let element" id="jump"
+                        style="width: 420px;">
+                        {{element.ten_doanh_nghiep}} </td>
                 </ng-container>
 
-                <!-- <ng-container matColumnDef="ten_nganh_nghe">
-                    <th mat-header-cell *matHeaderCellDef> Tên ngành nghề </th>
-                    <td mat-cell *matCellDef="let element"> {{element.ten_nganh_nghe}} </td>
-                </ng-container> -->
-
                 <ng-container matColumnDef="mst">
-                    <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã số thuế </th>
                     <td mat-cell *matCellDef="let element"> {{element.mst}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="mst_cha">
-                    <th mat-header-cell *matHeaderCellDef> Mã số thuế cha </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã số thuế cha </th>
                     <td mat-cell *matCellDef="let element"> {{element.mst_cha}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="so_dien_thoai">
-                    <th mat-header-cell *matHeaderCellDef> Số điện thoại </th>
-                    <td mat-cell *matCellDef="let element"> {{element.so_dien_thoai}} </td>
+                <ng-container matColumnDef="ten_loai_hinh_hoat_dong">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên loại hình hoạt động </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ten_loai_hinh_hoat_dong}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="nguoi_dai_dien">
-                    <th mat-header-cell *matHeaderCellDef> Người đại diện </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Người đại diện </th>
                     <td mat-cell *matCellDef="let element"> {{element.nguoi_dai_dien}} </td>
                 </ng-container>
 
+                <ng-container matColumnDef="dia_chi_day_du">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="so_dien_thoai">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Số điện thoại </th>
+                    <td mat-cell *matCellDef="let element"> {{element.so_dien_thoai}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                    <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="email_sct">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Email (Nguồn: SCT) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.email_sct}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ngay_bd_kd">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày bắt đầu kinh doanh </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ngay_bd_kd | date:'dd/MM/yyyy'}} </td>
+                </ng-container>
+
                 <ng-container matColumnDef="ma_nganh_nghe">
-                    <th mat-header-cell *matHeaderCellDef> Mã ngành nghề </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã ngành nghề </th>
                     <td mat-cell *matCellDef="let element"> {{element.ma_nganh_nghe}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="ten_nganh_nghe">
-                    <th mat-header-cell *matHeaderCellDef> Tên ngành nghề </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên ngành nghề </th>
                     <td mat-cell *matCellDef="let element"> {{element.ten_nganh_nghe}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="nganh_nghe_kd_chinh">
-                    <th mat-header-cell *matHeaderCellDef> Ngành nghề kinh doanh chính </th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngành nghề kinh doanh chính </th>
                     <td mat-cell *matCellDef="let element"> {{element.nganh_nghe_kd_chinh}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="ten_loai_hinh_hoat_dong">
-                    <th mat-header-cell *matHeaderCellDef> Tên loại hình hoạt động </th>
-                    <td mat-cell *matCellDef="let element"> {{element.ten_loai_hinh_hoat_dong}} </td>
+                <ng-container matColumnDef="so_giay_phep">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Số giấy phép </th>
+                    <td mat-cell *matCellDef="let element"> {{element.so_giay_phep}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="loai_hinh_doanh_nghiep">
-                    <th mat-header-cell *matHeaderCellDef> Loại hình doanh nghiệp </th>
-                    <td mat-cell *matCellDef="let element"> {{element.loai_hinh_doanh_nghiep}} </td>
+                <ng-container matColumnDef="ngay_cap">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày cấp </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ngay_cap}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="dia_chi_day_du">
-                    <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}} </td>
+                <ng-container matColumnDef="ngay_het_han">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngày hết hạn </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ngay_het_han}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="noi_cap">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nơi cấp </th>
+                    <td mat-cell *matCellDef="let element"> {{element.noi_cap}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="co_quan_cap">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Cơ quan cấp </th>
+                    <td mat-cell *matCellDef="let element"> {{element.co_quan_cap}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ghi_chu">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi chú về giấy phép<p></p>
+                    </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ghi_chu}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="von_dieu_le">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Vốn điều lệ </th>
+                    <td mat-cell *matCellDef="let element"> {{element.von_dieu_le | number: '1.0-4':'vi'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="quy_mo_tai_san">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Quy mô tài sản </th>
+                    <td mat-cell *matCellDef="let element"> {{element.quy_mo_tai_san}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="doanh_thu">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Doanh thu </th>
+                    <td mat-cell *matCellDef="let element"> {{element.doanh_thu}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="loi_nhuan">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Lơi nhuận </th>
+                    <td mat-cell *matCellDef="let element"> {{element.loi_nhuan}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cong_suat_thiet_ke">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Công suất thiết kế </th>
+                    <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | number: '1.0-4':'vi'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cong_suat_thiet_ke_sct">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Công suất thiết kế (Nguồn: SCT) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke_sct | number: '1.0-4':'vi'}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="so_lao_dong">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Số lao động </th>
+                    <td mat-cell *matCellDef="let element"> {{element.so_lao_dong | number: '1.0-0':'vi'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="so_lao_dong_sct">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Số lao động (Nguồn: SCT) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.so_lao_dong_sct | number: '1.0-0':'vi'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="san_luong">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sản lượng </th>
+                    <td mat-cell *matCellDef="let element"> {{element.san_luong | number: '1.0-4':'vi'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="san_luong_sct">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Sản lượng (Nguồn: SCT) </th>
+                    <td mat-cell *matCellDef="let element"> {{element.san_luong_sct | number: '1.0-4':'vi'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nhu_cau_ban">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nhu cầu bán </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nhu_cau_ban}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nhu_cau_mua">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nhu cầu mua </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nhu_cau_mua}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nhu_cau_hop_tac">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Nhu cầu hợp tác </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nhu_cau_hop_tac}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tieu_chuan_san_pham">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tiêu chuẩn sản phẩm </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tieu_chuan_san_pham}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="hoat_dong">
-                    <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-                    <td mat-cell *matCellDef="let element">
-                        <span *ngIf="element.hoat_dong; else negActiveExp">Hoạt động</span>
-                        <ng-template #negActiveExp>
-                            <span>Ngừng hoạt động</span>
-                        </ng-template>
-                    </td>
-                </ng-container>
-
-                <ng-container matColumnDef="chi_tiet_doanh_nghiep">
-                    <th mat-header-cell *matHeaderCellDef> Chi tiết </th>
-                    <td mat-cell *matCellDef="let element" class="jump">
-                        <mat-icon (click)="OpenDetailCompany(element.mst)">search</mat-icon>
-                    </td>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Hoạt động </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hoat_dong && 'Còn hoạt động' || 'Ngưng hoạt
+                        động'}} </td>
                 </ng-container>
 
                 <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>

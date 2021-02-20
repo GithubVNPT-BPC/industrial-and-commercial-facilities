@@ -33,7 +33,6 @@ export class ExportTopCompanyManager implements OnInit {
     public product: ExportManagerModel;
     public textSaveButton: string = "Lưu";
     public textCancelButton: string = "Hủy bỏ";
-    public typeOfSave: SAVE = SAVE.NONE;
     public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'nganh_nghe_kd'];
     //Declare variable for ONLY TS
 
@@ -56,7 +55,7 @@ export class ExportTopCompanyManager implements OnInit {
     async ngOnInit(): Promise<void> {
         this.field = this.data.message + " cho sản phẩm: " + this.data.product.ten_san_pham;
         this.product = this.data.product;
-        this.typeOfSave = this.data.typeOfSave;
+        // this.typeOfSave = this.data.typeOfSave;
         if (this.data.buttonText) {
             this.textCancelButton = this.data.buttonText.cancel;
             this.textSaveButton = this.data.buttonText.ok;
@@ -76,7 +75,7 @@ export class ExportTopCompanyManager implements OnInit {
     //Get all Company
     public async getAllCompany() {
         let allCompany = await this.marketService.GetAllCompany().toPromise();
-        let checkedCompay = await this.getAllCheckedCompany();
+        // let checkedCompay = await this.getAllCheckedCompany();
         if (allCompany) {
             this.dataSource = new MatTableDataSource<CompanyDetailModel>(allCompany.data);
             this.dataSource.sort = this.sort;
@@ -86,30 +85,28 @@ export class ExportTopCompanyManager implements OnInit {
             this.paginator._intl.lastPageLabel = "Trang Cuối";
             this.paginator._intl.previousPageLabel = "Trang Trước";
             this.paginator._intl.nextPageLabel = "Trang Tiếp";
-            if (checkedCompay && checkedCompay.data.length > 0) {
-                checkedCompay.data.forEach(element => {
-                    let tempElement = this.dataSource.data.find(con => con.mst == element.mst);
-                    if (tempElement) {
-                        this.selection.select(tempElement);
-                    }
-                });
-            }
+            // if (checkedCompay && checkedCompay.data.length > 0) {
+            //     checkedCompay.data.forEach(element => {
+            //         let tempElement = this.dataSource.data.find(con => con.mst == element.mst);
+            //         if (tempElement) {
+            //             this.selection.select(tempElement);
+            //         }
+            //     });
+            // }
         }
     }
-    public async getAllCheckedCompany(): Promise<any> {
-        switch (this.typeOfSave) {
-            case SAVE.NONE:
-                return null;
-            case SAVE.EXPORT:
-                return await this.marketService.GetTopExport(this.data.product.thang, this.data.product.nam, this.data.product.id_san_pham).toPromise();
-            case SAVE.IMPORT:
-                return await this.marketService.GetTopImport(this.data.product.thang, this.data.product.nam, this.data.product.id_san_pham).toPromise();
-            case SAVE.PRODUCT:
-                return await this.marketService.GetTopProduct(this.data.product.thang, this.data.product.nam, this.data.product.id_san_pham).toPromise();
-            default:
-                return null;
-        }
-    }
+    // public async getAllCheckedCompany(): Promise<any> {
+    //     switch (this.typeOfSave) {
+    //         case SAVE.EXPORT:
+    //             return await this.marketService.GetTopExport(this.data.product.thang, this.data.product.nam, this.data.product.id_san_pham).toPromise();
+    //         case SAVE.IMPORT:
+    //             return await this.marketService.GetTopImport(this.data.product.thang, this.data.product.nam, this.data.product.id_san_pham).toPromise();
+    //         case SAVE.PRODUCT:
+    //             return await this.marketService.GetTopProduct(this.data.product.thang, this.data.product.nam, this.data.product.id_san_pham).toPromise();
+    //         default:
+    //             return null;
+    //     }
+    // }
     //Function for EVENT HTML----------------------------------------------------------------------------------
     //Event for "Lọc dữ liệu"
     public applyFilter(event: Event) {

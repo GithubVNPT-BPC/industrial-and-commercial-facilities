@@ -6,7 +6,6 @@ import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { registration_management } from "../../../../../_models/APIModel/ecommerce.model";
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { DialogECommerceComponent } from '../dialog-e-commerce/dialog-e-commerce.component';
@@ -30,9 +29,7 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   filterModel: SaleWebsiteFilterModel = { id_quan_huyen: [] };
   constructor(
     public excelService: ExcelService,
-    public sctService: SCTService,
-    private _breadCrumService: BreadCrumService,
-    public matDialog: MatDialog) { }
+    public sctService: SCTService) { }
 
   ngOnInit() {
     this.GetDanhSachWebsiteTMDT();
@@ -45,7 +42,6 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
     this._linkOutput.title = this.TITLE_DEFAULT;
     this._linkOutput.text = this.TEXT_DEFAULT;
     this._linkOutput.type = type;
-    this._breadCrumService.sendLink(this._linkOutput);
   }
 
   districts: District[] = [
@@ -138,15 +134,5 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
       this.dSelect.options.forEach((item: MatOption) => item.deselect());
     }
     this.dSelect.close();
-  }
-
-  public ImportTOExcel() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      saleWebsite: true,
-    };
-    // dialogConfig.minWidth = window.innerWidth - 100;
-    // dialogConfig.minHeight = window.innerHeight - 300;
-    this.matDialog.open(DialogECommerceComponent, dialogConfig);
   }
 }
