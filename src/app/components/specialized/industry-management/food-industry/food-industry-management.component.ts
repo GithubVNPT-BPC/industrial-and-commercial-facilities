@@ -1,17 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { element } from 'protractor';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
-import { ChemicalLPGFoodManagementModel } from 'src/app/_models/APIModel/industry-management.module';
+import { FoodIndustryModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
 
 // Services
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { ReportService } from 'src/app/_services/APIService/report.service';
+import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
 @Component({
     selector: 'food-industry-management',
@@ -19,7 +15,7 @@ import { ReportService } from 'src/app/_services/APIService/report.service';
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class FoodIndustryManagementComponent implements OnInit {
+export class FoodIndustryManagementComponent extends BaseComponent {
     //Constant
   private readonly LINK_DEFAULT: string = "/specialized/industry-management/food";
   private readonly TITLE_DEFAULT: string = "Công nghiệp - Công nghiệp thực phẩm";
@@ -27,10 +23,30 @@ export class FoodIndustryManagementComponent implements OnInit {
   //Variable for only ts
   private _linkOutput: LinkModel = new LinkModel();
     displayedColumns: string[] = [];
-    displayedColumns1: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 'von_dau_tu', 'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'trang_thai_hoat_dong'];
-    displayedColumns2: string[] = ['index', 'ten_doanh_nghiep', 'nganh_nghe_kd', 'dia_chi', 'cong_suat', 'san_luong', 'trang_thai_hoat_dong'];
-    dataSource: MatTableDataSource<ChemicalLPGFoodManagementModel> = new MatTableDataSource<ChemicalLPGFoodManagementModel>();
-    filteredDataSource: MatTableDataSource<ChemicalLPGFoodManagementModel> = new MatTableDataSource<ChemicalLPGFoodManagementModel>();
+    fullFieldList: string[] = ['select', 'index'] //, 'ten_doanh_nghiep', 'mst', 'email', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'don_vi', 'von_dieu_le', 'cong_suat', 'ten_thuc_pham', 'san_luong', 'so_lao_dong_sct', 'email_sct', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
+    
+    displayedFields = {
+        mst: "Mã số thuế",
+        ten_doanh_nghiep: "Tên doanh nghiệp",
+        nganh_nghe_kd_chinh: "Ngành nghề KD chính",
+        dia_chi_day_du: "Địa chỉ",
+        // email: "Email",
+        // ten_thuc_pham: "Tên thực phẩm",
+        san_luong: "Sản lượng/năm",
+        cong_suat: "Công suất thiết kế/năm",
+        von_dieu_le: "Vốn đầu tư",
+        // so_lao_dong_sct: "Sổ lao động SCT",
+        // email_sct: "Email SCT",
+        so_giay_phep: "Số giấy phép",
+        ngay_cap: "Ngày cấp",
+        ngay_het_han: "Ngày hết hạn",
+        tinh_trang_hoat_dong: "Trạng thái hoạt động",
+    }
+
+    dataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
+    filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
+    
     years: number[] = [];
     districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
@@ -48,36 +64,27 @@ export class FoodIndustryManagementComponent implements OnInit {
     sanLuongRuou: number = 0;
     year : number;
 
-    @ViewChild('table', { static: false }) table: ElementRef;
-    @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
     constructor(
-        public excelService: ExcelService,
-        public sctService: SCTService,
-        private _breadCrumService: BreadCrumService) {
-    }
-
-
-    // ngAfterViewInit(): void {
-    //     this.accordion.openAll();
-    // }
-
-    autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
+        private injector: Injector,
+        public industryManagementService: IndustryManagementService,
+        private _breadCrumService: BreadCrumService
+    ) {
+        super(injector);
     }
 
     ngOnInit() {
+        super.ngOnInit();
         this.years = this.getYears();
         this.year = new Date().getFullYear() - 1;
-        this.getDanhSachQuanLyCongNghiepThucPham(this.year);
-        this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
-            return String(data.is_het_han).includes(filter);
-        };
-        this.displayedColumns = this.displayedColumns2;
-        this.autoOpen();
+        this.GetFoodIndustryData(this.year);
+        // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
+        //     return String(data.is_het_han).includes(filter);
+        // };
+        this.displayedColumns = this.reducedFieldList;
+        this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
         this.sendLinkToNext(true);
     }
+
     public sendLinkToNext(type: boolean) {
       this._linkOutput.link = this.LINK_DEFAULT;
       this._linkOutput.title = this.TITLE_DEFAULT;
@@ -91,16 +98,16 @@ export class FoodIndustryManagementComponent implements OnInit {
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    getDanhSachQuanLyCongNghiepThucPham(time_id: number) {
-        this.sctService.GetDanhSachQuanLyCongNghiepThucPham(time_id).subscribe(result => {
-            this.dataSource = new MatTableDataSource<ChemicalLPGFoodManagementModel>(result.data);
-            this.dataSource.data.forEach(element => {
-                element.is_het_han = new Date(element.ngay_het_han) < new Date();
-            });
-
+    GetFoodIndustryData(time_id) {
+        this.industryManagementService.GetFoodIndustry(time_id).subscribe(result => {
+            this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
             this.filteredDataSource.data = [...this.dataSource.data];
-            this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 1).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-            this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 2).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+            // this.dataSource.data.forEach(element => {
+            //     element.is_het_han = new Date(element.ngay_het_han) < new Date();
+            // });
+
+            // this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 1).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+            // this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 2).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
             this.filteredDataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -108,9 +115,6 @@ export class FoodIndustryManagementComponent implements OnInit {
             this.paginator._intl.previousPageLabel = "Trang Trước";
             this.paginator._intl.nextPageLabel = "Trang Tiếp";
         })
-    }
-
-    log(any) {
     }
 
     getYears() {
@@ -133,40 +137,19 @@ export class FoodIndustryManagementComponent implements OnInit {
         else {
             this.filteredDataSource.data = filteredData;
         }
-        this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 1).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-        this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 2).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+        // this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 1).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+        // this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 2).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
     }
-
-    // isHidden(row : any){
-    //     return (this.isChecked)? (row.is_het_han) : false;
-    // }
 
     applyExpireCheck(event) {
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
 
     showMoreDetail(event) {
-        this.displayedColumns = (event.checked) ? this.displayedColumns1 : this.displayedColumns2;
+        this.displayedColumns = (event.checked) ? this.fullFieldList : this.reducedFieldList;
     }
 
     showRightUnit(value, type) {
         return value + (type == 1 ? ' tấn' : ' lít');
-    }
-    
-    public ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    allSelected = false;
-    toggleAllSelection() {
-        this.allSelected = !this.allSelected;  // to control select-unselect
-
-        if (this.allSelected) {
-            this.dSelect.options.forEach((item: MatOption) => item.select());
-        } else {
-            this.dSelect.options.forEach((item: MatOption) => item.deselect());
-        }
-        this.dSelect.close();
     }
 }

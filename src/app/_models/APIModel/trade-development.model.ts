@@ -4,8 +4,8 @@ export class TFEModel {
     ten_doanh_nghiep : string;
     dia_chi_doanh_nghiep : string;
     ten_hoi_cho : string;
-    thoi_gian_bat_dau : Date;
-    thoi_gian_ket_thuc : Date;
+    thoi_gian_bat_dau : string;
+    thoi_gian_ket_thuc : string;
     dia_diem_to_chuc : string;
     id_phuong_xa : number;
     time_id : number;
@@ -13,7 +13,7 @@ export class TFEModel {
     so_luong_gian_hang : number;
     so_van_ban : string;
     co_quan_ban_hanh : string;
-    ngay_thang_nam_van_ban : number;
+    ngay_thang_nam_van_ban : string;
     san_pham : string;
 }
 
