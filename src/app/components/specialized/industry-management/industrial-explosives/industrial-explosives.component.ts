@@ -20,25 +20,65 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 })
 
 export class IndustrialExplosivesComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
-    totalColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no', 'moi_no', 'day_no'];
+    displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 
+    'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
+    totalColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 
+    'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no', 
+    'moi_no', 'day_no'];
     dataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
     filteredDataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
     years: number[] = [];
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-    tinhTrangHoatDong: any[] = [{ id: 1, tinh_trang: 'Đang hoạt động' },
-    { id: 2, tinh_trang: 'Ngưng hoạt động' },
-    { id: 3, tinh_trang: 'Giải thể' }];
+    districts: District[] = [
+        {
+            id: 688,
+            ten_quan_huyen: "Thị xã Phước Long"
+        },
+        {
+            id: 689,
+            ten_quan_huyen: "Thành phố Đồng Xoài"
+        },
+        {
+            id: 690,
+            ten_quan_huyen: "Thị xã Bình Long"
+        },
+        {
+            id: 691,
+            ten_quan_huyen: "Huyện Bù Gia Mập"
+        },
+        {
+            id: 692,
+            ten_quan_huyen: "Huyện Lộc Ninh"
+        },
+        {
+            id: 693,
+            ten_quan_huyen: "Huyện Bù Đốp"
+        },
+        {
+            id: 694,
+            ten_quan_huyen: "Huyện Hớn Quản"
+        },
+        {
+            id: 695,
+            ten_quan_huyen: "Huyện Đồng Phú"
+        },
+        {
+            id: 696,
+            ten_quan_huyen: "Huyện Bù Đăng"
+        },
+        {
+            id: 697,
+            ten_quan_huyen: "Huyện Chơn Thành"
+        },
+        {
+            id: 698,
+            ten_quan_huyen: "Huyện Phú Riềng"
+        }
+    ]
+    tinhTrangHoatDong: any[] = [
+        { id: 1, tinh_trang: 'Đang hoạt động' },
+        { id: 2, tinh_trang: 'Ngưng hoạt động' },
+        { id: 3, tinh_trang: 'Giải thể' }
+    ];
     isChecked: boolean;
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
@@ -63,6 +103,15 @@ export class IndustrialExplosivesComponent implements OnInit {
             return String(data.is_het_han).includes(filter);
         };
         this.autoOpen();
+        // this.laysanhsachQuanHuyen();
+    }
+
+    laysanhsachQuanHuyen(){
+        this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
+            if(res.success)
+                this.districts = [...res.data];
+                console.log(this.districts)
+        })
     }
 
     applyFilter(event: Event) {

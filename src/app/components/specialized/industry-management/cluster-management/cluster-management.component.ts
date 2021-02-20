@@ -60,7 +60,7 @@ export class ClusterManagementComponent implements OnInit {
     isChecked: boolean = false;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
-    filterModel: ClusterFilterModel = { id_hien_trang_ht: [], id_hien_trang_xlnt: [], id_quan_huyen: [] };
+    filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -115,10 +115,8 @@ export class ClusterManagementComponent implements OnInit {
 
     getDanhSachQuanLyCumCongNghiep(time_id: number) {
         this.sctService.GetDanhSachQuanLyCumCongNghiep(time_id).subscribe(result => {
-            result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
-            this.dataSource = new MatTableDataSource<ClusterModel>(result.data);
-
-
+            // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
+            this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
             this.filteredDataSource.data = [...this.dataSource.data];
             // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;

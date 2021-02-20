@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { ElectricityDevelopmentModel, HydroElectricManagementModel } from 'src/app/_models/APIModel/electric-management.module';
+import { ElectricityDevelopment35KVModel, ElectricityDevelopmentModel, HydroElectricManagementModel } from 'src/app/_models/APIModel/electric-management.module';
+import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
@@ -23,8 +25,8 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   public readonly displayedColumns: string[] = ['index', 'ten_huyen_thi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
   public readonly dsplayMergeColumns: string[] = ['indexM', 'ten_huyen_thiM', 'trung_apM', 'ha_apM', 'bien_apM'];
   //TS & HTML Variable
-  public dataSource: MatTableDataSource<ElectricityDevelopmentModel> = new MatTableDataSource<ElectricityDevelopmentModel>();
-  public filteredDataSource: MatTableDataSource<ElectricityDevelopmentModel> = new MatTableDataSource<ElectricityDevelopmentModel>();
+  public dataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
+  public filteredDataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
   public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
   { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
   { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
@@ -36,10 +38,6 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
   { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
   { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-  public data: Array<ElectricityDevelopmentModel> = [{ chi_tieu: "Công tác phát triển điện", ten_huyen_thi: "Thành phố đồng xoài", ma_huyen_thi: 2, trung_ap_3p: 61.91, trung_ap_1p: 31.72, ha_ap_3p: 58.6, ha_ap_1p: 225.53, so_tram_bien_ap: 472, cong_xuat_bien_ap: 114257 },
-  { chi_tieu: "Công tác phát triển điện", ten_huyen_thi: "Huyện Đồng Phú", ma_huyen_thi: 8, trung_ap_3p: 42.57, trung_ap_1p: 22.51, ha_ap_3p: 1.42, ha_ap_1p: 25.26, so_tram_bien_ap: 254, cong_xuat_bien_ap: 129763 },
-  { chi_tieu: "Công tác phát triển điện", ten_huyen_thi: "Huyện Chơn Thành", ma_huyen_thi: 10, trung_ap_3p: 62.72, trung_ap_1p: 41.17, ha_ap_3p: 1.6, ha_ap_1p: 58.01, so_tram_bien_ap: 549, cong_xuat_bien_ap: 356536 },
-  ]
   //Only TS Variable
   years: number[] = [];
   trung_ap_3p: number;
@@ -50,16 +48,34 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   so_tram_bien_ap: number;
   cong_xuat_bien_ap: number;
   isChecked: boolean;
-
-  constructor(public excelService: ExcelService,) {
+  currentYear: number = new Date().getFullYear();
+  constructor(
+    public excelService: ExcelService,
+    private energyService: EnergyService,
+    private sctService: SCTService
+    ) {
   }
 
   ngOnInit() {
     this.years = this.getYears();
-    this.dataSource.data = this.data;
-    this.filteredDataSource.data = [...this.dataSource.data];
-    this.caculatorValue();
+    // this.dataSource.data = this.data;
+    // this.filteredDataSource.data = [...this.dataSource.data];
     this.autoOpen();
+  }
+
+  getDataQuyHoachDienDuoi35KV(){
+    this.energyService.LayDuLieuQuyHoachDien35KV(this.currentYear).subscribe(res => {
+      this.filteredDataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(res['data']);
+      this.caculatorValue();
+      this.dataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(res['data']);
+    })
+  }
+
+  initDistricts(){
+    this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
+      if(res['success'])
+        this.districts = res['data']
+    })
   }
 
   autoOpen() {
@@ -88,7 +104,7 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
     let filteredData = [];
 
     event.value.forEach(element => {
-      this.dataSource.data.filter(x => x.ma_huyen_thi == element).forEach(x => filteredData.push(x));
+      this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
     });
 
     if (!filteredData.length) {
@@ -114,13 +130,13 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
     }
   }
   caculatorValue() {
-    this.trung_ap_3p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.trung_ap_3p).reduce((a, b) => a + b) : 0;
+    this.trung_ap_3p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.trung_ap_3_pha).reduce((a, b) => a + b) : 0;
     this.tongSoXa = this.filteredDataSource.data.length;
-    this.trung_ap_1p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.trung_ap_1p).reduce((a, b) => a + b) : 0;
-    this.ha_ap_1p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.ha_ap_1p).reduce((a, b) => a + b) : 0;
-    this.ha_ap_3p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.ha_ap_3p).reduce((a, b) => a + b) : 0;
-    this.so_tram_bien_ap = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_tram_bien_ap).reduce((a, b) => a + b) : 0;
-    this.cong_xuat_bien_ap = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_xuat_bien_ap).reduce((a, b) => a + b) : 0;
+    this.trung_ap_1p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.trung_ap_1_pha).reduce((a, b) => a + b) : 0;
+    this.ha_ap_1p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.ha_ap_1_pha).reduce((a, b) => a + b) : 0;
+    this.ha_ap_3p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.ha_ap_3_pha).reduce((a, b) => a + b) : 0;
+    this.so_tram_bien_ap = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_tram).reduce((a, b) => a + b) : 0;
+    this.cong_xuat_bien_ap = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat).reduce((a, b) => a + b) : 0;
   }
   // isHidden(row : any){
   //     return (this.isChecked)? (row.is_het_han) : false;

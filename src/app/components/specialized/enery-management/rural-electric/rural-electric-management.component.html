@@ -133,61 +133,61 @@
 
                         <ng-container matColumnDef="db">
                             <th mat-header-cell *matHeaderCellDef> Địa bàn (xã, phường, thị trấn) </th>
-                            <td mat-cell *matCellDef="let element" class="highlight"> {{element.db}}</td>
+                            <td mat-cell *matCellDef="let element" class="highlight"> {{element.dia_ban}}</td>
                         </ng-container>
                         <ng-container matColumnDef="t1">
                             <th mat-header-cell *matHeaderCellDef> Tổng </th>
-                            <td mat-cell *matCellDef="let element"> {{element.t1 | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.tong_so_ho | number: '1.0-4':'vi'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="cd1">
                             <th mat-header-cell *matHeaderCellDef> Có điện </th>
-                            <td mat-cell *matCellDef="let element"> {{element.cd1 | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.tong_so_ho_co_dien | number: '1.0-4':'vi'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tl1">
                             <th mat-header-cell *matHeaderCellDef> Tỷ lệ (%) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tl1 | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{(element.tong_so_ho_co_dien*100 / element.tong_so_ho )| number: '1.0-4':'vi'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="t2">
                             <th mat-header-cell *matHeaderCellDef> Tổng </th>
-                            <td mat-cell *matCellDef="let element"> {{element.t2 | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.nong_thon_tong_so_ho | number: '1.0-4':'vi'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="cd2">
                             <th mat-header-cell *matHeaderCellDef> Có điện </th>
-                            <td mat-cell *matCellDef="let element"> {{element.cd2 | number: '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.nong_thon_tong_so_ho_co_dien | number: '1.0-4':'vi'}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ccd2">
                             <th mat-header-cell *matHeaderCellDef> Chưa có điện </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ccd2 | number: '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{(element.nong_thon_tong_so_ho_co_dien - element.nong_thon_tong_so_ho_co_dien) | number: '1.0-4':'vi'}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tl2">
                             <th mat-header-cell *matHeaderCellDef> Tỷ lệ (%) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tl2 | number: '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{(element.nong_thon_tong_so_ho_co_dien*100 / element.nong_thon_tong_so_ho ) | number: '1.0-4':'vi'}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tc4_1">
                             <th mat-header-cell *matHeaderCellDef> Tiêu chí 4.1 </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tc4_1}}
+                            <td mat-cell *matCellDef="let element"> {{element.tieu_chi_41 ? 'Đạt' : 'Không đạt'}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tc4_2">
                             <th mat-header-cell *matHeaderCellDef> Tiêu chí 4.2 </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.tc4_2}}</td>
+                                {{element.tieu_chi_42 ? 'Đạt' : 'Không đạt'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tc4_3">
                             <th mat-header-cell *matHeaderCellDef>Tiêu chí 4.3 </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tc4_3}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.tieu_chi_43 ? 'Đạt' : 'Không đạt'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="merge1">
