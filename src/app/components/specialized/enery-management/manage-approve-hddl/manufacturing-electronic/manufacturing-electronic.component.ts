@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
 import { consualtantData } from '../dataMGN';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { ManageAproveElectronic } from 'src/app/_models/APIModel/electric-management.module';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import * as XLSX from 'xlsx';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-manufacturing-electronic',
@@ -18,7 +19,8 @@ export class ManufacturingElectronicComponent implements OnInit {
   @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
-
+  // Input
+  @Input('manufacturingData')  input_data: ManageAproveElectronic[];
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -68,15 +70,21 @@ export class ManufacturingElectronicComponent implements OnInit {
   ngOnInit() {
     this.years = this.getYears();
 
-    this.dataSource.data = this.data;
-    this.filteredDataSource.data = [...this.dataSource.data];
-    this.caculatorValue();
-    this.paginatorAgain();
+    this.getDataManufacturing();
     this.autoOpen();
   }
 
+  getDataManufacturing(){
+    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
+    this.dataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data); 
+  }
+
   autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
+    setTimeout(() => {
+      this.accordion.openAll()
+      this.paginatorAgain();
+      this.caculatorValue();
+    }, 1000);
   }
 
   applyFilter(event: Event) {
@@ -92,7 +100,7 @@ export class ManufacturingElectronicComponent implements OnInit {
   }
 
   getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
+    return Array(30).fill(1).map((element, index) => new Date().getFullYear() - 21 + index);
   }
   getValueOfHydroElectric(value: any) {
 
@@ -134,21 +142,36 @@ export class ManufacturingElectronicComponent implements OnInit {
     // this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
   }
 
-  handeldateExpired(){
-    this.data.filter(item => {
+  handeldateExpired() {
+    this.filteredDataSource.data.filter((item) => {
       let today = new Date();
-      Date.parse(item.ngay_het_han) > Date.parse(today.toString()) ? this.soLuongDoanhNghiepExpired++ : 0;
+      Date.parse(item.ngay_het_han) < Date.parse(today.toString())
+        ? this.soLuongDoanhNghiepExpired++
+        : 0;
     });
   }
-  // isHidden(row : any){
-  //     return (this.isChecked)? (row.is_het_han) : false;
-  // }
 
   applyActionCheck(event) {
-    this.filteredDataSource.filter = (event.checked) ? "true" : "";
-    this.caculatorValue();
+    let today = new Date();
+
+    if(event.checked){
+      this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
+        return Date.parse(today.toString()) > Date.parse(e.ngay_het_han)
+      })
+    }else{
+      this.filteredDataSource.data = [...this.dataSource.data];
+    }
+    // this.caculatorValue();
     this.paginatorAgain();
   }
 
-
+  LocDulieuTheoNgayCap(year){
+    let data_temp = [...this.dataSource.data];
+    this.filteredDataSource.data = data_temp;
+    if(year){
+      this.filteredDataSource.data = this.filteredDataSource.data.filter(item => {
+        return item.ngay_cap.includes(year);
+      })
+    }
+  }
 }
