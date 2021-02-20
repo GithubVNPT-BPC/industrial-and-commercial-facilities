@@ -115,7 +115,8 @@ export class MultilevelTradeComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.commerceManagementService.postMultiLevelTradeData([data]).subscribe(this.successNotify, this.errorNotify);
+    this.commerceManagementService.postMultiLevelTradeData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+
   }
 
 }

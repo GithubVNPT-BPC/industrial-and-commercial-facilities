@@ -169,6 +169,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(this.successNotify, this.errorNotify);
+    this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 }

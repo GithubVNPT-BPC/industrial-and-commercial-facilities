@@ -188,7 +188,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.commerceManagementService.postExpoData([data]).subscribe(this.successNotify, this.errorNotify);
+    this.commerceManagementService.postExpoData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 }
