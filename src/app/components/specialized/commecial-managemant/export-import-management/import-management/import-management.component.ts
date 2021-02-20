@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
 import { MatTableDataSource, MatTable, MatAccordion, MatPaginator, MatSort } from '@angular/material';
-import { new_import_export_model } from 'src/app/_models/APIModel/export-import.model';
+import { new_import_export_model, Task } from 'src/app/_models/APIModel/export-import.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { ModalComponent } from '../dialog-import-export/modal.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -26,6 +26,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     private readonly TITLE_DEFAULT: string = "Thông tin nhập khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin nhập khẩu";
     displayedColumns = [
+        'delete_checkbox',
         'index', 'ten_san_pham',
         'luong_thang', 'gia_tri_thang',
         'uoc_th_so_cungky_tht',
@@ -37,6 +38,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         'danh_sach_doanh_nghiep',
         'chi_tiet_doanh_nghiep'];
     displayRow1Header = [
+        'delete_checkbox',
         'index',
         'ten_san_pham',
         'thuc_hien_bao_cao_thang',
@@ -315,5 +317,36 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 100;
         this.matDialog.open(ImportDataComponent, dialogConfig);
+    }
+
+    // checkbox delete
+    allComplete: boolean = false;
+    task: Task[] = [];
+    updateAllComplete() {
+        let dataNo = this.dataSource.data['data'][0].length
+        this.allComplete = this.task != null && this.task.length === dataNo;
+    }
+
+    // someComplete(): boolean {
+    //     if (this.task.subtasks == null) {
+    //         return false;
+    //     }
+    //     return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+    // }
+
+    setAll() {
+        this.dataSource.data.forEach(item => item.isChecked=!item.isChecked)
+        console.log(this.dataSource.data)
+    }
+
+    setSomeIten(element){
+        let temp_item: Task = Object.assign({}, element);
+        this.task.push(temp_item);
+        console.log(this.task);
+        // element.isChecked = !element.isChecked;
+    }
+
+    Delete(){
+        // waiting api
     }
 }

@@ -265,7 +265,7 @@ export class EditBusinessComponent implements OnInit {
         let temp3 = temp2.reduce(Object)
         this.company = temp3
       },
-      (error) => (this.errorMessage = <any>error)
+      (error) => (console.log("Error when fetching data: \n" + error))
     );
   }
 

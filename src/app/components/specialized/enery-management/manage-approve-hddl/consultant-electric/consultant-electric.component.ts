@@ -1,56 +1,75 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
-import { ManageAproveElectronic } from 'src/app/_models/APIModel/electric-management.module';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { consualtantData } from '../dataMGN';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-import * as XLSX from 'xlsx';
+import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
+import {
+  MatAccordion,
+  MatPaginator,
+  MatTableDataSource,
+} from "@angular/material";
+import { ManageAproveElectronic } from "src/app/_models/APIModel/electric-management.module";
+import { DistrictModel } from "src/app/_models/APIModel/domestic-market.model";
+import { consualtantData } from "../dataMGN";
+import { ExcelService } from "src/app/_services/excelUtil.service";
+import * as XLSX from "xlsx";
+import { EnergyService } from "src/app/_services/APIService/energy.service";
+import { Observable, of } from "rxjs";
 @Component({
-  selector: 'app-consultant-electric',
-  templateUrl: './consultant-electric.component.html',
-  styleUrls: ['../../../special_layout.scss']
+  selector: "app-consultant-electric",
+  templateUrl: "./consultant-electric.component.html",
+  styleUrls: ["../../../special_layout.scss"],
 })
 export class ConsultantElectricComponent implements OnInit {
-
   
-  //ViewChild 
+  //ViewChild
   @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
-
+  @ViewChild("TABLE", { static: false }) table: ElementRef;
+  // Input
+  @Input('consualtantData')  input_data: ManageAproveElectronic[];
   exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
+      this.table.nativeElement
+    );
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Quản lý cấp phép HĐĐL');
-
-    XLSX.writeFile(wb, 'Quản lý cấp phép HĐĐL.xlsx');
-
+    XLSX.utils.book_append_sheet(wb, ws, "Quản lý cấp phép HĐĐL");
+    XLSX.writeFile(wb, "Quản lý cấp phép HĐĐL.xlsx");
   }
 
   ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    this.excelService.exportDomTableAsExcelFile(
+      filename,
+      sheetname,
+      this.table.nativeElement
+    );
   }
 
   //Constant variable
-  public readonly displayedColumns: string[] = 
-  ['index', 'ten_doanh_nghiep', 'dia_diem', 
-  'so_dien_thoai', 'so_giay_phep', 'ngay_cap', 
-  'ngay_het_han'];
+  public readonly displayedColumns: string[] = [
+    "index",
+    "ten_doanh_nghiep",
+    "dia_diem",
+    "so_dien_thoai",
+    "so_giay_phep",
+    "ngay_cap",
+    "ngay_het_han",
+  ];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
   public filteredDataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
-  public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-  public data: Array<ManageAproveElectronic> = consualtantData.filter(item => item.id_group === 1)
+  public districts: DistrictModel[] = [
+    { id: 1, ten_quan_huyen: "Thị xã Phước Long" },
+    { id: 2, ten_quan_huyen: "Thành phố Đồng Xoài" },
+    { id: 3, ten_quan_huyen: "Thị xã Bình Long" },
+    { id: 4, ten_quan_huyen: "Huyện Bù Gia Mập" },
+    { id: 5, ten_quan_huyen: "Huyện Lộc Ninh" },
+    { id: 6, ten_quan_huyen: "Huyện Bù Đốp" },
+    { id: 7, ten_quan_huyen: "Huyện Hớn Quản" },
+    { id: 8, ten_quan_huyen: "Huyện Đồng Phú" },
+    { id: 9, ten_quan_huyen: "Huyện Bù Đăng" },
+    { id: 10, ten_quan_huyen: "Huyện Chơn Thành" },
+    { id: 11, ten_quan_huyen: "Huyện Phú Riềng" },
+  ];
+  // public data: Array<ManageAproveElectronic> = consualtantData.filter(
+  //   (item) => item.id_group === 1
+  // );
   //Only TS Variable
   years: number[] = [];
   doanhThu: number;
@@ -59,22 +78,38 @@ export class ConsultantElectricComponent implements OnInit {
   soLuongDoanhNghiep: number;
   soLuongDoanhNghiepExpired: number = 0;
   isChecked: boolean;
-  
-  constructor(public excelService: ExcelService,) {
-  }
+
+  constructor(
+    public excelService: ExcelService,
+    private energyService: EnergyService
+  ) {}
 
   ngOnInit() {
+    this.getDataConsultantElectric();
+    // this.sequenceSubscriber();
     this.years = this.getYears();
-
-    this.dataSource.data = this.data;
-    this.filteredDataSource.data = [...this.dataSource.data];
-    this.caculatorValue();
-    this.paginatorAgain();
     this.autoOpen();
   }
 
+  getDataConsultantElectric() {
+    // this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
+    //   if (res['success']) {
+    //     this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(res['data']);
+    //     this.dataSource = new MatTableDataSource<ManageAproveElectronic>(res['data']);
+    //     this.caculatorValue();
+    //     this.paginatorAgain();
+    //   }
+    // });
+    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
+    this.dataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
+  }
+
   autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
+    setTimeout(() => {
+      this.accordion.openAll()
+      this.paginatorAgain();
+      this.caculatorValue();
+    }, 1000);
   }
 
   applyFilter(event: Event) {
@@ -82,19 +117,27 @@ export class ConsultantElectricComponent implements OnInit {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  get(time_id: number) {
+  get(time_id: number) {}
 
-  }
-
-  log(any) {
-  }
+  log(any) {}
 
   getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
+    return Array(20)
+      .fill(1)
+      .map((element, index) => (new Date().getFullYear() + index - 11))
   }
-  getValueOfHydroElectric(value: any) {
 
+  LocDulieuTheoNgayCap(year){
+    let data_temp = [...this.dataSource.data];
+    this.filteredDataSource.data = data_temp;
+    if(year){
+      this.filteredDataSource.data = this.filteredDataSource.data.filter(item => {
+        return item.ngay_cap.includes(year);
+      })
+    }
   }
+  
+  getValueOfHydroElectric(value: any) {}
   // applyDistrictFilter(event) {
   //   let filteredData = [];
 
@@ -115,9 +158,9 @@ export class ConsultantElectricComponent implements OnInit {
   //   this.paginatorAgain();
   // }
   paginatorAgain() {
-    if (this.filteredDataSource.data.length) {
+    if (this.input_data.length) {
       this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+      this.paginator._intl.itemsPerPageLabel = "Số hàng";
       this.paginator._intl.firstPageLabel = "Trang Đầu";
       this.paginator._intl.lastPageLabel = "Trang Cuối";
       this.paginator._intl.previousPageLabel = "Trang Trước";
@@ -132,20 +175,26 @@ export class ConsultantElectricComponent implements OnInit {
     // this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
   }
 
-  handeldateExpired(){
-    this.data.filter(item => {
+  handeldateExpired() {
+    this.filteredDataSource.data.filter((item) => {
       let today = new Date();
-      Date.parse(item.ngay_het_han) > Date.parse(today.toString()) ? this.soLuongDoanhNghiepExpired++ : 0;
+      Date.parse(item.ngay_het_han) < Date.parse(today.toString())
+        ? this.soLuongDoanhNghiepExpired++
+        : 0;
     });
   }
-  // isHidden(row : any){
-  //     return (this.isChecked)? (row.is_het_han) : false;
-  // }
 
   applyActionCheck(event) {
-    this.filteredDataSource.filter = (event.checked) ? "true" : "";
-    this.caculatorValue();
+    let today = new Date();
+
+    if(event.checked){
+      this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
+        return Date.parse(today.toString()) > Date.parse(e.ngay_het_han)
+      })
+    }else{
+      this.filteredDataSource.data = [...this.dataSource.data];
+    }
+    // this.caculatorValue();
     this.paginatorAgain();
   }
-
 }

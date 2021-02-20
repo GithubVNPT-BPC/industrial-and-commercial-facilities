@@ -22,6 +22,7 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 // import { FormatNumberReportPipe } from './shared/pipes/formatNumber.pipe';
 // import { dich } from 'src/app/components/specialized/commecial-managemant/border-trade/dich.pipe';
 import { PipeModule } from './pipe.module';
+// import { TranslateIdToNamePipe } from './shared/pipes/translateIdToName.pipe';
 @NgModule({
   imports: [
     BrowserModule,
@@ -39,10 +40,10 @@ import { PipeModule } from './pipe.module';
   declarations:[
     InformationComponent,
     ConfirmationDialogComponent,
-    // FormatNumberReportPipe
+    // TranslateIdToNamePipe
   ],
   exports : [
-    // FormatNumberReportPipe
+    // TranslateIdToNamePipe
     
   ],
   providers: [

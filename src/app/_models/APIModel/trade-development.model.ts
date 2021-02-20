@@ -1,38 +1,33 @@
-export class TFE {
-    Ten_doanh_nghiep: string;
-    Dia_chi: string;
-    Ma_so_thue: string;
-    Ten_Hoi_cho: string;
-    Thoi_gian_to_chuc: string;
-    Dia_diem_to_chuc: string;
-    Ke_hoach: string;
-    So_luong_gian_hang_du_kien: string;
-    San_pham_ban_tai_hoi_cho: string;
-    So_Van_ban: string;
-    Co_quan_ban_hanh: string;
-    Ngay_thang_nam: string;
-    Id_quan_huyen : number;
+export class TFEModel {    
+    id : number;
+    mst : string ;
+    ten_doanh_nghiep : string;
+    dia_chi_doanh_nghiep : string;
+    ten_hoi_cho : string;
+    thoi_gian_bat_dau : string;
+    thoi_gian_ket_thuc : string;
+    dia_diem_to_chuc : string;
+    id_phuong_xa : number;
+    time_id : number;
+    id_trang_thai : Boolean;
+    so_luong_gian_hang : number;
+    so_van_ban : string;
+    co_quan_ban_hanh : string;
+    ngay_thang_nam_van_ban : string;
+    san_pham : string;
 }
 
-export class TFEFilterModel{
-    Id_Quan_huyen : number[]=[];
-}
-
-export class SD {
-    Ten_doanh_nghiep: string;
-    Dia_chi: string;
-    Ma_so_thue: string;
-    Ten_chuong_trinh_KM: string;
-    Thoi_gian_KM: string;
-    Hang_hoa_dung_de_KM: string;
-    Dia_diem_KM: string;
-    Hinh_thuc_KM: string;
-    So_Van_ban: string;
-    Co_quan_ban_hanh: string;
-    Ngay_thang_nam: string;
-    Id_quan_huyen : number;
-}
-export class SDFilterModel{
-    Id_quan_huyen : number[]=[];
-    Hinh_thuc_KM : string[] = [];
+export class SDModel {
+    ten_doanh_nghiep: string;
+    dia_chi_doanh_nghiep: string;
+    mst: string;
+    ten_chuong_trinh_km: string;
+    thoi_gian_bat_dau: Date;
+    thoi_gian_ket_thuc: Date;
+    hang_hoa_km: string;
+    dia_diem_km: string;
+    ten_hinh_thuc: string;
+    so_van_ban: string;
+    co_quan_ban_hanh: string;
+    ngay_thang_nam_van_ban: string;
 }

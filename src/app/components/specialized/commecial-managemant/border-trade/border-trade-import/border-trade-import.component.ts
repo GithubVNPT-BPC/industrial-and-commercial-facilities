@@ -11,6 +11,8 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ModalComponent } from '../../export-import-management/dialog-import-export/modal.component';
 import { data_xk_t11 } from '../../border-trade/border-trade-import/data';
 import { dataDialogM1, dataDialogM2, dataDialogM3, dataDialogM4, dataDialogM5, dataDialogM6, dataDialogM7, dataDialogM8, dataDialogM9, dataDialogM10, dataDialogM11, dataDialogM12 } from '../../export-import-management/export-management/dataDialog';
+import { DialogImportDataComponent } from '../dialog-import-data/dialog-import-data.component';
+import { Task } from 'src/app/_models/APIModel/export-import.model';
 
 class gate{
     id?: number;
@@ -33,8 +35,8 @@ export class BorderTradeImportComponent implements OnInit {
     private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/exported_products";
     private readonly TITLE_DEFAULT: string = "Thông tin nhập khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin nhập khẩu";
-    displayedColumns = [
-        'index', 'ten_san_pham',
+    displayedColumns = ['delete_checkbox',
+        'index', 'ten_cua_khau',
         'luong_thang', 'gia_tri_thang',
         'uoc_th_so_cungky_tht',
         'uoc_th_so_thg_truoc_tht',
@@ -45,8 +47,9 @@ export class BorderTradeImportComponent implements OnInit {
         'danh_sach_doanh_nghiep',
         'chi_tiet_doanh_nghiep'];
     displayRow1Header = [
+        'delete_checkbox',
         'index',
-        'ten_san_pham',
+        'ten_cua_khau',
         'thuc_hien_bao_cao_thang',
         'cong_don_den_ky_bao_cao',
 
@@ -296,5 +299,50 @@ export class BorderTradeImportComponent implements OnInit {
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    // declare variable isExport
+
+    public ImportTOExcel() {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+            data: {
+                isExport: true,
+            },
+        };
+        dialogConfig.minWidth = window.innerWidth - 100;
+        dialogConfig.minHeight = window.innerHeight - 300;
+        this.matDialog.open(DialogImportDataComponent, dialogConfig);
+    }
+
+    // checkbox delete
+    allComplete: boolean = false;
+    task: Task[] = [];
+    updateAllComplete() {
+        let dataNo = this.dataSource.data['data'][0].length
+        this.allComplete = this.task != null && this.task.length === dataNo;
+    }
+
+    // someComplete(): boolean {
+    //     if (this.task.subtasks == null) {
+    //         return false;
+    //     }
+    //     return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
+    // }
+
+    setAll() {
+        this.dataSource.data.forEach(item => item.isChecked=!item.isChecked)
+        console.log(this.dataSource.data)
+    }
+
+    setSomeIten(element){
+        let temp_item: Task = Object.assign({}, element);
+        this.task.push(temp_item);
+        console.log(this.task);
+        // element.isChecked = !element.isChecked;
+    }
+
+    Delete(){
+        // waiting api
     }
 }

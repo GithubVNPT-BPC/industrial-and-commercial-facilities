@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { ElectricalPlan } from 'src/app/_models/APIModel/electric-management.module';
+import { ElectricalPlan, ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
+import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 @Component({
     selector: 'current-electrical-plan',
@@ -26,12 +27,16 @@ export class CurrentElectricalPlanComponent implements OnInit {
     { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
     { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
 
-    tba110KVDataSource: MatTableDataSource<ElectricalPlan> = new MatTableDataSource<ElectricalPlan>();
-    tba220KVDataSource: MatTableDataSource<ElectricalPlan> = new MatTableDataSource<ElectricalPlan>();
-    tba500KVDataSource: MatTableDataSource<ElectricalPlan> = new MatTableDataSource<ElectricalPlan>();
-    dd110KVDataSource: MatTableDataSource<ElectricalPlan> = new MatTableDataSource<ElectricalPlan>();
-    dd220KVDataSource: MatTableDataSource<ElectricalPlan> = new MatTableDataSource<ElectricalPlan>();
-    dd500KVDataSource: MatTableDataSource<ElectricalPlan> = new MatTableDataSource<ElectricalPlan>();
+    constructor(
+        private energyService: EnergyService
+    ) { }
+    currentYear: number = new Date().getFullYear();
+    tba110KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    tba220KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    tba500KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    dd110KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    dd220KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    dd500KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
 
     data: Array<ElectricalPlan> = [
         { ten_tram: 'Phước Long', duong_day_so_mach: 'T1', tba: 40, tiet_dien_day_dan: '', dien_ap: '110/23/15', chieu_dai: 0, p_max: 25.4, p_min: 10.65, p_tb: 17.43, mang_tai: 64.14, trang_thai_hoat_dong: 1, loai_quy_hoach: 1 },
@@ -79,15 +84,44 @@ export class CurrentElectricalPlanComponent implements OnInit {
         { ten_tram: 'Đường dây 500KV Pleiku - Cầu Bông (2 mạch)', duong_day_so_mach: '', tba: 0, tiet_dien_day_dan: '', dien_ap: '', chieu_dai: 102.371, p_max: 0, p_min: 0, p_tb: 0, mang_tai: 0, trang_thai_hoat_dong: 1, loai_quy_hoach: 5 },
     ]
 
-    displayedColumns : string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
+    displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
 
     ngOnInit() {
-        this.tba110KVDataSource.data = this.data.filter(x => x.loai_quy_hoach == 1);
-        this.tba220KVDataSource.data = this.data.filter(x => x.loai_quy_hoach == 2);
-        this.tba500KVDataSource.data = this.data.filter(x => x.loai_quy_hoach == 6);
-        this.dd110KVDataSource.data = this.data.filter(x => x.loai_quy_hoach == 3);
-        this.dd220KVDataSource.data = this.data.filter(x => x.loai_quy_hoach == 4);
-        this.dd500KVDataSource.data = this.data.filter(x => x.loai_quy_hoach == 5);
+        this.getDataElectric110KV();
+    }
+
+    getDataElectric110KV() {
+        this.energyService.LayDuLieuQuyHoachDien110KV(2020).subscribe(res => {
+            this.mappingDataSource(res['data'])
+        })
+    }
+
+    mappingDataSource(dataSource: ElectricalPlan110KV[]) {
+        dataSource.filter(item => {
+            switch (item.id_loai_quy_hoach) {
+                case 1:
+                    this.tba110KVDataSource.data.push(item);
+                    break;
+                case 2:
+                    this.tba220KVDataSource.data.push(item);
+                    break;
+                case 3:
+                    this.dd110KVDataSource.data.push(item);
+                    break;
+
+                case 4:
+                    this.dd220KVDataSource.data.push(item);
+                    break;
+                case 5:
+                    this.dd500KVDataSource.data.push(item);
+                    break;
+                case 6:
+                    this.tba500KVDataSource.data.push(item);
+                    break;
+                default:
+                    break;
+            }
+        })
     }
 
     autoOpen() {
@@ -98,29 +132,29 @@ export class CurrentElectricalPlanComponent implements OnInit {
 
     }
 
-    applyFilter(event: Event, table_id : number) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      switch (table_id){
-          case 1 : 
-          this.tba110KVDataSource.filter = filterValue.trim().toLowerCase();
-          break;
-          case 2: 
-          this.tba220KVDataSource.filter = filterValue.trim().toLowerCase();
-          break;
-          case 3: 
-          this.tba500KVDataSource.filter = filterValue.trim().toLowerCase();
-          break;
-          case 4: 
-          this.dd110KVDataSource.filter = filterValue.trim().toLowerCase();
-          break;
-          case 5: 
-          this.dd220KVDataSource.filter = filterValue.trim().toLowerCase();
-          break;
-          case 6: 
-          this.dd500KVDataSource.filter = filterValue.trim().toLowerCase();
-          break;
-          default: 
-          break;
-      }
+    applyFilter(event: Event, table_id: number) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        switch (table_id) {
+            case 1:
+                this.tba110KVDataSource.filter = filterValue.trim().toLowerCase();
+                break;
+            case 2:
+                this.tba220KVDataSource.filter = filterValue.trim().toLowerCase();
+                break;
+            case 3:
+                this.tba500KVDataSource.filter = filterValue.trim().toLowerCase();
+                break;
+            case 4:
+                this.dd110KVDataSource.filter = filterValue.trim().toLowerCase();
+                break;
+            case 5:
+                this.dd220KVDataSource.filter = filterValue.trim().toLowerCase();
+                break;
+            case 6:
+                this.dd500KVDataSource.filter = filterValue.trim().toLowerCase();
+                break;
+            default:
+                break;
+        }
     }
 }

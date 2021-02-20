@@ -77,15 +77,15 @@
                         </div>
                         <div class="col-lg-2 mt-2">
                             <button class="btn btn-danger" mat-raised-button (click)="removeFilter()">
-                                <mat-icon>remove_circle</mat-icon>
+                                <mat-icon >remove_circle</mat-icon>
                             </button>
                         </div>
                     </div>
                 </ng-container>
             </div>
             <div class="col-lg-5 button-control float-right mt-2">
-                <button mat-raised-button (click)="addMoreFilter()">
-                    <mat-icon [inline]="true">add_circle_outline</mat-icon> &nbsp;Thêm bộ lọc
+                <button mat-raised-button (click)="addMoreFilter()" class="reverse">
+                    <mat-icon>add_circle_outline</mat-icon> &nbsp;Thêm bộ lọc
                 </button>
                 <button mat-raised-button (click)="clearFilter()">Xóa bộ lọc</button>
                 <button mat-raised-button

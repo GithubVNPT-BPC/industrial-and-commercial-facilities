@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatOption, MatSelect, MatTableDataSource } from '@angular/material';
 import { SaleWebsite, SaleWebsiteFilterModel, ECommerceWebsite } from 'src/app/_models/APIModel/e-commerce.model';
 import { District } from 'src/app/_models/district.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
@@ -8,6 +8,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { DialogECommerceComponent } from '../dialog-e-commerce/dialog-e-commerce.component';
 
 @Component({
   selector: 'registered-sale-website',

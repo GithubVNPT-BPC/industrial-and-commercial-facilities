@@ -1,16 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { element } from 'protractor';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
+import { Component, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
-import { ChemicalLPGFoodManagementModel } from 'src/app/_models/APIModel/industry-management.module';
+import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
 
 // Services
-import { ReportService } from 'src/app/_services/APIService/report.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 @Component({
@@ -19,7 +15,7 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class ChemicalManagementComponent implements OnInit {
+export class ChemicalManagementComponent extends BaseComponent {
     //Constant
     private readonly LINK_DEFAULT: string = "/specialized/industry-management/chemical";
     private readonly TITLE_DEFAULT: string = "Công nghiệp - Hoá chất";
@@ -27,11 +23,30 @@ export class ChemicalManagementComponent implements OnInit {
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
     displayedColumns: string[] = [];
-    displayedColumns1: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'dia_chi', 'nganh_nghe_kd', 'email', 'so_lao_dong', 'cong_suat', 'san_luong', 'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
-    displayedColumns2: string[] = ['index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe_kd', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
-    dataSource: MatTableDataSource<ChemicalLPGFoodManagementModel> = new MatTableDataSource<ChemicalLPGFoodManagementModel>();
-    filteredDataSource: MatTableDataSource<ChemicalLPGFoodManagementModel> = new MatTableDataSource<ChemicalLPGFoodManagementModel>();
-    years: number[] = [];
+    fullFieldList: string[] = ['select', 'index'] // 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'email_sct', 'so_lao_dong_sct', 'cong_suat','so_giay_phep', 'san_luong', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'cong_suat', 'san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
+    
+    displayedFields = {
+        mst: "Mã số thuế",
+        ten_doanh_nghiep: "Tên doanh nghiệp",
+        dia_chi_day_du: "Địa chỉ",
+        nganh_nghe_kd_chinh: "Ngành nghề KD chính",
+        email: "Email",
+        so_lao_dong: "Số lao động",
+        cong_suat: "Công suất thiết kế Tấn/năm",
+        san_luong: "Sản lượng Tấn/năm",
+        so_giay_phep: "Số giấy phép/ Giấy chứng nhận",
+        ngay_cap: "Ngày cấp",
+        ngay_het_han: "Ngày hết hạn",
+        von_dieu_le: "Vốn điều lệ",
+        so_lao_dong_sct: "Sổ lao động SCT",
+        email_sct: "Email SCT",
+        tinh_trang_hoat_dong: "Trạng thái hoạt động",
+    }
+
+    dataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
+    filteredDataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
+    
     districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
     { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
@@ -46,35 +61,27 @@ export class ChemicalManagementComponent implements OnInit {
     isChecked: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
+    years: number[] = [];
     year: number;
 
-    @ViewChild('table', { static: false }) table: ElementRef;
-    @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
     constructor(
-        public sctService: SCTService,
-        public excelService: ExcelService,
-        private _breadCrumService: BreadCrumService) {
-    }
-
-    // ngAfterViewInit(): void {
-    //     this.accordion.openAll();
-    // }
-
-    autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
+        private injector: Injector,
+        public industryManagementService: IndustryManagementService,
+        private _breadCrumService: BreadCrumService
+    ) {
+        super(injector);
     }
 
     ngOnInit() {
+        super.ngOnInit();
         this.years = this.getYears();
         this.year = new Date().getFullYear() - 1;
-        this.getDanhSachQuanLyHoaChat(this.year);
-        this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
-            return String(data.is_het_han).includes(filter);
-        };
-        this.displayedColumns = this.displayedColumns2;
-        this.autoOpen();
+        this.getChemicalManagementData(this.year);
+        // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
+        //     return String(data.is_het_han).includes(filter);
+        // };
+        this.displayedColumns = this.reducedFieldList;
+        this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
         this.sendLinkToNext(true);
     }
 
@@ -86,33 +93,40 @@ export class ChemicalManagementComponent implements OnInit {
         this._breadCrumService.sendLink(this._linkOutput);
       }
     
-
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     }
 
-    getDanhSachQuanLyHoaChat(time_id: number) {
-        this.sctService.GetDanhSachQuanLyHoaChat(time_id).subscribe(result => {
-            this.dataSource = new MatTableDataSource<ChemicalLPGFoodManagementModel>(result.data);
+    getChemicalManagementData(time_id: number) {
+        this.industryManagementService.GetChemicalManagement(time_id).subscribe(result => {
+            if (result.data && result.data.length > 0) {
+                let chemicalManagementData = result.data[0];
+                let capacityData = result.data[1];
+                chemicalManagementData.map((c) => {
+                    let matchingList = capacityData.filter(x => x.mst == c.mst);
+                    
+                    c.san_luong = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.san_luong : x.san_luong).join(', ');
+                    c.cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
+                });
 
-            this.dataSource.data.forEach(element => {
-                element.is_het_han = new Date(element.ngay_het_han) < new Date();
-            });
+                this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
+                this.filteredDataSource.data = [...this.dataSource.data];
 
-            this.filteredDataSource.data = [...this.dataSource.data];
-            // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
-            // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
-            this.filteredDataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
+                // this.dataSource.data.forEach(element => {
+                //     element.is_het_han = new Date(element.ngay_het_han) < new Date();
+                // });
+
+                // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
+                // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
+                this.filteredDataSource.paginator = this.paginator;
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            }     
         })
-    }
-
-    log(any) {
     }
 
     getYears() {
@@ -139,32 +153,11 @@ export class ChemicalManagementComponent implements OnInit {
         // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
     }
 
-    // isHidden(row : any){
-    //     return (this.isChecked)? (row.is_het_han) : false;
-    // }
-
     applyExpireCheck(event) {
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
 
     showMoreDetail(event) {
-        this.displayedColumns = (event.checked) ? this.displayedColumns1 : this.displayedColumns2;
-    }
-    
-    public ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-    
-    @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    allSelected = false;
-    toggleAllSelection() {
-        this.allSelected = !this.allSelected;  // to control select-unselect
-
-        if (this.allSelected) {
-            this.dSelect.options.forEach((item: MatOption) => item.select());
-        } else {
-            this.dSelect.options.forEach((item: MatOption) => item.deselect());
-        }
-        this.dSelect.close();
+        this.displayedColumns = (event.checked) ? this.fullFieldList : this.reducedFieldList;
     }
 }

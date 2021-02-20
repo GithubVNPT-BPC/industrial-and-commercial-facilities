@@ -37,6 +37,7 @@ export class MarketService {
     public urlUpdateKNXK = '/doanh-nghiep/kim-ngach-xuat-khau';
     public urlListExportedCompany = "/kim-ngach-xuat-khau";
     public urlListImportedCompany = "/kim-ngach-nhap-khau";
+    public urlDomesticMarket_New = "gia-ca";
 
     token: any;
     username: any;

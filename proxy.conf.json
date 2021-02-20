@@ -1,0 +1,11 @@
+{
+    "/api/*": {
+        "target": "http://10.77.129.40:8080",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/api/settings": "/api/app/settings",
+            "^/api": ""}
+    }
+}
