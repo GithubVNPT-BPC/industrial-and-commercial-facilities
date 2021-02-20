@@ -8,18 +8,39 @@
     height: 30px !important;
     width: 100%;
   }
-  $blue: #1f7ed0;
-  $white: white;
   .mat-card-header {
     text-align: center;
     display: initial;
     .mat-card-title {
       strong {
-        color: $blue;
+        color: #1f7ed0;
       }
     }
   }
   .mat-card-content {
+    .cb-section {
+      display: flex;
+      align-content: center;
+      align-items: center;
+      height: 60px;
+      .cb {
+        margin-left: 10px;
+      }
+    }
+
+    .mat-raised-button {
+      background-color: #1f7ed0 !important;
+      color: white !important;
+      margin: auto 3px;
+      margin-bottom: 5px;
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    hr.edit {
+      margin: 2px;
+      border: 0.5px solid blue;
+    }
+
     ::ng-deep .mat-form-field-wrapper {
       margin-bottom: -0.5em;
     }
@@ -27,7 +48,7 @@
       width: 100%;
     }
     strong {
-      color: $blue;
+      color: #1f7ed0;
     }
     .mat-paginator {
       display: flex;
@@ -36,18 +57,31 @@
       min-height: 30px;
       width: 100%;
     }
+    button.mat-raised-button {
+      background-color: #1f7ed0 !important;
+      color: white !important;
+      margin: auto 3px;
+      margin-bottom: 5px;
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    }
     .button-control {
       text-align: right;
       margin-bottom: 5px;
       button.mat-raised-button {
-        background-color: $blue !important;
-        color: $white !important;
+        background-color: #1f7ed0 !important;
+        color: white !important;
         margin: auto 3px;
+        margin-bottom: 5px;
         box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
       }
-      button.mat-raised-button.reverse {
-        background-color: $white !important;
-        color: $blue !important;
+      button.mat-raised-button.white {
+        background-color: white !important;
+      }
+      button.mat-raised-button.red {
+        background-color: red !important;
+      }
+      button.mat-raised-button.green {
+        background-color: green !important;
       }
     }
     .button-control.-align-left {
@@ -55,14 +89,14 @@
     }
     .layout {
       .table-header {
-        height: 40px !important;
+        height: 30px !important;
       }
       .table-row {
-        height: 30px !important;
+        height: 33px !important;
       }
       max-width: 100%;
       max-height: 100%;
-      height: 460px;
+      height: 440px;
       overflow: auto;
       table.mat-table.table-layout {
         border-collapse: separate;
@@ -74,10 +108,10 @@
           padding-right: 5px !important;
         }
         .mat-header-cell {
-          background-color: $blue;
-          color: $white;
-          padding: 5px !important;
           border: 0.01em solid rgb(192, 192, 192);
+          background-color: #1f7ed0;
+          color: white;
+          padding: 5px !important;
           font-weight: bold;
           font-size: 12px;
           text-align: center;
@@ -101,6 +135,16 @@
           font-size: 13px;
           text-align: left;
           max-width: 350px;
+          input {
+            border: none;
+            font-size: 12px;
+            width: 100%;
+            height: 30px;
+          }
+          input:focus {
+            background-color: #1f7ed0;
+            color: white;
+          }
         }
         .center-cell {
           text-align: center !important;
@@ -113,37 +157,19 @@
           text-align: center;
           color: blue;
         }
-
-        input {
-          border: none;
-          width: 100%;
-          height: 100%;
-          background-color: white !important;
-          color: black;
-        }
-
         select {
           border: none;
+          font-size: 12px;
           width: 100%;
-          height: 100%;
-          background-color: white !important;
-          color: black !important;
-        }
-
-        select:invalid {
-          background-color: white !important;
-          color: black !important;
-        }
-
-        ::ng-deep .mat-select-disabled .mat-select-value {
-          color: black !important;
+          height: 30px;
+          text-align-last: center;
         }
       }
     }
   }
   #import_excel {
-    background-color: $blue !important;
-    color: $white !important;
+    background-color: #1f7ed0 !important;
+    color: white !important;
     font-weight: 500 !important;
     box-sizing: border-box;
     position: relative;
@@ -195,29 +221,7 @@
     width: 550%;
   }
 
-  .info {
-    input {
-      border: none;
-      width: 100%;
-      background-color: white !important;
-      color: black;
-    }
-
-    select {
-      border: none;
-      width: 100%;
-      background-color: white !important;
-    }
-
-    textarea {
-      border: none;
-      width: 100%;
-      background-color: white !important;
-      color: black;
-    }
-
-    ::ng-deep .mat-select-disabled .mat-select-value {
-      color: black !important;
-    }
+  ::ng-deep .mat-sort-header-arrow {
+    color: white !important;
   }
 }

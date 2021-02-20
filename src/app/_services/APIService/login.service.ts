@@ -6,7 +6,6 @@ import { UserModel } from '../../_models/APIModel/user.model';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';
-import { user_model } from 'src/app/_models/user.model';
 import { error } from 'protractor';
 
 @Injectable({

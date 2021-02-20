@@ -89,34 +89,34 @@ export class ProductManagerComponent implements OnInit {
         this.theYear = this.getCurrentYear();
         this.theMonth = this.getCurrentMonth();
         this.getListProduct();
-        this.getDomesticMarketProduct(this.theMonth, this.theYear);
+        // this.getDomesticMarketProduct(this.theMonth, this.theYear);
         this.keyboardservice.keyBoard.subscribe(res => {
             this.move(res)
         })
     }
     //Function for PROCESS-FLOW------------------------------------------------------------------------------------------
-    public getDomesticMarketProduct(month: number, year: number) {
-        this.managerService.GetProductManager(month, year).subscribe(
-            allrecords => {
-                if (allrecords.data.length > 0) {
-                    this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data);
-                    if (this.dataSource.data.length == 0) {
-                        this.createDefault();
-                        this.modeQuery = MODE.INSERT;
-                    } else {
-                        this.modeQuery = MODE.UPDATE;
-                    }
-                    this.dataSource.paginator = this.paginator;
-                    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                    this.paginator._intl.firstPageLabel = "Trang Đầu";
-                    this.paginator._intl.lastPageLabel = "Trang Cuối";
-                    this.paginator._intl.previousPageLabel = "Trang Trước";
-                    this.paginator._intl.nextPageLabel = "Trang Tiếp";
-                }
-            },
-            //error => this.errorMessage = <any>error
-        );
-    }
+    // public getDomesticMarketProduct(month: number, year: number) {
+    //     this.managerService.GetProductManager(month, year).subscribe(
+    //         allrecords => {
+    //             if (allrecords.data.length > 0) {
+    //                 this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data);
+    //                 if (this.dataSource.data.length == 0) {
+    //                     this.createDefault();
+    //                     this.modeQuery = MODE.INSERT;
+    //                 } else {
+    //                     this.modeQuery = MODE.UPDATE;
+    //                 }
+    //                 this.dataSource.paginator = this.paginator;
+    //                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    //                 this.paginator._intl.firstPageLabel = "Trang Đầu";
+    //                 this.paginator._intl.lastPageLabel = "Trang Cuối";
+    //                 this.paginator._intl.previousPageLabel = "Trang Trước";
+    //                 this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    //             }
+    //         },
+    //         //error => this.errorMessage = <any>error
+    //     );
+    // }
     //Event "Chọn năm"
     public chosenYearHandler(normalizedYear: Moment) {
         const ctrlValue = this.date.value;
@@ -132,7 +132,7 @@ export class ProductManagerComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theMonth = normalizedMonth.month() + 1;
         datepicker.close();
-        this.getDomesticMarketProduct(this.theMonth, this.theYear);
+        // this.getDomesticMarketProduct(this.theMonth, this.theYear);
         return this.theMonth as number
     }
     //Add event
@@ -140,7 +140,7 @@ export class ProductManagerComponent implements OnInit {
         let time = event.value;
         let year = time.getFullYear();
         let month = time.getMonth();
-        this.marketService.GetExportedValue(month, year);
+        // this.marketService.GetExportedValue(month, year);
     }
 
     //Event for "Tải template"

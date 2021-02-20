@@ -6,7 +6,6 @@ import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { registration_management } from "../../../../../_models/APIModel/ecommerce.model";
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
@@ -29,8 +28,7 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   filterModel: SaleWebsiteFilterModel = { id_quan_huyen: [] };
   constructor(
     public excelService: ExcelService,
-    public sctService: SCTService, 
-    private _breadCrumService: BreadCrumService) { }
+    public sctService: SCTService) { }
 
   ngOnInit() {
     this.GetDanhSachWebsiteTMDT();
@@ -43,7 +41,6 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
     this._linkOutput.title = this.TITLE_DEFAULT;
     this._linkOutput.text = this.TEXT_DEFAULT;
     this._linkOutput.type = type;
-    this._breadCrumService.sendLink(this._linkOutput);
   }
 
   districts: District[] = [
@@ -76,7 +73,7 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   ExportTOExcel(filename: string, sheetname: string) {
-      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   GetDanhSachWebsiteTMDT() {
@@ -124,17 +121,17 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
     })
     return temp;
   }
-  
+
   @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
   allSelected = false;
   toggleAllSelection() {
-      this.allSelected = !this.allSelected;  // to control select-unselect
+    this.allSelected = !this.allSelected;  // to control select-unselect
 
-      if (this.allSelected) {
-          this.dSelect.options.forEach((item: MatOption) => item.select());
-      } else {
-          this.dSelect.options.forEach((item: MatOption) => item.deselect());
-      }
-      this.dSelect.close();
+    if (this.allSelected) {
+      this.dSelect.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.dSelect.options.forEach((item: MatOption) => item.deselect());
+    }
+    this.dSelect.close();
   }
 }

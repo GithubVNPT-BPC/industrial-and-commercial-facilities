@@ -13,14 +13,14 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Ngày cập nhật giá</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.date"
-                        (ngModelChange)="getPriceChange($event)" style="width: 120%;">
+                        (ngModelChange)="getPriceChange($event)">
                     <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
             </div>
             <div class="col-lg-10 button-control my-auto">
                 <button *ngIf="!_noData" mat-raised-button
-                    (click)="exportTOExcel('Giá cả quốc tế',timeDomesticPrice)">Xuất Excel</button>
+                    (click)="exportTOExcel('Thông tin giá cả quốc tế','Thông tin giá cả quốc tế')">Xuất Excel</button>
             </div>
         </div>
         <div class="layout" #TABLE>
@@ -42,14 +42,20 @@
                     <td mat-cell *matCellDef="let element"> {{element.ten_san_pham}} </td>
                 </ng-container>
 
+                <ng-container matColumnDef="don_vi_tinh">
+                    <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
+                    <td mat-cell *matCellDef="let element"> {{element.don_vi_tinh}}</td>
+                </ng-container>
+
                 <ng-container matColumnDef="thi_truong">
                     <th mat-header-cell *matHeaderCellDef>Thị trường</th>
                     <td mat-cell *matCellDef="let element"> {{element.thi_truong }} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="gia">
-                    <th mat-header-cell *matHeaderCellDef> Giá <br> (USD/Tấn) </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.gia | number: '1.0-4':'vi'}} </td>
+                <ng-container matColumnDef="gia_ca">
+                    <th mat-header-cell *matHeaderCellDef> Giá </th>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.gia_ca | number: '1.0-4':'vi'}}
+                    </td>
                 </ng-container>
 
                 <ng-container matColumnDef="nguon_so_lieu">

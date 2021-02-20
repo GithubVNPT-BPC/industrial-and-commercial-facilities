@@ -87,7 +87,7 @@ export class ImportManagerComponent implements OnInit {
         this.getListProduct();
         this.theYear = this.getCurrentYear();
         this.theMonth = this.getCurrentMonth();
-        this.getDomesticMarketImport(this.theMonth, this.theYear);
+        // this.getDomesticMarketImport(this.theMonth, this.theYear);
         this.keyboardservice.keyBoard.subscribe(res => {
             this.move(res)
         })
@@ -98,37 +98,37 @@ export class ImportManagerComponent implements OnInit {
         this.managerService.GetListProduct().subscribe(
             allrecords => {
                 this.products = allrecords.data as ProductManagerModelList[];
-               // this.createDefault();
+                // this.createDefault();
             },
         );
     }
-    public getDomesticMarketImport(month: number, year: number) {
-        this.marketService.GetImportedValue(month, year).subscribe(
-            allrecords => {
-                this.dataSource = new MatTableDataSource<ImportMarketModel>(allrecords.data);
-                this.rows = this.dataSource.filteredData.length;
-                if (allrecords.data.length != 0) {
-                    allrecords.data.forEach(element => {
-                        element.san_luong = element.san_luong || 0;
-                        element.tri_gia = element.tri_gia || 0;
-                        element.san_luong_ct = element.san_luong_ct || 0;
-                        element.tri_gia_ct = element.tri_gia_ct || 0;
-                    });
-                    this.modeQuery = MODE.UPDATE;
-                }
-                else {
-                    this.createDefault();
-                    this.modeQuery = MODE.INSERT;
-                }
-                this.dataSource.paginator = this.paginator;
-                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                this.paginator._intl.firstPageLabel = "Trang Đầu";
-                this.paginator._intl.lastPageLabel = "Trang Cuối";
-                this.paginator._intl.previousPageLabel = "Trang Trước";
-                this.paginator._intl.nextPageLabel = "Trang Tiếp";
-            }
-        );
-    }
+    // public getDomesticMarketImport(month: number, year: number) {
+    //     this.marketService.GetImportedValue(month, year).subscribe(
+    //         allrecords => {
+    //             this.dataSource = new MatTableDataSource<ImportMarketModel>(allrecords.data);
+    //             this.rows = this.dataSource.filteredData.length;
+    //             if (allrecords.data.length != 0) {
+    //                 allrecords.data.forEach(element => {
+    //                     element.san_luong = element.san_luong || 0;
+    //                     element.tri_gia = element.tri_gia || 0;
+    //                     element.san_luong_ct = element.san_luong_ct || 0;
+    //                     element.tri_gia_ct = element.tri_gia_ct || 0;
+    //                 });
+    //                 this.modeQuery = MODE.UPDATE;
+    //             }
+    //             else {
+    //                 this.createDefault();
+    //                 this.modeQuery = MODE.INSERT;
+    //             }
+    //             this.dataSource.paginator = this.paginator;
+    //             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    //             this.paginator._intl.firstPageLabel = "Trang Đầu";
+    //             this.paginator._intl.lastPageLabel = "Trang Cuối";
+    //             this.paginator._intl.previousPageLabel = "Trang Trước";
+    //             this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    //         }
+    //     );
+    // }
     //Function for Event HTML ----------------------------------------------------------------------------------------------
     //Evemt "Lọc dữ liệu"
     public applyFilter(event: Event) {
@@ -174,7 +174,7 @@ export class ImportManagerComponent implements OnInit {
         this.theMonth = normalizedMonth.month() + 1;
         datepicker.close();
         //
-        this.getDomesticMarketImport(this.theMonth, this.theYear);
+        // this.getDomesticMarketImport(this.theMonth, this.theYear);
         return this.theMonth as number
     }
     //Event "Top Doanh Nghiệp"

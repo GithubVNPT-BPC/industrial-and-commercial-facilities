@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-
 import { ReportService } from '../../../../_services/APIService/report.service';
-
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject } from '../../../../_models/APIModel/report.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -57,16 +55,6 @@ export class FillSelectReportComponent implements OnInit {
     this.years = this.InitialYears();
   }
 
-  ExportTOExcel(filename: string, sheetname: string) {
-    // sheetname = sheetname.replace('/', '_');
-    // let excelFileName: string = filename + '.xlsx';
-    // const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    // const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    // XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    // /* save to file */
-    // XLSX.writeFile(wb, excelFileName);
-  }
-
   GetReportByPeriod(period: string, year: number, detailPeriod: number) {
     switch (period) {
       case "Tháng":
@@ -106,18 +94,6 @@ export class FillSelectReportComponent implements OnInit {
         );
         break;
       case "Năm":
-        // const object: ReportOject[] = [{ obj_id: 9475806, obj_code: 'BAO_CAO_01', obj_name: "Báo cáo 1", start_date: Date.now.toString(), end_date: Date.now.toString() },
-        // { obj_id: 124, obj_code: 'BAO_CAO_02', obj_name: "Báo cáo 2", start_date: Date.now.toString(), end_date: Date.now.toString() },
-        // { obj_id: 125, obj_code: 'BAO_CAO_03', obj_name: "Báo cáo 3", start_date: Date.now.toString(), end_date: Date.now.toString() },]
-        // this.dataSource = new MatTableDataSource<ReportOject>(object);
-        // this.dataSource.paginator = this.paginator;
-        // if (this.paginator) {
-        //   this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-        //   this.paginator._intl.firstPageLabel = "Trang Đầu";
-        //   this.paginator._intl.lastPageLabel = "Trang Cuối";
-        //   this.paginator._intl.previousPageLabel = "Trang Trước";
-        //   this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        // }
         this.reportSevice.GetList_ReportYear(year, this.org_id).subscribe(
           allrecords => {
             this.dataSource = new MatTableDataSource<ReportOject>(allrecords.data);
@@ -183,18 +159,7 @@ export class FillSelectReportComponent implements OnInit {
         break;
     }
   }
-  // changeMonth() {
-  //   this.GetReportByPeriod("Tháng", this.selectedYear, this.selectedMonth);
-  // }
-  // changeQuarter() {
-  //   this.GetReportByPeriod("Quý", this.selectedYear, this.selectedQuarter);
-  // }
-  // changeHalf() {
-  //   this.GetReportByPeriod("6 Tháng", this.selectedYear, this.selectedMonth);
-  // }
-  // changeYear() {
-  //   this.GetReportByPeriod("Năm", this.selectedYear, this.selectedMonth);
-  // }
+
   OpenDetailObject(obj_id: number) {
     var time_id = "";
     switch (this.selectedPeriod) {
@@ -214,12 +179,10 @@ export class FillSelectReportComponent implements OnInit {
       default:
         break;
     }
-    //window.open(this.router.url, '_blank');
     const url = this.router.serializeUrl(
       this.router.createUrlTree([encodeURI('#') + '/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
     );
     window.open(url.replace('%23', '#'), "_blank");
-    //this.router.navigate(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } });
   }
 
   GetCurrentMonth() {
