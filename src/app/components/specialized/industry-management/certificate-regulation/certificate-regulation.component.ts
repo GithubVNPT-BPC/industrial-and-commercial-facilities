@@ -5,6 +5,7 @@ import { certificate_regulation } from 'src/app/_models/APIModel/certificate-reg
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { SCTService } from 'src/app/_services/APIService/sct.service';
 
 @Component({
   selector: 'app-certificate-regulation',
@@ -27,7 +28,7 @@ export class CertificateRegulationComponent implements OnInit {
     'email', 'dien_thoai', 'ban_cong_bo_hop_quy', 'ngay_tiep_nhan_cong_bo', 'nhan_san_pham', 'tieu_chuan_san_pham_ap_dung', 'noi_cap',
   ];
   //TS & HTML Variable
-  public dataSource: MatTableDataSource<certificate_regulation> = new MatTableDataSource<certificate_regulation>();
+  public dataSource: MatTableDataSource<certificate_regulation>;
   public filteredDataSource: MatTableDataSource<certificate_regulation> = new MatTableDataSource<certificate_regulation>();
   public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
   { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
@@ -41,61 +42,61 @@ export class CertificateRegulationComponent implements OnInit {
   { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
   { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
 
-  public data: Array<certificate_regulation> =
-    [
-      {
-        ma_so_thue: '0316040707',
-        ten_doanh_nghiep: 'Công ty TNHH rượu thảo dược Vạn Niên Tùng',
-        loai_san_pham: 'THỰC PHẨM',
-        san_pham_cong_bo: 'Rượu thảo dược Vạn Niên Tùng: cốt chanh dây; cốt khổ hoa rừng, cốt mè đen, cốt nhàu, cốt tỏi',
-        email: 'info@vannientungwine.com',
-        dien_thoai: '0972194333',
-        ban_cong_bo_hop_quy: 'Số 01/VNT/2020; 02/VNT/2020; 03/VNT/2020; 04/VNT/2020; 05/VNT/2020',
-        ngay_tiep_nhan_cong_bo: '17/8/2020',
-        nhan_san_pham: 'assets/img/CBHQ/CBHQ1.png',
-        tieu_chuan_san_pham_ap_dung: null,
-        noi_cap: 'Số KT3 Trung tâm kỹ thuật đo lường chất lượng 3'
-      },
-      {
-        ma_so_thue: '3801068196',
-        ten_doanh_nghiep: 'Công ty TNHH MTV SX tinh bột mì Đạt Thành',
-        loai_san_pham: 'THỰC PHẨM',
-        san_pham_cong_bo: 'Tinh bột mì ướt',
-        email: null,
-        dien_thoai: '0918649401',
-        ban_cong_bo_hop_quy: 'Số 01/CTY-ĐT/2019',
-        ngay_tiep_nhan_cong_bo: '21/10/2019',
-        nhan_san_pham: null,
-        tieu_chuan_san_pham_ap_dung: null,
-        noi_cap: 'Trung tâm kỹ thuật đo lường chất lượng 3'
-      },
-      {
-        ma_so_thue: '3800346919',
-        ten_doanh_nghiep: 'Công ty cổ phần Ong Mật Bình  Phước',
-        loai_san_pham: 'THỰC PHẨM',
-        san_pham_cong_bo: 'Mật ong lên men Cashew; Mật ong lên men báo gấm',
-        email: null,
-        dien_thoai: '0888439479',
-        ban_cong_bo_hop_quy: 'Số 01/BP/2020; 02/BP/2020',
-        ngay_tiep_nhan_cong_bo: '09/7/2020',
-        nhan_san_pham: 'assets/img/CBHQ/CBHQ2.png',
-        tieu_chuan_san_pham_ap_dung: null,
-        noi_cap: 'Trung tâm chứng nhận phù hộp Quacert'
-      },
-      {
-        ma_so_thue: '3801221461',
-        ten_doanh_nghiep: 'Công ty cổ phần đầu tư Sơn Phát Bình Phước',
-        loai_san_pham: 'MAY MẶC',
-        san_pham_cong_bo: 'Khẩu trang 4 lớp dùng một lần; khẩu trang 3 lớp dùng  một lần',
-        email: null,
-        dien_thoai: null,
-        ban_cong_bo_hop_quy: 'Số3801221461/SPBP/0108143074',
-        ngay_tiep_nhan_cong_bo: '01/9/2020',
-        nhan_san_pham: 'assets/img/CBHQ/CBHQ3.png',
-        tieu_chuan_san_pham_ap_dung: 'TCCS01:2020/SPBP',
-        noi_cap: 'TQC.5.1974 ngày 21/8/2020 do TT kiểm nghiệm và chứng  nhận chất lượng TQC'
-      }
-    ]
+  // public data: Array<certificate_regulation> =
+  //   [
+  //     {
+  //       ma_so_thue: '0316040707',
+  //       ten_doanh_nghiep: 'Công ty TNHH rượu thảo dược Vạn Niên Tùng',
+  //       loai_san_pham: 'THỰC PHẨM',
+  //       san_pham_cong_bo: 'Rượu thảo dược Vạn Niên Tùng: cốt chanh dây; cốt khổ hoa rừng, cốt mè đen, cốt nhàu, cốt tỏi',
+  //       email: 'info@vannientungwine.com',
+  //       dien_thoai: '0972194333',
+  //       ban_cong_bo_hop_quy: 'Số 01/VNT/2020; 02/VNT/2020; 03/VNT/2020; 04/VNT/2020; 05/VNT/2020',
+  //       ngay_tiep_nhan_cong_bo: '17/8/2020',
+  //       nhan_san_pham: 'assets/img/CBHQ/CBHQ1.png',
+  //       tieu_chuan_san_pham_ap_dung: null,
+  //       noi_cap: 'Số KT3 Trung tâm kỹ thuật đo lường chất lượng 3'
+  //     },
+  //     {
+  //       ma_so_thue: '3801068196',
+  //       ten_doanh_nghiep: 'Công ty TNHH MTV SX tinh bột mì Đạt Thành',
+  //       loai_san_pham: 'THỰC PHẨM',
+  //       san_pham_cong_bo: 'Tinh bột mì ướt',
+  //       email: null,
+  //       dien_thoai: '0918649401',
+  //       ban_cong_bo_hop_quy: 'Số 01/CTY-ĐT/2019',
+  //       ngay_tiep_nhan_cong_bo: '21/10/2019',
+  //       nhan_san_pham: null,
+  //       tieu_chuan_san_pham_ap_dung: null,
+  //       noi_cap: 'Trung tâm kỹ thuật đo lường chất lượng 3'
+  //     },
+  //     {
+  //       ma_so_thue: '3800346919',
+  //       ten_doanh_nghiep: 'Công ty cổ phần Ong Mật Bình  Phước',
+  //       loai_san_pham: 'THỰC PHẨM',
+  //       san_pham_cong_bo: 'Mật ong lên men Cashew; Mật ong lên men báo gấm',
+  //       email: null,
+  //       dien_thoai: '0888439479',
+  //       ban_cong_bo_hop_quy: 'Số 01/BP/2020; 02/BP/2020',
+  //       ngay_tiep_nhan_cong_bo: '09/7/2020',
+  //       nhan_san_pham: 'assets/img/CBHQ/CBHQ2.png',
+  //       tieu_chuan_san_pham_ap_dung: null,
+  //       noi_cap: 'Trung tâm chứng nhận phù hộp Quacert'
+  //     },
+  //     {
+  //       ma_so_thue: '3801221461',
+  //       ten_doanh_nghiep: 'Công ty cổ phần đầu tư Sơn Phát Bình Phước',
+  //       loai_san_pham: 'MAY MẶC',
+  //       san_pham_cong_bo: 'Khẩu trang 4 lớp dùng một lần; khẩu trang 3 lớp dùng  một lần',
+  //       email: null,
+  //       dien_thoai: null,
+  //       ban_cong_bo_hop_quy: 'Số3801221461/SPBP/0108143074',
+  //       ngay_tiep_nhan_cong_bo: '01/9/2020',
+  //       nhan_san_pham: 'assets/img/CBHQ/CBHQ3.png',
+  //       tieu_chuan_san_pham_ap_dung: 'TCCS01:2020/SPBP',
+  //       noi_cap: 'TQC.5.1974 ngày 21/8/2020 do TT kiểm nghiệm và chứng  nhận chất lượng TQC'
+  //     }
+  //   ]
 
   //Only TS Variable
   years: number[] = [];
@@ -104,17 +105,25 @@ export class CertificateRegulationComponent implements OnInit {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
-  constructor(public excelService: ExcelService,) {
+  constructor(
+    public excelService: ExcelService,
+    private sctService: SCTService
+  ) {
   }
 
   ngOnInit() {
     this.years = this.getYears();
-
-    this.dataSource.data = this.data;
-    this.filteredDataSource.data = [...this.dataSource.data];
+    this.LayDuLieu();
+    
     this.caculatorValue();
     this.paginatorAgain();
     this.autoOpen();
+  }
+  LayDuLieu() {
+    this.sctService.LaydulieuCongBoHopQuy().subscribe(res => {
+      this.dataSource = new MatTableDataSource<certificate_regulation>(res['data']);
+      this.filteredDataSource = new MatTableDataSource<certificate_regulation>(res['data']);
+    })
   }
 
   autoOpen() {

@@ -113,7 +113,7 @@
                         <ng-container matColumnDef="ten_cum_cn" sticky>
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Tên, địa điểm CCN </th>
                             <td mat-cell *matCellDef="let element" id="jump">
-                                <div class="view-detail" (click)="openDetailCluster(element.id)">{{element.ten_cum_cn}}
+                                <div class="view-detail" (click)="openDetailCluster(element.id)">{{element.ten_cum}}
                                 </div>
                             </td>
                         </ng-container>
@@ -121,12 +121,12 @@
                         <ng-container matColumnDef="dien_tich_qh">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Diện tích theo quy hoạch (ha)
                             </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_qh}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_theo_qh}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="dien_tich_tl">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Diện tích đã thành lập(ha) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_tl}}</td>
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Diện tích đã thành lập (ha) </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_da_thanh_lap}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="chu_dau_tu">
@@ -141,22 +141,22 @@
 
                         <ng-container matColumnDef="dien_tich_da_dang_dau_tu">
                             <th mat-header-cell *matHeaderCellDef> Diện tích đã và đang ĐT HT </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_da_dang_dau_tu}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_ddtht}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_hien_trang_ha_tang">
                             <th mat-header-cell *matHeaderCellDef> Hiện trạng đầu tư hạ tầng </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ten_hien_trang_ha_tang}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.hien_trang_dau_tu_ha_tang}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_hien_trang_xlnt">
                             <th mat-header-cell *matHeaderCellDef> Hiện trạng đầu tư hệ thống XLNT chung </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ten_hien_trang_xlnt}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.hien_trang_dau_tu_he_thong_xu_ly_nuoc_thai}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tong_von_dau_tu">
                             <th mat-header-cell *matHeaderCellDef> Tổng vốn đầu tư (tỷ đồng) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tong_von_dau_tu}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.nhu_cau_von}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tinh_hinh_dau_tu">

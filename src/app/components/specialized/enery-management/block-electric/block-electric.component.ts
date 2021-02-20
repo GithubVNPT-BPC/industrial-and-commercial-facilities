@@ -4,6 +4,7 @@ import { BlockElectricModel } from 'src/app/_models/APIModel/electric-management
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import {dataBlockElectric} from './data'
+import { EnergyService } from 'src/app/_services/APIService/energy.service';
 @Component({
   selector: 'app-block-electric',
   templateUrl: './block-electric.component.html',
@@ -36,7 +37,7 @@ export class BlockElectricComponent implements OnInit {
   { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
   { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
   { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-  public data: Array<BlockElectricModel> = dataBlockElectric
+  // public data: Array<BlockElectricModel> = dataBlockElectric
   //Only TS Variable
   years: number[] = [];
   doanhThu: number;
@@ -44,16 +45,16 @@ export class BlockElectricComponent implements OnInit {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
-  constructor(public excelService: ExcelService,) {
+  currentYear: number = new Date().getFullYear();
+  constructor(
+    public excelService: ExcelService,
+    private energyService: EnergyService
+    ) {
   }
 
   ngOnInit() {
     this.years = this.getYears();
-
-    this.dataSource.data = this.data;
-    this.filteredDataSource.data = [...this.dataSource.data];
-    this.caculatorValue();
-    this.paginatorAgain();
+    this.getDataBlockElectric(this.currentYear);
     this.autoOpen();
   }
 
@@ -76,8 +77,13 @@ export class BlockElectricComponent implements OnInit {
   getYears() {
     return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
   }
-  getValueOfHydroElectric(value: any) {
-
+  getDataBlockElectric(value: any) {
+    this.energyService.LayDuLieuDienSinhKhoi(this.currentYear).subscribe(res => {
+      this.filteredDataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
+      this.dataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
+      this.caculatorValue();
+      this.paginatorAgain();
+    })
   }
   // applyDistrictFilter(event) {
   //   let filteredData = [];
@@ -111,7 +117,7 @@ export class BlockElectricComponent implements OnInit {
   caculatorValue() {
     this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
-    this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_xuat_thiet_ke).reduce((a, b) => a + b) : 0;
+    this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
     this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
   }
   // isHidden(row : any){
