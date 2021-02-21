@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { FoodIndustryModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -96,6 +97,26 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            san_luong: new FormControl(),
+            cong_suat: new FormControl(),
+        }
+    }
+
+    prepareData(data) {
+        data = {...data, ...{
+            tinh_trang_hoat_dong: "true",
+            time_id: this.currentYear,
+        }}
+        return data;        
+    }
+
+    callService(data) {
+        this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     GetFoodIndustryData(time_id) {

@@ -11,6 +11,8 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
 
+import moment from 'moment';
+
 export abstract class BaseComponent implements OnInit {
 
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
@@ -26,6 +28,7 @@ export abstract class BaseComponent implements OnInit {
     public formParams: any;
     public view = 'list';
     public errorMessage: any;
+    public currentYear = moment().format('yyyy');
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);

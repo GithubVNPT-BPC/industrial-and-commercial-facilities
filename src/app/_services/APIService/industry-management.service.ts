@@ -25,6 +25,8 @@ export class IndustryManagementService {
 
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
+    private urlPostLPGManagement = '/lpg';
+    private urlPostFoodIndustry = '/cntp';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -76,6 +78,24 @@ export class IndustryManagementService {
 
     public PostChemicalManagementQty(datas, time_id) {
         let apiUrl = this.endpoint + this.urlPostChemicalManagementQty;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostLPGManagement(datas, time_id) {
+        let apiUrl = this.endpoint + this.urlPostLPGManagement;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostFoodIndustry(datas, time_id) {
+        let apiUrl = this.endpoint + this.urlPostFoodIndustry;
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),

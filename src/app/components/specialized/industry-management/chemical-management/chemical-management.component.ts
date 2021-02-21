@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
-import { FormBuilder, FormControl, FormArray } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -98,22 +98,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     public switchView() {
         super.switchView();
-        if (this.chemistryNameList.length == 0) {
-            this.getChemicalNameListData();
-        }
-    }
-
-    getFormParams() {
-        return {
-            mst: new FormControl(),
-            details: this.formBuilder.array([
-                this.formBuilder.group({
-                    id_hoa_chat: [],
-                    san_luong: [],
-                    cong_suat: [],
-                })
-            ])
-        }
+        if (this.chemistryNameList.length == 0) this.getChemicalNameListData();
     }
 
     private addQtyRow(event) {
@@ -136,19 +121,31 @@ export class ChemicalManagementComponent extends BaseComponent {
         this.formData.get('details').removeAt(index);
     }
 
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            details: this.formBuilder.array([
+                this.formBuilder.group({
+                    id_hoa_chat: [],
+                    san_luong: [],
+                    cong_suat: [],
+                })
+            ])
+        }
+    }
+
     prepareData(data) {
         let details = data.details;
-
         details.map(e => {
             e['mst'] = data['mst'];
-            e['time_id'] = this.year;
+            e['time_id'] = this.currentYear;
         });
 
         data = {
             chemistryData : {
                 mst: data.mst,
-                id_trang_thai: 1,
-                time_id: this.year,
+                tinh_trang_hoat_dong: "true",
+                time_id: this.currentYear,
             },
             chemistryQtyData : details,
         }
@@ -158,8 +155,8 @@ export class ChemicalManagementComponent extends BaseComponent {
     callService(data) {
         let chemistryData = data.chemistryData;
         let chemistryQtyData = data.chemistryQtyData;
-        this.industryManagementService.PostChemicalManagement([chemistryData], this.year).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-        this.industryManagementService.PostChemicalManagementQty(chemistryQtyData, this.year).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostChemicalManagement([chemistryData], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostChemicalManagementQty(chemistryQtyData, this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
     
     applyFilter(event: Event) {
