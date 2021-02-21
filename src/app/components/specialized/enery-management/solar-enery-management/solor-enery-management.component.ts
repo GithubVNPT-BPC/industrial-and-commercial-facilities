@@ -1,5 +1,5 @@
-import { Component, ViewChild, Injector, ElementRef } from '@angular/core';
-import { MatAccordion, MatOption, MatPaginator, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
+import { Component, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SolarEneryManagementModel } from 'src/app/_models/APIModel/electric-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
@@ -100,7 +100,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
   }
 
   callService(data) {
-      this.energyService.PostSolarEnergydata([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+      this.energyService.PostSolarEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   applyDistrictFilter(event) {

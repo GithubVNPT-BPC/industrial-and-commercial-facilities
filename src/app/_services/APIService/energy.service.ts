@@ -26,8 +26,9 @@ export class EnergyService {
     private urlTuVanDien = "/cphd";
 
     // POST api
-    private urlPostSolarEnergydata = '/dmt';
-    private urlPost;
+    private urlPostSolarEnergyData = '/dmt';
+    private urlPostHydroEnergyData = '/thuy-dien';
+    private urlPostBlockElectricData = '/dsk';
 
     token: any;
     username: any;
@@ -106,8 +107,28 @@ export class EnergyService {
     }
 
     // POST method
-    PostSolarEnergydata(datas, time_id) {
-        let apiUrl = this.apiNangLuong + this.urlPostSolarEnergydata;
+    PostSolarEnergyData(datas, time_id) {
+        let apiUrl = this.apiNangLuong + this.urlPostSolarEnergyData;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    PostHydroEnergyData(datas, time_id) {
+        let apiUrl = this.apiNangLuong + this.urlPostHydroEnergyData;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    PostBlockElectricData(datas, time_id) {
+        let apiUrl = this.apiNangLuong + this.urlPostBlockElectricData;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         // let params = new HttpParams().set('time_id', time_id.toString());
