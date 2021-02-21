@@ -49,6 +49,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     
     years: number[] = [];
+    year : number;
     districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
     { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
@@ -63,7 +64,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     isChecked: boolean;
     sanLuongBotMy: number = 0;
     sanLuongRuou: number = 0;
-    year : number;
+    
 
     constructor(
         private injector: Injector,

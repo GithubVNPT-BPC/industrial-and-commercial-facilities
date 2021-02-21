@@ -28,7 +28,7 @@ export abstract class BaseComponent implements OnInit {
     public formParams: any;
     public view = 'list';
     public errorMessage: any;
-    public currentYear = moment().format('yyyy');
+    public currentYear = new Date().getFullYear();
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
