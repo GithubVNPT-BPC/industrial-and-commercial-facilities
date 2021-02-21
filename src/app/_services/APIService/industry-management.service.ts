@@ -18,19 +18,31 @@ export class IndustryManagementService {
 
     private endpoint = environment.apiEndpoint + "api/qlcn";
 
-    private urlChemicalManagement = '/hoa-chat';
+    private urlGetChemicalManagement = '/hoa-chat';
+    private urlGetChemicalNames = '/danh-sach-hoa-chat';
     private urlGetFoodIndustry = '/cntp';
     private urlGetLPGManagement = '/lpg';
+
+    private urlPostChemicalManagement = '/hoa-chat';
+    private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
     }
 
+    // GET methods
     public GetChemicalManagement(time_id) {
-        var apiUrl = this.endpoint + this.urlChemicalManagement;
+        var apiUrl = this.endpoint + this.urlGetChemicalManagement;
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetChemicalNameList() {
+        var apiUrl = this.endpoint + this.urlGetChemicalNames;
+        return this.http.get<any>(apiUrl, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -47,6 +59,26 @@ export class IndustryManagementService {
         var apiUrl = this.endpoint + this.urlGetLPGManagement;
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // POST methods
+
+    public PostChemicalManagement(datas, time_id) {
+        let apiUrl = this.endpoint + this.urlPostChemicalManagement;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostChemicalManagementQty(datas, time_id) {
+        let apiUrl = this.endpoint + this.urlPostChemicalManagementQty;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

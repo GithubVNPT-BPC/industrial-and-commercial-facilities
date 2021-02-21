@@ -42,6 +42,68 @@ export abstract class BaseComponent implements OnInit {
         this.initFormDatas();
     }
 
+    public initFormDatas() {
+        let datas = this.getFormParams();
+        this.formData = this.formBuilder.group(datas);
+    }
+
+    public getFormParams() {
+        return {};
+    }
+
+    public autoOpen() {
+        setTimeout(() => this.accordion.openAll(), 1000);
+    }
+
+    public switchView() {
+        if (this.view == 'list') {
+            this.view = 'form';
+        } else {
+            this.view = 'list';
+            this.formData.reset();
+            this.autoOpen();
+        }
+    }
+
+    public prepareData(data) { return data }
+
+    public callService(data) {}
+
+    public onCreate() {
+        let data = this.formData.value;
+        data = this.prepareData(data);    
+        this.callService(data);
+    }
+
+    public clearTable(event) {
+        event.preventDefault();
+        this.formData.reset();
+    }
+
+    public resetAll(): void {
+        this.formData.reset();
+        this.switchView();
+        this.ngOnInit();
+    }
+
+    public ExportTOExcel(filename: string, sheetname: string) {
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    public successNotify(response) {
+        if (response.id == -1) {
+            this.logger.msgError("Lưu lỗi! Lý do: " + response.message);
+        }
+        else {
+            this.logger.msgSuccess("Dữ liệu được lưu thành công!");
+            this.resetAll();
+        }
+    }
+
+    public errorNotify(error) {
+        this.logger.msgError("Không thể thực thi! Lý do: \n" + error);
+    }
+
     @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
     allSelected = false;
     toggleAllSelection() {
@@ -85,67 +147,5 @@ export abstract class BaseComponent implements OnInit {
           }
         })
         .catch((err) => console.log('Hủy không thao tác: \n' + err));
-    }
-
-    public initFormDatas() {
-        let datas = this.getFormParams();
-        this.formData = this.formBuilder.group(datas);
-    }
-
-    public getFormParams() {
-        return {};
-    }
-
-    public autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
-    }
-
-    public switchView() {
-        this.view = this.view == 'list' ? 'form': 'list';
-    }
-
-    public prepareData(data) {}
-
-    public callService(data) {}
-
-    public onCreate() {
-        let data = this.formData.value;
-        this.prepareData(data);    
-        this.callService(data);
-    }
-
-    public clearTable(event) {
-        event.preventDefault();
-        this.formData.reset();
-    }
-
-    public switch2ListView(): void {
-        this.formData.reset();
-        this.switchView();
-        this.autoOpen();
-    }
-
-    public resetAll(): void {
-        this.formData.reset();
-        this.switchView();
-        this.ngOnInit();
-    }
-
-    public ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    public successNotify(response) {
-        if (response.id == -1) {
-            this.logger.msgError("Lưu lỗi! Lý do: " + response.message);
-        }
-        else {
-            this.logger.msgSuccess("Dữ liệu được lưu thành công!");
-            this.resetAll();
-        }
-    }
-
-    public errorNotify(error) {
-        this.logger.msgError("Không thể thực thi! Lý do: \n" + error);
     }
 }

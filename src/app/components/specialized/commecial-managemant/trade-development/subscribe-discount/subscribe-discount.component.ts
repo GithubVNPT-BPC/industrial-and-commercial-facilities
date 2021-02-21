@@ -166,6 +166,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     data = {...data, ...{
       id_trang_thai: 1,
     }};
+    return data;
   }
 
   callService(data) {
