@@ -110,9 +110,7 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
 
     getDataElectric110KV() {
         this.energyService.LayDuLieuQuyHoachDien110KV(this.currentYear).subscribe(res => {
-            this.mappingDataSource(res['data']).then(res => {
-                console.log('success')
-            })
+            this.mappingDataSource(res['data'])
         })
     }
 
