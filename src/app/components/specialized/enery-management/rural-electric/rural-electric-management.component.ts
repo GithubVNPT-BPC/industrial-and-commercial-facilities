@@ -61,10 +61,10 @@ export class RuralElectricManagementComponent implements OnInit {
 
   getDataRuralElectric(){
     this.energyService.LayDuLieuQuyHoachDienNongThon().subscribe(res => {
+      this.dataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
       this.filteredDataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
       this.caculatorValue();
       this.paginatorAgain();
-      this.dataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
     })
   }
 
