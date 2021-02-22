@@ -18,7 +18,7 @@ export class ManageApproveHddlComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getDataConsultantElectric();
+    // this.getDataConsultantElectric();
   }
 
   getDataConsultantElectric() {

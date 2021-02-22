@@ -52,6 +52,7 @@ export class SCTService {
     // start api quan huyen
     private apiDanhSach = environment.apiEndpoint + "api/danh-sach";
     private urlQuanHuyen = "/quan-huyen"; 
+    private urlPhuongXa = "/phuong-xa"; 
     // end api quan huyen
 
     token: any;
@@ -134,7 +135,7 @@ export class SCTService {
         );
     }
 
-    public GetDanhSachQuanLyCumCongNghiep(time_id: number) {
+    public GetDanhSachQuanLyCumCongNghiep() {
         var apiUrl = this.apiIndustry + this.urlDanhSachQuanLyCumCongNghiep;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         // let params = new HttpParams().set('time_id', time_id.toString());
@@ -320,6 +321,14 @@ export class SCTService {
 
     LayDanhSachQuanHuyen(){
         var apiUrl = this.apiDanhSach + this.urlQuanHuyen;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    LayDanhSachPhuongXa(){
+        var apiUrl = this.apiDanhSach + this.urlPhuongXa;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

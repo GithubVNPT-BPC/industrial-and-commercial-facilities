@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, Input, Injector } from "@angular/core";
 import {
   MatAccordion,
   MatPaginator,
@@ -10,20 +10,22 @@ import { consualtantData } from "../dataMGN";
 import { ExcelService } from "src/app/_services/excelUtil.service";
 import * as XLSX from "xlsx";
 import { EnergyService } from "src/app/_services/APIService/energy.service";
-import { Observable, of } from "rxjs";
+import { FormControl } from "@angular/forms";
+import { BaseComponent } from "../../../specialized-base.component";
+import { Router } from "@angular/router";
 @Component({
   selector: "app-consultant-electric",
   templateUrl: "./consultant-electric.component.html",
   styleUrls: ["../../../special_layout.scss"],
 })
-export class ConsultantElectricComponent implements OnInit {
-  
+export class ConsultantElectricComponent extends BaseComponent {
+
   //ViewChild
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
+  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild("TABLE", { static: false }) table: ElementRef;
   // Input
-  @Input('consualtantData')  input_data: ManageAproveElectronic[];
+  @Input('consualtantData') input_data: ManageAproveElectronic[];
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
       this.table.nativeElement
@@ -80,36 +82,37 @@ export class ConsultantElectricComponent implements OnInit {
   isChecked: boolean;
 
   constructor(
+    private injector: Injector,
     public excelService: ExcelService,
-    private energyService: EnergyService
-  ) {}
+    private energyService: EnergyService,
+  ) {
+    super(injector);
+  }
 
   ngOnInit() {
+    super.ngOnInit();
     this.getDataConsultantElectric();
-    // this.sequenceSubscriber();
     this.years = this.getYears();
-    this.autoOpen();
   }
 
   getDataConsultantElectric() {
-    // this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
-    //   if (res['success']) {
-    //     this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(res['data']);
-    //     this.dataSource = new MatTableDataSource<ManageAproveElectronic>(res['data']);
-    //     this.caculatorValue();
-    //     this.paginatorAgain();
-    //   }
-    // });
-    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
-    this.dataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
+    this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
+      if (res['success']) {
+        this.handdleData(res['data'], 1);
+      }
+    });
+    // this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
+    // this.dataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
   }
 
-  autoOpen() {
-    setTimeout(() => {
-      this.accordion.openAll()
-      this.paginatorAgain();
-      this.caculatorValue();
-    }, 1000);
+  handdleData(data: ManageAproveElectronic[], id_group: number) {
+    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(data.filter(item => {
+      return item['id_group'] === id_group;
+    }));
+    this.dataSource.data = this.filteredDataSource.data;
+    this.caculatorValue();
+    this.paginatorAgain();
+    // console.log(this.filteredDataSource.data)
   }
 
   applyFilter(event: Event) {
@@ -117,9 +120,9 @@ export class ConsultantElectricComponent implements OnInit {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  get(time_id: number) {}
+  get(time_id: number) { }
 
-  log(any) {}
+  log(any) { }
 
   getYears() {
     return Array(20)
@@ -127,17 +130,16 @@ export class ConsultantElectricComponent implements OnInit {
       .map((element, index) => (new Date().getFullYear() + index - 11))
   }
 
-  LocDulieuTheoNgayCap(year){
+  LocDulieuTheoNgayCap(year) {
     let data_temp = [...this.dataSource.data];
     this.filteredDataSource.data = data_temp;
-    if(year){
+    if (year) {
       this.filteredDataSource.data = this.filteredDataSource.data.filter(item => {
         return item.ngay_cap.includes(year);
       })
     }
   }
-  
-  getValueOfHydroElectric(value: any) {}
+
   // applyDistrictFilter(event) {
   //   let filteredData = [];
 
@@ -157,22 +159,19 @@ export class ConsultantElectricComponent implements OnInit {
   //   this.caculatorValue();
   //   this.paginatorAgain();
   // }
-  paginatorAgain() {
-    if (this.input_data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = "Số hàng";
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
+
   caculatorValue() {
     // this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
     this.handeldateExpired();
     // this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_xuat_thiet_ke).reduce((a, b) => a + b) : 0;
     // this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
+  }
+
+  auto_caculator() {
+    setTimeout(() => {
+      this.caculatorValue();
+    }, 1000);
   }
 
   handeldateExpired() {
@@ -187,14 +186,37 @@ export class ConsultantElectricComponent implements OnInit {
   applyActionCheck(event) {
     let today = new Date();
 
-    if(event.checked){
+    if (event.checked) {
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
         return Date.parse(today.toString()) > Date.parse(e.ngay_het_han)
       })
-    }else{
+    } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
     // this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  getFormParams() {
+    return {
+      ten_doanh_nghiep: new FormControl(''),
+      dia_chi: new FormControl(''),
+      dien_thoai: new FormControl(''),
+      so_giay_phep: new FormControl(''),
+      ngay_cap: new FormControl(''),
+      ngay_het_han: new FormControl(''),
+      id_group: new FormControl(1)
+    }
+  }
+
+  public prepareData(data) {
+  }
+
+  public callService(data) {
+    let list_data = [data];
+    // console.log(list_data)
+    this.energyService.CapNhatDuLieuQuyHoachDienNongThon(list_data).subscribe(res => {
+      this.successNotify(res);
+    })
   }
 }

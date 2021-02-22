@@ -81,7 +81,7 @@ export class ClusterManagementComponent implements OnInit {
         this.showColumns = this.topColumns;
         this.showSubColumns = [];
         this.years = this.getYears();
-        this.getDanhSachQuanLyCumCongNghiep(2020);
+        this.getDanhSachQuanLyCumCongNghiep();
         this.autoOpen();
         this.sendLinkToNext(true);
     }
@@ -113,8 +113,8 @@ export class ClusterManagementComponent implements OnInit {
         setTimeout(() => this.accordion.openAll(), 1000);
     }
 
-    getDanhSachQuanLyCumCongNghiep(time_id: number) {
-        this.sctService.GetDanhSachQuanLyCumCongNghiep(time_id).subscribe(result => {
+    getDanhSachQuanLyCumCongNghiep() {
+        this.sctService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
             // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
             this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
             this.filteredDataSource.data = [...this.dataSource.data];
@@ -187,5 +187,12 @@ export class ClusterManagementComponent implements OnInit {
             }
         })
         return temp;
+    }
+
+    initDistricts() {
+        this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
+            if (res['success'])
+                this.districts = res['data'];
+        })
     }
 }
