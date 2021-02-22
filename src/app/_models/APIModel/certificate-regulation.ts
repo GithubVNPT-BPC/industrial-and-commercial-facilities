@@ -1,14 +1,17 @@
-export class certificate_regulation {
+export class ConformityAnnouncementModel {
+    id: number;
     mst: string;
-    ten_doanh_nghiep: string;
-    id_loai_san_pham: number; // loai_san_pham: string;
-    ten_san_pham // san_pham_cong_bo: string;
+    id_loai_san_pham: number;
+    ten_san_pham: string;
     ban_cong_bo_hop_quy: string;
-    email: string;
-    so_dien_thoai: string;
     ngay_tiep_nhan: string;
-    nhan_san_pham?: string;
+    duong_dan_nhan_san_pham: string;
     tieu_chuan_san_pham: string;
     noi_cap: string;
     ten_loai_san_pham: string;
+    ten_doanh_nghiep: string;
+    dia_chi_day_du: string;
+    id_quan_huyen: number;
+    email: string;
+    so_dien_thoai: string;
 }

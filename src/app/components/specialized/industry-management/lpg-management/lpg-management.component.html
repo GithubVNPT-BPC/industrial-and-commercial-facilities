@@ -146,7 +146,10 @@
                         
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex * this.filteredDataSource.paginator.pageSize}} 
+                            </td>                        
                         </ng-container>
 
                         <div *ngFor="let field of displayedFields | keyvalue">

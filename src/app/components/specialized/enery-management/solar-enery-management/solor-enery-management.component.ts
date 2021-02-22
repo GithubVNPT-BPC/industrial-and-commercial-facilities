@@ -1,12 +1,10 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SolarEneryManagementModel } from 'src/app/_models/APIModel/electric-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 import { FormControl } from '@angular/forms';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -26,8 +24,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
   public dataSource: MatTableDataSource<SolarEneryManagementModel> = new MatTableDataSource<SolarEneryManagementModel>();
   public filteredDataSource: MatTableDataSource<SolarEneryManagementModel> = new MatTableDataSource<SolarEneryManagementModel>();
 
-  public districts: DistrictModel[] = [];
-
   //Only TS Variable
   years: number[] = [];
   doanhThu: number;
@@ -41,7 +37,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     private _breadCrumService: BreadCrumService,
-    private sctService: SCTService,
     private energyService: EnergyService
   ) {
       super(injector);
@@ -52,7 +47,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
     this.years = this.getYears();
     this.getSolarEnergyData(this.currentYear);
     this.caculatorValue();
-    this.initDistricts();
   }
 
   getSolarEnergyData(time_id){
@@ -60,12 +54,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
       this.dataSource = new MatTableDataSource<SolarEneryManagementModel>(res.data);
       this.filteredDataSource =  new MatTableDataSource<SolarEneryManagementModel>(res.data);
       this.initPaginator();
-    })
-  }
-
-  initDistricts(){
-    this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
-      this.districts = res.data;
     })
   }
 

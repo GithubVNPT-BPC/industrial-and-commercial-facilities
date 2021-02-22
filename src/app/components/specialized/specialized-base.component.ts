@@ -36,6 +36,10 @@ export abstract class BaseComponent implements OnInit {
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
+
+    public displayedColumns = ['select', 'index'];
+    public displayedFields = {};
+    
     public districts: DistrictModel[] = [];
     public wards: any[] = [];
 
@@ -49,11 +53,19 @@ export abstract class BaseComponent implements OnInit {
 
     ngOnInit() {
         this.autoOpen();
-        this.initFormDatas();
+        this.initListView();
+        this.initFormView();
         this.initDistricts();
     }
 
-    public initFormDatas() {
+    protected initListView() {
+        // In case we have already declared all field in displayed Columns
+        if (this.displayedColumns.length == 2 && Object.keys(this.displayedFields).length > 0) {
+            this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+        }
+    }
+
+    protected initFormView() {
         let datas = this.getFormParams();
         this.formData = this.formBuilder.group(datas);
     }
@@ -175,14 +187,12 @@ export abstract class BaseComponent implements OnInit {
     }
 
     paginatorAgain() {
-        
-            this.filteredDataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = "Số hàng";
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        
+        this.filteredDataSource.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = "Số hàng";
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
     }
 
     autopaging(){
