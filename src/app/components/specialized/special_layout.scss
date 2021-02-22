@@ -24,6 +24,10 @@
         background-color: $red !important;
     }
 
+    .no-space-top {
+        top: 0 !important;
+    }
+
     .mat-paginator {
         margin-top: 10px;
         display: flex;

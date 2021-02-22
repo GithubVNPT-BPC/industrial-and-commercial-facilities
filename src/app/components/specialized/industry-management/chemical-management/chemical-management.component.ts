@@ -24,7 +24,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
     displayedColumns: string[] = [];
-    fullFieldList: string[] = ['select', 'index'] // 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'email_sct', 'so_lao_dong_sct', 'cong_suat','so_giay_phep', 'san_luong', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'cong_suat', 'san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
     
     displayedFields = {

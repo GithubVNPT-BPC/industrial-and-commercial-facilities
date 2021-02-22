@@ -22,11 +22,15 @@ export class IndustryManagementService {
     private urlGetChemicalNames = '/danh-sach-hoa-chat';
     private urlGetFoodIndustry = '/cntp';
     private urlGetLPGManagement = '/lpg';
+    private urlGetComformityAnnounce = '/cbhq';
+    private urlGetExplosiveMat = '/vlncn';
 
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
     private urlPostFoodIndustry = '/cntp';
+    private urlPostComformityAnnounce = '/cbhq';
+    private urlPostExplosiveMat = '/vlncn';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -65,8 +69,23 @@ export class IndustryManagementService {
         );
     }
 
-    // POST methods
+    public GetComformityAnnounce() {
+        var apiUrl = this.endpoint + this.urlGetComformityAnnounce;
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
 
+    public GetExplosiveMat(time_id) {
+        var apiUrl = this.endpoint + this.urlGetExplosiveMat;
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // POST methods
     public PostChemicalManagement(datas, time_id) {
         let apiUrl = this.endpoint + this.urlPostChemicalManagement;
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
@@ -96,6 +115,23 @@ export class IndustryManagementService {
 
     public PostFoodIndustry(datas, time_id) {
         let apiUrl = this.endpoint + this.urlPostFoodIndustry;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostComformityAnnounce(datas) {
+        let apiUrl = this.endpoint + this.urlPostComformityAnnounce;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostExplosiveMat(datas, time_id) {
+        let apiUrl = this.endpoint + this.urlPostExplosiveMat;
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),

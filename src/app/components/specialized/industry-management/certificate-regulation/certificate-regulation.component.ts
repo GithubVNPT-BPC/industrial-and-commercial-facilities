@@ -1,102 +1,37 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { certificate_regulation } from 'src/app/_models/APIModel/certificate-regulation';
-import { LinkModel } from 'src/app/_models/link.model';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
+import { Component, Injector } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material';
+import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificate-regulation';
+
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+
+import moment from 'moment';
 
 @Component({
   selector: 'app-certificate-regulation',
   templateUrl: './certificate-regulation.component.html',
   styleUrls: ['/../../special_layout.scss'],
 })
-export class CertificateRegulationComponent implements OnInit {
-
-  //ViewChild 
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
-
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-  
-  //Constant variable
-  public readonly displayedColumns: string[] = ['index', 'ma_so_thue', 'ten_doanh_nghiep', 'loai_san_pham', 'san_pham_cong_bo',
-    'email', 'dien_thoai', 'ban_cong_bo_hop_quy', 'ngay_tiep_nhan_cong_bo', 'nhan_san_pham', 'tieu_chuan_san_pham_ap_dung', 'noi_cap',
-  ];
+export class CertificateRegulationComponent extends BaseComponent {
   //TS & HTML Variable
-  public dataSource: MatTableDataSource<certificate_regulation>;
-  public filteredDataSource: MatTableDataSource<certificate_regulation> = new MatTableDataSource<certificate_regulation>();
-  public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+  public dataSource: MatTableDataSource<ConformityAnnouncementModel>;
+  public filteredDataSource: MatTableDataSource<ConformityAnnouncementModel>;
 
-  // public data: Array<certificate_regulation> =
-  //   [
-  //     {
-  //       ma_so_thue: '0316040707',
-  //       ten_doanh_nghiep: 'Công ty TNHH rượu thảo dược Vạn Niên Tùng',
-  //       loai_san_pham: 'THỰC PHẨM',
-  //       san_pham_cong_bo: 'Rượu thảo dược Vạn Niên Tùng: cốt chanh dây; cốt khổ hoa rừng, cốt mè đen, cốt nhàu, cốt tỏi',
-  //       email: 'info@vannientungwine.com',
-  //       dien_thoai: '0972194333',
-  //       ban_cong_bo_hop_quy: 'Số 01/VNT/2020; 02/VNT/2020; 03/VNT/2020; 04/VNT/2020; 05/VNT/2020',
-  //       ngay_tiep_nhan_cong_bo: '17/8/2020',
-  //       nhan_san_pham: 'assets/img/CBHQ/CBHQ1.png',
-  //       tieu_chuan_san_pham_ap_dung: null,
-  //       noi_cap: 'Số KT3 Trung tâm kỹ thuật đo lường chất lượng 3'
-  //     },
-  //     {
-  //       ma_so_thue: '3801068196',
-  //       ten_doanh_nghiep: 'Công ty TNHH MTV SX tinh bột mì Đạt Thành',
-  //       loai_san_pham: 'THỰC PHẨM',
-  //       san_pham_cong_bo: 'Tinh bột mì ướt',
-  //       email: null,
-  //       dien_thoai: '0918649401',
-  //       ban_cong_bo_hop_quy: 'Số 01/CTY-ĐT/2019',
-  //       ngay_tiep_nhan_cong_bo: '21/10/2019',
-  //       nhan_san_pham: null,
-  //       tieu_chuan_san_pham_ap_dung: null,
-  //       noi_cap: 'Trung tâm kỹ thuật đo lường chất lượng 3'
-  //     },
-  //     {
-  //       ma_so_thue: '3800346919',
-  //       ten_doanh_nghiep: 'Công ty cổ phần Ong Mật Bình  Phước',
-  //       loai_san_pham: 'THỰC PHẨM',
-  //       san_pham_cong_bo: 'Mật ong lên men Cashew; Mật ong lên men báo gấm',
-  //       email: null,
-  //       dien_thoai: '0888439479',
-  //       ban_cong_bo_hop_quy: 'Số 01/BP/2020; 02/BP/2020',
-  //       ngay_tiep_nhan_cong_bo: '09/7/2020',
-  //       nhan_san_pham: 'assets/img/CBHQ/CBHQ2.png',
-  //       tieu_chuan_san_pham_ap_dung: null,
-  //       noi_cap: 'Trung tâm chứng nhận phù hộp Quacert'
-  //     },
-  //     {
-  //       ma_so_thue: '3801221461',
-  //       ten_doanh_nghiep: 'Công ty cổ phần đầu tư Sơn Phát Bình Phước',
-  //       loai_san_pham: 'MAY MẶC',
-  //       san_pham_cong_bo: 'Khẩu trang 4 lớp dùng một lần; khẩu trang 3 lớp dùng  một lần',
-  //       email: null,
-  //       dien_thoai: null,
-  //       ban_cong_bo_hop_quy: 'Số3801221461/SPBP/0108143074',
-  //       ngay_tiep_nhan_cong_bo: '01/9/2020',
-  //       nhan_san_pham: 'assets/img/CBHQ/CBHQ3.png',
-  //       tieu_chuan_san_pham_ap_dung: 'TCCS01:2020/SPBP',
-  //       noi_cap: 'TQC.5.1974 ngày 21/8/2020 do TT kiểm nghiệm và chứng  nhận chất lượng TQC'
-  //     }
-  //   ]
+  displayedFields = {
+    mst: "Mã số thuế",
+    ten_doanh_nghiep: "Tên doanh nghiệp",
+    dia_chi_day_du: "Địa chỉ",
+    email: "Email",
+    so_dien_thoai: "Số điện thoại",
+    ten_san_pham: 'Sản phẩm',
+    ten_loai_san_pham: "Loại sản phẩm",
+    tieu_chuan_san_pham: 'Tiêu chuẩn sản phẩm',
+    noi_cap: 'Nơi cấp',
+    // duong_dan_nhan_san_pham: "Đường dẫn",
+    ban_cong_bo_hop_quy: "Bản công bố hợp quy",
+    ngay_tiep_nhan: "Ngày tiếp nhận",
+  }
 
   //Only TS Variable
   years: number[] = [];
@@ -105,29 +40,50 @@ export class CertificateRegulationComponent implements OnInit {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+
   constructor(
-    public excelService: ExcelService,
-    private sctService: SCTService
+    private injector: Injector,
+    private industryManagementService: IndustryManagementService
   ) {
+      super(injector);
   }
 
   ngOnInit() {
+    super.ngOnInit();
     this.years = this.getYears();
-    this.LayDuLieu();
-    
-    this.caculatorValue();
-    this.paginatorAgain();
-    this.autoOpen();
+    this.GetComformityAnnounceData(); 
   }
-  LayDuLieu() {
-    this.sctService.LaydulieuCongBoHopQuy().subscribe(res => {
-      this.dataSource = new MatTableDataSource<certificate_regulation>(res['data']);
-      this.filteredDataSource = new MatTableDataSource<certificate_regulation>(res['data']);
+
+  getFormParams() {
+    return {
+      mst: new FormControl(),
+      ten_san_pham: new FormControl(),
+      ban_cong_bo_hop_quy: new FormControl(),
+      ngay_tiep_nhan: new FormControl(),
+      // duong_dan_nhan_san_pham: new FormControl(),
+      tieu_chuan_san_pham: new FormControl(),
+      noi_cap: new FormControl(),
+    }
+  }
+
+  GetComformityAnnounceData() {
+    this.industryManagementService.GetComformityAnnounce().subscribe(res => {
+      if (res.data && res.data.length > 0 ) {
+        this.dataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
+        this.filteredDataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
+        this.caculatorValue();
+        this.paginatorAgain();
+      }
     })
   }
 
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
+  prepareData(data) {
+    data['ngay_tiep_nhan'] = moment(data['ngay_tiep_nhan']).format('DD/MM/yyyy');
+    return data;
+  }
+
+  callService(data) {
+    this.industryManagementService.PostComformityAnnounce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   applyFilter(event: Event) {
@@ -135,40 +91,9 @@ export class CertificateRegulationComponent implements OnInit {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  get(time_id: number) {
-
-  }
-
-  log(any) {
-  }
-
   getYears() {
     return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
   }
-
-  getValueOfHydroElectric(value: any) {
-
-  }
-
-  // applyDistrictFilter(event) {
-  //   let filteredData = [];
-
-  //   event.value.forEach(element => {
-  //     this.dataSource.data.filter(x => x.ma_huyen_thi == element).forEach(x => filteredData.push(x));
-  //   });
-
-  //   if (!filteredData.length) {
-  //     if (event.value.length)
-  //       this.filteredDataSource.data = [];
-  //     else
-  //       this.filteredDataSource.data = this.dataSource.data;
-  //   }
-  //   else {
-  //     this.filteredDataSource.data = filteredData;
-  //   }
-  //   this.caculatorValue();
-  //   this.paginatorAgain();
-  // }
 
   paginatorAgain() {
     if (this.filteredDataSource.data.length) {
@@ -180,12 +105,11 @@ export class CertificateRegulationComponent implements OnInit {
       this.paginator._intl.nextPageLabel = "Trang Tiếp";
     }
   }
+
   caculatorValue() {
-    // this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.Dt).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
-    // this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.Cx).reduce((a, b) => a + b) : 0;
-    // this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.Slnck).reduce((a, b) => a + b) : 0;
   }
+
   isHidden(row: any) {
     return (this.isChecked) ? (row.is_het_han) : false;
   }
