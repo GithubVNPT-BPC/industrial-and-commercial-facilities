@@ -305,7 +305,7 @@
                     <div class="col-md-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
-                                Thông tin chi tiết
+                                Thông tin doanh nghiệp
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
@@ -323,35 +323,19 @@
                                         <input matInput formControlName="dia_diem">
                                     </mat-form-field>
                                 </div>
+                                                        
+                            </div>
+                        </mat-card-content>
+                    </div>
 
-                                <div class="col-lg-6" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Công suất thiết kế</mat-label>
-                                        <input matInput formControlName="cong_suat_thiet_ke">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-lg-6" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Dung tích hồ chứa</mat-label>
-                                        <input matInput formControlName="dung_tich_ho_chua">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-lg-3" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Sản lượng 6 tháng</mat-label>
-                                        <input matInput type="number" formControlName="san_luong_6_thang">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-lg-3" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Sản lượng năm</mat-label>
-                                        <input matInput type="number" formControlName="san_luong_nam">
-                                    </mat-form-field>
-                                </div>
-
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thông số
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
                                 <div class="col-lg-3" >
                                     <mat-form-field appearance="outline"> 
                                         <mat-label>Doanh thu</mat-label>
@@ -359,58 +343,102 @@
                                     </mat-form-field>
                                 </div>
 
+                                <div class="col-lg-3" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Công xuất thiết kế/năm (MW)</mat-label>
+                                        <input matInput formControlName="cong_suat_thiet_ke">
+                                    </mat-form-field>
+                                </div>
+
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Phương án ứng phó thiên tại hạ du</mat-label>
+                                        <mat-label>Dung tích hồ chứa 106 m3</mat-label>
+                                        <input matInput formControlName="dung_tich_ho_chua">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Sản lượng 6 tháng/cùng kỳ
+                                            (triệu KW)</mat-label>
+                                        <input matInput type="number" formControlName="san_luong_6_thang">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Sản lượng năm/cùng kỳ
+                                            (triệu KW)</mat-label>
+                                        <input matInput type="number" formControlName="san_luong_nam">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thông tin chi tiết
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Phương án ứng phó thiên tai cho công trình vùng hạ du
+                                            (trong gđ thi công)</mat-label>
                                         <input matInput formControlName="phuong_an_ung_pho_thien_tai_ha_du">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Phê duyệt phương án ứng phó thiên tai</mat-label>
+                                        <mat-label>Phê duyệt pương án ứng phó thiên tai (năm/lần)</mat-label>
                                         <input matInput formControlName="phe_duyet_phuong_an_ung_pho_thien_tai">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Phương án ứng phó khẩn cấp</mat-label>
+                                        <mat-label>Phương án ứng phó với tình huống khẩn cấp đập, hồ
+                                            chứa thủy điện (năm/lần)</mat-label>
                                         <input matInput formControlName="phuong_an_ung_pho_khan_cap">
                                     </mat-form-field>
                                 </div>
                                 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Quy trình vận hành hồ chứa</mat-label>
+                                        <mat-label>Quy trình vận hành hồ chứa thủy điện (khi có thay
+                                            đổi)</mat-label>
                                         <input matInput formControlName="quy_trinh_van_hanh_ho_chua">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Quan trắc đập hồ</mat-label>
+                                        <mat-label>Quan trắc đập, hồ chứa thủy điện</mat-label>
                                         <input matInput formControlName="quan_trac_dap_ho">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Kiểm định đập</mat-label>
+                                        <mat-label>Kiểm định đập (5 năm/lần)</mat-label>
                                         <input matInput formControlName="kiem_dinh_dap">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Lắp đặt hệ thống cảnh báo hạ du</mat-label>
+                                        <mat-label>Lắp đặt hệ thống cảnh báo vùng hạ du</mat-label>
                                         <input matInput formControlName="lap_dat_he_thong_canh_bao_ha_du">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Báo cáo công trình</mat-label>
+                                        <mat-label>Bảo trì công trình</mat-label>
                                         <input matInput formControlName="bao_trinh_cong_trinh">
                                     </mat-form-field>
                                 </div>
@@ -424,14 +452,14 @@
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Phương án bảo vệ</mat-label>
+                                        <mat-label>Phương án bảo vệ đập, hồ chứa thủy điện</mat-label>
                                         <input matInput formControlName="phuong_an_bao_ve_dap_ho_chua_thuy_dien">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-lg-6" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Báo cáo đánh giá</mat-label>
+                                        <mat-label>Báo cáo đánh giá an toàn đập, hồ chứa thủy điện</mat-label>
                                         <input matInput formControlName="bao_cao_danh_gia_an_toan">
                                     </mat-form-field>
                                 </div>

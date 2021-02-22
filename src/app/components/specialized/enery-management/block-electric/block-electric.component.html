@@ -136,13 +136,10 @@
                 <hr>
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
-                    
-
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table2">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'> {{this.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.paginator.pageIndex * this.paginator.pageSize}}
-                            </td>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_du_an" sticky>
@@ -150,12 +147,12 @@
                             <td mat-cell *matCellDef="let element"> {{element.ten_du_an}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="ten_doanh_nghiep" sticky>
+                        <ng-container matColumnDef="ten_doanh_nghiep" >
                             <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
                             <td mat-cell *matCellDef="let element"> {{element.ten_doanh_nghiep}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dia_diem" sticky>
+                        <ng-container matColumnDef="dia_diem" >
                             <th mat-header-cell *matHeaderCellDef> Địa điểm (đến cấp huyện) </th>
                             <td mat-cell *matCellDef="let element"> {{element.dia_diem}}</td>
                         </ng-container>
@@ -181,9 +178,9 @@
                             <td mat-cell *matCellDef="let element"> {{element.doanh_thu }}
                             </td>
                         </ng-container>
-                        <ng-container matColumnDef="trang_thai">
+                        <ng-container matColumnDef="id_trang_thai_hoat_dong">
                             <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
-                            <td mat-cell *matCellDef="let element"> {{element.trang_thai }}
+                            <td mat-cell *matCellDef="let element"> {{element.id_trang_thai_hoat_dong ? 'Hoạt động': 'Ngừng hoạt động' }}
                             </td>
                         </ng-container>
 
@@ -194,8 +191,9 @@
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
                 <ng-template #ShowEmpty>
-                    <h1>Không có dữ liệu</h1>
+                    <h1 class="text-center">Không có dữ liệu</h1>
                 </ng-template>
+                <br>
 
             </mat-expansion-panel>
         </mat-accordion>
