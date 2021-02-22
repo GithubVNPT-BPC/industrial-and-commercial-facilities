@@ -32,6 +32,9 @@ export abstract class BaseComponent implements OnInit {
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
+
+    public displayedColumns = ['select', 'index'];
+    public displayedFields = {};
     
     constructor(injector: Injector) {
         this.excelService = injector.get(ExcelService);
@@ -42,10 +45,18 @@ export abstract class BaseComponent implements OnInit {
 
     ngOnInit() {
         this.autoOpen();
-        this.initFormDatas();
+        this.initListView();
+        this.initFormView();
     }
 
-    public initFormDatas() {
+    protected initListView() {
+        // In case we have already declared all field in displayed Columns
+        if (this.displayedColumns.length == 2) {
+            this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+        }
+    }
+
+    protected initFormView() {
         let datas = this.getFormParams();
         this.formData = this.formBuilder.group(datas);
     }
