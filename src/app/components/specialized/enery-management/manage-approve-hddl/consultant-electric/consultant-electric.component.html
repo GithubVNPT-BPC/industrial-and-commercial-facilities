@@ -117,11 +117,11 @@
                         <mat-label>Lọc dữ liệu</mat-label>
                         <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                     </mat-form-field>
-
+                    <!-- {{this.filteredDataSource.pageIndex == 0 ? i + 1 : 1 + i + this.filteredDataSource.pageIndex * this.filteredDataSource.pageSize}} -->
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table2">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'> {{this.filteredDataSource.pageIndex == 0 ? i + 1 : 1 + i + this.filteredDataSource.pageIndex * this.filteredDataSource.pageSize}}
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'> {{i+1}}
                             </td>
                         </ng-container>
 

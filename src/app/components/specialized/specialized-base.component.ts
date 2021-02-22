@@ -160,21 +160,21 @@ export abstract class BaseComponent implements OnInit {
             .catch((err) => console.log('Hủy không thao tác: \n' + err));
     }
 
-    initDistricts() {
+    public initDistricts() {
         this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
             if (res['success'])
                 this.districts = res['data'];
         })
     }
 
-    initWards(){
+    public initWards(){
         this.sctService.LayDanhSachPhuongXa().subscribe(res => {
             if(res['success'])
                 this.wards = res['data'];
         })
     }
 
-    paginatorAgain() {
+    public paginatorAgain() {
         
             this.filteredDataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = "Số hàng";
