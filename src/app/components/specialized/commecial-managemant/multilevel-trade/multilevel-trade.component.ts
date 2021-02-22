@@ -112,11 +112,11 @@ export class MultilevelTradeComponent extends BaseComponent {
     data = {...data, ...{
       id_trang_thai: 1,
     }};
+    return data;
   }
 
   callService(data) {
     this.commerceManagementService.postMultiLevelTradeData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-
   }
 
 }

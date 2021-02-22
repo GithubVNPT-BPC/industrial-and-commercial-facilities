@@ -1,56 +1,37 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { HydroElectricManagementModel, New_HydroElectrict } from 'src/app/_models/APIModel/electric-management.module';
+import { Component, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { HydroEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+
+import { FormControl } from '@angular/forms';
+
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 
 @Component({
   selector: 'app-hydroelectric',
   templateUrl: './hydroelectric.component.html',
   styleUrls: ['/../../special_layout.scss'],
 })
-export class HydroelectricComponent implements OnInit {
-  //ViewChild 
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
+export class HydroelectricComponent extends BaseComponent {
 
   constructor(
-    public excelService: ExcelService, 
+    private injector: Injector,
     private energyService: EnergyService
     ) {
+      super(injector);
   }
 
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-  
   //Constant variable
-  public readonly displayedColumns: string[] = ['index', 'Tdn', 'Dd', 'Cx', 'Dthc', 'Sl6tck', 
+  public readonly displayedColumns: string[] = ['select','index', 'Tdn', 'Dd', 'Cx', 'Dthc', 'Sl6tck', 
   'Slnck', 'Dt', 'Paupttcctvhd', 'Pdpauptt', 'Paupvthkcdhctd', 'Qtvhhctd', 'Qtdhctd', 'Kdd', 'Ldhtcbvhd', 
   'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd'
   ];
-  //TS & HTML Variable
-  public dataSource: MatTableDataSource<New_HydroElectrict>;
-  public filteredDataSource: MatTableDataSource<New_HydroElectrict> = new MatTableDataSource<New_HydroElectrict>();;
-  public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
 
-  // public data: Array<HydroElectricManagementModel> =
+  //TS & HTML Variable
+  public dataSource: MatTableDataSource<HydroEnergyModel>;
+  public filteredDataSource: MatTableDataSource<HydroEnergyModel> = new MatTableDataSource<HydroEnergyModel>();;
   
   //Only TS Variable
-  years: number[] = [];
   doanhThu: number;
   congXuat: number;
   sanluongnam: number;
@@ -58,22 +39,17 @@ export class HydroelectricComponent implements OnInit {
   isChecked: boolean;
 
   ngOnInit() {
-    this.years = this.getYears();
+    super.ngOnInit();
     this.laydulieuThuyDien();
-    this.autoOpen();
   }
 
   laydulieuThuyDien(){
     this.energyService.LayDuLieuThuyDien().subscribe(res => {
-      this.filteredDataSource = new MatTableDataSource<New_HydroElectrict>(res.data);
-      // this.dataSource = new MatTableDataSource<New_HydroElectrict>(res.data);
+      this.dataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
+      this.filteredDataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
       this.caculatorValue();
-      this.paginatorAgain();
+      this.initPaginator();
     })
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 100);
   }
 
   applyFilter(event: Event) {
@@ -81,19 +57,33 @@ export class HydroelectricComponent implements OnInit {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  get(time_id: number) {
-
+  getFormParams() {
+    return {
+      ten_doanh_nghiep: new FormControl(),
+      dia_diem: new FormControl(),
+      cong_suat_thiet_ke: new FormControl(),
+      dung_tich_ho_chua: new FormControl(),
+      san_luong_6_thang: new FormControl(),
+      san_luong_nam: new FormControl(),
+      doanh_thu: new FormControl(),
+      phuong_an_ung_pho_thien_tai_ha_du: new FormControl(),
+      phe_duyet_phuong_an_ung_pho_thien_tai: new FormControl(),
+      phuong_an_ung_pho_khan_cap: new FormControl(),
+      quy_trinh_van_hanh_ho_chua: new FormControl(),
+      quan_trac_dap_ho: new FormControl(),
+      kiem_dinh_dap: new FormControl(),
+      lap_dat_he_thong_canh_bao_ha_du: new FormControl(),
+      bao_trinh_cong_trinh: new FormControl(),
+      lap_co_so_du_lieu_ho_chua_thuy_dien: new FormControl(),
+      phuong_an_bao_ve_dap_ho_chua_thuy_dien: new FormControl(),
+      bao_cao_danh_gia_an_toan: new FormControl(),
+      bao_cao_hien_trang_an_toan_dap_ho: new FormControl(),
+      to_khai_dang_ky_an_toan_dap_ho: new FormControl()
+    }
   }
 
-  log(any) {
-  }
-
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-
-  getValueOfHydroElectric(value: any) {
-
+  callService(data) {
+      this.energyService.PostHydroEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   // applyDistrictFilter(event) {
@@ -116,16 +106,17 @@ export class HydroelectricComponent implements OnInit {
   //   this.paginatorAgain();
   // }
 
-  paginatorAgain() {
-    // if (this.filteredDataSource.data.length) {
-    //   this.filteredDataSource.paginator = this.paginator;
-    //   this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    //   this.paginator._intl.firstPageLabel = "Trang Đầu";
-    //   this.paginator._intl.lastPageLabel = "Trang Cuối";
-    //   this.paginator._intl.previousPageLabel = "Trang Trước";
-    //   this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    // }
+  initPaginator() {
+    if (this.filteredDataSource.data.length) {
+      this.filteredDataSource.paginator = this.paginator;
+      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+      this.paginator._intl.firstPageLabel = "Trang Đầu";
+      this.paginator._intl.lastPageLabel = "Trang Cuối";
+      this.paginator._intl.previousPageLabel = "Trang Trước";
+      this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    }
   }
+
   caculatorValue() {
     this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
@@ -139,6 +130,6 @@ export class HydroelectricComponent implements OnInit {
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
-    this.paginatorAgain();
+    this.initPaginator();
   }
 }

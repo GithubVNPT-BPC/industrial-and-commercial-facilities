@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -64,6 +65,8 @@ export class ChemicalManagementComponent extends BaseComponent {
     years: number[] = [];
     year: number;
 
+    public chemistryNameList = [];
+
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
@@ -91,7 +94,70 @@ export class ChemicalManagementComponent extends BaseComponent {
         this._linkOutput.text = this.TEXT_DEFAULT;
         this._linkOutput.type = type;
         this._breadCrumService.sendLink(this._linkOutput);
-      }
+    }
+
+    public switchView() {
+        super.switchView();
+        if (this.chemistryNameList.length == 0) this.getChemicalNameListData();
+    }
+
+    private addQtyRow(event) {
+        event.preventDefault();
+        let self = this;
+        function createItem() {
+            return self.formBuilder.group({
+                id_hoa_chat: [],
+                san_luong: [],
+                cong_suat: [],
+            });
+        }
+
+        let details = this.formData.get('details');
+        details.push(createItem());
+    }
+
+    private removeQtyRow(event, index) {
+        event.preventDefault();
+        this.formData.get('details').removeAt(index);
+    }
+
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            details: this.formBuilder.array([
+                this.formBuilder.group({
+                    id_hoa_chat: [],
+                    san_luong: [],
+                    cong_suat: [],
+                })
+            ])
+        }
+    }
+
+    prepareData(data) {
+        let details = data.details;
+        details.map(e => {
+            e['mst'] = data['mst'];
+            e['time_id'] = this.currentYear;
+        });
+
+        data = {
+            chemistryData : {
+                mst: data.mst,
+                tinh_trang_hoat_dong: "true",
+                time_id: this.currentYear,
+            },
+            chemistryQtyData : details,
+        }
+        return data;
+    }
+
+    callService(data) {
+        let chemistryData = data.chemistryData;
+        let chemistryQtyData = data.chemistryQtyData;
+        this.industryManagementService.PostChemicalManagement([chemistryData], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostChemicalManagementQty(chemistryQtyData, this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
     
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
@@ -128,6 +194,12 @@ export class ChemicalManagementComponent extends BaseComponent {
             }     
         })
     }
+
+    getChemicalNameListData() {
+        this.industryManagementService.GetChemicalNameList().subscribe(result => {
+            if (result.data && result.data.length > 0) this.chemistryNameList = result.data;
+        })
+    } 
 
     getYears() {
         return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);

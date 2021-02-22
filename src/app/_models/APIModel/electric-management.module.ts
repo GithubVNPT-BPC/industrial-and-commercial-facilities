@@ -181,7 +181,7 @@ export class ElectricalPlan {
     trang_thai_hoat_dong: number;
 }
 
-export class New_HydroElectrict {
+export class HydroEnergyModel {
     ten_doanh_nghiep: string;
     cong_suat_thiet_ke: number
     dung_tich_ho_chua: number;
