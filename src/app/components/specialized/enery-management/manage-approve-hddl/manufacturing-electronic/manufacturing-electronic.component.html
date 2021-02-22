@@ -1,4 +1,4 @@
-<mat-card class="material">
+<mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -101,20 +101,14 @@
                         <mat-checkbox (change)="applyActionCheck($event)">Doanh nghiệp hết hạn
                         </mat-checkbox>
                     </div>
-                    
-                    <div class="col-3 col-lg-3">
-                        <!-- <mat-form-field appearance="outline">
-                            <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyDistrictFilter($event)" multiple>
-                                <mat-option *ngFor='let district of districts' [value]='district.id'>
-                                    {{district.ten_quan_huyen}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-                    </div>
 
-                    <div class="col-3 col-lg-3 button-control">
-                        <button mat-raised-button (click)="exportExcel()">Xuất Excel</button>
+                    <div class="col-6 col-lg-6 button-control">
+                        <button mat-raised-button matTooltip="Xuất Excel"
+                        (click)="ExportTOExcel('Tư vấn ngành điện','Tư vấn ngành điện')"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button color="primary" matTooltip="Thêm mới" 
+                        (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button color="warn"
+                        mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
                     </div>
                 </div>
 
@@ -174,5 +168,77 @@
             </mat-expansion-panel>
         </mat-accordion>
 
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="material" *ngIf="view == 'form'">
+    <mat-card-content>
+        <mat-accordion>
+            <mat-card-header>
+                <mat-card-title>
+                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
+                    <button mat-mini-fab color="primary" matTooltip="Trở về danh sách"
+                    class="float-right" (click)="switch2ListView()">
+                        <mat-icon>menu</mat-icon>
+                    </button>
+                </mat-card-title>
+            </mat-card-header>
+            <hr>
+            <form [formGroup]="formData" (ngSubmit)="onCreate()">
+                <div class="form-group row">
+                    <div class="col-md-9">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="ten_doanh_nghiep" >Tên doanh nghiệp</mat-label>
+                            <input matInput placeholder="VD: Công ty TNHH" id="ten_doanh_nghiep" type="text"
+                            formControlName="ten_doanh_nghiep">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="dia_chi" >Địa chỉ</mat-label>
+                            <input matInput formControlName="dia_chi" id="dia_chi" type="text">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="dien_thoai" >Số điện thoại</mat-label>
+                            <input matInput formControlName="dien_thoai" id="dien_thoai" type="text">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="so_giay_phep" >Số giấy phép</mat-label>
+                            <input matInput formControlName="so_giay_phep" id="so_giay_phep" type="text">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ngày, tháng, năm văn bản</mat-label>
+                            <input matInput [matDatepicker]="docDate" formControlName="ngay_cap">
+                            <mat-datepicker-toggle matSuffix [for]="docDate"></mat-datepicker-toggle>
+                            <mat-datepicker #docDate></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ngày, tháng, năm văn bản</mat-label>
+                            <input matInput [matDatepicker]="docDate1" formControlName="ngay_het_han">
+                            <mat-datepicker-toggle matSuffix [for]="docDate1"></mat-datepicker-toggle>
+                            <mat-datepicker #docDate1></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button class="btn btn-danger float-left" (click)="clearTable($event)">Xóa</button>
+                    </div>
+                </div>
+            </form>
+        </mat-accordion>
     </mat-card-content>
 </mat-card>

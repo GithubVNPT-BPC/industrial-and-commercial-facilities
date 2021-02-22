@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricalPlan, ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { BaseComponent } from '../../specialized-base.component';
 
 @Component({
     selector: 'future-electrical-plan',
@@ -11,7 +13,7 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class FutureElectricalPlanComponent implements OnInit {
+export class FutureElectricalPlanComponent  extends BaseComponent  {
     //
     @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
     //
@@ -61,8 +63,25 @@ export class FutureElectricalPlanComponent implements OnInit {
 
     displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
     constructor(
+        private injector: Injector,
         private energyService: EnergyService
-    ) { }
+    ) {
+        super(injector);
+        // console.log(this.formData)
+    }
+    trang_thai_hd: any[] = [
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG' }
+    ];
+
+    loai_quy_hoach: any[] = [
+        { id_loai_quy_hoach: 1, ten_loai_quy_hoach: 'Trạm biến áp 110KV' },
+        { id_loai_quy_hoach: 2, ten_loai_quy_hoach: 'Trạm biến áp 220KV' },
+        { id_loai_quy_hoach: 3, ten_loai_quy_hoach: 'Trạm biến áp 500KV' },
+        { id_loai_quy_hoach: 4, ten_loai_quy_hoach: 'Đường dây 110KV' },
+        { id_loai_quy_hoach: 5, ten_loai_quy_hoach: 'Đường dây 220KV' },
+        { id_loai_quy_hoach: 6, ten_loai_quy_hoach: 'Đường dây 500KV' }
+    ]
     ngOnInit() {
         this.getDataElectric110KV();
     }
@@ -132,6 +151,39 @@ export class FutureElectricalPlanComponent implements OnInit {
                 break;
             default:
                 break;
+        }
+    }
+
+    public prepareData(data) {
+        data['tba'] = Number(data['tba']);
+        data['p_max'] = Number(data['p_max']);
+        data['p_min'] = Number(data['p_min']);
+        data['p_tb'] = Number(data['p_tb']);
+        data['mang_tai'] = Number(data['mang_tai']);
+    }
+
+    public callService(data) {
+        let list_data = [data];
+        // console.log(list_data)
+        this.energyService.CapNhatDuLieuQuyHoachDien110KVDuKien(list_data).subscribe(res => {
+            this.successNotify(res);
+        })
+    }
+
+    getFormParams() {
+        return {
+            ten_tram: new FormControl(''),
+            duong_day: new FormControl(''),
+            tba: new FormControl(''),
+            tiet_dien_day_dan: new FormControl(''),
+            dien_ap: new FormControl(''),
+            chieu_dai: new FormControl(''),
+            p_max: new FormControl(''),
+            p_min: new FormControl(''),
+            p_tb: new FormControl(''),
+            mang_tai: new FormControl(''),
+            id_trang_thai_hoat_dong: new FormControl(''),
+            id_loai_quy_hoach: new FormControl(''),
         }
     }
 }

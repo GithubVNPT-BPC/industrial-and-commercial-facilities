@@ -10,6 +10,8 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { SCTService } from 'src/app/_services/APIService/sct.service';
 
 import moment from 'moment';
 
@@ -19,6 +21,8 @@ export abstract class BaseComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
+
+    protected sctService: SCTService;
     protected excelService: ExcelService;
     protected logger: InformationService;
     protected formBuilder: FormBuilder;
@@ -36,17 +40,22 @@ export abstract class BaseComponent implements OnInit {
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
     
+    public districts: DistrictModel[] = [];
+    public wards: any[] = [];
+
     constructor(injector: Injector) {
         this.excelService = injector.get(ExcelService);
         this.logger = injector.get(InformationService);
         this.formBuilder = injector.get(FormBuilder);
         this.confirmationDialogService = injector.get(ConfirmationDialogService);
+        this.sctService = injector.get(SCTService);
     }
 
     ngOnInit() {
         this.autoOpen();
         this.initListView();
         this.initFormView();
+        this.initDistricts();
     }
 
     protected initListView() {
@@ -81,11 +90,11 @@ export abstract class BaseComponent implements OnInit {
 
     public prepareData(data) { return data }
 
-    public callService(data) {}
+    public callService(data) { }
 
     public onCreate() {
         let data = this.formData.value;
-        data = this.prepareData(data);    
+        data = this.prepareData(data);
         this.callService(data);
     }
 
@@ -124,9 +133,9 @@ export abstract class BaseComponent implements OnInit {
         this.allSelected = !this.allSelected;  // to control select-unselect
 
         if (this.allSelected) {
-        this.dSelect.options.forEach((item: MatOption) => item.select());
+            this.dSelect.options.forEach((item: MatOption) => item.select());
         } else {
-        this.dSelect.options.forEach((item: MatOption) => item.deselect());
+            this.dSelect.options.forEach((item: MatOption) => item.deselect());
         }
         this.dSelect.close();
     }
@@ -140,8 +149,8 @@ export abstract class BaseComponent implements OnInit {
     //Event check
     public masterToggle() {
         this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
     }
     //Event check item
     public checkboxLabel(row): string {
@@ -153,13 +162,42 @@ export abstract class BaseComponent implements OnInit {
     }
 
     public openRemoveDialog() {
-        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý','Đóng')
-        .then(confirm => {
-          if (confirm) {
-            // this.remove();
-            return;
-          }
+        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+            .then(confirm => {
+                if (confirm) {
+                    // this.remove();
+                    return;
+                }
+            })
+            .catch((err) => console.log('Hủy không thao tác: \n' + err));
+    }
+
+    initDistricts() {
+        this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
+            if (res['success'])
+                this.districts = res['data'];
         })
-        .catch((err) => console.log('Hủy không thao tác: \n' + err));
+    }
+
+    initWards(){
+        this.sctService.LayDanhSachPhuongXa().subscribe(res => {
+            if(res['success'])
+                this.wards = res['data'];
+        })
+    }
+
+    paginatorAgain() {
+        this.filteredDataSource.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = "Số hàng";
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    }
+
+    autopaging(){
+        setTimeout(() => {
+            this.paginatorAgain();
+        }, 1000);
     }
 }

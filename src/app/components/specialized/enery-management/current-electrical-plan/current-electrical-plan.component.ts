@@ -1,9 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild, Injector } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricalPlan, ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { BaseComponent } from '../../specialized-base.component';
 
 @Component({
     selector: 'current-electrical-plan',
@@ -11,10 +13,9 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class CurrentElectricalPlanComponent implements OnInit {
-    //
-    @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-    //
+export class CurrentElectricalPlanComponent extends BaseComponent {
+    formData: any = this.formData;
+    
     public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
     { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
@@ -26,10 +27,26 @@ export class CurrentElectricalPlanComponent implements OnInit {
     { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
     { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
     { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-
+    years: number[] = [2021, 2020, 2019, 2018, 2017, 2016, 2015]
     constructor(
+        private injector: Injector,
         private energyService: EnergyService
-    ) { }
+    ) {
+        super(injector);
+    }
+    trang_thai_hd: any[] = [
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG' }
+    ];
+
+    loai_quy_hoach: any[] = [
+        { id_loai_quy_hoach: 1, ten_loai_quy_hoach: 'Trạm biến áp 110KV' },
+        { id_loai_quy_hoach: 2, ten_loai_quy_hoach: 'Trạm biến áp 220KV' },
+        { id_loai_quy_hoach: 3, ten_loai_quy_hoach: 'Trạm biến áp 500KV' },
+        { id_loai_quy_hoach: 4, ten_loai_quy_hoach: 'Đường dây 110KV' },
+        { id_loai_quy_hoach: 5, ten_loai_quy_hoach: 'Đường dây 220KV' },
+        { id_loai_quy_hoach: 6, ten_loai_quy_hoach: 'Đường dây 500KV' }
+    ]
     currentYear: number = new Date().getFullYear();
     tba110KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
     tba220KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
@@ -87,11 +104,12 @@ export class CurrentElectricalPlanComponent implements OnInit {
     displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
 
     ngOnInit() {
+        super.ngOnInit();
         this.getDataElectric110KV();
     }
 
     getDataElectric110KV() {
-        this.energyService.LayDuLieuQuyHoachDien110KV(2020).subscribe(res => {
+        this.energyService.LayDuLieuQuyHoachDien110KV(this.currentYear).subscribe(res => {
             this.mappingDataSource(res['data'])
         })
     }
@@ -106,17 +124,17 @@ export class CurrentElectricalPlanComponent implements OnInit {
                     this.tba220KVDataSource.data.push(item);
                     break;
                 case 3:
-                    this.dd110KVDataSource.data.push(item);
+                    this.tba500KVDataSource.data.push(item);
                     break;
 
                 case 4:
-                    this.dd220KVDataSource.data.push(item);
+                    this.dd110KVDataSource.data.push(item);
                     break;
                 case 5:
-                    this.dd500KVDataSource.data.push(item);
+                    this.dd220KVDataSource.data.push(item);
                     break;
                 case 6:
-                    this.tba500KVDataSource.data.push(item);
+                    this.dd500KVDataSource.data.push(item);
                     break;
                 default:
                     break;
@@ -124,9 +142,9 @@ export class CurrentElectricalPlanComponent implements OnInit {
         })
     }
 
-    autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
-    }
+    // autoOpen() {
+    //     setTimeout(() => this.accordion.openAll(), 1000);
+    // }
 
     applyDistrictFilter(event) {
 
@@ -155,6 +173,43 @@ export class CurrentElectricalPlanComponent implements OnInit {
                 break;
             default:
                 break;
+        }
+    }
+
+    // switchView() {
+    //     console.log(this.formData)
+    // }
+
+    public prepareData(data) {
+        data['tba'] = Number(data['tba']);
+        data['p_max'] = Number(data['p_max']);
+        data['p_min'] = Number(data['p_min']);
+        data['p_tb'] = Number(data['p_tb']);
+        data['mang_tai'] = Number(data['mang_tai']);
+    }
+
+    public callService(data) {
+        let list_data = [data];
+        // console.log(list_data)
+        this.energyService.CapNhatDuLieuQuyHoachDien110KV(list_data).subscribe(res => {
+            this.successNotify(res);
+        })
+    }
+
+    getFormParams() {
+        return {
+            ten_tram: new FormControl(''),
+            duong_day: new FormControl(''),
+            tba: new FormControl(''),
+            tiet_dien_day_dan: new FormControl(''),
+            dien_ap: new FormControl(''),
+            chieu_dai: new FormControl(''),
+            p_max: new FormControl(''),
+            p_min: new FormControl(''),
+            p_tb: new FormControl(''),
+            mang_tai: new FormControl(''),
+            id_trang_thai_hoat_dong: new FormControl(''),
+            id_loai_quy_hoach: new FormControl(''),
         }
     }
 }
