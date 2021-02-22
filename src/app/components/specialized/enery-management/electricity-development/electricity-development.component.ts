@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { ElectricityDevelopment35KVModel, ElectricityDevelopmentModel, HydroElectricManagementModel } from 'src/app/_models/APIModel/electric-management.module';
+import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import {  MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
+import { ElectricityDevelopment35KVModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { BaseComponent } from '../../specialized-base.component';
 
 @Component({
   selector: 'app-electricity-development',
   templateUrl: './electricity-development.component.html',
   styleUrls: ['/../../special_layout.scss'],
 })
-export class ElectricDevelopmentManagementComponent implements OnInit {
+export class ElectricDevelopmentManagementComponent extends BaseComponent {
   //ViewChild 
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
+  // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -27,17 +27,17 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
   public filteredDataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
-  public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+  // public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
+  // { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
+  // { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
+  // { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
+  // { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
+  // { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
+  // { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
+  // { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
+  // { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
+  // { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
+  // { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
   //Only TS Variable
   years: number[] = [];
   trung_ap_3p: number;
@@ -49,17 +49,19 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
   cong_xuat_bien_ap: number;
   isChecked: boolean;
   currentYear: number = new Date().getFullYear();
+
   constructor(
+    private injector: Injector,
     public excelService: ExcelService,
     private energyService: EnergyService,
-    private sctService: SCTService
     ) {
+      super(injector);
   }
 
   ngOnInit() {
+    // this.initDistricts();
+    super.ngOnInit();
     this.years = this.getYears();
-    // this.dataSource.data = this.data;
-    // this.filteredDataSource.data = [...this.dataSource.data];
     this.autoOpen();
   }
 
@@ -71,12 +73,12 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
     })
   }
 
-  initDistricts(){
-    this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
-      if(res['success'])
-        this.districts = res['data']
-    })
-  }
+  // initDistricts(){
+  //   this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
+  //     if(res['success'])
+  //       this.districts = res['data']
+  //   })
+  // }
 
   autoOpen() {
     setTimeout(() => this.accordion.openAll(), 1000);
@@ -146,5 +148,36 @@ export class ElectricDevelopmentManagementComponent implements OnInit {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  getFormParams() {
+    return {
+      dia_ban: new FormControl(''),
+      trung_ap_3_pha: new FormControl(''),
+      trung_ap_1_pha: new FormControl(''),
+      ha_ap_3_pha: new FormControl(''),
+      ha_ap_1_pha: new FormControl(''),
+      so_tram: new FormControl(''),
+      cong_suat: new FormControl(''),
+      time_id: new FormControl(this.currentYear),
+      id_trang_thai_hoat_dong: new FormControl('')
+    }
+  }
+
+  public prepareData(data) {
+    data['trung_ap_3_pha'] = Number(data['trung_ap_3_pha']);
+    data['trung_ap_1_pha'] = Number(data['trung_ap_1_pha']);
+    data['ha_ap_3_pha'] = Number(data['ha_ap_3_pha']);
+    data['ha_ap_1_pha'] = Number(data['ha_ap_1_pha']);
+    data['so_tram'] = Number(data['so_tram']);
+    data['cong_suat'] = Number(data['cong_suat']);
+}
+
+  public callService(data) {
+      let list_data = [data];
+      // console.log(list_data)
+      this.energyService.CapNhatDuLieuQuyHoachDien35KV(list_data).subscribe(res => {
+          this.successNotify(res);
+      })
   }
 }
