@@ -1,11 +1,10 @@
-import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
 import { LPGManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -99,6 +98,26 @@ export class LPGManagementComponent extends BaseComponent {
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            san_luong: new FormControl(),
+            cong_suat: new FormControl(),
+        }
+    }
+
+    prepareData(data) {
+        data = {...data, ...{
+            tinh_trang_hoat_dong: "true",
+            time_id: this.currentYear,
+        }}
+        return data;        
+    }
+
+    callService(data) {
+        this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     GetLGPManagementData(time_id: number) {

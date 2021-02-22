@@ -1,4 +1,4 @@
-<mat-card class="material">
+<mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -114,20 +114,43 @@
                     </div>
 
                     <div class="col-lg-3 button-control">
-                        <button mat-raised-button (click)="ExportTOExcel('Thủy điện','Thủy điện')">Xuất Excel</button>
+                        <button mat-raised-button matTooltip="Xuất Excel"
+                            (click)="ExportTOExcel('Thủy điện', 'Thủy điện')"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button matTooltip="Thêm mới" 
+                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                    </div>
+
+                    <div class="col-12 col-lg-12">
+                        <mat-form-field id="large-filter">
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
                     </div>
                 </div>
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
-                    <mat-form-field id="large-filter">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
-
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout">
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef disableClear >
+                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()"> 
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)"
+                                    [aria-label]="checkboxLabel(element)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+                        
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="Tdn" sticky>
@@ -259,5 +282,211 @@
             </mat-expansion-panel>
         </mat-accordion>
 
+    </mat-card-content>
+</mat-card>
+
+<!-- Form view -->
+<mat-card class="material" *ngIf="view == 'form'">
+    <mat-card-content>
+        <mat-accordion>
+            <mat-card-header>
+                <mat-card-title>
+                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
+                    <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
+                    class="float-right set-bg-color-primary" (click)="switchView()">
+                        <mat-icon>menu</mat-icon> &nbsp;Danh sách
+                    </button>
+                </mat-card-title>
+            </mat-card-header>
+            <hr>
+            <form [formGroup]="formData" (ngSubmit)="onCreate()">
+                <div class="form-group row">
+                    
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thông tin doanh nghiệp
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-lg-9" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Tên doanh nghiệp</mat-label>
+                                        <input matInput formControlName="ten_doanh_nghiep">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Địa điểm</mat-label>
+                                        <input matInput formControlName="dia_diem">
+                                    </mat-form-field>
+                                </div>
+                                                        
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thông số
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-lg-3" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Doanh thu</mat-label>
+                                        <input matInput type="number"  formControlName="doanh_thu">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Công xuất thiết kế/năm (MW)</mat-label>
+                                        <input matInput formControlName="cong_suat_thiet_ke">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Dung tích hồ chứa 106 m3</mat-label>
+                                        <input matInput formControlName="dung_tich_ho_chua">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Sản lượng 6 tháng/cùng kỳ
+                                            (triệu KW)</mat-label>
+                                        <input matInput type="number" formControlName="san_luong_6_thang">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Sản lượng năm/cùng kỳ
+                                            (triệu KW)</mat-label>
+                                        <input matInput type="number" formControlName="san_luong_nam">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thông tin chi tiết
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Phương án ứng phó thiên tai cho công trình vùng hạ du
+                                            (trong gđ thi công)</mat-label>
+                                        <input matInput formControlName="phuong_an_ung_pho_thien_tai_ha_du">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Phê duyệt pương án ứng phó thiên tai (năm/lần)</mat-label>
+                                        <input matInput formControlName="phe_duyet_phuong_an_ung_pho_thien_tai">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Phương án ứng phó với tình huống khẩn cấp đập, hồ
+                                            chứa thủy điện (năm/lần)</mat-label>
+                                        <input matInput formControlName="phuong_an_ung_pho_khan_cap">
+                                    </mat-form-field>
+                                </div>
+                                
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Quy trình vận hành hồ chứa thủy điện (khi có thay
+                                            đổi)</mat-label>
+                                        <input matInput formControlName="quy_trinh_van_hanh_ho_chua">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Quan trắc đập, hồ chứa thủy điện</mat-label>
+                                        <input matInput formControlName="quan_trac_dap_ho">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Kiểm định đập (5 năm/lần)</mat-label>
+                                        <input matInput formControlName="kiem_dinh_dap">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Lắp đặt hệ thống cảnh báo vùng hạ du</mat-label>
+                                        <input matInput formControlName="lap_dat_he_thong_canh_bao_ha_du">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Bảo trì công trình</mat-label>
+                                        <input matInput formControlName="bao_trinh_cong_trinh">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Cơ sở dữ liệu hồ chứa thủy điện</mat-label>
+                                        <input matInput formControlName="lap_co_so_du_lieu_ho_chua_thuy_dien">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Phương án bảo vệ đập, hồ chứa thủy điện</mat-label>
+                                        <input matInput formControlName="phuong_an_bao_ve_dap_ho_chua_thuy_dien">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Báo cáo đánh giá an toàn đập, hồ chứa thủy điện</mat-label>
+                                        <input matInput formControlName="bao_cao_danh_gia_an_toan">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Báo cáo hiện trạng an toàn</mat-label>
+                                        <input matInput formControlName="bao_cao_hien_trang_an_toan_dap_ho">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Tờ khai đăng ký</mat-label>
+                                        <input matInput formControlName="to_khai_dang_ky_an_toan_dap_ho">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
+                    </div>
+                </div>
+            </form>
+        </mat-accordion>
     </mat-card-content>
 </mat-card>

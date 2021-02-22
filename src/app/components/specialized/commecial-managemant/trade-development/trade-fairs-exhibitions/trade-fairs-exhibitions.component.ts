@@ -185,6 +185,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
       id_trang_thai: 1,
       time_id: this.currentDate,
     }};
+    return data;
   }
 
   callService(data) {
