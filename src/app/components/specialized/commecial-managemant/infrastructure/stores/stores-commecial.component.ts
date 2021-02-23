@@ -58,14 +58,14 @@ export class StoreManagementComponent extends BaseComponent {
   getConvenienceStoreData () {
     this.dataSource = new MatTableDataSource<StoreCommonModel>(this.dataHuyenThi);
     this.filteredDataSource.data = [...this.dataSource.data];
-    this._caculator(this.dataSource.data);
+    this._prepareData(this.dataSource.data);
   }
 
   getYears() {
     return [{text:'Tất cả',value:0}, {text:'2020',value:2020},{text:'2019',value:2019},{text:'2018',value:2018},];
   }
 
-  private _caculator(data: StoreCommonModel[]): void {
+  private _prepareData(data: StoreCommonModel[]): void {
     this.soCuaHangTL = data.length;
     this.soCuaHangKhac = data.length - this.soCuaHangTL;
     this.tongCuaHang = this.dataHuyenThi.length;
@@ -92,7 +92,7 @@ export class StoreManagementComponent extends BaseComponent {
       this.filteredDataSource.data = filteredData;
     }
     this.paginatorAgain();
-    this._caculator(filteredData);
+    this._prepareData(filteredData);
   }
 
   filterArray(array, filters) {

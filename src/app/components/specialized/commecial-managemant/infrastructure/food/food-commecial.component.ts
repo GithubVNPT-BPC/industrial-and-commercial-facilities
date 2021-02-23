@@ -48,11 +48,11 @@ export class FoodManagementComponent extends BaseComponent {
   getFoodCommerceData() {
     this.dataSourceHuyenThi.data = this.dataHuyenThi;
     this.filteredDataSource.data = [...this.dataSourceHuyenThi.data];
-    this._caculator(this.dataHuyenThi);
+    this._prepareData(this.dataHuyenThi);
     this.listProduct = [...new Set( this.dataHuyenThi.map( x => x.sanphamkinhdoanh))];
   }
 
-  private _caculator(data: FoodCommonModel[]){
+  private _prepareData(data: FoodCommonModel[]){
     this.tongDoanhNghiep = data.length;
   }
 
@@ -63,7 +63,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSourceHuyenThi.data, this.filterModel);
-    this._caculator(filteredData);
+    this._prepareData(filteredData);
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];

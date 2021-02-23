@@ -1,24 +1,17 @@
 //Import Library
-import { Component, ViewChild, ElementRef, OnInit, ViewChildren, QueryList, Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-//Import Component
+import { FormControl } from '@angular/forms';
 
-//Import Model
-import { ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 //Import Services
-import { ReportDirective } from 'src/app/shared/report.directive';
 import { ReportService } from 'src/app/_services/APIService/report.service';
 
-import { TreeviewConfig, TreeviewItem } from 'ngx-treeview';
 import { SuperMarketCommonModel, SuperMarketFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
-import { District } from 'src/app/_models/district.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
-interface HashTableNumber<T> {
-  [key: string]: T;
-}
+import { marketTypeList } from '../common/common-commecial.component';
 
 @Component({
   selector: 'app-shoppingcentre',
@@ -26,24 +19,7 @@ interface HashTableNumber<T> {
   styleUrls: ['../../../special_layout.scss'],
 })
 export class ShoppingcentreComponent extends BaseComponent {
-  //Constant-------------------------------------------------------------------------
-  public readonly RANK_LABLE = (page: number, pageSize: number, length: number) => {
-    if (length == 0 || pageSize == 0) { return `0 của ${length}`; }
-
-    length = Math.max(length, 0);
-
-    const startIndex = page * pageSize;
-
-    // If the start index exceeds the list length, do not try and fix the end index to the end.
-    const endIndex = startIndex < length ?
-      Math.min(startIndex + pageSize, length) :
-      startIndex + pageSize;
-
-    return `${startIndex + 1} - ${endIndex} của ${length}`;
-  }
   //
-  private _conditionArray: HashTableNumber<string[]> = {};
-  private _tableData: MatTableDataSource<SuperMarketCommonModel> = new MatTableDataSource<SuperMarketCommonModel>();
 
   public tongSieuThi: number;
   public sieuThiTongHop: number;
@@ -60,17 +36,7 @@ export class ShoppingcentreComponent extends BaseComponent {
   public sieuThiDangXayDung: number;
   //
   public filterModel: SuperMarketFilterModel = new SuperMarketFilterModel();
-
-  //Viewchild & Input-----------------------------------------------------------------------
-  @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>
-
-  //Variable for HTML&TS-------------------------------------------------------------------------
-  public readonly phanloais: any[] = [
-    { value: "I", text: "Loại I" }
-    , { value: "II", text: "Loại II" }
-    , { value: "III", text: "Loại III" }]
-
-  // headerArray = ['index', 'tenhuyenthi', 'ten_tttm', 'dientich', 'vondautu', 'namdautuxaydung', 'phanloai'];
+  public marketTypeList = marketTypeList;
 
   headerArray = ['select', 'index', 'ten_sieu_thi_TTTM', 'dia_diem', 'nha_nuoc', 'ngoai_nha_nuoc', 'co_von_dau_tu_nuoc_ngoai', 'von_khac', 'tong_hop',
     'chuyen_doanh', 'nam_xay_dung', 'nam_ngung_hoat_dong', 'dien_tich_dat', 'phan_hang', 'so_lao_dong', 'ten_chu_dau_tu',
@@ -85,42 +51,6 @@ export class ShoppingcentreComponent extends BaseComponent {
   generalSupermarket: number = 0;
   specializedSupermarket: number = 0;
 
-  filterTyppeMarket() {
-    this.shoppingCenterData.forEach(element => {
-      switch (element.phan_hang) {
-        case "I":
-          this.supermarketTypeI += 1;
-          break;
-        case "II":
-          this.supermarketTypeII += 1;
-          break;
-        case "III":
-          this.supermarketTypeIII += 1;
-          break;
-        case "":
-          this.supermarketFuture += 1;
-          break;
-        default:
-          break;
-      }
-    });
-  }
-
-  items: TreeviewItem[] = [];
-  values: number[] = [];
-  config = TreeviewConfig.create({
-    hasAllCheckBox: true,
-    hasFilter: true,
-    hasCollapseExpand: true,
-    decoupleChildFromParent: false,
-    maxHeight: 400
-  });
-
-  public tableMergeHader: Array<ToltalHeaderMerge> = [];
-  public mergeHeadersColumn: Array<string> = [];
-  public indexOftableMergeHader: number = 0;
-  columns: number = 1;
-
   public dataSource: MatTableDataSource<SuperMarketCommonModel> = new MatTableDataSource<SuperMarketCommonModel>();
   public filteredDataSource: MatTableDataSource<SuperMarketCommonModel> = new MatTableDataSource<SuperMarketCommonModel>();
 
@@ -128,7 +58,7 @@ export class ShoppingcentreComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     public reportSevice: ReportService,
-    public route: ActivatedRoute,
+    public commerceManagementService: CommerceManagementService,
   ) {
     super(injector);
   }
@@ -143,16 +73,65 @@ export class ShoppingcentreComponent extends BaseComponent {
   }
 
   getShoppingCenterData() {
-      let data = this.shoppingCenterData;
-      this.dataSource = new MatTableDataSource<SuperMarketCommonModel>(data);
-      this._caculateData(data);
+    this.commerceManagementService.getMarketPlaceData().subscribe(
+      allrecords => {
+        if (allrecords.data && allrecords.data.length > 0) {
+          this.dataSource = new MatTableDataSource<SuperMarketCommonModel>(allrecords.data);
+          this._prepareData(this.dataSource.data);
+          this.paginatorAgain();
+        }
+      },
+      error => this.errorMessage = <any>error
+    );
   }
 
-  private _caculateData(data) {
+  getFormParams() {
+    return {
+      id_phan_hang: new FormControl(),
+      ten_sieu_thi_TTTM: new FormControl(),
+      dia_diem: new FormControl(),
+      id_dia_ban: new FormControl(),
+      nha_nuoc: new FormControl(),
+      ngoai_nha_nuoc: new FormControl(),
+      co_von_dau_tu_nuoc_ngoai: new FormControl(),
+      von_khac: new FormControl(),
+      
+      tong_hop: new FormControl(),
+      chuyen_doanh: new FormControl(),
+
+      nam_xay_dung: new FormControl(),
+      nam_ngung_hoat_dong: new FormControl(),
+      
+      dien_tich_dat: new FormControl(),
+      so_lao_dong: new FormControl(),
+
+      ten_chu_dau_tu: new FormControl(),
+      giay_dang_ky_kinh_doanh: new FormControl(),
+      dia_chi: new FormControl(),
+      dien_thoai: new FormControl(),
+
+      ho_va_ten: new FormControl(),
+      dia_chi1: new FormControl(),
+      dien_thoai1: new FormControl(),
+    }
+  }
+
+  prepareData(data) {
+    data = {...data, ...{
+        is_tttm: "true",
+    }}
+    return data;        
+  }
+
+  callService(data) {
+    this.commerceManagementService.postMarketPlace([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  private _prepareData(data) {
     this.tongSieuThi = data.length;
-    this.sieuThiHangI = data.filter(x => x.phan_hang == "I").length;
-    this.sieuThiHangII = data.filter(x => x.phan_hang == "II").length;
-    this.sieuThiHangIII = data.filter(x => x.phan_hang == "III").length;
+    this.sieuThiHangI = data.filter(x => x.id_phan_hang == 1).length;
+    this.sieuThiHangII = data.filter(x => x.id_phan_hang == 2).length;
+    this.sieuThiHangIII = data.filter(x => x.id_phan_hang == 3).length;
     this.sieuThiDangXayDung = data.length - this.sieuThiHangI - this.sieuThiHangII - this.sieuThiHangIII;
 
     this.sieuThiDauTuTrongNam = data.filter(x => x.nam_xay_dung == this.currentYear.toString()).length;
@@ -166,7 +145,7 @@ export class ShoppingcentreComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    this._caculateData(filteredData);
+    this._prepareData(filteredData);
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];
@@ -193,222 +172,4 @@ export class ShoppingcentreComponent extends BaseComponent {
     return temp;
   }
 
-  shoppingCenterData: Array<SuperMarketCommonModel> = [
-    {
-      ten_sieu_thi_TTTM: 'Trung tâm thương mại ITC Đồng Xoài',
-      dia_diem: 'Ngã ba chợ Đồng Xoài, phường Tân Bình, Tx. Đồng Xoài, Bình Phước',
-      id_dia_ban: 2,
-      dia_ban: 'Đồng Xoài',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 150,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: 'X',
-      chuyen_doanh: null,
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 9000,
-      phan_hang: 'III',
-      so_lao_dong: null,
-      ten_chu_dau_tu: 'Công ty Cổ phần thương mại Quốc tế ITC',
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Trung tâm thương mại An Lộc - Bình Long',
-      dia_diem: 'Phường An Lộc, thị xã Bình Long, tỉnh Bình Phước',
-      id_dia_ban: 3,
-      dia_ban: 'Bình Long',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 200,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: 'X',
-      chuyen_doanh: null,
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 26000,
-      phan_hang: 'III',
-      so_lao_dong: null,
-      ten_chu_dau_tu: 'Công ty Cổ phần Hải Vương',
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Trung tâm thương mại Thanh Bình - Bù Đốp',
-      dia_diem: 'Xã Thanh Bình, huyện Bù Đốp, tỉnh Bình Phước',
-      id_dia_ban: 6,
-      dia_ban: 'Bù Đốp',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 100,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: 'X',
-      chuyen_doanh: null,
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 61000,
-      phan_hang: 'III',
-      so_lao_dong: null,
-      ten_chu_dau_tu: 'Công ty TNHH Thành Liêm',
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Trung tâm thương mại Phước Binh',
-      dia_diem: 'Phường Phước Bình, thị xã Phước Long, tỉnh Bình Phước',
-      id_dia_ban: 1,
-      dia_ban: 'Phước Long',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 50,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: 'X',
-      chuyen_doanh: null,
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 10000,
-      phan_hang: 'III',
-      so_lao_dong: null,
-      ten_chu_dau_tu: 'Do UBND tỉnh thành lập Ban quản lý chợ và tự đảm bảo kinh phí hoạt động thường xuyên',
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Trung tâm thương mại Sơn Thành - Phước Long',
-      dia_diem: 'Phường Phước Bình, thị xã Phước Long, tỉnh Bình Phước',
-      id_dia_ban: 1,
-      dia_ban: 'Phước Long',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 300,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: null,
-      chuyen_doanh: 'X',
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 12000,
-      phan_hang: 'Đang xây dựng',
-      so_lao_dong: null,
-      ten_chu_dau_tu: 'Công ty Cổ phần Sơ Thành',
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'TTTM Đô Thành - Chơn Thành',
-      dia_diem: 'Thị trấn Chơn Thành, huyện Chơn Thành, tỉnh Bình Phước',
-      id_dia_ban: 10,
-      dia_ban: 'Chơn Thành',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 300,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: null,
-      chuyen_doanh: 'X',
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 10000,
-      phan_hang: 'Đang xây dựng',
-      so_lao_dong: null,
-      ten_chu_dau_tu: 'Công ty TNHH Đô Thành',
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Vincom Đồng Xoài',
-      dia_diem: 'Phường Tân Phú, thị xã Đồng Xoài, Bình Phước',
-      id_dia_ban: 2,
-      dia_ban: 'Đồng Xoài',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 240,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: null,
-      chuyen_doanh: 'X',
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 33000,
-      phan_hang: 'Đang xây dựng',
-      so_lao_dong: null,
-      ten_chu_dau_tu: null,
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Vincom Phước Long',
-      dia_diem: 'Thị trấn Thác Mơ, thị xã Phước Long, tỉnh Bình Phước',
-      id_dia_ban: 1,
-      dia_ban: 'Phước Long',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 190,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: null,
-      chuyen_doanh: 'X',
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 15000,
-      phan_hang: 'Đang xây dựng',
-      so_lao_dong: null,
-      ten_chu_dau_tu: null,
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    },
-    {
-      ten_sieu_thi_TTTM: 'Vincom Chơn Thành',
-      dia_diem: 'Thị trấn Chơn Thành, huyện Chơn Thành, tỉnh Bình Phước',
-      id_dia_ban: 10,
-      dia_ban: 'Chơn Thành',
-      nha_nuoc: null,
-      ngoai_nha_nuoc: 220,
-      co_von_dau_tu_nuoc_ngoai: null,
-      von_khac: null,
-      tong_hop: null,
-      chuyen_doanh: 'X',
-      nam_xay_dung: null,
-      nam_ngung_hoat_dong: null,
-      dien_tich_dat: 31000,
-      phan_hang: 'Đang xây dựng',
-      so_lao_dong: null,
-      ten_chu_dau_tu: null,
-      giay_dang_ky_kinh_doanh: null,
-      dia_chi: null,
-      dien_thoai: null,
-      ho_va_ten: null,
-      dia_chi1: null,
-      dien_thoai1: null
-    }
-  ]
 }

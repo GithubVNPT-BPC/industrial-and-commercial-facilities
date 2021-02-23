@@ -18,11 +18,13 @@ export class CommerceManagementService {
     private urlGetSubcribeDiscount = "api/qltm/khuyen-mai";
     private urlGetSubcribeDiscountType = "api/qltm/danh-sach-hinh-thuc-km";
     private urlGetMultiLevelTrade = "api/qltm/da-cap";
+    private urlGetMarketPlace = "api/qltm/sttttm";
 
     // POST
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
     private urlPostSubcribeDiscount = "api/qltm/cap-nhat-khuyen-mai";
     private urlPostMultiLevelTrade = "api/qltm/cap-nhat-du-lieu-da-cap";
+    private urlPostMarketPlace = "api/qlnl/addsttttm";
 
     constructor(public http: HttpClient) {}
 
@@ -63,15 +65,6 @@ export class CommerceManagementService {
         );
     }
 
-    public postSubcribeDiscountData(datas) {
-        let apiUrl = this.apiHome + this.urlPostSubcribeDiscount;
-        let headers = new HttpHeaders(HEADERS);
-        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
     // Multi-level Trade
     public getMultiLevelTradeData() {
         let apiUrl = this.apiHome + this.urlGetMultiLevelTrade;
@@ -81,8 +74,35 @@ export class CommerceManagementService {
         );
     }
 
+    public getMarketPlaceData(is_tttm=true) {
+        let apiUrl = this.apiHome + this.urlGetMarketPlace;
+        let headers = new HttpHeaders(HEADERS);
+        let params = new HttpParams().set('is_tttm', is_tttm.toString());
+        return this.http.get<any>(apiUrl, { headers: headers, params: params}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public postSubcribeDiscountData(datas) {
+        let apiUrl = this.apiHome + this.urlPostSubcribeDiscount;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     public postMultiLevelTradeData(datas) {
         let apiUrl = this.apiHome + this.urlPostMultiLevelTrade;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public postMarketPlace(datas) {
+        let apiUrl = this.apiHome + this.urlPostMarketPlace;
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),

@@ -1,3 +1,8 @@
+export class MarketTypeModel {
+    id: number;
+    name: string;
+}
+
 export class MarketCommonModel {
     huyen: string;
     tongsocho: number;
@@ -20,6 +25,7 @@ export class SuperMarketCommonModel {
     nam_xay_dung: string;
     nam_ngung_hoat_dong: string;
     dien_tich_dat: number;
+    id_phan_hang: number;
     phan_hang: string;
     so_lao_dong: number;
     ten_chu_dau_tu: string;
@@ -33,7 +39,7 @@ export class SuperMarketCommonModel {
 
 export class SuperMarketFilterModel {
     id_quan_huyen: number[] = [];
-    phanloai: string[] = [];
+    id_phan_hang: string[] = [];
 }
 
 export class StoreCommonModel {
