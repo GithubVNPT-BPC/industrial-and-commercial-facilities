@@ -172,15 +172,25 @@ export class ManufacturingElectronicComponent extends BaseComponent {
   applyActionCheck(event) {
     let today = new Date();
 
-    if(event.checked){
+    if (event.checked) {
+      
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
-        return Date.parse(today.toString()) > Date.parse(e.ngay_het_han)
-      })
-    }else{
+        return Date.parse(today.toString()) > Date.parse(this.formatMMddyyy(e.ngay_het_han))
+      });
+      
+    } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
     // this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  formatMMddyyy(date: string){
+    let d,m,y;
+    y = date.slice(-4);
+    m = date.slice(3,5);
+    d = date.slice(0,2);
+    return m + '/' + d + '/' + y;
   }
 
   LocDulieuTheoNgayCap(year){

@@ -62,6 +62,7 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     // this.initDistricts();
     super.ngOnInit();
     this.years = this.getYears();
+    this.getDataQuyHoachDienDuoi35KV();
     this.autoOpen();
   }
 
@@ -159,8 +160,9 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
       ha_ap_1_pha: new FormControl(''),
       so_tram: new FormControl(''),
       cong_suat: new FormControl(''),
-      time_id: new FormControl(this.currentYear),
-      id_trang_thai_hoat_dong: new FormControl('')
+      time_id: new FormControl(''),
+      id_trang_thai_hoat_dong: new FormControl(1),
+      id_quan_huyen: new FormControl()
     }
   }
 
@@ -171,6 +173,9 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     data['ha_ap_1_pha'] = Number(data['ha_ap_1_pha']);
     data['so_tram'] = Number(data['so_tram']);
     data['cong_suat'] = Number(data['cong_suat']);
+    data['time_id'] = Number(data['time_id']);
+    data['id_trang_thai_hoat_dong'] = 1;
+    return data;
 }
 
   public callService(data) {
