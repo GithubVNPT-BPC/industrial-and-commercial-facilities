@@ -21,7 +21,6 @@ export abstract class BaseComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-
     protected sctService: SCTService;
     protected excelService: ExcelService;
     protected logger: InformationService;
@@ -187,12 +186,12 @@ export abstract class BaseComponent implements OnInit {
     }
 
     paginatorAgain() {
-        this.filteredDataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = "Số hàng";
         this.paginator._intl.firstPageLabel = "Trang Đầu";
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        this.filteredDataSource.paginator = this.paginator;
     }
 
     autopaging(){

@@ -1,34 +1,21 @@
 //Import Library
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, ViewChildren, QueryList, } from "@angular/core";
-import * as XLSX from "xlsx";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, ViewChild, ElementRef, Injector, ViewChildren, QueryList, } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import { MatTableDataSource } from "@angular/material/table";
-import { FormControl, NgForm } from "@angular/forms";
-import { Observable } from "rxjs";
-import { startWith, map, isEmpty } from "rxjs/operators";
-import { MatTableFilter } from "mat-table-filter";
-//Import Component
+import { NgForm } from "@angular/forms";
 
 //Import Model
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge, } from "../../../../../_models/APIModel/report.model";
 
 //Import Services
-import { ControlService } from "../../../../../_services/APIService/control.service";
 import { ReportDirective } from "src/app/shared/report.directive";
 import { KeyboardService } from "src/app/shared/services/keyboard.service";
-import { InformationService } from "src/app/shared/information/information.service";
 import { ReportService } from "src/app/_services/APIService/report.service";
-import { ExcelService } from 'src/app/_services/excelUtil.service';
-
-import * as moment from "moment";
-import { CompanyDetailModel } from "src/app/_models/APIModel/domestic-market.model";
-import { TreeviewConfig, TreeviewItem, TreeviewModule } from "ngx-treeview";
-import { element } from "protractor";
-import { MarketCommonModel } from "src/app/_models/APIModel/commecial-management.model";
-import { MatAccordion } from "@angular/material/expansion";
-import { MatPaginator } from "@angular/material/paginator";
-import { District } from "src/app/_models/district.model";
+import { TreeviewItem } from "ngx-treeview";
 import { FilterModel } from "src/app/_models/filter.model";
+
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+
 
 interface HashTableNumber<T> {
   [key: number]: T;
@@ -39,7 +26,7 @@ interface HashTableNumber<T> {
   templateUrl: "./market-commecial.component.html",
   styleUrls: ['../../../special_layout.scss'],
 })
-export class MarketCommecialManagementComponent implements OnInit {
+export class MarketCommecialManagementComponent extends BaseComponent {
   //Constant-------------------------------------------------------------------------
   public readonly OBJ_ID: number = 10592419;
   public readonly TIME_ID: number = 2020;
@@ -62,19 +49,7 @@ export class MarketCommecialManagementComponent implements OnInit {
 
     return `${startIndex + 1} - ${endIndex} của ${length}`;
   }
-  public readonly districts: FilterModel[] = [
-    { key: 1, code: "PLG", name: "Phước Long" },
-    { key: 2, code: "DXI", name: "Đồng Xoài" },
-    { key: 3, code: "BLG", name: "Bình Long" },
-    { key: 4, code: "BGM", name: "Bù Gia Mập" },
-    { key: 5, code: "LNH", name: "Lộc Ninh" },
-    { key: 6, code: "BDP", name: "Bù Đốp" },
-    { key: 7, code: "HQN", name: "Hớn Quản" },
-    { key: 8, code: "DPU", name: "Đồng Phú" },
-    { key: 9, code: "BDG", name: "Bù Đăng" },
-    { key: 10, code: "CTH", name: "Chơn Thành" },
-    { key: 11, code: "PRG", name: "Phú Riềng" },
-  ];
+
   public readonly businesses: FilterModel[] = [
     { key: 1, code: "KIENCO", name: "Kiên cố" },
     { key: 2, code: "BANKIENCO", name: "Bán kiên cố" },
@@ -101,12 +76,7 @@ export class MarketCommecialManagementComponent implements OnInit {
   @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>;
   @ViewChild("new_element", { static: false }) ele: ElementRef;
   @ViewChild("form", { static: false }) ngForm: NgForm;
-  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  //Variable for HTML&TS-------------------------------------------------------------------------
-  public year: number = 2019;
   //Variable for Total---------------------------------------------------------------------------
   public tong_SoCho: number = 0;
   //--
@@ -156,37 +126,32 @@ export class MarketCommecialManagementComponent implements OnInit {
   public attributeHeaders: Array<any>;
   public dataSource: MatTableDataSource<ReportTable> = new MatTableDataSource<ReportTable>();
   //Variable for only TS-------------------------------------------------------------------------
-  private _obj_id: number;
   private _mergeHeadersColumn: Array<string> = [];
   private _indexOftableMergeHader: number = 0;
-  private _time_id: number;
-  private _org_id: number = 0;
   private _rows: number = 0;
   private _indicators: Array<ReportIndicator> = [];
   private _datarows: Array<ReportDatarow> = [];
   private _object: ReportOject[] = [];
   private _tableData: MatTableDataSource<ReportTable> = new MatTableDataSource<ReportTable>();
+  
   //Angular FUnction --------------------------------------------------------------------
   constructor(
-    public excelService: ExcelService,
+    private injector: Injector,
     public reportSevice: ReportService,
     public route: ActivatedRoute,
     public keyboardservice: KeyboardService,
-    public info: InformationService
-  ) { }
-
-  ngOnInit(): void {
-    let data: any = JSON.parse(localStorage.getItem("currentUser"));
-    this._org_id = parseInt(data.org_id);
-    this._obj_id = this.OBJ_ID;
-    this._time_id = this.TIME_ID;
-    this.GetReportById(this._obj_id, this._time_id, this._org_id);
-    this._autoOpenPanel();
+  ) {
+      super(injector);
   }
 
-  //Xuất excel
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  ngOnInit(): void {
+    super.ngOnInit();
+    let data: any = JSON.parse(localStorage.getItem("currentUser"));
+    this.GetReportById(this.OBJ_ID, this.TIME_ID, parseInt(data.org_id));
+  }
+
+  ngAfterViewInit() {
+    this.paginatorAgain();
   }
 
   cols: Array<any> = [];
@@ -224,7 +189,7 @@ export class MarketCommecialManagementComponent implements OnInit {
         this.CreateMergeHeaderTable(this.attributes);
         this.CreateReportTable();
         this._paginatorAgain();
-        this._autoOpenPanel()
+        this.autoOpen()
       });
   }
 
@@ -444,10 +409,10 @@ export class MarketCommecialManagementComponent implements OnInit {
     this._tableData.data.forEach((element) => {
       if (element.ind_formula == null && element.ind_type == 1) this._rows++;
     });
+
     this.dataSource.data = [...this._tableData.data];
     this._caculator(this.dataSource.data);
   }
-
 
   getNestedChildren(indicators: Array<ReportIndicator>, parent: number) {
     var out = [];
@@ -538,6 +503,7 @@ export class MarketCommecialManagementComponent implements OnInit {
     this._paginatorAgain();
     this._caculator(this.dataSource.data);
   }
+  
   private _countCondition(): number {
     let countOfCondition = 0;
     Object.keys(this._conditionArray).forEach(key => {
@@ -546,9 +512,7 @@ export class MarketCommecialManagementComponent implements OnInit {
     });
     return countOfCondition;
   }
-  private _autoOpenPanel() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
+
   private _caculator(data: Array<ReportTable>) {
 
     //--
@@ -562,24 +526,17 @@ export class MarketCommecialManagementComponent implements OnInit {
     this.hang_HangIII = data.filter((x) => x.fn09 == 1).length;;
     //--
     this.congtrinh_KienCo = data.filter((x) => x.fc11.includes("Kiên cố")).length;
-
     this.congtrinh_BanKienCo = data.filter((x) => x.fc11.includes("Bán kiên cố")).length;
     this.congtrinh_Tam = this.tong_SoCho - this.congtrinh_BanKienCo - this.congtrinh_KienCo;
     //--
     this.kinhdoanh_choBanLe = 0;
     //--
-    //--
-
     data.forEach(element => {
-      if (element.fn04)
-        this.tongvon_VonNganSachTW += element.fn04;
+      if (element.fn04) this.tongvon_VonNganSachTW += element.fn04;
+      if (element.fn11) this.tongvon_VonNganSachDiaPhuong += element.fn11;        
     });
-    data.forEach(element => {
-      if (element.fn11)
-        this.tongvon_VonNganSachDiaPhuong += element.fn11;
-    });
-    //--
   }
+
   private _paginatorAgain() {
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';

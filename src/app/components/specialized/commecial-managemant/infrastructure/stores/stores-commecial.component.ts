@@ -1,56 +1,130 @@
 //Import Library
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
-import * as XLSX from 'xlsx';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl, NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { startWith, map, isEmpty } from 'rxjs/operators';
-import { MatTableFilter } from 'mat-table-filter';
-//Import Component
 
-//Import Model
-import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
-//Import Services
-import { ControlService } from '../../../../../_services/APIService/control.service';
-import { ReportDirective } from 'src/app/shared/report.directive';
-import { KeyboardService } from 'src/app/shared/services/keyboard.service';
-import { InformationService } from 'src/app/shared/information/information.service';
-import { ReportService } from 'src/app/_services/APIService/report.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 
-import * as moment from 'moment';
-import { CompanyDetailModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { TreeviewConfig, TreeviewItem, TreeviewModule } from 'ngx-treeview';
-import { element } from 'protractor';
-import { MarketCommonModel, StoreCommonModel, StoreFilterModel, SuperMarketCommonModel } from 'src/app/_models/APIModel/commecial-management.model';
-import { Data } from 'src/app/components/data-sct/data-sct-type';
-import { Time } from 'highcharts';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
+import { StoreCommonModel, StoreFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
 
-interface HashTableNumber<T> {
-  [key: string]: T;
-}
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 
 @Component({
   selector: 'app-stores-commecial',
   templateUrl: './stores-commecial.component.html',
   styleUrls: ['../../../special_layout.scss'],
 })
-
-export class StoreManagementComponent implements OnInit {
-  //Constant-------------------------------------------------------------------------
-
-  //Viewchild & Input-----------------------------------------------------------------------
-  @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>
-  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
+export class StoreManagementComponent extends BaseComponent {  
 
   //Variable for HTML&TS-------------------------------------------------------------------------
-  displayedColumns = ['index', 'tencuahang', 'sanphamkinhdoanh', 'scndkkd', 'ngaycap', 'noicap', 'diachi', 'sogcn', 'ngaycapgcn', 'ngayhethangcn', 'sdtlienhe'];
+  years: any[] = [];
+  //Variable for only TS-------------------------------------------------------------------------
+  public tableMergeHader: Array<ToltalHeaderMerge> = [];
+  public mergeHeadersColumn: Array<string> = [];
+  public indexOftableMergeHader: number = 0;
+
+  columns: number = 1;
+  displayedColumns = ['select', 'index', 'tencuahang', 'sanphamkinhdoanh', 'scndkkd', 'ngaycap', 'noicap', 'diachi', 'sogcn', 'ngaycapgcn', 'ngayhethangcn', 'sdtlienhe'];
+  headerArray: string[] = ['select', 'index', 'tenhuyenthi', 'ten_tttm', 'dientich', 'vondautu', 'namdautuxaydung', 'phanloai'];
+  isChecked: boolean = false;
+
+  filterModel: StoreFilterModel = new StoreFilterModel();
+  dataSource: MatTableDataSource<StoreCommonModel> = new MatTableDataSource<StoreCommonModel>();
+  filteredDataSource: MatTableDataSource<StoreCommonModel> = new MatTableDataSource<StoreCommonModel>();
+
+  //
+  public tongCuaHang: number;
+  public soCuaHangTL: number;
+  public soCuaHangKhac: number;
+  public soCuaHangDauTuTrongNam: number = 0;
+  public soCuaHangDauTuNamTruoc: number = 0;
+
+  constructor(
+    private injector: Injector,
+  ) {
+    super(injector);
+  }
+
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.years = this.getYears();
+    this.getConvenienceStoreData();
+  }
+
+  ngAfterViewInit() {
+    this.paginator.pageIndex = 0;
+    this.paginatorAgain();
+  }
+
+  getConvenienceStoreData () {
+    this.dataSource = new MatTableDataSource<StoreCommonModel>(this.dataHuyenThi);
+    this.filteredDataSource.data = [...this.dataSource.data];
+    this._caculator(this.dataSource.data);
+  }
+
+  getYears() {
+    return [{text:'Tất cả',value:0}, {text:'2020',value:2020},{text:'2019',value:2019},{text:'2018',value:2018},];
+  }
+
+  private _caculator(data: StoreCommonModel[]): void {
+    this.soCuaHangTL = data.length;
+    this.soCuaHangKhac = data.length - this.soCuaHangTL;
+    this.tongCuaHang = this.dataHuyenThi.length;
+  }
+
+  applyFilter1(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  applyFilter() {
+    if (this.isChecked)
+      this.filterModel.is_het_han = true;
+    else
+      this.filterModel.is_het_han = null;
+    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+    if (!filteredData.length) {
+      if (this.filterModel)
+        this.filteredDataSource.data = [];
+      else
+        this.filteredDataSource.data = this.dataSource.data;
+    }
+    else {
+      this.filteredDataSource.data = filteredData;
+    }
+    this.paginatorAgain();
+    this._caculator(filteredData);
+  }
+
+  filterArray(array, filters) {
+    const filterKeys = Object.keys(filters);
+    let temp = [...array];
+    filterKeys.forEach(key => {
+      let temp2 = [];
+      if (key == 'is_het_han') {
+        if (filters[key]) {
+          temp2 = temp2.concat(temp.filter(x => x[key] == filters[key]));
+          temp = [...temp2];
+        }
+      }
+      if (key == 'ngaycapgcn') {
+        if (filters[key] != 0) {
+          temp2 = temp2.concat(temp.filter(x => x[key].getFullYear() == filters[key]));
+          temp = [...temp2];
+        }
+      }
+      else {
+        if (filters[key])
+          if (filters[key].length) {
+            filters[key].forEach(criteria => {
+              temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
+            });
+            temp = [...temp2];
+          }
+      }
+    })
+    return temp;
+  }
+
   dataHuyenThi: Array<StoreCommonModel> = [{ tencuahang: ' CH BHX Bình Phước số 3', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00003', ngaycap: new Date('2018-12-12'), noicap: 'Bình Phước', diachi: 'Đường ĐT741, ấp chợ, Xã Tân Tiến, Huyện Đồng Phú', id_quan_huyen: 8, sogcn: '03.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-02-13'), ngayhethangcn: new Date('2022-02-12'), sdtlienhe: '0902789078', is_het_han: false },
   { tencuahang: ' CH BHX Bình Phước số 04', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00004', ngaycap: new Date('2018-12-21'), noicap: 'Bình Phước', diachi: 'Thôn Phú Hưng, Xã Phú Riềng, Huyện Phú Riềng', id_quan_huyen: 11, sogcn: '04.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-05-04'), ngayhethangcn: new Date('2022-05-03'), sdtlienhe: '0902789079', is_het_han: false },
   { tencuahang: ' CH BHX Bình Phước số 5', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00005', ngaycap: new Date('2019-01-21'), noicap: 'Bình Phước', diachi: 'Đường Võ Văn Tần, Khu phố Tân Bình, Phường Tân Bình, TP Đồng Xoài', id_quan_huyen: 2, sogcn: '05.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-05-04'), ngayhethangcn: new Date('2022-05-03'), sdtlienhe: '0902789080', is_het_han: false },
@@ -105,160 +179,4 @@ export class StoreManagementComponent implements OnInit {
   { tencuahang: 'CH BHX Bình Phước số 50', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00054', ngaycap: new Date('2020-06-08'), noicap: 'Bình Phước', diachi: 'Đường ĐT 759, Khu phố 2, Phường Phước Bình, Thị xã Phước Long', id_quan_huyen: 1, sogcn: '51.2020KD/GCNATTP-SCT', ngaycapgcn: new Date('2020-07-31'), ngayhethangcn: new Date('2023-07-30'), sdtlienhe: '0902789129', is_het_han: false },
   { tencuahang: 'CH BHX Bình Phước số 53', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00055', ngaycap: new Date('2020-07-03'), noicap: 'Bình Phước', diachi: 'Đường Quốc lộ 13, Khu phố Ninh Thịnh, Thị trấn Lộc Ninh, Huyện Lộc Ninh', id_quan_huyen: 5, sogcn: '54.2020KD/GCNATTP-SCT', ngaycapgcn: new Date('2020-08-19'), ngayhethangcn: new Date('2023-08-18'), sdtlienhe: '0902789130', is_het_han: false },
   { tencuahang: 'CH BHX Bình Phước số 54', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00056', ngaycap: new Date('2020-07-15'), noicap: 'Bình Phước', diachi: 'Đường 3 tháng 2, Khu phố Long Điền 1, Phường Phước Long, Thị xã Phước Long', id_quan_huyen: 1, sogcn: '55.2020KD/GCNATTP-SCT', ngaycapgcn: new Date('2020-10-20'), ngayhethangcn: new Date('2023-10-19'), sdtlienhe: '0902789131', is_het_han: false }]
-  years: any[] = [];
-  //Variable for only TS-------------------------------------------------------------------------
-
-  items: TreeviewItem[] = [];
-  values: number[] = [];
-  config = TreeviewConfig.create({
-    hasAllCheckBox: false,
-    hasFilter: true,
-    hasCollapseExpand: true,
-    decoupleChildFromParent: false,
-    maxHeight: 400
-  });
-
-  applyFilter1(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSourceHuyenThi.filter = filterValue.trim().toLowerCase();
-  }
-
-  public tableMergeHader: Array<ToltalHeaderMerge> = [];
-  public mergeHeadersColumn: Array<string> = [];
-  public indexOftableMergeHader: number = 0;
-
-  columns: number = 1;
-  districts: District[] = [
-  { id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-  headerArray: string[] = ['index', 'tenhuyenthi', 'ten_tttm', 'dientich', 'vondautu', 'namdautuxaydung', 'phanloai'];
-  isChecked: boolean = false;
-
-  filterModel: StoreFilterModel = new StoreFilterModel();
-  filteredDataSource: MatTableDataSource<StoreCommonModel> = new MatTableDataSource<StoreCommonModel>();
-
-  //
-  public tongCuaHang: number;
-  public soCuaHangTL: number;
-  public soCuaHangKhac: number;
-  public soCuaHangDauTuTrongNam: number = 0;
-  public soCuaHangDauTuNamTruoc: number = 0;
-  year: number;
-
-
-  //Angular FUnction --------------------------------------------------------------------
-  constructor(
-    public excelService: ExcelService,
-    public reportSevice: ReportService,
-    public route: ActivatedRoute,
-    public keyboardservice: KeyboardService,
-    public info: InformationService
-  ) { }
-
-  ngOnInit(): void {
-    let data: any = JSON.parse(localStorage.getItem('currentUser'));
-    this.dataSourceHuyenThi.data = this.dataHuyenThi;
-    this.filteredDataSource.data = [...this.dataSourceHuyenThi.data];
-
-    this._caculator(this.dataSourceHuyenThi.data);
-    this.year = new Date().getFullYear();
-    this.years = this.getYears();
-    this.autoOpen();
-    // this._paginator();
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
-
-  ngAfterViewInit(): void {
-    this._paginator();
-  }
-  dataSourceHuyenThi: MatTableDataSource<StoreCommonModel> = new MatTableDataSource<StoreCommonModel>();
-
-  //Xuất excel
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
-  sortHeaderCondition(event) {
-
-  }
-
-  getYears() {
-    return [{text:'Tất cả',value:0}, {text:'2020',value:2020},{text:'2019',value:2019},{text:'2018',value:2018},];
-  }
-
-  private _paginator(): void {
-    this.filteredDataSource.paginator = this.paginator;
-    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    this.paginator._intl.firstPageLabel = "Trang Đầu";
-    this.paginator._intl.lastPageLabel = "Trang Cuối";
-    this.paginator._intl.previousPageLabel = "Trang Trước";
-    this.paginator._intl.nextPageLabel = "Trang Tiếp";
-  }
-
-  private _caculator(data: StoreCommonModel[]): void {
-    this.soCuaHangTL = data.length;
-    this.soCuaHangKhac = data.length - this.soCuaHangTL;
-    this.tongCuaHang = this.dataHuyenThi.length;
-  }
-
-  applyFilter() {
-    if (this.isChecked)
-      this.filterModel.is_het_han = true;
-    else
-      this.filterModel.is_het_han = null;
-    let filteredData = this.filterArray(this.dataSourceHuyenThi.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSourceHuyenThi.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
-    }
-    this._paginator();
-    this._caculator(filteredData);
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (key == 'is_het_han') {
-        if (filters[key]) {
-          temp2 = temp2.concat(temp.filter(x => x[key] == filters[key]));
-          temp = [...temp2];
-        }
-      }
-      if (key == 'ngaycapgcn') {
-        if (filters[key] != 0) {
-          temp2 = temp2.concat(temp.filter(x => x[key].getFullYear() == filters[key]));
-          temp = [...temp2];
-        }
-      }
-      else {
-        if (filters[key])
-          if (filters[key].length) {
-            filters[key].forEach(criteria => {
-              temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-            });
-            temp = [...temp2];
-          }
-      }
-    })
-    return temp;
-  }
 }

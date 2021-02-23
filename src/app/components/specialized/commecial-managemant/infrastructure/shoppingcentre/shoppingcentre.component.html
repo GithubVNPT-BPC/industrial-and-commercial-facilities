@@ -100,12 +100,12 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        TTTM thành lập mới năm <span>{{year}}</span>:<span>{{sieuThiDauTuTrongNam |
+                                        TTTM thành lập mới năm <span>{{currentYear}}</span>:<span>{{sieuThiDauTuTrongNam |
                                             number: '1.0-0':'vi'}}</span>
                                     </li>
 
                                     <li>
-                                        TTTM ngừng hoạt động năm <span>{{year}}</span>:<span>0</span>
+                                        TTTM ngừng hoạt động năm <span>{{currentYear}}</span>:<span>0</span>
                                     </li>
 
                                 </ul>
@@ -149,12 +149,36 @@
                     </div>
 
                     <div class="col-6 col-lg-6 button-control">
-                        <button mat-raised-button (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')">Xuất Excel</button>
+                        <button mat-raised-button matTooltip="Xuất Excel"
+                            (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button matTooltip="Thêm mới" 
+                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
                     </div>
                 </div>
+
+                <hr>
+
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
 
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef disableClear >
+                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()"> 
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)"
+                                    [aria-label]="checkboxLabel(element)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+                        
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
@@ -169,11 +193,6 @@
                             <th mat-header-cell *matHeaderCellDef>Địa điểm</th>
                             <td mat-cell *matCellDef="let element"> {{element.dia_diem}} </td>
                         </ng-container>
-
-                        <!-- <ng-container matColumnDef="dia_ban">
-                            <th mat-header-cell *matHeaderCellDef> Địa bàn </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dia_ban}} </td>
-                        </ng-container> -->
 
                         <ng-container matColumnDef="nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Nhà nước </th>
@@ -300,14 +319,14 @@
                         </tr>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="headerArray; sticky:true"></tr>
-                        <tr mat-row class="table-row" *matRowDef="let row; columns: headerArray;let i = index"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: headerArray; let i = index"></tr>
                     </table>
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
                 <ng-template #ShowEmpty>
-                    <h1>Không có dữ liệu</h1>
+                    <h1 class="text-center">Không có dữ liệu</h1>
                 </ng-template>
-
+                <br>
             </mat-expansion-panel>
         </mat-accordion>
 

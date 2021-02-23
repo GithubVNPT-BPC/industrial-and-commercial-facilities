@@ -1,38 +1,12 @@
 //Import Library
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, ViewChildren, QueryList } from '@angular/core';
-import * as XLSX from 'xlsx';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl, NgForm } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { startWith, map, isEmpty } from 'rxjs/operators';
-import { MatTableFilter } from 'mat-table-filter';
-//Import Component
 
 //Import Model
-import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
-//Import Service
-import { ControlService } from '../../../../../_services/APIService/control.service';
-import { ReportDirective } from 'src/app/shared/report.directive';
-import { KeyboardService } from 'src/app/shared/services/keyboard.service';
-import { InformationService } from 'src/app/shared/information/information.service';
-import { ReportService } from 'src/app/_services/APIService/report.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
+import { FoodCommonModel, FoodFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
 
-import * as moment from 'moment';
-import { CompanyDetailModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { TreeviewConfig, TreeviewItem, TreeviewModule } from 'ngx-treeview';
-import { element } from 'protractor';
-import { FoodCommonModel, FoodFilterModel, MarketCommonModel, StoreCommonModel, SuperMarketCommonModel } from 'src/app/_models/APIModel/commecial-management.model';
-import { Data } from 'src/app/components/data-sct/data-sct-type';
-import { Time } from 'highcharts';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
-
-interface HashTableNumber<T> {
-  [key: string]: T;
-}
+import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 
 @Component({
   selector: 'app-food-commecial',
@@ -40,25 +14,83 @@ interface HashTableNumber<T> {
   styleUrls: ['../../../special_layout.scss'],
 })
 
-export class FoodManagementComponent implements OnInit {
-  //Constant-------------------------------------------------------------------------
+export class FoodManagementComponent extends BaseComponent {  
+  dataSourceHuyenThi: MatTableDataSource<FoodCommonModel> = new MatTableDataSource<FoodCommonModel>();
+  filteredDataSource: MatTableDataSource<FoodCommonModel> = new MatTableDataSource<FoodCommonModel>();
 
-  //Viewchild & Input-----------------------------------------------------------------------
-  @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>
-  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
+  //Variable for HTML&TS-------------------------------------------------------------------------
+  displayedColumns = ['select', 'index', 'tendoanhnghiep', 'diachi', 'scndkkd', 'ngaycap', 'noicap', 'tennddpl', 'sdtnddpl', 'sanphamkinhdoanh'];
 
-  ExportTOExcel(filename: string, sheetname: string) {
-      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  } 
+  columns: number = 1;
+  headerArray: string[] = ['select', 'index', 'tenhuyenthi', 'ten_tttm', 'dientich', 'vondautu', 'namdautuxaydung', 'phanloai'];
+  isChecked: boolean;
+  public tongDoanhNghiep: number;
+  //
+  filterModel: FoodFilterModel = new FoodFilterModel();
+  listProduct : string[] = [];
+
+  //Angular FUnction --------------------------------------------------------------------
+  constructor(
+    private injector: Injector,
+  ) {
+    super(injector);
+  }
+
+  ngOnInit(): void {
+    super.ngOnInit();
+    this.getFoodCommerceData();    
+  }
+  
+  ngAfterViewInit() {
+    this.paginatorAgain();
+  }
+
+  getFoodCommerceData() {
+    this.dataSourceHuyenThi.data = this.dataHuyenThi;
+    this.filteredDataSource.data = [...this.dataSourceHuyenThi.data];
+    this._caculator(this.dataHuyenThi);
+    this.listProduct = [...new Set( this.dataHuyenThi.map( x => x.sanphamkinhdoanh))];
+  }
+
+  private _caculator(data: FoodCommonModel[]){
+    this.tongDoanhNghiep = data.length;
+  }
 
   applyFilter1(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceHuyenThi.filter = filterValue.trim().toLowerCase();
   }
-  //Variable for HTML&TS-------------------------------------------------------------------------
-  displayedColumns = ['index', 'tendoanhnghiep', 'diachi', 'scndkkd', 'ngaycap', 'noicap', 'tennddpl', 'sdtnddpl', 'sanphamkinhdoanh'];
+
+  applyFilter() {
+    let filteredData = this.filterArray(this.dataSourceHuyenThi.data, this.filterModel);
+    this._caculator(filteredData);
+    if (!filteredData.length) {
+      if (this.filterModel)
+        this.filteredDataSource.data = [];
+      else
+        this.filteredDataSource.data = this.dataSourceHuyenThi.data;
+    }
+    else {
+      this.filteredDataSource.data = filteredData;
+    }
+    this.paginatorAgain();
+  }
+
+  filterArray(array, filters) {
+    const filterKeys = Object.keys(filters);
+    let temp = [...array];
+    filterKeys.forEach(key => {
+      let temp2 = [];
+      if (filters[key].length) {
+        filters[key].forEach(criteria => {
+          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
+        });
+        temp = [...temp2];
+      }
+    })
+    return temp;
+  }
+
   dataHuyenThi: Array<FoodCommonModel> = [{ tendoanhnghiep: 'DNTN Phước Đức', id_quan_huyen: 2, diachi: 'Tổ 4, KP. Phước Tân, phường Tân Thiện, TP. Đồng Xoài', scndkkd: '', ngaycap: null, noicap: '', tennddpl: 'Phan Văn Bế', sdtnddpl: '0271.3862.101', sanphamkinhdoanh: 'Bán buôn thực phẩm' },
   { tendoanhnghiep: 'DNTN TM Phạm Nguyễn', id_quan_huyen: 2, diachi: 'Dẫy I, ấp 6, xã Tiến Hưng, TP.Đồng Xoài', scndkkd: '', ngaycap: null, noicap: '', tennddpl: 'Nguyễn Thị Minh Huệ', sdtnddpl: '0271.3896.478', sanphamkinhdoanh: 'Bán buôn thực phẩm' },
   { tendoanhnghiep: 'DNTN Hữu Bằng', id_quan_huyen: 2, diachi: 'Tổ 1, KP Suối Đá, phường Tân Xuân, TP.Đồng Xoài', scndkkd: '', ngaycap: null, noicap: '', tennddpl: 'Lê Xuân Bằng', sdtnddpl: '0271.3884.628', sanphamkinhdoanh: 'Bán buôn thực phẩm' },
@@ -90,122 +122,4 @@ export class FoodManagementComponent implements OnInit {
   { tendoanhnghiep: 'DNTN QUỐC ANH THU', id_quan_huyen: 5, diachi: 'KP.Ninh Thịnh, TT.Lộc Ninh, huyện Lộc Ninh', scndkkd: '', ngaycap: null, noicap: '', tennddpl: 'Lê Thị Thu', sdtnddpl: '0983379379', sanphamkinhdoanh: 'Bán buôn thực phẩm' },
   { tendoanhnghiep: 'C.ty TNHH MTV Tuấn Dương', id_quan_huyen: 9, diachi: 'KP. Hòa Đồng, thị trấn Đức phong, huyện Bù Đăng, BP', scndkkd: '', ngaycap: null, noicap: '', tennddpl: 'Đặng Văn Tuấn', sdtnddpl: '0376.955.054', sanphamkinhdoanh: 'Bán buôn thực phẩm' },
   { tendoanhnghiep: 'CÔNG TY TNHH MTV ĐÔNG HƯNG', id_quan_huyen: 9, diachi: 'ấp 2, xã Minh Hưng, huyện Bù Đăng', scndkkd: '', ngaycap: null, noicap: '', tennddpl: 'Phan Hoài Hạ', sdtnddpl: '0913720377', sanphamkinhdoanh: 'Bán buôn thực phẩm' }]
-  //Variable for only TS-------------------------------------------------------------------------
-
-  items: TreeviewItem[] = [];
-  values: number[] = [];
-  config = TreeviewConfig.create({
-    hasAllCheckBox: false,
-    hasFilter: true,
-    hasCollapseExpand: true,
-    decoupleChildFromParent: false,
-    maxHeight: 400
-  });
-
-  public tableMergeHader: Array<ToltalHeaderMerge> = [];
-  public mergeHeadersColumn: Array<string> = [];
-  public indexOftableMergeHader: number = 0;
-
-  columns: number = 1;
-  districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-  headerArray: string[] = ['index', 'tenhuyenthi', 'ten_tttm', 'dientich', 'vondautu', 'namdautuxaydung', 'phanloai'];
-  isChecked: boolean;
-  public tongDoanhNghiep: number;
-  //
-  filterModel: FoodFilterModel = new FoodFilterModel();
-  listProduct : string[] = [];
-
-  //Angular FUnction --------------------------------------------------------------------
-  constructor(
-    public reportSevice: ReportService,
-    public route: ActivatedRoute,
-    public keyboardservice: KeyboardService,
-    public info: InformationService,
-    public excelService: ExcelService,
-  ) { }
-
-  ngOnInit(): void {
-    let data: any = JSON.parse(localStorage.getItem('currentUser'));
-    this.dataSourceHuyenThi.data = this.dataHuyenThi;
-    this.filteredDataSource.data = [...this.dataSourceHuyenThi.data];
-    this._caculator(this.dataSourceHuyenThi.data);
-    this.autoOpen();
-    this.listProduct = [...new Set( this.dataHuyenThi.map( x => x.sanphamkinhdoanh))];
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
-
-  ngAfterViewInit(): void {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    // this.accordion.openAll();
-    this._paginator();
-  }
-  dataSourceHuyenThi: MatTableDataSource<FoodCommonModel> = new MatTableDataSource<FoodCommonModel>();
-  filteredDataSource: MatTableDataSource<FoodCommonModel> = new MatTableDataSource<FoodCommonModel>();
-
-  sortHeaderCondition(event) {
-
-  }
-
-  private _caculator(data: FoodCommonModel[]){
-    this.tongDoanhNghiep = data.length;
-  }
-  private _paginator(){
-    this.filteredDataSource.paginator = this.paginator;
-    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    this.paginator._intl.firstPageLabel = "Trang Đầu";
-    this.paginator._intl.lastPageLabel = "Trang Cuối";
-    this.paginator._intl.previousPageLabel = "Trang Trước";
-    this.paginator._intl.nextPageLabel = "Trang Tiếp";
-  }
-  // applyDistrictFilter(event) {
-
-  // }
-
-  // applyExpireCheck(event) {
-
-  // }
-
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSourceHuyenThi.data, this.filterModel);
-    this._caculator(filteredData);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSourceHuyenThi.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
-    }
-    this._paginator();
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
-      }
-    })
-    return temp;
-  }
 }

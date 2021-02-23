@@ -25,7 +25,7 @@ export class LPGManagementComponent extends BaseComponent {
     private _linkOutput: LinkModel = new LinkModel();
 
     displayedColumns: string[] = [];
-    fullFieldList: string[] = ['select', 'index']//, 'ten_doanh_nghiep', 'mst', 'email', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'von_dieu_le', 'cong_suat', 'san_luong', 'so_lao_dong_sct', 'email_sct', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    fullFieldList: string[] = ['select', 'index']
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
     
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
@@ -77,8 +77,7 @@ export class LPGManagementComponent extends BaseComponent {
     ngOnInit() {
         super.ngOnInit();
         this.years = this.getYears();
-        this.year = new Date().getFullYear() - 1;
-        this.GetLGPManagementData(this.year);
+        this.GetLGPManagementData(this.currentYear);
         // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
         //     return String(data.is_het_han).includes(filter);
         // };
