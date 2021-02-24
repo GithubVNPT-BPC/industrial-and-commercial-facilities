@@ -446,9 +446,11 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
-                                            <mat-option *ngFor='let ward of wards' [value]='ward.id_phuong_xa'>
-                                                {{ward.ten_phuong_xa}}
-                                            </mat-option>
+                                            <mat-optgroup *ngFor="let dt of districtWardSorted | keyvalue" [label]="dt.key">                                                
+                                                <mat-option *ngFor='let dw of dt.value' [value]='dw.id_phuong_xa'>
+                                                    {{dw.ten_phuong_xa}}
+                                                </mat-option>
+                                            </mat-optgroup>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -670,7 +672,7 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm</mat-label>
-                                        <input matInput type="text" formControlName="nam">
+                                        <input matInput  type="text" formControlName="nam">
                                     </mat-form-field>
                                 </div>
 

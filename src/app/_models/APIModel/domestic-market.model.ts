@@ -285,6 +285,13 @@ export class SubDistrictModel {
     id_quan_huyen: number;
 }
 
+export class DistrictWardModel {
+    id_phuong_xa: number;
+    ten_phuong_xa: string;
+    id_quan_huyen: number;
+    tem_quan_huyen: string;
+}
+
 export class BusinessTypeModel {
     id_loai_hinh_hoat_dong: number;
     ten_loai_hinh: string;

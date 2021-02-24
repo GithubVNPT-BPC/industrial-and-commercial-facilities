@@ -9,10 +9,25 @@ import { MarketModel } from 'src/app/_models/APIModel/commecial-management.model
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
+//Moment
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { YEAR_FORMAT } from '../common/common-commecial.component';
+
 @Component({
   selector: "app-market-commecial",
   templateUrl: "./market-commecial.component.html",
   styleUrls: ['../../../special_layout.scss'],
+  providers: [
+    {
+        provide: DateAdapter,
+        useClass: MomentDateAdapter,
+        deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: YEAR_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+],
 })
 export class MarketCommecialManagementComponent extends BaseComponent {
 
@@ -167,7 +182,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.initWards();
+    this.initDistrictWard();
     this.getMarketData();
   }
 
@@ -252,6 +267,11 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     })
     return temp;
   }
+
+  private chosenYearHandler(normalizedYear, datepicker) {
+    datepicker.close();
+    return normalizedYear.year()
+}
 }
 
 

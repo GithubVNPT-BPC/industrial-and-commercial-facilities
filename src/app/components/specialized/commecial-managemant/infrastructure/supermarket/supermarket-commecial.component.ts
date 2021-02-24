@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 
 //Import Service
-import { SuperMarketCommonModel, SuperMarketFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
+import { SuperMarketCommonModel } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
@@ -33,7 +33,10 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   public sieuThiNgungHoatDong: number;
   public sieuThiDangXayDung: number;
   //
-  public filterModel: SuperMarketFilterModel = new SuperMarketFilterModel();
+  public filterModel = {
+    id_quan_huyen: [],
+    phanloai :  [],
+  }
   public marketTypeList = marketTypeList;
 
   //Viewchild & Input-----------------------------------------------------------------------

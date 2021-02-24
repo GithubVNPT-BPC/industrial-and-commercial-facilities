@@ -3,6 +3,17 @@ import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { MarketTypeModel } from 'src/app/_models/APIModel/commecial-management.model';
 
+export const YEAR_FORMAT = {
+    parse: {
+        dateInput: 'YYYY',
+    },
+    display: {
+        dateInput: 'YYYY',
+        monthYearLabel: 'YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'YYYY',
+    },
+};
 
 @Component({
     selector: 'app-common-commecial',

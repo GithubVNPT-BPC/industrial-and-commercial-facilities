@@ -1,13 +1,5 @@
 <mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
-        <!-- <div class="button-control">
-            <button mat-raised-button (click)="accordion.openAll()">
-                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
-            </button>
-            <button mat-raised-button (click)="accordion.closeAll()">
-                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
-            </button>
-        </div> -->
         <mat-accordion class="accord" multi>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -109,79 +101,52 @@
                         </ng-container>
                         
                         <ng-container matColumnDef="index">
-                            <th mat-header-cell style="text-align: center;" *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i+1}} </td>
-                            <td mat-footer-cell *matFooterCellDef> </td>
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex * this.filteredDataSource.paginator.pageSize}} 
+                            </td>                        
                         </ng-container>
 
-                        <ng-container matColumnDef="tendoanhnghiep" sticky>
-                            <th mat-header-cell style="text-align: center;" *matHeaderCellDef>Tên doanh nghiệp</th>
-                            <td mat-cell *matCellDef="let element"> {{element.tendoanhnghiep}} </td>
+                        <div *ngFor="let field of displayedFields | keyvalue">
+                            <ng-container matColumnDef="{{field.key}}" [sticky]="['ten_cua_hang'].includes(field.key) ? true : null">
+                                <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
+                                <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
+                                    <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
+                                        <ng-container *ngIf="![].includes(field.key) ;else dateFieldCond">
+                                            <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                        </ng-container>
+                                    </ng-container>
+                                </ng-container>
+
+                                <ng-template #activeFieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' : 'Hết hạn'}}</td>
+                                </ng-template>
+
+                                <ng-template #qtyFieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | number:'1.0-4'}}</td>
+                                </ng-template>
+
+                                <ng-template #dateFieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy'}}</td>
+                                </ng-template>
+                                
+                            </ng-container>
+                        </div>
+
+                        <ng-container matColumnDef="general">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6">
                         </ng-container>
 
-                        <ng-container matColumnDef="sanphamkinhdoanh">
-                            <th mat-header-cell *matHeaderCellDef> Sản phẩm kinh doanh </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.sanphamkinhdoanh}} </td>
+                        <ng-container matColumnDef="businessLicense">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="3">Chứng nhận đăng ký KD	</th>
                         </ng-container>
 
-                        <ng-container matColumnDef="scndkkd">
-                            <th mat-header-cell *matHeaderCellDef> Số CNĐKKD </th>
-                            <td mat-cell *matCellDef="let element">{{element.scndkkd}} </td>
+                        <ng-container matColumnDef="representInfo">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">Người đại diện pháp lý	</th>
                         </ng-container>
 
-                        <ng-container matColumnDef="ngaycap">
-                            <th mat-header-cell *matHeaderCellDef> Ngày cấp</th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.ngaycap}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="noicap">
-                            <th mat-header-cell *matHeaderCellDef> Nơi cấp </th>
-                            <td mat-cell *matCellDef="let element"> {{element.noicap}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="diachi">
-                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
-                            <td mat-cell *matCellDef="let element"> {{element.diachi}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="tennddpl">
-                            <th mat-header-cell *matHeaderCellDef> Tên </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tennddpl}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="sdtnddpl">
-                            <th mat-header-cell *matHeaderCellDef> Diện thoại </th>
-                            <td mat-cell *matCellDef="let element"> {{element.sdtnddpl}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="stt1">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">
-                        </ng-container>
-
-                        <ng-container matColumnDef="tch">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="spkd">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="cndkkd">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="3">
-                                Chứng nhận đăng ký KD</th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="nddpl">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2"> Người đại diện pháp lý </th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="spkdd">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="">
-                        </ng-container>
-
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="['stt1','tch', 'spkd','cndkkd','nddpl','spkdd']; sticky: true">
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="['general','businessLicense', 'representInfo']; sticky: true">
                         </tr>
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -219,42 +184,103 @@
                     <div class="col-md-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
-                                Thông tin doanh nghiệp
+                                Thông tin cửa hàng
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-                            <!-- <div class="row">
-                                <div class="col-md-6" >
+                            <div class="row">
+                                <div class="col-md-9" >
                                     <mat-form-field appearance="outline"> 
-                                        <mat-label>Mã số thuế doanh nghiệp</mat-label>
+                                        <mat-label>Tên cửa hàng</mat-label>
+                                        <input matInput formControlName="ten_cua_hang">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Mã số thuế</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
-                            </div> -->
+
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Địa chỉ</mat-label>
+                                        <input matInput type="text" formControlName="dia_chi">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3 col-lg-3" >
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Địa bàn</mat-label>
+                                        <mat-select formControlName="id_phuong_xa">
+                                            <mat-optgroup *ngFor="let dt of districtWardSorted | keyvalue" [label]="dt.key">                                                
+                                                <mat-option *ngFor='let dw of dt.value' [value]='dw.id_phuong_xa'>
+                                                    {{dw.ten_phuong_xa}}
+                                                </mat-option>
+                                            </mat-optgroup>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
                         </mat-card-content>
                     </div>
 
                     <div class="col-md-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
-                                <span class="pt-2"> Công suất và sản lượng </span>
+                                <span class="pt-2"> Chứng nhận đăng ký kinh doanh </span>
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
-                            <!-- <div class="row">
+                            <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Sản lượng</mat-label>
-                                        <input matInput  type="number" formControlName="san_luong">
+                                        <mat-label>Số chứng nhận ĐKKD	</mat-label>
+                                        <input matInput  type="text" formControlName="so_giay_phep">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Công suất</mat-label>
-                                        <input matInput type="number" formControlName="cong_suat">
+                                        <mat-label>Ngày cấp</mat-label>
+                                        <input matInput [matDatepicker]="ngay_cap" formControlName="ngay_cap">
+                                        <mat-datepicker-toggle matSuffix [for]="ngay_cap"></mat-datepicker-toggle>
+                                        <mat-datepicker #ngay_cap></mat-datepicker>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Nơi cấp</mat-label>
+                                        <input matInput type="text" formControlName="noi_cap">
                                     </mat-form-field>
                                 </div>                  
-                            </div> -->
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Người đại diện pháp lý </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Tên người đại diện	</mat-label>
+                                        <input matInput  type="text" formControlName="nguoi_dai_dien">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Điện thoại	</mat-label>
+                                        <input matInput  type="text" formControlName="so_dien_thoai">
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
                         </mat-card-content>
                     </div>
 

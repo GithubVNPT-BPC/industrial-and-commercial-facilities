@@ -12,7 +12,7 @@ export const HEADERS = { 'Content-Type': 'application/json' }
 })
 export class CommerceManagementService {
     public apiHome = environment.apiEndpoint;
-
+    private prefix = 'api/qltm';
     // GET
     private urlGetExpo = "api/qltm/hoi-cho-trien-lam";
     private urlGetSubcribeDiscount = "api/qltm/khuyen-mai";
@@ -20,8 +20,8 @@ export class CommerceManagementService {
     private urlGetMultiLevelTrade = "api/qltm/da-cap";
     private urlGetMarketPlace = "api/qltm/sttttm";
     private urlGetMarket = 'api/qltm/httm/cho';
-    private urlGetFoodCommerce = '';
-    private urlGetConvenienceStore = '';
+    private urlGetFoodCommerce = 'api/qltm/httm/kdtp';
+    private urlGetConvenienceStore = 'api/qltm/httm/chtl';
 
     // POST
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
@@ -29,8 +29,8 @@ export class CommerceManagementService {
     private urlPostMultiLevelTrade = "api/qltm/cap-nhat-du-lieu-da-cap";
     private urlPostMarketPlace = "api/qlnl/addsttttm";
     private urlPostMarket = 'api/qltm/httm/cho';
-    private urlPostFoodCommerce = '';
-    private urlPostConvenienceStore = '';
+    private urlPostFoodCommerce = 'api/qltm/httm/kdtp';
+    private urlPostConvenienceStore = 'api/qltm/httm/chtl';
 
     constructor(public http: HttpClient) {}
 

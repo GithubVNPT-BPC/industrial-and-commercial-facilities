@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 //Import Services
 import { ReportService } from 'src/app/_services/APIService/report.service';
 
-import { SuperMarketCommonModel, SuperMarketFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
+import { SuperMarketCommonModel, } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
@@ -33,7 +33,10 @@ export class ShoppingcentreComponent extends BaseComponent {
   public sieuThiNgungHoatDong: number;
   public sieuThiDangXayDung: number;
   //
-  public filterModel: SuperMarketFilterModel = new SuperMarketFilterModel();
+  public filterModel = {
+    id_quan_huyen: [],
+    phanloai :  [],
+  }
   public marketTypeList = marketTypeList;
 
   headerArray = ['select', 'index', 'ten_sieu_thi_TTTM', 'dia_diem', 'nha_nuoc', 'ngoai_nha_nuoc', 'co_von_dau_tu_nuoc_ngoai', 'von_khac', 'tong_hop',

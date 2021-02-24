@@ -1,3 +1,9 @@
+
+export class MarketTypeModel {
+    id: number;
+    name: string;
+}
+
 export class MarketModel {
     id_phuong_xa: number;
     id_quan_huyen: number;
@@ -38,19 +44,6 @@ export class MarketModel {
     tinh_chat_cho: string;
 }
 
-export class MarketTypeModel {
-    id: number;
-    name: string;
-}
-
-export class MarketCommonModel {
-    huyen: string;
-    tongsocho: number;
-    chohang1: number;
-    chohang2: number;
-    chohang3: number;
-}
-
 export class SuperMarketCommonModel {
     ten_sieu_thi_TTTM: string;
     dia_diem: string;
@@ -77,44 +70,43 @@ export class SuperMarketCommonModel {
     dien_thoai1: string;
 }
 
-export class SuperMarketFilterModel {
-    id_quan_huyen: number[] = [];
-    id_phan_hang: string[] = [];
-}
-
 export class ConvenienceStoreModel {
-    tencuahang: string;
-    sanphamkinhdoanh: string;
-    scndkkd: string;
-    ngaycap: Date;
-    noicap: string;
-    diachi: string;
-    sogcn: string;
-    ngaycapgcn: Date;
-    ngayhethangcn: Date;
-    sdtlienhe: string;
+    id: number;
+    ten_cua_hang: string;
+    mst: string;
+    id_spkd: number;
+    dia_chi: string;
+    id_phuong_xa: number;
+    so_dien_thoai: string;
+    id_giay_cndkkd: number;
+    id_giay_atvstp: number;
+    dia_chi_day_du: string;
+    so_chung_nhan: string;
+    ngay_cap_giay_chung_nhan: string;
+    noi_cap_giay_chung_nhan: string;
+    so_giay_phep: string;
+    ngay_cap_giay_phep: string;
+    ngay_het_han_giay_phep: string;
+    ten_san_pham: string;
     id_quan_huyen: number;
-    is_het_han?: boolean;
-}
-export class StoreFilterModel {
-    id_quan_huyen: number[] = [];
-    is_het_han: boolean = null;
-    ngaycapgcn: number = 0;
+    is_expired: boolean;
 }
 
-export class FoodCommonModel {
-    tendoanhnghiep: string;
-    diachi: string;
-    sanphamkinhdoanh: string;
-    scndkkd: string;
-    ngaycap: Date;
-    noicap: string;
-    tennddpl: string;
-    sdtnddpl: string;
+export class FoodCommerceModel {
+    id: number;
+    ten_cua_hang: string;
+    mst: string;
+    id_spkd: number;
+    dia_chi: string;
+    id_phuong_xa: number;
+    so_dien_thoai: string;
+    id_giay_cndkkd: number;
+    id_giay_atvstp: number;
+    dia_chi_day_du: string;
+    so_giay_phep: string;
+    ngay_cap: string;
+    noi_cap: string;
+    ten_san_pham: string;
+    nguoi_dai_dien: string;
     id_quan_huyen: number;
-}
-
-export class FoodFilterModel {
-    id_quan_huyen: number[] = [];
-    sanphamkinhdoanh: string[] = [];
 }

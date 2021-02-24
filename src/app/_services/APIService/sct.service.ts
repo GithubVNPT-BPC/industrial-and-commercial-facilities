@@ -51,8 +51,10 @@ export class SCTService {
 
     // start api quan huyen
     private apiDanhSach = environment.apiEndpoint + "api/danh-sach";
+
     private urlQuanHuyen = "/quan-huyen"; 
     private urlPhuongXa = "/phuong-xa"; 
+    private urlPhuongXaQuanHuyen = "/phuong-xa-kem-quan-huyen"
     // end api quan huyen
 
     token: any;
@@ -329,6 +331,14 @@ export class SCTService {
 
     LayDanhSachPhuongXa(){
         var apiUrl = this.apiDanhSach + this.urlPhuongXa;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    LayDanhSachPhuongXaQuanHuyen(){
+        var apiUrl = this.apiDanhSach + this.urlPhuongXaQuanHuyen;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
