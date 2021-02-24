@@ -20,6 +20,8 @@ export class CommerceManagementService {
     private urlGetMultiLevelTrade = "api/qltm/da-cap";
     private urlGetMarketPlace = "api/qltm/sttttm";
     private urlGetMarket = 'api/qltm/httm/cho';
+    private urlGetFoodCommerce = '';
+    private urlGetConvenienceStore = '';
 
     // POST
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
@@ -27,6 +29,8 @@ export class CommerceManagementService {
     private urlPostMultiLevelTrade = "api/qltm/cap-nhat-du-lieu-da-cap";
     private urlPostMarketPlace = "api/qlnl/addsttttm";
     private urlPostMarket = 'api/qltm/httm/cho';
+    private urlPostFoodCommerce = '';
+    private urlPostConvenienceStore = '';
 
     constructor(public http: HttpClient) {}
 
@@ -94,6 +98,23 @@ export class CommerceManagementService {
         );
     }
 
+    public getFoodCommerceData() {
+        let apiUrl = this.apiHome + this.urlGetFoodCommerce;
+        let headers = new HttpHeaders(HEADERS);
+        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public getConvenienceStoreData() {
+        let apiUrl = this.apiHome + this.urlGetConvenienceStore;
+        let headers = new HttpHeaders(HEADERS);
+        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // POST Methods
     public postSubcribeDiscountData(datas) {
         let apiUrl = this.apiHome + this.urlPostSubcribeDiscount;
         let headers = new HttpHeaders(HEADERS);
@@ -130,7 +151,23 @@ export class CommerceManagementService {
         );
     }
 
-    
+    public postFoodCommerce(datas) {
+        let apiUrl = this.apiHome + this.urlPostFoodCommerce;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public postConvenienceStore(datas) {
+        let apiUrl = this.apiHome + this.urlPostConvenienceStore;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
 
     public handleError(error: HttpErrorResponse) {
         let errorMessage = '';

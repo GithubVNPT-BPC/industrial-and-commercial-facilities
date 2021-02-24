@@ -1,13 +1,5 @@
 <mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
-        <!-- <div class="button-control">
-            <button mat-raised-button (click)="accordion.openAll()">
-                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
-            </button>
-            <button mat-raised-button (click)="accordion.closeAll()">
-                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
-            </button>
-        </div> -->
         <mat-accordion class="accord" multi>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -26,7 +18,7 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> 1. Tổng số chợ: <span>{{tong_SoCho}} chợ</span>
+                                    <mat-icon>filter</mat-icon> 1. Tổng số chợ: <span>{{numOfMarket}} chợ</span>
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
@@ -50,7 +42,7 @@
                                     <li>
                                         Chợ thành thị: <span>{{diaban_ThanhThi}}</span>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         Chợ đầu mối: <span>{{diaban_DauMoi}}</span>
                                     </li>
                                     <li>
@@ -60,8 +52,8 @@
                                         Chợ tự phát: <span>{{diaban_TuPhat}}</span>
                                     </li>
                                     <li>
-                                        Chợ khac: <span>{{diaban_Khac}}</span>
-                                    </li>
+                                        Chợ khác: <span>{{diaban_Khac}}</span>
+                                    </li> -->
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -85,6 +77,12 @@
                                     <li>
                                         Chợ hạng 3: <span>{{hang_HangIII}} chợ</span>
                                     </li>
+                                    <li>
+                                        Làm tạm: <span>{{hang_LamTam}} chợ</span>
+                                    </li>
+                                    <li>
+                                        Chưa có hạng: <span>{{hang_ChuaCo}} chợ</span>
+                                    </li>
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -103,7 +101,7 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Chợ Kiên cố: <span>{{congtrinh_KienCo}}</span>
+                                        Chợ kiên cố: <span>{{congtrinh_KienCo}}</span>
                                     </li>
                                     <li>
                                         Chợ bán kiên cố: <span>{{congtrinh_BanKienCo}}</span>
@@ -125,7 +123,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <li>
+                                    <!-- <li>
                                         Chợ đầu mối chuyên doanh: <span>{{kinhdoanh_choDauMoiChuyenDoanh}}</span>
                                     </li>
                                     <li>
@@ -133,7 +131,7 @@
                                     </li>
                                     <li>
                                         Chợ bán lẻ: <span>{{kinhdoanh_choBanLe}}</span>
-                                    </li>
+                                    </li> -->
 
                                 </ul>
                             </mat-card-content>
@@ -150,7 +148,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <li>
+                                    <!-- <li>
                                         Ban quản lý/Tổ quản lý: <span>{{quanly_BanTo}}</span>
                                     </li>
                                     <li>
@@ -161,7 +159,7 @@
                                     </li>
                                     <li>
                                         Hộ kinh doanh: <span>{{quanly_HoKinhDoanh}}</span>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -180,7 +178,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <li>
+                                    <!-- <li>
                                         Vốn ngân sách Trung ương: <span>{{tongvon_VonNganSachTW}}</span>
                                     </li>
                                     <li>
@@ -191,7 +189,7 @@
                                     </li>
                                     <li>
                                         Vốn khác: <span>{{tongvon_Khac}}</span>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -206,7 +204,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <li>
+                                    <!-- <li>
                                         Chợ xây dựng mới năm {{currentYear}}: <span>{{xaydung_Moi}}</span>
                                     </li>
                                     <li>
@@ -223,7 +221,7 @@
                                     <li>
                                         Chợ chuyển đổi chức năng hoạt động năm
                                         {{currentYear}}:<span>{{xaydung_ChuyenDoi}}</span>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -238,7 +236,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <li>
+                                    <!-- <li>
                                         Chợ ngoài quy hoạch: <span>{{chokhac_NgoaiQuyHoach}}</span>
                                     </li>
                                     <li>
@@ -246,7 +244,7 @@
                                     </li>
                                     <li>
                                         Chợ biên giới:<span>{{chokhac_BienGioi}}</span>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -269,7 +267,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyCondictionFilter('1',$event)" multiple>
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -279,9 +277,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Hạng chợ</mat-label>
-                            <mat-select (selectionChange)="applyCondictionFilter('2', $event)" multiple>
-                                <mat-option *ngFor='let marketRank of marketRanks' [value]='marketRank.key'>
-                                    {{marketRank.name}}
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_hang_cho" multiple>
+                                <mat-option *ngFor='let type of marketTypeList' [value]='type.id_hang_cho'>
+                                    {{type.loai_hang_cho}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -289,23 +287,23 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tính chất công trình</mat-label>
-                            <mat-select (selectionChange)="applyCondictionFilter('3',$event)" multiple>
-                                <mat-option *ngFor='let business of businesses' [value]='business.name'>
-                                    {{business.name}}</mat-option>
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_tinh_chat_cho" multiple>
+                                <mat-option *ngFor='let type of marketPropTypeList' [value]='type.id_tinh_chat_cho'>
+                                    {{type.tinh_chat_cho}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="col-3 col-lg-3">
+                    <!-- <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Hình thức quản lý</mat-label>
-                            <mat-select (selectionChange)="applyCondictionFilter('4',$event)" multiple>
+                            <mat-select multiple>
                                 <mat-option *ngFor='let managerType of managerTypes' [value]='managerType.key'>
                                     {{managerType.name}}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
+                    </div> -->
 
-                    <div class="col-12 col-lg-12 button-control">
+                    <div class="col-3 col-lg-3 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Chợ','HTTM - Chợ')"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
@@ -473,8 +471,8 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Phân hạng</mat-label>
                                         <mat-select formControlName="id_hang_cho">
-                                            <mat-option *ngFor='let type of marketTypeList' [value]='type.id_tinh_chat_cho'>
-                                                {{type.tinh_chat_cho}}
+                                            <mat-option *ngFor='let type of marketTypeList' [value]='type.id_hang_cho'>
+                                                {{type.loai_hang_cho}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -484,8 +482,8 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tính chất</mat-label>
                                         <mat-select formControlName="id_tinh_chat_cho">
-                                            <mat-option *ngFor='let type of marketPropTypeList' [value]='type.id_hang_cho'>
-                                                {{type.loai_hang_cho}}
+                                            <mat-option *ngFor='let type of marketPropTypeList' [value]='type.id_tinh_chat_cho'>
+                                                {{type.tinh_chat_cho}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>

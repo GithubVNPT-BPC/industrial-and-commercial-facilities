@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 
 import { ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 
-import { StoreCommonModel, StoreFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
+import { ConvenienceStoreModel, StoreFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
@@ -30,8 +30,8 @@ export class StoreManagementComponent extends BaseComponent {
   isChecked: boolean = false;
 
   filterModel: StoreFilterModel = new StoreFilterModel();
-  dataSource: MatTableDataSource<StoreCommonModel> = new MatTableDataSource<StoreCommonModel>();
-  filteredDataSource: MatTableDataSource<StoreCommonModel> = new MatTableDataSource<StoreCommonModel>();
+  dataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
+  filteredDataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
 
   //
   public tongCuaHang: number;
@@ -50,7 +50,7 @@ export class StoreManagementComponent extends BaseComponent {
   ngOnInit(): void {
     super.ngOnInit();
     this.years = this.getYears();
-    this.getConvenienceStoreData();
+    // this.getConvenienceStoreData();
   }
 
   ngAfterViewInit() {
@@ -59,15 +59,17 @@ export class StoreManagementComponent extends BaseComponent {
   }
 
   getConvenienceStoreData () {
-    this.dataSource = new MatTableDataSource<StoreCommonModel>(this.dataHuyenThi);
-    this.filteredDataSource.data = [...this.dataSource.data];
-    this._prepareData(this.dataSource.data);
-  }
-
-  getYears() {
-    return Array(5)
-      .fill(1)
-      .map((element, index) => new Date().getFullYear() - index);
+    this.commerceManagementService.getFoodCommerceData().subscribe(
+      allrecords => {
+        if (allrecords.data && allrecords.data.length > 0) {
+          this.dataSource = new MatTableDataSource<ConvenienceStoreModel>(allrecords.data);
+          this.filteredDataSource.data = [...this.dataSource.data];
+          this._prepareData(this.dataSource.data);
+          this.paginatorAgain();
+        }
+      },
+      error => this.errorMessage = <any>error
+    );
   }
 
   getFormParams() {
@@ -81,7 +83,24 @@ export class StoreManagementComponent extends BaseComponent {
     }
   }
 
-  private _prepareData(data: StoreCommonModel[]): void {
+  prepareData(data) {
+    data = {...data, ...{
+        is_tttm: "true",
+    }}
+    return data;        
+  }
+
+  callService(data) {
+    this.commerceManagementService.postConvenienceStore([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  getYears() {
+    return Array(5)
+      .fill(1)
+      .map((element, index) => new Date().getFullYear() - index);
+  }
+
+  private _prepareData(data: ConvenienceStoreModel[]): void {
     this.soCuaHangTL = data.length;
     this.soCuaHangKhac = data.length - this.soCuaHangTL;
     this.tongCuaHang = this.dataHuyenThi.length;
@@ -141,7 +160,7 @@ export class StoreManagementComponent extends BaseComponent {
     return temp;
   }
 
-  dataHuyenThi: Array<StoreCommonModel> = [{ tencuahang: ' CH BHX Bình Phước số 3', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00003', ngaycap: new Date('2018-12-12'), noicap: 'Bình Phước', diachi: 'Đường ĐT741, ấp chợ, Xã Tân Tiến, Huyện Đồng Phú', id_quan_huyen: 8, sogcn: '03.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-02-13'), ngayhethangcn: new Date('2022-02-12'), sdtlienhe: '0902789078', is_het_han: false },
+  dataHuyenThi: Array<ConvenienceStoreModel> = [{ tencuahang: ' CH BHX Bình Phước số 3', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00003', ngaycap: new Date('2018-12-12'), noicap: 'Bình Phước', diachi: 'Đường ĐT741, ấp chợ, Xã Tân Tiến, Huyện Đồng Phú', id_quan_huyen: 8, sogcn: '03.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-02-13'), ngayhethangcn: new Date('2022-02-12'), sdtlienhe: '0902789078', is_het_han: false },
   { tencuahang: ' CH BHX Bình Phước số 04', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00004', ngaycap: new Date('2018-12-21'), noicap: 'Bình Phước', diachi: 'Thôn Phú Hưng, Xã Phú Riềng, Huyện Phú Riềng', id_quan_huyen: 11, sogcn: '04.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-05-04'), ngayhethangcn: new Date('2022-05-03'), sdtlienhe: '0902789079', is_het_han: false },
   { tencuahang: ' CH BHX Bình Phước số 5', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00005', ngaycap: new Date('2019-01-21'), noicap: 'Bình Phước', diachi: 'Đường Võ Văn Tần, Khu phố Tân Bình, Phường Tân Bình, TP Đồng Xoài', id_quan_huyen: 2, sogcn: '05.2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-05-04'), ngayhethangcn: new Date('2022-05-03'), sdtlienhe: '0902789080', is_het_han: false },
   { tencuahang: ' CH BHX Bình Phước số 01', sanphamkinhdoanh: 'Thực phẩm tiêu dùng', scndkkd: '00001', ngaycap: new Date('2018-12-06'), noicap: 'Bình Phước', diachi: 'đường 7/4, khu phố Ninh Phú, Thị Trấn Lộc Ninh, Huyện Lộc Ninh', id_quan_huyen: 5, sogcn: '07/2019KD/GCNATTP-SCT', ngaycapgcn: new Date('2019-05-22'), ngayhethangcn: new Date('2022-05-21'), sdtlienhe: '0902789081', is_het_han: false },

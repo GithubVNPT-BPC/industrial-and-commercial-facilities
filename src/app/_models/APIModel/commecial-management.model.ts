@@ -82,7 +82,7 @@ export class SuperMarketFilterModel {
     id_phan_hang: string[] = [];
 }
 
-export class StoreCommonModel {
+export class ConvenienceStoreModel {
     tencuahang: string;
     sanphamkinhdoanh: string;
     scndkkd: string;
