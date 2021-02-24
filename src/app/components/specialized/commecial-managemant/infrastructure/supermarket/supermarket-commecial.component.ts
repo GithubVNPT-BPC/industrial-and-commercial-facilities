@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 
 //Import Service
-import { SuperMarketCommonModel, SuperMarketFilterModel, MarketTypeModel } from 'src/app/_models/APIModel/commecial-management.model';
+import { SuperMarketCommonModel, SuperMarketFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';

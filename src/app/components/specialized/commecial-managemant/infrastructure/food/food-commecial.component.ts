@@ -1,12 +1,13 @@
 //Import Library
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
 
 //Import Model
-import { ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 import { FoodCommonModel, FoodFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 @Component({
   selector: 'app-food-commecial',
@@ -32,6 +33,7 @@ export class FoodManagementComponent extends BaseComponent {
   //Angular FUnction --------------------------------------------------------------------
   constructor(
     private injector: Injector,
+    public commerceManagementService: CommerceManagementService,
   ) {
     super(injector);
   }

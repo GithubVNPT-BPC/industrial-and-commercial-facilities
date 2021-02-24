@@ -1,12 +1,14 @@
 //Import Library
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
 
 import { ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 
 import { StoreCommonModel, StoreFilterModel } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 @Component({
   selector: 'app-stores-commecial',
@@ -40,6 +42,7 @@ export class StoreManagementComponent extends BaseComponent {
 
   constructor(
     private injector: Injector,
+    public commerceManagementService: CommerceManagementService,
   ) {
     super(injector);
   }
@@ -62,7 +65,20 @@ export class StoreManagementComponent extends BaseComponent {
   }
 
   getYears() {
-    return [{text:'Tất cả',value:0}, {text:'2020',value:2020},{text:'2019',value:2019},{text:'2018',value:2018},];
+    return Array(5)
+      .fill(1)
+      .map((element, index) => new Date().getFullYear() - index);
+  }
+
+  getFormParams() {
+    return {
+      ten_cua_hang: new FormControl(),
+      mst: new FormControl(),
+      dia_chi: new FormControl(),
+      so_dien_thoai: new FormControl(),
+      // ten_sieu_thi_TTTM: new FormControl(),
+      // dia_diem: new FormControl(),
+    }
   }
 
   private _prepareData(data: StoreCommonModel[]): void {

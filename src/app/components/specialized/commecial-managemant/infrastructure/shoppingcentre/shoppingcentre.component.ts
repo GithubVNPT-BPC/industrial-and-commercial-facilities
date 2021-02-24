@@ -19,8 +19,6 @@ import { marketTypeList } from '../common/common-commecial.component';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class ShoppingcentreComponent extends BaseComponent {
-  //
-
   public tongSieuThi: number;
   public sieuThiTongHop: number;
   public sieuThiChuyenDanh: number;
