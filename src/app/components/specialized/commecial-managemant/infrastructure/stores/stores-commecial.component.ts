@@ -114,6 +114,11 @@ export class StoreManagementComponent extends BaseComponent {
   callService(data) {
     this.commerceManagementService.postConvenienceStore(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
+  
+  resetAll() {
+    this.isFound = false;
+    super.resetAll();
+  }
 
   getYears() {
     return Array(5)

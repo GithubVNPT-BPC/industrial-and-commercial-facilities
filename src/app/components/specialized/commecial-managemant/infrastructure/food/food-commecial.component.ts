@@ -8,6 +8,7 @@ import { FoodCommerceModel } from 'src/app/_models/APIModel/commecial-management
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 
 @Component({
   selector: 'app-food-commecial',
@@ -20,10 +21,22 @@ export class FoodManagementComponent extends BaseComponent {
   filteredDataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
 
   isChecked: boolean;
+  isFound: boolean = false;
   public tongDoanhNghiep: number;
   //
   filterModel = {
+    id_spkd: [],
+    id_quan_huyen: [],
   };
+
+  businessProducts = [
+    {id_spkd: 1, ten_san_pham: "Bán buôn thực phẩm"},
+    {id_spkd: 2, ten_san_pham: "Bán buôn bán lẻ thực phẩm"},
+    {id_spkd: 3, ten_san_pham: "Phân phối gạo"},
+    {id_spkd: 4, ten_san_pham: "Bán buôn đồ uống"},
+    {id_spkd: 5, ten_san_pham: "Đại lý gạo"},
+    {id_spkd: 6, ten_san_pham: "Bán buôn thực phẩm"},
+  ];
 
   displayedFields = {
     ten_cua_hang: "Tên cửa hàng",
@@ -35,13 +48,14 @@ export class FoodManagementComponent extends BaseComponent {
     noi_cap: "Nơi cấp",
     nguoi_dai_dien: "Tên",
     so_dien_thoai: "Điện thoại",
-
   }
+  giayCndkkdList = [];
 
   //Angular FUnction --------------------------------------------------------------------
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
+    public enterpriseService: EnterpriseService,
   ) {
     super(injector);
   }
@@ -71,21 +85,19 @@ export class FoodManagementComponent extends BaseComponent {
 
   getFormParams() {
     return {
-      ten_cua_hang: new FormControl(),
       mst: new FormControl(),
-      dia_chi: new FormControl(),
-      so_dien_thoai: new FormControl(),
-      nguoi_dai_dien: new FormControl(),
-      ten_san_pham: new FormControl(),
-      so_giay_phep: new FormControl(),
-      ngay_cap: new FormControl(),
-      noi_cap: new FormControl(),
-      id_phuong_xa: new FormControl(),
+      id_spkd: new FormControl(),
+      id_giay_phep: new FormControl(),
     }
   }
 
   callService(data) {
-    this.commerceManagementService.postFoodCommerce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.commerceManagementService.postFoodCommerce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  resetAll() {
+    this.isFound = false;
+    super.resetAll();
   }
 
   private _prepareData(data: FoodCommerceModel[]){
@@ -126,5 +138,32 @@ export class FoodManagementComponent extends BaseComponent {
     })
     return temp;
   }
-
+  
+  findLicenseInfo(event) {
+    event.preventDefault();
+    let mst = this.formData.controls.mst.value;
+    this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
+      if (response.success) {
+        if (response.data.length > 0) {
+          let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 2);
+          
+          if (giayCndkkdList.length == 0 )
+            this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+          else {
+            this.isFound = true;
+            this.giayCndkkdList = giayCndkkdList;
+            this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
+          }
+        } else {
+          this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+        }
+      } else {
+        this.isFound = false;
+        this.logger.msgSuccess("Không tìm thấy dữ liệu");
+      }
+    }, error => {
+        this.isFound = false;
+        this.logger.msgError("Lỗi khi xử lý \n" + error);
+    });
+  }
 }

@@ -54,9 +54,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Sản phẩm kinh doanh</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.sanphamkinhdoanh" multiple>
-                                <mat-option *ngFor='let product of listProduct' [value]='product'>
-                                    {{product}}
+                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_spkd" multiple>
+                                <mat-option *ngFor='let product of businessProducts' [value]='product.id_spkd'>
+                                    {{product.ten_san_pham}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -189,45 +189,33 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-9" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Tên cửa hàng</mat-label>
-                                        <input matInput formControlName="ten_cua_hang">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3" >
+                                <div class="col-6 col-md-6">
                                     <mat-form-field appearance="outline"> 
                                         <mat-label>Mã số thuế</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
+                                <div class="col-6 col-md-6">
+                                    <button mat-raised-button color="primary" (click)="findLicenseInfo($event)" class="mt-2"><mat-icon>search</mat-icon>Tìm kiếm</button>
+                                </div>
+                            </div>
 
+                            <div class="row" *ngIf="isFound">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Địa chỉ</mat-label>
-                                        <input matInput type="text" formControlName="dia_chi">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3 col-lg-3" >
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Địa bàn</mat-label>
-                                        <mat-select formControlName="id_phuong_xa">
-                                            <mat-optgroup *ngFor="let dt of districtWardSorted | keyvalue" [label]="dt.key">                                                
-                                                <mat-option *ngFor='let dw of dt.value' [value]='dw.id_phuong_xa'>
-                                                    {{dw.ten_phuong_xa}}
-                                                </mat-option>
-                                            </mat-optgroup>
+                                        <mat-label>Sản phẩm</mat-label>
+                                        <mat-select formControlName="id_spkd">
+                                            <mat-option *ngFor="let item of businessProducts" [value]="item.id_spkd">
+                                                {{item.ten_san_pham}}
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
-
                             </div>
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Chứng nhận đăng ký kinh doanh </span>
@@ -237,54 +225,20 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Số chứng nhận ĐKKD	</mat-label>
-                                        <input matInput  type="text" formControlName="so_giay_phep">
+                                        <mat-label>Số chứng nhận</mat-label>
+                                        <mat-select formControlName="id_giay_phep">
+                                            <mat-option *ngFor="let item of giayCndkkdList" [value]="item.id_giay_phep">
+                                                {{item.so_giay_phep}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Ngày cấp</mat-label>
-                                        <input matInput [matDatepicker]="ngay_cap" formControlName="ngay_cap">
-                                        <mat-datepicker-toggle matSuffix [for]="ngay_cap"></mat-datepicker-toggle>
-                                        <mat-datepicker #ngay_cap></mat-datepicker>
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Nơi cấp</mat-label>
-                                        <input matInput type="text" formControlName="noi_cap">
-                                    </mat-form-field>
-                                </div>                  
+                                        
                             </div>
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Người đại diện pháp lý </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Tên người đại diện	</mat-label>
-                                        <input matInput  type="text" formControlName="nguoi_dai_dien">
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Điện thoại	</mat-label>
-                                        <input matInput  type="text" formControlName="so_dien_thoai">
-                                    </mat-form-field>
-                                </div>
-
-                            </div>
-                        </mat-card-content>
-                    </div>
-
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
                         <button type="submit" class="btn btn-success float-right">Tạo mới</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
