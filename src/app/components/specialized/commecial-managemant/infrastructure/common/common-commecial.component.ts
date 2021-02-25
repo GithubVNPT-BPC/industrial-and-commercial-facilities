@@ -1,6 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { MarketTypeModel } from 'src/app/_models/APIModel/commecial-management.model';
+
+export const YEAR_FORMAT = {
+    parse: {
+        dateInput: 'YYYY',
+    },
+    display: {
+        dateInput: 'YYYY',
+        monthYearLabel: 'YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'YYYY',
+    },
+};
 
 @Component({
     selector: 'app-common-commecial',
@@ -25,3 +38,9 @@ export class CommonCommecialComponent implements OnInit {
         this._breadCrumService.sendLink(this._linkOutput);
     }
 }
+
+export const marketTypeList: MarketTypeModel[] = [
+    { id: 1, name: "Loại I" },
+    { id: 2, name: "Loại II" },
+    { id: 3, name: "Loại III" }
+]
