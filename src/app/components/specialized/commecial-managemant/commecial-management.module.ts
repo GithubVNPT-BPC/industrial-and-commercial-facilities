@@ -57,6 +57,7 @@ import { UpdatePetrolComponent } from './conditional-business-line/petro-busines
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
+import { ImportDataBorderComponent } from './border-trade/import-data-border/import-data-border.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
