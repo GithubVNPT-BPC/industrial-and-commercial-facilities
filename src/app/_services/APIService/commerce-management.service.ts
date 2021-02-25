@@ -33,6 +33,7 @@ export class CommerceManagementService {
     private urlPostConvenienceStore = 'api/qltm/httm/chtl';
     private urlPostPromoAdress = "api/qltm/cap-nhat-dia-diem-khuyen-mai";
     private urldeletePromo = "api/qltm/khuyen-mai/xoa";
+    
     constructor(public http: HttpClient) { }
 
     // Expo
