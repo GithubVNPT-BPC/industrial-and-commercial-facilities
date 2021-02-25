@@ -321,7 +321,7 @@ export class SCTService {
         );
     }
 
-    LayDanhSachQuanHuyen(){
+    public LayDanhSachQuanHuyen(){
         var apiUrl = this.apiDanhSach + this.urlQuanHuyen;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
@@ -329,7 +329,7 @@ export class SCTService {
         );
     }
 
-    LayDanhSachPhuongXa(){
+    public LayDanhSachPhuongXa(){
         var apiUrl = this.apiDanhSach + this.urlPhuongXa;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),

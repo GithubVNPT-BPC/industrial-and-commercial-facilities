@@ -140,6 +140,7 @@ export class RuralElectricManagementComponent extends BaseComponent {
     data['tieu_chi_41'] = Number(data['tieu_chi_41']);
     data['tieu_chi_42'] = Number(data['tieu_chi_42']);
     data['tieu_chi_43'] = Number(data['tieu_chi_43']);
+    return data;
   }
 
   public callService(data) {

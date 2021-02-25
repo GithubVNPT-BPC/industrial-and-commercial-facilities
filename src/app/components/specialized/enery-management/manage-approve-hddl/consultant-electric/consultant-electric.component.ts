@@ -13,6 +13,7 @@ import { EnergyService } from "src/app/_services/APIService/energy.service";
 import { FormControl } from "@angular/forms";
 import { BaseComponent } from "../../../specialized-base.component";
 import { Router } from "@angular/router";
+import moment from "moment";
 @Component({
   selector: "app-consultant-electric",
   templateUrl: "./consultant-electric.component.html",
@@ -187,14 +188,24 @@ export class ConsultantElectricComponent extends BaseComponent {
     let today = new Date();
 
     if (event.checked) {
+      
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
-        return Date.parse(today.toString()) > Date.parse(e.ngay_het_han)
-      })
+        return Date.parse(today.toString()) > Date.parse(this.formatMMddyyy(e.ngay_het_han))
+      });
+      
     } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
     // this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  formatMMddyyy(date: string){
+    let d,m,y;
+    y = date.slice(-4);
+    m = date.slice(3,5);
+    d = date.slice(0,2);
+    return m + '/' + d + '/' + y;
   }
 
   getFormParams() {
@@ -210,12 +221,15 @@ export class ConsultantElectricComponent extends BaseComponent {
   }
 
   public prepareData(data) {
+    data['ngay_cap'] = moment(data['ngay_cap']).format('DD/MM/yyyy');
+    data['ngay_het_han'] = moment(data['ngay_het_han']).format('DD/MM/yyyy');
+    return data;
   }
 
   public callService(data) {
     let list_data = [data];
     // console.log(list_data)
-    this.energyService.CapNhatDuLieuQuyHoachDienNongThon(list_data).subscribe(res => {
+    this.energyService.CapNhatDuLieuCapPhepHoatDong(list_data).subscribe(res => {
       this.successNotify(res);
     })
   }

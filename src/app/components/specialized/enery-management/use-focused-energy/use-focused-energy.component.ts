@@ -165,10 +165,11 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   }
 
   public prepareData(data) {
-    data['dia_diem'] = data['dia_diem'] ? data['dia_diem'].concat(' , ', this.address) : data['dia_diem'].concat(this.address);
+    data['dia_diem'] = data['dia_diem'] ? data['id_quan_huyen'].concat(' , ', this.address) : data['dia_diem'].concat(this.address);
     data['nang_luong_tieu_thu'] = Number(data['nang_luong_tieu_thu']);
     data['suat_tieu_hao_1_dv_sp'] = Number(data['suat_tieu_hao_1_dv_sp']);
     data['nang_luong_quy_doi'] = Number(data['nang_luong_quy_doi']);
+    return data;
   }
 
   public callService(data) {
