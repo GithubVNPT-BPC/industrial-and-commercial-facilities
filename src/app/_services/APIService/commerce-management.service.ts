@@ -32,7 +32,11 @@ export class CommerceManagementService {
     private urlPostFoodCommerce = 'api/qltm/httm/kdtp';
     private urlPostConvenienceStore = 'api/qltm/httm/chtl';
     private urlPostPromoAdress = "api/qltm/cap-nhat-dia-diem-khuyen-mai";
+
+    // DELETE
     private urldeletePromo = "api/qltm/khuyen-mai/xoa";
+    private urldeleteMultiLevel = "api/qltm/da-cap/xoa";
+    private urldeleteTradeFairs = "api/qltm/hoi-cho/xoa";
     
     constructor(public http: HttpClient) { }
 
@@ -195,6 +199,24 @@ export class CommerceManagementService {
 
     deletePromo(datas) {
         let apiUrl = this.apiHome + this.urldeletePromo;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteMultiLevel(datas) {
+        let apiUrl = this.apiHome + this.urldeleteMultiLevel;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteTradeFairs(datas) {
+        let apiUrl = this.apiHome + this.urldeleteTradeFairs;
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),

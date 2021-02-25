@@ -17,11 +17,11 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 })
 
 export class ChemicalManagementComponent extends BaseComponent {
-    
+
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'cong_suat', 'san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
-    
+
     displayedFields = {
         mst: "Mã số thuế",
         ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -42,7 +42,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     dataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
     filteredDataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
-    
+
     districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
     { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
@@ -81,7 +81,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
     }
 
-    getLinkDefault(){
+    getLinkDefault() {
         //Constant
         this.LINK_DEFAULT = "/specialized/industry-management/chemical";
         this.TITLE_DEFAULT = "Công nghiệp - Hoá chất";
@@ -134,12 +134,12 @@ export class ChemicalManagementComponent extends BaseComponent {
         });
 
         data = {
-            chemistryData : {
+            chemistryData: {
                 mst: data.mst,
                 tinh_trang_hoat_dong: "true",
                 time_id: this.currentYear,
             },
-            chemistryQtyData : details,
+            chemistryQtyData: details,
         }
         return data;
     }
@@ -150,7 +150,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         this.industryManagementService.PostChemicalManagement([chemistryData], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
         this.industryManagementService.PostChemicalManagementQty(chemistryQtyData, this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
-    
+
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
@@ -163,7 +163,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                 let capacityData = result.data[1];
                 chemicalManagementData.map((c) => {
                     let matchingList = capacityData.filter(x => x.mst == c.mst);
-                    
+
                     c.san_luong = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.san_luong : x.san_luong).join(', ');
                     c.cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
                 });
@@ -183,7 +183,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                 this.paginator._intl.lastPageLabel = "Trang Cuối";
                 this.paginator._intl.previousPageLabel = "Trang Trước";
                 this.paginator._intl.nextPageLabel = "Trang Tiếp";
-            }     
+            }
         })
     }
 
@@ -191,7 +191,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         this.industryManagementService.GetChemicalNameList().subscribe(result => {
             if (result.data && result.data.length > 0) this.chemistryNameList = result.data;
         })
-    } 
+    }
 
     getYears() {
         return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
@@ -223,5 +223,16 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     showMoreDetail(event) {
         this.displayedColumns = (event.checked) ? this.fullFieldList : this.reducedFieldList;
+    }
+
+    prepareRemoveData() {
+        let datas = this.selection.selected.map(element => new Object({ id: element.id }));
+        return datas;
+    }
+
+    callRemoveService(data) {
+        // this.industryManagementService.deleteMultiLevel(data).subscribe(res => {
+        //     this.successNotify(res);
+        // });
     }
 }

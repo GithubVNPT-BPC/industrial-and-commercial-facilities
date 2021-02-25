@@ -40,6 +40,12 @@ export class CertificateRegulationComponent extends BaseComponent {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+  
+
+  ds_sp: any[] = [
+    {id_loai_san_pham: 1, ten_san_pham: "Thực phẩm"},
+    {id_loai_san_pham: 2,	ten_san_pham: "May mặc"}
+  ]
 
   constructor(
     private injector: Injector,
@@ -69,6 +75,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       // duong_dan_nhan_san_pham: new FormControl(),
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl(),
+      id_loai_san_pham: new FormControl(),
     }
   }
 
@@ -84,7 +91,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data['ngay_tiep_nhan'] = moment(data['ngay_tiep_nhan']).format('DD/MM/yyyy');
+    data['ngay_tiep_nhan'] = moment(data['ngay_tiep_nhan']).format('yyyyMMDD');
     return data;
   }
 
@@ -124,6 +131,17 @@ export class CertificateRegulationComponent extends BaseComponent {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  prepareRemoveData() {
+    let datas = this.selection.selected.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+      this.industryManagementService.DeleteCBHQ(data).subscribe(res => {
+          this.successNotify(res);
+      });
   }
 
 }

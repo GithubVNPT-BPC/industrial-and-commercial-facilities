@@ -116,6 +116,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.industryManagementService.GetFoodIndustry(time_id).subscribe(result => {
             this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
             this.filteredDataSource.data = [...this.dataSource.data];
+            this.dataSource.data = [...this.dataSource.data];
             // this.dataSource.data.forEach(element => {
             //     element.is_het_han = new Date(element.ngay_het_han) < new Date();
             // });
@@ -156,7 +157,14 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.filter = (event.checked) ? "true" : "";
+        let filterEntity = new FoodIndustryModel();
+        if(event.checked){
+            this.filteredDataSource.data = this.filteredDataSource.data.filter(item=> {
+                return item.tinh_trang_hoat_dong ==  false;
+            });
+        }else{
+            this.filteredDataSource.data = this.dataSource.data;
+        }
     }
 
     showMoreDetail(event) {
