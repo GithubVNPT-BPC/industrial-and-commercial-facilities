@@ -19,30 +19,18 @@
                     <mat-panel-description>
                     </mat-panel-description>
                 </mat-expansion-panel-header>
-                <ng-container *ngIf="id_cua_khau === 4">
+                <ng-container>
                     <ng-container>
                         <div class="row">
                             <div class="col-4 col-lg-4">
                                 <mat-card class="card1">
                                     <mat-card-header>
                                         <mat-card-title>
-                                            <mat-icon> business</mat-icon> Cửa khẩu:
-                                        </mat-card-title>
-                                    </mat-card-header>
-                                    <mat-card-content matTooltip={{cua_khau}}>
-                                        {{cua_khau}}
-                                    </mat-card-content>
-                                </mat-card>
-                            </div>
-                            <div class="col-4 col-lg-4">
-                                <mat-card class="card1">
-                                    <mat-card-header>
-                                        <mat-card-title>
-                                            <mat-icon> business</mat-icon> Tổng kim ngạch xuất khẩu 3 cửa khẩu:
+                                            <mat-icon> business</mat-icon> kỳ dữ liệu
                                         </mat-card-title>
                                     </mat-card-header>
                                     <mat-card-content>
-                                        {{TongKimNgach3xk | formatNumber }} (USD)
+                                        Tháng {{curentmonth}}
                                     </mat-card-content>
                                 </mat-card>
                             </div>
@@ -51,139 +39,29 @@
                                 <mat-card class="card1">
                                     <mat-card-header>
                                         <mat-card-title>
-                                            <mat-icon> business</mat-icon> Tổng kim ngạch nhập khẩu 3 cửa khẩu:
+                                            <mat-icon> business</mat-icon> Tổng giá trị nhập khẩu:
                                         </mat-card-title>
                                     </mat-card-header>
                                     <mat-card-content>
-                                        {{TongKimNgach3nk | formatNumber}} (USD)
+                                        {{TongGiaTriThangThucHien | formatNumber}} (USD)
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-card class="card1">
+                                    <mat-card-header>
+                                        <mat-card-title>
+                                            <mat-icon> business</mat-icon> Tổng giá trị nhập khẩu cộng dồn:
+                                        </mat-card-title>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        {{TongGiaTriCongDon | formatNumber}} (USD)
                                     </mat-card-content>
                                 </mat-card>
                             </div>
                         </div>
                     </ng-container>
-                </ng-container>
-                <ng-container *ngIf="id_cua_khau === 1">
-                    <div class="row">
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Cửa khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content matTooltip={{cua_khau}}>
-                                    {{cua_khau}}
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Tổng kim ngạch xuất khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    {{TongKimNgachxk | formatNumber }} (USD)
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Tổng kim ngạch nhập khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    {{TongKimNgachnk | formatNumber}} (USD)
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="id_cua_khau === 2">
-                    <div class="row">
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Cửa khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content matTooltip={{cua_khau}}>
-                                    {{cua_khau}}
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Tổng kim ngạch xuất khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    {{TongKimNgachxkII | formatNumber }} (USD)
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Tổng kim ngạch nhập khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    {{TongKimNgachnkII | formatNumber}} (USD)
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="id_cua_khau === 3">
-                    <div class="row">
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Cửa khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content matTooltip={{cua_khau}}>
-                                    {{cua_khau}}
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Tổng kim ngạch xuất khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    {{TongKimNgachxkIII | formatNumber }} (USD)
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-
-                        <div class="col-4 col-lg-4">
-                            <mat-card class="card1">
-                                <mat-card-header>
-                                    <mat-card-title>
-                                        <mat-icon> business</mat-icon> Tổng kim ngạch nhập khẩu:
-                                    </mat-card-title>
-                                </mat-card-header>
-                                <mat-card-content>
-                                    {{TongKimNgachnkIII | formatNumber}} (USD)
-                                </mat-card-content>
-                            </mat-card>
-                        </div>
-                    </div>
                 </ng-container>
             </mat-expansion-panel>
 

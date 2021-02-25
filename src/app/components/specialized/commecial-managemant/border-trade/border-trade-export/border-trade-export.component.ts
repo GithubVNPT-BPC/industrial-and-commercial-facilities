@@ -30,8 +30,8 @@ export class BorderTradeExportComponent implements OnInit {
 
     //Constant
     private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/exported_products";
-    private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
-    private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
+    private readonly TITLE_DEFAULT: string = "Thương mại biên giới - xuất khẩu";
+    private readonly TEXT_DEFAULT: string = "Thương mại biên giới - xuất khẩu";
     displayedColumns = [
         // 'delete_checkbox',
         'ten_loai_hang_hoa',

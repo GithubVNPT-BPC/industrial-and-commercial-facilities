@@ -21,8 +21,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class IipMonthComponent implements OnInit {
     //Constant variable -----------------------------------------------------------
     private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip-industrial/month?";
-    private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp tháng ";
-    private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp tháng ";
+    private readonly TITLE_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp tháng ";
+    private readonly TEXT_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp tháng ";
     public readonly DISPLAY_COLS: string[] = ['index', 'chi_tieu', 'don_vi', 'cung_ky', 'luy_ke_cung_ky', 'ke_hoach_nam', 'thuc_hien_thang_truoc', 'thuc_hien_thang', 'luy_ke', 'thuc_hien_so_voi_thang_truoc', 'thuc_hien_so_voi_cung_ky', 'luy_ke_so_so_voi_cung_ky', 'luy_ke_so_voi_ke_hoach'];
     private readonly DATA_DEFAULT: Array<IIPIndustrialMonthModel[]> = [
         //1

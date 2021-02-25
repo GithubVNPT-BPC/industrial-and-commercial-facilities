@@ -49,6 +49,10 @@ import { DialogImportDataComponent } from './border-trade/dialog-import-data/dia
 import { DownloadService } from 'src/app/_services/injectable-service/dowloadFile.service';
 import { TranslateIdToNamePipe } from 'src/app/shared/pipes/translateIdToName.pipe';
 import { DialogECommerceComponent } from './e-commerce-managemant/dialog-e-commerce/dialog-e-commerce.component';
+import { CommonDataBorderComponent } from './border-trade/common-data-border/common-data-border.component';
+import { DetailDataBorderComponent } from './border-trade/detail-data-border/detail-data-border.component';
+import { MatTabBorderComponent } from './border-trade/mat-tab-border/mat-tab-border.component';
+import { ImportDataBorderComponent } from './border-trade/import-data-border/import-data-border.component';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { SpecialDirective } from 'src/app/shared/special.directive';
 import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
@@ -57,7 +61,6 @@ import { UpdatePetrolComponent } from './conditional-business-line/petro-busines
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
-import { ImportDataBorderComponent } from './border-trade/import-data-border/import-data-border.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -73,7 +76,6 @@ export const customCurrencyMaskConfig = {
   max: 1000000000000,
   inputMode: CurrencyMaskInputMode.NATURAL
 };
-
 @NgModule({
   imports: [
     CommonModule,
@@ -129,6 +131,10 @@ export const customCurrencyMaskConfig = {
     DialogImportDataComponent,
     TranslateIdToNamePipe,
     DialogECommerceComponent,
+    CommonDataBorderComponent,
+    DetailDataBorderComponent,
+    MatTabBorderComponent,
+    ImportDataBorderComponent,
     SpecialDirective,
     ManagePetrolValueComponent,
     AddStoreComponent,

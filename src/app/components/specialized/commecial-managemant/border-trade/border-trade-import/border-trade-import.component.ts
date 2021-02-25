@@ -28,11 +28,11 @@ export class Group {
     styleUrls: ["../../../special_layout.scss"]
 })
 export class BorderTradeImportComponent implements OnInit {
-    
+
     //Constant
-    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/exported_products";
-    private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
-    private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
+    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/imported_products";
+    private readonly TITLE_DEFAULT: string = "Thương mại biên giới - Nhập khẩu";
+    private readonly TEXT_DEFAULT: string = "Thương mại biên giới - Nhập khẩu";
     displayedColumns = [
         // 'delete_checkbox',
         'ten_loai_hang_hoa',
@@ -48,7 +48,7 @@ export class BorderTradeImportComponent implements OnInit {
     ];
     displayRow1Header = [
         // 'delete_checkbox',
-        
+
         'ten_loai_hang_hoa',
         'thuc_hien_bao_cao_thang',
         'cong_don_den_ky_bao_cao',
@@ -170,6 +170,7 @@ export class BorderTradeImportComponent implements OnInit {
         this.sctService.GetDuLieuNhapKhauBG(time_id).subscribe(res => {
             if (res['success']) {
                 this.dataSource.data = this.addGroups(res['data'], this.groupByColumns);
+                this.tinh_tong(res['data'])
                 console.log(this.dataSource.data)
                 this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
             }
@@ -257,18 +258,10 @@ export class BorderTradeImportComponent implements OnInit {
         return item.level;
     }
 
-    tinh_tong(data) {
+    tinh_tong(data: any[]) {
         this.initVariable();
-        for (let item of data) {
-            this.TongLuongThangThucHien += item['luong_thang'];
-            this.TongGiaTriThangThucHien += item['gia_tri_thang'];
-            this.TongLuongCongDon += item['luong_cong_don'];
-            this.TongGiaTriCongDon += item['gia_tri_cong_don'];
-            this.tongluong_tc += item['luong_thang_tc'];
-            this.tonggiatri_tc += item['gia_tri_thang_tc'];
-            this.tongluongcongdon_tc += item['luong_cong_don_tc'];
-            this.tonggiatricongdon_tc += item['gia_tri_cong_don_tc'];
-        }
+        this.TongGiaTriThangThucHien = data.map(item => item['tri_gia_thang']).reduce((a, b) => a + b);
+        this.TongGiaTriCongDon = data.map(item => item['tri_gia_cong_don']).reduce((a, b) => a + b);
     }
 
     ngAfterViewInit(): void {
