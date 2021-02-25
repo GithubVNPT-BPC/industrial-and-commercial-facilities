@@ -10,7 +10,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
-import { DistrictModel, SubDistrictModel, DistrictWardModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { DistrictModel, SubDistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 
 import moment from 'moment';
