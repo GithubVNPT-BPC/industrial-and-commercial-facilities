@@ -90,7 +90,6 @@ export class SearchBusinessComponent implements OnInit {
     const numRows = this.dataSource.connect().value.length;
     return numSelected === numRows;
   }
-  selection = new SelectionModel<CompanyDetailModel1>(true, []);
 
   masterToggle() {
     this.isAllSelected() ?
