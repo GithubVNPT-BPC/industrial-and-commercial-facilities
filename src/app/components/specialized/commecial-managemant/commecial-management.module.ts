@@ -142,7 +142,6 @@ export const customCurrencyMaskConfig = {
     ManageBusinessmanComponent,
     UpdateBusinessmanComponent,
     AddSupplyBusinessComponent,
-    ImportDataBorderComponent
   ],
   entryComponents: [
     ModalComponent,
