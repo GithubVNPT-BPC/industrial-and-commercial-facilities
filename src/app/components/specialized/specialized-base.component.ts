@@ -14,6 +14,8 @@ import { DistrictModel, SubDistrictModel, DistrictWardModel } from 'src/app/_mod
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 
 import moment from 'moment';
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 export abstract class BaseComponent implements OnInit {
 
@@ -21,11 +23,19 @@ export abstract class BaseComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
+    protected _linkOutput: LinkModel = new LinkModel();
+    //Constant
+    protected LINK_DEFAULT: string = "";
+    protected TITLE_DEFAULT: string = "";
+    protected TEXT_DEFAULT: string = "";
+
     protected sctService: SCTService;
     protected excelService: ExcelService;
     protected logger: InformationService;
     protected formBuilder: FormBuilder;
+    protected formBuilder1: FormBuilder;
     protected confirmationDialogService: ConfirmationDialogService;
+    protected _breadCrumService: BreadCrumService;
 
     public formData: any;
     public formParams: any;
@@ -50,6 +60,8 @@ export abstract class BaseComponent implements OnInit {
         this.formBuilder = injector.get(FormBuilder);
         this.confirmationDialogService = injector.get(ConfirmationDialogService);
         this.sctService = injector.get(SCTService);
+        this.formBuilder1 = injector.get(FormBuilder);
+        this._breadCrumService = injector.get(BreadCrumService);
     }
 
     ngOnInit() {
@@ -57,6 +69,8 @@ export abstract class BaseComponent implements OnInit {
         this.initListView();
         this.initFormView();
         this.initDistricts();
+        this.getLinkDefault();
+        this.sendLinkToNext(true);
     }
 
     protected initListView() {
@@ -97,6 +111,18 @@ export abstract class BaseComponent implements OnInit {
         let data = this.formData.value;
         data = this.prepareData(data);
         this.callService(data);
+        this.resetAll();
+    }
+
+    prepareRemoveData(data) { return data }
+
+    callRemoveService(data) {}
+
+    public onRemove() {
+        let data = this.selection.selected;
+        data = this.prepareRemoveData(data);
+        this.callRemoveService(data);
+        this.resetAll(false);
     }
 
     public clearTable(event) {
@@ -104,9 +130,9 @@ export abstract class BaseComponent implements OnInit {
         this.formData.reset();
     }
 
-    public resetAll(): void {
+    public resetAll(isSwitch=true): void {
         this.formData.reset();
-        this.switchView();
+        if (isSwitch) this.switchView();
         this.ngOnInit();
     }
 
@@ -120,7 +146,6 @@ export abstract class BaseComponent implements OnInit {
         }
         else {
             this.logger.msgSuccess("Dữ liệu được lưu thành công!");
-            this.resetAll();
         }
     }
 
@@ -163,10 +188,11 @@ export abstract class BaseComponent implements OnInit {
     }
 
     public openRemoveDialog() {
+        let self = this;
         this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
             .then(confirm => {
                 if (confirm) {
-                    // this.remove();
+                    self.onRemove();
                     return;
                 }
             })
@@ -227,4 +253,16 @@ export abstract class BaseComponent implements OnInit {
             this.paginatorAgain();
         }, 1000);
     }
+
+    getLinkDefault(){}
+
+    public sendLinkToNext(type: boolean) {
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this._breadCrumService.sendLink(this._linkOutput);
+    }
+
+    remove(){}
 }

@@ -31,8 +31,9 @@ export class CommerceManagementService {
     private urlPostMarket = 'api/qltm/httm/cho';
     private urlPostFoodCommerce = 'api/qltm/httm/kdtp';
     private urlPostConvenienceStore = 'api/qltm/httm/chtl';
-
-    constructor(public http: HttpClient) {}
+    private urlPostPromoAdress = "api/qltm/cap-nhat-dia-diem-khuyen-mai";
+    private urldeletePromo = "api/qltm/khuyen-mai/xoa";
+    constructor(public http: HttpClient) { }
 
     // Expo
     public getExpoData(date: any) {
@@ -58,7 +59,7 @@ export class CommerceManagementService {
     public getSubcribeDiscountData() {
         let apiUrl = this.apiHome + this.urlGetSubcribeDiscount;
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -66,7 +67,7 @@ export class CommerceManagementService {
     public getSubcribeDiscountTypeData() {
         let apiUrl = this.apiHome + this.urlGetSubcribeDiscountType;
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -180,5 +181,23 @@ export class CommerceManagementService {
         }
         window.alert(errorMessage);
         return throwError(errorMessage);
+    }
+
+    postAddressPromo(datas) {
+        let apiUrl = this.apiHome + this.urlPostPromoAdress;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deletePromo(datas) {
+        let apiUrl = this.apiHome + this.urldeletePromo;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
     }
 }

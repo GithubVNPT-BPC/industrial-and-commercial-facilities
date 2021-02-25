@@ -17,12 +17,7 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 })
 
 export class ChemicalManagementComponent extends BaseComponent {
-    //Constant
-    private readonly LINK_DEFAULT: string = "/specialized/industry-management/chemical";
-    private readonly TITLE_DEFAULT: string = "Công nghiệp - Hoá chất";
-    private readonly TEXT_DEFAULT: string = "Công nghiệp - Hoá chất";
-    //Variable for only ts
-    private _linkOutput: LinkModel = new LinkModel();
+    
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'cong_suat', 'san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
@@ -70,7 +65,6 @@ export class ChemicalManagementComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
-        private _breadCrumService: BreadCrumService
     ) {
         super(injector);
     }
@@ -85,15 +79,13 @@ export class ChemicalManagementComponent extends BaseComponent {
         // };
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
-        this.sendLinkToNext(true);
     }
 
-    public sendLinkToNext(type: boolean) {
-        this._linkOutput.link = this.LINK_DEFAULT;
-        this._linkOutput.title = this.TITLE_DEFAULT;
-        this._linkOutput.text = this.TEXT_DEFAULT;
-        this._linkOutput.type = type;
-        this._breadCrumService.sendLink(this._linkOutput);
+    getLinkDefault(){
+        //Constant
+        this.LINK_DEFAULT = "/specialized/industry-management/chemical";
+        this.TITLE_DEFAULT = "Công nghiệp - Hoá chất";
+        this.TEXT_DEFAULT = "Công nghiệp - Hoá chất";
     }
 
     public switchView() {

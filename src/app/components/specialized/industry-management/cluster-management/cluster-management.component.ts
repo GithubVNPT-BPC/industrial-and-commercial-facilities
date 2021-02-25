@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material';
 import { element } from 'protractor';
 import { ReportService } from 'src/app/_services/APIService/report.service';
@@ -12,6 +12,10 @@ import { Router } from '@angular/router';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { BaseComponent } from '../../specialized-base.component';
+import { FormControl } from '@angular/forms';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
 
 @Component({
@@ -20,13 +24,8 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class ClusterManagementComponent implements OnInit {
-    //Constant
-    private readonly LINK_DEFAULT: string = "/specialized/industry-management/cluster";
-    private readonly TITLE_DEFAULT: string = "Tổng quan cụm công nghiệp";
-    private readonly TEXT_DEFAULT: string = "Tổng quan cụm công nghiệp";
-    //Variable for only ts
-    private _linkOutput: LinkModel = new LinkModel();
+export class ClusterManagementComponent extends BaseComponent {
+    
     showColumns: string[] = [];
     showSubColumns: string[] = [];
     subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
@@ -35,17 +34,17 @@ export class ClusterManagementComponent implements OnInit {
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     years: number[] = [];
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+    // districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
+    // { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
+    // { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
+    // { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
+    // { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
+    // { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
+    // { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
+    // { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
+    // { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
+    // { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
+    // { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
 
     hienTrangHaTang: any[] = [{ id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
     { id: 2, ten_hien_trang_ha_tang: 'Có quy hoạch chi tiết' },
@@ -72,26 +71,28 @@ export class ClusterManagementComponent implements OnInit {
 
     constructor(
         public excelService: ExcelService,
-        public sctService: SCTService,
+        public indService: IndustryManagementService,
         public router: Router,
-        private _breadCrumService: BreadCrumService,
-    ) { }
+        private injector: Injector
+    ) {
+        super(injector)
+    }
 
     ngOnInit() {
+        super.ngOnInit();
         this.showColumns = this.topColumns;
         this.showSubColumns = [];
         this.years = this.getYears();
         this.getDanhSachQuanLyCumCongNghiep();
         this.autoOpen();
-        this.sendLinkToNext(true);
+        this.initWards();
     }
-    public sendLinkToNext(type: boolean) {
-        this._linkOutput.link = this.LINK_DEFAULT;
-        this._linkOutput.title = this.TITLE_DEFAULT;
-        this._linkOutput.text = this.TEXT_DEFAULT;
-        this._linkOutput.type = type;
-        this._breadCrumService.sendLink(this._linkOutput);
+    getLinkDefault(){
+        this.LINK_DEFAULT = "/specialized/industry-management/cluster";
+        this.TITLE_DEFAULT = "Tổng quan cụm công nghiệp";
+        this.TEXT_DEFAULT = "Tổng quan cụm công nghiệp";
     }
+
     applyFilter() {
         let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
         if (!filteredData.length) {
@@ -114,18 +115,18 @@ export class ClusterManagementComponent implements OnInit {
     }
 
     getDanhSachQuanLyCumCongNghiep() {
-        this.sctService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
+        this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
             // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
             this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
             this.filteredDataSource.data = [...this.dataSource.data];
             // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
-            this.filteredDataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số cụm công nghiệp đang hiển thị';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            // this.filteredDataSource.paginator = this.paginator;
+            // this.paginator._intl.itemsPerPageLabel = 'Số cụm công nghiệp đang hiển thị';
+            // this.paginator._intl.firstPageLabel = "Trang Đầu";
+            // this.paginator._intl.lastPageLabel = "Trang Cuối";
+            // this.paginator._intl.previousPageLabel = "Trang Trước";
+            // this.paginator._intl.nextPageLabel = "Trang Tiếp";
         })
     }
 
@@ -188,11 +189,49 @@ export class ClusterManagementComponent implements OnInit {
         })
         return temp;
     }
+    @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
+    getFormParams(){
+        return{
+            ten_cum: new FormControl(''),
+            chu_dau_tu: new FormControl(''),
+            dien_tich_theo_qh: new FormControl(0),
+            dien_tich_da_thanh_lap: new FormControl(0),
+            dia_chi: new FormControl(''),
+            id_phuong_xa: new FormControl(),
+            quyet_dinh_thanh_lap: new FormControl(''),
+            quyet_dinh_quy_hoach_chi_tiet: new FormControl(''),
+            quyet_dinh_danh_gia_dtm: new FormControl(''),
+            dieu_kien_kinh_doanh: new FormControl(''),
+            vi_tri_quy_mo: new FormControl(''),
+            tong_muc_dau_tu: new FormControl(0),
+            quy_mo_dien_tich: new FormControl(0),
+            dien_giai: new FormControl(''),
+            duong_dan: new FormControl(''),
+            dien_tich_qhct: new FormControl(0),
+            dien_tich_ddtht: new FormControl(0),
+            id_htdtht: new FormControl(),
+            id_htdthtxlnt: new FormControl(),
+            id_trang_thai_hoat_dong: new FormControl(),
+            nhu_cau_von: new FormControl(0),
+        }
+    }
 
-    initDistricts() {
-        this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
-            if (res['success'])
-                this.districts = res['data'];
+    trang_thai_hd: any[] = [
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
+    ];
+
+    public prepareData(data) { 
+        return data 
+    }
+
+    public callService(data) {
+        // console.log(data);
+        this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(res => {
+            // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
+            this.successNotify(res);
+            this.autopaging();
         })
     }
 }
