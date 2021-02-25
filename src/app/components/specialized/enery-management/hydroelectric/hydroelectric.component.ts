@@ -43,6 +43,12 @@ export class HydroelectricComponent extends BaseComponent {
     this.laydulieuThuyDien();
   }
 
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/enery-management/hydroelectric";
+    this.TITLE_DEFAULT = "Năng lượng - Thủy điện";
+    this.TEXT_DEFAULT = "Năng lượng - Thủy điện";
+  }
+
   laydulieuThuyDien(){
     this.energyService.LayDuLieuThuyDien().subscribe(res => {
       this.dataSource = new MatTableDataSource<HydroEnergyModel>(res.data);

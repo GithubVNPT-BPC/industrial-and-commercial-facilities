@@ -2,12 +2,10 @@ import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { FoodIndustryModel } from 'src/app/_models/APIModel/industry-management.module';
-import { LinkModel } from 'src/app/_models/link.model';
 import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
 @Component({
