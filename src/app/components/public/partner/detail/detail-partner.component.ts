@@ -4,7 +4,7 @@ import { Company } from '../../../../_models/company.model';
 
 import { MarketService } from '../../../../_services/APIService/market.service';
 import { CompanyDetailModel } from '../../../../_models/APIModel/domestic-market.model';
-import { CareerModel, DistrictModel, SubDistrictModel, BusinessTypeModel, CSTTModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { CareerModel, DistrictModel, SubDistrictModel, BusinessTypeModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { MatDialog } from '@angular/material/dialog';
 
 import {
@@ -81,7 +81,6 @@ export class CompanyDetailComponent implements OnInit {
 	public career: Array<CareerModel> = new Array<CareerModel>();
 	public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
 	public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
-	public CSTT: Array<CSTTModel> = new Array<CSTTModel>();
 	defaultLogo: string = '../../../../assets/img/brandlogo/company_ph01.jpg';
 	SLCSTT: any;
 	dataSourceKNXK = new MatTableDataSource<any>();
@@ -162,7 +161,7 @@ export class CompanyDetailComponent implements OnInit {
 		// this.getKNXK();
 
 		// get list product and nationals
-		this.getAllProducts();
+		// this.getAllProducts();
 		// this.getAllNational();
 	}
 
@@ -387,13 +386,13 @@ export class CompanyDetailComponent implements OnInit {
 	// 		});
 	// }
 
-	getAllProducts() {
-		this.marketService.GetAllProduct().subscribe(data => {
-			if (data['data'].length !== 0) {
-				this.products = data['data'];
-			}
-		})
-	}
+	// getAllProducts() {
+	// 	this.marketService.GetAllProduct().subscribe(data => {
+	// 		if (data['data'].length !== 0) {
+	// 			this.products = data['data'];
+	// 		}
+	// 	})
+	// }
 
 	// getAllNational() {
 	// 	this.marketService.GetAllNational().subscribe(data => {

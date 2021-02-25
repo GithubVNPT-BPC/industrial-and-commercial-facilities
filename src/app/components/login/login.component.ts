@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
         }
         else if (response.data.user_role_id == 1) {
           this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
+          this.returnUrl = '/manager/market/domestic/price'
           this.router.navigateByUrl(this.returnUrl);
         }
         else if (response.data.user_role_id == 3) {

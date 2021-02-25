@@ -5,16 +5,15 @@ import { Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class EventService {
-  constructor() {}
+  constructor() { }
 
   open: boolean = false;
-  isSCTData: boolean = false;
-//   @HostListener('click', ['$event.target'])
+
   getValue() {
-      return this.open;
+    return this.open;
   }
-  setvalue(param){
-      this.open = param;
+  setvalue(param) {
+    this.open = param;
   }
 
 }

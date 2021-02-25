@@ -65,8 +65,6 @@ export class DomesticPriceComponent implements OnInit {
     this.getDomesticMarketPriceByTime(this.pickedDate.date);
   }
 
-  public _noData: boolean = true;
-
   public getPriceChange(param: any) {
     this.getDomesticMarketPriceByTime(param._d);
   }
@@ -79,11 +77,6 @@ export class DomesticPriceComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<DomesticPriceModel>(allrecords.data);
-        if (this.dataSource.data.length == 0) {
-          this._noData = true;
-        } else {
-          this._noData = false;
-        }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";

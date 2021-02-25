@@ -13,6 +13,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
     selector: 'company-top-popup',
+    
     templateUrl: 'company-top-popup.component.html',
     styleUrls: ['../../public_layout.scss'],
 })

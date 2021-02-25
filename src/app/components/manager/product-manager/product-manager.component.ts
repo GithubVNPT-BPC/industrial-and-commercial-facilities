@@ -1,26 +1,22 @@
-//Import library
-import { Component, OnInit, ViewChild, QueryList, ViewChildren, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatDialog } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
+import * as XLSX from 'xlsx';
+import { formatDate } from '@angular/common';
+import { ReplaySubject, Subject } from 'rxjs';
+
+import { ManagerDirective } from './../../../shared/manager.directive';
+import { LoginService } from 'src/app/_services/APIService/login.service';
+import { KeyboardService } from './../../../shared/services/keyboard.service';
+import { InformationService } from 'src/app/shared/information/information.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { MarketService } from '../../../_services/APIService/market.service';
+
+import { ProductValueModel, ProductModel, DeleteModel1 } from '../../../_models/APIModel/domestic-market.model';
+
 import { FormControl } from '@angular/forms';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
-//Import Service
-import { ManagerService } from '../../../_services/APIService/manager.service';
-import { InformationService } from 'src/app/shared/information/information.service';
-import { MarketService } from 'src/app/_services/APIService/market.service';
-import { KeyboardService } from './../../../shared/services/keyboard.service';
-//Import Model
-import { ProductManagerModelList, ProductManagerModel, MODE } from '../../../_models/APIModel/manager.model';
-import { SAVE } from 'src/app/_enums/save.enum';
-import { ProductValueModel } from 'src/app/_models/APIModel/domestic-market.model';
-//Import Component
-import { ExportTopCompanyManager } from '../export-top-company-manager/export-top-company-manager.component';
-import { ManagerDirective } from './../../../shared/manager.directive';
-import * as XLSX from 'xlsx';
-import { Subject } from 'rxjs';
-
-//Moment
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
@@ -55,122 +51,285 @@ export const MY_FORMATS = {
 })
 
 export class ProductManagerComponent implements OnInit {
+    public products: Array<ProductModel> = new Array<ProductModel>();
+    public dataSource: MatTableDataSource<ProductValueModel> = new MatTableDataSource<ProductValueModel>();
+    public displayedColumns: string[] = ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 'tri_gia', 'time_id'];
 
-    //Declare constant
-    public readonly FORMAT = 'dd/MM/yyyy';
-    public readonly LOCALE = 'en-GB';
-
-    //Declare variable for HTML&TS
-    public date = new FormControl(_moment());
-    public modeQuery: MODE = MODE.INSERT;
-    public columns: number = 1;
-    public timeProductManager: string;
-    public displayedColumns: string[] = ['index', 'ten_san_pham', 'san_luong', 'tri_gia', 'top_san_xuat'];
-    public products: Array<ProductManagerModelList> = new Array<ProductManagerModelList>();
-    public dataSource: MatTableDataSource<ProductManagerModel> = new MatTableDataSource<ProductManagerModel>();
-    //Declare variable for ONLY TS
-    rows: number = 0;
-    public currentRow: number = 0;
-    public theYear: number = 0;
-    public theMonth: number = 0;
-
-    //Viewchild
     @ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild("TABLE", { static: true }) table: ElementRef;
 
-    constructor(public managerService: ManagerService,
+    public constructor(
         public marketService: MarketService,
+        public _keyboardservice: KeyboardService,
         public _infor: InformationService,
-        public keyboardservice: KeyboardService,
-        public dialog: MatDialog) { }
+        public excelService: ExcelService,
+        public _loginService: LoginService) {
+    }
 
-    ngOnInit() {
-        this.timeProductManager = this.getCurrentDate();
-        this.theYear = this.getCurrentYear();
-        this.theMonth = this.getCurrentMonth();
+    selection = new SelectionModel<ProductValueModel>(true, []);
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        // const numRows = this.dataSource.data.length;
+        const numRows = this.dataSource.connect().value.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.connect().value.forEach(row => this.selection.select(row));
+    }
+
+    checkboxLabel(row?: ProductValueModel): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    }
+
+    removeRows() {
+        if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+            // this.selection.selected.forEach(item => {
+            //     this.marketService.DeleteProductValue(item.id).subscribe(res => {
+            //         this.dataSource = null
+            //         this.selection.clear();
+            //         this._infor.msgSuccess('Xóa thành công')
+            //         this.getALLProductValueList();
+            //         this.selection.clear();
+            //         this.paginator.pageIndex = 0;
+            //     })
+            // });
+        }
+    }
+
+    public ngOnInit() {
         this.getListProduct();
-        // this.getDomesticMarketProduct(this.theMonth, this.theYear);
-        this.keyboardservice.keyBoard.subscribe(res => {
+        this._keyboardservice.keyBoard.subscribe(res => {
             this.move(res)
         })
+        this.getALLProductValueList();
+        this.date = null
     }
-    //Function for PROCESS-FLOW------------------------------------------------------------------------------------------
-    // public getDomesticMarketProduct(month: number, year: number) {
-    //     this.managerService.GetProductManager(month, year).subscribe(
-    //         allrecords => {
-    //             if (allrecords.data.length > 0) {
-    //                 this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data);
-    //                 if (this.dataSource.data.length == 0) {
-    //                     this.createDefault();
-    //                     this.modeQuery = MODE.INSERT;
-    //                 } else {
-    //                     this.modeQuery = MODE.UPDATE;
-    //                 }
-    //                 this.dataSource.paginator = this.paginator;
-    //                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    //                 this.paginator._intl.firstPageLabel = "Trang Đầu";
-    //                 this.paginator._intl.lastPageLabel = "Trang Cuối";
-    //                 this.paginator._intl.previousPageLabel = "Trang Trước";
-    //                 this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    //             }
-    //         },
-    //         //error => this.errorMessage = <any>error
-    //     );
-    // }
-    //Event "Chọn năm"
+
+    resetAll() {
+        this.getALLProductValueList()
+        this.date = null
+    }
+
+    public getListProduct(): void {
+        this.marketService.GetProductList().subscribe(
+            allrecords => {
+                this.products = allrecords.data as ProductModel[];
+            },
+        );
+    }
+
+    public getChange(param: any) {
+        this.getProductValueList(param._d)
+    }
+
+    Convertdate(text: string): string {
+        let date: string
+        date = text.substring(4, 6) + "/" + text.substring(0, 4)
+        return date
+    }
+
+    Convertdatetostring(text: string): string {
+        let date: string
+        date = text.replace('/', '').replace('/', '')
+        let date1: string
+        date1 = date.substring(4, 9) + date.substring(2, 4) + date.substring(0, 2)
+        return date1
+    }
+
+    public getCurrentDate() {
+        let date = new Date;
+        return formatDate(date, 'MM/yyyy', 'en-US');
+    }
+
+    public date = new FormControl(_moment());
+    public theYear: number;
+    public theMonth: number;
+    public stringmonth: string
+    public time: string
+
     public chosenYearHandler(normalizedYear: Moment) {
         const ctrlValue = this.date.value;
         ctrlValue.year(normalizedYear.year());
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
-        return this.theYear as number
     }
-    //Event "Chọn tháng"
+
     public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
         const ctrlValue = this.date.value;
         ctrlValue.month(normalizedMonth.month());
         this.date.setValue(ctrlValue);
         this.theMonth = normalizedMonth.month() + 1;
         datepicker.close();
-        // this.getDomesticMarketProduct(this.theMonth, this.theYear);
-        return this.theMonth as number
+
+        if (this.theMonth >= 10) {
+            this.stringmonth = this.theMonth.toString();
+        }
+        else {
+            this.stringmonth = "0" + this.theMonth.toString()
+        }
+        this.time = this.theYear.toString() + this.stringmonth
+        this.getProductValueList(this.time);
     }
-    //Add event
-    public addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
-        let time = event.value;
-        let year = time.getFullYear();
-        let month = time.getMonth();
-        // this.marketService.GetExportedValue(month, year);
+
+    public getProductValueList(time: string) {
+        this.marketService.GetProductValue(time).subscribe(
+            allrecords => {
+                allrecords.data[0].forEach(element => {
+                    element.time_id = this.Convertdate(element.time_id)
+                });
+                this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
+                if (this.dataSource.data.length == 0) {
+                    this.createDefault();
+                }
+                this.dataSource.paginator = this.paginator;
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+
+                this._rows = this.dataSource.filteredData.length;
+            },
+        );
     }
 
-    //Event for "Tải template"
-    downloadExcelTemplate(filename: string, sheetname: string) {
-        let excelFileName: string;
-        let newArray: any[] = [];
-        //Format name of Excel will be export
-        sheetname = sheetname.replace('/', '_');
-        excelFileName = filename + '.xlsx';
+    public getALLProductValueList() {
+        this.marketService.GetAllProductValue().subscribe(
+            allrecords => {
+                allrecords.data[0].forEach(element => {
+                });
+                this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
+                if (this.dataSource.data.length == 0) {
+                    this.createDefault();
+                }
+                this.dataSource.paginator = this.paginator;
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
 
-        //Alias column name
-        let data = Object.values(this.dataSource.data);
+                this._rows = this.dataSource.filteredData.length;
+            },
+        );
+    }
 
-        Object.keys(data).forEach((key, index) => {
-            newArray.push({
-                'STT': index,
-                'Mã sản phẩm': data[key].id_san_pham,
-                'Tên sản phẩm': data[key].ten_san_pham,
-                'Sản lượng': '',
-                'Trị giá': '',
-            });
+    public _currentRow: number = 0;
+
+    public addRow(): void {
+        let newRow: ProductValueModel = new ProductValueModel();
+        newRow.san_luong;
+        newRow.tri_gia;
+        newRow.time_id = this.getCurrentDate();
+        // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+        this.dataSource.data.push(newRow);
+        this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+        this._rows = this.dataSource.filteredData.length;
+    }
+
+    public insertRow(): void {
+        let data = this.dataSource.data.slice(this._currentRow);
+        this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
+        let newRow: ProductValueModel = new ProductValueModel();
+        newRow.san_luong;
+        newRow.time_id = this.getCurrentDate();
+        // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+        this.dataSource.data.push(newRow);
+        data.forEach(element => {
+            this.dataSource.data.push(element);
         });
-        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
-        const wb: XLSX.WorkBook = XLSX.utils.book_new();
-        /* save to file */
-        XLSX.utils.book_append_sheet(wb, ws, sheetname);
-        XLSX.writeFile(wb, excelFileName);
+        this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+        this._rows = this.dataSource.filteredData.length;
     }
 
-    //Event for "Nhập từ excel"
+    public deleteRow(): void {
+        this.dataSource.data.splice(this._currentRow, 1);
+        this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+        this._rows = this.dataSource.filteredData.length;
+    }
+
+    public createDefault() {
+        const Product1: number = 1;
+        const Product2: number = 2;
+        const Product3: number = 3;
+        const Product4: number = 4;
+        this.dataSource = new MatTableDataSource<ProductValueModel>();
+        this.addRow();
+        this.addRow();
+        this.addRow();
+        this.addRow();
+        this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == Product1)[0].id_san_pham;
+        this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == Product2)[0].id_san_pham;
+        this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == Product3)[0].id_san_pham;
+        this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == Product4)[0].id_san_pham;
+
+        this._rows = this.dataSource.filteredData.length;
+    }
+
+    public save() {
+        this.dataSource.data.forEach(element => {
+            if (element.time_id) {
+                let x = this.Convertdatetostring(element.time_id)
+                element.time_id = x;
+            }
+            element.id = null
+        });
+        this.marketService.PostProductValue(this.dataSource.data).subscribe(
+            next => {
+                if (next.id == -1) {
+                    this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                }
+                else {
+                    this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                    this.getALLProductValueList();
+                }
+            },
+            error => {
+                this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+            }
+        );
+    }
+
+    // downloadExcelTemplate(filename: string, sheetname: string) {
+    //   let excelFileName: string;
+    //   let newArray: any[] = [];
+
+    //   sheetname = sheetname.replace('/', '_');
+    //   excelFileName = filename + '.xlsx';
+
+    //   let data = Object.values(this.dataSource.data);
+
+    //   Object.keys(data).forEach((key, index) => {
+    //     newArray.push({
+    //       'STT': index,
+    //       'Tên sản phẩm': data[key].ten_san_pham,
+    //       'ID sản phẩm': data[key].id_san_pham,
+    //       'Giá': '',
+    //       'Nguồn số liệu': '',
+    //     });
+    //   });
+    //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
+    //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    //   XLSX.utils.book_append_sheet(wb, ws, sheetname);
+    //   XLSX.writeFile(wb, excelFileName);
+    // }
+
+    // public exportTOExcel(filename: string, sheetname: string) {
+    //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    // }
+
     spinnerEnabled = false;
     keys: string[];
     dataSheet = new Subject();
@@ -195,23 +354,20 @@ export class ProductManagerComponent implements OnInit {
                 this.spinnerEnabled = true;
                 const reader: FileReader = new FileReader();
                 reader.onload = (e: any) => {
-                    /* read workbook */
                     const bstr: string = e.target.result;
                     const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
 
-                    /* grab first sheet */
                     const wsname: string = wb.SheetNames[0];
                     const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-                    /* save data */
                     data = XLSX.utils.sheet_to_json(ws);
                     this.dataSource.data = [];
                     data.forEach(item => {
-                        let datarow: ProductManagerModel = new ProductManagerModel();
+                        let datarow: ProductValueModel = new ProductValueModel();
                         datarow.san_luong = item['Sản lượng'];
                         datarow.tri_gia = item['Trị giá'];
-                        datarow.ten_san_pham = item['Tên sản phẩm'];
-                        datarow.id_san_pham = item['Mã sản phẩm'];
+                        datarow.id_san_pham = item['ID sản phẩm'];
+                        datarow.time_id = this.getCurrentDate();
                         this.dataSource.data.push(datarow);
                     });
                     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -229,44 +385,20 @@ export class ProductManagerComponent implements OnInit {
                 this.inputFile.nativeElement.value = '';
             }
         }
-        // let dataExcel;
-        // let jsonFromExcel;
-        // const target: DataTransfer = (evt.target) as DataTransfer;
-        // const reader: FileReader = new FileReader();
-
-        // reader.onload = (e: any) => {
-        //     let bstr: string = e.target.result;
-
-        //     let wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-        //     let wsName: string = wb.SheetNames[0];
-
-        //     let ws: XLSX.WorkSheet = wb.Sheets[wsName];
-
-        //     dataExcel = (XLSX.utils.sheet_to_json(ws, { header: 2 }));
-        //     jsonFromExcel = JSON.stringify(dataExcel);
-
-        // };
-
-        // reader.readAsBinaryString(target.files[0]);
     }
 
-
-    public getListProduct(): void {
-        this.managerService.GetListProduct().subscribe(
-            allrecords => {
-                this.products = allrecords.data as ProductManagerModelList[];
-                this.createDefault();
-            },
-        );
-    }
-    //Function for HTML EVENT------------------------------------------------------------------------------------------
-    //Event "Lọc dữ liệu"
     public applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
-    //Event "Key Arrown"
+
+    public changeRow(index: number) {
+        this._currentRow = index;
+    }
+
+    public _rows: number = 0;
+    public columns: number = 1;
+
     public move(object) {
         const inputToArray = this.inputs.toArray()
         let index = inputToArray.findIndex(x => x.element == object.element);
@@ -278,157 +410,14 @@ export class ProductManagerComponent implements OnInit {
                 index += this.columns;
                 break;
             case "LEFT":
-                index -= this.rows;
+                index -= this._rows;
                 break;
             case "RIGHT":
-                index += this.rows;
+                index += this._rows;
                 break;
         }
         if (index >= 0 && index < this.inputs.length) {
             inputToArray[index].element.nativeElement.focus();
-            // inputToArray[index].element.nativeElement.style.backgroundColor = '#5789D8';
         }
     }
-    //Event "Tạo mặc định"
-    public createDefault() {
-        const HAT_DIEU: number = 2;
-        // const HAT_TIEU: number = 3;
-        const CAO_SU: number = 4;
-        // const CA_PHE: number = 5;
-        // if (this.dataSource.data.length > 0)
-        //     if (!confirm("Nếu bạn tạo mặc định sẽ xóa dữ liệu hiện tại! Bạn tiếp tục không?"))
-        //         return;
-        this.dataSource = new MatTableDataSource<ProductManagerModel>();;
-        this.addRow();
-        this.addRow();
-        this.dataSource.data[0].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ten_san_pham;
-        // this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ten_san_pham;
-        this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ten_san_pham;
-        // this.dataSource.data[3].ten_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ten_san_pham;
-        this.dataSource.data[0].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ma_san_pham;
-        // this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ma_san_pham;
-        this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ma_san_pham;
-        // this.dataSource.data[3].id_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ma_san_pham;
-        this.rows = this.dataSource.filteredData.length;
-    }
-    //Event "Thêm dòng"
-    public addRow() {
-        let newRow: ProductManagerModel = new ProductManagerModel();
-        newRow.san_luong;
-        newRow.tri_gia;
-        newRow.don_vi_tinh = "";
-        newRow.thang = this.getCurrentMonth();
-        newRow.nam = this.getCurrentYear();
-        this.dataSource.data.push(newRow);
-        this.dataSource = new MatTableDataSource(this.dataSource.data);
-        this.dataSource.paginator = this.paginator;
-        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-        this.paginator._intl.firstPageLabel = "Trang Đầu";
-        this.paginator._intl.lastPageLabel = "Trang Cuối";
-        this.paginator._intl.previousPageLabel = "Trang Trước";
-        this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        this.rows = this.dataSource.filteredData.length;
-    }
-    //Event "Xóa dòng"
-    public deleteRow() {
-        this.dataSource.data.splice(this.currentRow, 1);
-        this.dataSource = new MatTableDataSource(this.dataSource.data);
-        this.rows = this.dataSource.filteredData.length;
-    }
-    //Event "Chèn dòng"
-    public insertRow() {
-        let data = this.dataSource.data.slice(this.currentRow);
-        this.dataSource.data.splice(this.currentRow, this.dataSource.data.length - this.currentRow + 1);
-        let newRow: ProductManagerModel = new ProductManagerModel();
-        newRow.san_luong;
-        newRow.tri_gia;
-        newRow.don_vi_tinh = "";
-        newRow.thang = this.getCurrentMonth();
-        newRow.nam = this.getCurrentYear();
-        this.dataSource.data.push(newRow);
-        data.forEach(element => {
-            this.dataSource.data.push(element);
-        });
-        this.dataSource = new MatTableDataSource(this.dataSource.data);
-        this.rows = this.dataSource.filteredData.length;
-    }
-
-    //Event "Top doanh nghiệp"
-    public openDialogSelectCompany(data: any) {
-        const dialogRef = this.dialog.open(ExportTopCompanyManager, {
-            data: {
-                message: 'Nhập dữ liệu top doanh nghiệp nhập khẩu',
-                buttonText: {
-                    ok: 'Lưu',
-                    cancel: 'Hủy bỏ'
-                },
-                product: data,
-                typeOfSave: SAVE.PRODUCT,
-            }
-        });
-
-        dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-            if (confirmed) {
-            }
-        });
-    }
-    //Event "Change row"
-    public changeRow(index: number) {
-        this.currentRow = index;
-    }
-    //Event "Select combobox"
-    public changeProduct(element: any) {
-        element.ten_san_pham = this.products.filter(x => x.ma_san_pham == element.id_san_pham)[0].ten_san_pham;
-        element.thang = this.getCurrentMonth();
-        element.nam = this.getCurrentYear();
-    }
-    //Event "Lưu"
-    public save() {
-        let month = this.getCurrentMonth();
-        let year = this.getCurrentYear();
-        // let data: ProductManagerModel[] = this.dataSource.data.filter(x => x.id == 0);
-        this.managerService.PostProductManager(month, year, this.dataSource.data).subscribe(
-            next => {
-                if (next.id == -1) {
-                    this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-                }
-                else {
-                    this.modeQuery = MODE.UPDATE;
-                    this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-                }
-            },
-            error => {
-                this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
-            }
-        );
-    }
-    //Function EXTENTION-----------------------------------------------------------------------------------------
-    public formatNgayCapNhat(str: string) {
-        let year: string = str.substr(0, 4);
-        let month: string = str.substr(4, 2);
-        let day: string = str.substr(6, 2);
-        let result: string = day + '/' + month + '/' + year;
-        return result;
-    }
-    public getMonthAndYear(time: string) {
-        let year = time.substr(0, 4);
-        let month = time.substr(4, 2);
-        let day = time.substr(6, 2);
-        let result = day + "/" + month + "/" + year;
-        return result as string;
-    }
-    public getCurrentDate() {
-        let date = new Date;
-        return date.toLocaleDateString(this.LOCALE);
-        //return this.GetMonthAndYear(date.toISOString().replace('-', '').replace('-', ''));
-    }
-    public getCurrentMonth() {
-        let date = new Date();
-        return date.getMonth() + 1;
-    }
-    public getCurrentYear() {
-        let date = new Date();
-        return date.getFullYear();
-    }
-
 }

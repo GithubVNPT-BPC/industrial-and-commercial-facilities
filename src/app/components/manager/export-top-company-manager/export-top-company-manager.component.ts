@@ -10,10 +10,8 @@ import { MatSort } from '@angular/material/sort';
 //Import Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { InformationService } from 'src/app/shared/information/information.service';
-import { ManagerService } from 'src/app/_services/APIService/manager.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 //Import Model
-import { ExportManagerModel } from 'src/app/_models/APIModel/manager.model';
 import { CompanyDetailModel } from './../../../_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
 //Import Component
@@ -30,7 +28,7 @@ export class ExportTopCompanyManager implements OnInit {
     public dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
     public selection = new SelectionModel<CompanyDetailModel>(true, []);
     public field: string = "";
-    public product: ExportManagerModel;
+    // public product: ExportManagerModel;
     public textSaveButton: string = "Lưu";
     public textCancelButton: string = "Hủy bỏ";
     public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'nganh_nghe_kd'];
@@ -46,7 +44,6 @@ export class ExportTopCompanyManager implements OnInit {
         @Inject(MAT_DIALOG_DATA) public data: any,
         public dialogRef: MatDialogRef<ExportTopCompanyManager>,
         public marketService: MarketService,
-        public managerService: ManagerService,
         public excelService: ExcelService,
         public router: Router,
         public _infor: InformationService
@@ -54,7 +51,7 @@ export class ExportTopCompanyManager implements OnInit {
 
     async ngOnInit(): Promise<void> {
         this.field = this.data.message + " cho sản phẩm: " + this.data.product.ten_san_pham;
-        this.product = this.data.product;
+        // this.product = this.data.product;
         // this.typeOfSave = this.data.typeOfSave;
         if (this.data.buttonText) {
             this.textCancelButton = this.data.buttonText.cancel;

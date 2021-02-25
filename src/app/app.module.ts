@@ -12,17 +12,14 @@ import { InformationService } from './shared/information/information.service';
 import { InformationComponent } from './shared/information/information.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtInterceptor } from './_helpers/jwt.interceptor';
-import { appInitializer } from './_helpers/app.initializer';
-import { LoginService } from './_services/APIService/login.service';
 import { ErrorInterceptor } from './_helpers/error.interceptor';
 import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from './shared/confirmation-dialog/confirmation-dialog.service';
-// import {ToastrModule} from 'ngx-toastr';
-import {MatPaginatorModule} from '@angular/material/paginator';
-// import { FormatNumberReportPipe } from './shared/pipes/formatNumber.pipe';
-// import { dich } from 'src/app/components/specialized/commecial-managemant/border-trade/dich.pipe';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { PipeModule } from './pipe.module';
-// import { TranslateIdToNamePipe } from './shared/pipes/translateIdToName.pipe';
+import { MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -35,19 +32,17 @@ import { PipeModule } from './pipe.module';
     PipeModule,
     ReactiveFormsModule,
     MatPaginatorModule,
-    // ToastrModule.forRoot()
+    MatSelectModule,
+    MatFormFieldModule,
+    NgxMatSelectSearchModule
   ],
-  declarations:[
+  declarations: [
     InformationComponent,
     ConfirmationDialogComponent,
-    // TranslateIdToNamePipe
   ],
-  exports : [
-    // TranslateIdToNamePipe
-    
+  exports: [
   ],
   providers: [
-   // { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [LoginService] },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {
@@ -57,7 +52,7 @@ import { PipeModule } from './pipe.module';
     InformationService,
     ConfirmationDialogService,
   ],
-  entryComponents:[
+  entryComponents: [
     InformationComponent,
     ConfirmationDialogComponent
   ],
