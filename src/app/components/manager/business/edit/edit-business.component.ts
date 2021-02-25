@@ -1,44 +1,36 @@
 import { Component, OnInit, OnDestroy, Input, ViewChild } from "@angular/core";
+import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from "@angular/router";
-import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from '../../../../shared/information/information.service';
 import { MarketService } from "../../../../_services/APIService/market.service";
+import { MatDialog } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import {
-  CompanyDetailModel1,
+  CompanyDetailModel,
   CompanyPost,
   CareerModel,
   DistrictModel,
   SubDistrictModel,
   BusinessTypeModel,
-  Career,
 } from "../../../../_models/APIModel/domestic-market.model";
-import { MatDialog } from "@angular/material/dialog";
 
-import {
-  MAT_MOMENT_DATE_FORMATS,
-  MomentDateAdapter,
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from "@angular/material-moment-adapter";
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from "@angular/material/core";
-import { MatTableDataSource, MatDatepicker, MatPaginator } from "@angular/material";
-import { formatDate } from "@angular/common";
-import moment from "moment";
-import { CommentStmt } from "@angular/compiler";
-
-export const MY_FORMATS = {
+import { FormControl } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
+const moment = _rollupMoment || _moment;
+export const DDMMYY_FORMAT = {
   parse: {
-    dateInput: "DD/MM/YYYY",
+    dateInput: 'LL',
   },
   display: {
-    dateInput: "DD/MM/YYYY",
-    monthYearLabel: "DD/MM/YYYY",
-    dateA11yLabel: "LL",
-    monthYearA11yLabel: "MMMM YYYY",
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
   },
 };
 
@@ -47,13 +39,15 @@ export const MY_FORMATS = {
   templateUrl: "./edit-business.component.html",
   styleUrls: ['../../manager_layout.scss'],
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: "vi-VI" },
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+
+    { provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    DatePipe
   ],
 })
 export class EditBusinessComponent implements OnInit {
@@ -63,8 +57,6 @@ export class EditBusinessComponent implements OnInit {
   public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
   errorMessage: string;
 
-  @Input() company: CompanyDetailModel1;
-
   mst: string;
   doanh_nghiep: FormGroup;
   danh_sach_nganh_nghe: FormArray;
@@ -72,6 +64,7 @@ export class EditBusinessComponent implements OnInit {
   constructor(
     public route: ActivatedRoute,
     public router: Router,
+    public datepipe: DatePipe,
     public dialog: MatDialog,
     public _Service: MarketService,
     public info: InformationService,
@@ -80,7 +73,11 @@ export class EditBusinessComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.mst = params["mst"];
     });
-    this.company = new CompanyDetailModel1();
+  }
+
+  date = new FormControl(moment);
+  pickedDate = {
+    date: new Date()
   }
 
   GetAllNganhNghe() {
@@ -109,7 +106,10 @@ export class EditBusinessComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.GetCompanyInfoById();
+    console.log(this.mst)
+    if (this.mst != undefined) {
+      this.GetCompanyInfoById();
+    }
     this.GetAllNganhNghe();
     this.GetAllPhuongXa();
     this.getQuan_Huyen();
@@ -167,23 +167,44 @@ export class EditBusinessComponent implements OnInit {
 
   public SaveData(companyinput) {
     console.log(companyinput)
-    this._Service.PostCompany().subscribe(
+    this._Service.PostCompany(companyinput).subscribe(
       res => {
         // debugger;
-        // this.resetForm(form);
+        // this.resetForm(companyinput);
         this.info.msgSuccess('Thêm thành công')
         this.router.navigate(['manager/business/search/']);
       },
       err => {
         // debugger;
-        console.log(err);
       }
     )
   }
+
+  public UpdateData(companyinput) {
+    console.log(companyinput)
+    this._Service.UpdateCompany(companyinput, this.mst).subscribe(
+      res => {
+        // debugger;
+        this.resetForm(companyinput);
+        this.info.msgSuccess('Cập nhật thành công')
+        this.router.navigate(['manager/business/search/']);
+      },
+      err => {
+        // debugger;
+      }
+    )
+  }
+
   companyinput: CompanyPost
   onSubmit() {
     this.companyinput = this.doanh_nghiep.value
     this.SaveData(this.companyinput);
+    // if (this.mst == undefined) {
+    //   this.SaveData(this.companyinput);
+    // }
+    // else {
+    //   this.UpdateData(this.companyinput);
+    // }
   }
 
   resetForm(form?: NgForm) {
@@ -221,52 +242,148 @@ export class EditBusinessComponent implements OnInit {
     }
   }
 
-  companyList1: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList2: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList3: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList4: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList5: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
+  Convertdate(text: string): string {
+    let date: string
+    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+    return date
+  }
 
-  public GetCompanyInfoById() {
+  dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
+  companyList1: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList2: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  company: CompanyDetailModel;
+
+  GetCompanyInfoById() {
     this._Service.GetCompanyInfoById(this.mst).subscribe(
-      (allrecords) => {
+      allrecords => {
         this.companyList1 = allrecords.data[0]
         this.companyList2 = allrecords.data[1]
-        this.companyList3 = this.companyList1.map(x => {
-          let temp = this.companyList2.find(y => y.mst === x.mst)
-          if (temp) {
-            x.ma_nganh_nghe = temp.ma_nganh_nghe
-            x.ten_nganh_nghe = temp.ten_nganh_nghe
-            x.nganh_nghe_kd_chinh = temp.nganh_nghe_kd_chinh
-            x.id_nganh_nghe_kd = temp.id_nganh_nghe_kd
+        this.companyList3 = allrecords.data[2]
+
+        this.companyList4 = this.companyList1.map(a => {
+          let temp = this.companyList2.filter(b => b.mst === a.mst)
+          let temp1 = temp.map(c => c.ma_nganh_nghe)
+          if (temp1 == undefined || temp1 == null) {
+            a.ma_nganh_nghe = null
           }
           else {
-            x.ma_nganh_nghe = null
-            x.ten_nganh_nghe = null
-            x.nganh_nghe_kd_chinh = null
-            x.id_nganh_nghe_kd = null
+            a.ma_nganh_nghe = temp1.join('; ')
           }
-          return x
+
+          let temp2 = temp.map(c => c.ten_nganh_nghe)
+          if (temp2 == undefined || temp2 == null) {
+            a.ten_nganh_nghe = null
+          }
+          else {
+            a.ten_nganh_nghe = temp2.join('; ')
+          }
+
+          let temp3 = temp.map(c => c.nganh_nghe_kd_chinh)
+          if (temp3 == undefined || temp3 == null) {
+            a.nganh_nghe_kd_chinh = null
+          }
+          else {
+            a.nganh_nghe_kd_chinh = temp3.join('; ')
+          }
+
+          return a
         })
 
-        this.companyList4 = allrecords.data[2]
-
-        this.companyList5 = this.companyList3.map(z => {
-          let temp1 = this.companyList4.find(w => w.mst = z.mst)
-          if (temp1) {
-            z.so_giay_phep = temp1.so_giay_phep
-            z.ngay_cap = temp1.ngay_cap
-            z.ngay_het_han = temp1.ngay_het_han
+        this.companyList5 = this.companyList4.map(d => {
+          let temp = this.companyList3.filter(e => e.mst === d.mst)
+          let temp1 = temp.map(f => f.so_giay_phep)
+          if (temp1[0] == undefined || temp1[0] == null) {
+            d.so_giay_phep = null
           }
-          return z
+          else {
+            d.so_giay_phep = temp1.join('; ')
+          }
+
+          let temp2 = temp.map(f => this.Convertdate(f.ngay_cap))
+          if (temp2[0] == undefined || temp2[0] == null) {
+            d.ngay_cap = null
+          }
+          else {
+            d.ngay_cap = temp2.join('; ')
+          }
+
+          let temp3 = temp.map(f => this.Convertdate(f.ngay_het_han))
+          if (temp3[0] == undefined || temp3[0] == null) {
+            d.ngay_het_han = null
+          }
+          else {
+            d.ngay_het_han = temp3.join('; ')
+          }
+
+          let temp4 = temp.map(f => f.noi_cap)
+          if (temp4[0] == undefined || temp4[0] == null) {
+            d.noi_cap = null
+          }
+          else {
+            d.noi_cap = temp4.join('; ')
+          }
+
+          let temp5 = temp.map(f => f.co_quan_cap)
+          if (temp5[0] == undefined || temp5[0] == null) {
+            d.co_quan_cap = null
+          }
+          else {
+            d.co_quan_cap = temp5.join('; ')
+          }
+
+          let temp6 = temp.map(f => f.ghi_chu)
+          if (temp6[0] == undefined || temp6[0] == null) {
+            d.ghi_chu == null
+          }
+          else {
+            d.ghi_chu = temp6.join('; ')
+          }
+
+          return d
         })
 
-        let temp2 = this.companyList5
-        let temp3 = temp2.reduce(Object)
-        this.company = temp3
-      },
-      (error) => (console.log("Error when fetching data: \n" + error))
-    );
+        this.company = this.companyList5[0]
+        console.log(this.company)
+
+        this._Service.companyinfo = {
+          mst: this.company.mst,
+          id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
+          mst_parent: this.company.mst_cha,
+          sct: true,
+          hoat_dong: this.company.hoat_dong,
+          dia_chi: this.company.dia_chi,
+          id_phuong_xa: this.company.id_phuong_xa,
+          nguoi_dai_dien: this.company.nguoi_dai_dien,
+          so_dien_thoai: this.company.so_dien_thoai,
+          ten_doanh_nghiep: '',
+          von_dieu_le: this.company.von_dieu_le,
+          ngay_bd_kd: this.company.ngay_bd_kd,
+          so_lao_dong: this.company.so_lao_dong,
+          cong_suat_thiet_ke: this.company.cong_suat_thiet_ke,
+          san_luong: this.company.san_luong,
+          email: this.company.email,
+          so_lao_dong_sct: this.company.so_lao_dong_sct,
+          cong_suat_thiet_ke_sct: 0,
+          san_luong_sct: 0,
+          email_sct: '',
+          tieu_chuan_san_pham: '',
+          doanh_thu: '',
+          quy_mo_tai_san: '',
+          loi_nhuan: '',
+          nhu_cau_ban: '',
+          nhu_cau_mua: '',
+          nhu_cau_hop_tac: '',
+          danh_sach_nganh_nghe: [{
+            id_nganh_nghe_kinh_doanh: 1,
+            nganh_nghe_kd_chinh: 'Test',
+            id_linh_vuc: 1
+          }],
+        }
+
+      });
   }
 
 }

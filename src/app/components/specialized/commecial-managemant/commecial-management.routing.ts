@@ -3,7 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { ConditionalBusinessLineComponent } from './conditional-business-line/conditional-business-line.component';
 import { LiquorBusinessComponent } from './conditional-business-line/liquor-business/liquor-business.component';
 import { LPGBusinessComponent } from './conditional-business-line/lpg-business/lpg-business.component';
-import { PetrolBusinessComponent } from './conditional-business-line/petro-business/petrol-business.component';
 import { TobaccoBusinessComponent } from './conditional-business-line/tobacco-business/tobacco-business.component';
 import { CommonCommecialComponent } from './infrastructure/common/common-commecial.component';
 import { MarketCommecialManagementComponent } from './infrastructure/market/market-commecial.component';
@@ -20,6 +19,15 @@ import { TradeFairsExhibitionsComponent } from './trade-development/trade-fairs-
 import { SubscribeDiscountComponent } from './trade-development/subscribe-discount/subscribe-discount.component';
 import { BorderTradeImportComponent } from './border-trade/border-trade-import/border-trade-import.component';
 import { BorderTradeExportComponent } from './border-trade/border-trade-export/border-trade-export.component';
+
+import { PetrolBusinessComponent } from './conditional-business-line/petro-business/petrol-business.component';
+import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
+import { UpdatePetrolComponent } from './conditional-business-line/petro-business/update-petrol/update-petrol.component';
+import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
+import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
+import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
+import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
+
 const routes: Routes = [
   {
     path: 'domestic',
@@ -67,7 +75,49 @@ const routes: Routes = [
         path: 'petrol',
         component: PetrolBusinessComponent,
         data: {
-          title: 'Quản lý cửa hàng bán lẻ xăng dầu',
+          title: 'Quản lý cửa hàng xăng dầu',
+        }
+      },
+      {
+        path: 'addstore',
+        component: AddStoreComponent,
+        data: {
+          title: 'Thêm cửa hàng xăng dầu',
+        }
+      },
+      {
+        path: 'update-petrol/:id/:mst',
+        component: UpdatePetrolComponent,
+        data: {
+          title: 'Cập nhật thông tin cửa hàng xăng dầu',
+        }
+      },
+      {
+        path: 'managevalue',
+        component: ManagePetrolValueComponent,
+        data: {
+          title: 'Quản lý sản lượng xăng dầu',
+        }
+      },
+      {
+        path: 'managebusiness',
+        component: ManageBusinessmanComponent,
+        data: {
+          title: 'Quản lý thương nhân',
+        }
+      },
+      {
+        path: 'supplybusiness',
+        component: AddSupplyBusinessComponent,
+        data: {
+          title: 'Quản lý thương nhân cung cấp',
+        }
+      },
+      {
+        path: 'updatebusiness/:id',
+        component: UpdateBusinessmanComponent,
+        data: {
+          title: 'Cập nhật thương nhân',
         }
       },
       {

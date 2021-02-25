@@ -1,62 +1,162 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { element } from 'protractor';
-import { ConditionalBusinessLineModel } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
+import { SelectionModel } from '@angular/cdk/collections';
+import { InformationService } from 'src/app/shared/information/information.service';
+
+import {
+    DistrictModel,
+    SubDistrictModel,
+    DeleteModel,
+    PetrolList,
+    CertificateModel
+} from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
-import { CommonFuntions } from '../common-functions.service';
 
-// Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { ReportService } from 'src/app/_services/APIService/report.service';
+import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
+
+import { FormControl } from '@angular/forms';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import _moment from 'moment';
+import { defaultFormat as _rollupMoment, Moment } from 'moment';
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'YYYY',
+    },
+    display: {
+        dateInput: 'YYYY',
+        monthYearLabel: 'YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
 
 @Component({
     selector: 'petrol-business',
     templateUrl: './petrol-business.component.html',
     styleUrls: ['../../../special_layout.scss'],
+    providers: [
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+    ],
 })
 
 export class PetrolBusinessComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'mst', 'ten_doanh_nghiep', 'ten_cua_hang', 'dia_chi', 'dien_thoai', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'danh_sach_thuong_nhan', 'san_luong', 'ghi_chu'];
-    dataSource: MatTableDataSource<ConditionalBusinessLineModel> = new MatTableDataSource<ConditionalBusinessLineModel>();
-    filteredDataSource: MatTableDataSource<ConditionalBusinessLineModel> = new MatTableDataSource<ConditionalBusinessLineModel>();
-    years: any[] = [];
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-    sanLuongBanRa: number;
-    soLuongDoanhNghiep: number;
-    soLuongThuongNhanCungCap: number;
-    isChecked: boolean;
+    displayedColumns: string[] = ['select', 'cap_nhat',
+        'index',
+        'ten_cua_hang',
+        'mst',
+        'so_giay_phep',
+        'ngay_cap',
+        'ngay_het_han',
+        'dia_chi',
+        'ten_quan_huyen',
+        'so_dien_thoai',
+        'ten_quan_ly',
+        'ten_nhan_vien',
+        'nguoi_dai_dien',
+        'tinh_trang_hoat_dong',
+        'san_luong',
+        'id_cua_hang_xang_dau',
+    ];
+    dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+    dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
 
     @ViewChild('table', { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-
     constructor(
         public excelService: ExcelService,
-        public sctService: SCTService,
-        public commonFunctions: CommonFuntions
-        ) {
+        public _Service: ConditionBusinessService,
+        public router: Router,
+        public _info: InformationService,
+    ) {
+    }
+
+    selection = new SelectionModel<PetrolList>(true, []);
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        // const numRows = this.dataSource.data.length;
+        const numRows = this.dataSource1.connect().value.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+    }
+
+    checkboxLabel(row?: PetrolList): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_cua_hang_xang_dau + 1}`;
+    }
+
+    deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+    selectionarray: string[];
+    removeRows() {
+        if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+            this.selection.selected.forEach(x => {
+                this.selectionarray = this.selection.selected.map(item => item.id_cua_hang_xang_dau)
+                this.deletemodel1.push({
+                    id: ''
+                })
+            })
+            for (let index = 0; index < this.selectionarray.length; index++) {
+                const element = this.deletemodel1[index];
+                element.id = this.selectionarray[index]
+            }
+            this._Service.DeletePetrol(this.deletemodel1).subscribe(res => {
+                this._info.msgSuccess('Xóa thành công')
+                this.getPetrolList();
+                this.date = null
+                this.selection.clear();
+                this.paginator.pageIndex = 0;
+            })
+        }
+    }
+
+    public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+    public district: Array<DistrictModel> = new Array<DistrictModel>();
+    public Certificate: Array<CertificateModel> = new Array<CertificateModel>();
+
+    GetAllPhuongXa() {
+        this._Service.GetAllSubDistrict().subscribe((allrecords) => {
+            this.subdistrict = allrecords.data as SubDistrictModel[];
+        });
+    }
+
+    getQuan_Huyen() {
+        this._Service.GetAllDistrict().subscribe((allDistrict) => {
+            this.district = allDistrict["data"] as DistrictModel[];
+        });
+    }
+
+    GetAllGiayPhep(mst: string) {
+        this._Service.GetCertificate(mst).subscribe((allrecords) => {
+            this.Certificate = allrecords.data as CertificateModel[];
+        });
     }
 
     ngOnInit() {
-        this.years = this.commonFunctions.getYears();
-        // this.filteredDataSource.filterPredicate = function (data: ConditionalBusinessLineModel, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
-        this.getDanhSachBuonBanLeXangDau(0);
+        this.getQuan_Huyen();
+        this.getPetrolList();
         this.autoOpen();
     }
 
@@ -72,27 +172,25 @@ export class PetrolBusinessComponent implements OnInit {
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        this.dataSource1.filter = filterValue.trim().toLowerCase();
     }
 
-    getDanhSachBuonBanLeXangDau(time_id: number) {
-        this.sctService.GetDanhSachBanLeXangDau(2020).subscribe(result => {
-            this.dataSource = new MatTableDataSource<ConditionalBusinessLineModel>(result.data[0]);
+    getPetrolList() {
+        this._Service.GetAllPetrolStore().subscribe(all => {
+            this.dataSource = new MatTableDataSource<PetrolList>(all.data);
             this.dataSource.data.forEach(element => {
-                element.is_het_han = new Date(element.ngay_het_han) < new Date();
-                result.data[1].forEach(businessman => {
-                    if (businessman.id_kd_co_dk === element.id) {
-                        element.danh_sach_thuong_nhan += businessman.ten_thuong_nhan + '\n';
-                    }
-                });
+                if (element.ngay_het_han) {
+                    let temp = this.Convertdate(element.ngay_het_han)
+                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                }
+                else {
+                    element.is_het_han = false
+                }
+                element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+                element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
-            if (time_id != 0)
-                this.filteredDataSource.data = [...this.dataSource.data.filter(x => new Date(x.ngay_cap).getFullYear() == time_id)];
-            else
-                this.filteredDataSource.data = [...this.dataSource.data];
-            this.sanLuongBanRa = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
-            this.soLuongThuongNhanCungCap = this.filteredDataSource.data.length ? [...new Set(this.filteredDataSource.data.map(x => x.danh_sach_thuong_nhan))].length : 0;
-            this.filteredDataSource.paginator = this.paginator;
+            this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+            this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";
             this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -101,62 +199,114 @@ export class PetrolBusinessComponent implements OnInit {
         })
     }
 
-    log(any) {
+    // getPetrolListbyYear(year: string) {
+    //     this._Service.GetPetrolValue(year).subscribe(all => {
+    //         this.dataSource = new MatTableDataSource<PetrolList>(all.data[0]);
+    //         this.dataSource.data.forEach(element => {
+    //             if (element.ngay_het_han) {
+    //                 let temp = this.Convertdate(element.ngay_het_han)
+    //                 element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+    //             }
+    //             else {
+    //                 element.is_het_han = false
+    //             }
+    //         });
+    //         this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+    //         this.dataSource1.paginator = this.paginator;
+    //         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    //         this.paginator._intl.firstPageLabel = "Trang Đầu";
+    //         this.paginator._intl.lastPageLabel = "Trang Cuối";
+    //         this.paginator._intl.previousPageLabel = "Trang Trước";
+    //         this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    //     })
+    // }
+
+    AddStore() {
+        this.router.navigate(['specialized/commecial-management/domestic/addstore']);
     }
 
-    getYears() {
-        return [{value: 0, des: 'Tất cả'}, ...Array(5).fill(1).map((element, index) => {
-                return {value: new Date().getFullYear() - index , des: (new Date().getFullYear() - index).toString()}
-            }
-        )]
+    ManageValue() {
+        this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
     }
+
+    ManageBusiness() {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
+    }
+
+    OpenDetailPetrol(id: number, mst: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/update-petrol/' + id + '/' + mst])
+    }
+
+    // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
+    // allSelected = false;
+    // toggleAllSelection() {
+    //     this.allSelected = !this.allSelected;
+
+    //     if (this.allSelected) {
+    //         this.dSelect.options.forEach((item: MatOption) => item.select());
+    //     } else {
+    //         this.dSelect.options.forEach((item: MatOption) => item.deselect());
+    //     }
+    //     this.dSelect.close();
+    // }
+
+    // OpenDetailPetrol(id: number, mst: string) {
+    //     let url = this.router.serializeUrl(
+    //         this.router.createUrlTree([encodeURI('#') + 'specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
+    //     window.open(url.replace('%23', '#'), "_blank");
+    // }
 
     applyDistrictFilter(event) {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.dia_chi_cua_hang.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            this.dataSource.data.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
             if (event.value.length)
-                this.filteredDataSource.data = [];
+                this.dataSource1.data = [];
             else
-                this.filteredDataSource.data = this.dataSource.data;
+                this.dataSource1.data = this.dataSource.data;
         }
         else {
-            this.filteredDataSource.data = filteredData;
+            this.dataSource1.data = filteredData;
         }
-        this.sanLuongBanRa = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
-        this.soLuongThuongNhanCungCap = this.filteredDataSource.data.length ? [...new Set(this.filteredDataSource.data.map(x => x.danh_sach_thuong_nhan))].length : 0;
     }
-
-    // isHidden(row : any){
-    //     return (this.isChecked)? (row.is_het_han) : false;
-    // }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.filter = (event.checked) ? "true" : "";
+        this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
     }
 
-    countBusiness(): number {
-        return [...new Set(this.filteredDataSource.data.map(x => x.mst.toString().split('-')[0]))].length;
+    public getCurrentDate() {
+        let date = new Date;
+        return formatDate(date, 'yyyy-MM-dd', 'en-US');
+    }
+
+    public getCurrentYear() {
+        let date = new Date;
+        return formatDate(date, 'yyyy', 'en-US');
+    }
+
+    Convertdate(text: string): string {
+        let date: string
+        date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+        return date
+    }
+
+    public date = new FormControl(_moment());
+    public theYear: number;
+
+    public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+        const ctrlValue = this.date.value;
+        ctrlValue.year(normalizedYear.year());
+        this.date.setValue(ctrlValue);
+        this.theYear = normalizedYear.year();
+        datepicker.close();
+        // this.getPetrolListbyYear(this.theYear.toString())
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    allSelected = false;
-    toggleAllSelection() {
-        this.allSelected = !this.allSelected;  // to control select-unselect
-
-        if (this.allSelected) {
-            this.dSelect.options.forEach((item: MatOption) => item.select());
-        } else {
-            this.dSelect.options.forEach((item: MatOption) => item.deselect());
-        }
-        this.dSelect.close();
     }
 }

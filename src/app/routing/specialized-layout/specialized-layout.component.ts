@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SidebarService } from '../../_services/sidebar.service';
 import { onMainContentChange } from 'src/app/_animations/animation-sidebar';
-import { MODE } from 'src/app/_models/APIModel/manager.model';
 import { MODULE_CONTROL } from 'src/app/_enums/module-control.enum';
 
 @Component({

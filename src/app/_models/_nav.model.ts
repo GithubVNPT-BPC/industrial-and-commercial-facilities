@@ -9,9 +9,4 @@ export class INavItem {
     is_SCT?: boolean;
     id_linh_vuc: number;
     children?: INavItem[];
-    // expand?: boolean;
-    // title?: boolean;
-    // variant?: string;
-    // badge?: any;
-    // attributes?: Attribute;
 }
