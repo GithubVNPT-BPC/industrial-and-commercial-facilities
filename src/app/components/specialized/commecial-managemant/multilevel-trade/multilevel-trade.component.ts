@@ -18,12 +18,6 @@ import moment from 'moment';
   styleUrls: ['/../../special_layout.scss'],
 })
 export class MultilevelTradeComponent extends BaseComponent {
-  //Constant
-  private readonly LINK_DEFAULT: string = "/specialized/commecial-management/multilevel-trade";
-  private readonly TITLE_DEFAULT: string = "Hoạt động bán hàng đa cấp";
-  private readonly TEXT_DEFAULT: string = "Hoạt động bán hàng đa cấp";
-  //Variable for only ts
-  private _linkOutput: LinkModel = new LinkModel();
 
   displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'mst','thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
     'so_giay_dkbhdc', 'co_quan_ban_hanh_giay_dkbhdc', 'ngay_dang_ky_giay_dkbhdc',
@@ -41,7 +35,6 @@ export class MultilevelTradeComponent extends BaseComponent {
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
     public marketService: MarketService,
-    private _breadCrumService: BreadCrumService,
   ) {
       super(injector);
   }
@@ -69,15 +62,14 @@ export class MultilevelTradeComponent extends BaseComponent {
     // this.filteredDataSource.filterPredicate = function (data: multilevel, filter): boolean {
     //     return String(data.is_het_han).includes(filter);
     // };
-    this.sendLinkToNext(true);
   }
 
-  public sendLinkToNext(type: boolean) {
-    this._linkOutput.link = this.LINK_DEFAULT;
-    this._linkOutput.title = this.TITLE_DEFAULT;
-    this._linkOutput.text = this.TEXT_DEFAULT;
-    this._linkOutput.type = type;
-    this._breadCrumService.sendLink(this._linkOutput);
+  getLinkDefault(){
+    //Constant
+    this.LINK_DEFAULT = "/specialized/commecial-management/multilevel-trade";
+    this.TITLE_DEFAULT = "Hoạt động bán hàng đa cấp";
+    this.TEXT_DEFAULT = "Hoạt động bán hàng đa cấp";
+  
   }
 
   public getMultiLevelTradeList() {

@@ -104,8 +104,8 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
     displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
 
     ngOnInit() {
-        this.getDataElectric110KV();
         super.ngOnInit();
+        this.getDataElectric110KV();
     }
 
     getDataElectric110KV() {
@@ -114,7 +114,7 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
         })
     }
 
-    async mappingDataSource(dataSource: ElectricalPlan110KV[]) {
+    mappingDataSource(dataSource: ElectricalPlan110KV[]) {
         dataSource.filter(item => {
             switch (item.id_loai_quy_hoach) {
                 case 1:
@@ -140,6 +140,8 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
                     break;
             }
         })
+        this.accordion.openAll();
+        console.log(this.tba110KVDataSource);
     }
 
     // autoOpen() {

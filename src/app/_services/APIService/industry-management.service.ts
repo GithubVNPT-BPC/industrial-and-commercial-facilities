@@ -31,6 +31,9 @@ export class IndustryManagementService {
     private urlPostFoodIndustry = '/cntp';
     private urlPostComformityAnnounce = '/cbhq';
     private urlPostExplosiveMat = '/vlncn';
+
+    private urlGetDetailGroupCompany = '/ccn/chi-tiet';
+    private urlGroupCompany = '/ccn/';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -149,5 +152,30 @@ export class IndustryManagementService {
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
         }
         return throwError(errorMessage);
+    }
+
+    public GetDanhSachQuanLyCumCongNghiep() {
+        var apiUrl = this.endpoint + this.urlGroupCompany;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetDetailGroupCompany(id) {
+        var apiUrl = this.endpoint + this.urlGetDetailGroupCompany;
+        let params = new HttpParams().set('id', id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostDataGroupCompany(body: any){
+        var apiUrl = this.endpoint + this.urlGroupCompany;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
     }
 }

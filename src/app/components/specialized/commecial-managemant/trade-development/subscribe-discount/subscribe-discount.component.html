@@ -29,7 +29,7 @@
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                <!-- {{countBusiness() | number: '1.0-0':'vi'}} -->
+                                {{countBusiness()}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -96,9 +96,10 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Hình thức KM</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterComponents.ten_hinh_thuc" multiple>
-                                <mat-option *ngFor='let sdtype of promotionTypes' [value]='sdtype'>
-                                    {{sdtype}}
+                            <mat-select (selectionChange)="applyFilter($event)"
+                                [(ngModel)]="filterComponents.ten_hinh_thuc" multiple>
+                                <mat-option *ngFor='let type of promotionTypes' [value]='type.id_hinh_thuc'>
+                                    {{type.ten_hinh_thuc}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -107,13 +108,17 @@
                     <div class="col-6 col-lg-6"></div>
 
                     <div class="col-3 col-lg-3 button-control">
-                        <button mat-raised-button
-                            matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('Đăng ký khuyến mại','Đăng ký khuyến mại')"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                        color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
-                        mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <button mat-raised-button matTooltip="Xuất Excel"
+                            (click)="ExportTOExcel('Đăng ký khuyến mại','Đăng ký khuyến mại')">
+                            <mat-icon>file_download</mat-icon>
+                        </button>
+                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()">
+                            <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()">
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </div>
 
                     <div class="col-md-12">
@@ -130,42 +135,47 @@
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
 
                         <ng-container matColumnDef="select">
-                            <th mat-header-cell *matHeaderCellDef disableClear >
+                            <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                    [aria-label]="checkboxLabel()"> 
+                                    [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 <mat-checkbox (click)="$event.stopPropagation()"
-                                    (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)"
-                                    [aria-label]="checkboxLabel(element)">
+                                    (change)="$event ? selection.toggle(element) : null"
+                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
                                 </mat-checkbox>
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
-                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
-                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex * this.filteredDataSource.paginator.pageSize}} 
-                            </td>                        
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}
+                                <!-- {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                this.filteredDataSource.paginator.pageSize}} -->
+                            </td>
                         </ng-container>
-                        
+
                         <div *ngFor="let field of displayedFields | keyvalue">
-                            <ng-container matColumnDef="{{field.key}}" [sticky]="field.key == 'ten_doanh_nghiep' ? true : null">
+                            <ng-container matColumnDef="{{field.key}}"
+                                [sticky]="field.key == 'ten_doanh_nghiep' ? true : null">
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'id_trang_thai';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
                                         <ng-container *ngIf="![].includes(field.key) ;else dateFieldCond">
-                                            <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                            <ng-container *ngIf="field.key != 'dia_diem_km'; else listAddress">
+                                                <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                            </ng-container>
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
 
                                 <ng-template #activeFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' : 'Hết hạn'}}</td>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' :
+                                        'Hết hạn'}}</td>
                                 </ng-template>
 
                                 <ng-template #qtyFieldCond>
@@ -173,7 +183,16 @@
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy'}}</td>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy'}}
+                                    </td>
+                                </ng-template>
+
+                                <ng-template #listAddress>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ol *ngFor="let item of element[field.key]">
+                                            <li>{{item.dia_diem}}, {{item.ten_quan_huyen}}</li>
+                                        </ol>
+                                    </td>
                                 </ng-template>
 
                             </ng-container>
@@ -191,7 +210,6 @@
                 <br>
             </mat-expansion-panel>
         </mat-accordion>
-
     </mat-card-content>
 </mat-card>
 
@@ -203,47 +221,47 @@
                 <mat-card-title>
                     <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
                     <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
-                    class="float-right set-bg-color-primary" (click)="switchView()">
+                        class="float-right set-bg-color-primary" (click)="switchView()">
                         <mat-icon>menu</mat-icon> &nbsp;Danh sách
                     </button>
                 </mat-card-title>
             </mat-card-header>
             <hr>
-            <form [formGroup]="formData" (ngSubmit)="onCreate()">
+            <form [formGroup]="formData">
                 <div class="form-group row">
-                    <div class="col-md-9">
+                    <div class="col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label for="ten_doanh_nghiep" >Doanh nghiệp</mat-label>
+                            <mat-label for="ten_doanh_nghiep">Doanh nghiệp</mat-label>
                             <input matInput placeholder="VD: Công ty TNHH" id="ten_doanh_nghiep" type="text"
-                            required="true" formControlName="ten_doanh_nghiep">
+                                required="true" formControlName="ten_doanh_nghiep">
                         </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
-                            <mat-label for="mst" >Mã số thuế</mat-label>
+                            <mat-label for="mst">Mã số thuế</mat-label>
                             <input matInput formControlName="mst" id="mst" type="text">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label for="dia_chi_doanh_nghiep" >Địa chỉ</mat-label>
-                            <input matInput formControlName="dia_chi_doanh_nghiep">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-md-6">
+                    <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Chương trình khuyến mãi</mat-label>
                             <input matInput formControlName="ten_chuong_trinh_km">
                         </mat-form-field>
                     </div>
 
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="dia_chi_doanh_nghiep">Địa chỉ</mat-label>
+                            <input matInput formControlName="dia_chi_doanh_nghiep">
+                        </mat-form-field>
+                    </div>
+
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Bắt đầu</mat-label>
-                            <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau">
+                            <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau" required>
                             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                             <mat-datepicker #startDate></mat-datepicker>
                         </mat-form-field>
@@ -252,46 +270,39 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Kết thúc</mat-label>
-                            <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc">
+                            <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc" required>
                             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                             <mat-datepicker #endDate></mat-datepicker>
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-6" >
-                        <mat-form-field appearance="outline"> 
-                            <mat-label>Địa điểm khuyến mãi</mat-label>
-                            <input matInput formControlName="dia_diem_km">
-                        </mat-form-field>
-                    </div>
-
                     <div class="col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>Hình thức khuyến mãi</mat-label>
-                            <mat-select formControlName="id_hinh_thuc" >
-                                <mat-option *ngFor='let type of promotionTypes' [value]='type'>
-                                    {{type}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-md-6">
-                        <mat-form-field appearance="outline"> 
                             <mat-label>Hàng hóa khuyến mãi</mat-label>
                             <input matInput formControlName="hang_hoa_km">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3" >
-                        <mat-form-field appearance="outline"> 
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hình thức khuyến mãi</mat-label>
+                            <mat-select formControlName="id_hinh_thuc">
+                                <mat-option *ngFor='let type of promotionTypes' [value]='type.id_hinh_thuc'>
+                                    {{type.ten_hinh_thuc}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
                             <mat-label>Số văn bản</mat-label>
                             <input matInput formControlName="so_van_ban">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3" >
-                        <mat-form-field appearance="outline"> 
+                    <div class="col-md-3">
+                        <mat-form-field appearance="outline">
                             <mat-label>Cơ quan ban hành</mat-label>
                             <input matInput formControlName="co_quan_ban_hanh">
                         </mat-form-field>
@@ -300,15 +311,55 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Ngày, tháng, năm văn bản</mat-label>
-                            <input matInput [matDatepicker]="docDate" formControlName="ngay_thang_nam_van_ban">
+                            <input matInput [matDatepicker]="docDate" formControlName="ngay_thang_nam_van_ban" required>
                             <mat-datepicker-toggle matSuffix [for]="docDate"></mat-datepicker-toggle>
                             <mat-datepicker #docDate></mat-datepicker>
                         </mat-form-field>
                     </div>
 
+                    <!-- <div class="col-md-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mã chương trình khuyến mãi</mat-label>
+                            <input matInput formControlName="ma_km">
+                        </mat-form-field>
+                    </div> -->
+
+                    <div class="container group-address">
+                        <h4>Danh sách địa điểm khuyến mãi</h4>
+                        <button class="btn btn-success" (click)="addAddress()">Thêm địa điểm</button>
+                        <div formArrayName="danh_sach_dia_diem"
+                            *ngFor="let dc of danh_sach_dia_diem.controls; let i = index">
+                            <ng-container [formGroupName]="i">
+                                <div class="row">
+                                    <div class="col-5 col-lg-5">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Địa điểm khuyến mãi</mat-label>
+                                            <input matInput formControlName="dia_diem">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-3 col-lg-3">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Địa bàn</mat-label>
+                                            <mat-select formControlName="id_quan_huyen">
+                                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                                    {{district.ten_quan_huyen}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-3 col-lg-3">
+                                        <button class="btn btn-danger mt-1" (click)="removeSkill(i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    
                     <div class="col-md-12 mt-3">
-                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
-                        <button class="btn btn-danger float-left" (click)="clearTable($event)">Xóa</button>
+                        <button class="btn btn-success float-right ml-2" (click)='onCreate()'>Tạo mới</button>
+                        <button class="btn btn-danger float-right" (click)="clearTable($event)">Xóa</button>
                     </div>
                 </div>
             </form>

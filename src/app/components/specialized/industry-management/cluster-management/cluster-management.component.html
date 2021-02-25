@@ -1,4 +1,4 @@
-<mat-card class="material">
+<mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -59,7 +59,8 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
 
-                            <mat-select [(ngModel)]="filterModel.id_quan_huyen" (selectionChange)="applyFilter()" multiple>
+                            <mat-select [(ngModel)]="filterModel.id_quan_huyen" (selectionChange)="applyFilter()"
+                                multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -67,10 +68,11 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3 col-lg-3">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht" (selectionChange)="applyFilter()" multiple>
+                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht" (selectionChange)="applyFilter()"
+                                multiple>
                                 <mat-option *ngFor='let hienTrang of hienTrangHaTang' [value]='hienTrang.id'>
                                     {{hienTrang.ten_hien_trang_ha_tang}}
                                 </mat-option>
@@ -78,10 +80,11 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3 col-lg-3">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt" (selectionChange)="applyFilter()" multiple>
+                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt" (selectionChange)="applyFilter()"
+                                multiple>
                                 <mat-option *ngFor='let hienTrang of hienTrangXLNT' [value]='hienTrang.id'>
                                     {{hienTrang.ten_hien_trang_xlnt}}
                                 </mat-option>
@@ -93,8 +96,13 @@
                         <mat-checkbox (change)=" changeTable($event)" [ngModel]="isChecked">Xem đầy đủ</mat-checkbox>
                     </div>
 
-                    <div class="col-2 col-lg-2 button-control">
-                        <button mat-raised-button (click)="ExportTOExcel('Cụm công nghiệp', 'Cụm công nghiệp')">Xuất file Excel</button>
+                    <div class="col-4 col-lg-4 button-control">
+                        <button mat-raised-button matTooltip="Xuất Excel"
+                        (click)="ExportTOExcel('Điện nông thôn','Điện nông thôn')"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button color="primary" matTooltip="Thêm mới" 
+                        (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button color="warn"
+                        mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
                     </div>
                 </div>
 
@@ -104,10 +112,12 @@
                         <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                     </mat-form-field> -->
 
-                    <table mat-table [dataSource]="filteredDataSource" id="{{showColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
+                    <table mat-table [dataSource]="filteredDataSource"
+                        id="{{showColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
+                                {{i+1}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_cum_cn" sticky>
@@ -151,7 +161,8 @@
 
                         <ng-container matColumnDef="ten_hien_trang_xlnt">
                             <th mat-header-cell *matHeaderCellDef> Hiện trạng đầu tư hệ thống XLNT chung </th>
-                            <td mat-cell *matCellDef="let element"> {{element.hien_trang_dau_tu_he_thong_xu_ly_nuoc_thai}}</td>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.hien_trang_dau_tu_he_thong_xu_ly_nuoc_thai}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tong_von_dau_tu">
@@ -176,5 +187,201 @@
             </mat-expansion-panel>
         </mat-accordion>
 
+    </mat-card-content>
+</mat-card>
+
+<!-- Form view -->
+<mat-card class="material" *ngIf="view == 'form'">
+    <mat-card-content>
+        <mat-accordion>
+            <mat-card-header>
+                <mat-card-title>
+                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
+                    <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
+                        class="float-right set-bg-color-primary" (click)="switchView()">
+                        <mat-icon>menu</mat-icon> &nbsp;Danh sách
+                    </button>
+                </mat-card-title>
+            </mat-card-header>
+            <hr>
+            <form [formGroup]="formData" (ngSubmit)="onCreate()">
+                <div class="form-group row">
+
+                    <div class="col-md-12">
+                        <!-- <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thêm mới cụm công nghiệp
+                            </mat-card-title>
+                        </mat-card-header> -->
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Tên cụm công nghiệp</mat-label>
+                                        <input matInput formControlName="ten_cum">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Chủ đầu tư</mat-label>
+                                        <input matInput formControlName="chu_dau_tu">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Diện tích theo quy hoạch</mat-label>
+                                        <input matInput type="number" formControlName="dien_tich_theo_qh">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Diện tích đã thành lập</mat-label>
+                                        <input matInput type="number" formControlName="dien_tich_da_thanh_lap">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Địa chỉ</mat-label>
+                                        <input matInput type="text" formControlName="dia_chi">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Địa bàn</mat-label>
+                                        <mat-select formControlName="id_phuong_xa">
+                                            <mat-option *ngFor='let district of wards' [value]='district.id_phuong_xa'>
+                                                {{district.ten_phuong_xa}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Quyết định thành lập</mat-label>
+                                        <input matInput type="text" formControlName="quyet_dinh_thanh_lap">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Quyết định tham gia DTM </mat-label>
+                                        <input matInput type="text" formControlName="quyet_dinh_danh_gia_dtm">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Điều kiện kinh doanh</mat-label>
+                                        <input matInput type="text" formControlName="dieu_kien_kinh_doanh">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Vị trí, quy mô</mat-label>
+                                        <input matInput type="text" formControlName="vi_tri_quy_mo">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>	Tổng mức đầu tư</mat-label>
+                                        <input matInput type="number" formControlName="tong_muc_dau_tu">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>		Quy mô, diện tích</mat-label>
+                                        <input matInput type="number" formControlName="quy_mo_dien_tich">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field>
+                                        <mat-label>	Diễn giải</mat-label>
+                                        <textarea matInput placeholder="." formControlName="dien_giai">
+                                        </textarea>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>dien_tich_qhct</mat-label>
+                                        <input matInput type="number" formControlName="dien_tich_qhct">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>dien_tich_ddtht</mat-label>
+                                        <input matInput type="number" formControlName="dien_tich_ddtht">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>dien_tich_ddtht</mat-label>
+                                        <input matInput type="number" formControlName="dien_tich_ddtht">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
+                                        <mat-select formControlName="id_htdtht">
+                                            <mat-option *ngFor='let hienTrang of hienTrangHaTang' [value]='hienTrang.id'>
+                                                {{hienTrang.ten_hien_trang_ha_tang}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+            
+                                <div class="col-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
+                                        <mat-select formControlName="id_htdthtxlnt">
+                                            <mat-option *ngFor='let hienTrang of hienTrangXLNT' [value]='hienTrang.id'>
+                                                {{hienTrang.ten_hien_trang_xlnt}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Trạng thái hoạt động</mat-label>
+                                        <mat-select formControlName="id_trang_thai_hoat_dong">
+                                            <mat-option *ngFor='let tt of trang_thai_hd' [value]='tt.id_trang_thai_hoat_dong'>
+                                                {{tt.ten_trang_thai_hoat_dong}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Nhu cầu vốn</mat-label>
+                                        <input matInput type="number" formControlName="nhu_cau_von">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button class="btn btn-danger set-bg-color-danger float-left"
+                            (click)="clearTable($event)">Xóa</button>
+                    </div>
+                </div>
+            </form>
+        </mat-accordion>
     </mat-card-content>
 </mat-card>

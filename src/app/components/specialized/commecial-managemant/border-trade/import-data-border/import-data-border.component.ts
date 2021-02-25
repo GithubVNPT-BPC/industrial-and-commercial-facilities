@@ -3,11 +3,11 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { SAVE } from 'src/app/_enums/save.enum';
 
 @Component({
-  selector: 'app-dialog-import-data',
-  templateUrl: './dialog-import-data.component.html',
-  styleUrls: ["../../../special_layout.scss"],
+  selector: 'app-import-data-border',
+  templateUrl: './import-data-border.component.html',
+  styles: []
 })
-export class DialogImportDataComponent implements OnInit {
+export class ImportDataBorderComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dialogData

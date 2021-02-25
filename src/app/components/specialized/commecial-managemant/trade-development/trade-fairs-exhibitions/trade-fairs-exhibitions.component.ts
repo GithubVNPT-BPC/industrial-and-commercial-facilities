@@ -12,6 +12,8 @@ import { BaseComponent } from 'src/app/components/specialized/specialized-base.c
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 import moment from 'moment';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { LinkModel } from 'src/app/_models/link.model';
 
 export const DATE_FORMAT_DATEPICKER = {
   parse: {
@@ -41,7 +43,6 @@ export const DATE_FORMAT_DATEPICKER = {
 
 export class TradeFairsExhibitionsComponent extends BaseComponent {
   displayedColumns: string[] = ['select', 'index'];
-
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
 
@@ -85,14 +86,23 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
+    
     ) {
       super(injector);
+      this._breadCrumService.sendLink(this._linkOutput);
   }
 
   ngOnInit() {
     super.ngOnInit();
     this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
     this.getTFEList(this.currentDate);
+    
+  }
+
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/commecial-management/trade-development/TFE";
+    this.TITLE_DEFAULT = "Hội chợ triển lãm";
+    this.TEXT_DEFAULT = "Hội chợ triển lãm";
   }
 
   getFormParams() {

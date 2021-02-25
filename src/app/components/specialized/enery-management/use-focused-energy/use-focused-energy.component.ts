@@ -25,10 +25,7 @@ export class UseFocusedEnergyComponent extends BaseComponent {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
-  //Constant variable
-  private readonly LINK_DEFAULT: string = "/specialized/enery-management/countryside_electric";
-  private readonly TITLE_DEFAULT: string = "Tiết kiệm năng lượng";
-  private readonly TEXT_DEFAULT: string = "Tiết kiệm năng lượng";
+  
   public readonly displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_tieu_thu', 'nang_luong_quy_doi', 'suat_tieu_hao'];
   public readonly displayMergeColumns: string[] = ['indexM', 'ten_doanh_nghiepM', 'nganh_ngheM', 'nang_luong_trong_diemM'];
   //TS & HTML Variable
@@ -58,9 +55,7 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   doanhNghiep: number;
   isChecked: boolean;
   currentYear: number = new Date().getFullYear();
-  private _linkOutput: LinkModel = new LinkModel();
   constructor(
-    private _breadCrumService: BreadCrumService,
     private injector: Injector,
     public excelService: ExcelService,
     private energyService: EnergyService,
@@ -68,14 +63,13 @@ export class UseFocusedEnergyComponent extends BaseComponent {
     super(injector);
   }
 
-
   ngOnInit() {
     super.ngOnInit();
     this.years = this.getYears();
     // this.dataSource.data = this.data;
     // this.filteredDataSource.data = [...this.dataSource.data];
     this.getDataSaveElectric();
-    this.sendLinkToNext(true);
+    
     this.initWards();
   }
 
@@ -87,13 +81,13 @@ export class UseFocusedEnergyComponent extends BaseComponent {
     })
   }
 
-  public sendLinkToNext(type: boolean) {
-    this._linkOutput.link = this.LINK_DEFAULT;
-    this._linkOutput.title = this.TITLE_DEFAULT;
-    this._linkOutput.text = this.TEXT_DEFAULT;
-    this._linkOutput.type = type;
-    this._breadCrumService.sendLink(this._linkOutput);
+  getLinkDefault(){
+    //Constant variable
+    this.LINK_DEFAULT = "/specialized/enery-management/countryside_electric";
+    this.TITLE_DEFAULT = "Tiết kiệm năng lượng";
+    this.TEXT_DEFAULT = "Tiết kiệm năng lượng";
   }
+
   autoOpen() {
     setTimeout(() => this.accordion.openAll(), 1000);
   }

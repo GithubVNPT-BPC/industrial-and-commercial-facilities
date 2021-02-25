@@ -97,6 +97,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     ]
     dataTargetId = 2;
     isOnlyTongCucHQ: number = 2;
+    dataDetail: any[] = [];
     constructor(
         public sctService: SCTService,
         public matDialog: MatDialog,
@@ -166,6 +167,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
             this.setDataImport(result.data[0]);
+            this.setDataDetail(result.data[2]);
         });
     }
 
@@ -173,14 +175,15 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachNhapKhauTC(time_id).subscribe((result) => {
             this.setDataImport(result.data[0]);
+            this.setDataDetail(result.data[2]);
         });
     }
 
-    setSumaryData(data){
-        this.TongGiaTriThangThucHien = data[16].tri_gia_thang ? data[16].tri_gia_thang : 0;
-        this.uth_so_cungky = data[16].uoc_thang_so_voi_ki_truoc ? data[16].uoc_thang_so_voi_ki_truoc : 0;
-        this.TongGiaTriCongDon = data[16].tri_gia_cong_don ? data[16].tri_gia_cong_don : 0;
-        this.uth_so_khn = data[16].uoc_cong_don_so_voi_cong_don_truoc ? data[16].uoc_cong_don_so_voi_cong_don_truoc : 0;
+    setSumaryData(data: any[]){
+        this.TongGiaTriThangThucHien = data.length ? data.map(item => item.tri_gia_thang).reduce((a,b) => a + b) : 0
+        this.uth_so_cungky = data.length ? data.map(item => item.uoc_thang_so_voi_ki_truoc).reduce((a,b) => a + b)/data.length : 0
+        this.TongGiaTriCongDon = data.length ? data.map(item => item.tri_gia_cong_don).reduce((a,b) => a + b) : 0
+        this.uth_so_khn = data.length ? data.map(item => item.uoc_cong_don_so_voi_cong_don_truoc).reduce((a,b) => a + b)/data.length : 0
     }
 
     setDataImport(data){
@@ -189,6 +192,10 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
                 this.dataSource.paginator = this.paginator;
                 this.setSumaryData(data);
             }
+    }
+
+    setDataDetail(data){
+        this.dataDialog = [...data];
     }
 
     tinh_tong(data) {
@@ -243,22 +250,23 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     }
 
     openDialog(id_mat_hang) {
-        if (this.kiem_tra(id_mat_hang)) {
+        // if (this.kiem_tra(id_mat_hang)) {
             const dialogConfig = new MatDialogConfig();
             dialogConfig.data = {
                 data: this.handelDataDialog(id_mat_hang),
                 id: 1,
             };
-            dialogConfig.minWidth = '80%'
+            dialogConfig.minWidth = window.innerWidth - 100;
+            dialogConfig.minHeight = window.innerHeight - 100;
             // console.log(this.handelDataDialog(id_mat_hang));
             // dialogConfig.panelClass = ['overflow-y: scroll;']
             this.matDialog.open(ModalComponent, dialogConfig);
-        }
+        // }
     }
 
     handelDataDialog(id_mat_hang) {
         let data = this.dataDialog.filter(
-            (item) => item.id_mat_hang === id_mat_hang
+            (item) => item.id_san_pham === id_mat_hang
         );
         return data;
     }
@@ -283,7 +291,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         // this.dataTargetId[0] = 2
         // 1: cuc hai quan
         // 2: tong cuc hai quan
-
+        this.dataDetail = [];
         switch (this.dataTargetId) {
             case 1:
                 this.getDanhSachNhapKhau();

@@ -32,11 +32,8 @@ export class SolarEneryManagementComponent extends BaseComponent {
   soLuongDoanhNghiep: number;
   isChecked: boolean;
 
-  private _linkOutput: LinkModel = new LinkModel();
-
   constructor(
     private injector: Injector,
-    private _breadCrumService: BreadCrumService,
     private energyService: EnergyService
   ) {
       super(injector);

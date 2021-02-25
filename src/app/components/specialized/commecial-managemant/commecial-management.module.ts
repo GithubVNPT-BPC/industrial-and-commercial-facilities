@@ -52,6 +52,10 @@ import { DialogImportDataComponent } from './border-trade/dialog-import-data/dia
 import { DownloadService } from 'src/app/_services/injectable-service/dowloadFile.service';
 import { TranslateIdToNamePipe } from 'src/app/shared/pipes/translateIdToName.pipe';
 import { DialogECommerceComponent } from './e-commerce-managemant/dialog-e-commerce/dialog-e-commerce.component';
+import { CommonDataBorderComponent } from './border-trade/common-data-border/common-data-border.component';
+import { DetailDataBorderComponent } from './border-trade/detail-data-border/detail-data-border.component';
+import { MatTabBorderComponent } from './border-trade/mat-tab-border/mat-tab-border.component';
+import { ImportDataBorderComponent } from './border-trade/import-data-border/import-data-border.component';
 
 @NgModule({
   imports: [
@@ -107,13 +111,18 @@ import { DialogECommerceComponent } from './e-commerce-managemant/dialog-e-comme
     CommonDataComponent,
     DialogImportDataComponent,
     TranslateIdToNamePipe,
-    DialogECommerceComponent
+    DialogECommerceComponent,
+    CommonDataBorderComponent,
+    DetailDataBorderComponent,
+    MatTabBorderComponent,
+    ImportDataBorderComponent
   ],
   entryComponents: [
     ModalComponent,
     ImportDataComponent,
     DialogImportDataComponent,
-    DialogECommerceComponent
+    DialogECommerceComponent,
+    ImportDataBorderComponent
   ],
   providers: [
     CommonFuntions,

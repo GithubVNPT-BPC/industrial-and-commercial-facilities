@@ -10,8 +10,17 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 import { ModalComponent } from '../../export-import-management/dialog-import-export/modal.component';
-import { data_xk_t11 } from '../border-trade-export/data';
-import { DialogImportDataComponent } from '../dialog-import-data/dialog-import-data.component';
+import { ImportDataBorderComponent } from '../import-data-border/import-data-border.component';
+
+export class Group {
+    level = 0;
+    parent: Group;
+    expanded = true;
+    totalCounts = 0;
+    get visible(): boolean {
+        return !this.parent || (this.parent.visible && this.parent.expanded);
+    }
+}
 @Component({
     selector: 'app-border-trade-export',
     templateUrl: './border-trade-export.component.html',
@@ -23,8 +32,9 @@ export class BorderTradeExportComponent implements OnInit {
     private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/exported_products";
     private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
-    displayedColumns = ['delete_checkbox',
-        'index', 'ten_cua_khau',
+    displayedColumns = [
+        // 'delete_checkbox',
+        'ten_loai_hang_hoa',
         'luong_thang', 'gia_tri_thang',
         'uoc_th_so_cungky_tht',
         'uoc_th_so_thg_truoc_tht',
@@ -32,17 +42,18 @@ export class BorderTradeExportComponent implements OnInit {
         'luong_cong_don', 'gia_tri_cong_don',
         'uoc_th_so_cungky_cong_don',
         'uoc_th_so_thg_truoc_cong_don',
-        'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep'];
+        // 'danh_sach_doanh_nghiep',
+        // 'chi_tiet_doanh_nghiep'
+    ];
     displayRow1Header = [
-        'delete_checkbox',
-        'index',
-        'ten_cua_khau',
+        // 'delete_checkbox',
+        
+        'ten_loai_hang_hoa',
         'thuc_hien_bao_cao_thang',
         'cong_don_den_ky_bao_cao',
 
-        'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep'
+        // 'danh_sach_doanh_nghiep',
+        // 'chi_tiet_doanh_nghiep'
     ]
     displaRow2Header = [
         'luong_thang',
@@ -53,7 +64,8 @@ export class BorderTradeExportComponent implements OnInit {
         'gia_tri_cong_don',
         'uoc_th_so_cungky_cong_don',
         'uoc_th_so_thg_truoc_cong_don',
-    ]
+    ];
+    groupByColumns: string[] = [];
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
     // displayedColumns: string[] = [];
@@ -61,7 +73,7 @@ export class BorderTradeExportComponent implements OnInit {
     // displaRow2Header: string[] = []
     // displayRow3Header: string[] = [];
     // dataSource: MatTableDataSource<ex_im_model> = new MatTableDataSource<ex_im_model>();
-    dataSource: MatTableDataSource<BorderTrade>;
+    dataSource: MatTableDataSource<BorderTrade> = new MatTableDataSource<any | Group>();
     dataDialog: any[] = [];
     filteredDataSource: MatTableDataSource<BorderTrade> = new MatTableDataSource<BorderTrade>();
     years: number[] = this.getYears();
@@ -100,7 +112,10 @@ export class BorderTradeExportComponent implements OnInit {
         public matDialog: MatDialog,
         public marketService: MarketService,
         private _breadCrumService: BreadCrumService
-    ) { }
+    ) {
+        this.groupByColumns = ['ten_cua_khau']
+    }
+
 
     handleGTXK() {
         // this.TongGiaTriThangThucHien = this.dataSource.data[15].gia_tri_thang;
@@ -151,9 +166,94 @@ export class BorderTradeExportComponent implements OnInit {
 
     getDanhSachXuatKhau() {
         let time_id = this.curentYear * 100 + this.curentmonth;
-        this.sctService.GetDanhSachXuatNhapKhauBG(time_id).subscribe(data => {
-            this.dataSource = new MatTableDataSource<BorderTrade>(data['data']);
+        this.sctService.GetDuLieuXuatKhauBG(time_id).subscribe(res => {
+            if (res['success']) {
+                this.dataSource.data = this.addGroups(res['data'], this.groupByColumns);
+                console.log(this.dataSource.data)
+                this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
+            }
         })
+    }
+
+    getDataRowVisible(data: any): boolean {
+        const groupRows = this.dataSource.data.filter(
+            row => {
+                if (!(row instanceof Group)) {
+                    return false;
+                }
+                let match = true;
+                this.groupByColumns.forEach(column => {
+                    if (!row[column] || !data[column] || row[column] !== data[column]) {
+                        match = false;
+                    }
+                });
+                return match;
+            }
+        );
+
+        if (groupRows.length === 0) {
+            return true;
+        }
+        const parent = groupRows[0] as Group;
+        return parent.visible && parent.expanded;
+    }
+
+    // below is for grid row grouping
+    customFilterPredicate(data: any | Group, filter: string): boolean {
+        return (data instanceof Group) ? data.visible : this.getDataRowVisible(data);
+    }
+
+    addGroups(data: any[], groupByColumns: string[]): any[] {
+        const rootGroup = new Group();
+        rootGroup.expanded = true;
+        return this.getSublevel(data, 0, groupByColumns, rootGroup);
+    }
+
+    getSublevel(data: any[], level: number, groupByColumns: string[], parent: Group): any[] {
+        if (level >= groupByColumns.length) {
+            return data;
+        }
+        const groups = this.uniqueBy(
+            data.map(
+                row => {
+                    const result = new Group();
+                    result.level = level + 1;
+                    result.parent = parent;
+                    for (let i = 0; i <= level; i++) {
+                        result[groupByColumns[i]] = row[groupByColumns[i]];
+                    }
+                    return result;
+                }
+            ),
+            JSON.stringify);
+
+        const currentColumn = groupByColumns[level];
+        let subGroups = [];
+        groups.forEach(group => {
+            const rowsInGroup = data.filter(row => group[currentColumn] === row[currentColumn]);
+            group.totalCounts = rowsInGroup.length;
+            const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
+            subGroup.unshift(group);
+            subGroups = subGroups.concat(subGroup);
+        });
+        return subGroups;
+    }
+
+    uniqueBy(a, key) {
+        const seen = {};
+        return a.filter((item) => {
+            const k = key(item);
+            return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+        });
+    }
+
+    groupHeaderClick(row) {
+        row.expanded = !row.expanded;
+        this.dataSource.filter = performance.now().toString();  // bug here need to fix
+    }
+
+    isGroup(index, item): boolean {
+        return item.level;
     }
 
     tinh_tong(data) {
@@ -220,6 +320,10 @@ export class BorderTradeExportComponent implements OnInit {
         dialogConfig.minWidth = '90%';
         this.matDialog.open(ModalComponent, dialogConfig);
         // }
+
+        this.matDialog.afterAllClosed.subscribe(res => {
+            this.ngOnInit();
+        })
     }
 
     handelDataDialog(id_mat_hang) {
@@ -263,7 +367,7 @@ export class BorderTradeExportComponent implements OnInit {
         };
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 300;
-        this.matDialog.open(DialogImportDataComponent, dialogConfig);
+        this.matDialog.open(ImportDataBorderComponent, dialogConfig);
     }
 
     // checkbox delete
