@@ -95,7 +95,7 @@ export class DomesticImportComponent implements OnInit {
     let sumSL: number = 0;
     if (this.dataSource)
       for (let row of this.dataSource.data) {
-        if (row.id != 0) sumSL += row.san_luong_thang;
+        if (row.id != '') sumSL += row.san_luong_thang;
       }
     return sumSL;
   }
@@ -104,7 +104,7 @@ export class DomesticImportComponent implements OnInit {
     let sumTG: number = 0;
     if (this.dataSource)
       for (let row of this.dataSource.data) {
-        if (row.id != 0) sumTG += row.tri_gia_thang;
+        if (row.id != '') sumTG += row.tri_gia_thang;
       }
     return sumTG;
   }
@@ -113,7 +113,7 @@ export class DomesticImportComponent implements OnInit {
     let sumSLCT: number = 0;
     if (this.dataSource)
       for (let row of this.dataSource.data) {
-        if (row.id != 0) sumSLCT += row.san_luong_thang_tc;
+        if (row.id != '') sumSLCT += row.san_luong_thang_tc;
       }
     return sumSLCT;
   }
@@ -122,7 +122,7 @@ export class DomesticImportComponent implements OnInit {
     let sumTGCT: number = 0;
     if (this.dataSource)
       for (let row of this.dataSource.data) {
-        if (row.id != 0) sumTGCT += row.tri_gia_thang_tc;
+        if (row.id != '') sumTGCT += row.tri_gia_thang_tc;
       }
     return sumTGCT;
   }

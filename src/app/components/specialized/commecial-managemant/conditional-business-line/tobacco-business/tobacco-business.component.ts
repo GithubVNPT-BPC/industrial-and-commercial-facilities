@@ -8,7 +8,7 @@ import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
-import { CommonFuntions } from '../common-functions.service';
+import { CommonFuntions } from 'src/app/components/specialized/commecial-managemant/conditional-business-line/common-functions.service';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
@@ -47,7 +47,7 @@ export class TobaccoBusinessComponent implements OnInit {
         public excelService: ExcelService,
         public sctService: SCTService,
         public commonFunctions: CommonFuntions
-        ) {
+    ) {
     }
 
     ngOnInit() {
@@ -94,7 +94,7 @@ export class TobaccoBusinessComponent implements OnInit {
             // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
             // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
             // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-        this.sanLuongBanRa = (this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0) * 1000;
+            this.sanLuongBanRa = (this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0) * 1000;
             this.giaTriSanPham = (this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.tri_gia).reduce((a, b) => a + b) : 0) / 1000;
             this.filteredDataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -139,11 +139,11 @@ export class TobaccoBusinessComponent implements OnInit {
     applyExpireCheck(event) {
         this.filteredDataSource.filter = (event.checked) ? "true" : "";
     }
-    
+
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
-    
+
     @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
     allSelected = false;
     toggleAllSelection() {

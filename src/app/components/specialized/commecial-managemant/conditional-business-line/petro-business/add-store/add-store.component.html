@@ -1,0 +1,67 @@
+<mat-card class="material">
+    <mat-card-header>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="petrol_data" autocomplete="off" (ngSubmit)="onSubmit(petrol_data.getRawValue())">
+            <div class="row">
+                <div class="col-6 button-control -align-left my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên cửa hàng</mat-label>
+                        <input formControlName="ten_cua_hang" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.ten_cua_hang">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" hidden>
+                        <mat-label> ID </mat-label>
+                        <input formControlName="id_cua_hang_xang_dau" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.id_cua_hang_xang_dau">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mã số thuế</mat-label>
+                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.petrol.mst">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Địa chỉ</mat-label>
+                        <input formControlName="dia_chi" matInput placeholder="" [(ngModel)]="_Service.petrol.dia_chi">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Phường xã</mat-label>
+                        <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.petrol.id_phuong_xa">
+                            <mat-option *ngFor="let item of subdistrict" [value]="item.id_phuong_xa">
+                                {{item.ten_phuong_xa}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số điện thoại</mat-label>
+                        <input formControlName="so_dien_thoai" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.so_dien_thoai">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên quản lý</mat-label>
+                        <input formControlName="ten_quan_ly" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.ten_quan_ly">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên nhân viên</mat-label>
+                        <input formControlName="ten_nhan_vien" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.ten_nhan_vien">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

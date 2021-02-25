@@ -98,7 +98,8 @@
                             <tr color="accent">
                                 <th scope="row">Ngày bắt đầu kinh doanh</th>
                                 <td>
-                                    <input matInput [matDatepicker]="date2" [(ngModel)]="company.ngay_bat_dau_kd" disabled>
+                                    <input matInput [matDatepicker]="date2" [(ngModel)]="company.ngay_bat_dau_kd"
+                                        disabled>
                                 </td>
                             </tr>
 
@@ -140,7 +141,8 @@
                             <tr color="accent">
                                 <th scope="row">Thời hạn</th>
                                 <td>
-                                    <input matInput [matDatepicker]="date_thoi_han" [(ngModel)]="company.ngay_het_han" disabled>
+                                    <input matInput [matDatepicker]="date_thoi_han" [(ngModel)]="company.ngay_het_han"
+                                        disabled>
                                 </td>
                             </tr>
 
@@ -148,8 +150,10 @@
                                 <span>
                                     Mở rộng/Thu hẹp
                                 </span>
-                                <mat-icon *ngIf="!isOpen" aria-hidden="false" aria-label="Example home icon" (click)="toggle()">expand_less</mat-icon>
-                                <mat-icon *ngIf="isOpen" aria-hidden="false" aria-label="Example home icon" (click)="toggle()">expand_more</mat-icon>
+                                <mat-icon *ngIf="!isOpen" aria-hidden="false" aria-label="Example home icon"
+                                    (click)="toggle()">expand_less</mat-icon>
+                                <mat-icon *ngIf="isOpen" aria-hidden="false" aria-label="Example home icon"
+                                    (click)="toggle()">expand_more</mat-icon>
                             </div>
                             <ng-container [@toggleBox]="isOpen ? 'open' : 'closed'" *ngIf="isOpen" class="custom-style">
                                 <tr>
@@ -216,184 +220,5 @@
                 </div>
             </div>
         </div>
-        <!-- <hr>
-        <ng-container>
-            <h4><strong>KIM NGẠCH XUẤT KHẨU</strong></h4>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="period_select">Kỳ báo cáo</label>
-                        <select class="form-control" name="" id="period_select" (change)="changePeriod(false)" [(ngModel)]="selectedPeriodXK">
-                            <option *ngFor="let period of periodsXK" [ngValue]="period">{{period}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedPeriodXK === 'Tháng'">
-                    <div class="form-group">
-                        <label for="month_select">Tháng báo cáo</label>
-                        <select class="form-control" name="" id="month_select" [(ngModel)]="selectedMonthXK">
-                            <option *ngFor="let month of monthsXK" [ngValue]="month">{{month}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedPeriodXK === 'Quý'">
-                    <div class="form-group">
-                        <label for="quarter_select">Quý báo cáo</label>
-                        <select class="form-control" name="" id="quarter_select" [(ngModel)]="selectedQuarterXK">
-                            <option *ngFor="let quarter of quartersXK" [ngValue]="quarter.ma_so">
-                                {{quarter.ma_chu}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedPeriodXK === '6 Tháng'">
-                    <div class="form-group">
-                        <label for="half_select">Báo cáo 6 Tháng</label>
-                        <select class="form-control" name="" id="half_select" [(ngModel)]="selectedHalfXK">
-                            <option *ngFor="let half of halfsXK" [ngValue]="half">{{half}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedYearXK >0">
-                    <div class="form-group">
-                        <label for="year_select">Năm báo cáo</label>
-                        <select class="form-control" name="" id="year_select" [(ngModel)]="selectedYearXK">
-                            <option *ngFor="let year of yearsXK" [ngValue]="year">{{year}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3 button-control my-auto">
-                    <button mat-raised-button (click)="findKNXK()">Tìm kiếm</button>
-                </div>
-            </div>
-
-            <div class="layout">
-                <table mat-table #table [dataSource]="dataSourceKNXK" *ngIf="dataSourceKNXK.data.length !== 0" class="table-layout" id="small-table">
-                    <ng-container matColumnDef="index">
-                        <th mat-header-cell *matHeaderCellDef> STT </th>
-                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="SAN_PHAM">
-                        <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
-                        <td mat-cell *matCellDef="let element">
-                            <select [(ngModel)]="element.id_san_pham" [disabled]="true">
-                                <option *ngFor="let product of products" [ngValue]="product.ma_san_pham">
-                                    {{product.ten_san_pham}} </option>
-                            </select>
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="SAN_LUONG">
-                        <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
-                        <td mat-cell *matCellDef="let element"><input class="right-cell" [disabled]="true" [(ngModel)]="element.san_luong">
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="TRI_GIA">
-                        <th mat-header-cell *matHeaderCellDef> Trị giá </th>
-                        <td mat-cell *matCellDef="let element"><input class="right-cell" [disabled]="true" [(ngModel)]="element.tri_gia">
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="DOI_TAC">
-                        <th mat-header-cell *matHeaderCellDef> Đối tác </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element.thi_truong}}
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; "></tr>
-                </table>
-            </div>
-            <mat-paginator #ExportPaginators [hidden]="dataSourceKNXK.data.length === 0" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
-            <div *ngIf="dataSourceKNXK.data.length !== 0">{{messageXK}}</div>
-        </ng-container>
-        <hr>
-        <ng-container>
-            <h4><strong>KIM NGẠCH NHẬP KHẨU</strong></h4>
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="form-group">
-                        <label for="period_select">Kỳ báo cáo</label>
-                        <select class="form-control" name="" id="period_select" (change)="changePeriod(true)" [(ngModel)]="selectedPeriodNK">
-                            <option *ngFor="let period of periodsNK" [ngValue]="period">{{period}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedPeriodNK === 'Tháng'">
-                    <div class="form-group">
-                        <label for="month_select">Tháng báo cáo</label>
-                        <select class="form-control" name="" id="month_select" [(ngModel)]="selectedMonthNK">
-                            <option *ngFor="let month of monthsNK" [ngValue]="month">{{month}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedPeriodNK === 'Quý'">
-                    <div class="form-group">
-                        <label for="quarter_select">Quý báo cáo</label>
-                        <select class="form-control" name="" id="quarter_select" [(ngModel)]="selectedQuarterNK">
-                            <option *ngFor="let quarter of quartersNK" [ngValue]="quarter.ma_so">{{quarter.ma_chu}}
-                            </option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedPeriodNK === '6 Tháng'">
-                    <div class="form-group">
-                        <label for="half_select">Báo cáo 6 Tháng</label>
-                        <select class="form-control" name="" id="half_select" [(ngModel)]="selectedHalfNK">
-                            <option *ngFor="let half of halfsNK" [ngValue]="half">{{half}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3" *ngIf="selectedYearNK >0">
-                    <div class="form-group">
-                        <label for="year_select">Năm báo cáo</label>
-                        <select class="form-control" name="" id="year_select" [(ngModel)]="selectedYearNK">
-                            <option *ngFor="let year of yearsNK" [ngValue]="year">{{year}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3 button-control my-auto">
-                    <button mat-raised-button (click)="findKNNK()">Tìm kiếm</button>
-                </div>
-            </div>
-            <div class="layout">
-                <table mat-table #table [dataSource]="dataSourceKNNK" *ngIf="dataSourceKNNK.data.length !== 0" class="table-layout" id="small-table">
-                    <ng-container matColumnDef="index">
-                        <th mat-header-cell *matHeaderCellDef> STT </th>
-                        <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i+1}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="SAN_PHAM">
-                        <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
-                        <td mat-cell *matCellDef="let element">
-                            <select id="period_select" [(ngModel)]="element.id_san_pham" [disabled]="true">
-                                <option *ngFor="let product of products" [ngValue]="product.ma_san_pham">
-                                    {{product.ten_san_pham}} </option>
-                            </select>
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="SAN_LUONG">
-                        <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
-                        <td mat-cell *matCellDef="let element">
-                            <input class="right-cell" [(ngModel)]="element.san_luong" type="number" [disabled]="true">
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="TRI_GIA">
-                        <th mat-header-cell *matHeaderCellDef> Trị giá </th>
-                        <td mat-cell *matCellDef="let element"><input class="right-cell" [(ngModel)]="element.tri_gia" type="number" [disabled]="true"> </td>
-                    </ng-container>
-                    <ng-container matColumnDef="DOI_TAC">
-                        <th mat-header-cell *matHeaderCellDef> Đối tác </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element.thi_truong}}
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index;" class="center-cell"></tr>
-                </table>
-            </div>
-            <mat-paginator #ImportPaginators [hidden]="dataSourceKNNK.data.length === 0" [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
-            <div *ngIf="dataSourceKNNK.data.length !== 0">{{messageNK}}</div>
-        </ng-container> -->
-
     </mat-card-content>
 </mat-card>

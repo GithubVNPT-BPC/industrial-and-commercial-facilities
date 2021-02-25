@@ -5,9 +5,8 @@ import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { CompanyDetailModel1, filter } from '../../../../_models/APIModel/domestic-market.model';
+import { CompanyDetailModel, filter, DeleteModel } from '../../../../_models/APIModel/domestic-market.model';
 import { MatTableFilter } from 'mat-table-filter';
-import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
 
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
@@ -79,11 +78,11 @@ export class SearchBusinessComponent implements OnInit {
 
   ngOnInit(): void {
     this.GetAllCompany();
-    this.filterEntity = new CompanyDetailModel1();
-    this.tempFilter = new CompanyDetailModel1();
+    this.filterEntity = new CompanyDetailModel();
+    this.tempFilter = new CompanyDetailModel();
     this.filterType = MatTableFilter.ANYWHERE;
   }
-  selection = new SelectionModel<CompanyDetailModel1>(true, []);
+  selection = new SelectionModel<CompanyDetailModel>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -98,26 +97,33 @@ export class SearchBusinessComponent implements OnInit {
       this.dataSource.connect().value.forEach(row => this.selection.select(row));
   }
 
-  checkboxLabel(row?: CompanyDetailModel1): string {
+  checkboxLabel(row?: CompanyDetailModel): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
+  deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+  selectionarray: string[];
   removeRows() {
     if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-      this.selection.selected.forEach(item => {
-        this._marketService.DeleteCompany(item.mst).subscribe(res => {
-          console.log(res)
-          this.dataSource = null
-          this.selection.clear();
-          this.info.msgSuccess('Xóa thành công')
-          this.GetAllCompany();
-          this.selection.clear();
-          this.paginator.pageIndex = 0;
+      this.selection.selected.forEach(x => {
+        this.selectionarray = this.selection.selected.map(item => item.mst)
+        this.deletemodel1.push({
+          mst: ''
         })
-      });
+      })
+      for (let index = 0; index < this.selectionarray.length; index++) {
+        const element = this.deletemodel1[index];
+        element.mst = this.selectionarray[index]
+      }
+      this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
+        this.info.msgSuccess('Xóa thành công')
+        this.GetAllCompany();
+        this.selection.clear();
+        this.paginator.pageIndex = 0;
+      })
     }
   }
 
@@ -146,12 +152,12 @@ export class SearchBusinessComponent implements OnInit {
   count: number = 1;
 
   isSearch_Advanced: boolean = true;
-  filterEntity: CompanyDetailModel1;
-  tempFilter: CompanyDetailModel1;
+  filterEntity: CompanyDetailModel;
+  tempFilter: CompanyDetailModel;
   filterType: MatTableFilter;
 
   filter() {
-    this.tempFilter = new CompanyDetailModel1();
+    this.tempFilter = new CompanyDetailModel();
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
       let element = temp[i];
@@ -165,8 +171,8 @@ export class SearchBusinessComponent implements OnInit {
   }
 
   cancel() {
-    this.tempFilter = new CompanyDetailModel1();
-    this.filterEntity = new CompanyDetailModel1();
+    this.tempFilter = new CompanyDetailModel();
+    this.filterEntity = new CompanyDetailModel();
     this.dataSource.filter = '';
   }
 
@@ -185,13 +191,12 @@ export class SearchBusinessComponent implements OnInit {
     }
   }
 
-  dataSource: MatTableDataSource<CompanyDetailModel1> = new MatTableDataSource();
-  companyList1: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList2: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList3: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList4: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList5: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  dataselection: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
+  dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
+  companyList1: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList2: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
     let date: string
@@ -288,7 +293,7 @@ export class SearchBusinessComponent implements OnInit {
           return d
         })
 
-        this.dataSource = new MatTableDataSource<CompanyDetailModel1>(this.companyList5);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -296,7 +301,6 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        this.dataselection = this.companyList5
 
         // // Overrride default filter behaviour of Material Datatable
         // this.dataSource.filterPredicate = this.filterService.createFilter();

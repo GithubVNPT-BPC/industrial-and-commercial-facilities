@@ -2,17 +2,18 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
-import { BusinessExportImportComponent } from './business/business-export-import/business-export-import.component';
 import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
-
 import { Industry } from '../../_authGuard/Industry';
 import { Energy } from '../../_authGuard/Energy';
 import { Commercial } from '../../_authGuard/Commercial';
 import { Manager } from '../../_authGuard/Manager';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent, LoaderInterceptor } from '../../shared';
+import { DomesticManagerComponent } from './domestic-manager/domestic-manager.component';
+import { ForeignManagerComponent } from './foreign-manager/foreign-manager.component';
+import { ProductManagerComponent } from './product-manager/product-manager.component';
 
 const routes: Routes = [
   {
@@ -48,16 +49,58 @@ const routes: Routes = [
               title: 'Chỉnh sửa doanh nghiệp'
             },
           },
+        ],
+      },
+
+      {
+        path: 'market',
+        data: {
+          title: ''
+        },
+        children: [
           {
-            path: 'top-export',
-            component: BusinessExportImportComponent,
+            path: 'domestic',
             data: {
-              title: 'Doanh nghiệp Xuất Nhập khẩu'
+              title: 'Thị trường'
             },
+            children: [
+              {
+                path: 'price',
+                component: DomesticManagerComponent,
+                data: {
+                  title: 'Quản lý doanh nghiệp'
+                },
+              },
+              {
+                path: 'production',
+                component: ProductManagerComponent,
+                data: {
+                  title: 'Thêm doanh nghiệp'
+                },
+              },
+            ],
+          },
+
+          {
+            path: 'foreign',
+            data: {
+              title: 'Thị trường'
+            },
+            children: [
+              {
+                path: 'price',
+                component: ForeignManagerComponent,
+                data: {
+                  title: 'Quản lý doanh nghiệp'
+                },
+              },
+            ],
           },
         ],
       },
     ],
+
+
   }
 ];
 

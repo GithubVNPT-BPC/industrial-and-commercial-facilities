@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Component } from '@angular/Core';
 import { Observable, throwError, Subject } from 'rxjs'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
-import { INavItem } from '../_models/_nav.model';
 import { environment } from '../../environments/environment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
@@ -36,7 +34,6 @@ export class SidebarService {
       var apiUrl = this.apisidebar + 1;
     }
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
     return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
       catchError(this.handleError)
     );
