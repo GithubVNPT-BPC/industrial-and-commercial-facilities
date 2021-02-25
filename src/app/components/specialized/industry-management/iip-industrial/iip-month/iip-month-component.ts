@@ -23,13 +23,13 @@ interface HashTableNumber<T> {
 }
 
 @Component({
-    selector: 'retail-month',
-    templateUrl: './retail-month.component.html',
+    selector: 'iip-month',
+    templateUrl: './iip-month-component.html',
     styleUrls: ['../../../../report/report_layout.scss'],
 })
 
 
-export class RetailMonthComponent implements OnInit {
+export class IIPMonthComponent implements OnInit {
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
     public readonly TYPE_INDICATOR_INPUT: number = 1;
@@ -180,7 +180,7 @@ export class RetailMonthComponent implements OnInit {
     }
 
     GetReportById(time_id: number) {
-        this.reportSevice.GetReportByKey(1, time_id, 1).subscribe(
+        this.reportSevice.GetReportByKey(2, time_id, 1).subscribe(
             allRecord => {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
@@ -404,6 +404,7 @@ export class RetailMonthComponent implements OnInit {
                 this.info.msgError("Xảy ra lỗi: " + error.message);
             })
     }
+
     Back() {
         this.location.back();
     }
