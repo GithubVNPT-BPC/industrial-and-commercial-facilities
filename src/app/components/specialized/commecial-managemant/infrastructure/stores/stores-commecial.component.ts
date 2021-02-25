@@ -7,6 +7,7 @@ import { ConvenienceStoreModel } from 'src/app/_models/APIModel/commecial-manage
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 
 import moment from 'moment';
 
@@ -18,9 +19,9 @@ import moment from 'moment';
 export class StoreManagementComponent extends BaseComponent {  
 
   years: any[] = [];
-
+  message: string;
   isChecked: boolean = false;
-
+  isFound: boolean = false;
   filterModel = {
     is_expired: false,
     id_quan_huyen: [],
@@ -48,10 +49,18 @@ export class StoreManagementComponent extends BaseComponent {
     ngay_cap_giay_phep: "Ngày cấp",
     ngay_het_han_giay_phep: "Ngày hết hạn",
   }
+  
+  businessProducts = [
+    {id_spkd: 1, ten_san_pham: "Thực phẩm tiêu dùng"}
+  ];
+
+  giayCndkkdList = [];
+  giayAtvstpList = [];
 
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
+    public enterpriseService: EnterpriseService,
   ) {
     super(injector);
   }
@@ -95,19 +104,15 @@ export class StoreManagementComponent extends BaseComponent {
       mst: new FormControl(),
       dia_chi: new FormControl(),
       so_dien_thoai: new FormControl(),
-      ten_san_pham: new FormControl(),
-      so_chung_nhan: new FormControl(),
-      ngay_cap_giay_chung_nhan: new FormControl(),
-      noi_cap_giay_chung_nhan: new FormControl(),
-      so_giay_phep: new FormControl(),
-      ngay_cap_giay_phep: new FormControl(),
-      ngay_het_han_giay_phep: new FormControl(),
+      id_spkd: new FormControl(),
+      id_giay_cndkkd: new FormControl(),
+      id_giay_atvstp: new FormControl(),
       id_phuong_xa: new FormControl(),
     }
   }
 
   callService(data) {
-    this.commerceManagementService.postConvenienceStore([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.commerceManagementService.postConvenienceStore(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   getYears() {
@@ -172,5 +177,36 @@ export class StoreManagementComponent extends BaseComponent {
       }
     })
     return temp;
+  }
+
+  findLicenseInfo(event) {
+    event.preventDefault();
+    let mst = this.formData.controls.mst.value;
+    this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
+      if (response.success) {
+        if (response.data.length > 0) {
+          
+          let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 1);
+          let giayAtvstpList = response.data.filter(x => x.id_loai_giay_phep == 4);
+          
+          if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0 )
+            this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
+          else {
+            this.isFound = true;
+            this.giayCndkkdList = giayCndkkdList;
+            this.giayAtvstpList = giayAtvstpList;
+            this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
+          }
+        } else {
+          this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
+        }
+      } else {
+        this.isFound = false;
+        this.logger.msgSuccess("Không tìm thấy dữ liệu");
+      }
+    }, error => {
+        this.isFound = false;
+        this.logger.msgError("Lỗi khi xử lý \n" + error);
+    });
   }
 }

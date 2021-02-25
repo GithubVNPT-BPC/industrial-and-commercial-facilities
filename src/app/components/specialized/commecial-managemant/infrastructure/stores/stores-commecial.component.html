@@ -255,17 +255,33 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-9" >
+                                <div class="col-6 col-md-6">
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Mã số thuế</mat-label>
+                                        <input matInput formControlName="mst">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-6 col-md-6">
+                                    <button mat-raised-button color="primary" (click)="findLicenseInfo($event)" class="mt-2"><mat-icon>search</mat-icon>Tìm kiếm</button>
+                                </div>
+                            </div>
+
+                            <div class="row" *ngIf="isFound">
+                                <div class="col-md-6" >
                                     <mat-form-field appearance="outline"> 
                                         <mat-label>Tên cửa hàng</mat-label>
                                         <input matInput formControlName="ten_cua_hang">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-3" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Mã số thuế</mat-label>
-                                        <input matInput formControlName="mst">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Sản phẩm</mat-label>
+                                        <mat-select formControlName="id_spkd">
+                                            <mat-option *ngFor="let item of businessProducts" [value]="item.id_spkd">
+                                                {{item.ten_san_pham}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
 
@@ -299,7 +315,7 @@
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Chứng nhận đăng ký kinh doanh </span>
@@ -309,29 +325,20 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Số chứng nhận ĐKKD	</mat-label>
-                                        <input matInput  type="text" formControlName="so_chung_nhan">
+                                        <mat-label>Số chứng nhận</mat-label>
+                                        <mat-select formControlName="id_giay_cndkkd">
+                                            <mat-option *ngFor="let item of giayCndkkdList" [value]="item.id_giay_phep">
+                                                {{item.so_giay_phep}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Ngày cấp</mat-label>
-                                        <input matInput [matDatepicker]="ngay_cap_giay_chung_nhan" formControlName="ngay_cap_giay_chung_nhan">
-                                        <mat-datepicker-toggle matSuffix [for]="ngay_cap_giay_chung_nhan"></mat-datepicker-toggle>
-                                        <mat-datepicker #ngay_cap_giay_chung_nhan></mat-datepicker>
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Nơi cấp</mat-label>
-                                        <input matInput type="text" formControlName="noi_cap_giay_chung_nhan">
-                                    </mat-form-field>
-                                </div>                  
+                                
                             </div>
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Giấy chứng nhận đủ điều kiện ATTP </span>
@@ -341,31 +348,19 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Số chứng nhận ĐKKD	</mat-label>
-                                        <input matInput  type="text" formControlName="so_chung_nhan">
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Ngày cấp</mat-label>
-                                        <input matInput [matDatepicker]="ngay_cap_giay_phep" formControlName="ngay_cap_giay_phep">
-                                        <mat-datepicker-toggle matSuffix [for]="ngay_cap_giay_phep"></mat-datepicker-toggle>
-                                        <mat-datepicker #ngay_cap_giay_phep></mat-datepicker>
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Ngày hết hạn</mat-label>
-                                        <input matInput [matDatepicker]="ngay_het_han_giay_phep" formControlName="ngay_het_han_giay_phep">
-                                        <mat-datepicker-toggle matSuffix [for]="ngay_het_han_giay_phep"></mat-datepicker-toggle>
-                                        <mat-datepicker #ngay_het_han_giay_phep></mat-datepicker>
+                                        <mat-label>Số chứng nhận</mat-label>
+                                        <mat-select formControlName="id_giay_atvstp">
+                                            <mat-option *ngFor="let item of giayAtvstpList" [value]="item.id_giay_phep">
+                                                {{item.so_giay_phep}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
                         <button type="submit" class="btn btn-success float-right">Tạo mới</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
