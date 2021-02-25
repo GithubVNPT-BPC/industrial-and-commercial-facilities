@@ -10,7 +10,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
-import { DistrictModel, SubDistrictModel, DistrictWardModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { DistrictModel, SubDistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 
 import moment from 'moment';
@@ -51,7 +51,7 @@ export abstract class BaseComponent implements OnInit {
     
     public districts: DistrictModel[] = [];
     public wards: SubDistrictModel[] = [];
-    public districtWards: DistrictWardModel[] = [];
+    // public districtWards: DistrictWardModel[] = [];
     public districtWardSorted = {};
 
     constructor(injector: Injector) {
@@ -213,31 +213,31 @@ export abstract class BaseComponent implements OnInit {
         })
     }
 
-    initDistrictWard(sorted=true) {
-        this.sctService.LayDanhSachPhuongXaQuanHuyen().subscribe(res => {
-            if(res['success']) {
-                let districtWardData = res['data'];
-                this.districtWards = districtWardData;
-                if (sorted) {
-                    districtWardData.forEach(x => {
-                        if (!this.districtWardSorted[x.ten_quan_huyen]) {
-                            this.districtWardSorted[x.ten_quan_huyen] = [{
-                                id_phuong_xa: x.id_phuong_xa,
-                                ten_phuong_xa: x.ten_phuong_xa,
-                            }];
-                        } else {
-                            this.districtWardSorted[x.ten_quan_huyen].push({
-                                id_phuong_xa: x.id_phuong_xa,
-                                ten_phuong_xa: x.ten_phuong_xa,
-                            })
-                        }
-                    });
-                }
+    // initDistrictWard(sorted=true) {
+    //     this.sctService.LayDanhSachPhuongXaQuanHuyen().subscribe(res => {
+    //         if(res['success']) {
+    //             let districtWardData = res['data'];
+    //             this.districtWards = districtWardData;
+    //             if (sorted) {
+    //                 districtWardData.forEach(x => {
+    //                     if (!this.districtWardSorted[x.ten_quan_huyen]) {
+    //                         this.districtWardSorted[x.ten_quan_huyen] = [{
+    //                             id_phuong_xa: x.id_phuong_xa,
+    //                             ten_phuong_xa: x.ten_phuong_xa,
+    //                         }];
+    //                     } else {
+    //                         this.districtWardSorted[x.ten_quan_huyen].push({
+    //                             id_phuong_xa: x.id_phuong_xa,
+    //                             ten_phuong_xa: x.ten_phuong_xa,
+    //                         })
+    //                     }
+    //                 });
+    //             }
                 
-            }   
+    //         }   
                 
-        })
-    }
+    //     })
+    // }
 
     paginatorAgain() {
         this.paginator._intl.itemsPerPageLabel = "Số hàng";
