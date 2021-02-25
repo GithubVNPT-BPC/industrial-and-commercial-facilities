@@ -190,6 +190,12 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     this.paginatorAgain();
   }
 
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
+    this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+    this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+  }
+
   switchView() {
     super.switchView();
     // document.querySelector(".main_content").scrollTo(0, 0);

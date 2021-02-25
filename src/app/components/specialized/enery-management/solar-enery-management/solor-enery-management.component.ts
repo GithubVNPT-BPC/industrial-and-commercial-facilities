@@ -46,6 +46,12 @@ export class SolarEneryManagementComponent extends BaseComponent {
     this.caculatorValue();
   }
 
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/enery-management/solarelectric";
+    this.TITLE_DEFAULT = "Năng lượng - Điện mặt trời";
+    this.TEXT_DEFAULT = "Năng lượng - Điện mặt trời";
+  }
+
   getSolarEnergyData(time_id){
     this.energyService.LayDuLieuDienMatTroi(time_id).subscribe(res => {
       this.dataSource = new MatTableDataSource<SolarEneryManagementModel>(res.data);
