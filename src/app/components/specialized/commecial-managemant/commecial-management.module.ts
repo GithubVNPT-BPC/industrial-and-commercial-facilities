@@ -57,25 +57,7 @@ import { UpdatePetrolComponent } from './conditional-business-line/petro-busines
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
-<<<<<<< HEAD
 import { ImportDataBorderComponent } from './border-trade/import-data-border/import-data-border.component';
-=======
-
-export const customCurrencyMaskConfig = {
-  align: "right",
-  allowNegative: true,
-  allowZero: true,
-  decimal: ",",
-  precision: 0,
-  prefix: "",
-  suffix: "",
-  thousands: ".",
-  nullable: true,
-  min: null,
-  max: 1000000000000,
-  inputMode: CurrencyMaskInputMode.NATURAL
-};
->>>>>>> 0042feb93a863271887123f60f0f8e3be1a36c4e
 
 export const customCurrencyMaskConfig = {
   align: "right",
