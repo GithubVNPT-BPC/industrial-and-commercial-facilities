@@ -21,8 +21,8 @@ export class IipIndustrialComponent implements OnInit {
     //Constant variable -----------------------------------------------------------
     private readonly REDIRECT_PAGE: string = "/specialized/industry-management/iip/iip-detail";
     private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip";
-    private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
-    private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
+    private readonly TITLE_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp";
+    private readonly TEXT_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp";
     public readonly DISPLAY_COLS: string[] = ['index', 'chi_tieu', 'don_vi', 'thang_1', 'thang_2', 'thang_3',
         'thang_4', 'thang_5', 'thang_6', 'thang_7', 'thang_8', 'thang_9', 'thang_10', 'thang_11', 'thang_12'];
     private readonly DATA_DEFAULT: IIPIndustrialModel[] = [

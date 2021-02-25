@@ -57,13 +57,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         // this.filteredDataSource.filterPredicate = function (data: IndustrialExplosivesModel, filter): boolean {
         //     return String(data.is_het_han).includes(filter);
         // };
-        this.getDistrictData();
     }
 
-    getDistrictData(){
-        this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
-            if(res.success) this.districts = res.data;
-        })
+    getLinkDefault(){
+        this.LINK_DEFAULT = "/specialized/industry-management/explosives";
+        this.TITLE_DEFAULT = "Công nghiệp - Vật liệu nổ công nghiệp";
+        this.TEXT_DEFAULT = "Công nghiệp - Vật liệu nổ công nghiệp";
     }
 
     getFormParams() {

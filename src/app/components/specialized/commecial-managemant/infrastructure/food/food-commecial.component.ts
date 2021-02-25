@@ -69,6 +69,12 @@ export class FoodManagementComponent extends BaseComponent {
     this.paginatorAgain();
   }
 
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
+    this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+    this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+  }
+
   getFoodCommerceData() {
     this.commerceManagementService.getFoodCommerceData().subscribe(
       allrecords => {

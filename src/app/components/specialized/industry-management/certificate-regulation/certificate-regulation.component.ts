@@ -54,6 +54,12 @@ export class CertificateRegulationComponent extends BaseComponent {
     this.GetComformityAnnounceData(); 
   }
 
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/industry-management/cr";
+    this.TITLE_DEFAULT = "Công nghiệp - Công bố hợp quy";
+    this.TEXT_DEFAULT = "Công nghiệp - Công bố hợp quy";
+  } 
+
   getFormParams() {
     return {
       mst: new FormControl(),

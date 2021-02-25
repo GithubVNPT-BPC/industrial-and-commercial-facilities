@@ -87,10 +87,11 @@ export class ClusterManagementComponent extends BaseComponent {
         this.autoOpen();
         this.initWards();
     }
+    
     getLinkDefault(){
         this.LINK_DEFAULT = "/specialized/industry-management/cluster";
-        this.TITLE_DEFAULT = "Tổng quan cụm công nghiệp";
-        this.TEXT_DEFAULT = "Tổng quan cụm công nghiệp";
+        this.TITLE_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
+        this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
     }
 
     applyFilter() {

@@ -43,6 +43,12 @@ export class BlockElectricComponent extends BaseComponent {
     this.getDataBlockElectric(this.currentYear);
   }
 
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/enery-management/block_electric";
+    this.TITLE_DEFAULT = "Năng lượng - Điện sinh khối";
+    this.TEXT_DEFAULT = "Năng lượng - Điện sinh khối";
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
