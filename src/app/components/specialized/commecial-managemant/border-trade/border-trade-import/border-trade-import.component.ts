@@ -9,20 +9,17 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ModalComponent } from '../../export-import-management/dialog-import-export/modal.component';
-import { data_xk_t11 } from '../../border-trade/border-trade-import/data';
-import { dataDialogM1, dataDialogM2, dataDialogM3, dataDialogM4, dataDialogM5, dataDialogM6, dataDialogM7, dataDialogM8, dataDialogM9, dataDialogM10, dataDialogM11, dataDialogM12 } from '../../export-import-management/export-management/dataDialog';
-import { DialogImportDataComponent } from '../dialog-import-data/dialog-import-data.component';
 import { Task } from 'src/app/_models/APIModel/export-import.model';
+import { ImportDataBorderComponent } from '../import-data-border/import-data-border.component';
 
-class gate{
-    id?: number;
-    id_cua_khau?: number;
-    ten_cua_khau?: string;
-    so_luong?: number;
-    kim_ngach?: number;
-    nhap_khau?: boolean;
-    time_id?: number;
-    don_vi?: string;
+export class Group {
+    level = 0;
+    parent: Group;
+    expanded = true;
+    totalCounts = 0;
+    get visible(): boolean {
+        return !this.parent || (this.parent.visible && this.parent.expanded);
+    }
 }
 
 @Component({
@@ -31,12 +28,14 @@ class gate{
     styleUrls: ["../../../special_layout.scss"]
 })
 export class BorderTradeImportComponent implements OnInit {
+    
     //Constant
     private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/exported_products";
-    private readonly TITLE_DEFAULT: string = "Thông tin nhập khẩu";
-    private readonly TEXT_DEFAULT: string = "Thông tin nhập khẩu";
-    displayedColumns = ['delete_checkbox',
-        'index', 'ten_cua_khau',
+    private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
+    private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
+    displayedColumns = [
+        // 'delete_checkbox',
+        'ten_loai_hang_hoa',
         'luong_thang', 'gia_tri_thang',
         'uoc_th_so_cungky_tht',
         'uoc_th_so_thg_truoc_tht',
@@ -44,17 +43,18 @@ export class BorderTradeImportComponent implements OnInit {
         'luong_cong_don', 'gia_tri_cong_don',
         'uoc_th_so_cungky_cong_don',
         'uoc_th_so_thg_truoc_cong_don',
-        'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep'];
+        // 'danh_sach_doanh_nghiep',
+        // 'chi_tiet_doanh_nghiep'
+    ];
     displayRow1Header = [
-        'delete_checkbox',
-        'index',
-        'ten_cua_khau',
+        // 'delete_checkbox',
+        
+        'ten_loai_hang_hoa',
         'thuc_hien_bao_cao_thang',
         'cong_don_den_ky_bao_cao',
 
-        'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep'
+        // 'danh_sach_doanh_nghiep',
+        // 'chi_tiet_doanh_nghiep'
     ]
     displaRow2Header = [
         'luong_thang',
@@ -65,10 +65,18 @@ export class BorderTradeImportComponent implements OnInit {
         'gia_tri_cong_don',
         'uoc_th_so_cungky_cong_don',
         'uoc_th_so_thg_truoc_cong_don',
-    ]
+    ];
+    groupByColumns: string[] = [];
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
-    dataSource: MatTableDataSource<BorderTrade> = new MatTableDataSource<BorderTrade>([]);
+    // displayedColumns: string[] = [];
+    // displayRow1Header: string[] = []
+    // displaRow2Header: string[] = []
+    // displayRow3Header: string[] = [];
+    // dataSource: MatTableDataSource<ex_im_model> = new MatTableDataSource<ex_im_model>();
+    dataSource: MatTableDataSource<BorderTrade> = new MatTableDataSource<any | Group>();
+    dataDialog: any[] = [];
+    filteredDataSource: MatTableDataSource<BorderTrade> = new MatTableDataSource<BorderTrade>();
     years: number[] = this.getYears();
     months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -87,6 +95,7 @@ export class BorderTradeImportComponent implements OnInit {
     @ViewChild("paginator", { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
     xuat_khau_chu_yeu = [1, 6, 8, 4, 7, 21, 13, 27, 82, 51, 28, 20, 31, 19, 23]
+
     tongluong_tc: number = 0;
     tonggiatri_tc: number = 0;
     tongluongcongdon_tc: number = 0;
@@ -100,11 +109,14 @@ export class BorderTradeImportComponent implements OnInit {
     isOnlyTongCucHQ: number = 2;
     constructor(
         public sctService: SCTService,
+        public excelService: ExcelService,
         public matDialog: MatDialog,
         public marketService: MarketService,
-        public excelService: ExcelService,
         private _breadCrumService: BreadCrumService
-    ) { }
+    ) {
+        this.groupByColumns = ['ten_cua_khau']
+    }
+
 
     handleGTXK() {
         // this.TongGiaTriThangThucHien = this.dataSource.data[15].gia_tri_thang;
@@ -132,7 +144,7 @@ export class BorderTradeImportComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getDanhSachXuatKhau(this.curentmonth);
+        this.getDanhSachNhapKhau();
         this.autoOpen();
         this.sendLinkToNext(true);
         this.handleGTXK();
@@ -153,56 +165,96 @@ export class BorderTradeImportComponent implements OnInit {
     //   return this.dataSource.data.map(t => t.cost).reduce((acc, value) => acc + value, 0);
     // }
 
-    getDanhSachXuatKhau(value) {
+    getDanhSachNhapKhau() {
         let time_id = this.curentYear * 100 + this.curentmonth;
-        if (time_id == 202001) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM1;
+        this.sctService.GetDuLieuNhapKhauBG(time_id).subscribe(res => {
+            if (res['success']) {
+                this.dataSource.data = this.addGroups(res['data'], this.groupByColumns);
+                console.log(this.dataSource.data)
+                this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
+            }
+        })
+    }
+
+    getDataRowVisible(data: any): boolean {
+        const groupRows = this.dataSource.data.filter(
+            row => {
+                if (!(row instanceof Group)) {
+                    return false;
+                }
+                let match = true;
+                this.groupByColumns.forEach(column => {
+                    if (!row[column] || !data[column] || row[column] !== data[column]) {
+                        match = false;
+                    }
+                });
+                return match;
+            }
+        );
+
+        if (groupRows.length === 0) {
+            return true;
         }
-        if (time_id == 202002) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM2;
+        const parent = groupRows[0] as Group;
+        return parent.visible && parent.expanded;
+    }
+
+    // below is for grid row grouping
+    customFilterPredicate(data: any | Group, filter: string): boolean {
+        return (data instanceof Group) ? data.visible : this.getDataRowVisible(data);
+    }
+
+    addGroups(data: any[], groupByColumns: string[]): any[] {
+        const rootGroup = new Group();
+        rootGroup.expanded = true;
+        return this.getSublevel(data, 0, groupByColumns, rootGroup);
+    }
+
+    getSublevel(data: any[], level: number, groupByColumns: string[], parent: Group): any[] {
+        if (level >= groupByColumns.length) {
+            return data;
         }
-        if (time_id == 202003) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM3;
-        }
-        if (time_id == 202004) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM4;
-        }
-        if (time_id == 202005) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM5;
-        }
-        if (time_id == 202006) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM6;
-        }
-        if (time_id == 202007) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM7
-        }
-        if (time_id == 202008) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM8
-        }
-        if (time_id == 202009) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM9;
-        }
-        if (time_id == 202010) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM10
-        }
-        if (time_id == 202011) {
-            this.dataSource.data = data_xk_t11;
-            // this.dataDialog = dataDialogM11;
-        }
-        if (time_id == 202012) {
-            this.dataSource.data = [];
-            // this.dataDialog = dataDialogM12;
-        }
+        const groups = this.uniqueBy(
+            data.map(
+                row => {
+                    const result = new Group();
+                    result.level = level + 1;
+                    result.parent = parent;
+                    for (let i = 0; i <= level; i++) {
+                        result[groupByColumns[i]] = row[groupByColumns[i]];
+                    }
+                    return result;
+                }
+            ),
+            JSON.stringify);
+
+        const currentColumn = groupByColumns[level];
+        let subGroups = [];
+        groups.forEach(group => {
+            const rowsInGroup = data.filter(row => group[currentColumn] === row[currentColumn]);
+            group.totalCounts = rowsInGroup.length;
+            const subGroup = this.getSublevel(rowsInGroup, level + 1, groupByColumns, group);
+            subGroup.unshift(group);
+            subGroups = subGroups.concat(subGroup);
+        });
+        return subGroups;
+    }
+
+    uniqueBy(a, key) {
+        const seen = {};
+        return a.filter((item) => {
+            const k = key(item);
+            return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+        });
+    }
+
+    groupHeaderClick(row) {
+        row.expanded = !row.expanded;
+        this.dataSource.filter = performance.now().toString();  // bug here need to fix
+    }
+
+    isGroup(index, item): boolean {
+        return item.level;
     }
 
     tinh_tong(data) {
@@ -226,7 +278,7 @@ export class BorderTradeImportComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    log(any) {
+    log() {
     }
 
     applyFilter(event: Event) {
@@ -244,7 +296,7 @@ export class BorderTradeImportComponent implements OnInit {
             .map((element, index) => new Date().getFullYear() - index);
     }
 
-    applyDistrictFilter(event) { }
+    applyDistrictFilter() { }
 
     // isHidden(row : any){
     //     return (this.isChecked)? (row.is_het_han) : false;
@@ -269,13 +321,17 @@ export class BorderTradeImportComponent implements OnInit {
         dialogConfig.minWidth = '90%';
         this.matDialog.open(ModalComponent, dialogConfig);
         // }
+
+        this.matDialog.afterAllClosed.subscribe(res => {
+            this.ngOnInit();
+        })
     }
 
     handelDataDialog(id_mat_hang) {
-        // let data = this.dataDialog.filter(
-        //     (item) => item.id_mat_hang === id_mat_hang
-        // );
-        // return data;
+        let data = this.dataDialog.filter(
+            (item) => item.id_mat_hang === id_mat_hang
+        );
+        return data;
     }
 
     // openDanh_sach_doanh_nghiep(id_mat_hang, ten_san_pham) {
@@ -294,7 +350,7 @@ export class BorderTradeImportComponent implements OnInit {
     //         });
     // }
 
-    applyDataTarget(value: number[]) {
+    applyDataTarget() {
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
@@ -307,12 +363,12 @@ export class BorderTradeImportComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
             data: {
-                isExport: true,
+                isImport: true,
             },
         };
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 300;
-        this.matDialog.open(DialogImportDataComponent, dialogConfig);
+        this.matDialog.open(ImportDataBorderComponent, dialogConfig);
     }
 
     // checkbox delete
@@ -331,18 +387,19 @@ export class BorderTradeImportComponent implements OnInit {
     // }
 
     setAll() {
-        this.dataSource.data.forEach(item => item.isChecked=!item.isChecked)
+        this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
         console.log(this.dataSource.data)
     }
 
-    setSomeIten(element){
+    setSomeIten(element) {
         let temp_item: Task = Object.assign({}, element);
         this.task.push(temp_item);
         console.log(this.task);
         // element.isChecked = !element.isChecked;
     }
 
-    Delete(){
+    Delete() {
         // waiting api
     }
+
 }

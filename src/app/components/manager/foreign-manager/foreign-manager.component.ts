@@ -384,7 +384,6 @@ export class ForeignManagerComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
   public changeRow(index: number) {
     this._currentRow = index;
   }

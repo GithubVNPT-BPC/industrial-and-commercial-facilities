@@ -140,7 +140,8 @@ export const customCurrencyMaskConfig = {
     ModalComponent,
     ImportDataComponent,
     DialogImportDataComponent,
-    DialogECommerceComponent
+    DialogECommerceComponent,
+    ImportDataBorderComponent
   ],
   providers: [
     CommonFuntions,

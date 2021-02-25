@@ -1,13 +1,15 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { District } from 'src/app/_models/district.model';
-import { SDModel} from 'src/app/_models/APIModel/trade-development.model';
+import { dia_diem_km, SDModel} from 'src/app/_models/APIModel/trade-development.model';
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 import moment from 'moment';
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 @Component({
   selector: 'app-subscribe-discount',
@@ -52,37 +54,73 @@ export class SubscribeDiscountComponent extends BaseComponent {
   // { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
 
   public promotionTypes: string[] = [];
-    
+  form: FormGroup;
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
   ) {
       super(injector);
+      this._breadCrumService.sendLink(this._linkOutput);
+      this.initDisplayColumns();
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
     this.getPromotionTypes();
     this.getSDList();
+    console.log(this.displayedColumns)
+  }
+
+  initDisplayColumns(){
+    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+  }
+
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/commecial-management/trade-development/SD";
+    this.TITLE_DEFAULT = "Khuyến mãi";
+    this.TEXT_DEFAULT = "Khuyến mãi";
   }
 
   getFormParams() {
     return {
-      ten_doanh_nghiep: new FormControl(),
-      dia_chi_doanh_nghiep: new FormControl(),
-      id_phuong_xa: new FormBuilder(),
+      ten_doanh_nghiep: new FormControl(''),
+      dia_chi_doanh_nghiep: new FormControl(''),
       mst: new FormControl(),
       ten_chuong_trinh_km: new FormControl(),
       thoi_gian_bat_dau: new FormControl(),
       thoi_gian_ket_thuc: new FormControl(),
       hang_hoa_km: new FormControl(),
-      dia_diem_km: new FormControl(),
-      ten_hinh_thuc: new FormControl(),
       so_van_ban: new FormControl(),
       co_quan_ban_hanh: new FormControl(),
       ngay_thang_nam_van_ban: new FormControl(),
+      id_hinh_thuc: new FormControl(),
+
+      // array address discount
+      danh_sach_dia_diem: this.formBuilder1.array([]),
+      id_temp: new FormControl(1)
     }
+  }
+
+  get danh_sach_dia_diem(): FormArray{
+    return this.formData.get('danh_sach_dia_diem') as FormArray
+  }
+
+  newAddress(): FormGroup{
+    return this.formBuilder1.group(
+      {
+          dia_diem: new FormControl(),
+          id_quan_huyen: new FormControl(),
+          id_xttm_km: new FormControl(1)
+      }
+    )
+  }
+
+  addAddress(){
+    this.danh_sach_dia_diem.push(this.newAddress())
+  }
+
+  removeAddress(i:number) {
+    this.danh_sach_dia_diem.removeAt(i);
   }
 
   applyFilter(event) {
@@ -132,9 +170,11 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.commerceManagementService.getSubcribeDiscountTypeData().subscribe(
       result => {
         if (result.data && result.data.length > 0) {
-          result.data.map((element, index) => { 
-            this.promotionTypes.push(element.ten_hinh_thuc);
-          })
+          this.promotionTypes = result.data
+          // result.data.map((element, index) => { 
+          //   this.promotionTypes.push(element.ten_hinh_thuc);
+          // })
+          this.autopaging();
         }
       },
       error => this.errorMessage = <any>error
@@ -145,30 +185,74 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.commerceManagementService.getSubcribeDiscountData().subscribe(
       result => {
         if (result.data && result.data.length > 0) {
-          this.dataSource = new MatTableDataSource<SDModel>(result.data);
-          this.filteredDataSource = new MatTableDataSource<SDModel>(result.data);
-          this.filteredDataSource.paginator = this.paginator;
+          this.dataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
+          this.filteredDataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
+          // this.filteredDataSource.paginator = this.paginator;
+          console.log(this.dataSource.data)
         }
       },
       error => this.errorMessage = <any>error
     );
   }
 
+  handleData(data:SDModel){
+    let ds_km: SDModel[] = data[0];
+    let ds_dd_km: dia_diem_km[] = data[1];
+    let dd_km_temp: dia_diem_km[] = [];
+    ds_km.filter(k => {
+      k.dia_diem_km = [];
+      dd_km_temp = [];
+      ds_dd_km.filter(d => {
+        if(k.id == d.id_xttm_km){
+          dd_km_temp.push(d);
+        }
+      });
+      k.dia_diem_km = [...k.dia_diem_km, ...dd_km_temp];
+    });
+    // console.log(ds_km);
+    return ds_km;
+  }
+
   countBusiness(): number {
-    return [...new Set(this.dataSource.data.map(x => x.mst))].length;
+    return this.dataSource.data.map(x => x.ngay_thang_nam_van_ban.slice(0,4) == this.currentYear.toString()).length;
   } 
 
-  prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
-    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('DD/MM/yyyy');
+  // onCreate(){
+  //   // this.addAddress();
+  //   // console.log(this.formData)
 
-    data = {...data, ...{
-      id_trang_thai: 1,
-    }};
+  // }
+
+  prepareData(data) {
+    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
+    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
+    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD');
+    return data;
+    // data = {...data, ...{
+    //   id_trang_thai: 1,
+    // }};
+
+    return data;
   }
 
   callService(data) {
+
+    // console.log(data)
     this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  removeSkill(i:number) {
+    this.danh_sach_dia_diem.removeAt(i);
+  }
+
+  prepareRemoveData(){
+    let datas = this.selection.selected.map(element => new Object({id: element.id}));
+    return datas;
+  }
+
+  callRemoveService(data){
+    this.commerceManagementService.deletePromo(data).subscribe(res => {
+      this.successNotify(res);
+    });
   }
 }

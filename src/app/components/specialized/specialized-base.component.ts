@@ -10,6 +10,12 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+import { DistrictModel, SubDistrictModel, DistrictWardModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { SCTService } from 'src/app/_services/APIService/sct.service';
+
+import moment from 'moment';
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 export abstract class BaseComponent implements OnInit {
 
@@ -17,77 +23,64 @@ export abstract class BaseComponent implements OnInit {
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
+    protected _linkOutput: LinkModel = new LinkModel();
+    //Constant
+    protected LINK_DEFAULT: string = "";
+    protected TITLE_DEFAULT: string = "";
+    protected TEXT_DEFAULT: string = "";
+
+    protected sctService: SCTService;
     protected excelService: ExcelService;
     protected logger: InformationService;
     protected formBuilder: FormBuilder;
+    protected formBuilder1: FormBuilder;
     protected confirmationDialogService: ConfirmationDialogService;
+    protected _breadCrumService: BreadCrumService;
 
     public formData: any;
     public formParams: any;
     public view = 'list';
     public errorMessage: any;
+    public currentYear = new Date().getFullYear();
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
+
+    public displayedColumns = ['select', 'index'];
+    public displayedFields = {};
     
+    public districts: DistrictModel[] = [];
+    public wards: SubDistrictModel[] = [];
+    public districtWards: DistrictWardModel[] = [];
+    public districtWardSorted = {};
+
     constructor(injector: Injector) {
         this.excelService = injector.get(ExcelService);
         this.logger = injector.get(InformationService);
         this.formBuilder = injector.get(FormBuilder);
         this.confirmationDialogService = injector.get(ConfirmationDialogService);
+        this.sctService = injector.get(SCTService);
+        this.formBuilder1 = injector.get(FormBuilder);
+        this._breadCrumService = injector.get(BreadCrumService);
     }
 
     ngOnInit() {
         this.autoOpen();
-        this.initFormDatas();
+        this.initListView();
+        this.initFormView();
+        this.initDistricts();
+        this.getLinkDefault();
+        this.sendLinkToNext(true);
     }
 
-    @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    allSelected = false;
-    toggleAllSelection() {
-        this.allSelected = !this.allSelected;  // to control select-unselect
-
-        if (this.allSelected) {
-        this.dSelect.options.forEach((item: MatOption) => item.select());
-        } else {
-        this.dSelect.options.forEach((item: MatOption) => item.deselect());
+    protected initListView() {
+        // In case we have already declared all field in displayed Columns
+        if (this.displayedColumns.length == 2 && Object.keys(this.displayedFields).length > 0) {
+            this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
         }
-        this.dSelect.close();
     }
 
-    public isAllSelected() {
-        let numSelected = this.selection.selected.length;
-        let numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-    }
-
-    //Event check
-    public masterToggle() {
-        this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-    //Event check item
-    public checkboxLabel(row): string {
-
-        if (!row) {
-            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-        }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-    }
-
-    public openRemoveDialog() {
-        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý','Đóng')
-        .then(confirm => {
-          if (confirm) {
-            // this.remove();
-            return;
-          }
-        })
-        .catch((err) => console.log('Hủy không thao tác: \n' + err));
-    }
-
-    public initFormDatas() {
+    protected initFormView() {
         let datas = this.getFormParams();
         this.formData = this.formBuilder.group(datas);
     }
@@ -101,17 +94,35 @@ export abstract class BaseComponent implements OnInit {
     }
 
     public switchView() {
-        this.view = this.view == 'list' ? 'form': 'list';
+        if (this.view == 'list') {
+            this.view = 'form';
+        } else {
+            this.view = 'list';
+            this.formData.reset();
+            this.autoOpen();
+        }
     }
 
-    public prepareData(data) {}
+    public prepareData(data) { return data }
 
-    public callService(data) {}
+    public callService(data) { }
 
     public onCreate() {
         let data = this.formData.value;
-        this.prepareData(data);    
+        data = this.prepareData(data);
         this.callService(data);
+        this.resetAll();
+    }
+
+    prepareRemoveData(data) { return data }
+
+    callRemoveService(data) {}
+
+    public onRemove() {
+        let data = this.selection.selected;
+        data = this.prepareRemoveData(data);
+        this.callRemoveService(data);
+        this.resetAll(false);
     }
 
     public clearTable(event) {
@@ -119,15 +130,9 @@ export abstract class BaseComponent implements OnInit {
         this.formData.reset();
     }
 
-    public switch2ListView(): void {
+    public resetAll(isSwitch=true): void {
         this.formData.reset();
-        this.switchView();
-        this.autoOpen();
-    }
-
-    public resetAll(): void {
-        this.formData.reset();
-        this.switchView();
+        if (isSwitch) this.switchView();
         this.ngOnInit();
     }
 
@@ -141,11 +146,123 @@ export abstract class BaseComponent implements OnInit {
         }
         else {
             this.logger.msgSuccess("Dữ liệu được lưu thành công!");
-            this.resetAll();
         }
     }
 
     public errorNotify(error) {
         this.logger.msgError("Không thể thực thi! Lý do: \n" + error);
     }
+
+    @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
+    allSelected = false;
+    toggleAllSelection() {
+        this.allSelected = !this.allSelected;  // to control select-unselect
+
+        if (this.allSelected) {
+            this.dSelect.options.forEach((item: MatOption) => item.select());
+        } else {
+            this.dSelect.options.forEach((item: MatOption) => item.deselect());
+        }
+        this.dSelect.close();
+    }
+
+    public isAllSelected() {
+        let numSelected = this.selection.selected.length;
+        let numRows = this.dataSource.data.length;
+        return numSelected === numRows;
+    }
+
+    //Event check
+    public masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource.data.forEach(row => this.selection.select(row));
+    }
+    //Event check item
+    public checkboxLabel(row): string {
+
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    }
+
+    public openRemoveDialog() {
+        let self = this;
+        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+            .then(confirm => {
+                if (confirm) {
+                    self.onRemove();
+                    return;
+                }
+            })
+            .catch((err) => console.log('Hủy không thao tác: \n' + err));
+    }
+
+    public initDistricts() {
+        this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
+            if (res['success'])
+                this.districts = res['data'];
+        })
+    }
+
+    public initWards(){
+        this.sctService.LayDanhSachPhuongXa().subscribe(res => {
+            if(res['success'])
+                this.wards = res['data'];
+        })
+    }
+
+    initDistrictWard(sorted=true) {
+        this.sctService.LayDanhSachPhuongXaQuanHuyen().subscribe(res => {
+            if(res['success']) {
+                let districtWardData = res['data'];
+                this.districtWards = districtWardData;
+                if (sorted) {
+                    districtWardData.forEach(x => {
+                        if (!this.districtWardSorted[x.ten_quan_huyen]) {
+                            this.districtWardSorted[x.ten_quan_huyen] = [{
+                                id_phuong_xa: x.id_phuong_xa,
+                                ten_phuong_xa: x.ten_phuong_xa,
+                            }];
+                        } else {
+                            this.districtWardSorted[x.ten_quan_huyen].push({
+                                id_phuong_xa: x.id_phuong_xa,
+                                ten_phuong_xa: x.ten_phuong_xa,
+                            })
+                        }
+                    });
+                }
+                
+            }   
+                
+        })
+    }
+
+    paginatorAgain() {
+        this.paginator._intl.itemsPerPageLabel = "Số hàng";
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        this.filteredDataSource.paginator = this.paginator;
+    }
+
+    autopaging(){
+        setTimeout(() => {
+            this.paginatorAgain();
+        }, 1000);
+    }
+
+    getLinkDefault(){}
+
+    public sendLinkToNext(type: boolean) {
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this._breadCrumService.sendLink(this._linkOutput);
+    }
+
+    remove(){}
 }

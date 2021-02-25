@@ -1,15 +1,15 @@
 export class ClusterDetailModel{
     id:number;
-    ten_cum_cong_nghiep: string;
+    ten_cum: string;
     hinh_anhs: string[];
     dia_chi:string;
     chu_dau_tu: string;
     dien_tich: number;
-    co_so_phap_lys:string[];
+    quyet_dinh_thanh_lap:string;
     dien_giai: string;
     downloadPDF:string;
-    dang_ki_kinh_doanh : string[];
-    vi_tri_quy_mo : string[];
+    dieu_kien_kinh_doanh : string;
+    vi_tri_quy_mo : string;
     quy_mo_dien_tich : string;
     tong_muc_dau_tu : string;
 }

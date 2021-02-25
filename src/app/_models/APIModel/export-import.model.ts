@@ -69,3 +69,18 @@ export class dialog_detail_model {
     san_luong_cong_don: number;
     tri_gia_cong_don: number;
 }
+
+export class tong_quan_bg_model {
+    id_loai_hang_hoa?: number;
+    ten_cua_khau?: string;
+    time_id: number;
+    id_cua_khau: number;
+    san_luong_thang: number;
+    tri_gia_thang: number;
+    uoc_thang_so_voi_ki_truoc: number;
+    uoc_thang_so_voi_thang_truoc: number;
+    san_luong_cong_don: number;
+    tri_gia_cong_don: number;
+    uoc_cong_don_so_voi_cung_ki: number;
+    uoc_cong_don_so_voi_ke_hoach_nam: number;
+}

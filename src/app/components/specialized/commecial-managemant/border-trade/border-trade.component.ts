@@ -282,25 +282,25 @@ export class BorderTradeComponent implements OnInit {
   }
 
   excuteAllGate() {
-    let tem = new Date().getFullYear() * 100 + this.curentmonth;
-    const excuteallgate = forkJoin(
-      [
-        this.sctService.GetDanhSachXuatNhapKhauBG(tem, 1),
-        this.sctService.GetDanhSachXuatNhapKhauBG(tem, 2),
-        this.sctService.GetDanhSachXuatNhapKhauBG(tem, 3)
-      ]).pipe(tap(console.log)).subscribe((data) => {
-        this.xulyDulieunhomI(data[0]);
-        this.initValueXNK();
-        this.xulyDulieunhomII(data[1]);
-        this.initValueXNK();
-        this.xulyDulieunhomIII(data[2]);
-        let tongxk3 = this.TongKimNgachxk;
-        let tongnk3 = this.TongKimNgachnk;
-        this.TongKimNgach3xk = this.TongKimNgachxk + this.TongKimNgachxkII + this.TongKimNgachxkIII;
-        this.TongKimNgach3nk = this.TongKimNgachnk + this.TongKimNgachnkII + this.TongKimNgachnkIII;
-        // this.AlldataSource = [this.dataSourceI, this.dataSourceII, this.dataSourceIII]
-        this.dulieutonghop();
-      })
+    // let tem = new Date().getFullYear() * 100 + this.curentmonth;
+    // const excuteallgate = forkJoin(
+    //   [
+    //     this.sctService.GetDanhSachXuatNhapKhauBG(tem, 1),
+    //     this.sctService.GetDanhSachXuatNhapKhauBG(tem, 2),
+    //     this.sctService.GetDanhSachXuatNhapKhauBG(tem, 3)
+    //   ]).pipe(tap(console.log)).subscribe((data) => {
+    //     this.xulyDulieunhomI(data[0]);
+    //     this.initValueXNK();
+    //     this.xulyDulieunhomII(data[1]);
+    //     this.initValueXNK();
+    //     this.xulyDulieunhomIII(data[2]);
+    //     let tongxk3 = this.TongKimNgachxk;
+    //     let tongnk3 = this.TongKimNgachnk;
+    //     this.TongKimNgach3xk = this.TongKimNgachxk + this.TongKimNgachxkII + this.TongKimNgachxkIII;
+    //     this.TongKimNgach3nk = this.TongKimNgachnk + this.TongKimNgachnkII + this.TongKimNgachnkIII;
+    //     // this.AlldataSource = [this.dataSourceI, this.dataSourceII, this.dataSourceIII]
+    //     this.dulieutonghop();
+    //   })
   }
 
   xulyDulieunhomI(result) {
@@ -365,23 +365,23 @@ export class BorderTradeComponent implements OnInit {
   getThuongMaiBGGateI() {
     this.initValueXNK();
     let tem = new Date().getFullYear() * 100 + this.curentmonth;
-    this.sctService.GetDanhSachXuatNhapKhauBG(tem, this.id_cua_khau).subscribe((result) => {
-      this.xulyDulieunhomI(result)
-    });
+    // this.sctService.GetDanhSachXuatNhapKhauBG(tem, this.id_cua_khau).subscribe((result) => {
+    //   this.xulyDulieunhomI(result)
+    // });
   }
   getThuongMaiBGGateII() {
-    this.initValueXNK();
-    let tem = new Date().getFullYear() * 100 + this.curentmonth;
-    this.sctService.GetDanhSachXuatNhapKhauBG(tem, 2).subscribe((result) => {
-      this.xulyDulieunhomII(result)
-    });
+    // this.initValueXNK();
+    // let tem = new Date().getFullYear() * 100 + this.curentmonth;
+    // this.sctService.GetDanhSachXuatNhapKhauBG(tem, 2).subscribe((result) => {
+    //   this.xulyDulieunhomII(result)
+    // });
   }
   getThuongMaiBGGateIII() {
-    this.initValueXNK();
-    let tem = new Date().getFullYear() * 100 + this.curentmonth;
-    this.sctService.GetDanhSachXuatNhapKhauBG(tem, 3).subscribe((result) => {
-      this.xulyDulieunhomIII(result)
-    });
+    // this.initValueXNK();
+    // let tem = new Date().getFullYear() * 100 + this.curentmonth;
+    // this.sctService.GetDanhSachXuatNhapKhauBG(tem, 3).subscribe((result) => {
+    //   this.xulyDulieunhomIII(result)
+    // });
   }
 
   getNhomI(result, dulieu?) {

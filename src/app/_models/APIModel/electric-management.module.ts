@@ -134,13 +134,13 @@ export class PowerProductionModel {
 export class UserForcusEnergy {
     mst: string;
     ten_doanh_nghiep: string;
-    dia_chi: string;
-    ma_huyen_thi: number;
-    nganh_nghe: string;
+    dia_diem: string;
+    ma_huyen_thi?: number;
+    nganh_nghe_san_xuat: string;
     nang_luong_tieu_thu: number;
     nang_luong_quy_doi: number;
-    suat_tieu_hao: number;
-
+    suat_tieu_hao_1_dv_sp: number;
+    id_quan_huyen?: number;
 }
 
 export class BlockElectricModel{
@@ -181,7 +181,7 @@ export class ElectricalPlan {
     trang_thai_hoat_dong: number;
 }
 
-export class New_HydroElectrict {
+export class HydroEnergyModel {
     ten_doanh_nghiep: string;
     cong_suat_thiet_ke: number
     dung_tich_ho_chua: number;
@@ -218,6 +218,7 @@ export class ElectricalPlan110KV {
     id_loai_quy_hoach: number;
     id_trang_thai_hoat_dong: number;
     ten_trang_thai_hoat_dong: string;
+    id_giai_doan?: number;
 }
 
 export class New_RuralElectricModel {

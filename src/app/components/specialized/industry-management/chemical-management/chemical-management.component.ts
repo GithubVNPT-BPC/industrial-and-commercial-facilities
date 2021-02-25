@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -16,14 +17,9 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 })
 
 export class ChemicalManagementComponent extends BaseComponent {
-    //Constant
-    private readonly LINK_DEFAULT: string = "/specialized/industry-management/chemical";
-    private readonly TITLE_DEFAULT: string = "Công nghiệp - Hoá chất";
-    private readonly TEXT_DEFAULT: string = "Công nghiệp - Hoá chất";
-    //Variable for only ts
-    private _linkOutput: LinkModel = new LinkModel();
+    
     displayedColumns: string[] = [];
-    fullFieldList: string[] = ['select', 'index'] // 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'email_sct', 'so_lao_dong_sct', 'cong_suat','so_giay_phep', 'san_luong', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'cong_suat', 'san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
     
     displayedFields = {
@@ -64,10 +60,11 @@ export class ChemicalManagementComponent extends BaseComponent {
     years: number[] = [];
     year: number;
 
+    public chemistryNameList = [];
+
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
-        private _breadCrumService: BreadCrumService
     ) {
         super(injector);
     }
@@ -82,16 +79,77 @@ export class ChemicalManagementComponent extends BaseComponent {
         // };
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
-        this.sendLinkToNext(true);
     }
 
-    public sendLinkToNext(type: boolean) {
-        this._linkOutput.link = this.LINK_DEFAULT;
-        this._linkOutput.title = this.TITLE_DEFAULT;
-        this._linkOutput.text = this.TEXT_DEFAULT;
-        this._linkOutput.type = type;
-        this._breadCrumService.sendLink(this._linkOutput);
-      }
+    getLinkDefault(){
+        //Constant
+        this.LINK_DEFAULT = "/specialized/industry-management/chemical";
+        this.TITLE_DEFAULT = "Công nghiệp - Hoá chất";
+        this.TEXT_DEFAULT = "Công nghiệp - Hoá chất";
+    }
+
+    public switchView() {
+        super.switchView();
+        if (this.chemistryNameList.length == 0) this.getChemicalNameListData();
+    }
+
+    private addQtyRow(event) {
+        event.preventDefault();
+        let self = this;
+        function createItem() {
+            return self.formBuilder.group({
+                id_hoa_chat: [],
+                san_luong: [],
+                cong_suat: [],
+            });
+        }
+
+        let details = this.formData.get('details');
+        details.push(createItem());
+    }
+
+    private removeQtyRow(event, index) {
+        event.preventDefault();
+        this.formData.get('details').removeAt(index);
+    }
+
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            details: this.formBuilder.array([
+                this.formBuilder.group({
+                    id_hoa_chat: [],
+                    san_luong: [],
+                    cong_suat: [],
+                })
+            ])
+        }
+    }
+
+    prepareData(data) {
+        let details = data.details;
+        details.map(e => {
+            e['mst'] = data['mst'];
+            e['time_id'] = this.currentYear;
+        });
+
+        data = {
+            chemistryData : {
+                mst: data.mst,
+                tinh_trang_hoat_dong: "true",
+                time_id: this.currentYear,
+            },
+            chemistryQtyData : details,
+        }
+        return data;
+    }
+
+    callService(data) {
+        let chemistryData = data.chemistryData;
+        let chemistryQtyData = data.chemistryQtyData;
+        this.industryManagementService.PostChemicalManagement([chemistryData], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostChemicalManagementQty(chemistryQtyData, this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
     
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
@@ -128,6 +186,12 @@ export class ChemicalManagementComponent extends BaseComponent {
             }     
         })
     }
+
+    getChemicalNameListData() {
+        this.industryManagementService.GetChemicalNameList().subscribe(result => {
+            if (result.data && result.data.length > 0) this.chemistryNameList = result.data;
+        })
+    } 
 
     getYears() {
         return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);

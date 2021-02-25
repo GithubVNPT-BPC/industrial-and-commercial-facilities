@@ -4,7 +4,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
-import { data_detail_model, new_import_export_model } from 'src/app/_models/APIModel/export-import.model';
+import { data_detail_model, new_import_export_model, tong_quan_bg_model } from 'src/app/_models/APIModel/export-import.model';
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +22,7 @@ export class SCTService {
     private urlDanhSachQuanLyChietNapLPG = "/danh-sach-quan-ly-chiet-nap-lpg";
     private urlDanhSachQuanLyCongNghiepThucPham = "/danh-sach-quan-ly-cong-nghiep-thuc-pham";
     private urlDanhSachQuanLyVatLieuNoCongNghiep = "/vlncn";
-    private urlDanhSachQuanLyCumCongNghiep = "/ccn";
+    
 
     private urlDanhSachWebTMDT = "/danh-sach-dang-ki-tmdt";
     private urlDanhSachWebBH = "/danh-sach-website";
@@ -38,7 +38,10 @@ export class SCTService {
     private urlChiTietXuatKhau = "/xnk/chi-tiet-xuat-khau";
     private urlChiTietXuatKhauTC = "/xnk/chi-tiet-xuat-khau-tc";
 
-    private urlThuongMaiBienGioi = "/tmbg/cua-khau-thang";
+    private urlDuLieuBienGioiNK = "/tmbg/nhap-khau";
+    private urlDuLieuBienGioiXK = "/tmbg/xuat-khau";
+    private urlThuongMaiBienGioiNK = "/tmbg/nhap-khau";
+    private urlThuongMaiBienGioiXK = "/tmbg/xuat-khau";
 
     private urlSaleWebsite = "/cap-nhat-danh-sach-website"
     private urlCapNhatDanhSachWebTMDT = "/cap-nhat-danh-sach-dang-ki-tmdt";
@@ -51,7 +54,10 @@ export class SCTService {
 
     // start api quan huyen
     private apiDanhSach = environment.apiEndpoint + "api/danh-sach";
+
     private urlQuanHuyen = "/quan-huyen"; 
+    private urlPhuongXa = "/phuong-xa"; 
+    private urlPhuongXaQuanHuyen = "/phuong-xa-kem-quan-huyen"
     // end api quan huyen
 
     token: any;
@@ -134,14 +140,14 @@ export class SCTService {
         );
     }
 
-    public GetDanhSachQuanLyCumCongNghiep(time_id: number) {
-        var apiUrl = this.apiIndustry + this.urlDanhSachQuanLyCumCongNghiep;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
+    // public GetDanhSachQuanLyCumCongNghiep() {
+    //     var apiUrl = this.apiIndustry + this.urlDanhSachQuanLyCumCongNghiep;
+    //     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    //     // let params = new HttpParams().set('time_id', time_id.toString());
+    //     return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+    //         catchError(this.handleError)
+    //     );
+    // }
 
     // Start Import and Export
     public GetDanhSachNhapKhau(time_id: number) {
@@ -261,12 +267,39 @@ export class SCTService {
     }
     
 
-    public GetDanhSachXuatNhapKhauBG(time_id: number, id_cua_khau?: number) {
-        var apiUrl = this.apiSpecialized + this.urlThuongMaiBienGioi;
+    public GetDuLieuXuatKhauBG(time_id: number) {
+        var apiUrl = this.apiSpecialized + this.urlDuLieuBienGioiXK;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams().set('time_id', time_id.toString()).set('id_cua_khau', id_cua_khau.toString());
-
+        let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetDuLieuNhapKhauBG(time_id: number) {
+        var apiUrl = this.apiSpecialized + this.urlDuLieuBienGioiNK;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public CapNhatDuLieuNKBG(time_id: number, data: tong_quan_bg_model[]) {
+        var apiUrl = this.apiSpecialized + this.urlThuongMaiBienGioiNK;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public CapNhatDuLieuXKBG(time_id: number, data: tong_quan_bg_model[]) {
+        var apiUrl = this.apiSpecialized + this.urlThuongMaiBienGioiXK;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -318,8 +351,24 @@ export class SCTService {
         );
     }
 
-    LayDanhSachQuanHuyen(){
+    public LayDanhSachQuanHuyen(){
         var apiUrl = this.apiDanhSach + this.urlQuanHuyen;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public LayDanhSachPhuongXa(){
+        var apiUrl = this.apiDanhSach + this.urlPhuongXa;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    LayDanhSachPhuongXaQuanHuyen(){
+        var apiUrl = this.apiDanhSach + this.urlPhuongXaQuanHuyen;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

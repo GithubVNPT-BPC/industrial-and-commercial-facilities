@@ -25,9 +25,17 @@ export class SDModel {
     thoi_gian_bat_dau: Date;
     thoi_gian_ket_thuc: Date;
     hang_hoa_km: string;
-    dia_diem_km: string;
+    dia_diem_km?: any[];
     ten_hinh_thuc: string;
     so_van_ban: string;
     co_quan_ban_hanh: string;
     ngay_thang_nam_van_ban: string;
+    id_temp?: number;
+    id?: number;
+}
+
+export class dia_diem_km{
+    dia_diem: string;
+    id_quan_huyen: number;
+    id_xttm_km: number;
 }

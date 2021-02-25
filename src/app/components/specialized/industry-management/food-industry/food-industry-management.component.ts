@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { FoodIndustryModel } from 'src/app/_models/APIModel/industry-management.module';
 import { LinkModel } from 'src/app/_models/link.model';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -17,11 +18,7 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 
 export class FoodIndustryManagementComponent extends BaseComponent {
     //Constant
-  private readonly LINK_DEFAULT: string = "/specialized/industry-management/food";
-  private readonly TITLE_DEFAULT: string = "Công nghiệp - Công nghiệp thực phẩm";
-  private readonly TEXT_DEFAULT: string = "Công nghiệp - Công nghiệp thực phẩm";
-  //Variable for only ts
-  private _linkOutput: LinkModel = new LinkModel();
+  
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'] //, 'ten_doanh_nghiep', 'mst', 'email', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'don_vi', 'von_dieu_le', 'cong_suat', 'ten_thuc_pham', 'san_luong', 'so_lao_dong_sct', 'email_sct', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
@@ -48,6 +45,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     
     years: number[] = [];
+    year : number;
     districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
     { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
     { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
@@ -62,12 +60,12 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     isChecked: boolean;
     sanLuongBotMy: number = 0;
     sanLuongRuou: number = 0;
-    year : number;
+    
 
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
-        private _breadCrumService: BreadCrumService
+    
     ) {
         super(injector);
     }
@@ -82,20 +80,38 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         // };
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
-        this.sendLinkToNext(true);
+        
     }
 
-    public sendLinkToNext(type: boolean) {
-      this._linkOutput.link = this.LINK_DEFAULT;
-      this._linkOutput.title = this.TITLE_DEFAULT;
-      this._linkOutput.text = this.TEXT_DEFAULT;
-      this._linkOutput.type = type;
-      this._breadCrumService.sendLink(this._linkOutput);
+    getLinkDefault(){
+        this.LINK_DEFAULT = "/specialized/industry-management/food";
+        this.TITLE_DEFAULT = "Công nghiệp - Công nghiệp thực phẩm";
+        this.TEXT_DEFAULT = "Công nghiệp - Công nghiệp thực phẩm";
     }
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            san_luong: new FormControl(),
+            cong_suat: new FormControl(),
+        }
+    }
+
+    prepareData(data) {
+        data = {...data, ...{
+            tinh_trang_hoat_dong: "true",
+            time_id: this.currentYear,
+        }}
+        return data;        
+    }
+
+    callService(data) {
+        this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     GetFoodIndustryData(time_id) {

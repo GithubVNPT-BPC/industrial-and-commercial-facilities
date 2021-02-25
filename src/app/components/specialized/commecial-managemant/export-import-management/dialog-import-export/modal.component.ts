@@ -62,15 +62,20 @@ export class ModalComponent implements OnInit {
     so_quoc_gia: number = 0;
     handleData() {
         this.id = this.data['id'];
+        console.log(this.data)
         // id = 1 => Export
         if (this.id === 1) {
             this.dataSource = new MatTableDataSource<dialog_detail_model>(this.data['data']);
-            for (let item of this.data['data']) {
-                this.ten_san_pham = item['ten_san_pham']
-                this.TongGiaTriThangThucHien += item['tri_gia_thang'];
-                this.TongGiaTriCongDon += item['tri_gia_cong_don'];
-                this.so_quoc_gia += 1;
-            }
+            this.TongGiaTriThangThucHien = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_thang).reduce((a,b) => a + b) : 0
+            this.TongGiaTriCongDon = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_cong_don).reduce((a,b) => a + b) : 0
+            this.so_quoc_gia = this.data['data'].length;
+            this.ten_san_pham = this.data['data'][0]['ten_san_pham']
+            // for (let item of this.data['data']) {
+            //     this.ten_san_pham = item['ten_san_pham']
+            //     this.TongGiaTriThangThucHien += item['tri_gia_thang'];
+            //     this.TongGiaTriCongDon += item['tri_gia_cong_don'];
+            //     this.so_quoc_gia += 1;
+            // }
         } else {
             this.ten_san_pham = this.data['ten_san_pham'];
             this.so_doanh_nghiep = this.data['data'].length;

@@ -1,4 +1,4 @@
-<mat-card class="material">
+<mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -80,7 +80,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="GetLGPManagementData($event.value)" [(value)]="year">
+                            <mat-select (selectionChange)="GetLGPManagementData($event.value)" [(value)]="currentYear">
                                 <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -126,7 +126,7 @@
                 </div>
                 <hr>
 
-                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #table>
+                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="{{displayedColumns.length == 7 ? 'small-table1': 'small-table2'}}">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear >
@@ -146,7 +146,10 @@
                         
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}</td>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex * this.filteredDataSource.paginator.pageSize}} 
+                            </td>                        
                         </ng-container>
 
                         <div *ngFor="let field of displayedFields | keyvalue">
@@ -188,5 +191,74 @@
             </mat-expansion-panel>
         </mat-accordion>
 
+    </mat-card-content>
+</mat-card>
+
+<!-- Form view -->
+<mat-card class="material" *ngIf="view == 'form'">
+    <mat-card-content>
+        <mat-accordion>
+            <mat-card-header>
+                <mat-card-title>
+                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
+                    <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
+                    class="float-right set-bg-color-primary" (click)="switchView()">
+                        <mat-icon>menu</mat-icon> &nbsp;Danh sách
+                    </button>
+                </mat-card-title>
+            </mat-card-header>
+            <hr>
+            <form [formGroup]="formData" (ngSubmit)="onCreate()">
+                <div class="form-group row">
+                    
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                Thông tin doanh nghiệp
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-6" >
+                                    <mat-form-field appearance="outline"> 
+                                        <mat-label>Mã số thuế doanh nghiệp</mat-label>
+                                        <input matInput formControlName="mst">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Công suất và sản lượng </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Sản lượng</mat-label>
+                                        <input matInput  type="number" formControlName="san_luong">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Công suất</mat-label>
+                                        <input matInput type="number" formControlName="cong_suat">
+                                    </mat-form-field>
+                                </div>                  
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
+                    </div>
+                </div>
+            </form>
+        </mat-accordion>
     </mat-card-content>
 </mat-card>

@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { ElectricityDevelopmentModel, HydroElectricManagementModel, New_RuralElectricModel, RuralElectricModel } from 'src/app/_models/APIModel/electric-management.module';
+import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { New_RuralElectricModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { BaseComponent } from '../../specialized-base.component';
 
 @Component({
   selector: 'rural-electric-management',
@@ -11,11 +12,11 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
   styleUrls: ['/../../special_layout.scss'],
 })
 
-export class RuralElectricManagementComponent implements OnInit {
+export class RuralElectricManagementComponent extends BaseComponent {
   //ViewChild 
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
+  // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
@@ -28,18 +29,7 @@ export class RuralElectricManagementComponent implements OnInit {
   //TS & HTML Variable
   public dataSource: MatTableDataSource<New_RuralElectricModel> = new MatTableDataSource<New_RuralElectricModel>();
   public filteredDataSource: MatTableDataSource<New_RuralElectricModel> = new MatTableDataSource<New_RuralElectricModel>();
-  public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-    
+
   //Only TS Variable
   years: number[] = [];
   tongSoHo: number;
@@ -48,28 +38,27 @@ export class RuralElectricManagementComponent implements OnInit {
   tongHoCoDien: number;
   isChecked: boolean;
 
-  constructor(public excelService: ExcelService,
+  constructor(
+    private injector: Injector,
+    public excelService: ExcelService,
     private energyService: EnergyService,
-    ) {
+  ) {
+    super(injector);
   }
 
   ngOnInit() {
+    super.ngOnInit();
     // this.years = this.getYears();
     this.getDataRuralElectric();
-    this.autoOpen();
   }
 
-  getDataRuralElectric(){
+  getDataRuralElectric() {
     this.energyService.LayDuLieuQuyHoachDienNongThon().subscribe(res => {
+      this.dataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
       this.filteredDataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
       this.caculatorValue();
       this.paginatorAgain();
-      this.dataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
     })
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
   }
 
   applyFilter(event: Event) {
@@ -109,16 +98,6 @@ export class RuralElectricManagementComponent implements OnInit {
   //   this.caculatorValue();
   //   this.paginatorAgain();
   // }
-  paginatorAgain() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
   caculatorValue() {
     this.tongSoHo = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nong_thon_tong_so_ho).reduce((a, b) => a + b) : 0;
     this.tongSoXa = this.filteredDataSource.data.filter(x => x.nong_thon_tong_so_ho != null).length;
@@ -133,5 +112,42 @@ export class RuralElectricManagementComponent implements OnInit {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  getFormParams() {
+    return {
+      dia_ban: new FormControl(''),
+      is_cap_huyen: new FormControl(1),
+      tong_so_ho: new FormControl(''),
+      tong_so_ho_co_dien: new FormControl(''),
+      nong_thon_tong_so_ho: new FormControl(''),
+      nong_thon_tong_so_ho_co_dien: new FormControl(''),
+      tieu_chi_41: new FormControl(''),
+      tieu_chi_42: new FormControl(''),
+      tieu_chi_43: new FormControl('')
+    }
+  }
+
+  tieu_chi: any[] = [
+    {id: 1, value: 'Đạt'},
+    {id: 2, value: 'Không đạt'}
+  ]
+  public prepareData(data) {
+    data['tong_so_ho'] = Number(data['tong_so_ho']);
+    data['tong_so_ho_co_dien'] = Number(data['tong_so_ho_co_dien']);
+    data['nong_thon_tong_so_ho'] = Number(data['nong_thon_tong_so_ho']);
+    data['nong_thon_tong_so_ho_co_dien'] = Number(data['nong_thon_tong_so_ho_co_dien']);
+    data['tieu_chi_41'] = Number(data['tieu_chi_41']);
+    data['tieu_chi_42'] = Number(data['tieu_chi_42']);
+    data['tieu_chi_43'] = Number(data['tieu_chi_43']);
+    return data;
+  }
+
+  public callService(data) {
+    let list_data = [data];
+    // console.log(list_data)
+    this.energyService.CapNhatDuLieuQuyHoachDienNongThon(list_data).subscribe(res => {
+      this.successNotify(res);
+    })
   }
 }

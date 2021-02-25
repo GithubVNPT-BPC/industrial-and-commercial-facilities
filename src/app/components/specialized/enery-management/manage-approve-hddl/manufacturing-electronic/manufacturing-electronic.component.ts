@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Input, Injector } from '@angular/core';
 import { consualtantData } from '../dataMGN';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { ManageAproveElectronic } from 'src/app/_models/APIModel/electric-management.module';
@@ -6,18 +6,21 @@ import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import * as XLSX from 'xlsx';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { FormControl } from '@angular/forms';
+import { BaseComponent } from '../../../specialized-base.component';
+import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 @Component({
   selector: 'app-manufacturing-electronic',
   templateUrl: './manufacturing-electronic.component.html',
   styleUrls: ['../../../special_layout.scss']
 })
-export class ManufacturingElectronicComponent implements OnInit {
+export class ManufacturingElectronicComponent extends BaseComponent {
 
   
   //ViewChild 
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
+  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   // Input
   @Input('manufacturingData')  input_data: ManageAproveElectronic[];
@@ -63,20 +66,35 @@ export class ManufacturingElectronicComponent implements OnInit {
   soLuongDoanhNghiepExpired: number = 0;
   isChecked: boolean;
   constructor(
+    private injector: Injector,
     public excelService: ExcelService,
-    ) {
+    private energyService: EnergyService,
+  ) {
+    super(injector);
   }
-
   ngOnInit() {
+    super.ngOnInit();
     this.years = this.getYears();
-
     this.getDataManufacturing();
-    this.autoOpen();
+    // this.autoOpen();
   }
 
   getDataManufacturing(){
-    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data);
-    this.dataSource = new MatTableDataSource<ManageAproveElectronic>(this.input_data); 
+    this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
+      if (res['success']) {
+        this.handdleData(res['data'], 2);
+      }
+    });
+  }
+
+  handdleData(data: ManageAproveElectronic[], id_group: number) {
+    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(data.filter(item => {
+      return item['id_group'] === id_group;
+    }));
+    this.dataSource.data = this.filteredDataSource.data;
+    this.caculatorValue();
+    this.paginatorAgain();
+    // console.log(this.filteredDataSource.data)
   }
 
   autoOpen() {
@@ -154,15 +172,25 @@ export class ManufacturingElectronicComponent implements OnInit {
   applyActionCheck(event) {
     let today = new Date();
 
-    if(event.checked){
+    if (event.checked) {
+      
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
-        return Date.parse(today.toString()) > Date.parse(e.ngay_het_han)
-      })
-    }else{
+        return Date.parse(today.toString()) > Date.parse(this.formatMMddyyy(e.ngay_het_han))
+      });
+      
+    } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
     // this.caculatorValue();
     this.paginatorAgain();
+  }
+
+  formatMMddyyy(date: string){
+    let d,m,y;
+    y = date.slice(-4);
+    m = date.slice(3,5);
+    d = date.slice(0,2);
+    return m + '/' + d + '/' + y;
   }
 
   LocDulieuTheoNgayCap(year){
@@ -173,5 +201,28 @@ export class ManufacturingElectronicComponent implements OnInit {
         return item.ngay_cap.includes(year);
       })
     }
+  }
+
+  getFormParams() {
+    return {
+      ten_doanh_nghiep: new FormControl(''),
+      dia_chi: new FormControl(''),
+      dien_thoai: new FormControl(''),
+      so_giay_phep: new FormControl(''),
+      ngay_cap: new FormControl(''),
+      ngay_het_han: new FormControl(''),
+      id_group: new FormControl(1)
+    }
+  }
+
+  public prepareData(data) {
+  }
+
+  public callService(data) {
+    let list_data = [data];
+    // console.log(list_data)
+    this.energyService.CapNhatDuLieuQuyHoachDienNongThon(list_data).subscribe(res => {
+      this.successNotify(res);
+    })
   }
 }

@@ -1,11 +1,10 @@
-import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
 import { LPGManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
+import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
@@ -18,32 +17,14 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 })
 
 export class LPGManagementComponent extends BaseComponent {
-    //Constant
-    private readonly LINK_DEFAULT: string = "/specialized/industry-management/lpg";
-    private readonly TITLE_DEFAULT: string = "Công nghiệp - Chiết nạp khí hoá lỏng";
-    private readonly TEXT_DEFAULT: string = "Công nghiệp - Chiết nạp khí hoá lỏng";
-    //Variable for only ts
-    private _linkOutput: LinkModel = new LinkModel();
-
     displayedColumns: string[] = [];
-    fullFieldList: string[] = ['select', 'index']//, 'ten_doanh_nghiep', 'mst', 'email', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'von_dieu_le', 'cong_suat', 'san_luong', 'so_lao_dong_sct', 'email_sct', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    fullFieldList: string[] = ['select', 'index']
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
     
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     filteredDataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     
     years: number[] = [];
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
     isChecked: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
@@ -70,7 +51,6 @@ export class LPGManagementComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
-        private _breadCrumService: BreadCrumService
     ) {
         super(injector);
     }
@@ -78,8 +58,7 @@ export class LPGManagementComponent extends BaseComponent {
     ngOnInit() {
         super.ngOnInit();
         this.years = this.getYears();
-        this.year = new Date().getFullYear() - 1;
-        this.GetLGPManagementData(this.year);
+        this.GetLGPManagementData(this.currentYear);
         // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
         //     return String(data.is_het_han).includes(filter);
         // };
@@ -88,17 +67,35 @@ export class LPGManagementComponent extends BaseComponent {
         this.sendLinkToNext(true);
     }
 
-    public sendLinkToNext(type: boolean) {
-      this._linkOutput.link = this.LINK_DEFAULT;
-      this._linkOutput.title = this.TITLE_DEFAULT;
-      this._linkOutput.text = this.TEXT_DEFAULT;
-      this._linkOutput.type = type;
-      this._breadCrumService.sendLink(this._linkOutput);
+    getLinkDefault(){
+        this.LINK_DEFAULT = "/specialized/industry-management/lpg";
+        this.TITLE_DEFAULT = "Công nghiệp - Chiết nạp khí hoá lỏng";
+        this.TEXT_DEFAULT = "Công nghiệp - Chiết nạp khí hoá lỏng";
     }
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    getFormParams() {
+        return {
+            mst: new FormControl(),
+            san_luong: new FormControl(),
+            cong_suat: new FormControl(),
+        }
+    }
+
+    prepareData(data) {
+        data = {...data, ...{
+            tinh_trang_hoat_dong: "true",
+            time_id: this.currentYear,
+        }}
+        return data;        
+    }
+
+    callService(data) {
+        this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     GetLGPManagementData(time_id: number) {
