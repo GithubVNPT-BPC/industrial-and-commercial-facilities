@@ -1,4 +1,4 @@
-    <mat-card class="material" *ngIf="view == 'list'">
+<mat-card class="material" *ngIf="view == 'list'">
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -80,7 +80,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="GetLGPManagementData($event.value)" [(value)]="year">
+                            <mat-select (selectionChange)="GetLGPManagementData($event.value)" [(value)]="currentYear">
                                 <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -126,7 +126,7 @@
                 </div>
                 <hr>
 
-                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #table>
+                <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="{{displayedColumns.length == 7 ? 'small-table1': 'small-table2'}}">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear >
