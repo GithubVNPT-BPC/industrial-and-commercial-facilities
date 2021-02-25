@@ -2,8 +2,9 @@ import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angula
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
 
-import { CompanyDetailModel1, filter } from '../../../../_models/APIModel/domestic-market.model';
+import { CompanyDetailModel, filter } from '../../../../_models/APIModel/domestic-market.model';
 import { MatTableFilter } from 'mat-table-filter';
 
 import { MarketService } from 'src/app/_services/APIService/market.service';
@@ -20,6 +21,7 @@ export class SearchPartnerComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('new_element', { static: false }) ele: ElementRef;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
     'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
@@ -73,8 +75,8 @@ export class SearchPartnerComponent implements OnInit {
 
   ngOnInit(): void {
     this.GetAllCompany();
-    this.filterEntity = new CompanyDetailModel1();
-    this.tempFilter = new CompanyDetailModel1();
+    this.filterEntity = new CompanyDetailModel();
+    this.tempFilter = new CompanyDetailModel();
     this.filterType = MatTableFilter.ANYWHERE;
   }
 
@@ -84,22 +86,22 @@ export class SearchPartnerComponent implements OnInit {
 
   OpenDetailCompany(mst: string) {
     let url = this.router.serializeUrl(
-      this.router.createUrlTree([encodeURI('#') + 'manager/business/search/' + mst]));
+      this.router.createUrlTree([encodeURI('#') + 'public/partner/search/' + mst]));
     window.open(url.replace('%23', '#'), "_blank");
   }
 
-  temDataSource: MatTableDataSource<CompanyDetailModel1> = new MatTableDataSource();
+  temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
   selected_field: string = 'ten_doanh_nghiep';
   countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
   count: number = 1;
 
   isSearch_Advanced: boolean = true;
-  filterEntity: CompanyDetailModel1;
-  tempFilter: CompanyDetailModel1;
+  filterEntity: CompanyDetailModel;
+  tempFilter: CompanyDetailModel;
   filterType: MatTableFilter;
 
   filter() {
-    this.tempFilter = new CompanyDetailModel1();
+    this.tempFilter = new CompanyDetailModel();
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
       let element = temp[i];
@@ -113,8 +115,8 @@ export class SearchPartnerComponent implements OnInit {
   }
 
   cancel() {
-    this.tempFilter = new CompanyDetailModel1();
-    this.filterEntity = new CompanyDetailModel1();
+    this.tempFilter = new CompanyDetailModel();
+    this.filterEntity = new CompanyDetailModel();
     this.dataSource.filter = '';
   }
 
@@ -133,12 +135,12 @@ export class SearchPartnerComponent implements OnInit {
     }
   }
 
-  dataSource: MatTableDataSource<CompanyDetailModel1> = new MatTableDataSource();
-  companyList1: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList2: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList3: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList4: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
-  companyList5: Array<CompanyDetailModel1> = new Array<CompanyDetailModel1>();
+  dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
+  companyList1: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList2: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string) {
     let date: string
@@ -155,60 +157,94 @@ export class SearchPartnerComponent implements OnInit {
 
         this.companyList4 = this.companyList1.map(a => {
           let temp = this.companyList2.filter(b => b.mst === a.mst)
-          // let temp1 = temp.map(c => c.id_nganh_nghe_kd)
-          // let temp2 = temp1.join('; ')
-          let temp3 = temp.map(c => c.ma_nganh_nghe)
-          let temp4 = temp3.join('; ')
-          let temp5 = temp.map(c => c.ten_nganh_nghe)
-          let temp6 = temp5.join('; ')
-          let temp7 = temp.map(c => c.nganh_nghe_kd_chinh)
-          let temp8 = temp7.join('; ')
-          if (temp) {
-            // a.id_nganh_nghe_kd = temp2
-            a.ma_nganh_nghe = temp4
-            a.ten_nganh_nghe = temp6
-            a.nganh_nghe_kd_chinh = temp8
+          let temp1 = temp.map(c => c.ma_nganh_nghe)
+          if (temp1 == undefined || temp1 == null) {
+            a.ma_nganh_nghe = null
           }
+          else {
+            a.ma_nganh_nghe = temp1.join('; ')
+          }
+
+          let temp2 = temp.map(c => c.ten_nganh_nghe)
+          if (temp2 == undefined || temp2 == null) {
+            a.ten_nganh_nghe = null
+          }
+          else {
+            a.ten_nganh_nghe = temp2.join('; ')
+          }
+
+          let temp3 = temp.map(c => c.nganh_nghe_kd_chinh)
+          if (temp3 == undefined || temp3 == null) {
+            a.nganh_nghe_kd_chinh = null
+          }
+          else {
+            a.nganh_nghe_kd_chinh = temp3.join('; ')
+          }
+
           return a
         })
 
-        console.log(this.companyList1)
-        console.log(this.companyList3)
-        console.log(this.companyList4)
-
         this.companyList5 = this.companyList4.map(d => {
-          let temp9 = this.companyList3.filter(e => e.mst === d.mst)
-          let temp10 = temp9.map(f => f.so_giay_phep)
-          let temp11 = temp10.join('; ')
-          let temp12 = temp9.map(f => f.ngay_cap)
-          let temp13 = temp12.join('; ')
-          let temp14 = temp9.map(f => f.ngay_het_han)
-          let temp15 = temp14.join('; ')
-          let temp16 = temp9.map(f => f.noi_cap)
-          let temp17 = temp16.join('; ')
-          let temp18 = temp9.map(f => f.co_quan_cap)
-          let temp19 = temp18.join('; ')
-          let temp20 = temp9.map(f => f.ghi_chu)
-          let temp21 = temp20.join('; ')
-          if (temp9) {
-            d.so_giay_phep = temp11
-            d.ngay_cap = temp13
-            d.ngay_het_han = temp15
-            d.noi_cap = temp17
-            d.co_quan_cap = temp19
-            d.ghi_chu = temp21
+          let temp = this.companyList3.filter(e => e.mst === d.mst)
+          let temp1 = temp.map(f => f.so_giay_phep)
+          if (temp1[0] == undefined || temp1[0] == null) {
+            d.so_giay_phep = null
           }
+          else {
+            d.so_giay_phep = temp1.join('; ')
+          }
+
+          let temp2 = temp.map(f => this.Convertdate(f.ngay_cap))
+          if (temp2[0] == undefined || temp2[0] == null) {
+            d.ngay_cap = null
+          }
+          else {
+            d.ngay_cap = temp2.join('; ')
+          }
+
+          let temp3 = temp.map(f => this.Convertdate(f.ngay_het_han))
+          if (temp3[0] == undefined || temp3[0] == null) {
+            d.ngay_het_han = null
+          }
+          else {
+            d.ngay_het_han = temp3.join('; ')
+          }
+
+          let temp4 = temp.map(f => f.noi_cap)
+          if (temp4[0] == undefined || temp4[0] == null) {
+            d.noi_cap = null
+          }
+          else {
+            d.noi_cap = temp4.join('; ')
+          }
+
+          let temp5 = temp.map(f => f.co_quan_cap)
+          if (temp5[0] == undefined || temp5[0] == null) {
+            d.co_quan_cap = null
+          }
+          else {
+            d.co_quan_cap = temp5.join('; ')
+          }
+
+          let temp6 = temp.map(f => f.ghi_chu)
+          if (temp6[0] == undefined || temp6[0] == null) {
+            d.ghi_chu == null
+          }
+          else {
+            d.ghi_chu = temp6.join('; ')
+          }
+
           return d
         })
 
-        this.dataSource = new MatTableDataSource<CompanyDetailModel1>(this.companyList5);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
+        this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        this.temDataSource = new MatTableDataSource<CompanyDetailModel1>(this.companyList5);
 
         // // Overrride default filter behaviour of Material Datatable
         // this.dataSource.filterPredicate = this.filterService.createFilter();

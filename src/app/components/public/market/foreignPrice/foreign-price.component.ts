@@ -62,7 +62,6 @@ export class ForeignMarketPriceComponent implements OnInit {
     this.getForeignMarketPriceByTime(this.pickedDate.date);
   }
 
-  public _noData: boolean = true;
   public pickedDate = {
     date: new Date()
   }
@@ -75,11 +74,6 @@ export class ForeignMarketPriceComponent implements OnInit {
           row.ngay_cap_nhat = this.Convertdate(row.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
-        if (this.dataSource.data.length == 0) {
-          this._noData = true;
-        } else {
-          this._noData = false;
-        }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";

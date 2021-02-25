@@ -1,27 +1,27 @@
-//Import library
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
-import _moment from 'moment';
-import { defaultFormat as _rollupMoment, Moment } from 'moment';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
-import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
-import { Subject } from 'rxjs';
-//Import service
-import { KeyboardService } from './../../../shared/services/keyboard.service';
-import { ManagerService } from '../../../_services/APIService/manager.service';
-//Import model
-import { ProductManagerModelList, ForeignManagerModel, NationModel, MODE } from '../../../_models/APIModel/manager.model';
-//import component
-import { ManagerDirective } from './../../../shared/manager.directive';
-import { InformationService } from 'src/app/shared/information/information.service';
 import { formatDate } from '@angular/common';
+import { ReplaySubject, Subject } from 'rxjs';
 
-//Moment
+import { ManagerDirective } from './../../../shared/manager.directive';
+import { LoginService } from 'src/app/_services/APIService/login.service';
+import { KeyboardService } from './../../../shared/services/keyboard.service';
+import { InformationService } from 'src/app/shared/information/information.service';
+import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { MarketService } from '../../../_services/APIService/market.service';
+
+import { ForeignMarketModel, ProductModel, DeleteModel1 } from '../../../_models/APIModel/domestic-market.model';
+
+import { FormControl } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
 const moment = _rollupMoment || _moment;
-
 export const DDMMYY_FORMAT = {
   parse: {
     dateInput: 'LL',
@@ -47,70 +47,133 @@ export const DDMMYY_FORMAT = {
 
     { provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
     { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    DatePipe
   ],
 })
 
 export class ForeignManagerComponent implements OnInit {
+  public products: Array<ProductModel> = new Array<ProductModel>();
+  public dataSource: MatTableDataSource<ForeignMarketModel> = new MatTableDataSource<ForeignMarketModel>();
+  public displayedColumns: string[] = ['select', 'index', 'ten_san_pham', 'id_san_pham', 'thi_truong', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
 
-  //Constant
-  public readonly FORMAT = 'dd/MM/yyyy';
-  public readonly LOCALE = 'en-US';
-  public pickedDate = {
-    date: new Date()
-  }
-  //Declare varialbe for ONLY TS
-  public rows: number = 0;
-  public _mode: MODE = MODE.INSERT;
-
-  //Declare variable for HTML
-  public columns: number = 1;
-  public timeForeignManager: string;
-  public displayedColumns: string[] = ['index', 'ten_san_pham', 'thi_truong', 'gia', 'nguon_so_lieu', 'thoi_gian_cap_nhat'];
-  public products: Array<ProductManagerModelList> = new Array<ProductManagerModelList>();
-  public nations: Array<NationModel> = new Array<NationModel>();
-  public currentRow: number = 0;
-  public dataSource: MatTableDataSource<ForeignManagerModel> = new MatTableDataSource<ForeignManagerModel>();
-
-  //ViewChildren
   @ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild("TABLE", { static: true }) table: ElementRef;
 
-  public constructor(public _managerService: ManagerService, public _infor: InformationService, public _keyboardservice: KeyboardService) {
+  public constructor(
+    public marketService: MarketService,
+    public _keyboardservice: KeyboardService,
+    public _infor: InformationService,
+    public datepipe: DatePipe,
+    public excelService: ExcelService,
+    public _loginService: LoginService) {
+  }
+
+  date = new FormControl(moment);
+  pickedDate = {
+    date: new Date()
+  }
+
+  selection = new SelectionModel<ForeignMarketModel>(true, []);
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    // const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource.connect().value.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.connect().value.forEach(row => this.selection.select(row));
+  }
+
+  checkboxLabel(row?: ForeignMarketModel): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  }
+
+  deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
+  selectionarray: string[];
+  removeRows() {
+    if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+      this.selection.selected.forEach(x => {
+        this.selectionarray = this.selection.selected.map(item => item.id)
+        this.deletemodel1.push({
+          id: ''
+        })
+      })
+      for (let index = 0; index < this.selectionarray.length; index++) {
+        const element = this.deletemodel1[index];
+        element.id = this.selectionarray[index]
+      }
+      this.marketService.DeleteForeignMarket(this.deletemodel1).subscribe(res => {
+        this._infor.msgSuccess('Xóa thành công')
+        this.GetAllForeignMarketPrice();
+        this.selection.clear();
+        this.paginator.pageIndex = 0;
+      })
+    }
   }
 
   public ngOnInit() {
-    this.timeForeignManager = this.getCurrentDate();
     this.getListProduct();
-    this.getAllForegionManagerPrevious(this.pickedDate.date);
     this._keyboardservice.keyBoard.subscribe(res => {
       this.move(res)
     })
+    this.GetAllForeignMarketPrice();
+    this.pickedDate.date = null
   }
-  //FUNCTION FOR PROCESS FLOW ------------------------------------------------------------------------------------------------------------
-  //Get products
+
+  resetAll() {
+    this.GetAllForeignMarketPrice()
+    this.pickedDate.date = null
+  }
+
   public getListProduct(): void {
-    this._managerService.GetListProduct().subscribe(
+    this.marketService.GetProductList().subscribe(
       allrecords => {
-        this.products = allrecords.data as ProductManagerModelList[];
-        this.createDefault();
+        this.products = allrecords.data as ProductModel[];
       },
     );
   }
-  //Get Foreign market price
-  public getAllForegionManagerPrevious(time: Date) {
-    this._managerService.GetForeignMarket(_moment(time).format('DD/MM/YYYY')).subscribe(
+
+  public getChange(param: any) {
+    this.GetForeignMarketPrice(param._d)
+  }
+
+  Convertdate(text: string): string {
+    let date: string
+    date = text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4)
+    return date
+  }
+
+  Convertdatetostring(text: string): string {
+    let date: string
+    date = text.replace('/', '').replace('/', '')
+    let date1: string
+    date1 = date.substring(4, 9) + date.substring(2, 4) + date.substring(0, 2)
+    return date1
+  }
+
+  public getCurrentDate() {
+    let date = new Date;
+    return formatDate(date, 'dd/MM/yyyy', 'en-US');
+  }
+
+  public GetForeignMarketPrice(time: Date) {
+    let datepipe = this.datepipe.transform(this.pickedDate.date, 'yyyyMMdd')
+    this.marketService.GetForeignMarket(datepipe).subscribe(
       allrecords => {
-        allrecords.data.forEach(row => {
-          row.ngay_cap_nhat = formatDate(row.ngay_cap_nhat, this.FORMAT, this.LOCALE).toString();
+        allrecords.data.forEach(element => {
+          element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
-        this.dataSource = new MatTableDataSource<ForeignManagerModel>(allrecords.data);
-        this.rows = this.dataSource.filteredData.length;
+        this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
         if (this.dataSource.data.length == 0) {
-          this._mode = MODE.INSERT;
           this.createDefault();
-        } else {
-          this._mode = MODE.UPDATE;
         }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -118,40 +181,147 @@ export class ForeignManagerComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
+
+        this._rows = this.dataSource.filteredData.length;
       },
-      //error => this.errorMessage = <any>error
     );
   }
 
-  //Event for "Tải template"
-  downloadExcelTemplate(filename: string, sheetname: string) {
-    let excelFileName: string;
-    let newArray: any[] = [];
-    //Format name of Excel will be export
-    sheetname = sheetname.replace('/', '_');
-    excelFileName = filename + '.xlsx';
+  public GetAllForeignMarketPrice() {
+    this.marketService.GetAllForeignMarket().subscribe(
+      allrecords => {
+        allrecords.data.forEach(element => {
+          element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
+        });
+        this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
+        if (this.dataSource.data.length == 0) {
+          this.createDefault();
+        }
+        this.dataSource.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
 
-    //Alias column name
-    let data = Object.values(this.dataSource.data);
-
-    Object.keys(data).forEach((key, index) => {
-      newArray.push({
-        'STT': index,
-        'Mã sản phẩm': data[key].id_san_pham,
-        'Tên sản phẩm': data[key].ten_san_pham,
-        'Thị trường': '',
-        'Giá': '',
-        'Nguồn số liệu': '',
-      });
-    });
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    /* save to file */
-    XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    XLSX.writeFile(wb, excelFileName);
+        this._rows = this.dataSource.filteredData.length;
+      },
+    );
   }
 
-  //Event for "Nhập từ excel"
+  public _currentRow: number = 0;
+
+  public addRow(): void {
+    let newRow: ForeignMarketModel = new ForeignMarketModel();
+    newRow.gia_ca;
+    newRow.nguon_so_lieu = "";
+    newRow.ngay_cap_nhat = this.getCurrentDate();
+    // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+    this.dataSource.data.push(newRow);
+    this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this._rows = this.dataSource.filteredData.length;
+  }
+
+  public insertRow(): void {
+    let data = this.dataSource.data.slice(this._currentRow);
+    this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
+    let newRow: ForeignMarketModel = new ForeignMarketModel();
+    newRow.gia_ca;
+    newRow.nguon_so_lieu = "";
+    newRow.ngay_cap_nhat = this.getCurrentDate();
+    // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+    this.dataSource.data.push(newRow);
+    data.forEach(element => {
+      this.dataSource.data.push(element);
+    });
+    this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this._rows = this.dataSource.filteredData.length;
+  }
+
+  public deleteRow(): void {
+    this.dataSource.data.splice(this._currentRow, 1);
+    this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this._rows = this.dataSource.filteredData.length;
+  }
+
+  public createDefault() {
+    const Product1: number = 1;
+    const Product2: number = 2;
+    const Product3: number = 3;
+    const Product4: number = 4;
+    this.dataSource = new MatTableDataSource<ForeignMarketModel>();
+    this.addRow();
+    this.addRow();
+    this.addRow();
+    this.addRow();
+    this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == Product1)[0].id_san_pham;
+    this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == Product2)[0].id_san_pham;
+    this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == Product3)[0].id_san_pham;
+    this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == Product4)[0].id_san_pham;
+
+    this._rows = this.dataSource.filteredData.length;
+  }
+
+  public save() {
+    this.dataSource.data.forEach(element => {
+      if (element.ngay_cap_nhat) {
+        let x = this.Convertdatetostring(element.ngay_cap_nhat)
+        element.ngay_cap_nhat = x;
+      }
+      element.id = null
+    });
+    this.marketService.PostForeignMarket(this.dataSource.data).subscribe(
+      next => {
+        if (next.id == -1) {
+          this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+        }
+        else {
+          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+          this.GetAllForeignMarketPrice();
+        }
+      },
+      error => {
+        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+      }
+    );
+  }
+
+  // downloadExcelTemplate(filename: string, sheetname: string) {
+  //   let excelFileName: string;
+  //   let newArray: any[] = [];
+
+  //   sheetname = sheetname.replace('/', '_');
+  //   excelFileName = filename + '.xlsx';
+
+  //   let data = Object.values(this.dataSource.data);
+
+  //   Object.keys(data).forEach((key, index) => {
+  //     newArray.push({
+  //       'STT': index,
+  //       'Tên sản phẩm': data[key].ten_san_pham,
+  //       'ID sản phẩm': data[key].id_san_pham,
+  //       'Giá': '',
+  //       'Nguồn số liệu': '',
+  //     });
+  //   });
+  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
+  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+  //   XLSX.utils.book_append_sheet(wb, ws, sheetname);
+  //   XLSX.writeFile(wb, excelFileName);
+  // }
+
+  // public exportTOExcel(filename: string, sheetname: string) {
+  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  // }
+
+  public exportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+
   spinnerEnabled = false;
   keys: string[];
   dataSheet = new Subject();
@@ -176,24 +346,20 @@ export class ForeignManagerComponent implements OnInit {
         this.spinnerEnabled = true;
         const reader: FileReader = new FileReader();
         reader.onload = (e: any) => {
-          /* read workbook */
           const bstr: string = e.target.result;
           const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
 
-          /* grab first sheet */
           const wsname: string = wb.SheetNames[0];
           const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
-          /* save data */
           data = XLSX.utils.sheet_to_json(ws);
           this.dataSource.data = [];
           data.forEach(item => {
-            let datarow: ForeignManagerModel = new ForeignManagerModel();
-            datarow.thi_truong = item['Thị trường'];
-            datarow.gia = item['Giá'];
+            let datarow: ForeignMarketModel = new ForeignMarketModel();
+            datarow.gia_ca = item['Giá'];
             datarow.nguon_so_lieu = item['Nguồn số liệu'];
-            datarow.ten_san_pham = item['Tên sản phẩm'];
-            datarow.id_san_pham = item['Mã sản phẩm'];
+            datarow.id_san_pham = item['ID sản phẩm'];
+            datarow.thi_truong = item['Thị trường'];
             datarow.ngay_cap_nhat = this.getCurrentDate();
             this.dataSource.data.push(datarow);
           });
@@ -212,134 +378,19 @@ export class ForeignManagerComponent implements OnInit {
         this.inputFile.nativeElement.value = '';
       }
     }
-    // let dataExcel;
-    // let jsonFromExcel;
-    // const target: DataTransfer = (evt.target) as DataTransfer;
-    // const reader: FileReader = new FileReader();
-
-    // reader.onload = (e: any) => {
-    //     let bstr: string = e.target.result;
-
-    //     let wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-    //     let wsName: string = wb.SheetNames[0];
-
-    //     let ws: XLSX.WorkSheet = wb.Sheets[wsName];
-
-    //     dataExcel = (XLSX.utils.sheet_to_json(ws, { header: 2 }));
-    //     jsonFromExcel = JSON.stringify(dataExcel);
-
-    // };
-
-    // reader.readAsBinaryString(target.files[0]);
   }
 
-  // Evnet for "Ngày cập nhật giá"
-  public getPriceChange(param: any) {
-    this.getAllForegionManagerPrevious(param._d);
-  }
-
-  // EVENT HTML --------------------------------------------------------------------------------
-  //Event for "Lọc dữ liệu"
   public applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-  //Event for "Lưu"
-  public save() {
-    this.dataSource.data.forEach(element => {
-      let x: number = + element.gia.toString().replace(',', '').replace(',', '').replace(',', '');
-      element.gia = x;
-      if (element.ngay_cap_nhat) {
-        let x = formatDate(this.pickedDate.date, this.FORMAT, this.LOCALE);
-        element.ngay_cap_nhat = x;
-      }
-    });
-    this._managerService.PostForeignManager(this.dataSource.data).subscribe(
-      next => {
-        if (next.id == -1) {
-          this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-        }
-        else {
-          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-        }
-      },
-      error => {
-        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
-      }
-    );
-  }
-  //Event for change " Tên sản phẩm"
-  public changeProduct(element: any) {
-    element.ten_san_pham = this.products.filter(x => x.ma_san_pham == element.id_san_pham)[0].ten_san_pham;
-  }
-  //Event addrow for "Thêm dòng"
-  public addRow() {
-    let newRow: ForeignManagerModel = new ForeignManagerModel();
-    newRow.gia;
-    newRow.ngay_cap_nhat = this.getCurrentDate();
-    newRow.nguon_so_lieu = "";
-    this.dataSource.data.push(newRow);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
-    this.dataSource.paginator = this.paginator;
-    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    this.paginator._intl.firstPageLabel = "Trang Đầu";
-    this.paginator._intl.lastPageLabel = "Trang Cuối";
-    this.paginator._intl.previousPageLabel = "Trang Trước";
-    this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    this.rows = this.dataSource.filteredData.length;
-  }
-  //Event addrow for "Xóa dòng"
-  public deleteRow() {
-    this.dataSource.data.splice(this.currentRow, 1);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
-    this.rows = this.dataSource.filteredData.length;
-  }
-  //Event addrow for "Chèn dòng"
-  public insertRow() {
-    let data = this.dataSource.data.slice(this.currentRow);
-    this.dataSource.data.splice(this.currentRow, this.dataSource.data.length - this.currentRow + 1);
-    let newRow: ForeignManagerModel = new ForeignManagerModel();
-    newRow.gia;
-    newRow.ngay_cap_nhat = this.getCurrentDate();
-    newRow.nguon_so_lieu = "";
-    this.dataSource.data.push(newRow);
-    data.forEach(element => {
-      this.dataSource.data.push(element);
-    });
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
-    this.rows = this.dataSource.filteredData.length;
-  }
-  //Event for changeRow Mattable
   public changeRow(index: number) {
-    this.currentRow = index;
-  }
-  //Event for "Tạo mặc định"
-  public createDefault() {
-    const HAT_DIEU: number = 2;
-    const HAT_TIEU: number = 10;
-    const CAO_SU: number = 4;
-    const CA_PHE: number = 5;
-    // if (this.dataSource.data.length > 0)
-    //   if (!confirm("Nếu bạn tạo mặc định sẽ xóa dữ liệu hiện tại! Bạn tiếp tục không?"))
-    //     return;
-    this.dataSource = new MatTableDataSource<ForeignManagerModel>();;
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.dataSource.data[0].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ten_san_pham;
-    this.dataSource.data[1].ten_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ten_san_pham;
-    this.dataSource.data[2].ten_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ten_san_pham;
-    this.dataSource.data[3].ten_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ten_san_pham;
-    this.dataSource.data[0].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_DIEU)[0].ma_san_pham;
-    this.dataSource.data[1].id_san_pham = this.products.filter(x => x.ma_san_pham == HAT_TIEU)[0].ma_san_pham;
-    this.dataSource.data[2].id_san_pham = this.products.filter(x => x.ma_san_pham == CAO_SU)[0].ma_san_pham;
-    this.dataSource.data[3].id_san_pham = this.products.filter(x => x.ma_san_pham == CA_PHE)[0].ma_san_pham;
-    this.rows = this.dataSource.filteredData.length;
+    this._currentRow = index;
   }
 
-  //Evnent for "Key Arrown"
+  public _rows: number = 0;
+  public columns: number = 1;
+
   public move(object) {
     const inputToArray = this.inputs.toArray()
     let index = inputToArray.findIndex(x => x.element == object.element);
@@ -351,38 +402,14 @@ export class ForeignManagerComponent implements OnInit {
         index += this.columns;
         break;
       case "LEFT":
-        index -= this.rows;
+        index -= this._rows;
         break;
       case "RIGHT":
-        index += this.rows;
+        index += this._rows;
         break;
     }
     if (index >= 0 && index < this.inputs.length) {
       inputToArray[index].element.nativeElement.focus();
-      // inputToArray[index].element.nativeElement.style.backgroundColor = '#5789D8';
     }
-  }
-  // FUNTION EXTENTION ----------------------------------------------------------------------------------------------------
-  //Get month
-  public getMonthAndYear(time: string) {
-    let year = time.substr(0, 4);
-    let month = time.substr(4, 2);
-    let day = time.substr(6, 2);
-    let result = day + "/" + month + "/" + year;
-    return result as string;
-  }
-  //Get current month
-  public getCurrentMonth() {
-    let date = new Date;
-    return date.getMonth();
-  }
-  //Get current Year
-  public getCurrentYear() {
-    let date = new Date;
-    return date.getFullYear();
-  }
-  public getCurrentDate() {
-    let date = new Date;
-    return formatDate(date, this.FORMAT, this.LOCALE);
   }
 }

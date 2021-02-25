@@ -19,7 +19,7 @@
                 </mat-form-field>
             </div>
             <div class="col-lg-10 button-control my-auto">
-                <button *ngIf="!_noData" mat-raised-button
+                <button mat-raised-button
                     (click)="exportTOExcel('Thông tin giá cả quốc tế','Thông tin giá cả quốc tế')">Xuất Excel</button>
             </div>
         </div>
@@ -43,8 +43,8 @@
                 </ng-container>
 
                 <ng-container matColumnDef="don_vi_tinh">
-                    <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
-                    <td mat-cell *matCellDef="let element"> {{element.don_vi_tinh}}</td>
+                    <th mat-header-cell hidden *matHeaderCellDef> Đơn vị tính </th>
+                    <td mat-cell hidden *matCellDef="let element"> {{element.don_vi_tinh}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thi_truong">

@@ -1,0 +1,51 @@
+<mat-card class="material">
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <form [formGroup]="businessman" autocomplete="off" (ngSubmit)="onSubmit(businessman.getRawValue())">
+            <div class="row">
+                <div class="col-6 button-control -align-left my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên thương nhân</mat-label>
+                        <input formControlName="ten_thuong_nhan" matInput placeholder=""
+                            [(ngModel)]="_Service.businessman.ten_thuong_nhan">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" hidden>
+                        <mat-label> ID </mat-label>
+                        <input formControlName="id_thuong_nhan" matInput placeholder=""
+                            [(ngModel)]="_Service.businessman.id_thuong_nhan">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Địa chỉ</mat-label>
+                        <input formControlName="dia_chi" matInput placeholder=""
+                            [(ngModel)]="_Service.businessman.dia_chi">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số điện thoại</mat-label>
+                        <input formControlName="so_dien_thoai" matInput placeholder=""
+                            [(ngModel)]="_Service.businessman.so_dien_thoai">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+    <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Đóng</button>
+    </mat-dialog-actions>
+</mat-card>

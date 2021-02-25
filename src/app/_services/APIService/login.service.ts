@@ -6,34 +6,28 @@ import { UserModel } from '../../_models/APIModel/user.model';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';
-import { error } from 'protractor';
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class LoginService {
-
     public readonly LOCALSTORAGE_USER: string = "currentUser";
     public readonly HOME_PAGE: string = "/dashboard";
     public loggedUser: string;
-
     public token: string;
     public userSubject: BehaviorSubject<UserModel>;
     public user: Observable<UserModel>;
     public refreshTokenTimeout;
 
-
     public apiUrl = environment.apiEndpoint + "api/dang-nhap/dang-nhap-sct";
-    // public apiUrl = environment.apiEndpoint + "api/dang-nhap";
     public apiRegister = environment.apiEndpoint + "api/dang-ky";
     public apiGetUserInfor = environment.apiEndpoint + "api/tai-khoan";
     public apiUpdateUser = environment.apiEndpoint + "api/tai-khoan";
     public apiLogout = environment.apiEndpoint + "api/dang-xuat";
-    public apiRefreshToken = environment.apiEndpoint + "api/cap-lai-token";// "api/cap-lai-token";
+    public apiRefreshToken = environment.apiEndpoint + "api/cap-lai-token";
 
     /**
-     * 
      * @param _http 
      * @param router 
      */
@@ -42,9 +36,6 @@ export class LoginService {
         this.user = this.userSubject.asObservable();
     }
 
-    /**
-     * Get current User
-     */
     public get userValue(): UserModel {
         if (!this.userSubject.value) {
             return this.getUserFromStorage();
@@ -73,9 +64,9 @@ export class LoginService {
     }
 
     /**
-     * 
      * @param loginmodel 
      */
+
     public validateLoginUser(loginmodel: UserModel, isBusiness) {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams();
@@ -87,17 +78,13 @@ export class LoginService {
                         let user = this.createUserFromRes(response.data);
                         this.updateUserToLocalstorage(user)
                         this.userSubject.next(user);
-                        //this.startRefreshTokenTimer();
-                        // return true to indicate successful login
                         return response;
                     }
                     else {
-                        // return false to indicate failed login
                         return null;
                     }
                 }
                 else {
-                    // return false to indicate failed login
                     return null;
                 }
             }),
@@ -118,6 +105,7 @@ export class LoginService {
      * Map UserModel from response
      * @param response response from API Login server
      */
+
     public createUserFromRes(data: any): UserModel {
         let user: UserModel = new UserModel();
         user.user_id = data.user_id;
@@ -135,10 +123,6 @@ export class LoginService {
         return user;
     }
 
-    /**
-     * public
-     * Write user infomation to localstored with title LOCALSTORAGE_USER
-     */
     public updateUserToLocalstorage(user: UserModel): void {
         localStorage.setItem(this.LOCALSTORAGE_USER,
             JSON.stringify({
@@ -153,8 +137,7 @@ export class LoginService {
     }
 
     /**
-     * Try register new user of bussiness. This account must be accept of SCT
-     * @param registerModel User model from caller
+     * @param registerModel
      */
     public register(registerModel: RegisterModel) {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -165,21 +148,14 @@ export class LoginService {
             .pipe(catchError(this.handleError));
     }
 
-    /**
-     * Logout
-     */
     public LogoutUser(): void {
         localStorage.removeItem(this.LOCALSTORAGE_USER);
-        //this._http.post<any>(this.apiLogout, {}, { withCredentials: true }).subscribe(); //Wait for API
-        //this.stopRefreshTokenTimer();
         this.userSubject.next(null);
-        //this.router.navigate([this.HOME_PAGE]);
     }
 
     /**
-     * Get information of user from server
-     * @param userName User name
-     * @param token access token type JWT
+     * @param userName
+     * @param token
      */
     public getUser(userName, token): any {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token });
@@ -192,9 +168,7 @@ export class LoginService {
             this.handleError(error);
         }
     }
-
     /**
-     * 
      * @param body 
      * @param token 
      */
@@ -206,9 +180,6 @@ export class LoginService {
         return this._http.post(url, body, { headers: headers, params: params });
     }
 
-    /**
-     * request server provider new access token from refreshtoken
-     */
     public refreshToken() {
         let api = this.apiRefreshToken
         let data = { 'refresh_token': this.userValue.refresh_token, 'isBusiness': false };
@@ -229,37 +200,18 @@ export class LoginService {
             }));
     }
 
-    /**
-     * 
-     */
-    // public startRefreshTokenTimer() {
-    //     // parse json object from base64 encoded jwt token
-    //     const jwtToken = JSON.parse(atob(this.userValue.token.split('.')[1]));
-
-    //     // set a timeout to refresh the token a minute before it expires
-    //     const expires = new Date(jwtToken.exp * 1000);
-    //     const timeout = expires.getTime() - Date.now() - (60 * 1000);
-    //     this.refreshTokenTimeout = setTimeout(() => this.refreshToken().subscribe(), timeout);
-    // }
-
-    /**
-     * 
-     */
     public stopRefreshTokenTimer(): void {
         clearTimeout(this.refreshTokenTimeout);
     }
 
     /**
-     * 
      * @param error 
      */
     public handleError(error: HttpErrorResponse) {
         let errorMessage = '';
         if (error.error instanceof ErrorEvent) {
-            // client-side error
             errorMessage = `Lỗi: ${error.error.message}`;
         } else {
-            // server-side error
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
         }
         window.alert(errorMessage);

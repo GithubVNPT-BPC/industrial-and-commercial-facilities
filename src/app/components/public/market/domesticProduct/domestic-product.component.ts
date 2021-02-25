@@ -94,7 +94,7 @@ export class DomesticProductComponent implements OnInit {
     let sumSL: number = 0;
     if (this.dataSource)
       for (let row of this.dataSource.data) {
-        if (row.id != 0) sumSL += row.san_luong;
+        if (row.id != '') sumSL += row.san_luong;
       }
     return sumSL;
   }
@@ -103,7 +103,7 @@ export class DomesticProductComponent implements OnInit {
     let sumTG: number = 0;
     if (this.dataSource)
       for (let row of this.dataSource.data) {
-        if (row.id != 0) sumTG += row.tri_gia;
+        if (row.id != '') sumTG += row.tri_gia;
       }
     return sumTG;
   }

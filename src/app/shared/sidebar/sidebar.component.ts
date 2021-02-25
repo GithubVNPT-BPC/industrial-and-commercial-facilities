@@ -1,22 +1,14 @@
-//Import library-----------------------------------------------------------
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { flatMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-//Import service-----------------------------------------------------------
-import { EventService } from '../services/evenet.service';
+
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { SidebarService } from '../../_services/sidebar.service'
 import { onSideNavChange, animateText } from '../../_animations/animation-sidebar'
-//Import Component-----------------------------------------------------------
 
-//Import Model-----------------------------------------------------------
-// import { navItemsPublic, navItemsManager, navItemsSpecialized, navItemsReport } from './_nav';
 import { INavItem } from '../../_models/_nav.model';
 import { TYPE_OF_NAV } from '../../_enums/typeOfUser.enum';
 import { STYLESCSS_TYPE } from 'src/app/_enums/styleChoose.enum';
-import { arrayMax, each } from 'highcharts';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-sidebar',
@@ -25,11 +17,10 @@ import { element } from 'protractor';
   animations: [onSideNavChange, animateText]
 })
 export class SidebarComponent implements OnInit {
-  //Input & viewchild-----------------------------------------------------------
-  @Input('typeOfSideBar') typeOfSidebar: number = 0;
+
+  @Input('typeOfSideBar') typeOfSidebar: string;
   @ViewChild('sidebar', { static: false }) sidenav: MatSidenav;
 
-  //Constatnt-----------------------------------------------------------
   public readonly SIDEBAR_STATE_DEFAULT: boolean = false;
   public readonly SHOW_SUB_MENU_DEFAULT: boolean = false;
   public readonly LOGON_STATE_DEFAULT: boolean = false;
@@ -39,10 +30,7 @@ export class SidebarComponent implements OnInit {
   public readonly AVATAR_DEFAULT: string = "../../../assets/img/avatars/1.jpg";
   public readonly STYLE_SCSS_DEFAULTL: STYLESCSS_TYPE = STYLESCSS_TYPE.MATERIAL;
 
-  //Variable for only TS-----------------------------------------------------------
-
   public styleOfScss: STYLESCSS_TYPE;
-  //Variable for TS & HTML-----------------------------------------------------------
   public showSubMenus: Array<boolean> = new Array<boolean>();
   public showSubmenu: boolean = this.SHOW_SUB_MENU_DEFAULT;
   public sideNavState: boolean = this.SIDEBAR_STATE_DEFAULT;
@@ -56,7 +44,6 @@ export class SidebarComponent implements OnInit {
 
   public options = {
     autoHide: true, scrollbarMinSize: 100, forceVisible: true, classNames: {
-      // defaults
       content: 'simplebar-content',
       scrollContent: 'simplebar-scroll-content',
       scrollbar: 'simplebar-scrollbar',
@@ -64,7 +51,6 @@ export class SidebarComponent implements OnInit {
     }
   };
 
-  //Contruction and Oninit-----------------------------------------------------------
   constructor(
     public _sidebarService: SidebarService,
     public _loginService: LoginService,
@@ -72,41 +58,34 @@ export class SidebarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     this.styleOfScss = this.STYLE_SCSS_DEFAULTL;
     this._loginService.refreshToken();
     this.onSinenavToggle();
-    // if (this.navItems) {
-    //   let navLength = this.navItems.length;
-    //   for (let index = 0; index < navLength; index++) {
-    //     this.showSubMenus.push(false);
-    //   }
-    // }
     this.logon = this._checkLocalStorage();
-    // this.navItems = this._showNavigationMenu(this.typeOfSidebar);
-    // this.getMenu();
     this.getMenu();
   }
 
   public getMenu() {
     this._sidebarService.GetMenu().subscribe(
       all => {
-        this.navItems = this.createNavigation(all.data)
-        // this.navItems = all.data as INavItem[];
+        this.navItems = this.MenuList(all.data, this.typeOfSidebar)
       }
     )
   }
 
-  private createNavigation(navItems: Array<INavItem> = []): Array<INavItem> {
-    let reltNavItems: Array<INavItem> = new Array<INavItem>();
+  temp: Array<INavItem> = new Array<INavItem>();
+  temp1: Array<INavItem> = new Array<INavItem>();
+
+  public MenuList(navItems: Array<INavItem>, areacode: string): Array<INavItem> {
     let parentNavItems = navItems.filter(item => item.parent_id == null);
     let chilrentNavItems = navItems.filter(item => item.parent_id != null);
-
     parentNavItems.forEach(item => item.children = this.getChildNav(item, chilrentNavItems));
-    return parentNavItems;
+    this.temp = parentNavItems
+    this.temp1 = this.temp.filter(item => item.navitems == areacode)
+    return this.temp1;
   }
 
-  public getChildNav(navItemParent: INavItem, navItems: Array<INavItem> = []): Array<INavItem> {
+  public getChildNav(navItemParent: INavItem, navItems: Array<INavItem>): Array<INavItem> {
     let countChild: number = 0;
     let reOutput: Array<INavItem> = new Array<INavItem>();
     navItems.forEach(item => {
@@ -125,8 +104,6 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  //Function for event HTML-----------------------------------------------------------
-  //When toggle menu click
   onSinenavToggle() {
     this.sideNavState = !this.sideNavState
 
@@ -135,15 +112,10 @@ export class SidebarComponent implements OnInit {
     }, 200)
     this._sidebarService.sideBarState$.next(this.sideNavState)
   }
-  //Function default run when After Content Checked
+
   public ngAfterContentChecked(): void {
-    // if (this.logon) {
-    //   this._checkurlSCTData();
-    // } else {
-    //   this.navItems = this.navItemsLogout;
-    // }
   }
-  //Open child menu
+
   public OpenChildren(index: number, navItem_child) {
     for (let i = 0; i < this.showSubMenus.length; i++) {
       if (i != index)
@@ -156,13 +128,10 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  // Open subchildren
   public OpenSubChildren(index: number, navItem_child) {
     navItem_child['expand'] = !navItem_child['expand'];
   }
 
-  //Function for only TS-----------------------------------------------------------
-  //Check localstorage for get Login information
   public _checkLocalStorage(): boolean {
     if (localStorage.getItem('currentUser')) {
       let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -177,41 +146,4 @@ export class SidebarComponent implements OnInit {
       return false;
     }
   }
-  // //Check link is SCT
-  // public _checkurlSCTData(): void {
-  //   if (this._router.url.includes('sct')) this.navItems = navItemsReports;
-  // }
-  //Check user is Bussiness
-  // public _checkUserIsBusiness(): void {
-  //   if (this.logon) {
-  //     let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  //     let isBusiness = currentUser.role === "2" ? true : false;
-  //   }
-  // }
-
-  //Check input and show menu
-  // public _showNavigationMenu(typeNav: number): INavItem[] {
-  //   let navItems: INavItem[] = [];
-  //   switch (typeNav) {
-  //     case TYPE_OF_NAV.NONE:
-  //       navItems = [];
-  //       break;
-  //     case TYPE_OF_NAV.MANAGER:
-  //       navItems = navItemsManager;
-  //       break;
-  //     case TYPE_OF_NAV.PUBLIC:
-  //       navItems = navItemsPublic;
-  //       break;
-  //     case TYPE_OF_NAV.SPECICALIZED:
-  //       navItems = navItemsSpecialized;
-  //       break;
-  //     case TYPE_OF_NAV.REPORT:
-  //       navItems = navItemsReport;
-  //       break;
-  //     default:
-  //       navItems = [];
-  //       break;
-  //   }
-  //   return navItems;
-  // }
 }

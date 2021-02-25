@@ -14,7 +14,6 @@ import { SidebarService } from '../_services/sidebar.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { FilterByTextPipe } from './pipes/filterByText.pipe';
 import { HeaderComponent } from './header/header.component';
-// import { FlexLayoutModule } from '@angular/flex-layout';
 
 
 @NgModule({
@@ -25,7 +24,7 @@ import { HeaderComponent } from './header/header.component';
     PageNotFoundComponent,
     LoaderComponent,
     SidebarComponent,
-    FilterByTextPipe
+    FilterByTextPipe,
   ],
   imports: [
     CommonModule,
@@ -33,7 +32,6 @@ import { HeaderComponent } from './header/header.component';
     MaterialModule,
     RouterModule,
     SimplebarAngularModule
-    // FlexLayoutModule
   ],
   exports: [
     TopbarComponent,
