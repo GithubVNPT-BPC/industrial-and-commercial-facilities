@@ -89,18 +89,26 @@ export class ProductManagerComponent implements OnInit {
         return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
     }
 
+    deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
+    selectionarray: string[];
     removeRows() {
         if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-            // this.selection.selected.forEach(item => {
-            //     this.marketService.DeleteProductValue(item.id).subscribe(res => {
-            //         this.dataSource = null
-            //         this.selection.clear();
-            //         this._infor.msgSuccess('Xóa thành công')
-            //         this.getALLProductValueList();
-            //         this.selection.clear();
-            //         this.paginator.pageIndex = 0;
-            //     })
-            // });
+            this.selection.selected.forEach(x => {
+                this.selectionarray = this.selection.selected.map(item => item.id)
+                this.deletemodel1.push({
+                    id: ''
+                })
+            })
+            for (let index = 0; index < this.selectionarray.length; index++) {
+                const element = this.deletemodel1[index];
+                element.id = this.selectionarray[index]
+            }
+            this.marketService.DeleteProductValue(this.deletemodel1).subscribe(res => {
+                this._infor.msgSuccess('Xóa thành công')
+                this.getALLProductValueList();
+                this.selection.clear();
+                this.paginator.pageIndex = 0;
+            })
         }
     }
 
@@ -110,12 +118,10 @@ export class ProductManagerComponent implements OnInit {
             this.move(res)
         })
         this.getALLProductValueList();
-        this.date = null
     }
 
     resetAll() {
         this.getALLProductValueList()
-        this.date = null
     }
 
     public getListProduct(): void {
@@ -126,25 +132,21 @@ export class ProductManagerComponent implements OnInit {
         );
     }
 
-    public getChange(param: any) {
-        this.getProductValueList(param._d)
-    }
-
     Convertdate(text: string): string {
         let date: string
-        date = text.substring(4, 6) + "/" + text.substring(0, 4)
+        date = text.substr(4, 2) + "/" + text.substring(0, 4)
         return date
     }
 
     Convertdatetostring(text: string): string {
         let date: string
-        date = text.replace('/', '').replace('/', '')
+        date = text.replace('/', '')
         let date1: string
-        date1 = date.substring(4, 9) + date.substring(2, 4) + date.substring(0, 2)
+        date1 = date.substring(2, 7) + date.substring(0, 2)
         return date1
     }
 
-    public getCurrentDate() {
+    public getCurrentMonth(): string {
         let date = new Date;
         return formatDate(date, 'MM/yyyy', 'en-US');
     }
@@ -183,12 +185,12 @@ export class ProductManagerComponent implements OnInit {
         this.marketService.GetProductValue(time).subscribe(
             allrecords => {
                 allrecords.data[0].forEach(element => {
-                    element.time_id = this.Convertdate(element.time_id)
+                    element.time_id = this.Convertdate(element.time_id.toString())
                 });
                 this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
-                if (this.dataSource.data.length == 0) {
-                    this.createDefault();
-                }
+                // if (this.dataSource.data.length == 0) {
+                //     this.createDefault();
+                // }
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -205,11 +207,12 @@ export class ProductManagerComponent implements OnInit {
         this.marketService.GetAllProductValue().subscribe(
             allrecords => {
                 allrecords.data[0].forEach(element => {
+                    element.time_id = this.Convertdate(element.time_id.toString())
                 });
                 this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
-                if (this.dataSource.data.length == 0) {
-                    this.createDefault();
-                }
+                // if (this.dataSource.data.length == 0) {
+                //     this.createDefault();
+                // }
                 this.dataSource.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -228,7 +231,7 @@ export class ProductManagerComponent implements OnInit {
         let newRow: ProductValueModel = new ProductValueModel();
         newRow.san_luong;
         newRow.tri_gia;
-        newRow.time_id = this.getCurrentDate();
+        newRow.time_id = this.getCurrentMonth();
         // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
         this.dataSource.data.push(newRow);
         this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -241,7 +244,7 @@ export class ProductManagerComponent implements OnInit {
         this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
         let newRow: ProductValueModel = new ProductValueModel();
         newRow.san_luong;
-        newRow.time_id = this.getCurrentDate();
+        newRow.time_id = this.getCurrentMonth();
         // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
         this.dataSource.data.push(newRow);
         data.forEach(element => {
@@ -280,10 +283,8 @@ export class ProductManagerComponent implements OnInit {
     public save() {
         this.dataSource.data.forEach(element => {
             if (element.time_id) {
-                let x = this.Convertdatetostring(element.time_id)
-                element.time_id = x;
+                element.time_id = this.Convertdatetostring(element.time_id.toString())
             }
-            element.id = null
         });
         this.marketService.PostProductValue(this.dataSource.data).subscribe(
             next => {
@@ -367,7 +368,7 @@ export class ProductManagerComponent implements OnInit {
                         datarow.san_luong = item['Sản lượng'];
                         datarow.tri_gia = item['Trị giá'];
                         datarow.id_san_pham = item['ID sản phẩm'];
-                        datarow.time_id = this.getCurrentDate();
+                        datarow.time_id = this.getCurrentMonth();
                         this.dataSource.data.push(datarow);
                     });
                     this.dataSource = new MatTableDataSource(this.dataSource.data);
