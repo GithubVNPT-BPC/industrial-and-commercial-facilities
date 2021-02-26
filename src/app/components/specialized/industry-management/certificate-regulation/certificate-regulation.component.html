@@ -59,7 +59,7 @@
                     <div class="col-md-8 col-lg-8 button-control">
                         <button mat-raised-button
                             matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - Công bố hợp quy',year.toString())"><mat-icon>file_download</mat-icon></button>
+                            (click)="ExportTOExcel('QLCN - Công bố hợp quy',currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
                         color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
                         <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 

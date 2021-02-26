@@ -31,7 +31,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{dataSource.data.length}} doanh nghiệp
+                                {{filteredDataSource.data.length}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -80,7 +80,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="GetFoodIndustryData($event.value)" [(value)]="currentYear">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -117,7 +117,7 @@
 
                     <div class="col-md-8 col-lg-8 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - CNTP',year.toString())"><mat-icon>file_download</mat-icon></button>
+                            (click)="ExportTOExcel('QLCN - CNTP',currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
                             color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
                         <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
