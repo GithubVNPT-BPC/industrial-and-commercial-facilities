@@ -119,8 +119,8 @@ export class SearchBusinessComponent implements OnInit {
         element.mst = this.selectionarray[index]
       }
       this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
-        this.info.msgSuccess('Xóa thành công')
         this.GetAllCompany();
+        this.info.msgSuccess('Xóa thành công')
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
@@ -161,11 +161,7 @@ export class SearchBusinessComponent implements OnInit {
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
       let element = temp[i];
-      if (element.filed_name === 'ngay_cap' || element.filed_name === 'ngay_bd_kd' || element.filed_name === 'ngay_het_han') {
-        this.tempFilter[element.filed_name] = this.Convertdate(element.filed_value);
-      } else {
-        this.tempFilter[element.filed_name] = element.filed_value;
-      }
+      this.tempFilter[element.filed_name] = element.filed_value;
     }
     this.filterEntity = Object.assign({}, this.tempFilter);
   }
@@ -210,6 +206,8 @@ export class SearchBusinessComponent implements OnInit {
         this.companyList1 = allrecords.data[0]
         this.companyList2 = allrecords.data[1]
         this.companyList3 = allrecords.data[2]
+
+        this.companyList1.forEach(x => x.ngay_bd_kd = x.ngay_bd_kd ? this.Convertdate(x.ngay_bd_kd.toString()) : null)
 
         this.companyList4 = this.companyList1.map(a => {
           let temp = this.companyList2.filter(b => b.mst === a.mst)
@@ -305,6 +303,11 @@ export class SearchBusinessComponent implements OnInit {
         // // Overrride default filter behaviour of Material Datatable
         // this.dataSource.filterPredicate = this.filterService.createFilter();
       });
+  }
+
+  public applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   // private DEFAULT_FIELD: string = 'ten_doanh_nghiep';

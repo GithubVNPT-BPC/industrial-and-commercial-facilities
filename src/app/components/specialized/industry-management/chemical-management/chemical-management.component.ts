@@ -2,13 +2,11 @@ import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { District } from 'src/app/_models/district.model';
 import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
-import { LinkModel } from 'src/app/_models/link.model';
 import { FormControl } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 @Component({
     selector: 'chemical-management',
@@ -20,7 +18,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'cong_suat', 'san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'computed_cong_suat', 'computed_san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
 
     displayedFields = {
         mst: "Mã số thuế",
@@ -29,8 +27,8 @@ export class ChemicalManagementComponent extends BaseComponent {
         nganh_nghe_kd_chinh: "Ngành nghề KD chính",
         email: "Email",
         so_lao_dong: "Số lao động",
-        cong_suat: "Công suất thiết kế Tấn/năm",
-        san_luong: "Sản lượng Tấn/năm",
+        computed_cong_suat: "Công suất thiết kế Tấn/năm",
+        computed_san_luong: "Sản lượng Tấn/năm",
         so_giay_phep: "Số giấy phép/ Giấy chứng nhận",
         ngay_cap: "Ngày cấp",
         ngay_het_han: "Ngày hết hạn",
@@ -43,22 +41,9 @@ export class ChemicalManagementComponent extends BaseComponent {
     dataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
     filteredDataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
 
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
     isChecked: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
-    years: number[] = [];
-    year: number;
 
     public chemistryNameList = [];
 
@@ -71,12 +56,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.years = this.getYears();
-        this.year = new Date().getFullYear() - 1;
-        this.getChemicalManagementData(this.year);
-        // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
+        this.getChemicalManagementData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
     }
@@ -90,7 +70,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     public switchView() {
         super.switchView();
-        if (this.chemistryNameList.length == 0) this.getChemicalNameListData();
+        if (this.chemistryNameList.length == 0 && this.view == 'form') this.getChemicalNameListData();
     }
 
     private addQtyRow(event) {
@@ -116,6 +96,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     getFormParams() {
         return {
             mst: new FormControl(),
+            time_id: new FormControl({value: this.currentYear}),
             details: this.formBuilder.array([
                 this.formBuilder.group({
                     id_hoa_chat: [],
@@ -130,25 +111,30 @@ export class ChemicalManagementComponent extends BaseComponent {
         let details = data.details;
         details.map(e => {
             e['mst'] = data['mst'];
-            e['time_id'] = this.currentYear;
+            e['time_id'] = data['time_id'];
         });
 
         data = {
             chemistryData: {
                 mst: data.mst,
                 tinh_trang_hoat_dong: "true",
-                time_id: this.currentYear,
+                time_id: data['time_id'],
             },
             chemistryQtyData: details,
+            time_id: data['time_id'],
         }
         return data;
     }
 
     callService(data) {
+        let self = this;
         let chemistryData = data.chemistryData;
         let chemistryQtyData = data.chemistryQtyData;
-        this.industryManagementService.PostChemicalManagement([chemistryData], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-        this.industryManagementService.PostChemicalManagementQty(chemistryQtyData, this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostChemicalManagement([chemistryData], data.time_id).subscribe(response => {
+            if (response.id != -1) {
+                self.industryManagementService.PostChemicalManagementQty(chemistryQtyData, data.time_id).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
+            }
+        }, error => this.errorNotify(error));
     }
 
     applyFilter(event: Event) {
@@ -164,37 +150,34 @@ export class ChemicalManagementComponent extends BaseComponent {
                 chemicalManagementData.map((c) => {
                     let matchingList = capacityData.filter(x => x.mst == c.mst);
 
-                    c.san_luong = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.san_luong : x.san_luong).join(', ');
-                    c.cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
+                    c.computed_san_luong = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.san_luong : x.san_luong).join(', ');
+                    
+                    c.computed_cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
+                    c.san_luong = matchingList.length ? matchingList.map(x => x.san_luong ? parseInt(x.san_luong) : 0).reduce((a, b) => a + b) : 0;
+                    c.cong_suat = matchingList.length ? matchingList.map(x => x.cong_suat ? parseInt(x.cong_suat) : 0).reduce((a, b) => a + b) : 0;
                 });
 
                 this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
-                this.filteredDataSource.data = [...this.dataSource.data];
+                this.dataSource.data.forEach(element => {
+                    element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+                });
 
-                // this.dataSource.data.forEach(element => {
-                //     element.is_het_han = new Date(element.ngay_het_han) < new Date();
-                // });
-
-                // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
-                // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
-                this.filteredDataSource.paginator = this.paginator;
-                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                this.paginator._intl.firstPageLabel = "Trang Đầu";
-                this.paginator._intl.lastPageLabel = "Trang Cuối";
-                this.paginator._intl.previousPageLabel = "Trang Trước";
-                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+                this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
+                this._prepareData();
+                this.paginatorAgain();
             }
         })
+    }
+
+    private _prepareData() {
+        this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+        this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
     }
 
     getChemicalNameListData() {
         this.industryManagementService.GetChemicalNameList().subscribe(result => {
             if (result.data && result.data.length > 0) this.chemistryNameList = result.data;
         })
-    }
-
-    getYears() {
-        return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
     }
 
     applyDistrictFilter(event) {
@@ -213,12 +196,12 @@ export class ChemicalManagementComponent extends BaseComponent {
         else {
             this.filteredDataSource.data = filteredData;
         }
-        // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-        // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
+        this._prepareData();
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.filter = (event.checked) ? "true" : "";
+        this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
+        this._prepareData();
     }
 
     showMoreDetail(event) {

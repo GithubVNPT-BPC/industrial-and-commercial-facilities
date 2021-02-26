@@ -18,7 +18,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     //Constant
   
     displayedColumns: string[] = [];
-    fullFieldList: string[] = ['select', 'index'] //, 'ten_doanh_nghiep', 'mst', 'email', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'don_vi', 'von_dieu_le', 'cong_suat', 'ten_thuc_pham', 'san_luong', 'so_lao_dong_sct', 'email_sct', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
     
     displayedFields = {
@@ -42,24 +42,10 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     dataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     
-    years: number[] = [];
-    year : number;
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
     isChecked: boolean;
     sanLuongBotMy: number = 0;
     sanLuongRuou: number = 0;
     
-
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
@@ -70,15 +56,26 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.years = this.getYears();
-        this.year = new Date().getFullYear() - 1;
-        this.GetFoodIndustryData(this.year);
-        // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
+        this.GetFoodIndustryData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
-        
+    }
+
+    GetFoodIndustryData(time_id) {
+        this.industryManagementService.GetFoodIndustry(time_id).subscribe(result => {
+            this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
+            this.dataSource.data.forEach(element => {
+                element.is_expired = !element.tinh_trang_hoat_dong;
+            });
+            this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
+            this._prepareData();
+            this.paginatorAgain();
+        })
+    }
+
+    private _prepareData() {
+        this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.id_thuc_pham == 1).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
+        this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.id_thuc_pham == 2).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
     }
 
     getLinkDefault(){
@@ -112,30 +109,6 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    GetFoodIndustryData(time_id) {
-        this.industryManagementService.GetFoodIndustry(time_id).subscribe(result => {
-            this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
-            this.filteredDataSource.data = [...this.dataSource.data];
-            this.dataSource.data = [...this.dataSource.data];
-            // this.dataSource.data.forEach(element => {
-            //     element.is_het_han = new Date(element.ngay_het_han) < new Date();
-            // });
-
-            // this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 1).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-            // this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 2).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-            this.filteredDataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        })
-    }
-
-    getYears() {
-        return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-    }
-
     applyDistrictFilter(event) {
         let filteredData = [];
 
@@ -152,19 +125,12 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         else {
             this.filteredDataSource.data = filteredData;
         }
-        // this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 1).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-        // this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.loai_sp == 2).map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+        this._prepareData();
     }
 
     applyExpireCheck(event) {
-        let filterEntity = new FoodIndustryModel();
-        if(event.checked){
-            this.filteredDataSource.data = this.filteredDataSource.data.filter(item=> {
-                return item.tinh_trang_hoat_dong ==  false;
-            });
-        }else{
-            this.filteredDataSource.data = this.dataSource.data;
-        }
+        this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
+        this._prepareData();
     }
 
     showMoreDetail(event) {

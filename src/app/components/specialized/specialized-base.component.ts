@@ -42,6 +42,7 @@ export abstract class BaseComponent implements OnInit {
     public view = 'list';
     public errorMessage: any;
     public currentYear = new Date().getFullYear();
+    public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
@@ -60,7 +61,6 @@ export abstract class BaseComponent implements OnInit {
         this.formBuilder = injector.get(FormBuilder);
         this.confirmationDialogService = injector.get(ConfirmationDialogService);
         this.sctService = injector.get(SCTService);
-        this.formBuilder1 = injector.get(FormBuilder);
         this._breadCrumService = injector.get(BreadCrumService);
     }
 
@@ -108,10 +108,10 @@ export abstract class BaseComponent implements OnInit {
     public callService(data) { }
 
     public onCreate() {
+        // Must change to async function
         let data = this.formData.value;
         data = this.prepareData(data);
         this.callService(data);
-        this.resetAll();
     }
 
     prepareRemoveData(data) { return data }
@@ -119,10 +119,12 @@ export abstract class BaseComponent implements OnInit {
     callRemoveService(data) {}
 
     public onRemove() {
+        // Must change to async function
         let data = this.selection.selected;
         data = this.prepareRemoveData(data);
         this.callRemoveService(data);
-        this.resetAll(false);
+        this.selection.clear();
+        this.resetAll();
     }
 
     public clearTable(event) {
@@ -130,9 +132,9 @@ export abstract class BaseComponent implements OnInit {
         this.formData.reset();
     }
 
-    public resetAll(isSwitch=true): void {
+    public resetAll(): void {
         this.formData.reset();
-        if (isSwitch) this.switchView();
+        if (this.view == 'form') this.switchView();
         this.ngOnInit();
     }
 
@@ -146,6 +148,7 @@ export abstract class BaseComponent implements OnInit {
         }
         else {
             this.logger.msgSuccess("Dữ liệu được lưu thành công!");
+            this.resetAll();
         }
     }
 
@@ -233,9 +236,7 @@ export abstract class BaseComponent implements OnInit {
                         }
                     });
                 }
-                
             }   
-                
         })
     }
 

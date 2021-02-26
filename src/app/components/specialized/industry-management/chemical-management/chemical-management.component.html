@@ -31,7 +31,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{dataSource.data.length}} doanh nghiệp
+                                {{filteredDataSource.data.length}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -44,8 +44,8 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <!-- <strong>{{sanLuongSanXuat}}</strong> -->
-                                0 tấn/năm
+                                <strong>{{sanLuongSanXuat}}</strong>
+                                tấn/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -58,8 +58,8 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <!-- <strong>{{sanLuongKinhDoanh}}</strong> -->
-                                0 tấn/năm
+                                <strong>{{sanLuongKinhDoanh}}</strong>
+                                tấn/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -81,8 +81,8 @@
                     <div class="col-sm-12 col-md-3 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="getChemicalManagementData($event.value)" [(value)]="year">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            <mat-select (selectionChange)="getChemicalManagementData($event.value)" [(value)]="currentYear">
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -107,18 +107,18 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-2 col-lg-2">
+                    <div class="col-md-2 col-lg-2 checkbox">
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">DN hết hạn
                         </mat-checkbox>
                     </div>
-                    <div class="col-md-2 col-lg-2">
+                    <div class="col-md-2 col-lg-2 checkbox">
                         <mat-checkbox (change)="showMoreDetail($event)">Chi tiết
                         </mat-checkbox>
                     </div>
                     <div class="col-md-8 col-lg-8 button-control">
                         <button mat-raised-button
                             matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - Hóa chất',year.toString())"><mat-icon>file_download</mat-icon></button>
+                            (click)="ExportTOExcel('QLCN - Hóa chất', currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
                         color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
                         <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
@@ -231,6 +231,14 @@
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kỳ dữ liệu</mat-label>
+                                        <mat-select formControlName="time_id">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </mat-card-content>
                     </div>
@@ -240,8 +248,8 @@
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Sản lượng hóa chất </span>
                                 <span>
-                                    <button mat-flat-button class="ml-2 set-bg-color-primary"
-                                    color="primary" matTooltip="Thêm sản lượng" (click)="addQtyRow($event)">
+                                    <button mat-mini-fab color="warn" class="ml-2 set-bg-color-primary"
+                                    matTooltip="Thêm sản lượng" (click)="addQtyRow($event)">
                                         <mat-icon>add</mat-icon> 
                                     </button>
                                 </span>

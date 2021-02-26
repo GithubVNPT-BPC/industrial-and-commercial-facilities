@@ -168,6 +168,7 @@ export class CompanyPost {
     public so_dien_thoai: string;
     public ten_doanh_nghiep: string;
     public von_dieu_le: number;
+
     public ngay_bd_kd: string;
     public so_lao_dong: number;
     public cong_suat_thiet_ke: number;
@@ -188,7 +189,7 @@ export class CompanyPost {
 }
 
 export class Career {
-    id_nganh_nghe_kinh_doanh: number;
+    id_nganh_nghe_kinh_doanh: string;
     nganh_nghe_kd_chinh: string;
     id_linh_vuc: number
 }

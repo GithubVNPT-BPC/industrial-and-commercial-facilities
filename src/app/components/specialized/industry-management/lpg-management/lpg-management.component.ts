@@ -1,9 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { District } from 'src/app/_models/district.model';
 import { LPGManagementModel } from 'src/app/_models/APIModel/industry-management.module';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { LinkModel } from 'src/app/_models/link.model';
 import { FormControl } from '@angular/forms';
 
 // Services
@@ -57,14 +54,9 @@ export class LPGManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.years = this.getYears();
         this.GetLGPManagementData(this.currentYear);
-        // this.filteredDataSource.filterPredicate = function (data: ChemicalLPGFoodManagementModel, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
-        this.sendLinkToNext(true);
     }
 
     getLinkDefault(){
@@ -101,25 +93,19 @@ export class LPGManagementComponent extends BaseComponent {
     GetLGPManagementData(time_id: number) {
         this.industryManagementService.GetLPGManagement(time_id).subscribe(result => {
             this.dataSource = new MatTableDataSource<LPGManagementModel>(result.data);
-
-            // this.dataSource.data.forEach(element => {
-            //     element.is_het_han = new Date(element.ngay_het_han) < new Date();
-            // });
+            this.dataSource.data.forEach(element => {
+                element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+            });
 
             this.filteredDataSource.data = [...this.dataSource.data];
-            // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-            // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
-            this.filteredDataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            this._prepareData();
+            this.paginatorAgain();
         })
     }
 
-    getYears() {
-        return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
+    private _prepareData() {
+        this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
+        this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat || 0).reduce((a, b) => a + b) : 0;
     }
 
     applyDistrictFilter(event) {
@@ -138,12 +124,12 @@ export class LPGManagementComponent extends BaseComponent {
         else {
             this.filteredDataSource.data = filteredData;
         }
-        // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-        // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
+        this._prepareData();
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.filter = (event.checked) ? "true" : "";
+        this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
+        this._prepareData();
     }
 
     showMoreDetail(event) {

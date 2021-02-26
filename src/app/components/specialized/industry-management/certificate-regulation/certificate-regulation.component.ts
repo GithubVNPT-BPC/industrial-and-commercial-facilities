@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import {  FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificate-regulation';
 
@@ -34,14 +34,10 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   //Only TS Variable
-  years: number[] = [];
-  doanhThu: number;
-  congXuat: number;
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
   
-
   ds_sp: any[] = [
     {id_loai_san_pham: 1, ten_san_pham: "Thực phẩm"},
     {id_loai_san_pham: 2,	ten_san_pham: "May mặc"}
@@ -56,7 +52,6 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.years = this.getYears();
     this.GetComformityAnnounceData(); 
   }
 
@@ -84,7 +79,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       if (res.data && res.data.length > 0 ) {
         this.dataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
         this.filteredDataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
-        this.caculatorValue();
+        this._prepareData();
         this.paginatorAgain();
       }
     })
@@ -104,32 +99,12 @@ export class CertificateRegulationComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-
-  paginatorAgain() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
-
-  caculatorValue() {
+  private _prepareData() {
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
-  }
-
-  isHidden(row: any) {
-    return (this.isChecked) ? (row.is_het_han) : false;
   }
 
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
-    this.caculatorValue();
     this.paginatorAgain();
   }
 

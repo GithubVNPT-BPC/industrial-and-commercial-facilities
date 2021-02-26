@@ -173,9 +173,9 @@ export class DomesticManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<DomesticPriceModel>(allrecords.data);
-        if (this.dataSource.data.length == 0) {
-          this.createDefault();
-        }
+        // if (this.dataSource.data.length == 0) {
+        //   this.createDefault();
+        // }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -195,9 +195,9 @@ export class DomesticManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<DomesticPriceModel>(allrecords.data);
-        if (this.dataSource.data.length == 0) {
-          this.createDefault();
-        }
+        // if (this.dataSource.data.length == 0) {
+        //   this.createDefault();
+        // }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -248,23 +248,23 @@ export class DomesticManagerComponent implements OnInit {
     this._rows = this.dataSource.filteredData.length;
   }
 
-  public createDefault() {
-    const Product1: number = 1;
-    const Product2: number = 2;
-    const Product3: number = 3;
-    const Product4: number = 4;
-    this.dataSource = new MatTableDataSource<DomesticPriceModel>();
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == Product1)[0].id_san_pham;
-    this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == Product2)[0].id_san_pham;
-    this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == Product3)[0].id_san_pham;
-    this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == Product4)[0].id_san_pham;
+  // public createDefault() {
+  //   const Product1: number = 1;
+  //   const Product2: number = 2;
+  //   const Product3: number = 3;
+  //   const Product4: number = 4;
+  //   this.dataSource = new MatTableDataSource<DomesticPriceModel>();
+  //   this.addRow();
+  //   this.addRow();
+  //   this.addRow();
+  //   this.addRow();
+  //   this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == Product1)[0].id_san_pham;
+  //   this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == Product2)[0].id_san_pham;
+  //   this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == Product3)[0].id_san_pham;
+  //   this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == Product4)[0].id_san_pham;
 
-    this._rows = this.dataSource.filteredData.length;
-  }
+  //   this._rows = this.dataSource.filteredData.length;
+  // }
 
   public save() {
     this.dataSource.data.forEach(element => {
@@ -272,7 +272,6 @@ export class DomesticManagerComponent implements OnInit {
         let x = this.Convertdatetostring(element.ngay_cap_nhat)
         element.ngay_cap_nhat = x;
       }
-      element.id = null;
     });
     this.marketService.PostDomesticMarket(this.dataSource.data).subscribe(
       next => {

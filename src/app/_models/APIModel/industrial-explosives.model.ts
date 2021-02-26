@@ -32,6 +32,7 @@ export class IndustrialExplosivesModel{
     id_tinh_trang_hoat_dong : number;
     so_giay_phep: string;
     ten_tinh_trang_hoat_dong: string;
+    is_expired: boolean;
 }
 
 export class IndustrialExplosivesFilterModel{
