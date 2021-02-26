@@ -29,8 +29,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     dataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
     filteredDataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
     
-    years: number[] = [];
-    districts: District[] = []
     tinhTrangHoatDong: any[] = [
         { id: 1, tinh_trang: 'Đang hoạt động' },
         { id: 2, tinh_trang: 'Ngưng hoạt động' },
@@ -40,7 +38,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
     tongMucSanLuong: number = 0;
-    filterModel: IndustrialExplosivesFilterModel = { id_quan_huyen: [], id_tinh_trang_hoat_dong: [], is_het_han: false };
+    filterModel = { id_quan_huyen: [], id_tinh_trang_hoat_dong: [], is_expired: false };
 
     constructor(
         private injector: Injector,
@@ -52,11 +50,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.years = this.getYears();
         this.getPostExplosiveMatData(this.currentYear);
-        // this.filteredDataSource.filterPredicate = function (data: IndustrialExplosivesModel, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
     }
 
     getLinkDefault(){
@@ -93,47 +87,44 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.industryManagementService.PostExplosiveMat([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    }
-
-    applySelectFilter() {
-        let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-        if (!filteredData.length) {
-            if (this.filterModel.id_quan_huyen.length || this.filterModel.id_tinh_trang_hoat_dong.length || this.filterModel.is_het_han)
+    applyFilter(event) {
+        if (!event.target) {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+            if (!filteredData.length) {
+            if (this.filterModel)
                 this.filteredDataSource.data = [];
             else
                 this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
+            }
+            else {
             this.filteredDataSource.data = filteredData;
+            }
+        } else {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
         }
+        this.paginatorAgain();
+        this._prepareData();
     }
 
     getPostExplosiveMatData(time_id) {
         this.industryManagementService.GetExplosiveMat(time_id).subscribe(result => {
             if (result.data && result.data.length > 0) {
                 this.dataSource = new MatTableDataSource<IndustrialExplosivesModel>(result.data);
+                this.dataSource.data.forEach(element => {
+                    element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+                });
                 this.filteredDataSource.data = [...this.dataSource.data];
-
-                this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong).reduce((a, b) => a + b) : 0;
-                this.tongCongSuatThietKe = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
-                this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
-                
-                this.filteredDataSource.paginator = this.paginator;
-                this.filteredDataSource.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                this.filteredDataSource.paginator._intl.firstPageLabel = "Trang Đầu";
-                this.filteredDataSource.paginator._intl.lastPageLabel = "Trang Cuối";
-                this.filteredDataSource.paginator._intl.previousPageLabel = "Trang Trước";
-                this.filteredDataSource.paginator._intl.nextPageLabel = "Trang Tiếp";
+                this._prepareData();
+                this.paginatorAgain();
             }
-            
         })
     }
 
-    getYears() {
-        return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
+    private _prepareData() {
+        this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong).reduce((a, b) => a + b) : 0;
+        this.tongCongSuatThietKe = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
+        this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
     }
 
     filterArray(array, filters) {
@@ -141,7 +132,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         let temp = [...array];
         filterKeys.forEach(key => {
             let temp2 = [];
-            if (key == 'is_het_han') {
+            if (key == 'is_expired') {
                 temp2 = (filters[key]) ? temp2.concat(temp.filter(x => x[key] == true)) : temp;
                 temp = [...temp2];
             }

@@ -31,7 +31,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{dataSource.data.length}} doanh nghiệp
+                                {{filteredDataSource.data.length}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -93,7 +93,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="getPostExplosiveMatData($event.value)" [(value)]="currentYear">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -101,7 +101,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen" multiple>
+                            <mat-select #dSelect (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
@@ -113,7 +113,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng hoạt động</mat-label>
-                            <mat-select (selectionChange)="applySelectFilter()" [(ngModel)]="filterModel.id_tinh_trang_hoat_dong" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_tinh_trang_hoat_dong" multiple>
                                 <mat-option *ngFor='let tinhTrang of tinhTrangHoatDong' [value]='tinhTrang.id'>
                                     {{tinhTrang.tinh_trang}}
                                 </mat-option>
@@ -122,7 +122,7 @@
                     </div>
 
                     <div class="col-2 col-lg-2 checkbox">
-                        <mat-checkbox (change)="applySelectFilter()" [(ngModel)]="filterModel.is_het_han">DN hết hạn
+                        <mat-checkbox (change)="applyFilter($event)" [(ngModel)]="filterModel.is_expired">DN hết hạn
                         </mat-checkbox>
                     </div>                  
                 </div>
