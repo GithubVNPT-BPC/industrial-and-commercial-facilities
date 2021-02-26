@@ -34,7 +34,7 @@ export class MarketService {
     public urlProduct = "api/qltm/thong-tin-san-xuat";
     public urlProductAll = "api/qltm/tat-ca-thong-tin-san-xuat";
     public urlProductPost = "api/qltm/thong-tin-san-xuat";
-    public urlProductDelete = "api/qltm/xoa-gia-ca-quoc-te";
+    public urlProductDelete = "api/qltm/xoa-thong-tin-san-xuat";
 
     public urlImport = "api/qltm/xnk/nhap-khau-tong-hop";
     public urlExport = "api/qltm/xnk/xuat-khau-tong-hop";
@@ -44,6 +44,7 @@ export class MarketService {
     public urlAllCompany = "api/doanh-nghiep/danh-sach-doanh-nghiep";
     public urlCompanyInfo = "api/doanh-nghiep";
     public urlDeleteCompany = "api/doanh-nghiep/xoa-nhieu-doanh-nghiep";
+    public urlDeleteCareer = "api/doanh-nghiep/xoa-nganh-nghe";
 
     constructor(public http: HttpClient) {
         // this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -60,12 +61,11 @@ export class MarketService {
             catchError(this.handleError)
         );
     }
-    public UpdateCompany(companyinfo: Array<CompanyPost>, mst: string) {
+    public UpdateCompany(companyinfo: Array<CompanyPost>) {
         var apiUrl = this.apiHome + this.urlUpdateCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams().set('mst', mst);
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.post<any>(apiUrl, companyinfo, { headers: headers, params: params }).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, companyinfo, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -86,6 +86,12 @@ export class MarketService {
     }
     public DeleteCompany(deletemodel: Array<DeleteModel>) {
         var apiUrl = this.apiHome + this.urlDeleteCompany
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+    }
+    public DeleteCareer(deletemodel: Array<DeleteModel1>) {
+        var apiUrl = this.apiHome + this.urlDeleteCareer
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))

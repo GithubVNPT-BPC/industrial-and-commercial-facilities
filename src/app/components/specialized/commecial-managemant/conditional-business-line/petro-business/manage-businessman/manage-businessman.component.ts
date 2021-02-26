@@ -79,14 +79,14 @@ export class ManageBusinessmanComponent implements OnInit {
   ) {
   }
 
-  public AddBusiness(data: any) {
-    const dialogRef = this.dialog.open(UpdateBusinessmanComponent, {
-      data: {
-        message: 'Dữ liệu top doanh nghiệp sản xuất',
-        business_data: data,
-      }
-    });
-  }
+  // public AddBusiness(data: any) {
+  //   const dialogRef = this.dialog.open(UpdateBusinessmanComponent, {
+  //     data: {
+  //       message: 'Dữ liệu top doanh nghiệp sản xuất',
+  //       business_data: data,
+  //     }
+  //   });
+  // }
 
   selection = new SelectionModel<Businessman>(true, []);
 
@@ -167,8 +167,8 @@ export class ManageBusinessmanComponent implements OnInit {
     })
   }
 
-  AddStore() {
-    this.router.navigate(['specialized/commecial-management/domestic/addstore']);
+  AddBusiness(id: number) {
+    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id]);
   }
 
   // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
