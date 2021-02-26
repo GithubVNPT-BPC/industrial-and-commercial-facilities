@@ -152,10 +152,10 @@
         .right-cell {
           text-align: right !important;
         }
-        #jump {
+        .jump {
           cursor: zoom-in;
           text-align: center;
-          color: blue;
+          color: blue !important;
         }
         select {
           border: none;

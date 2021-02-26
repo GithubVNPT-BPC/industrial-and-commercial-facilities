@@ -70,9 +70,11 @@ export class UpdateBusinessmanComponent implements OnInit {
     }
   }
 
+  id: string;
+
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    public dialogRef: MatDialogRef<UpdateBusinessmanComponent>,
+    // @Inject(MAT_DIALOG_DATA) public data: any,
+    // public dialogRef: MatDialogRef<UpdateBusinessmanComponent>,
     public excelService: ExcelService,
     public _Service: ConditionBusinessService,
     public formbuilder: FormBuilder,
@@ -80,6 +82,9 @@ export class UpdateBusinessmanComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
   ) {
+    this.route.params.subscribe((params) => {
+      this.id = params["id"];
+    });
   }
 
   ngOnInit() {
@@ -99,7 +104,7 @@ export class UpdateBusinessmanComponent implements OnInit {
       res => {
         // debugger;
         this._info.msgSuccess('Thêm thành công')
-        this.dialogRef.close()
+        // this.dialogRef.close()
         this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
       },
       err => {
@@ -131,7 +136,7 @@ export class UpdateBusinessmanComponent implements OnInit {
   getBusinessmanList() {
     this._Service.GetBusinessman().subscribe(all => {
       this.dataSource = new MatTableDataSource<Businessman>(all.data);
-      this.dataSource1.data = this.dataSource.data.filter(x => x.id_thuong_nhan == this.data.business_data)
+      this.dataSource1.data = this.dataSource.data.filter(x => x.id_thuong_nhan == this.id)
       this.businessmanobject = this.dataSource1.data[0]
 
       this._Service.businessman = {

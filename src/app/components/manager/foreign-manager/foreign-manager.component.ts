@@ -172,9 +172,9 @@ export class ForeignManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
-        if (this.dataSource.data.length == 0) {
-          this.createDefault();
-        }
+        // if (this.dataSource.data.length == 0) {
+        //   this.createDefault();
+        // }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -194,9 +194,9 @@ export class ForeignManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
-        if (this.dataSource.data.length == 0) {
-          this.createDefault();
-        }
+        // if (this.dataSource.data.length == 0) {
+        //   this.createDefault();
+        // }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -271,7 +271,6 @@ export class ForeignManagerComponent implements OnInit {
         let x = this.Convertdatetostring(element.ngay_cap_nhat)
         element.ngay_cap_nhat = x;
       }
-      element.id = null
     });
     this.marketService.PostForeignMarket(this.dataSource.data).subscribe(
       next => {

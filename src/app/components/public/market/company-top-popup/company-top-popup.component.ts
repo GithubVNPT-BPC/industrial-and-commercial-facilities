@@ -3,8 +3,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { MarketService } from './../../../../_services/APIService/market.service';
-import { TopCompanyModel, ProductValueModel, ExportMarketModel, ImportMarketModel } from './../../../../_models/APIModel/domestic-market.model';
+import { MarketService } from 'src/app/_services/APIService/market.service';
+import { TopCompanyModel, ProductValueModel, ExportMarketModel, ImportMarketModel } from 'src/app/_models/APIModel/domestic-market.model';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SAVE } from 'src/app/_enums/save.enum';
@@ -13,7 +13,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 @Component({
     selector: 'company-top-popup',
-    
+
     templateUrl: 'company-top-popup.component.html',
     styleUrls: ['../../public_layout.scss'],
 })
