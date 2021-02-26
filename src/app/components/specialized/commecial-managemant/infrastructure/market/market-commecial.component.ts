@@ -18,16 +18,16 @@ import { YEAR_FORMAT } from '../common/common-commecial.component';
   selector: "app-market-commecial",
   templateUrl: "./market-commecial.component.html",
   styleUrls: ['../../../special_layout.scss'],
-  providers: [
-    {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
+//   providers: [
+//     {
+//         provide: DateAdapter,
+//         useClass: MomentDateAdapter,
+//         deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+//     },
 
-    { provide: MAT_DATE_FORMATS, useValue: YEAR_FORMAT },
-    { provide: MAT_DATE_LOCALE, useValue: 'vi' },
-],
+//     { provide: MAT_DATE_FORMATS, useValue: YEAR_FORMAT },
+//     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+// ],
 })
 export class MarketCommecialManagementComponent extends BaseComponent {
 
@@ -64,8 +64,8 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   ]
   
   displayedFields = {
-    DIA_CHI: "Địa chỉ",
     ten_cho: "Tên chợ",
+    DIA_CHI: "Địa chỉ",
     is_thanh_thi: "Nông thôn/Thành thị",
     dien_tich: "Diện tích",
     loai_hang_cho: "Loại hạng chợ", 

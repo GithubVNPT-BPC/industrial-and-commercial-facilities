@@ -41,6 +41,7 @@ export class ReportIndicator {
     parent_id: number;
     formula: string;
     obj_id: number;
+    ind_index : string;
 }
 
 export class ReportAttribute {
@@ -143,6 +144,7 @@ export class ReportTable {
     ind_unit: string;
     ind_parent_id: number;
     ind_formula: string;
+    ind_index : string;
     fd01: Date;
     fd02: Date;
     fd03: Date;

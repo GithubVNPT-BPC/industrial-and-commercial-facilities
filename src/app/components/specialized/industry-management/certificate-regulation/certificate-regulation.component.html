@@ -59,7 +59,7 @@
                     <div class="col-md-8 col-lg-8 button-control">
                         <button mat-raised-button
                             matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - Công bố hợp quy',year.toString())"><mat-icon>file_download</mat-icon></button>
+                            (click)="ExportTOExcel('QLCN - Công bố hợp quy',currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
                         color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
                         <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
@@ -186,19 +186,31 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên sản phẩm</mat-label>
                                         <input matInput  type="text" formControlName="ten_san_pham">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Bản công bố hợp quy</mat-label>
                                         <input matInput  type="text" formControlName="ban_cong_bo_hop_quy">
                                     </mat-form-field>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Loại sản phẩm</mat-label>
+                                        <mat-select formControlName="id_loai_san_pham">
+                                            <mat-option *ngFor="let item of ds_sp" [value]="item.id_loai_san_pham">
+                                                {{item.ten_san_pham}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">

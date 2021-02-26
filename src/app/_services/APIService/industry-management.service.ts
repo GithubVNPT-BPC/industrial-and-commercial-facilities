@@ -34,6 +34,8 @@ export class IndustryManagementService {
 
     private urlGetDetailGroupCompany = '/ccn/chi-tiet';
     private urlGroupCompany = '/ccn/';
+
+    private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -173,6 +175,15 @@ export class IndustryManagementService {
 
     public PostDataGroupCompany(body: any){
         var apiUrl = this.endpoint + this.urlGroupCompany;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // xóa công bố hợp quy
+    public DeleteCBHQ(body: any){
+        var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)

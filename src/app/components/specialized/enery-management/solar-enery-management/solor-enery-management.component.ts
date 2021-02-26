@@ -43,7 +43,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
     super.ngOnInit();
     this.years = this.getYears();
     this.getSolarEnergyData(this.currentYear);
-    this.caculatorValue();
+    
   }
 
   getLinkDefault(){
@@ -57,6 +57,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
       this.dataSource = new MatTableDataSource<SolarEneryManagementModel>(res.data);
       this.filteredDataSource =  new MatTableDataSource<SolarEneryManagementModel>(res.data);
       this.initPaginator();
+      this.caculatorValue();
     })
   }
 
@@ -133,7 +134,10 @@ export class SolarEneryManagementComponent extends BaseComponent {
   }
 
   applyActionCheck(event) {
-    this.filteredDataSource.filter = (event.checked) ? "true" : "";
+    event.checked 
+    ?this.filteredDataSource.data = this.filteredDataSource.data.filter(item => item.id_trang_thai_hoat_dong = 0) 
+    : this.filteredDataSource.data = this.dataSource.data;
+    // this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
     this.initPaginator();
   }

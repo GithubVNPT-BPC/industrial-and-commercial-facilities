@@ -202,4 +202,15 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     this.commerceManagementService.postExpoData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  prepareRemoveData(){
+    let datas = this.selection.selected.map(element => new Object({id: element.id}));
+    return datas;
+  }
+
+  callRemoveService(data){
+    this.commerceManagementService.deleteTradeFairs(data).subscribe(res => {
+      this.successNotify(res);
+    });
+  }
+
 }

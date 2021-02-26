@@ -1,179 +1,122 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatAccordion, MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { ElectricityDevelopmentModel, HydroElectricManagementModel, PowerProductionModel } from 'src/app/_models/APIModel/electric-management.module';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+
+import { ReportService } from '../../../../_services/APIService/report.service';
+
+import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject } from '../../../../_models/APIModel/report.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { MatTableDataSource } from '@angular/material/table';
+import { formatDate } from '@angular/common';
+import { MatTableFilter } from 'mat-table-filter';
+import { element } from 'protractor';
+import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
 
 @Component({
-  selector: 'app-power-production',
-  templateUrl: './power-production.component.html',
-  styleUrls: ['/../../special_layout.scss'],
+    selector: 'app-power-production',
+    templateUrl: './power-production.component.html',
+    styleUrls: ['/../../special_layout.scss']
 })
+
 export class PowerProductionManagementComponent implements OnInit {
-  //ViewChild 
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
-  
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
 
-  //Constant variable
-  public readonly displayedColumns: string[] = ['index', 'ctcy', 'dvt', 't112019', 'lk11t2019', 'khn2020', 't102020',
-    't112020', 'lk11t2020', 'tht11stt', 'tht11sck', 'lktsck', 'lktskh',
-  ];
-  public readonly dsplayMergeColumns: string[] = ['merge1', 'merge2', 'merge3', 'merge4',];
-  //TS & HTML Variable
-  public dataSource: MatTableDataSource<PowerProductionModel> = new MatTableDataSource<PowerProductionModel>();
-  public filteredDataSource: MatTableDataSource<PowerProductionModel> = new MatTableDataSource<PowerProductionModel>();
-  public data: Array<PowerProductionModel> =
-    [
-      {
-        ctcy: 'Điện sản xuất ',
-        dvt: '(Tr. KW)',
-        t112019: 143,
-        lk11t2019: 1291.00,
-        khn2020: 1968.00,
-        t102020: 130,
-        t112020: 133,
-        lk11t2020: 1181.00,
-        tht11stt: 102.31,
-        tht11sck: 93.01,
-        lktsck: 91.48,
-        lktskh: 60.01
-      },
-      {
-        ctcy: 'Sản lượng điện thương phẩm',
-        dvt: '(Tr. KW)',
-        t112019: 43.9,
-        lk11t2019: 135.60,
-        khn2020: 170.00,
-        t102020: 45.5,
-        t112020: 47.1,
-        lk11t2020: 146.90,
-        tht11stt: 103.52,
-        tht11sck: 107.29,
-        lktsck: 108.33,
-        lktskh: 86.41
-      },
-      {
-        ctcy: '- Điện phục vụ sản xuất ',
-        dvt: null,
-        t112019: 35.30,
-        lk11t2019: 95.80,
-        khn2020: null,
-        t102020: 36.40,
-        t112020: 37.10,
-        lk11t2020: 105.70,
-        tht11stt: 101.92,
-        tht11sck: 105.10,
-        lktsck: 110.33,
-        lktskh: null
-      },
-      {
-        ctcy: '- Điện sinh hoạt + Kinh doanh dịch vụ',
-        dvt: null,
-        t112019: 5.20,
-        lk11t2019: 23.10,
-        khn2020: null,
-        t102020: 5.50,
-        t112020: 6.00,
-        lk11t2020: 24.30,
-        tht11stt: 109.09,
-        tht11sck: 115.38,
-        lktsck: 105.19,
-        lktskh: null
-      },
-      {
-        ctcy: '- Nhu cầu khác (chiếu sáng công cộng)',
-        dvt: null,
-        t112019: 3.40,
-        lk11t2019: 16.70,
-        khn2020: null,
-        t102020: 3.60,
-        t112020: 4.00,
-        lk11t2020: 16.90,
-        tht11stt: 111.11,
-        tht11sck: 117.65,
-        lktsck: 101.20,
-        lktskh: null
-      }
-    ]
-  //Only TS Variable
-  years: number[] = [];
-  year: number = 0;
-  trung_ap_3p: number;
-  tongSoXa: number;
-  trung_ap_1p: number;
-  ha_ap_1p: number;
-  ha_ap_3p: number;
-  so_tram_bien_ap: number;
-  cong_xuat_bien_ap: number;
-  isChecked: boolean;
+    displayedColumns: string[] = ['index', "obj_name", "time_id", "edit"];
+    dataSource: MatTableDataSource<any>;
+    tempObject: ReportOject;
+    filterObject: ReportOject;
+    filterType: MatTableFilter;
 
-  constructor(public excelService: ExcelService,) {
-  }
-
-  ngOnInit() {
-    this.years = this.getYears();
-    this.year = this.getCurrentSelectedYear()
-    this.dataSource.data = this.data;
-    this.filteredDataSource.data = [...this.dataSource.data];
-    this.caculatorValue();
-    this.paginatorAgain();
-    this.autoOpen();
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-  }
-  getCurrentSelectedYear() {
-    return 2020;
-  }
-
-  get(time_id: number) {
-
-  }
-
-  log(any) {
-  }
-
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-  getValueOfHydroElectric(value: any) {
-    this.year = value;
-
-  }
-  applyDistrictFilter(event) {
-
-  }
-  paginatorAgain() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filter = filterValue.trim().toLowerCase();
     }
-  }
-  caculatorValue() {
 
-  }
-  // isHidden(row : any){
-  //     return (this.isChecked)? (row.is_het_han) : false;
-  // }
+    @ViewChild('reportPaginators', { static: true }) paginator: MatPaginator;
+    public readonly DEFAULT_PERIOD = "Tháng";
+    public readonly format = 'dd/MM/yyyy';
+    public readonly locale = 'en-US';
+    reportTypes = [{ ma_so: null, noi_dung: '' }, { ma_so: 1, noi_dung: 'Tháng' }, { ma_so: 2, noi_dung: 'Quý' }, { ma_so: 3, noi_dung: '6 Tháng' }, { ma_so: 4, noi_dung: 'Năm' }];
+    months: number[] = [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    selectedYear: number;
+    years: number[] = [];
+    halfs: number[] = [1];
+    org_id: number = 0;
+    periods: Object[];
 
-  applyActionCheck(event) {
-    this.filteredDataSource.filter = (event.checked) ? "true" : "";
-    this.caculatorValue();
-    this.paginatorAgain();
-  }
+    constructor(
+        public reportSevice: ReportService,
+        public router: Router,
+        public confirmationDialogService: ConfirmationDialogService
+    ) { }
+
+    ngOnInit() {
+        this.filterObject = new ReportOject();
+        this.tempObject = new ReportOject();
+        this.filterType = MatTableFilter.ANYWHERE;
+        this.years = this.InitialYears();
+        this.selectedYear = this.GetCurrentYear();
+
+        let data: any = JSON.parse(localStorage.getItem('currentUser'));
+        this.org_id = parseInt(data.org_id);
+        this.GetList_ReportPowerProduction(this.selectedYear);
+        this.periods = this.months;
+        this.tempObject.submit_type_name = 'Báo cáo tháng';
+    }
+
+    GetList_ReportPowerProduction(year : number) {
+        this.reportSevice.GetList_ReportPowerProduction(year).subscribe(response => {
+            console.log(response)
+            response.data.forEach(element => {
+                element.time_id_text = this.TimeIDToText(element.time_id.toString());
+            })
+            this.dataSource = null;
+            this.dataSource = new MatTableDataSource<ReportOject>(response.data);
+            this.dataSource.paginator = this.paginator;
+            if (this.paginator) {
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            }
+        })
+    }
+
+    TimeIDToText(time_id: string) {
+        let result: string;
+        switch (time_id.length) {
+            case 4: result = 'Năm ' + time_id;
+                break;
+            case 5: result = 'Quý ' + time_id.substr(4) + '/' + time_id.substr(0, 4);
+                break;
+            case 6: result = 'Tháng ' + time_id.substr(4) + '/' + time_id.substr(0, 4);
+                break;
+            default:
+        }
+        return result;
+    }
+    
+    GetCurrentYear() {
+        var currentDate = new Date();
+        return currentDate.getFullYear();
+    }
+    InitialYears() {
+        let returnYear: Array<any> = [];
+        let currentDate = new Date();
+        let nextYear = currentDate.getFullYear();
+        for (let index = 0; index < 5; index++) {
+            returnYear.push(nextYear - index);
+        }
+        return returnYear;
+    }
+
+    click() {
+        this.GetList_ReportPowerProduction(this.selectedYear);
+    }
+
+    OpenDetailObject(obj: ReportOject) {
+        const url = this.router.serializeUrl(
+            this.router.createUrlTree([encodeURI('#') + '/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
+        );
+        window.open(url.replace('%23', '#'), "_blank");
+    }
 }

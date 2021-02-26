@@ -1,119 +1,85 @@
+<!-- <div class="row">
+    <div class="col-lg-6"> -->
+<!-- <button mat-raised-button (click)="Back()" title="Trở lại">Trở lại</button> -->
+<!-- </div>
+    <div class="col-lg-6" style="text-align: right;">
+        <button mat-raised-button [ngStyle]="{'background-color': 'blue', 'color': 'white'}" (click)="SendReport()" title="Lưu">Lưu</button> &nbsp;
+        <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}" title="Trình lãnh đạo">Trình
+            lãnh đạo</button>
+    </div>
+</div> -->
 <mat-card class="material">
     <mat-card-content>
         <div class="row">
-            <div class="col">
-                <mat-card class="card1">
-                    <mat-card-header>
-                        <mat-card-title>
-                            <mat-icon>filter</mat-icon> Kế hoạch năm {{year}}:
-                        </mat-card-title>
-                        <mat-card-subtitle></mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                        {{percent.ke_hoach|number: '1.0-2':'vi'| ZeroAsSub}} Triệu đồng
-                    </mat-card-content>
-                </mat-card>
+            <div class="col-10">
+                <mat-card-header *ngIf="object[0]">
+                    <mat-card-title>
+                        <h2 style="padding-left: 20px;">{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
+                        </h2>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        <p style="padding-left: 40px;">Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
+                            ngày <strong>{{ngayketthucbaocao}}</strong></p>
+                    </mat-card-subtitle>
+                </mat-card-header>
             </div>
-            <div class="col">
-                <mat-card class="card1">
-                    <mat-card-header>
-                        <mat-card-title>
-                            <mat-icon>filter</mat-icon> Luỹ kế {{month}} tháng đầu năm:
-                        </mat-card-title>
-                        <mat-card-subtitle></mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                        {{percent.luy_ke|number: '1.0-2':'vi'| ZeroAsSub}} Triệu đồng
-                    </mat-card-content>
-                </mat-card>
-            </div>
-            <div class="col">
-                <mat-card class="card1">
-                    <mat-card-header>
-                        <mat-card-title>
-                            <mat-icon>filter</mat-icon> Tỷ lệ thực hiện {{month}} tháng so với KH:
-                        </mat-card-title>
-                        <mat-card-subtitle></mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                        {{percent.ty_le_thuc_hien|number: '1.0-2':'vi'| ZeroAsSub}} %
-                    </mat-card-content>
-                </mat-card>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-3 col-lg-3 button-control -align-left">
-                <button mat-raised-button (click)="ExportTOExcel('Tổng mức bán lẻ hàng hóa','Tổng mức bán lẻ hàng hóa')">Xuất Excel</button>
+            <div class="col-2" style="text-align: right;">
+                <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
+                    (click)="exportToExcel('BaoCao','DuLieuBaoCao')">Xuất Excel</button>
             </div>
         </div>
 
-        <div class="layout" *ngIf="dataSource.data.length; else ShowEmpty" #TABLE>
-            <table mat-table [dataSource]="dataSource" #table class="table-layout" id="small-table">
-                <ng-container matColumnDef="index">
-                    <th mat-header-cell *matHeaderCellDef> STT </th>
-                    <td mat-cell *matCellDef="let element;"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.thu_tu}}</td>
+        <div class="layout" *ngIf="dataSource.data.length; else ShowList" #TABLE>
+            <!-- <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field> -->
+
+            <table mat-table [dataSource]="dataSource" class="table-layout">
+
+                <ng-container matColumnDef="index" sticky>
+                    <th mat-header-cell *matHeaderCellDef>STT</th>
+                    <td mat-cell *matCellDef="let element;" class="stt1">{{element.ind_index}}</td>
                 </ng-container>
 
-                <ng-container matColumnDef="chi_tieu" [sticky]="true">
-                    <th mat-header-cell *matHeaderCellDef> Chỉ tiêu </th>
-                    <td mat-cell *matCellDef="let element" style="text-align: left; padding: 5px;"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.chi_tieu}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="don_vi" [sticky]="false">
-                    <th mat-header-cell *matHeaderCellDef> Đơn vị </th>
-                    <td mat-cell *matCellDef="let element"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.don_vi}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="cung_ky">
-                    <th mat-header-cell *matHeaderCellDef> Tháng {{month}}/{{year-1}}</th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.cung_ky|number: '1.0-2':'vi'| ZeroAsSub}}</td>
-                </ng-container>
-                <ng-container matColumnDef="thuc_hien_thang_truoc">
-                    <th mat-header-cell *matHeaderCellDef> Tháng {{month-1==0?12:month-1}}/{{month-1==0?year-1:year}}
-                    </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.thuc_hien_thang_truoc|number: '1.0-2':'vi'| ZeroAsSub}}</td>
-                </ng-container>
-
-                <ng-container matColumnDef="thuc_hien_thang">
-                    <th mat-header-cell *matHeaderCellDef> Tháng {{month}}/{{year}}</th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.thuc_hien_thang|number: '1.0-2':'vi'| ZeroAsSub}}
+                <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
+                        column.attr_code.toLowerCase() : 
+                        column.fld_code.toLowerCase()">
+                    <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
+                            ngược lại thì lấy cột fld_code (cột dữ liệu) -->
+                    <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
+                    <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
+                        'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
+                        <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
+                            nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
+                        <div
+                            [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                            {{row[column.is_default === 1? column.attr_code.toLowerCase():
+                            column.fld_code.toLowerCase()]}}
+                        </div>
+                        <!-- && indicators[rowIndex].ind_type_id != '1' -->
+                        <!-- <ng-template #other_content>
+                                <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                            </ng-template> -->
                     </td>
                 </ng-container>
-                <ng-container matColumnDef="luy_ke">
-                    <th mat-header-cell *matHeaderCellDef> Luỹ kế {{month}} tháng</th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        -
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="thuc_hien_so_voi_thang_truoc"> class="right-cell"
-                    <th mat-header-cell *matHeaderCellDef> Thực hiện tháng {{month}}<br> so với tháng trước (%)</th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"
-                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II' || element.thu_tu=='A'?'bold':''">
-                        {{element.thuc_hien_so_voi_thang_truoc|number: '1.0-2':'vi'| ZeroAsSub}}</td>
-                </ng-container>
-                
 
-                <tr mat-header-row class="table-header" *matHeaderRowDef="DISPLAY_COLS; sticky : true"></tr>
-                <tr mat-row class="table-row" *matRowDef="let row; columns: DISPLAY_COLS;let i = index; ">
+                <div *ngFor="let table of tableMergeHader">
+                    <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;"
+                            [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                    </ng-container>
+
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName;"> </tr>
+                </div>
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index"></tr>
             </table>
         </div>
-        <mat-paginator [pageSizeOptions]="[27, 50, 100]" showFirstLastButtons></mat-paginator>
-        <ng-template #ShowEmpty>
+
+        <ng-template #ShowList>
             <h1>Không có dữ liệu</h1>
         </ng-template>
-
     </mat-card-content>
 </mat-card>

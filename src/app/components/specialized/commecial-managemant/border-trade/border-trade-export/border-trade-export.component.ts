@@ -116,7 +116,6 @@ export class BorderTradeExportComponent implements OnInit {
         this.groupByColumns = ['ten_cua_khau']
     }
 
-
     handleGTXK() {
         // this.TongGiaTriThangThucHien = this.dataSource.data[15].gia_tri_thang;
         // this.uth_so_cungky = this.dataSource.data[15].uoc_th_so_cungky_tht;
@@ -169,7 +168,8 @@ export class BorderTradeExportComponent implements OnInit {
         this.sctService.GetDuLieuXuatKhauBG(time_id).subscribe(res => {
             if (res['success']) {
                 this.dataSource.data = this.addGroups(res['data'], this.groupByColumns);
-                console.log(this.dataSource.data)
+                // console.log(this.dataSource.data)
+                this.tinh_tong(res['data'])
                 this.dataSource.filterPredicate = this.customFilterPredicate.bind(this);
             }
         })
@@ -258,16 +258,8 @@ export class BorderTradeExportComponent implements OnInit {
 
     tinh_tong(data) {
         this.initVariable();
-        for (let item of data) {
-            this.TongLuongThangThucHien += item['luong_thang'];
-            this.TongGiaTriThangThucHien += item['gia_tri_thang'];
-            this.TongLuongCongDon += item['luong_cong_don'];
-            this.TongGiaTriCongDon += item['gia_tri_cong_don'];
-            this.tongluong_tc += item['luong_thang_tc'];
-            this.tonggiatri_tc += item['gia_tri_thang_tc'];
-            this.tongluongcongdon_tc += item['luong_cong_don_tc'];
-            this.tonggiatricongdon_tc += item['gia_tri_cong_don_tc'];
-        }
+        this.TongGiaTriThangThucHien = data.map(item => item['tri_gia_thang']).reduce((a, b) => a + b);
+        this.TongGiaTriCongDon = data.map(item => item['tri_gia_cong_don']).reduce((a, b) => a + b);
     }
 
     ngAfterViewInit(): void {

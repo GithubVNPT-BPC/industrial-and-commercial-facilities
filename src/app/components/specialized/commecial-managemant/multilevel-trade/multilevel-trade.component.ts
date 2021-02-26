@@ -69,7 +69,6 @@ export class MultilevelTradeComponent extends BaseComponent {
     this.LINK_DEFAULT = "/specialized/commecial-management/multilevel-trade";
     this.TITLE_DEFAULT = "Hoạt động bán hàng đa cấp";
     this.TEXT_DEFAULT = "Hoạt động bán hàng đa cấp";
-  
   }
 
   public getMultiLevelTradeList() {
@@ -109,6 +108,17 @@ export class MultilevelTradeComponent extends BaseComponent {
 
   callService(data) {
     this.commerceManagementService.postMultiLevelTradeData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  prepareRemoveData(){
+    let datas = this.selection.selected.map(element => new Object({id: element.id}));
+    return datas;
+  }
+
+  callRemoveService(data){
+    this.commerceManagementService.deleteMultiLevel(data).subscribe(res => {
+      this.successNotify(res);
+    });
   }
 
 }
