@@ -155,7 +155,7 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Ngày bắt đầu kinh doanh</mat-label>
                         <input formControlName="ngay_bd_kd" matInput readonly [matDatepicker]="datePicker"
-                            [(ngModel)]="_Service.companyinfo.ngay_bd_kd" (ngModelChange)="getChange($event)">
+                            [(ngModel)]="bdkddate" (ngModelChange)="getChange($event)">
                         <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
                         </mat-datepicker-toggle>
                         <mat-datepicker #datePicker></mat-datepicker>
