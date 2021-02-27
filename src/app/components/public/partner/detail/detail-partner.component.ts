@@ -393,6 +393,8 @@ export class CompanyDetailComponent implements OnInit {
 	company: CompanyDetailModel;
 	careerarray: Array<Career> = new Array<Career>();
 
+	bdkddate: Date;
+
 	GetCompanyInfoById() {
 		this._Service.GetCompanyInfoById(this.mst).subscribe(
 			allrecords => {
@@ -507,36 +509,38 @@ export class CompanyDetailComponent implements OnInit {
 					this.paginator._intl.nextPageLabel = "Trang Tiếp";
 				}
 
-				this._Service.companyinfo = {
-					mst: this.company.mst,
-					id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
-					mst_parent: this.company.mst_cha,
-					sct: true,
-					hoat_dong: this.company.hoat_dong,
-					dia_chi: this.company.dia_chi,
-					id_phuong_xa: this.company.id_phuong_xa,
-					nguoi_dai_dien: this.company.nguoi_dai_dien,
-					so_dien_thoai: this.company.so_dien_thoai,
-					ten_doanh_nghiep: String(this.company.ten_doanh_nghiep),
-					von_dieu_le: this.company.von_dieu_le,
-					ngay_bd_kd: this.convertstringtodate(this.company.ngay_bd_kd),
-					so_lao_dong: this.company.so_lao_dong,
-					cong_suat_thiet_ke: this.company.cong_suat_thiet_ke,
-					san_luong: this.company.san_luong,
-					email: this.company.email,
-					so_lao_dong_sct: this.company.so_lao_dong_sct,
-					cong_suat_thiet_ke_sct: this.company.cong_suat_thiet_ke_sct,
-					san_luong_sct: this.company.san_luong_sct,
-					email_sct: this.company.email_sct,
-					tieu_chuan_san_pham: this.company.tieu_chuan_san_pham,
-					doanh_thu: this.company.doanh_thu,
-					quy_mo_tai_san: this.company.quy_mo_tai_san,
-					loi_nhuan: this.company.loi_nhuan,
-					nhu_cau_ban: this.company.nhu_cau_ban,
-					nhu_cau_mua: this.company.nhu_cau_mua,
-					nhu_cau_hop_tac: this.company.nhu_cau_hop_tac,
-					danh_sach_nganh_nghe: [],
-				}
+				this.bdkddate = this.convertstringtodate(this.company.ngay_bd_kd),
+
+					this._Service.companyinfo = {
+						mst: this.company.mst,
+						id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
+						mst_parent: this.company.mst_cha,
+						sct: true,
+						hoat_dong: this.company.hoat_dong,
+						dia_chi: this.company.dia_chi,
+						id_phuong_xa: this.company.id_phuong_xa,
+						nguoi_dai_dien: this.company.nguoi_dai_dien,
+						so_dien_thoai: this.company.so_dien_thoai,
+						ten_doanh_nghiep: String(this.company.ten_doanh_nghiep),
+						von_dieu_le: this.company.von_dieu_le,
+						ngay_bd_kd: '',
+						so_lao_dong: this.company.so_lao_dong,
+						cong_suat_thiet_ke: this.company.cong_suat_thiet_ke,
+						san_luong: this.company.san_luong,
+						email: this.company.email,
+						so_lao_dong_sct: this.company.so_lao_dong_sct,
+						cong_suat_thiet_ke_sct: this.company.cong_suat_thiet_ke_sct,
+						san_luong_sct: this.company.san_luong_sct,
+						email_sct: this.company.email_sct,
+						tieu_chuan_san_pham: this.company.tieu_chuan_san_pham,
+						doanh_thu: this.company.doanh_thu,
+						quy_mo_tai_san: this.company.quy_mo_tai_san,
+						loi_nhuan: this.company.loi_nhuan,
+						nhu_cau_ban: this.company.nhu_cau_ban,
+						nhu_cau_mua: this.company.nhu_cau_mua,
+						nhu_cau_hop_tac: this.company.nhu_cau_hop_tac,
+						danh_sach_nganh_nghe: [],
+					}
 			});
 	}
 
