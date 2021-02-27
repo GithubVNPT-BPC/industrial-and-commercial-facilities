@@ -117,7 +117,7 @@ export class UpdateBusinessmanComponent implements OnInit {
 
   onSubmit() {
     this.input.push({
-      id_thuong_nhan: null,
+      id_thuong_nhan: this.id == undefined ? this.id : null,
       ten_thuong_nhan: '',
       dia_chi: '',
       so_dien_thoai: '',

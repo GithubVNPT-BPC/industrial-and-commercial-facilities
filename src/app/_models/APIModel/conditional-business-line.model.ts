@@ -23,6 +23,13 @@ export class PetrolList {
     ghi_chu: string;
     is_het_han: boolean;
     ten_quan_huyen: string;
+
+    id_thuong_nhan: string;
+    ten_thuong_nhan: string;
+    dia_chi_tn: string;
+    so_dien_thoai_tn: string;
+    id_san_luong: string;
+    id: string;
 }
 
 export class PetrolPost {
@@ -44,6 +51,13 @@ export class PetrolValuePost {
     time_id: string;
     san_luong: number;
     ghi_chu: string;
+}
+
+export class PostBusinessmanValue {
+    id: string;
+    id_thuong_nhan: string;
+    id_linh_vuc: number;
+    id_quan_ly: string;
 }
 
 export class Businessman {
@@ -104,5 +118,11 @@ export class CertificateModel {
     public ghi_chu: string;
     public id_linh_vuc: number;
     public ten_giay_phep: string;
+}
+export class BusinessmanSelect {
+    id_thuong_nhan: number;
+    ten_thuong_nhan: string;
+    dia_chi: string;
+    so_dien_thoai: string;
 }
 //mat-select model

@@ -18,7 +18,7 @@ import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 
 export const customCurrencyMaskConfig = {
-  align: "left",
+  align: "right",
   allowNegative: true,
   allowZero: true,
   decimal: ".",

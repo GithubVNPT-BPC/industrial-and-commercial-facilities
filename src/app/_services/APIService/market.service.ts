@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { DomesticPriceModel, ForeignMarketModel, ProductValueModel, CompanyPost, DeleteModel, DeleteModel1 } from '../../_models/APIModel/domestic-market.model';
+import { DomesticPriceModel, ForeignMarketModel, ProductValueModel, CompanyPost, DeleteModel, DeleteModel1, PostTopProduct } from '../../_models/APIModel/domestic-market.model';
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +34,9 @@ export class MarketService {
     public urlProduct = "api/qltm/thong-tin-san-xuat";
     public urlProductAll = "api/qltm/tat-ca-thong-tin-san-xuat";
     public urlProductPost = "api/qltm/thong-tin-san-xuat";
+    public urlProductPostTop = "api/qltm/doanh-nghiep-san-xuat";
     public urlProductDelete = "api/qltm/xoa-thong-tin-san-xuat";
+    public urlTopProductValueDelete = "api/qltm/xoa-doanh-nghiep-san-xuat";
 
     public urlImport = "api/qltm/xnk/nhap-khau-tong-hop";
     public urlExport = "api/qltm/xnk/xuat-khau-tong-hop";
@@ -186,11 +188,25 @@ export class MarketService {
             catchError(this.handleError)
         );
     }
+    public PostProductValueTop(toparray: Array<PostTopProduct>) {
+        var apiUrl = this.apiHome + this.urlProductPostTop;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, toparray, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
     public DeleteProductValue(deletemodel1: Array<DeleteModel1>) {
         var apiUrl = this.apiHome + this.urlProductDelete
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, deletemodel1, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+    }
+    public DeleteProductValueTop(deletemodel: Array<DeleteModel1>) {
+        var apiUrl = this.apiHome + this.urlTopProductValueDelete
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
     }
     //ProductValue
 
