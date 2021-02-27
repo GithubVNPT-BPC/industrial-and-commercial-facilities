@@ -107,7 +107,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'supplybusiness',
+        path: 'supplybusiness/:id/:time',
         component: AddSupplyBusinessComponent,
         data: {
           title: 'Quản lý thương nhân cung cấp',

@@ -52,25 +52,7 @@ export const MY_FORMATS = {
   ],
 })
 export class ManagePetrolValueComponent implements OnInit {
-  displayedColumns: string[] = [
-    'index',
-    'ten_cua_hang',
-    'mst',
-    'san_luong',
-    'so_giay_phep',
-    'ngay_cap',
-    'ngay_het_han',
-    'dia_chi',
-    'ten_quan_huyen',
-    'so_dien_thoai',
-    'ten_quan_ly',
-    'ten_nhan_vien',
-    'nguoi_dai_dien',
-    'id_cua_hang_xang_dau',
-    'tinh_trang_hoat_dong',
-  ];
-  dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-  dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+
 
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
@@ -85,13 +67,8 @@ export class ManagePetrolValueComponent implements OnInit {
   ) {
   }
 
-  public AddBusiness(data: any) {
-    const dialogRef = this.dialog.open(AddSupplyBusinessComponent, {
-      data: {
-        message: 'Dữ liệu top doanh nghiệp sản xuất',
-        business_data: data,
-      }
-    });
+  AddSupplyBusiness(id: string, time: string) {
+    this.router.navigate(['specialized/commecial-management/domestic/supplybusiness/' + id + '/' + time]);
   }
 
   public district: Array<DistrictModel> = new Array<DistrictModel>();
@@ -125,9 +102,70 @@ export class ManagePetrolValueComponent implements OnInit {
   SanLuongBanRa: number;
   SLThuongNhan: number;
 
+  displayedColumns: string[] = [
+    'cap_nhat',
+    'index',
+    'ten_cua_hang',
+    'mst',
+    'san_luong',
+    'ten_thuong_nhan',
+    'dia_chi_tn',
+    'so_dien_thoai_tn',
+    'so_giay_phep',
+    'ngay_cap',
+    'ngay_het_han',
+    'dia_chi',
+    'ten_quan_huyen',
+    'so_dien_thoai',
+    'ten_quan_ly',
+    'ten_nhan_vien',
+    'nguoi_dai_dien',
+    'id_cua_hang_xang_dau',
+    'id_san_luong',
+    'tinh_trang_hoat_dong',
+    'time_id'
+  ];
+  dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+  dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+  petrollist: Array<PetrolList> = new Array<PetrolList>();
+  petrollist1: Array<PetrolList> = new Array<PetrolList>();
+  petrollist2: Array<PetrolList> = new Array<PetrolList>();
+
   getPetrolListbyYear(year: string) {
     this._Service.GetPetrolValue(year).subscribe(all => {
-      this.dataSource = new MatTableDataSource<PetrolList>(all.data[0]);
+      this.petrollist = all.data[0];
+      this.petrollist1 = all.data[1];
+      this.petrollist2 = this.petrollist.map(x => {
+        let temp = this.petrollist1.filter(y => y.id_san_luong == x.id_san_luong)
+
+        let temp1 = temp.map(z => z.ten_thuong_nhan)
+        if (temp1 == undefined || temp1 == null) {
+          x.ten_thuong_nhan = null
+        }
+        else {
+          x.ten_thuong_nhan = temp1.join('; ')
+        }
+
+        let temp2 = temp.map(z => z.dia_chi_tn)
+        if (temp2 == undefined || temp2 == null) {
+          x.dia_chi_tn = null
+        }
+        else {
+          x.dia_chi_tn = temp2.join('; ')
+        }
+
+        let temp3 = temp.map(z => z.so_dien_thoai_tn)
+        if (temp3 == undefined || temp3 == null) {
+          x.so_dien_thoai_tn = null
+        }
+        else {
+          x.so_dien_thoai_tn = temp3.join('; ')
+        }
+
+        return x
+      })
+
+      this.dataSource.data = this.petrollist2
       this.dataSource.data.forEach(element => {
         if (element.ngay_het_han) {
           let temp = this.Convertdate(element.ngay_het_han)
@@ -140,6 +178,7 @@ export class ManagePetrolValueComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
       this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
 
       this.dataSource1.paginator = this.paginator;

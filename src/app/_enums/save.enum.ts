@@ -3,6 +3,7 @@ export enum SAVE {
     EXPORT = 'Xuất khẩu',
     IMPORT = 'Nhập khẩu',
     PRODUCT = 'Sản xuất',
+    ADD = 'Thêm',
 
     DATA_IMPORT = 'Dữ liệu nhập khẩu',
     DATA_EXPORT = 'Dữ liệu xuất khẩu',

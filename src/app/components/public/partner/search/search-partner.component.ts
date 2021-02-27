@@ -80,6 +80,11 @@ export class SearchPartnerComponent implements OnInit {
     this.filterType = MatTableFilter.ANYWHERE;
   }
 
+  public applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
@@ -105,11 +110,7 @@ export class SearchPartnerComponent implements OnInit {
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
       let element = temp[i];
-      if (element.filed_name === 'ngay_cap' || element.filed_name === 'ngay_bd_kd' || element.filed_name === 'ngay_het_han') {
-        this.tempFilter[element.filed_name] = this.Convertdate(element.filed_value);
-      } else {
-        this.tempFilter[element.filed_name] = element.filed_value;
-      }
+      this.tempFilter[element.filed_name] = element.filed_value;
     }
     this.filterEntity = Object.assign({}, this.tempFilter);
   }
@@ -235,6 +236,15 @@ export class SearchPartnerComponent implements OnInit {
           }
 
           return d
+        })
+
+        this.companyList5.forEach(x => {
+          if (x.ngay_bd_kd) {
+            x.ngay_bd_kd = this.Convertdate(x.ngay_bd_kd)
+          }
+          else {
+            x.ngay_bd_kd = ''
+          }
         })
 
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);

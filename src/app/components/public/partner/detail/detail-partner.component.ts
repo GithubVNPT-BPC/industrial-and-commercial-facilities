@@ -1,521 +1,551 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Company } from '../../../../_models/company.model';
-
-import { MarketService } from '../../../../_services/APIService/market.service';
-import { CompanyDetailModel } from '../../../../_models/APIModel/domestic-market.model';
-import { CareerModel, DistrictModel, SubDistrictModel, BusinessTypeModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { MatDialog } from '@angular/material/dialog';
-
+import { Component, OnInit, OnDestroy, Input, ViewChild, QueryList, ViewChildren } from "@angular/core";
+import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from "@angular/router";
+import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
+import { InformationService } from '../../../../shared/information/information.service';
+import { MarketService } from "../../../../_services/APIService/market.service";
+import { MatDialog } from "@angular/material/dialog";
+import { NgForm } from '@angular/forms';
+import { KeyboardService } from 'src/app/shared/services/keyboard.service';
+import { formatDate } from '@angular/common';
+import { ManagerDirective } from 'src/app/shared/manager.directive';
+import { MatPaginator } from '@angular/material/paginator';
+import { SelectionModel } from '@angular/cdk/collections';
 import {
-	MAT_MOMENT_DATE_FORMATS,
-	MomentDateAdapter,
-	MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-} from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+	CompanyDetailModel,
+	CompanyPost,
+	CareerModel,
+	DistrictModel,
+	SubDistrictModel,
+	BusinessTypeModel,
+	Career,
+	DeleteModel1
+} from "../../../../_models/APIModel/domestic-market.model";
+
 import { FormControl } from '@angular/forms';
-import { Moment } from 'moment';
-import moment from 'moment';
-import { MatDatepicker, MatPaginator, MatTableDataSource } from '@angular/material';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-export const MY_FORMATS = {
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
+const moment = _rollupMoment || _moment;
+export const DDMMYY_FORMAT = {
 	parse: {
-		dateInput: 'MM/YYYY',
+		dateInput: 'LL',
 	},
 	display: {
-		dateInput: 'MM/YYYY',
-		monthYearLabel: 'MMM YYYY',
+		dateInput: 'DD-MM-YYYY',
+		monthYearLabel: 'YYYY',
 		dateA11yLabel: 'LL',
-		monthYearA11yLabel: 'MMMM YYYY',
+		monthYearA11yLabel: 'YYYY',
 	},
 };
-export let model_KNNK = {
-	id_san_pham: 0,
-	san_luong: 0,
-	tri_gia: 0,
-	id_quoc_gia: 0,
-	id_kn_xuat_nhap_khau: 0
-}
 
 @Component({
 	selector: 'app-company-detail',
 	templateUrl: './detail-partner.component.html',
 	styleUrls: ['../../public_layout.scss'],
 	providers: [
-		{ provide: MAT_DATE_LOCALE, useValue: 'vi-VI' },
-
 		{
 			provide: DateAdapter,
 			useClass: MomentDateAdapter,
 			deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
 		},
-		{ provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-		{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+
+		{ provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
+		{ provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+		DatePipe
 	],
-	animations: [
-		trigger('toggleBox', [
-			// ...
-			state('open', style({
-				height: '300px',
-				backgroundColor: '#061ff0'
-			})),
-			state('closed', style({
-				height: '70px',
-				backgroundColor: '#E91E63',
-			})),
-			transition('open => closed', [
-				animate('.3s')
-			]),
-			transition('closed => open', [
-				animate('0.3s')
-			]),
-		])
-	]
 })
 
 export class CompanyDetailComponent implements OnInit {
 
-	@Input() company: CompanyDetailModel;
-	mst: string;
-	errorMessage: any;
+	@ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
+	@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
 	public career: Array<CareerModel> = new Array<CareerModel>();
 	public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+	public district: Array<DistrictModel> = new Array<DistrictModel>();
 	public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
-	defaultLogo: string = '../../../../assets/img/brandlogo/company_ph01.jpg';
-	SLCSTT: any;
-	dataSourceKNXK = new MatTableDataSource<any>();
-	dataSourceKNNK = new MatTableDataSource<any>();
-	date2: any;
-	date1: any;
-	date_thoi_han: any;
-	// NK
-	periodsNK = ["Tháng", "Quý", "6 Tháng", "Năm"];
-	monthsNK: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-	quartersNK: any[] = [
-		{ ma_so: 1, ma_chu: "I" },
-		{ ma_so: 2, ma_chu: "II" },
-		{ ma_so: 3, ma_chu: "III" },
-		{ ma_so: 4, ma_chu: "IV" },
-	];
-	selectedHalfNK: number = 1;
-	selectedMonthNK: number = 1;
-	selectedQuarterNK: number = 0;
-	selectedYearNK: number = 2020;
-	selectedPeriodNK: string = "Tháng";
-	yearsNK: Array<number> = [];
-	halfsNK: number[] = [1, 2];
+	errorMessage: string;
 
-	// XK
-	periodsXK = ["Tháng", "Quý", "6 Tháng", "Năm"];
-	monthsXK: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-	quartersXK: any[] = [
-		{ ma_so: 1, ma_chu: "I" },
-		{ ma_so: 2, ma_chu: "II" },
-		{ ma_so: 3, ma_chu: "III" },
-		{ ma_so: 4, ma_chu: "IV" },
-	];
-	selectedHalfXK: number = 1;
-	selectedMonthXK: number = 1;
-	selectedQuarterXK: number = 0;
-	selectedYearXK: number = 2020;
-	selectedPeriodXK: string = "Tháng";
-	yearsXK: Array<number> = [];
-	halfsXK: number[] = [1, 2];
-	products: any;
-	nationals: any;
-	messageNK: string;
-	messageXK: string;
-	@ViewChild('ImportPaginators', { static: true }) Importpaginator: MatPaginator;
-	@ViewChild('ExportPaginators', { static: true }) Exportpaginator: MatPaginator;
+	mst: string;
+	doanh_nghiep: FormGroup;
+	// danh_sach_nganh_nghe: FormArray;
+
+	selection = new SelectionModel<Career>(true, []);
+
+	isAllSelected() {
+		const numSelected = this.selection.selected.length;
+		// const numRows = this.dataSource.data.length;
+		const numRows = this.dataSource.connect().value.length;
+		return numSelected === numRows;
+	}
+
+	masterToggle() {
+		this.isAllSelected() ?
+			this.selection.clear() :
+			this.dataSource.connect().value.forEach(row => this.selection.select(row));
+	}
+
+	checkboxLabel(row?: Career): string {
+		if (!row) {
+			return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+		}
+		return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_nganh_nghe_kinh_doanh + 1}`;
+	}
+
+	deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
+	selectionarray: string[];
+	removeRows() {
+		if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+			this.selection.selected.forEach(x => {
+				this.selectionarray = this.selection.selected.map(item => item.id_nganh_nghe_kinh_doanh)
+				this.deletemodel1.push({
+					id: ''
+				})
+			})
+			for (let index = 0; index < this.selectionarray.length; index++) {
+				const element = this.deletemodel1[index];
+				element.id = this.selectionarray[index]
+			}
+			this._Service.DeleteCareer(this.deletemodel1).subscribe(res => {
+				this.info.msgSuccess('Xóa thành công')
+				this.selection.clear();
+				this.paginator.pageIndex = 0;
+			})
+		}
+	}
 
 	constructor(
 		public route: ActivatedRoute,
+		public router: Router,
+		public datepipe: DatePipe,
 		public dialog: MatDialog,
-		public marketService: MarketService,) {
-		this.route.params.subscribe(params => {
-			this.mst = params['mst'];
+		public _Service: MarketService,
+		public info: InformationService,
+		private formbuilder: FormBuilder,
+		public _keyboardservice: KeyboardService,
+	) {
+		this.route.params.subscribe((params) => {
+			this.mst = params["mst"];
 		});
-		this.company = new CompanyDetailModel();
 	}
-
-	public readonly DEFAULT_PERIOD = "6 Tháng";
-	ngOnInit() {
-		this.GetCompanyInfoById();
-		this.GetAllNganhNghe();
-		this.GetAllPhuongXa();
-		// this.GetAllLoaiHinh();
-		// this.GetAllCSTT();
-
-		///
-		this.selectedPeriodNK = this.DEFAULT_PERIOD;
-		this.selectedPeriodXK = this.DEFAULT_PERIOD;
-		this.selectedYearNK = this.GetCurrentYear();
-		this.selectedYearXK = this.GetCurrentYear();
-		this.selectedMonthNK = this.GetCurrentMonth();
-		this.selectedMonthXK = this.GetCurrentMonth();
-		this.yearsNK = this.InitialYears();
-		this.yearsXK = this.InitialYears();
-
-		/// get init information XNK with current time
-		// this.getKNNK();
-		// this.getKNXK();
-
-		// get list product and nationals
-		// this.getAllProducts();
-		// this.getAllNational();
-	}
-
-	isOpen: boolean = false;
-	toggle() {
-		this.isOpen = !this.isOpen;
-	}
-
-	message: String = '';
-	// cuDate = new Date();
-	dateNK = new FormControl(moment());
-	dateXK = new FormControl(moment());
-	// displayedColumns: String[] = ['index', 'SAN_PHAM', 'SAN_LUONG', 'TRI_GIA', 'DOI_TAC', 'ACTION'];
-	displayedColumns: String[] = ['index', 'SAN_PHAM', 'SAN_LUONG', 'TRI_GIA', 'DOI_TAC'];
-	public readonly formatDate = 'dd/MM/yyyy';
-	public readonly localeDate = 'en-US';
-
-	changePeriod(isNK) {
-		if (isNK) {
-			switch (this.selectedPeriodNK) {
-				case "Tháng":
-					this.selectedMonthNK = this.GetCurrentMonth();
-					this.selectedYearNK = this.GetCurrentYear();
-					break;
-				case "Quý":
-					this.selectedQuarterNK = this.GetCurrentQuarter();
-					this.selectedYearNK = this.GetCurrentYear();
-					break;
-				case "Năm":
-					this.selectedYearNK = this.GetCurrentYear();
-					break;
-				case "6 Tháng":
-					this.selectedYearNK = this.GetCurrentYear();
-					this.selectedHalfNK = 1;
-					break;
-				default:
-					break;
-			}
-		} else {
-			switch (this.selectedPeriodXK) {
-				case "Tháng":
-					this.selectedMonthXK = this.GetCurrentMonth();
-					this.selectedYearXK = this.GetCurrentYear();
-					break;
-				case "Quý":
-					this.selectedQuarterXK = this.GetCurrentQuarter();
-					this.selectedYearXK = this.GetCurrentYear();
-					break;
-				case "Năm":
-					this.selectedYearXK = this.GetCurrentYear();
-					break;
-				case "6 Tháng":
-					this.selectedYearXK = this.GetCurrentYear();
-					this.selectedHalfXK = 1;
-					break;
-				default:
-					break;
-			}
-		}
-	}
-
-	GetCurrentMonth() {
-		var currentDate = new Date();
-		return currentDate.getMonth() + 1;
-	}
-	GetCurrentYear() {
-		var currentDate = new Date();
-		return currentDate.getFullYear();
-	}
-	GetCurrentQuarter() {
-		let currentDate = new Date();
-		let month = currentDate.getMonth() + 1;
-		return month <= 3 ? 1 : month <= 6 ? 2 : month <= 9 ? 3 : 4;
-	}
-	InitialYears() {
-		let returnYear: Array<any> = [];
-		let currentDate = new Date();
-		let nextYear = currentDate.getFullYear() + 1;
-		for (let index = 0; index < 11; index++) {
-			returnYear.push(nextYear - index);
-		}
-		return returnYear;
-	}
-
-
-	// findKNNK() {
-	// 	this.getKNNK()
-	// }
-
-	// findKNXK() {
-	// 	this.getKNXK();
-	// }
-
-	handleReportMode(selectedPeriod) {
-		switch (selectedPeriod) {
-			case "Tháng":
-				return 1;
-			case "Quý":
-				return 2;
-			case "6 Tháng":
-				return 3;
-			default:
-				break;
-		}
-	}
-
-	handlePeriod(selectedPeriod, type) {
-
-		if (selectedPeriod === 'Tháng' && type === 'NK') {
-			return this.selectedMonthNK;
-		}
-		if (selectedPeriod === 'Tháng' && type === 'XK') {
-			return this.selectedMonthXK;
-		}
-
-		if (selectedPeriod === 'Quý' && type === 'NK') {
-			return this.selectedQuarterNK;
-		}
-		if (selectedPeriod === 'Quý' && type === 'XK') {
-			return this.selectedQuarterXK;
-		}
-
-		if (selectedPeriod === '6 Tháng' && type === 'NK') {
-			return this.selectedHalfNK;
-		}
-		if (selectedPeriod === '6 Tháng' && type === 'XK') {
-			return this.selectedHalfXK;
-		}
-
-	}
-
-	// getKNNK() {
-	// 	let report_mode = this.handleReportMode(this.selectedPeriodNK);
-	// 	let year = this.selectedYearNK;
-	// 	let period = this.handlePeriod(this.selectedPeriodNK, 'NK')
-	// 	this.marketService.GetKNNK(this.mst, report_mode, year, period)
-	// 		.subscribe((data) => {
-	// 			if (data["data"]) {
-	// 				this.dataSourceKNNK = new MatTableDataSource<any>(data["data"]);
-	// 				this.dataSourceKNNK.paginator = this.Importpaginator;
-	// 				if (this.Importpaginator) {
-	// 					this.Importpaginator._intl.itemsPerPageLabel = 'Số hàng';
-	// 					this.Importpaginator._intl.firstPageLabel = "Trang Đầu";
-	// 					this.Importpaginator._intl.lastPageLabel = "Trang Cuối";
-	// 					this.Importpaginator._intl.previousPageLabel = "Trang Trước";
-	// 					this.Importpaginator._intl.nextPageLabel = "Trang Tiếp";
-	// 				}
-	// 				this.messageNK = "";
-	// 			}
-	// 			if (data['data'].length === 0) {
-	// 				this.messageNK = "Không tìm thấy dữ liệu !!";
-	// 			}
-
-	// 		});
-	// }
-
-	// getKNXK() {
-	// 	let report_mode = this.handleReportMode(this.selectedPeriodXK);
-	// 	let year = this.selectedYearXK;
-	// 	let period = this.handlePeriod(this.selectedPeriodXK, 'XK');
-	// 	this.marketService.GetKNXK(this.mst, report_mode, year, period)
-	// 		.subscribe((data) => {
-	// 			if (data["data"]) {
-	// 				this.dataSourceKNXK = new MatTableDataSource<any>(data["data"]);
-	// 				this.dataSourceKNXK.paginator = this.Exportpaginator;
-	// 				if (this.Exportpaginator) {
-	// 					this.Exportpaginator._intl.itemsPerPageLabel = 'Số hàng';
-	// 					this.Exportpaginator._intl.firstPageLabel = "Trang Đầu";
-	// 					this.Exportpaginator._intl.lastPageLabel = "Trang Cuối";
-	// 					this.Exportpaginator._intl.previousPageLabel = "Trang Trước";
-	// 					this.Exportpaginator._intl.nextPageLabel = "Trang Tiếp";
-	// 				}
-	// 			}
-	// 			if (data['data'].length === 0) {
-	// 				this.messageXK = "Không tìm thấy dữ liệu !!";
-	// 			}
-	// 		});
-	// }
-
-	// openDialog(mst: string) {
-	// 	const dialogRef = this.dialog.open(DialogPartnerComponent, { data: mst });
-
-	// 	dialogRef.afterClosed().subscribe(result => {
-	// 	});
-	// }
 
 	GetAllNganhNghe() {
-		this.marketService.GetAllCareer().subscribe(
-			allrecords => {
-				this.career = allrecords.data as CareerModel[];
-			});
+		this._Service.GetAllCareer().subscribe((allrecords) => {
+			this.career = allrecords.data as CareerModel[];
+		});
 	}
 
 	GetAllPhuongXa() {
-		this.marketService.GetAllSubDistrict().subscribe(
+		this._Service.GetAllSubDistrict().subscribe((allrecords) => {
+			this.subdistrict = allrecords.data as SubDistrictModel[];
+		});
+	}
+
+	getQuan_Huyen() {
+		this._Service.GetAllDistrict().subscribe((allDistrict) => {
+			this.district = allDistrict["data"] as DistrictModel[];
+
+		});
+	}
+
+	GetAllLoaiHinh() {
+		this._Service.GetAllBusinessType().subscribe((allrecords) => {
+			this.Business = allrecords.data as BusinessTypeModel[];
+		});
+	}
+
+	ngOnInit() {
+		if (this.mst != undefined) {
+			this.GetCompanyInfoById();
+		}
+		this.GetAllNganhNghe();
+		this.GetAllPhuongXa();
+		this.getQuan_Huyen();
+		this.GetAllLoaiHinh();
+		this.resetForm();
+
+		this.doanh_nghiep = this.formbuilder.group({
+			mst: '',
+			id_loai_hinh_hoat_dong: null,
+			mst_parent: '',
+			sct: true,
+			hoat_dong: true,
+			dia_chi: '',
+			id_phuong_xa: null,
+			nguoi_dai_dien: '',
+			so_dien_thoai: '',
+			ten_doanh_nghiep: '',
+			von_dieu_le: null,
+			ngay_bd_kd: '',
+			so_lao_dong: null,
+			cong_suat_thiet_ke: null,
+			san_luong: null,
+			email: '',
+			so_lao_dong_sct: null,
+			cong_suat_thiet_ke_sct: null,
+			san_luong_sct: null,
+			email_sct: '',
+			tieu_chuan_san_pham: '',
+			doanh_thu: '',
+			quy_mo_tai_san: '',
+			loi_nhuan: '',
+			nhu_cau_ban: '',
+			nhu_cau_mua: '',
+			nhu_cau_hop_tac: '',
+			danh_sach_nganh_nghe: []
+			// danh_sach_nganh_nghe: this.formbuilder.array([this.newCareer()])
+		})
+	}
+
+	// newCareer(): FormGroup {
+	//   return this.formbuilder.group({
+	//     id_nganh_nghe_kinh_doanh: 0,
+	//     nganh_nghe_kd_chinh: '',
+	//     id_linh_vuc: 0
+	//   })
+	// }
+
+	// addCareer(): void {
+	//   this.danh_sach_nganh_nghe = this.doanh_nghiep.get('danh_sach_nganh_nghe') as FormArray;
+	//   this.danh_sach_nganh_nghe.push(this.newCareer());
+	// }
+
+	// removeCareer(i: number) {
+	//   this.danh_sach_nganh_nghe.removeAt(i);
+	// }
+
+	public SaveData(companyinput) {
+		if (this.mst == undefined) {
+			this._Service.PostCompany(companyinput).subscribe(
+				res => {
+					// debugger;
+					// this.resetForm(companyinput);
+					this.info.msgSuccess('Thêm thành công')
+					this.router.navigate(['manager/business/search/']);
+				},
+				err => {
+					// debugger;
+				}
+			)
+		}
+		else {
+			this._Service.UpdateCompany(companyinput).subscribe(
+				res => {
+					// debugger;
+					// this.resetForm(companyinput);
+					this.info.msgSuccess('Thêm thành công')
+					this.router.navigate(['manager/business/search/']);
+				},
+				err => {
+					// debugger;
+				}
+			)
+		}
+	}
+
+	date = new FormControl(moment);
+	pickedDate = {
+		date: new Date()
+	}
+
+	public getChange(param: any): string {
+		let datepipe = this.datepipe.transform(param._d, 'yyyyMMdd')
+		return datepipe
+	}
+
+	companyinput: CompanyPost
+	onSubmit() {
+		this.companyinput = this.doanh_nghiep.value
+		this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
+		this.companyinput.ngay_bd_kd = this.getChange(this.companyinput.ngay_bd_kd)
+		this.companyinput
+		this.SaveData(this.companyinput);
+	}
+
+	resetForm(form?: NgForm) {
+		if (form != null)
+			form.form.reset();
+		this._Service.companyinfo = {
+			mst: '',
+			id_loai_hinh_hoat_dong: null,
+			mst_parent: '',
+			sct: true,
+			hoat_dong: true,
+			dia_chi: '',
+			id_phuong_xa: null,
+			nguoi_dai_dien: '',
+			so_dien_thoai: '',
+			ten_doanh_nghiep: '',
+			von_dieu_le: null,
+			ngay_bd_kd: '',
+			so_lao_dong: null,
+			cong_suat_thiet_ke: null,
+			san_luong: null,
+			email: '',
+			so_lao_dong_sct: null,
+			cong_suat_thiet_ke_sct: null,
+			san_luong_sct: null,
+			email_sct: '',
+			tieu_chuan_san_pham: '',
+			doanh_thu: '',
+			quy_mo_tai_san: '',
+			loi_nhuan: '',
+			nhu_cau_ban: '',
+			nhu_cau_mua: '',
+			nhu_cau_hop_tac: '',
+			danh_sach_nganh_nghe: [],
+		}
+	}
+	dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
+	public displayedColumns: string[] = ['index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh'];
+
+	public _currentRow: number = 0;
+
+	addRow(): void {
+		let newRow: Career = new Career();
+		newRow.id_nganh_nghe_kinh_doanh;
+		newRow.nganh_nghe_kd_chinh = "";
+		newRow.id_linh_vuc = null
+
+		this.dataSource.data.push(newRow);
+		this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+		this._rows = this.dataSource.filteredData.length;
+	}
+
+	insertRow(): void {
+		let data = this.dataSource.data.slice(this._currentRow);
+		this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
+		let newRow: Career = new Career();
+		newRow.id_nganh_nghe_kinh_doanh;
+		newRow.nganh_nghe_kd_chinh = "";
+		newRow.id_linh_vuc = null
+
+		this.dataSource.data.push(newRow);
+		data.forEach(element => {
+			this.dataSource.data.push(element);
+		});
+		this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+		this._rows = this.dataSource.data.length
+	}
+
+	deleteRow(): void {
+		this.dataSource.data.splice(this._currentRow, 1);
+		this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+		this._rows = this.dataSource.data.length
+	}
+
+	getCurrentDate() {
+		let date = new Date;
+		return formatDate(date, 'yyyy-MM-dd', 'en-US');
+	}
+
+	getCurrentYear() {
+		let date = new Date;
+		return formatDate(date, 'yyyy', 'en-US');
+	}
+
+	public changeRow(index: number) {
+		this._currentRow = index;
+	}
+
+	public _rows: number = 0;
+	public columns: number = 1;
+
+	public move(object) {
+		const inputToArray = this.inputs.toArray()
+		let index = inputToArray.findIndex(x => x.element == object.element);
+		switch (object.action) {
+			case "UP":
+				index -= this.columns;
+				break;
+			case "DOWN":
+				index += this.columns;
+				break;
+			case "LEFT":
+				index -= this._rows;
+				break;
+			case "RIGHT":
+				index += this._rows;
+				break;
+		}
+		if (index >= 0 && index < this.inputs.length) {
+			inputToArray[index].element.nativeElement.focus();
+		}
+	}
+
+	Convertdate(text: string): string {
+		let date: string
+		date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+		return date
+	}
+
+	companyList1: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+	companyList2: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+	companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+	companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+	companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+	company: CompanyDetailModel;
+	careerarray: Array<Career> = new Array<Career>();
+
+	GetCompanyInfoById() {
+		this._Service.GetCompanyInfoById(this.mst).subscribe(
 			allrecords => {
-				this.subdistrict = allrecords.data as SubDistrictModel[];
+				this.companyList1 = allrecords.data[0]
+				this.companyList2 = allrecords.data[1]
+				this.companyList3 = allrecords.data[2]
+
+				this.companyList4 = this.companyList1.map(a => {
+					let temp = this.companyList2.filter(b => b.mst === a.mst)
+					let temp1 = temp.map(c => c.ma_nganh_nghe)
+					if (temp1 == undefined || temp1 == null) {
+						a.ma_nganh_nghe = null
+					}
+					else {
+						a.ma_nganh_nghe = temp1.join('; ')
+					}
+
+					let temp2 = temp.map(c => c.ten_nganh_nghe)
+					if (temp2 == undefined || temp2 == null) {
+						a.ten_nganh_nghe = null
+					}
+					else {
+						a.ten_nganh_nghe = temp2.join('; ')
+					}
+
+					let temp3 = temp.map(c => c.nganh_nghe_kd_chinh)
+					if (temp3 == undefined || temp3 == null) {
+						a.nganh_nghe_kd_chinh = null
+					}
+					else {
+						a.nganh_nghe_kd_chinh = temp3.join('; ')
+					}
+
+					return a
+				})
+
+				this.companyList5 = this.companyList4.map(d => {
+					let temp = this.companyList3.filter(e => e.mst === d.mst)
+					let temp1 = temp.map(f => f.so_giay_phep)
+					if (temp1[0] == undefined || temp1[0] == null) {
+						d.so_giay_phep = null
+					}
+					else {
+						d.so_giay_phep = temp1.join('; ')
+					}
+
+					let temp2 = temp.map(f => this.Convertdate(f.ngay_cap))
+					if (temp2[0] == undefined || temp2[0] == null) {
+						d.ngay_cap = null
+					}
+					else {
+						d.ngay_cap = temp2.join('; ')
+					}
+
+					let temp3 = temp.map(f => this.Convertdate(f.ngay_het_han))
+					if (temp3[0] == undefined || temp3[0] == null) {
+						d.ngay_het_han = null
+					}
+					else {
+						d.ngay_het_han = temp3.join('; ')
+					}
+
+					let temp4 = temp.map(f => f.noi_cap)
+					if (temp4[0] == undefined || temp4[0] == null) {
+						d.noi_cap = null
+					}
+					else {
+						d.noi_cap = temp4.join('; ')
+					}
+
+					let temp5 = temp.map(f => f.co_quan_cap)
+					if (temp5[0] == undefined || temp5[0] == null) {
+						d.co_quan_cap = null
+					}
+					else {
+						d.co_quan_cap = temp5.join('; ')
+					}
+
+					let temp6 = temp.map(f => f.ghi_chu)
+					if (temp6[0] == undefined || temp6[0] == null) {
+						d.ghi_chu == null
+					}
+					else {
+						d.ghi_chu = temp6.join('; ')
+					}
+
+					return d
+				})
+
+				this.company = this.companyList5[0]
+
+				if (this.companyList2) {
+					this.companyList2.forEach(x => {
+						this.careerarray.push({
+							id_nganh_nghe_kinh_doanh: null,
+							nganh_nghe_kd_chinh: '',
+							id_linh_vuc: null
+						})
+					})
+
+					for (let index = 0; index < this.companyList2.length; index++) {
+						this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
+						this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
+					}
+					this.dataSource.data = this.careerarray
+
+					this.dataSource.paginator = this.paginator;
+					this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+					this.paginator._intl.firstPageLabel = "Trang Đầu";
+					this.paginator._intl.lastPageLabel = "Trang Cuối";
+					this.paginator._intl.previousPageLabel = "Trang Trước";
+					this.paginator._intl.nextPageLabel = "Trang Tiếp";
+				}
+
+				this._Service.companyinfo = {
+					mst: this.company.mst,
+					id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
+					mst_parent: this.company.mst_cha,
+					sct: true,
+					hoat_dong: this.company.hoat_dong,
+					dia_chi: this.company.dia_chi,
+					id_phuong_xa: this.company.id_phuong_xa,
+					nguoi_dai_dien: this.company.nguoi_dai_dien,
+					so_dien_thoai: this.company.so_dien_thoai,
+					ten_doanh_nghiep: String(this.company.ten_doanh_nghiep),
+					von_dieu_le: this.company.von_dieu_le,
+					ngay_bd_kd: this.convertstringtodate(this.company.ngay_bd_kd),
+					so_lao_dong: this.company.so_lao_dong,
+					cong_suat_thiet_ke: this.company.cong_suat_thiet_ke,
+					san_luong: this.company.san_luong,
+					email: this.company.email,
+					so_lao_dong_sct: this.company.so_lao_dong_sct,
+					cong_suat_thiet_ke_sct: this.company.cong_suat_thiet_ke_sct,
+					san_luong_sct: this.company.san_luong_sct,
+					email_sct: this.company.email_sct,
+					tieu_chuan_san_pham: this.company.tieu_chuan_san_pham,
+					doanh_thu: this.company.doanh_thu,
+					quy_mo_tai_san: this.company.quy_mo_tai_san,
+					loi_nhuan: this.company.loi_nhuan,
+					nhu_cau_ban: this.company.nhu_cau_ban,
+					nhu_cau_mua: this.company.nhu_cau_mua,
+					nhu_cau_hop_tac: this.company.nhu_cau_hop_tac,
+					danh_sach_nganh_nghe: [],
+				}
 			});
 	}
 
-	// GetAllLoaiHinh() {
-	// 	this.marketService.GetAllBusinessType().subscribe(
-	// 		allrecords => {
-	// 			this.Business = allrecords.data as BusinessTypeModel[];
-	// 		});
-	// }
+	convertstringtodate(time: string): Date {
+		let year = parseInt(time.substring(0, 4));
+		let month = parseInt(time.substring(4, 6));
+		let day = parseInt(time.substring(6, 8));
 
-	public GetCompanyInfoById() {
-		this.marketService.GetCompanyInfoById(this.mst).subscribe(
-			allrecords => {
-				this.company = allrecords.data[0] as CompanyDetailModel;
-			},
-			error => this.errorMessage = <any>error
-		);
+		let date = new Date(year, month - 1, day);
+		return date
 	}
-
-	// GetAllCSTT() {
-	// 	this.marketService.GetAllBasebyid(this.mst).subscribe(
-	// 		allrecords => {
-	// 			this.CSTT = allrecords.data as CSTTModel[];
-	// 			this.SLCSTT = this.CSTT.length;
-	// 		});
-	// }
-
-	// getAllProducts() {
-	// 	this.marketService.GetAllProduct().subscribe(data => {
-	// 		if (data['data'].length !== 0) {
-	// 			this.products = data['data'];
-	// 		}
-	// 	})
-	// }
-
-	// getAllNational() {
-	// 	this.marketService.GetAllNational().subscribe(data => {
-	// 		this.nationals = data['data'];
-	// 	})
-	// }
-
-	// Them_dong_NK(){
-	// 	let dataSource = [...this.dataSourceKNNK];
-	// 	let new_ob = {
-	//         id: Math.floor(Math.random() *100000) + 1,
-	//         id_san_pham: 0,
-	//         san_luong: 0,
-	//         tri_gia: 0,
-	//         id_quoc_gia: 0,
-	//         id_kn_nhap_khau: 0
-	// 	};
-	// 	dataSource.push(new_ob);
-	// 	this.dataSourceKNNK = [...dataSource]
-	// }
-
-	// Save_NK(){
-	// 	let ob_update = [...this.dataSourceKNNK];
-	// 	let data = ob_update.map(item => {
-	// 		let new_ob = {
-	// 			id_san_pham : item.id_san_pham,
-	// 			san_luong: item.san_luong,
-	// 			tri_gia: item.tri_gia,
-	// 			id_quoc_gia: item.id_quoc_gia,
-	// 			id_kn_xuat_nhap_khau: item.id_quoc_gia
-	// 		};
-	// 		return new_ob
-	// 	});
-	// 	let report_mode, period;
-	// 	switch (this.selectedPeriodNK) {
-	// 		case 'Tháng':
-	// 			report_mode = 1;
-	// 			period = this.selectedMonthNK;
-	// 			break;
-	// 		case 'Quý':
-	// 			report_mode = 2;
-	// 			period = this.selectedQuarterNK;
-	// 			break;
-	// 			case '6 Tháng':
-	// 				report_mode = 3;
-	// 				period = this.selectedHalfNK;
-	// 				break;
-	// 		default:
-	// 			break;
-	// 	}
-	// 	this.marketService.UpdateKNNK(data, report_mode, this.mst, this.selectedYearNK, period).subscribe(data => {
-	// 		alert(data['message']);
-	// 	})
-	// 	// let is_sct = JSON.parse(localStorage.getItem('currentUser')) === 3;
-	// }
-
-	// Them_dong_XK(){
-	// 	let dataSource = [...this.dataSourceKNXK];
-	// 	let new_ob = {
-	//         id: Math.floor(Math.random() *100000) + 1,
-	//         id_san_pham: 0,
-	//         san_luong: 0,
-	//         tri_gia: 0,
-	//         id_quoc_gia: 0,
-	//         id_kn_nhap_khau: 0
-	// 	};
-	// 	dataSource.push(new_ob);
-	// 	this.dataSourceKNXK = [...dataSource]
-	// }
-
-	// Save_XK(){
-	// 	let ob_update = [...this.dataSourceKNXK];
-	// 	let data = ob_update.map(item => {
-	// 		let new_ob = {
-	// 			id_san_pham : item.id_san_pham,
-	// 			san_luong: item.san_luong,
-	// 			tri_gia: item.tri_gia,
-	// 			id_quoc_gia: item.id_quoc_gia,
-	// 			id_kn_xuat_nhap_khau: item.id_quoc_gia
-	// 		};
-	// 		return new_ob
-	// 	});
-	// 	let report_mode, period;
-	// 	switch (this.selectedPeriodXK) {
-	// 		case 'Tháng':
-	// 			report_mode = 1;
-	// 			period = this.selectedMonthXK;
-	// 			break;
-	// 		case 'Quý':
-	// 			report_mode = 2;
-	// 			period = this.selectedQuarterXK;
-	// 			break;
-	// 			case '6 Tháng':
-	// 				report_mode = 3;
-	// 				period = this.selectedHalfXK;
-	// 				break;
-	// 		default:
-	// 			break;
-	// 	}
-	// 	this.marketService.UpdateKNXK(data, report_mode, this.mst, this.selectedYearNK, period).subscribe(data => {
-	// 		alert(data['message']);
-	// 	})
-	// }
-
-	// DeleteNK(element){
-	// 	this.dataSourceKNNK = this.dataSourceKNNK.filter(item => item.id !== element.id);
-	// }
-
-	// DeleteXK(element){
-	// 	this.dataSourceKNXK = this.dataSourceKNXK.filter(item => item.id !== element.id);
-	// }
-
-
-	// this.marketService.GetKNXK(this.mst, null).subscribe(
-	// 	allrecords => {
-	// 		this.CSTT = allrecords as CSTTModel[];
-	// 		this.SLCSTT = this.CSTT.length;
-	// 	});
-	// }
-	addToCart(company: Company) {
-	}
-
-	// back() {
-	// 	window.history.back();
-	// }
 }

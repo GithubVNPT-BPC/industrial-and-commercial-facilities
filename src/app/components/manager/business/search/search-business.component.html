@@ -94,10 +94,10 @@
             </div>
         </div> -->
         <div class="layout" #TABLE>
-            <mat-form-field id="filter">
+            <!-- <mat-form-field id="filter">
                 <mat-label>Lọc dữ liệu</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field>
+            </mat-form-field> -->
 
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 [filterType]="filterType" [dataSource]="dataSource" matSort matSortDisableClear matSortDirection="asc">

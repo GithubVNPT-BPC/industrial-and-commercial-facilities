@@ -358,5 +358,5 @@ export class UpdatePetrolComponent implements OnInit {
       inputToArray[index].element.nativeElement.focus();
     }
   }
-
+  
 }

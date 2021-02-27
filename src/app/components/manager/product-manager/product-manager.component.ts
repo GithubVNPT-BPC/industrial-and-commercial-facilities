@@ -5,6 +5,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import { formatDate } from '@angular/common';
 import { ReplaySubject, Subject } from 'rxjs';
+import { MatDialog } from '@angular/material';
+import { ExportTopCompanyManager } from '../export-top-company-manager/export-top-company-manager.component';
 
 import { ManagerDirective } from './../../../shared/manager.directive';
 import { LoginService } from 'src/app/_services/APIService/login.service';
@@ -14,6 +16,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { MarketService } from '../../../_services/APIService/market.service';
 
 import { ProductValueModel, ProductModel, DeleteModel1 } from '../../../_models/APIModel/domestic-market.model';
+import { SAVE } from 'src/app/_enums/save.enum';
 
 import { FormControl } from '@angular/forms';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -53,7 +56,7 @@ export const MY_FORMATS = {
 export class ProductManagerComponent implements OnInit {
     public products: Array<ProductModel> = new Array<ProductModel>();
     public dataSource: MatTableDataSource<ProductValueModel> = new MatTableDataSource<ProductValueModel>();
-    public displayedColumns: string[] = ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 'tri_gia', 'time_id'];
+    public displayedColumns: string[] = ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 'tri_gia', 'time_id', 'top_san_xuat', 'them_top_san_xuat'];
 
     @ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -64,7 +67,8 @@ export class ProductManagerComponent implements OnInit {
         public _keyboardservice: KeyboardService,
         public _infor: InformationService,
         public excelService: ExcelService,
-        public _loginService: LoginService) {
+        public _loginService: LoginService,
+        public dialog: MatDialog) {
     }
 
     selection = new SelectionModel<ProductValueModel>(true, []);
@@ -110,6 +114,26 @@ export class ProductManagerComponent implements OnInit {
                 this.paginator.pageIndex = 0;
             })
         }
+    }
+
+    public AddCompanyTopPopup(data: any) {
+        const dialogRef = this.dialog.open(ExportTopCompanyManager, {
+            data: {
+                message: 'Dữ liệu top doanh nghiệp sản xuất',
+                product_data: data,
+                typeOfSave: SAVE.ADD,
+            }
+        });
+    }
+
+    public openCompanyTopPopup(data: any) {
+        const dialogRef = this.dialog.open(ExportTopCompanyManager, {
+            data: {
+                message: 'Dữ liệu top doanh nghiệp sản xuất',
+                product_data: data,
+                typeOfSave: SAVE.PRODUCT,
+            }
+        });
     }
 
     public ngOnInit() {
