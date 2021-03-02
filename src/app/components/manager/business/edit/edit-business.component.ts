@@ -290,7 +290,7 @@ export class EditBusinessComponent implements OnInit {
     this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
     this.companyinput.ngay_bd_kd = this.doanh_nghiep.value.ngay_bd_kd ? this.getChange(this.companyinput.ngay_bd_kd) : null
 
-    // this.SaveData(this.companyinput);
+    this.SaveData(this.companyinput);
   }
 
   onReset() {
