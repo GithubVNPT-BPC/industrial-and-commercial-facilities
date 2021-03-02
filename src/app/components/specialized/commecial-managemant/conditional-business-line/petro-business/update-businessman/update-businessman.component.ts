@@ -117,15 +117,19 @@ export class UpdateBusinessmanComponent implements OnInit {
 
   onSubmit() {
     this.input.push({
-      id_thuong_nhan: this.id == undefined ? this.id : null,
+      id_thuong_nhan: null,
       ten_thuong_nhan: '',
       dia_chi: '',
       so_dien_thoai: '',
     })
+
+    if (this.id != 'undefined') {
+      this.input[0].id_thuong_nhan = this.id
+    }
+
     this.input[0].ten_thuong_nhan = this.businessman.value.ten_thuong_nhan
     this.input[0].dia_chi = this.businessman.value.dia_chi
     this.input[0].so_dien_thoai = this.businessman.value.so_dien_thoai
-    console.log(this.input)
     this.SaveData(this.input);
   }
 
@@ -156,6 +160,10 @@ export class UpdateBusinessmanComponent implements OnInit {
   getCurrentYear() {
     let date = new Date;
     return formatDate(date, 'yyyy', 'en-US');
+  }
+
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
   }
 
 }

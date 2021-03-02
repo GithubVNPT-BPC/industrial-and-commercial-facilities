@@ -131,10 +131,14 @@ export class SearchBusinessComponent implements OnInit {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
 
+  // OpenDetailCompany(mst: string) {
+  //   let url = this.router.serializeUrl(
+  //     this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/' + mst]));
+  //   window.open(url.replace('%23', '#'), "_blank");
+  // }
+
   OpenDetailCompany(mst: string) {
-    let url = this.router.serializeUrl(
-      this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/' + mst]));
-    window.open(url.replace('%23', '#'), "_blank");
+    this.router.navigate(['manager/business/edit/' + mst]);
   }
 
   // AddCompany() {

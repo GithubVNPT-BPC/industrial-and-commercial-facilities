@@ -43,13 +43,17 @@
 
                         <button mat-raised-button (click)="ManageValue()">Quản lý sản lượng</button>
 
-                        <button mat-raised-button (click)="ManageBusiness()">Quản lý thương nhân</button>
+                        <!-- <button mat-raised-button (click)="ManageBusiness()">Quản lý thương nhân</button> -->
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa cửa hàng</button>
 
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Cửa hàng kinh doanh xăng dầu','Cửa hàng kinh doanh xăng dầu')">Xuất
                             Excel</button>
+
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
                     </div>
                 </div>
 

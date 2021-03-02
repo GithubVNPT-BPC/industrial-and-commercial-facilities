@@ -125,7 +125,6 @@ export class PetrolBusinessComponent implements OnInit {
             this._Service.DeletePetrol(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
                 this.getPetrolList();
-                this.date = null
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
@@ -235,6 +234,10 @@ export class PetrolBusinessComponent implements OnInit {
 
     OpenDetailPetrol(id: number, mst: string) {
         this.router.navigate(['specialized/commecial-management/domestic/update-petrol/' + id + '/' + mst])
+    }
+
+    Back() {
+        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 
     // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;

@@ -3,12 +3,14 @@ import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/mat
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
 import { InformationService } from 'src/app/shared/information/information.service';
+import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatDialog } from '@angular/material';
 
 import {
-    PetrolList,
-    DistrictModel
+    DistrictModel,
+    TobaccoList,
+    DeleteModel
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -34,7 +36,6 @@ export const MY_FORMATS = {
         monthYearA11yLabel: 'MMMM YYYY',
     },
 };
-
 @Component({
     selector: 'tobacco-business',
     templateUrl: './tobacco-business.component.html',
@@ -52,26 +53,6 @@ export const MY_FORMATS = {
 })
 
 export class TobaccoBusinessComponent implements OnInit {
-    displayedColumns: string[] = [
-        'index',
-        'ten_cua_hang',
-        'mst',
-        'san_luong',
-        'so_giay_phep',
-        'ngay_cap',
-        'ngay_het_han',
-        'dia_chi',
-        'ten_quan_huyen',
-        'so_dien_thoai',
-        'ten_quan_ly',
-        'ten_nhan_vien',
-        'nguoi_dai_dien',
-        'id_cua_hang_xang_dau',
-        'tinh_trang_hoat_dong',
-    ];
-    dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-    dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-
     @ViewChild('table', { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -85,6 +66,18 @@ export class TobaccoBusinessComponent implements OnInit {
     ) {
     }
 
+    Addtobaccobusiness(id: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco/' + id]);
+    }
+
+    Addtobaccosupply(id: string, time: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco-supply/' + id + '/' + time]);
+    }
+
+    Back() {
+        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+    }
+
     public district: Array<DistrictModel> = new Array<DistrictModel>();
     getQuan_Huyen() {
         this._Service.GetAllDistrict().subscribe((allDistrict) => {
@@ -94,8 +87,9 @@ export class TobaccoBusinessComponent implements OnInit {
 
     ngOnInit() {
         this.autoOpen();
-        this.getPetrolListbyYear(this.getCurrentYear())
+        this.getTobaccoListbyYear(this.getCurrentYear())
         this.getQuan_Huyen();
+        this.theYear = parseInt(this.getCurrentYear());
     }
 
     autoOpen() {
@@ -113,12 +107,117 @@ export class TobaccoBusinessComponent implements OnInit {
         this.dataSource1.filter = filterValue.trim().toLowerCase();
     }
 
+    selection = new SelectionModel<TobaccoList>(true, []);
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        // const numRows = this.dataSource.data.length;
+        const numRows = this.dataSource1.connect().value.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+    }
+
+    checkboxLabel(row?: TobaccoList): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_thuoc_la + 1}`;
+    }
+
+    deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+    selectionarray: string[];
+    removeRows() {
+        if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+            this.selection.selected.forEach(x => {
+                this.selectionarray = this.selection.selected.map(item => item.id_thuoc_la)
+                this.deletemodel1.push({
+                    id: ''
+                })
+            })
+            for (let index = 0; index < this.selectionarray.length; index++) {
+                const element = this.deletemodel1[index];
+                element.id = this.selectionarray[index]
+            }
+            this._Service.DeleteTobaccoValue(this.deletemodel1).subscribe(res => {
+                this._info.msgSuccess('Xóa thành công')
+                this.ngOnInit()
+                this.selection.clear();
+                this.paginator.pageIndex = 0;
+            })
+        }
+    }
+
     SanLuongBanRa: number;
+    TriGiaBanRa: number;
     SLThuongNhan: number;
 
-    getPetrolListbyYear(year: string) {
-        this._Service.GetPetrolValue(year).subscribe(all => {
-            this.dataSource = new MatTableDataSource<PetrolList>(all.data[0]);
+    displayedColumns: string[] = [
+        'select',
+        'cap_nhat',
+        'them_thuong_nhan',
+        'index',
+        'mst',
+        'ten_doanh_nghiep',
+        'dia_chi_day_du',
+        'so_dien_thoai',
+        'so_giay_phep',
+        'ngay_cap',
+        'ngay_het_han',
+        'nguoi_dai_dien',
+        'ten_thuong_nhan',
+        'so_luong',
+        'tri_gia',
+
+        'ten_quan_huyen',
+        'id_thuoc_la',
+        'time_id'
+    ];
+    dataSource: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
+    dataSource1: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
+    TobaccoList: Array<TobaccoList> = new Array<TobaccoList>();
+    TobaccoList1: Array<TobaccoList> = new Array<TobaccoList>();
+    TobaccoList2: Array<TobaccoList> = new Array<TobaccoList>();
+
+    getTobaccoListbyYear(year: string) {
+        this._Service.GetTobaccoValue(year).subscribe(all => {
+            this.TobaccoList = all.data[0];
+            this.TobaccoList1 = all.data[1];
+            this.TobaccoList2 = this.TobaccoList.map(x => {
+                let temp = this.TobaccoList1.filter(y => y.id_san_luong == x.id_thuoc_la)
+
+                let temp1 = temp.map(z => z.ten_thuong_nhan)
+                if (temp1 == undefined || temp1 == null) {
+                    x.ten_thuong_nhan = null
+                }
+                else {
+                    x.ten_thuong_nhan = temp1.join('; ')
+                }
+
+                let temp2 = temp.map(z => z.dia_chi_tn)
+                if (temp2 == undefined || temp2 == null) {
+                    x.dia_chi_tn = null
+                }
+                else {
+                    x.dia_chi_tn = temp2.join('; ')
+                }
+
+                let temp3 = temp.map(z => z.so_dien_thoai_tn)
+                if (temp3 == undefined || temp3 == null) {
+                    x.so_dien_thoai_tn = null
+                }
+                else {
+                    x.so_dien_thoai_tn = temp3.join('; ')
+                }
+
+                return x
+            })
+
+            this.dataSource.data = this.TobaccoList2
             this.dataSource.data.forEach(element => {
                 if (element.ngay_het_han) {
                     let temp = this.Convertdate(element.ngay_het_han)
@@ -131,7 +230,10 @@ export class TobaccoBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
             this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
-            this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
+
+            this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+            this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
+            this.SLThuongNhan = this.TobaccoList1.length;
 
             this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -178,7 +280,7 @@ export class TobaccoBusinessComponent implements OnInit {
             this.dataSource1.data = filteredData;
         }
 
-        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
+        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
 
     }
 
@@ -211,7 +313,7 @@ export class TobaccoBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
-        this.getPetrolListbyYear(this.theYear.toString())
+        this.getTobaccoListbyYear(this.theYear.toString())
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {

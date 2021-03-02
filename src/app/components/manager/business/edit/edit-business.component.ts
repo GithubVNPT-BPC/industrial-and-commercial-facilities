@@ -159,6 +159,7 @@ export class EditBusinessComponent implements OnInit {
     if (this.mst != undefined) {
       this.GetCompanyInfoById();
     }
+
     this.GetAllNganhNghe();
     this.GetAllPhuongXa();
     this.getQuan_Huyen();
@@ -214,6 +215,22 @@ export class EditBusinessComponent implements OnInit {
   // removeCareer(i: number) {
   //   this.danh_sach_nganh_nghe.removeAt(i);
   // }
+  checkmst: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  checkmstobject = new CompanyDetailModel();
+  existmst: boolean
+  Checkexistmst(mstinput: string) {
+    this._Service.GetCompanyInfoById(mstinput).subscribe(
+      allrecords => {
+        this.checkmst = allrecords.data[0]
+        this.checkmstobject = this.checkmst[0]
+        if (this.checkmstobject == undefined) {
+          this.existmst = false
+        }
+        else {
+          this.existmst = true
+        }
+      });
+  }
 
   public SaveData(companyinput) {
     if (this.mst == undefined) {
@@ -264,11 +281,16 @@ export class EditBusinessComponent implements OnInit {
       return;
     }
 
+    this.Checkexistmst(this.doanh_nghiep.value.mst)
+    if (this.existmst == true) {
+      return
+    }
+
     this.companyinput = this.doanh_nghiep.value
     this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
-    this.companyinput.ngay_bd_kd = this.getChange(this.companyinput.ngay_bd_kd)
-    this.companyinput
-    this.SaveData(this.companyinput);
+    this.companyinput.ngay_bd_kd = this.doanh_nghiep.value.ngay_bd_kd ? this.getChange(this.companyinput.ngay_bd_kd) : null
+
+    // this.SaveData(this.companyinput);
   }
 
   onReset() {
@@ -576,6 +598,10 @@ export class EditBusinessComponent implements OnInit {
 
     let date = new Date(year, month - 1, day);
     return date
+  }
+
+  Back() {
+    this.router.navigate(['manager/business/search/']);
   }
 
 }

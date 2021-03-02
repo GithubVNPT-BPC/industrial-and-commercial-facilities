@@ -53,7 +53,6 @@ export const MY_FORMATS = {
 })
 export class ManagePetrolValueComponent implements OnInit {
 
-
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -70,6 +69,14 @@ export class ManagePetrolValueComponent implements OnInit {
   AddSupplyBusiness(id: string, time: string) {
     this.router.navigate(['specialized/commecial-management/domestic/supplybusiness/' + id + '/' + time]);
   }
+
+  // public AddSupplyBusiness(data: any) {
+  //   const dialogRef = this.dialog.open(AddSupplyBusinessComponent, {
+  //     data: {
+  //       petrolvalue_data: data,
+  //     }
+  //   });
+  // }
 
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   getQuan_Huyen() {
@@ -105,28 +112,29 @@ export class ManagePetrolValueComponent implements OnInit {
   displayedColumns: string[] = [
     'cap_nhat',
     'index',
-    'ten_cua_hang',
     'mst',
-    'san_luong',
-    'ten_thuong_nhan',
-    'dia_chi_tn',
-    'so_dien_thoai_tn',
+    'ten_doanh_nghiep',
+    'ten_cua_hang',
+    'dia_chi',
+    'so_dien_thoai',
     'so_giay_phep',
     'ngay_cap',
     'ngay_het_han',
-    'dia_chi',
-    'ten_quan_huyen',
-    'so_dien_thoai',
+    'nguoi_dai_dien',
     'ten_quan_ly',
     'ten_nhan_vien',
-    'nguoi_dai_dien',
+    'ten_thuong_nhan',
+    'san_luong',
+    'ghi_chu',
+
+    'ten_quan_huyen',
     'id_cua_hang_xang_dau',
     'id_san_luong',
-    'tinh_trang_hoat_dong',
     'time_id'
   ];
   dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
   dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+  dataSource3: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
   petrollist: Array<PetrolList> = new Array<PetrolList>();
   petrollist1: Array<PetrolList> = new Array<PetrolList>();
   petrollist2: Array<PetrolList> = new Array<PetrolList>();
@@ -180,6 +188,7 @@ export class ManagePetrolValueComponent implements OnInit {
       this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
 
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
+      this.SLThuongNhan = this.petrollist1.length;
 
       this.dataSource1.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -264,6 +273,10 @@ export class ManagePetrolValueComponent implements OnInit {
 
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/petrol']);
   }
 
 }

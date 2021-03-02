@@ -100,7 +100,7 @@ export class AddStoreComponent implements OnInit {
       res => {
         // debugger;
         this._info.msgSuccess('Thêm thành công')
-        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+        this.router.navigate(['specialized/commecial-management/domestic/petrol']);
       },
       err => {
         // debugger;
@@ -118,4 +118,7 @@ export class AddStoreComponent implements OnInit {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+  }
 }
