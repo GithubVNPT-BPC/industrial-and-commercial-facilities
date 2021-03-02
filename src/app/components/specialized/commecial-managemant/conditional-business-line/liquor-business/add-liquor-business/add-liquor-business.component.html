@@ -1,0 +1,59 @@
+<mat-card class="material">
+    <mat-card-header>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="liquor_data" autocomplete="off" (ngSubmit)="onSubmit(liquor_data.getRawValue())">
+            <div class="row">
+                <div class="col-6 button-control -align-left my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+                </div>
+                <div class="col-6 button-control -align-right my-auto">
+                    <button mat-raised-button (click)="Back()">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <mat-form-field appearance="outline" hidden>
+                        <mat-label> ID </mat-label>
+                        <input formControlName="id" matInput placeholder="" [(ngModel)]="_Service.liquor.id">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mã số thuế</mat-label>
+                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.liquor.mst">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Năm</mat-label>
+                        <input formControlName="time_id" matInput placeholder="" [(ngModel)]="_Service.liquor.time_id">
+                    </mat-form-field>
+
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Thời gian</mat-label>
+                        <input [(ngModel)]="year" matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)"
+                            panelClass="example-month-picker">
+                        </mat-datepicker>
+                    </mat-form-field> -->
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số lượng bán</mat-label>
+                        <input matInput currencyMask class="text-right" formControlName="so_luong"
+                            [(ngModel)]="_Service.liquor.so_luong">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Trị giá bán</mat-label>
+                        <input matInput currencyMask class="text-right" formControlName="tri_gia"
+                            [(ngModel)]="_Service.liquor.tri_gia">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

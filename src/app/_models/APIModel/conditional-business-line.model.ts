@@ -23,6 +23,57 @@ export class PetrolList {
     ghi_chu: string;
     is_het_han: boolean;
     ten_quan_huyen: string;
+    ten_doanh_nghiep: string;
+
+    id_thuong_nhan: string;
+    ten_thuong_nhan: string;
+    dia_chi_tn: string;
+    so_dien_thoai_tn: string;
+    id_san_luong: string;
+    id: string;
+}
+
+export class TobaccoList {
+    id_thuoc_la: string;
+    mst: string;
+    so_luong: number;
+    tri_gia: number;
+    time_id: string;
+    dia_chi_day_du: string;
+    id_quan_huyen: number;
+    ten_quan_huyen: string;
+    so_dien_thoai: string;
+    nguoi_dai_dien: string;
+    ten_doanh_nghiep: string;
+    so_giay_phep: string
+    ngay_cap: string;
+    ngay_het_han: string;
+    is_het_han: boolean;
+
+    id_thuong_nhan: string;
+    ten_thuong_nhan: string;
+    dia_chi_tn: string;
+    so_dien_thoai_tn: string;
+    id_san_luong: string;
+    id: string;
+}
+
+export class LiquorList {
+    id_ruou: string;
+    mst: string;
+    so_luong: number;
+    tri_gia: number;
+    time_id: string;
+    dia_chi_day_du: string;
+    id_quan_huyen: number;
+    ten_quan_huyen: string;
+    so_dien_thoai: string;
+    nguoi_dai_dien: string;
+    ten_doanh_nghiep: string;
+    so_giay_phep: string
+    ngay_cap: string;
+    ngay_het_han: string;
+    is_het_han: boolean;
 
     id_thuong_nhan: string;
     ten_thuong_nhan: string;
@@ -43,6 +94,22 @@ export class PetrolPost {
     public ten_quan_ly: string;
     public ten_nhan_vien: string;
     public id_giay_phep: number;
+}
+
+export class TobaccoPost {
+    public id: string;
+    public mst: string;
+    public so_luong: number;
+    public tri_gia: number;
+    public time_id: string;
+}
+
+export class LiquorPost {
+    public id: string;
+    public mst: string;
+    public so_luong: number;
+    public tri_gia: number;
+    public time_id: string;
 }
 
 export class PetrolValuePost {

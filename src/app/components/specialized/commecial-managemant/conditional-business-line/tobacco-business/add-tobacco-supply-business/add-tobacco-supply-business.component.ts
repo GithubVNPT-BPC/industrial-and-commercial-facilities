@@ -12,7 +12,7 @@ import {
   DeleteModel,
   BusinessmanSelect,
   PostBusinessmanValue,
-  PetrolList
+  TobaccoList
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -41,9 +41,10 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
 @Component({
-  selector: 'app-add-supply-business',
-  templateUrl: './add-supply-business.component.html',
+  selector: 'app-add-tobacco-supply-business',
+  templateUrl: './add-tobacco-supply-business.component.html',
   styleUrls: ['../../../../special_layout.scss'],
   providers: [
     {
@@ -56,7 +57,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
   ],
 })
-export class AddSupplyBusinessComponent implements OnInit {
+export class AddTobaccoSupplyBusinessComponent implements OnInit {
   displayedColumns: string[] = ['select', 'index', 'id', 'id_thuong_nhan', 'id_quan_ly', 'id_linh_vuc'];
 
   @ViewChild('table', { static: false }) table: ElementRef;
@@ -164,27 +165,31 @@ export class AddSupplyBusinessComponent implements OnInit {
   }
 
   dataSource: MatTableDataSource<PostBusinessmanValue> = new MatTableDataSource<PostBusinessmanValue>();
-  businessmanvalue: Array<PetrolList> = new Array<PetrolList>();
-  businessmanvalue1: Array<PetrolList> = new Array<PetrolList>();
+  businessmanvalue: Array<TobaccoList> = new Array<TobaccoList>();
+  businessmanvalue1: Array<TobaccoList> = new Array<TobaccoList>();
 
   getBusinessmanvalue(time: string) {
-    this._Service.GetPetrolValue(time).subscribe(all => {
+    this._Service.GetTobaccoValue(time).subscribe(all => {
 
       this.businessmanvalue = all.data[1]
       this.businessmanvalue1 = this.businessmanvalue.filter(x => x.id_san_luong == this.id)
 
       this.businessmanvalue1.forEach(x => {
         this.dataSource.data.push({
-          id_linh_vuc: 6,
+          id_linh_vuc: 7,
           id: '',
           id_quan_ly: '',
           id_thuong_nhan: ''
         })
       })
 
+      if (this.id == 'undefined') {
+        this.id = null
+      }
+
       for (let index = 0; index < this.businessmanvalue1.length; index++) {
         this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue1[index].id_thuong_nhan ? this.businessmanvalue1[index].id_thuong_nhan : null
-        this.dataSource.data[index].id_quan_ly = this.businessmanvalue1[index].id_san_luong ? this.businessmanvalue1[index].id_san_luong : null
+        this.dataSource.data[index].id_quan_ly = this.id
         this.dataSource.data[index].id = this.businessmanvalue1[index].id ? this.businessmanvalue1[index].id : null
       }
 
@@ -202,7 +207,7 @@ export class AddSupplyBusinessComponent implements OnInit {
   addRow(): void {
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
     newRow.id_quan_ly = this.id;
-    newRow.id_linh_vuc = 6;
+    newRow.id_linh_vuc = 7;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
@@ -214,7 +219,7 @@ export class AddSupplyBusinessComponent implements OnInit {
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
     newRow.id_quan_ly = this.id;
-    newRow.id_linh_vuc = 6;
+    newRow.id_linh_vuc = 7;
     this.dataSource.data.push(newRow);
     data.forEach(element => {
       this.dataSource.data.push(element);
@@ -271,7 +276,7 @@ export class AddSupplyBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
+    this.router.navigate(['specialized/commecial-management/domestic/tobacco']);
   }
 
 }
