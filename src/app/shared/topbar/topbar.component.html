@@ -1,12 +1,16 @@
 <div class="{{styleOfScss}}">
     <mat-toolbar class="mat-elevation-z5 main-contain">
         <mat-toolbar-row>
+            <a mat-raised-button class="btn-sct-page" (click)="sidebar.toggle();">
+                <mat-icon>menu</mat-icon>
+            </a>
+
             <div class="navbar-brand">
                 <a class="navbar-item" (click)="openHome()" [routerLink]="['/']" routerLinkActive="router-link-active">
                     <img class="logo" src="assets/img/brand/logo.svg">
                 </a>
             </div>
-            <h1><strong>SỞ CÔNG THƯƠNG - {{module_control}}</strong></h1>
+            <h1><strong>SỞ CÔNG THƯƠNG</strong></h1>
             <div class="spacer"></div>
             <div *ngIf="!checkLogin() else divUser" class="btn-color">
                 <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
@@ -19,9 +23,7 @@
             </div>
             <ng-template #divUser>
                 <div class="btn-color">
-                    <a mat-raised-button class="btn-sct-page" (click)="sidebar.toggle();">
-                        <mat-icon>menu</mat-icon> Mở rộng/Thu hẹp Menu
-                    </a>
+
                     <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
                         <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
