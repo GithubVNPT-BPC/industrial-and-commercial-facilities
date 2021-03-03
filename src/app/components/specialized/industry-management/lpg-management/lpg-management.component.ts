@@ -72,9 +72,20 @@ export class LPGManagementComponent extends BaseComponent {
 
     getFormParams() {
         return {
+            id: new FormControl(),
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
+        }
+    }
+
+    setFormParams() {
+        if (this.selection.selected.length) {
+            let selectedRecord = this.selection.selected[0];
+            this.formData.controls['id'].setValue(selectedRecord.id);
+            this.formData.controls['mst'].setValue(selectedRecord.mst);
+            this.formData.controls['san_luong'].setValue(selectedRecord.san_luong);
+            this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
         }
     }
 
@@ -86,8 +97,21 @@ export class LPGManagementComponent extends BaseComponent {
         return data;        
     }
 
+    prepareRemoveData(data) { 
+        let datas = data.map(element => new Object({id: element.id}));
+        return datas;
+    }
+
     callService(data) {
         this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    callEditService(data) {
+        this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    callRemoveService(data) {
+        this.industryManagementService.DeleteLPGManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     GetLGPManagementData(time_id: number) {

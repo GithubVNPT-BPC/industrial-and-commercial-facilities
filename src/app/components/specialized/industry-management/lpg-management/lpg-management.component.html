@@ -39,7 +39,7 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>equalizer</mat-icon> Công suất chiết nạp hàng năm:
+                                    <mat-icon>equalizer</mat-icon> Công suất thiết kế hàng năm:
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
@@ -53,7 +53,7 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>equalizer</mat-icon> Sản lượng KD hàng năm:
+                                    <mat-icon>equalizer</mat-icon> Sản lượng chiết nạp hàng năm:
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
@@ -119,9 +119,11 @@
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('QLCN - LPG', currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
-                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
                             mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
                 </div>
                 <hr>
@@ -219,6 +221,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
+                                <input matInput formControlName="id" type="text">
                                 <div class="col-md-6" >
                                     <mat-form-field appearance="outline"> 
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
@@ -254,7 +257,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button type="submit" class="btn btn-success float-right">Lưu thông tin</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
                 </div>

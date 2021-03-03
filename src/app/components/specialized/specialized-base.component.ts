@@ -40,6 +40,7 @@ export abstract class BaseComponent implements OnInit {
     public formData: any;
     public formParams: any;
     public view = 'list';
+    public mode = 'create';
     public errorMessage: any;
     public currentYear = new Date().getFullYear();
     public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
@@ -98,20 +99,32 @@ export abstract class BaseComponent implements OnInit {
             this.view = 'form';
         } else {
             this.view = 'list';
+            this.mode = 'create';
             this.formData.reset();
             this.autoOpen();
         }
     }
 
+    public switchEditMode() {
+        this.mode = 'edit';
+        this.switchView();
+        this.setFormParams();
+    }
+
+    public setFormParams() {}
+
     public prepareData(data) { return data }
 
     public callService(data) { }
+
+    public callEditService(data) {}
 
     public onCreate() {
         // Must change to async function
         let data = this.formData.value;
         data = this.prepareData(data);
-        this.callService(data);
+        if (this.mode == 'edit') this.callEditService(data);
+        else this.callService(data);
     }
 
     prepareRemoveData(data) { return data }
@@ -123,7 +136,6 @@ export abstract class BaseComponent implements OnInit {
         let data = this.selection.selected;
         data = this.prepareRemoveData(data);
         this.callRemoveService(data);
-        this.selection.clear();
         this.resetAll();
     }
 
@@ -135,6 +147,7 @@ export abstract class BaseComponent implements OnInit {
     public resetAll(): void {
         this.formData.reset();
         if (this.view == 'form') this.switchView();
+        this.selection.clear();
         this.ngOnInit();
     }
 
