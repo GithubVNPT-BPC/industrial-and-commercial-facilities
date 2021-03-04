@@ -21,11 +21,11 @@ export class LPGManagementComponent extends BaseComponent {
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     filteredDataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     
-    years: number[] = [];
     isChecked: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
-    year: number;
+    selectedFile: File = null;
+    avatarElement = null;
 
     displayedFields = {
         mst: "Mã số thuế",
@@ -76,6 +76,7 @@ export class LPGManagementComponent extends BaseComponent {
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
+            // pdf_file: new FormControl(),
         }
     }
 
@@ -160,4 +161,32 @@ export class LPGManagementComponent extends BaseComponent {
         this.displayedColumns = (event.checked) ? this.fullFieldList : this.reducedFieldList;
     }
     
+    // async onSubmit(buttonType) {
+    //     if (buttonType === "Submit") {
+    //         if (this.selectedFile !== null) {
+    //             const fd = new FormData();
+    //             fd.append(this.selectedFile.name, this.selectedFile);
+    //             this.EmployeesForms.AvaLink = await this._SchemeService.UploadAvatar(fd).toPromise();
+    //         }
+    //         await this._SchemeService.UpdateScheme(this.EmployeesForms)
+    //             .subscribe(response => {
+    //                 if (response.status == "200") {
+    //                     this.logger.msgSuccess('Cập nhật nhân viên thành công');
+    //                     this._Route.navigate(['/Employees/All']);
+    //                 }
+    //                 else {
+    //                     this.logger.msgSuccess('Lỗi xảy ra, vui lòng thử lại');
+    //                 }
+    //             });
+    //     }
+    // }
+
+    onFileSelected(event) {
+        var temp : number = event.target.files.length;
+        if (temp !== 0) {
+            this.selectedFile = <File>event.target.files[0];
+            this.avatarElement = <HTMLImageElement>document.getElementById('Avatar');
+            this.avatarElement.src = URL.createObjectURL(event.target.files[0]);
+        }
+    }
 }

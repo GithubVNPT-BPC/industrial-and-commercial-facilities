@@ -221,7 +221,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <input matInput formControlName="id" type="text">
+                                <input matInput formControlName="id" type="text" class="o_invisible">
                                 <div class="col-md-6" >
                                     <mat-form-field appearance="outline"> 
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
@@ -255,6 +255,24 @@
                             </div>
                         </mat-card-content>
                     </div>
+
+                    <!-- <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Quản lý files </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+                                        <input hidden (change)="onFileSelected()" #fileInput type="file" formControlName="pdf_file">
+                                    </mat-form-field>
+                                </div>             
+                            </div>
+                        </mat-card-content>
+                    </div> -->
 
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success float-right">Lưu thông tin</button>

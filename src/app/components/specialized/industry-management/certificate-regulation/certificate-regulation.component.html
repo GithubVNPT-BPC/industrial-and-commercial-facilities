@@ -61,9 +61,11 @@
                             matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('QLCN - Công bố hợp quy',currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
-                        color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
-                        mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
+                            mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
                     
                     <div class="col-12 col-lg-12">
@@ -168,6 +170,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
+                                <input matInput formControlName="id" type="text" class="o_invisible">
                                 <div class="col-md-6" >
                                     <mat-form-field appearance="outline"> 
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
@@ -186,21 +189,14 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-9">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên sản phẩm</mat-label>
                                         <input matInput  type="text" formControlName="ten_san_pham">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-4">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Bản công bố hợp quy</mat-label>
-                                        <input matInput  type="text" formControlName="ban_cong_bo_hop_quy">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Loại sản phẩm</mat-label>
                                         <mat-select formControlName="id_loai_san_pham">
@@ -211,6 +207,12 @@
                                     </mat-form-field>
                                 </div>
 
+                                <div class="col-md-9">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Bản công bố hợp quy</mat-label>
+                                        <input matInput  type="text" formControlName="ban_cong_bo_hop_quy">
+                                    </mat-form-field>
+                                </div>
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
@@ -221,7 +223,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Nơi cấp</mat-label>
                                         <input matInput type="text" formControlName="noi_cap">
@@ -241,7 +243,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button type="submit" class="btn btn-success float-right">Lưu thông tin</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
                 </div>
