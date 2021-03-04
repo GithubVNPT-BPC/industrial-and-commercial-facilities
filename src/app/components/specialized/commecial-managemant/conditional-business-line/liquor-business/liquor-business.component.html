@@ -30,7 +30,7 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Doanh nghiệp kinh doanh rượu:
+                                    <mat-icon>filter</mat-icon> Tổng số doanh nghiệp bán buôn rượu:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -42,7 +42,7 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Số lượng bán ra:
+                                    <mat-icon>filter</mat-icon> Tổng số lượng bán ra:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -54,23 +54,11 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Trị giá bán ra:
+                                    <mat-icon>filter</mat-icon> Tổng trị giá bán ra:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
                                 {{TriGiaBanRa | number: '1.0-4':'vi'}} (1000 VNĐ)
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-3">
-                        <mat-card class="card2">
-                            <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Thương nhân cung cấp:
-                                </mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                {{SLThuongNhan | number: '1.0-0':'vi'}} thương nhân
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -139,6 +127,22 @@
                     </mat-form-field>
 
                     <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table2">
+
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let row" class="center-cell">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
 
                         <ng-container matColumnDef="cap_nhat">
                             <th mat-header-cell *matHeaderCellDef> Cập nhật thông tin </th>

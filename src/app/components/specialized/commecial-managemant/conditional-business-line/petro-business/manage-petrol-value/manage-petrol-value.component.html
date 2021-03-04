@@ -1,4 +1,8 @@
 <mat-card class="material">
+    <mat-card-header>
+        <mat-card-title><strong>CỬA HÀNG BÁN LẺ XĂNG DẦU</strong></mat-card-title>
+        <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -25,7 +29,19 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> CH xăng dầu:
+                                    <mat-icon>filter</mat-icon> Tổng số doanh nghiệp kinh doanh xăng dầu:
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{this.dataSource1.filteredData.length | number: '1.0-0':'vi'}} doanh nghiệp
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng số cửa hàng <br> xăng dầu:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -37,7 +53,7 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Sản lượng tiêu thụ:
+                                    <mat-icon>filter</mat-icon> Tổng sản lượng bán ra:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -49,7 +65,7 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Thương nhân cung cấp:
+                                    <mat-icon>filter</mat-icon> Tổng số thương nhân cung cấp xăng dầu:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -101,6 +117,10 @@
                     </div>
 
                     <div class="col-6 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="ManageBusiness()">Quản lý thương nhân</button>
+
+                        <button mat-raised-button (click)="ManageStore()">Quản lý cửa hàng</button>
+
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
                             Excel</button>

@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { InformationService } from 'src/app/shared/information/information.service';
 
 import { MatDialog } from '@angular/material';
+import { SelectionModel } from '@angular/cdk/collections';
 
 import {
     DistrictModel,
     LiquorList,
-
+    DeleteModel
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -94,6 +95,51 @@ export class LiquorBusinessComponent implements OnInit {
 
     autoOpen() {
         setTimeout(() => this.accordion.openAll(), 1000);
+    }
+
+    selection = new SelectionModel<LiquorList>(true, []);
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        // const numRows = this.dataSource.data.length;
+        const numRows = this.dataSource1.connect().value.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+    }
+
+    checkboxLabel(row?: LiquorList): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_ruou + 1}`;
+    }
+
+    deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+    selectionarray: string[];
+    removeRows() {
+        if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+            this.selection.selected.forEach(x => {
+                this.selectionarray = this.selection.selected.map(item => item.id_ruou)
+                this.deletemodel1.push({
+                    id: ''
+                })
+            })
+            for (let index = 0; index < this.selectionarray.length; index++) {
+                const element = this.deletemodel1[index];
+                element.id = this.selectionarray[index]
+            }
+            this._Service.DeleteTobaccoValue(this.deletemodel1).subscribe(res => {
+                this._info.msgSuccess('Xóa thành công')
+                this.ngOnInit()
+                this.selection.clear();
+                this.paginator.pageIndex = 0;
+            })
+        }
     }
 
     // ngAfterViewInit(): void {

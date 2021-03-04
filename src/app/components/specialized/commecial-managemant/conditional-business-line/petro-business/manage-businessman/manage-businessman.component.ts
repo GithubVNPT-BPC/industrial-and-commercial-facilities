@@ -168,14 +168,6 @@ export class ManageBusinessmanComponent implements OnInit {
     })
   }
 
-  AddBusiness(id: number) {
-    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id]);
-  }
-
-  Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/cbl']);
-  }
-
   // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
   // allSelected = false;
   // toggleAllSelection() {
@@ -230,5 +222,13 @@ export class ManageBusinessmanComponent implements OnInit {
   // Back() {
   //   this._location.back();
   // }
+
+  AddBusiness(id: number) {
+    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id]);
+  }
+
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
+  }
 
 }

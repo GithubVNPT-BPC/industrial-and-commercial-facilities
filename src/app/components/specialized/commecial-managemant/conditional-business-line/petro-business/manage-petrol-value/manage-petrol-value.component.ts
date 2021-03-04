@@ -66,10 +66,6 @@ export class ManagePetrolValueComponent implements OnInit {
   ) {
   }
 
-  AddSupplyBusiness(id: string, time: string) {
-    this.router.navigate(['specialized/commecial-management/domestic/supplybusiness/' + id + '/' + time]);
-  }
-
   // public AddSupplyBusiness(data: any) {
   //   const dialogRef = this.dialog.open(AddSupplyBusinessComponent, {
   //     data: {
@@ -275,8 +271,20 @@ export class ManagePetrolValueComponent implements OnInit {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
-  Back() {
+  AddSupplyBusiness(id: string, time: string) {
+    this.router.navigate(['specialized/commecial-management/domestic/supplybusiness/' + id + '/' + time]);
+  }
+
+  ManageStore() {
     this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+  }
+
+  ManageBusiness() {
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
+  }
+
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/cbl']);
   }
 
 }
