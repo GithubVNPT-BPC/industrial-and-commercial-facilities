@@ -109,4 +109,6 @@ export class FoodCommerceModel {
     ten_san_pham: string;
     nguoi_dai_dien: string;
     id_quan_huyen: number;
+    is_het_han: boolean;
+    ngay_het_han: string;
 }

@@ -1,7 +1,4 @@
 .material {
-  $blue: #1f7ed0;
-  $white: white;
-  $black: #000000;
   .sidenav_container .mat-elevation-z5 {
     min-width: 60px;
     height: 100%;
@@ -9,7 +6,7 @@
     z-index: -1 !important;
     .sct-sidebar {
       height: 100%;
-      background-color: $white;
+      background-color: white;
     }
   }
 
@@ -20,11 +17,11 @@
 
   .mat-list-item {
     font-size: 0.9em;
-    background-color: $white;
-    color: $black;
+    background-color: white;
+    color: black;
     .submenu {
-      color: $black;
-      background-color: $white;
+      color: black;
+      background-color: white;
     }
   }
   .mat-list-base {
@@ -32,13 +29,8 @@
   }
   .mat-list-item.parent {
     text-transform: uppercase;
-    color: $blue;
+    color: #1f7ed0;
     font-weight: bold;
-  }
-
-  .mat-list-item.child {
-    font-size: 0.9em;
-    // padding-left: 28px;
   }
 
   .mat-list-item.child {
@@ -48,13 +40,14 @@
   .mat-icon {
     margin-right: 5px;
   }
-  .mat-list-base .mat-list-item .mat-list-icon, .mat-list-base .mat-list-option .mat-list-icon{
+  .mat-list-base .mat-list-item .mat-list-icon,
+  .mat-list-base .mat-list-option .mat-list-icon {
     margin-right: 5px;
-    padding:0px;
+    padding: 0px;
   }
   .mat-list-item:hover {
-    background-color: $blue;
-    color: $white;
+    background-color: #1f7ed0;
+    color: white;
   }
 
   .mat-list-item:active {
@@ -62,13 +55,13 @@
     transition: 1s ease all;
     -moz-transition: 1s ease all;
     -webkit-transition: 1s ease all;
-    background-color: $blue;
-    color: $black;
+    background-color: #1f7ed0;
+    color: black;
   }
 
   .mat-list-item:focus {
-    background-color: $blue;
-    color: $white;
+    background-color: #1f7ed0;
+    color: white;
   }
 
   .mat-list-item-active {
