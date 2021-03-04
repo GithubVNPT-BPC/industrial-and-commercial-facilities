@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricalPlan, ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
-import { LinkModel } from 'src/app/_models/link.model';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { BaseComponent } from '../../specialized-base.component';
 
@@ -16,17 +15,7 @@ import { BaseComponent } from '../../specialized-base.component';
 export class CurrentElectricalPlanComponent extends BaseComponent {
     formData: any = this.formData;
     
-    public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+    public districts: DistrictModel[] = [];
     years: number[] = [2021, 2020, 2019, 2018, 2017, 2016, 2015]
     constructor(
         private injector: Injector,
@@ -34,6 +23,7 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
     ) {
         super(injector);
     }
+
     trang_thai_hd: any[] = [
         { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG' },
         { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG' }
@@ -214,5 +204,12 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
             id_trang_thai_hoat_dong: new FormControl(''),
             id_loai_quy_hoach: new FormControl(''),
         }
+    }
+
+    getLinkDefault(){
+        //Constant
+        this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
+        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
+        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
     }
 }

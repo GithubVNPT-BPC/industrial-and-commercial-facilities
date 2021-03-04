@@ -57,19 +57,7 @@ export class ConsultantElectricComponent extends BaseComponent {
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
   public filteredDataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
-  public districts: DistrictModel[] = [
-    { id: 1, ten_quan_huyen: "Thị xã Phước Long" },
-    { id: 2, ten_quan_huyen: "Thành phố Đồng Xoài" },
-    { id: 3, ten_quan_huyen: "Thị xã Bình Long" },
-    { id: 4, ten_quan_huyen: "Huyện Bù Gia Mập" },
-    { id: 5, ten_quan_huyen: "Huyện Lộc Ninh" },
-    { id: 6, ten_quan_huyen: "Huyện Bù Đốp" },
-    { id: 7, ten_quan_huyen: "Huyện Hớn Quản" },
-    { id: 8, ten_quan_huyen: "Huyện Đồng Phú" },
-    { id: 9, ten_quan_huyen: "Huyện Bù Đăng" },
-    { id: 10, ten_quan_huyen: "Huyện Chơn Thành" },
-    { id: 11, ten_quan_huyen: "Huyện Phú Riềng" },
-  ];
+  public districts: DistrictModel[] = [];
   // public data: Array<ManageAproveElectronic> = consualtantData.filter(
   //   (item) => item.id_group === 1
   // );
@@ -233,4 +221,10 @@ export class ConsultantElectricComponent extends BaseComponent {
       this.successNotify(res);
     })
   }
+
+  // getLinkDefault(){
+  //   this.LINK_DEFAULT = "specialized/enery-management/manage_aprove_hddl";
+  //   this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
+  //   this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
+  // }
 }

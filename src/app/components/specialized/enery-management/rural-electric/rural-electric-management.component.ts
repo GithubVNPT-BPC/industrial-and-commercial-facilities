@@ -150,4 +150,10 @@ export class RuralElectricManagementComponent extends BaseComponent {
       this.successNotify(res);
     })
   }
+
+  getLinkDefault(){
+    this.LINK_DEFAULT = "/specialized/enery-management/rural_electricity";
+    this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
+    this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
+  }
 }
