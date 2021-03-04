@@ -1,5 +1,8 @@
 <mat-card class="material">
     <mat-card-header>
+        <!-- <mat-card-title></mat-card-title> -->
+        <mat-card-subtitle hidden>
+        </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <!-- <button (click)="addCareer()" mat-raised-button>Thêm ngành nghề</button> -->
@@ -8,7 +11,16 @@
             <div class="row">
                 <div class="col-6 button-control -align-left my-auto">
                     <button type="submit" mat-raised-button>Lưu</button>
+
+                    <button mat-raised-button type="reset" (click)="onReset()">Nhập lại</button>
                 </div>
+
+                <div class="col-6 button-control -align-right my-auto">
+                    <button mat-raised-button (click)="Back()">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
+                </div>
+
             </div>
             <div class="row">
                 <div class="col-6">
@@ -39,13 +51,17 @@
                     </section>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Tên doanh nghiệp</mat-label>
+                        <mat-label>Tên doanh nghiệp (*)</mat-label>
                         <input formControlName="ten_doanh_nghiep" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.ten_doanh_nghiep">
+                            [(ngModel)]="_Service.companyinfo.ten_doanh_nghiep"
+                            [ngClass]="{ 'is-invalid': submitted && f.ten_doanh_nghiep.errors }">
+                        <div *ngIf="submitted && f.ten_doanh_nghiep.errors" class="invalid-feedback">
+                            <div *ngIf="f.ten_doanh_nghiep.errors.required">Vui lòng nhập tên doanh nghiệp</div>
+                        </div>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Tên loại hình hoạt động</mat-label>
+                        <mat-label>Tên loại hình hoạt động (*)</mat-label>
                         <mat-select formControlName="id_loai_hinh_hoat_dong"
                             [(ngModel)]="_Service.companyinfo.id_loai_hinh_hoat_dong">
                             <mat-option *ngFor="let item of Business" [value]="item.id_loai_hinh_hoat_dong">
@@ -55,7 +71,7 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Phường xã</mat-label>
+                        <mat-label>Phường xã (*)</mat-label>
                         <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.companyinfo.id_phuong_xa">
                             <mat-option *ngFor="let item of subdistrict" [value]="item.id_phuong_xa">
                                 {{item.ten_phuong_xa}}
@@ -64,26 +80,42 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Mã số thuế</mat-label>
-                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst">
+                        <mat-label>Mã số thuế (*)</mat-label>
+                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
+                            [ngClass]="{ 'is-invalid': submitted && f.mst.errors }">
+                        <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
+                            <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
+                        </div>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Mã số thuế cha</mat-label>
+                        <mat-label>Mã số thuế cha (*)</mat-label>
                         <input formControlName="mst_parent" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.mst_parent">
+                            [(ngModel)]="_Service.companyinfo.mst_parent"
+                            [ngClass]="{ 'is-invalid': submitted && f.mst_parent.errors }">
+                        <div *ngIf="submitted && f.mst_parent.errors" class="invalid-feedback">
+                            <div *ngIf="f.mst_parent.errors.required">Vui lòng nhập mã số thuế cha</div>
+                        </div>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Người đại diện theo pháp luật</mat-label>
+                        <mat-label>Người đại diện theo pháp luật (*)</mat-label>
                         <input formControlName="nguoi_dai_dien" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nguoi_dai_dien">
+                            [(ngModel)]="_Service.companyinfo.nguoi_dai_dien"
+                            [ngClass]="{ 'is-invalid': submitted && f.nguoi_dai_dien.errors }">
+                        <div *ngIf="submitted && f.nguoi_dai_dien.errors" class="invalid-feedback">
+                            <div *ngIf="f.nguoi_dai_dien.errors.required">Vui lòng nhập người đại diện</div>
+                        </div>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label style="color: red;">Địa chỉ</mat-label>
+                        <mat-label>Địa chỉ (*)</mat-label>
                         <input formControlName="dia_chi" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.dia_chi">
+                            [(ngModel)]="_Service.companyinfo.dia_chi"
+                            [ngClass]="{ 'is-invalid': submitted && f.dia_chi.errors }">
+                        <div *ngIf="submitted && f.dia_chi.errors" class="invalid-feedback">
+                            <div *ngIf="f.dia_chi.errors.required">Vui lòng nhập địa chỉ</div>
+                        </div>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
@@ -106,26 +138,35 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Nhu cầu bán</mat-label>
-                        <input formControlName="nhu_cau_ban" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban">
+                        <textarea formControlName="nhu_cau_ban" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban"></textarea>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Nhu cầu mua</mat-label>
-                        <input formControlName="nhu_cau_mua" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua">
+                        <textarea formControlName="nhu_cau_mua" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua"></textarea>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Tiêu chuẩn sản phẩm</mat-label>
-                        <input formControlName="tieu_chuan_san_pham" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham">
+                        <textarea formControlName="tieu_chuan_san_pham" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham"></textarea>
                     </mat-form-field>
                 </div>
 
                 <div class="col-6">
                     <section class="cb-section">
                     </section>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngày bắt đầu kinh doanh</mat-label>
+                        <input formControlName="ngay_bd_kd" matInput readonly [matDatepicker]="datePicker"
+                            [(ngModel)]="bdkddate" (ngModelChange)="getChange($event)">
+                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #datePicker></mat-datepicker>
+                    </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Vốn điều lệ</mat-label>
@@ -189,17 +230,8 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Nhu cầu hợp tác</mat-label>
-                        <input formControlName="nhu_cau_hop_tac" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_hop_tac">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Ngày bắt đầu kinh doanh</mat-label>
-                        <input formControlName="ngay_bd_kd" matInput readonly [matDatepicker]="datePicker"
-                            [(ngModel)]="_Service.companyinfo.ngay_bd_kd" (ngModelChange)="getChange($event)">
-                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
-                        </mat-datepicker-toggle>
-                        <mat-datepicker #datePicker></mat-datepicker>
+                        <textarea formControlName="nhu_cau_hop_tac" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_hop_tac"></textarea>
                     </mat-form-field>
                 </div>
             </div>
@@ -222,7 +254,7 @@
         <div class="layout" id="small" #TABLE>
             <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">
 
-                <ng-container matColumnDef="select">
+                <!-- <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef>
                         <mat-checkbox (change)="$event ? masterToggle() : null"
                             [checked]="selection.hasValue() && isAllSelected()"
@@ -235,7 +267,7 @@
                             [aria-label]="checkboxLabel(row)">
                         </mat-checkbox>
                     </td>
-                </ng-container>
+                </ng-container> -->
 
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>

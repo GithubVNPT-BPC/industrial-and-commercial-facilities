@@ -195,6 +195,9 @@
             button.mat-raised-button.green {
                 background-color: green !important;
             }
+            button.mat-raised-button.yellow {
+                background-color: yellow !important;
+            }
         }
         .button-control.-align-left {
             text-align: left;
@@ -354,7 +357,7 @@
         width: 550%;
     }
 
-    form .form-group .container{
+    form .form-group .container {
         margin-right: 0;
         margin-left: 0;
     }
@@ -416,4 +419,13 @@ a:hover {
     margin-bottom: 0rem;
     background-color: #f4f5f7;
     min-width: max-content;
+}
+
+#config.mat-raised-button {
+    height: 300px !important;
+    width: 300px !important;
+}
+
+.o_invisible {
+    display: none;
 }

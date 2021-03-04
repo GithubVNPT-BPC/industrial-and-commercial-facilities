@@ -359,4 +359,8 @@ export class UpdatePetrolComponent implements OnInit {
     }
   }
 
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+  }
+
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
@@ -14,9 +15,41 @@ export class ConditionalBusinessLineComponent implements OnInit {
     private readonly TEXT_DEFAULT: string = "Kinh doanh có điều kiện";
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
-    constructor(private _breadCrumService: BreadCrumService) { }
+    navLinks: any[];
+    activeLinkIndex = -1;
+
+    constructor(private _breadCrumService: BreadCrumService,
+        private router: Router) {
+        this.navLinks = [
+            {
+                label: 'Petrol',
+                link: './petrol',
+                index: 0,
+            },
+        ];
+    }
+
+    Petrol() {
+        this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
+    }
+
+    Tobacco() {
+        this.router.navigate(['specialized/commecial-management/domestic/tobacco']);
+    }
+
+    Liquor() {
+        this.router.navigate(['specialized/commecial-management/domestic/liquor']);
+    }
+
+    LPG() {
+        this.router.navigate(['specialized/commecial-management/domestic/lpg']);
+    }
+
     ngOnInit() {
         this.sendLinkToNext(true);
+        this.router.events.subscribe((res) => {
+            this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
+        });
     }
 
     public sendLinkToNext(type: boolean) {

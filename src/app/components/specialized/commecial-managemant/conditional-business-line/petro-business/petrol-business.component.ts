@@ -125,7 +125,6 @@ export class PetrolBusinessComponent implements OnInit {
             this._Service.DeletePetrol(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
                 this.getPetrolList();
-                this.date = null
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
@@ -221,22 +220,6 @@ export class PetrolBusinessComponent implements OnInit {
     //     })
     // }
 
-    AddStore() {
-        this.router.navigate(['specialized/commecial-management/domestic/addstore']);
-    }
-
-    ManageValue() {
-        this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
-    }
-
-    ManageBusiness() {
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
-    }
-
-    OpenDetailPetrol(id: number, mst: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/update-petrol/' + id + '/' + mst])
-    }
-
     // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
     // allSelected = false;
     // toggleAllSelection() {
@@ -308,5 +291,17 @@ export class PetrolBusinessComponent implements OnInit {
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    AddStore() {
+        this.router.navigate(['specialized/commecial-management/domestic/addstore']);
+    }
+
+    OpenDetailPetrol(id: number, mst: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/update-petrol/' + id + '/' + mst])
+    }
+
+    Back() {
+        this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
     }
 }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { formatDate } from '@angular/common';
+import { formatDate, Location } from '@angular/common';
 import { NgForm, NumberValueAccessor } from '@angular/forms';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
@@ -76,6 +76,7 @@ export class ManageBusinessmanComponent implements OnInit {
     public router: Router,
     public _info: InformationService,
     public dialog: MatDialog,
+    private _location: Location
   ) {
   }
 
@@ -167,10 +168,6 @@ export class ManageBusinessmanComponent implements OnInit {
     })
   }
 
-  AddBusiness(id: number) {
-    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id]);
-  }
-
   // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
   // allSelected = false;
   // toggleAllSelection() {
@@ -220,6 +217,18 @@ export class ManageBusinessmanComponent implements OnInit {
 
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+
+  // Back() {
+  //   this._location.back();
+  // }
+
+  AddBusiness(id: number) {
+    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id]);
+  }
+
+  Back() {
+    this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
   }
 
 }

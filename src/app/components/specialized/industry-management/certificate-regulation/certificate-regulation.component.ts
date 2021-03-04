@@ -63,6 +63,7 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       mst: new FormControl(),
       ten_san_pham: new FormControl(),
       ban_cong_bo_hop_quy: new FormControl(),
@@ -71,6 +72,20 @@ export class CertificateRegulationComponent extends BaseComponent {
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl(),
       id_loai_san_pham: new FormControl(),
+    }
+  }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['mst'].setValue(selectedRecord.mst);
+        this.formData.controls['ten_san_pham'].setValue(selectedRecord.ten_san_pham);
+        this.formData.controls['ban_cong_bo_hop_quy'].setValue(selectedRecord.ban_cong_bo_hop_quy);
+        this.formData.controls['ngay_tiep_nhan'].setValue(selectedRecord.ngay_tiep_nhan);
+        this.formData.controls['tieu_chuan_san_pham'].setValue(selectedRecord.tieu_chuan_san_pham);
+        this.formData.controls['noi_cap'].setValue(selectedRecord.noi_cap);
+        this.formData.controls['id_loai_san_pham'].setValue(selectedRecord.id_loai_san_pham);
     }
   }
 
@@ -88,10 +103,6 @@ export class CertificateRegulationComponent extends BaseComponent {
   prepareData(data) {
     data['ngay_tiep_nhan'] = moment(data['ngay_tiep_nhan']).format('yyyyMMDD');
     return data;
-  }
-
-  callService(data) {
-    this.industryManagementService.PostComformityAnnounce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   applyFilter(event: Event) {
@@ -113,10 +124,16 @@ export class CertificateRegulationComponent extends BaseComponent {
     return datas;
   }
 
+  callService(data) {
+    this.industryManagementService.PostComformityAnnounce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  callEditService(data) {
+    this.industryManagementService.PostComformityAnnounce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
   callRemoveService(data) {
-      this.industryManagementService.DeleteCBHQ(data).subscribe(res => {
-          this.successNotify(res);
-      });
+      this.industryManagementService.DeleteCBHQ(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 }

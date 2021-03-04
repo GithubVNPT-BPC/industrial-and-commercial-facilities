@@ -22,6 +22,7 @@ export class CommerceManagementService {
     private urlGetMarket = 'api/qltm/httm/cho';
     private urlGetFoodCommerce = 'api/qltm/httm/kdtp';
     private urlGetConvenienceStore = 'api/qltm/httm/chtl';
+    private urlGetCountrSide = 'api/qltm/dsNTM';
 
     // POST
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
@@ -32,6 +33,7 @@ export class CommerceManagementService {
     private urlPostFoodCommerce = 'api/qltm/httm/kdtp';
     private urlPostConvenienceStore = 'api/qltm/httm/chtl';
     private urlPostPromoAdress = "api/qltm/cap-nhat-dia-diem-khuyen-mai";
+    private urlPostCountrSide = 'api/qltm/adddsNTM';
 
     // DELETE
     private urldeletePromo = "api/qltm/khuyen-mai/xoa";
@@ -120,6 +122,14 @@ export class CommerceManagementService {
         );
     }
 
+    public getCountrySideData() {
+        let apiUrl = this.apiHome + this.urlGetCountrSide;
+        let headers = new HttpHeaders(HEADERS);
+        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     // POST Methods
     public postSubcribeDiscountData(datas) {
         let apiUrl = this.apiHome + this.urlPostSubcribeDiscount;
@@ -168,6 +178,15 @@ export class CommerceManagementService {
 
     public postConvenienceStore(datas) {
         let apiUrl = this.apiHome + this.urlPostConvenienceStore;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public postCountrySide(datas) {
+        let apiUrl = this.apiHome + this.urlPostCountrSide;
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),

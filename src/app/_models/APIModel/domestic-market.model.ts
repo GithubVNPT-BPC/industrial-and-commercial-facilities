@@ -97,7 +97,7 @@ export class ProductValueModel {
 }
 
 export class TopCompanyModel {
-    public id: number;
+    public id: string;
     public id_san_pham: number;
     public mst: string;
     public cong_suat: number;
@@ -105,6 +105,14 @@ export class TopCompanyModel {
     public ten_doanh_nghiep: string;
     public dia_chi: string;
     public so_dien_thoai: string;
+}
+
+export class PostTopProduct {
+    public id: string;
+    public id_san_pham: number;
+    public mst: string;
+    public cong_suat: number;
+    public time_id: string;
 }
 
 export class CompanyDetailModel {

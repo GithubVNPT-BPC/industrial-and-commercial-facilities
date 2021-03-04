@@ -2,6 +2,7 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 //Import Model
 import { FoodCommerceModel } from 'src/app/_models/APIModel/commecial-management.model';
@@ -9,6 +10,7 @@ import { FoodCommerceModel } from 'src/app/_models/APIModel/commecial-management
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-food-commecial',
@@ -16,7 +18,7 @@ import { EnterpriseService } from 'src/app/_services/APIService/enterprise.servi
   styleUrls: ['../../../special_layout.scss'],
 })
 
-export class FoodManagementComponent extends BaseComponent {  
+export class FoodManagementComponent extends BaseComponent {
   dataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
   filteredDataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
 
@@ -30,12 +32,12 @@ export class FoodManagementComponent extends BaseComponent {
   };
 
   businessProducts = [
-    {id_spkd: 1, ten_san_pham: "Bán buôn thực phẩm"},
-    {id_spkd: 2, ten_san_pham: "Bán buôn bán lẻ thực phẩm"},
-    {id_spkd: 3, ten_san_pham: "Phân phối gạo"},
-    {id_spkd: 4, ten_san_pham: "Bán buôn đồ uống"},
-    {id_spkd: 5, ten_san_pham: "Đại lý gạo"},
-    {id_spkd: 6, ten_san_pham: "Bán buôn thực phẩm"},
+    { id_spkd: 1, ten_san_pham: "Bán buôn thực phẩm" },
+    { id_spkd: 2, ten_san_pham: "Bán buôn bán lẻ thực phẩm" },
+    { id_spkd: 3, ten_san_pham: "Phân phối gạo" },
+    { id_spkd: 4, ten_san_pham: "Bán buôn đồ uống" },
+    { id_spkd: 5, ten_san_pham: "Đại lý gạo" },
+    { id_spkd: 6, ten_san_pham: "Bán buôn thực phẩm" },
   ];
 
   displayedFields = {
@@ -45,7 +47,7 @@ export class FoodManagementComponent extends BaseComponent {
     ten_san_pham: "Sản phẩm kinh doanh",
     so_giay_phep: "Số chứng nhận ĐKKD",
     ngay_cap: "Ngày cấp",
-    noi_cap: "Nơi cấp",
+    ngay_het_han: "Ngày hết hạn",
     nguoi_dai_dien: "Tên",
     so_dien_thoai: "Điện thoại",
   }
@@ -62,14 +64,14 @@ export class FoodManagementComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.getFoodCommerceData();    
+    this.getFoodCommerceData();
   }
-  
+
   ngAfterViewInit() {
     this.paginatorAgain();
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
@@ -80,13 +82,36 @@ export class FoodManagementComponent extends BaseComponent {
       allrecords => {
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
-          this.filteredDataSource.data = [...this.dataSource.data];
+          this.dataSource.data.forEach(element => {
+            if (element.ngay_het_han) {
+              let temp = this.Convertdate(element.ngay_het_han)
+              element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+            }
+            else {
+              element.is_het_han = false
+            }
+            element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+            element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
+          })
+
+          this.filteredDataSource.data = [...this.dataSource.data].filter(x=>x.is_het_han == false)
           this._prepareData(this.dataSource.data);
           this.paginatorAgain();
         }
       },
       error => this.errorMessage = <any>error
     );
+  }
+
+  Convertdate(text: string): string {
+    let date: string
+    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+    return date
+  }
+
+  public getCurrentDate() {
+    let date = new Date;
+    return formatDate(date, 'yyyy-MM-dd', 'en-US');
   }
 
   getFormParams() {
@@ -106,7 +131,7 @@ export class FoodManagementComponent extends BaseComponent {
     super.resetAll();
   }
 
-  private _prepareData(data: FoodCommerceModel[]){
+  private _prepareData(data: FoodCommerceModel[]) {
     this.tongDoanhNghiep = data.length;
   }
 
@@ -144,7 +169,11 @@ export class FoodManagementComponent extends BaseComponent {
     })
     return temp;
   }
-  
+
+  applyExpireCheck(event) {
+    this.filteredDataSource.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+  }
+
   findLicenseInfo(event) {
     event.preventDefault();
     let mst = this.formData.controls.mst.value;
@@ -152,8 +181,8 @@ export class FoodManagementComponent extends BaseComponent {
       if (response.success) {
         if (response.data.length > 0) {
           let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 2);
-          
-          if (giayCndkkdList.length == 0 )
+
+          if (giayCndkkdList.length == 0)
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
           else {
             this.isFound = true;
@@ -168,8 +197,8 @@ export class FoodManagementComponent extends BaseComponent {
         this.logger.msgSuccess("Không tìm thấy dữ liệu");
       }
     }, error => {
-        this.isFound = false;
-        this.logger.msgError("Lỗi khi xử lý \n" + error);
+      this.isFound = false;
+      this.logger.msgError("Lỗi khi xử lý \n" + error);
     });
   }
 }

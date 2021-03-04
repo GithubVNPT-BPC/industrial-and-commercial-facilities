@@ -131,10 +131,14 @@ export class SearchBusinessComponent implements OnInit {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
 
+  // OpenDetailCompany(mst: string) {
+  //   let url = this.router.serializeUrl(
+  //     this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/' + mst]));
+  //   window.open(url.replace('%23', '#'), "_blank");
+  // }
+
   OpenDetailCompany(mst: string) {
-    let url = this.router.serializeUrl(
-      this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/' + mst]));
-    window.open(url.replace('%23', '#'), "_blank");
+    this.router.navigate(['manager/business/edit/' + mst]);
   }
 
   // AddCompany() {
@@ -206,8 +210,6 @@ export class SearchBusinessComponent implements OnInit {
         this.companyList1 = allrecords.data[0]
         this.companyList2 = allrecords.data[1]
         this.companyList3 = allrecords.data[2]
-
-        this.companyList1.forEach(x => x.ngay_bd_kd = x.ngay_bd_kd ? this.Convertdate(x.ngay_bd_kd.toString()) : null)
 
         this.companyList4 = this.companyList1.map(a => {
           let temp = this.companyList2.filter(b => b.mst === a.mst)
@@ -289,6 +291,15 @@ export class SearchBusinessComponent implements OnInit {
           }
 
           return d
+        })
+
+        this.companyList5.forEach(x => {
+          if (x.ngay_bd_kd) {
+            x.ngay_bd_kd = this.Convertdate(x.ngay_bd_kd)
+          }
+          else {
+            x.ngay_bd_kd = ''
+          }
         })
 
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);

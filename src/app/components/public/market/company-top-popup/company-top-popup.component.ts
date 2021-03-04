@@ -64,8 +64,9 @@ export class CompanyTopPopup implements OnInit {
     }
 
     OpenDetailCompany(mst: string) {
-        this.router.navigate(['/public/partner/search/' + mst]);
-        this.dialogRef.close();
+        let url = this.router.serializeUrl(
+            this.router.createUrlTree([encodeURI('#') + 'public/partner/search/' + mst]));
+        window.open(url.replace('%23', '#'), "_blank");
     }
 
     public exportTOExcel(filename: string, sheetname: string) {
@@ -95,7 +96,7 @@ export class CompanyTopPopup implements OnInit {
         this.marketService.GetExportValue(this.export_data.time_id).subscribe(
             allrecords => {
                 this.filtercompany = allrecords.data[1]
-                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.export_data.id_san_pham)
 
                 this.dataSource = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
                 this.dataSource.paginator = this.paginator;
@@ -111,7 +112,7 @@ export class CompanyTopPopup implements OnInit {
         this.marketService.GetImportValue(this.import_data.time_id).subscribe(
             allrecords => {
                 this.filtercompany = allrecords.data[1]
-                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.import_data.id_san_pham)
 
                 this.dataSource = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
                 this.dataSource.paginator = this.paginator;

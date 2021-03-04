@@ -16,6 +16,7 @@ import { PetrolBusinessComponent } from './conditional-business-line/petro-busin
 import { LPGBusinessComponent } from './conditional-business-line/lpg-business/lpg-business.component';
 import { InformedEcommerceWebsiteComponent } from './e-commerce-managemant/informed-ecommerce-website/informed-ecommerce-website.component';
 import { ShoppingcentreComponent } from './infrastructure/shoppingcentre/shoppingcentre.component';
+import { CountrysideComponent } from './infrastructure/countryside/countryside.component';
 import { TRSManagementComponent } from './infrastructure/total-retail-sales/total-retail-sales.component';
 import { ImportManagementComponent } from './export-import-management/import-management/import-management.component';
 import { ExportManagementComponent } from './export-import-management/export-management/export-management.component';
@@ -58,9 +59,13 @@ import { SpecialDirective } from 'src/app/shared/special.directive';
 import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
 import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
 import { UpdatePetrolComponent } from './conditional-business-line/petro-business/update-petrol/update-petrol.component';
-import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
+import { AddTobaccoBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-business/add-tobacco-business.component';
+import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-supply-business/add-tobacco-supply-business.component';
+import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
+import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
+import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -101,6 +106,7 @@ export const customCurrencyMaskConfig = {
     TobaccoBusinessComponent,
     ConditionalBusinessLineComponent,
     SuperMarketCommecialManagementComponent,
+    CountrysideComponent,
     CommonCommecialComponent,
     LiquorBusinessComponent,
     StoreManagementComponent,
@@ -142,6 +148,10 @@ export const customCurrencyMaskConfig = {
     ManageBusinessmanComponent,
     UpdateBusinessmanComponent,
     AddSupplyBusinessComponent,
+    AddTobaccoBusinessComponent,
+    AddTobaccoSupplyBusinessComponent,
+    AddLiquorBusinessComponent,
+    AddLiquorSupplyBusinessComponent,
   ],
   entryComponents: [
     ModalComponent,

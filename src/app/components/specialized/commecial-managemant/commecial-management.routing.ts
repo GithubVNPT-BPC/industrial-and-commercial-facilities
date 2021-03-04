@@ -24,9 +24,13 @@ import { PetrolBusinessComponent } from './conditional-business-line/petro-busin
 import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
 import { UpdatePetrolComponent } from './conditional-business-line/petro-business/update-petrol/update-petrol.component';
 import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
-import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
+import { AddTobaccoBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-business/add-tobacco-business.component';
+import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-supply-business/add-tobacco-supply-business.component';
+import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
+import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
+import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 
 const routes: Routes = [
   {
@@ -107,7 +111,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'supplybusiness',
+        path: 'supplybusiness/:id/:time',
         component: AddSupplyBusinessComponent,
         data: {
           title: 'Quản lý thương nhân cung cấp',
@@ -128,10 +132,38 @@ const routes: Routes = [
         }
       },
       {
+        path: 'add-tobacco/:id',
+        component: AddTobaccoBusinessComponent,
+        data: {
+          title: 'Thêm doanh nghiệp buôn bán thuốc lá',
+        }
+      },
+      {
+        path: 'add-tobacco-supply/:id/:time',
+        component: AddTobaccoSupplyBusinessComponent,
+        data: {
+          title: 'Thêm thương nhân cung cấp thuốc lá',
+        }
+      },
+      {
         path: 'liquor',
         component: LiquorBusinessComponent,
         data: {
-          title: 'Quản lý bán buôn rượu',
+          title: 'Quản lý buôn bán rượu',
+        }
+      },
+      {
+        path: 'add-liquor/:id',
+        component: AddLiquorBusinessComponent,
+        data: {
+          title: 'Thêm doanh nghiệp buôn bán rượu',
+        }
+      },
+      {
+        path: 'add-liquor-supply/:id/:time',
+        component: AddLiquorSupplyBusinessComponent,
+        data: {
+          title: 'Thêm thương nhân cung cấp rượu',
         }
       },
       {

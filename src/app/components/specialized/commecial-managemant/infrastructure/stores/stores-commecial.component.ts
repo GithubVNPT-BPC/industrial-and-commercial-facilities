@@ -67,7 +67,6 @@ export class StoreManagementComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.years = this.getYears();
     this.initDistrictWard();
     this.getConvenienceStoreData();
   }
@@ -124,12 +123,6 @@ export class StoreManagementComponent extends BaseComponent {
   resetAll() {
     this.isFound = false;
     super.resetAll();
-  }
-
-  getYears() {
-    return Array(5)
-      .fill(1)
-      .map((element, index) => new Date().getFullYear() - index);
   }
 
   private _prepareData(data: ConvenienceStoreModel[]): void {

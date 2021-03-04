@@ -1,33 +1,71 @@
-<mat-tab-group>
-    <mat-tab>
-        <ng-template mat-tab-label>
+<div class="row">
+    <div class="col-3">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="Petrol()">
             <mat-icon> local_gas_station</mat-icon>
             XĂNG DẦU
+        </button>
+    </div>
+    <div class="col-3">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="Tobacco()">
+            <mat-icon>smoking_rooms</mat-icon>
+            THUỐC LÁ
+        </button>
+    </div>
+    <div class="col-3">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="Liquor()">
+            <mat-icon> local_bar</mat-icon>
+            RƯỢU
+        </button>
+    </div>
+    <div class="col-3">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="LPG()">
+            <mat-icon> settings</mat-icon>
+            LPG
+        </button>
+    </div>
+</div>
+
+<!-- <mat-tab-group>
+    <mat-tab>
+        <ng-template mat-tab-label>
+
         </ng-template>
         <petrol-business></petrol-business>
     </mat-tab>
 
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon>smoking_rooms</mat-icon>
-            THUỐC LÁ
+
         </ng-template>
         <tobacco-business></tobacco-business>
     </mat-tab>
 
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon> local_bar</mat-icon>
-            RƯỢU
+
         </ng-template>
         <liquor-business></liquor-business>
     </mat-tab>
 
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon>settings</mat-icon>
-            LPG
+
         </ng-template>
         <lpg-business></lpg-business>
     </mat-tab>
-</mat-tab-group>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+
+        </ng-template>
+        <app-manage-businessman></app-manage-businessman>
+    </mat-tab>
+</mat-tab-group> -->
+
+<!-- <nav mat-tab-nav-bar>
+    <a mat-tab-link *ngFor="let link of navLinks" [routerLink]="link.link" routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        {{link.label}}
+    </a>
+</nav>
+<router-outlet></router-outlet> -->

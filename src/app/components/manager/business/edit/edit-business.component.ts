@@ -25,7 +25,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
 const moment = _rollupMoment || _moment;
@@ -65,11 +65,6 @@ export class EditBusinessComponent implements OnInit {
   public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
-  errorMessage: string;
-
-  mst: string;
-  doanh_nghiep: FormGroup;
-  // danh_sach_nganh_nghe: FormArray;
 
   selection = new SelectionModel<Career>(true, []);
 
@@ -115,6 +110,11 @@ export class EditBusinessComponent implements OnInit {
     }
   }
 
+  mst: string;
+  doanh_nghiep: FormGroup;
+  submitted = false;
+  // danh_sach_nganh_nghe: FormArray;
+
   constructor(
     public route: ActivatedRoute,
     public router: Router,
@@ -159,6 +159,7 @@ export class EditBusinessComponent implements OnInit {
     if (this.mst != undefined) {
       this.GetCompanyInfoById();
     }
+
     this.GetAllNganhNghe();
     this.GetAllPhuongXa();
     this.getQuan_Huyen();
@@ -166,16 +167,16 @@ export class EditBusinessComponent implements OnInit {
     this.resetForm();
 
     this.doanh_nghiep = this.formbuilder.group({
-      mst: '',
-      id_loai_hinh_hoat_dong: null,
-      mst_parent: '',
+      mst: ['', Validators.required],
+      id_loai_hinh_hoat_dong: [null, Validators.required],
+      mst_parent: ['', Validators.required],
       sct: true,
       hoat_dong: true,
-      dia_chi: '',
-      id_phuong_xa: null,
-      nguoi_dai_dien: '',
+      dia_chi: ['', Validators.required],
+      id_phuong_xa: [null, Validators.required],
+      nguoi_dai_dien: ['', Validators.required],
       so_dien_thoai: '',
-      ten_doanh_nghiep: '',
+      ten_doanh_nghiep: [null, Validators.required],
       von_dieu_le: null,
       ngay_bd_kd: '',
       so_lao_dong: null,
@@ -214,6 +215,22 @@ export class EditBusinessComponent implements OnInit {
   // removeCareer(i: number) {
   //   this.danh_sach_nganh_nghe.removeAt(i);
   // }
+  checkmst: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  checkmstobject = new CompanyDetailModel();
+  existmst: boolean
+  Checkexistmst(mstinput: string) {
+    this._Service.GetCompanyInfoById(mstinput).subscribe(
+      allrecords => {
+        this.checkmst = allrecords.data[0]
+        this.checkmstobject = this.checkmst[0]
+        if (this.checkmstobject == undefined) {
+          this.existmst = false
+        }
+        else {
+          this.existmst = true
+        }
+      });
+  }
 
   public SaveData(companyinput) {
     if (this.mst == undefined) {
@@ -254,13 +271,31 @@ export class EditBusinessComponent implements OnInit {
     return datepipe
   }
 
+  get f() { return this.doanh_nghiep.controls; }
+
   companyinput: CompanyPost
   onSubmit() {
+    this.submitted = true;
+
+    if (this.doanh_nghiep.invalid) {
+      return;
+    }
+
+    this.Checkexistmst(this.doanh_nghiep.value.mst)
+    if (this.existmst == true) {
+      return
+    }
+
     this.companyinput = this.doanh_nghiep.value
     this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
-    this.companyinput.ngay_bd_kd = this.getChange(this.companyinput.ngay_bd_kd)
-    this.companyinput
+    this.companyinput.ngay_bd_kd = this.doanh_nghiep.value.ngay_bd_kd ? this.getChange(this.companyinput.ngay_bd_kd) : null
+
     this.SaveData(this.companyinput);
+  }
+
+  onReset() {
+    this.submitted = false;
+    this.doanh_nghiep.reset();
   }
 
   resetForm(form?: NgForm) {
@@ -298,7 +333,7 @@ export class EditBusinessComponent implements OnInit {
     }
   }
   dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
-  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh'];
+  public displayedColumns: string[] = ['index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh'];
 
   public _currentRow: number = 0;
 
@@ -310,6 +345,13 @@ export class EditBusinessComponent implements OnInit {
 
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.dataSource.paginator = this.paginator;
+    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    this.paginator._intl.firstPageLabel = "Trang Đầu";
+    this.paginator._intl.lastPageLabel = "Trang Cuối";
+    this.paginator._intl.previousPageLabel = "Trang Trước";
+    this.paginator._intl.nextPageLabel = "Trang Tiếp";
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -327,6 +369,13 @@ export class EditBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.dataSource.paginator = this.paginator;
+    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    this.paginator._intl.firstPageLabel = "Trang Đầu";
+    this.paginator._intl.lastPageLabel = "Trang Cuối";
+    this.paginator._intl.previousPageLabel = "Trang Trước";
+    this.paginator._intl.nextPageLabel = "Trang Tiếp";
 
     this._rows = this.dataSource.data.length
   }
@@ -390,6 +439,8 @@ export class EditBusinessComponent implements OnInit {
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   company: CompanyDetailModel;
   careerarray: Array<Career> = new Array<Career>();
+
+  bdkddate: Date;
 
   GetCompanyInfoById() {
     this._Service.GetCompanyInfoById(this.mst).subscribe(
@@ -496,39 +547,61 @@ export class EditBusinessComponent implements OnInit {
             this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
           }
           this.dataSource.data = this.careerarray
+
+          this.dataSource.paginator = this.paginator;
+          this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+          this.paginator._intl.firstPageLabel = "Trang Đầu";
+          this.paginator._intl.lastPageLabel = "Trang Cuối";
+          this.paginator._intl.previousPageLabel = "Trang Trước";
+          this.paginator._intl.nextPageLabel = "Trang Tiếp";
         }
 
-        this._Service.companyinfo = {
-          mst: this.company.mst,
-          id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
-          mst_parent: this.company.mst_cha,
-          sct: true,
-          hoat_dong: this.company.hoat_dong,
-          dia_chi: this.company.dia_chi,
-          id_phuong_xa: this.company.id_phuong_xa,
-          nguoi_dai_dien: this.company.nguoi_dai_dien,
-          so_dien_thoai: this.company.so_dien_thoai,
-          ten_doanh_nghiep: String(this.company.ten_doanh_nghiep),
-          von_dieu_le: this.company.von_dieu_le,
-          ngay_bd_kd: this.Convertdate(this.company.ngay_bd_kd),
-          so_lao_dong: this.company.so_lao_dong,
-          cong_suat_thiet_ke: this.company.cong_suat_thiet_ke,
-          san_luong: this.company.san_luong,
-          email: this.company.email,
-          so_lao_dong_sct: this.company.so_lao_dong_sct,
-          cong_suat_thiet_ke_sct: this.company.cong_suat_thiet_ke_sct,
-          san_luong_sct: this.company.san_luong_sct,
-          email_sct: this.company.email_sct,
-          tieu_chuan_san_pham: this.company.tieu_chuan_san_pham,
-          doanh_thu: this.company.doanh_thu,
-          quy_mo_tai_san: this.company.quy_mo_tai_san,
-          loi_nhuan: this.company.loi_nhuan,
-          nhu_cau_ban: this.company.nhu_cau_ban,
-          nhu_cau_mua: this.company.nhu_cau_mua,
-          nhu_cau_hop_tac: this.company.nhu_cau_hop_tac,
-          danh_sach_nganh_nghe: [],
-        }
+        this.bdkddate = this.convertstringtodate(this.company.ngay_bd_kd),
+
+          this._Service.companyinfo = {
+            mst: this.company.mst,
+            id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
+            mst_parent: this.company.mst_cha,
+            sct: true,
+            hoat_dong: this.company.hoat_dong,
+            dia_chi: this.company.dia_chi,
+            id_phuong_xa: this.company.id_phuong_xa,
+            nguoi_dai_dien: this.company.nguoi_dai_dien,
+            so_dien_thoai: this.company.so_dien_thoai,
+            ten_doanh_nghiep: String(this.company.ten_doanh_nghiep),
+            von_dieu_le: this.company.von_dieu_le,
+            ngay_bd_kd: '',
+            so_lao_dong: this.company.so_lao_dong,
+            cong_suat_thiet_ke: this.company.cong_suat_thiet_ke,
+            san_luong: this.company.san_luong,
+            email: this.company.email,
+            so_lao_dong_sct: this.company.so_lao_dong_sct,
+            cong_suat_thiet_ke_sct: this.company.cong_suat_thiet_ke_sct,
+            san_luong_sct: this.company.san_luong_sct,
+            email_sct: this.company.email_sct,
+            tieu_chuan_san_pham: this.company.tieu_chuan_san_pham,
+            doanh_thu: this.company.doanh_thu,
+            quy_mo_tai_san: this.company.quy_mo_tai_san,
+            loi_nhuan: this.company.loi_nhuan,
+            nhu_cau_ban: this.company.nhu_cau_ban,
+            nhu_cau_mua: this.company.nhu_cau_mua,
+            nhu_cau_hop_tac: this.company.nhu_cau_hop_tac,
+            danh_sach_nganh_nghe: [],
+          }
       });
+  }
+
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = parseInt(time.substring(6, 8));
+
+    let date = new Date(year, month - 1, day);
+    return date
+  }
+
+  Back() {
+    this.router.navigate(['manager/business/search/']);
   }
 
 }

@@ -109,4 +109,23 @@ export class FoodCommerceModel {
     ten_san_pham: string;
     nguoi_dai_dien: string;
     id_quan_huyen: number;
+    is_het_han: boolean;
+    ngay_het_han: string;
+}
+
+export class CountrySideModel {
+    id: number;
+    id_phuong_xa: number;
+    ten_phuong_xa: string;
+    id_quan_huyen: number;
+    ten_quan_huyen: number;
+    cho_truyen_thong: string;
+    nam_dat_TC_7: string;
+    nam_dat_NTM: string;
+    th_6_thang_nam_cung_ky_dat_TC_7: string;
+    th_6_thang_nam_cung_ky_cho_dat_NTM: string;
+    nam_bc_kh_6_thang_nam_dat_TC_7: string;
+    nam_bc_kh_6_thang_nam_cho_dat_NTM: string;
+    nam_bc_ut_6_thang_nam_dat_TC_7: string;
+    nam_bc_ut_6_thang_nam_cho_dat_NTM: string;
 }

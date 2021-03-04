@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-12 button-control -align-right my-auto">
+                    <div class="col-8 button-control -align-left my-auto">
                         <button mat-raised-button (click)="AddBusiness()">Thêm thương nhân</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa thương nhân</button>
@@ -29,7 +29,17 @@
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Danh sách thương nhân','Danh sách thương nhân')">Xuất
                             Excel</button>
+
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
                     </div>
+
+                    <!-- <div class="col-4 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
+                    </div> -->
                 </div>
 
                 <div class="layout" #table>

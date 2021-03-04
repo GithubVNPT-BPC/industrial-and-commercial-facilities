@@ -4,7 +4,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
-import { DeleteModel, PetrolPost, PetrolValuePost, Businessman } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { DeleteModel, PetrolPost, PetrolValuePost, Businessman, PostBusinessmanValue, TobaccoPost, LiquorPost } from 'src/app/_models/APIModel/conditional-business-line.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,21 +15,35 @@ export class ConditionBusinessService {
   data: any;
   apiHome = environment.apiEndpoint;
 
-  public urlProductSelect = "api/danh-sach/san-pham"
+  public urlProductSelect = "api/danh-sach/san-pham";
   public urlAllCareer = "api/danh-sach/nganh-nghe";
   public urlDistrict = "api/danh-sach/quan-huyen";
   public urlSubDistrict = "api/danh-sach/phuong-xa";
   public urlLHHD = "api/danh-sach/loai-hinh-hoat-dong";
   public urlCer = "api/doanh-nghiep/giay-phep";
 
+  urlgetTobaccoValue = "api/qltm/thuoc-la";
+  urlgetAllTobaccoValue = "api/qltm/thuoc-la/tat-ca";
+  urlpostTobacco = "api/qltm/thuoc-la";
+  urldeleteTobacco = "api/qltm/thuoc-la/xoa";
+
+  urlgetLiquorValue = "api/qltm/ruou";
+  urlgetAllLiquorValue = "api/qltm/ruou/tat-ca";
+  urlpostLiquor = "api/qltm/ruou";
+  urldeleteLiquor = "api/qltm/ruou/xoa";
+
   urlgetPetrolValue = "api/qltm/xang-dau/san-luong";
   urlgetAllPetrolValue = "api/qltm/xang-dau/tat-ca-san-luong";
   urlgetAllPetrolStore = "api/qltm/xang-dau/cua-hang";
   urlgetBusinessman = "api/qltm/thuong-nhan";
+
   urlpostPetrol = "api/qltm/xang-dau/cua-hang";
   urlpostPetrolValue = "api/qltm/xang-dau/san-luong";
   urlpostBusinessman = "api/qltm/thuong-nhan";
+  urlpostBusinessmanValue = "api/qltm/thuong-nhan/cung-cap";
+
   urlDeleteBusinessman = "api/qltm/thuong-nhan/xoa";
+  urlDeleteBusinessmanValue = "api/qltm/thuong-nhan/xoa-cung-cap";
   urlDeletePetrol = "api/qltm/xang-dau/xoa-cua-hang";
   urlDeletePetrolValue = "api/qltm/xang-dau/xoa-san-luong";
 
@@ -62,6 +76,14 @@ export class ConditionBusinessService {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers = headers.append('Authorization', 'Bearer ' + `${this.token}`).append("Access-Control-Allow-Origin", "*");
     return this.http.post<any>(apiUrl, businessman, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public PostBusinessmanValue(businessmanvalue: Array<PostBusinessmanValue>) {
+    var apiUrl = this.apiHome + this.urlpostBusinessmanValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`).append("Access-Control-Allow-Origin", "*");
+    return this.http.post<any>(apiUrl, businessmanvalue, { headers: headers }).pipe(tap(data => data),
       catchError(this.handleError)
     );
   }
@@ -100,6 +122,12 @@ export class ConditionBusinessService {
     headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
     return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
   }
+  public DeleteBusinessmanValue(deletemodel: Array<DeleteModel>) {
+    var apiUrl = this.apiHome + this.urlDeleteBusinessmanValue
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+  }
   public DeletePetrol(deletemodel: Array<DeleteModel>) {
     var apiUrl = this.apiHome + this.urlDeletePetrol
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -113,6 +141,72 @@ export class ConditionBusinessService {
     return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
   }
   //Petrol
+
+  //Tobacco
+  tobacco: TobaccoPost
+  public PostTobacco(tobacco: Array<TobaccoPost>) {
+    var apiUrl = this.apiHome + this.urlpostTobacco;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, tobacco, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetTobaccoValue(time: string) {
+    var apiUrl = this.apiHome + this.urlgetTobaccoValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let params = new HttpParams().set('time_id', time);
+    return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetAllTobaccoValue() {
+    var apiUrl = this.apiHome + this.urlgetAllTobaccoValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public DeleteTobaccoValue(deletemodel: Array<DeleteModel>) {
+    var apiUrl = this.apiHome + this.urldeleteTobacco
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+  }
+  //Tobacco
+
+  //Liquor
+  liquor: LiquorPost
+  public PostLiquor(liquor: Array<LiquorPost>) {
+    var apiUrl = this.apiHome + this.urlpostLiquor;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, liquor, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetLiquorValue(time: string) {
+    var apiUrl = this.apiHome + this.urlgetLiquorValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let params = new HttpParams().set('time_id', time);
+    return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetAllLiquorValue() {
+    var apiUrl = this.apiHome + this.urlgetAllLiquorValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public DeleteLiquorValue(deletemodel: Array<DeleteModel>) {
+    var apiUrl = this.apiHome + this.urldeleteLiquor
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+  }
+  //Liquor
 
   //mat-select api
   public GetProductList() {
