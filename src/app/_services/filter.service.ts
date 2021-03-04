@@ -61,4 +61,8 @@ export class FilterService {
     public setFilterVals(value = {}) {
         this.filterValues = value;
     }
+    
+    public onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
 }

@@ -50,6 +50,7 @@ export abstract class BaseComponent implements OnInit {
 
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
+    public filterModel = {}
     
     public districts: DistrictModel[] = [];
     public wards: SubDistrictModel[] = [];
@@ -279,4 +280,6 @@ export abstract class BaseComponent implements OnInit {
     }
 
     remove(){}
+
+    
 }

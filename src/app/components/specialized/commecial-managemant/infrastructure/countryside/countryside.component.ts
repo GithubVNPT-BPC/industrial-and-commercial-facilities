@@ -81,8 +81,8 @@ export class CountrysideComponent extends BaseComponent {
 
   getLinkDefault(){
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
-    this.TITLE_DEFAULT = "Thương mại nội địa";
-    this.TEXT_DEFAULT = "Thương mại nội địa";
+    this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+    this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
   }
 
   getCountrySideData () {
