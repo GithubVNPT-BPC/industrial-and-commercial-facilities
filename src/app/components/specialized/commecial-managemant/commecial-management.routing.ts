@@ -24,13 +24,13 @@ import { PetrolBusinessComponent } from './conditional-business-line/petro-busin
 import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
 import { UpdatePetrolComponent } from './conditional-business-line/petro-business/update-petrol/update-petrol.component';
 import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
-import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
 import { AddTobaccoBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-business/add-tobacco-business.component';
 import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-supply-business/add-tobacco-supply-business.component';
 import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
 import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
+import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 
 const routes: Routes = [
   {

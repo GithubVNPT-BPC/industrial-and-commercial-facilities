@@ -30,7 +30,7 @@ export class ConditionalBusinessLineComponent implements OnInit {
     }
 
     Petrol() {
-        this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+        this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
     }
 
     Tobacco() {
@@ -43,10 +43,6 @@ export class ConditionalBusinessLineComponent implements OnInit {
 
     LPG() {
         this.router.navigate(['specialized/commecial-management/domestic/lpg']);
-    }
-
-    Businessman() {
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
     }
 
     ngOnInit() {

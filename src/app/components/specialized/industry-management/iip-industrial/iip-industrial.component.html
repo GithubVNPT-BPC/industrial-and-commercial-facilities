@@ -11,7 +11,9 @@
             </div>
 
             <div class="col-9 col-lg-9 button-control">
-                <button mat-raised-button (click)="ExportTOExcel('Chỉ số sản xuất công nghiệp', 'Chỉ số sản xuất công nghiệp')">Xuất Excel</button>
+                <button mat-raised-button
+                    (click)="ExportTOExcel('Chỉ số sản xuất công nghiệp', 'Chỉ số sản xuất công nghiệp')">Xuất
+                    Excel</button>
             </div>
         </div>
 
@@ -19,88 +21,115 @@
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table2">
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
-                    <td mat-cell *matCellDef="let element; "  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''">{{element.thu_tu}}</td>
+                    <td mat-cell *matCellDef="let element; "
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''">{{element.thu_tu}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="chi_tieu" sticky>
                     <th mat-header-cell *matHeaderCellDef> Chỉ tiêu </th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''"> {{element.chi_tieu}}</td>
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''"> {{element.chi_tieu}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="don_vi" [sticky]="false">
                     <th mat-header-cell *matHeaderCellDef> Đơn vị </th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''"> {{element.don_vi}}</td>
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''"> {{element.don_vi}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_01">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 1</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(1, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(1, year)" id="jump">
                         {{element.thang_01| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_02">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 2</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(2, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(2, year)" id="jump">
                         {{element.thang_02| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_03">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 3</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(3, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(3, year)" id="jump">
                         {{element.thang_03| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_04">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 4</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(4, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(4, year)" id="jump">
                         {{element.thang_04| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_05">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 5</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(5, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(5, year)" id="jump">
                         {{element.thang_05| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_06">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 6</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(6, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(6, year)" id="jump">
                         {{element.thang_06| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_07">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 7</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(7, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(7, year)" id="jump">
                         {{element.thang_07| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_08">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 8</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(8, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(8, year)" id="jump">
                         {{element.thang_08| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_09">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 9</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(9, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(9, year)" id="jump">
                         {{element.thang_09| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_10">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 10</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(10, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(10, year)" id="jump">
                         {{element.thang_10| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_11">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 11</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(11, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(11, year)" id="jump">
                         {{element.thang_11| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="thang_12">
                     <th mat-header-cell *matHeaderCellDef> Thực hiện tháng 12</th>
-                    <td mat-cell *matCellDef="let element"  [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail" (click)="OpenDetail(12, year)" id="jump">
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        (click)="OpenDetail(12, year)" id="jump">
                         {{element.thang_12| number: '1.0-2':'vi'| ZeroAsSub}}</td>
                 </ng-container>
 
@@ -112,6 +141,5 @@
         <ng-template #ShowEmpty>
             <h3 class="text-center">Không có dữ liệu</h3>
         </ng-template>
-        <br>
     </mat-card-content>
 </mat-card>

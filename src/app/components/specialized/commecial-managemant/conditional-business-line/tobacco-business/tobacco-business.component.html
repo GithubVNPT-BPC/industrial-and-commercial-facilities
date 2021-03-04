@@ -30,11 +30,11 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Doanh nghiệp kinh doanh thuốc lá:
+                                    <mat-icon>filter</mat-icon> Tổng số doanh nghiệp bán buôn thuốc lá:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                {{this.dataSource1.filteredData.length | number: '1.0-0':'vi'}} cửa hàng
+                                {{this.dataSource1.filteredData.length | number: '1.0-0':'vi'}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -42,7 +42,7 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Số lượng bán ra:
+                                    <mat-icon>filter</mat-icon> Tổng số lượng bán ra:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
@@ -54,23 +54,11 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Trị giá bán ra:
+                                    <mat-icon>filter</mat-icon> Tổng trị giá bán ra:
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
                                 {{TriGiaBanRa | number: '1.0-4':'vi'}} (1000 VNĐ)
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-3">
-                        <mat-card class="card2">
-                            <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Thương nhân cung cấp:
-                                </mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                {{SLThuongNhan | number: '1.0-0':'vi'}} thương nhân
                             </mat-card-content>
                         </mat-card>
                     </div>

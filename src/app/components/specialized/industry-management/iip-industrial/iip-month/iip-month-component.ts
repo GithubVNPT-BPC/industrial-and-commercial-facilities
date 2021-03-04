@@ -25,7 +25,7 @@ interface HashTableNumber<T> {
 @Component({
     selector: 'iip-month',
     templateUrl: './iip-month-component.html',
-    styleUrls: ['../../../../report/report_layout.scss'],
+    styleUrls: ['../../../special_layout.scss'],
 })
 
 
