@@ -10,6 +10,8 @@ import { formatDate } from '@angular/common';
 import { MatTableFilter } from 'mat-table-filter';
 import { element } from 'protractor';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 @Component({
     selector: 'app-power-production',
@@ -19,6 +21,11 @@ import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/co
 
 export class PowerProductionManagementComponent implements OnInit {
 
+    protected _linkOutput: LinkModel = new LinkModel();
+    //Constant
+    protected LINK_DEFAULT: string = "";
+    protected TITLE_DEFAULT: string = "";
+    protected TEXT_DEFAULT: string = "";
     displayedColumns: string[] = ['index', "obj_name", "time_id", "edit"];
     dataSource: MatTableDataSource<any>;
     tempObject: ReportOject;
@@ -45,7 +52,8 @@ export class PowerProductionManagementComponent implements OnInit {
     constructor(
         public reportSevice: ReportService,
         public router: Router,
-        public confirmationDialogService: ConfirmationDialogService
+        public confirmationDialogService: ConfirmationDialogService,
+        private breadCrumService: BreadCrumService
     ) { }
 
     ngOnInit() {
@@ -54,6 +62,7 @@ export class PowerProductionManagementComponent implements OnInit {
         this.filterType = MatTableFilter.ANYWHERE;
         this.years = this.InitialYears();
         this.selectedYear = this.GetCurrentYear();
+        this.sendLinkToNext(true);
 
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
         this.org_id = parseInt(data.org_id);
@@ -118,5 +127,21 @@ export class PowerProductionManagementComponent implements OnInit {
             this.router.createUrlTree([encodeURI('#') + '/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
         );
         window.open(url.replace('%23', '#'), "_blank");
+    }
+
+    getLinkDefault(){
+        //Constant
+        this.LINK_DEFAULT = "/specialized/enery-management/power_production";
+        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
+        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
+    }
+
+    public sendLinkToNext(type: boolean) {
+        this.getLinkDefault();
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this.breadCrumService.sendLink(this._linkOutput);
     }
 }
