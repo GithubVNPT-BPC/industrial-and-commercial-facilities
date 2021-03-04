@@ -68,6 +68,7 @@ export class SuperMarketCommonModel {
     ho_va_ten: string;
     dia_chi1: string;
     dien_thoai1: string;
+    business_area_id: number;
 }
 
 export class ConvenienceStoreModel {
