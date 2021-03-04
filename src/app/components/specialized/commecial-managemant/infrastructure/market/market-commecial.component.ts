@@ -196,11 +196,6 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
   }
 
-  switchView() {
-    super.switchView();
-    // document.querySelector(".main_content").scrollTo(0, 0);
-  }
-
   getMarketData() {
     this.commerceManagementService.getMarketData().subscribe(
       allrecords => {
@@ -277,7 +272,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   private chosenYearHandler(normalizedYear, datepicker) {
     datepicker.close();
     return normalizedYear.year()
-}
+  }
 }
 
 

@@ -35,7 +35,9 @@ export class IndustryManagementService {
     private urlGetDetailGroupCompany = '/ccn/chi-tiet';
     private urlGroupCompany = '/ccn/';
 
+    // Delete URLs
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
+    private urlDeleteLPGManagement = '/lpg-xoa';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -140,6 +142,14 @@ export class IndustryManagementService {
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // UNLINK
+    public DeleteLPGManagement(datas) {
+        let apiUrl = this.endpoint + this.urlDeleteLPGManagement;
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

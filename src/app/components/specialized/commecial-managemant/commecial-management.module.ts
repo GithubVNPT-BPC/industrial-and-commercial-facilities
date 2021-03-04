@@ -16,6 +16,7 @@ import { PetrolBusinessComponent } from './conditional-business-line/petro-busin
 import { LPGBusinessComponent } from './conditional-business-line/lpg-business/lpg-business.component';
 import { InformedEcommerceWebsiteComponent } from './e-commerce-managemant/informed-ecommerce-website/informed-ecommerce-website.component';
 import { ShoppingcentreComponent } from './infrastructure/shoppingcentre/shoppingcentre.component';
+import { CountrysideComponent } from './infrastructure/countryside/countryside.component';
 import { TRSManagementComponent } from './infrastructure/total-retail-sales/total-retail-sales.component';
 import { ImportManagementComponent } from './export-import-management/import-management/import-management.component';
 import { ExportManagementComponent } from './export-import-management/export-management/export-management.component';
@@ -105,6 +106,7 @@ export const customCurrencyMaskConfig = {
     TobaccoBusinessComponent,
     ConditionalBusinessLineComponent,
     SuperMarketCommecialManagementComponent,
+    CountrysideComponent,
     CommonCommecialComponent,
     LiquorBusinessComponent,
     StoreManagementComponent,
