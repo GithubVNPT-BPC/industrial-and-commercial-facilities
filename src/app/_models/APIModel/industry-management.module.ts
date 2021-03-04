@@ -96,4 +96,6 @@ export class ChemicalManagementModel{
     san_luong: string;
     computed_san_luong: string;
     is_expired: boolean;
+    id_loai_hinh: number;
+    ten_loai_hinh: string;
 }

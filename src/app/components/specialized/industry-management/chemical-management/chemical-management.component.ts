@@ -1,6 +1,5 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { District } from 'src/app/_models/district.model';
 import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { FormControl } from '@angular/forms';
 
@@ -27,6 +26,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         nganh_nghe_kd_chinh: "Ngành nghề KD chính",
         email: "Email",
         so_lao_dong: "Số lao động",
+        ten_loai_hinh: "Loại hình",
         computed_cong_suat: "Công suất thiết kế Tấn/năm",
         computed_san_luong: "Sản lượng Tấn/năm",
         so_giay_phep: "Số giấy phép/ Giấy chứng nhận",
@@ -38,6 +38,11 @@ export class ChemicalManagementComponent extends BaseComponent {
         tinh_trang_hoat_dong: "Trạng thái hoạt động",
     }
 
+    filterModel = {
+        id_quan_huyen: [],
+        id_loai_hinh: [],
+    }
+
     dataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
     filteredDataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
 
@@ -46,6 +51,11 @@ export class ChemicalManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
 
     public chemistryNameList = [];
+    
+    private typeList = [
+        { id :1, name: "Sản xuất"},
+        { id :2, name: "Kinh doanh"},
+    ]
 
     constructor(
         private injector: Injector,
@@ -97,6 +107,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         return {
             mst: new FormControl(),
             time_id: new FormControl({value: this.currentYear}),
+            id_loai_hinh: new FormControl(),
             details: this.formBuilder.array([
                 this.formBuilder.group({
                     id_hoa_chat: [],
@@ -112,6 +123,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         details.map(e => {
             e['mst'] = data['mst'];
             e['time_id'] = data['time_id'];
+            e['id_loai_hinh'] = data['id_loai_hinh'];
         });
 
         data = {
@@ -137,11 +149,6 @@ export class ChemicalManagementComponent extends BaseComponent {
         }, error => this.errorNotify(error));
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    }
-
     getChemicalManagementData(time_id: number) {
         this.industryManagementService.GetChemicalManagement(time_id).subscribe(result => {
             if (result.data && result.data.length > 0) {
@@ -163,15 +170,15 @@ export class ChemicalManagementComponent extends BaseComponent {
                 });
 
                 this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
-                this._prepareData();
+                this._prepareData(this.filteredDataSource.data);
                 this.paginatorAgain();
             }
         })
     }
 
-    private _prepareData() {
-        this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-        this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
+    private _prepareData(data) {
+        this.sanLuongKinhDoanh = data.length ? data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+        this.sanLuongSanXuat = data.length ? data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
     }
 
     getChemicalNameListData() {
@@ -180,28 +187,9 @@ export class ChemicalManagementComponent extends BaseComponent {
         })
     }
 
-    applyDistrictFilter(event) {
-        let filteredData = [];
-
-        event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length)
-                this.filteredDataSource.data = [];
-            else
-                this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
-            this.filteredDataSource.data = filteredData;
-        }
-        this._prepareData();
-    }
-
     applyExpireCheck(event) {
         this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
-        this._prepareData();
+        this._prepareData(this.filteredDataSource.data);
     }
 
     showMoreDetail(event) {
@@ -217,5 +205,40 @@ export class ChemicalManagementComponent extends BaseComponent {
         // this.industryManagementService.deleteMultiLevel(data).subscribe(res => {
         //     this.successNotify(res);
         // });
+    }
+
+    applyFilter(event) {
+        if (event.target) {
+          const filterValue = (event.target as HTMLInputElement).value;
+          this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+          let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+          this._prepareData(filteredData);
+          if (!filteredData.length) {
+            if (this.filterModel)
+              this.filteredDataSource.data = [];
+            else
+              this.filteredDataSource.data = this.dataSource.data;
+          }
+          else {
+            this.filteredDataSource.data = filteredData;
+          }
+          this.paginatorAgain();
+        }
+    }
+
+    filterArray(array, filters) {
+        const filterKeys = Object.keys(filters);
+        let temp = [...array];
+        filterKeys.forEach(key => {
+            let temp2 = [];
+            if (filters[key].length) {
+            filters[key].forEach(criteria => {
+                temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
+            });
+            temp = [...temp2];
+            }
+        })
+        return temp;
     }
 }
