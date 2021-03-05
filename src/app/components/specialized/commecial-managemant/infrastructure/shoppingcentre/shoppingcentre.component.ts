@@ -10,6 +10,7 @@ import { SuperMarketCommonModel, } from 'src/app/_models/APIModel/commecial-mana
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+import { FilterService } from 'src/app/_services/filter.service';
 
 import { marketTypeList } from '../common/common-commecial.component';
 
@@ -34,9 +35,23 @@ export class ShoppingcentreComponent extends BaseComponent {
   public sieuThiDangXayDung: number;
   //
   public filterModel = {
-    id_quan_huyen: [],
-    phanloai :  [],
+    id_dia_ban: [],
+    id_phan_hang :  [],
+    business_area_id: [],
+    nam_xay_dung: [],
+    nam_ngung_hoat_dong: [],
   }
+
+  public businessAreaList = [
+    { id: 1, name: "Nhà nước"},
+    { id: 2, name: "Ngoài nhà nước"},
+    { id: 3, name: "Có vốn đầu tư nước ngoài"},
+    { id: 4, name: "Vốn khác"},
+  ]
+
+  private builtYears = [];
+  private holdYears = [];
+  
   public marketTypeList = marketTypeList;
 
   headerArray = ['select', 'index', 'ten_sieu_thi_TTTM', 'dia_diem', 'nha_nuoc', 'ngoai_nha_nuoc', 'co_von_dau_tu_nuoc_ngoai', 'von_khac', 'tong_hop',
@@ -59,6 +74,7 @@ export class ShoppingcentreComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     public reportSevice: ReportService,
+    public filterService: FilterService,
     public commerceManagementService: CommerceManagementService,
   ) {
     super(injector);
@@ -84,6 +100,8 @@ export class ShoppingcentreComponent extends BaseComponent {
       allrecords => {
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<SuperMarketCommonModel>(allrecords.data);
+          this.builtYears = this.dataSource.data.map(x => x.nam_xay_dung).filter(this.filterService.onlyUnique);
+          this.holdYears = this.dataSource.data.map(x => x.nam_ngung_hoat_dong).filter(this.filterService.onlyUnique);
           this._prepareData(this.dataSource.data);
           this.paginatorAgain();
         }
@@ -146,6 +164,15 @@ export class ShoppingcentreComponent extends BaseComponent {
 
     this.sieuThiChuyenDanh = data.filter(x => x.chuyen_doanh != null).length;
     this.sieuThiTongHop = data.filter(x => x.tong_hop != null).length;
+
+    // Compute Business Area ID
+    data.map(x => {
+      if (x.nha_nuoc) x.business_area_id = 1;
+      else if (x.ngoai_nha_nuoc) x.business_area_id = 2;
+      else if (x.co_von_dau_tu_nuoc_ngoai) x.business_area_id = 3;
+      else if (x.von_khac) x.business_area_id = 4;
+      else x.business_area_id = 0;
+    });
 
     this.filteredDataSource.data = [...data];
   }

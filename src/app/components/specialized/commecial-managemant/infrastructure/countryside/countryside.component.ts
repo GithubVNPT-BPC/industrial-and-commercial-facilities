@@ -8,6 +8,8 @@ import { CountrySideModel } from 'src/app/_models/APIModel/commecial-management.
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
+import { FilterService } from 'src/app/_services/filter.service';
+
 
 @Component({
   selector: 'app-countryside',
@@ -15,6 +17,8 @@ import { EnterpriseService } from 'src/app/_services/APIService/enterprise.servi
   styleUrls: ['../../../special_layout.scss'],
 })
 export class CountrysideComponent extends BaseComponent {
+  public dataSource: MatTableDataSource<CountrySideModel> = new MatTableDataSource<CountrySideModel>();
+  public filteredDataSource: MatTableDataSource<CountrySideModel> = new MatTableDataSource<CountrySideModel>();
 
   private sumOfMarket = 0;
   private sumOfWards = 0;
@@ -68,6 +72,7 @@ export class CountrysideComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
+    public filterService: FilterService,
     public enterpriseService: EnterpriseService,
   ) {
     super(injector);
@@ -81,8 +86,8 @@ export class CountrysideComponent extends BaseComponent {
 
   getLinkDefault(){
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
-    this.TITLE_DEFAULT = "Thương mại nội địa";
-    this.TEXT_DEFAULT = "Thương mại nội địa";
+    this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+    this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
   }
 
   getCountrySideData () {
@@ -92,6 +97,8 @@ export class CountrysideComponent extends BaseComponent {
           let data = allrecords.data;
           this.dataSource = new MatTableDataSource<CountrySideModel>(data);
           this.filteredDataSource.data = [...this.dataSource.data];
+          this.yearOfTC7 = this.filteredDataSource.data.map(x => x.nam_dat_TC_7).filter(this.filterService.onlyUnique);
+          this.yearOfStd = this.dataSource.data.map(x => x.nam_dat_NTM).filter(this.filterService.onlyUnique);
           this._prepareData(this.filteredDataSource.data);
           this.paginatorAgain();
         }
@@ -101,13 +108,6 @@ export class CountrysideComponent extends BaseComponent {
   }
 
   private _prepareData(data): void {
-    function onlyUnique(value, index, self) {
-      return self.indexOf(value) === index;
-    }
-
-    this.yearOfTC7 = data.map(x => x.nam_dat_TC_7).filter(onlyUnique);
-    this.yearOfStd = data.map(x => x.nam_dat_NTM).filter(onlyUnique);
-
     this.sumOfMarket = data.map(x => x.cho_truyen_thong).length;
     this.sumOfWards = data.map(x => x.id_phuong_xa).length;
 

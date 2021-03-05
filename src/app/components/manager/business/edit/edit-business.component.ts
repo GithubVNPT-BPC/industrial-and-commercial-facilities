@@ -445,8 +445,11 @@ export class EditBusinessComponent implements OnInit {
   GetCompanyInfoById() {
     this._Service.GetCompanyInfoById(this.mst).subscribe(
       allrecords => {
+        // thong tin chung
         this.companyList1 = allrecords.data[0]
+        // thong tin nganh nghe
         this.companyList2 = allrecords.data[1]
+        // thong tin
         this.companyList3 = allrecords.data[2]
 
         this.companyList4 = this.companyList1.map(a => {
