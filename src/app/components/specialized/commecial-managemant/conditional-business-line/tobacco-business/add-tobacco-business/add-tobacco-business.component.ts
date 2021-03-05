@@ -128,6 +128,16 @@ export class AddTobaccoBusinessComponent implements OnInit {
     })
   }
 
+
+  jQuery: any;
+
+  ngAfterViewInit() {
+    document.getElementById('preloader').classList.add('hide');
+    this.jQuery('select').selectpicker();
+  }
+
+  @ViewChild('selectpicker', { static: false }) selectPicker: ElementRef;
+
   ngOnInit() {
     this.resetForm();
     this.getQuan_Huyen();

@@ -195,6 +195,10 @@ export class ManagePetrolValueComponent implements OnInit {
     })
   }
 
+  // Reload() {
+  //   location.reload();
+  // }
+
   // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
   // allSelected = false;
   // toggleAllSelection() {

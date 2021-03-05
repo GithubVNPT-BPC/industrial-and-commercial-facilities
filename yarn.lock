@@ -5552,6 +5552,13 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
+mat-select-filter@^2.3.7:
+  version "2.3.7"
+  resolved "https://registry.yarnpkg.com/mat-select-filter/-/mat-select-filter-2.3.7.tgz#b9ac04c3e715045f5c39e26d33d78957392c0a6d"
+  integrity sha512-vGhzgOLuwQqPlJ2XJI2oJbPgn+b+JiwLEk31nCSx30naWbNx3p0IRQM6ZXHwX3zjId8W5lZNbrY2Mg+SrjjwNw==
+  dependencies:
+    tslib "^1.9.0"
+
 mat-table-filter@1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/mat-table-filter/-/mat-table-filter-1.2.5.tgz#8f1e7f748122bf79fa2cf42abff7ed48ffb2d3cf"

@@ -12,7 +12,8 @@ import {
   DeleteModel,
   BusinessmanSelect,
   PostBusinessmanValue,
-  TobaccoList
+  TobaccoList,
+  Businessman
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -106,6 +107,7 @@ export class AddTobaccoSupplyBusinessComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
+
   deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
   selectionarray: string[];
   removeRows() {
@@ -137,12 +139,15 @@ export class AddTobaccoSupplyBusinessComponent implements OnInit {
     });
   }
 
+  public filteredList = this.Businessman.slice();
+
   ngOnInit() {
     this._keyboardservice.keyBoard.subscribe(res => {
       this.move(res)
     })
     this.getBusinessmanvalue(this.time);
     this.GetBusinessman();
+
   }
 
   SaveData() {
