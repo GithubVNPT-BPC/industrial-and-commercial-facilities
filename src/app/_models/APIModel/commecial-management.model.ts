@@ -112,6 +112,7 @@ export class FoodCommerceModel {
     id_quan_huyen: number;
     is_het_han: boolean;
     ngay_het_han: string;
+<<<<<<< HEAD
 }
 
 export class CountrySideModel {
@@ -129,4 +130,6 @@ export class CountrySideModel {
     nam_bc_kh_6_thang_nam_cho_dat_NTM: string;
     nam_bc_ut_6_thang_nam_dat_TC_7: string;
     nam_bc_ut_6_thang_nam_cho_dat_NTM: string;
+=======
+>>>>>>> 862b27497e0b124efd2fc0fcbe88acc0f655d35a
 }
