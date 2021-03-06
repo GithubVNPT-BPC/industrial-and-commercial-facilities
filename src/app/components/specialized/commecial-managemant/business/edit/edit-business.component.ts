@@ -556,7 +556,7 @@ export class EditBusinessComponent implements OnInit {
           this.paginator._intl.nextPageLabel = "Trang Tiếp";
         }
 
-        this.bdkddate = this.convertstringtodate(this.company.ngay_bd_kd),
+        this.bdkddate = this.bdkddate ? this.convertstringtodate(this.company.ngay_bd_kd) : null,
 
           this._Service.companyinfo = {
             mst: this.company.mst,
@@ -601,7 +601,7 @@ export class EditBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['manager/business/search/']);
+    this.router.navigate(['specialized/commecial-management/domestic/search']);
   }
 
 }

@@ -78,7 +78,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'edit',
+        path: 'edit/:mst',
         component: EditBusinessComponent,
         data: {
           title: 'Chỉnh sửa doanh nghiệp',

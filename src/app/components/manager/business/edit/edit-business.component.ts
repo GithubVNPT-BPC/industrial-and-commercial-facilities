@@ -559,7 +559,7 @@ export class EditBusinessComponent implements OnInit {
           this.paginator._intl.nextPageLabel = "Trang Tiếp";
         }
 
-        this.bdkddate = this.convertstringtodate(this.company.ngay_bd_kd),
+        this.bdkddate = this.bdkddate ? this.convertstringtodate(this.company.ngay_bd_kd) : null,
 
           this._Service.companyinfo = {
             mst: this.company.mst,

@@ -9,7 +9,7 @@ import { AddSupplyBusinessComponent } from '../add-supply-business/add-supply-bu
 
 import {
   PetrolList,
-  DistrictModel
+  DistrictModel,
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -104,6 +104,7 @@ export class ManagePetrolValueComponent implements OnInit {
 
   SanLuongBanRa: number;
   SLThuongNhan: number;
+  SLDoanhNghiep: number;
 
   displayedColumns: string[] = [
     'cap_nhat',
@@ -122,6 +123,7 @@ export class ManagePetrolValueComponent implements OnInit {
     'ten_thuong_nhan',
     'san_luong',
     'ghi_chu',
+    'tinh_trang_hoat_dong',
 
     'ten_quan_huyen',
     'id_cua_hang_xang_dau',
@@ -185,6 +187,10 @@ export class ManagePetrolValueComponent implements OnInit {
 
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
       this.SLThuongNhan = this.petrollist1.length;
+
+      let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
+
+      this.SLDoanhNghiep = unique.length;
 
       this.dataSource1.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
