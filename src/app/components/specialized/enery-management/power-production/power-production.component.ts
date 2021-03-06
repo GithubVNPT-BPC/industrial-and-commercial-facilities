@@ -71,9 +71,9 @@ export class PowerProductionManagementComponent implements OnInit {
         this.tempObject.submit_type_name = 'Báo cáo tháng';
     }
 
-    GetList_ReportPowerProduction(year : number) {
+    GetList_ReportPowerProduction(year: number) {
         this.reportSevice.GetList_ReportPowerProduction(year).subscribe(response => {
-            console.log(response)
+            console.log(response.data)
             response.data.forEach(element => {
                 element.time_id_text = this.TimeIDToText(element.time_id.toString());
             })
@@ -103,7 +103,7 @@ export class PowerProductionManagementComponent implements OnInit {
         }
         return result;
     }
-    
+
     GetCurrentYear() {
         var currentDate = new Date();
         return currentDate.getFullYear();
@@ -129,7 +129,7 @@ export class PowerProductionManagementComponent implements OnInit {
         window.open(url.replace('%23', '#'), "_blank");
     }
 
-    getLinkDefault(){
+    getLinkDefault() {
         //Constant
         this.LINK_DEFAULT = "/specialized/enery-management/power_production";
         this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
