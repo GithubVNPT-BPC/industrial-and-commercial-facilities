@@ -25,6 +25,7 @@ export class IndustryManagementService {
     private urlGetComformityAnnounce = '/cbhq';
     private urlGetExplosiveMat = '/vlncn';
 
+    private urlPostAttachment = environment.apiEndpoint + 'api/upload-file';
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
@@ -36,6 +37,7 @@ export class IndustryManagementService {
     private urlGroupCompany = '/ccn/';
 
     // Delete URLs
+    private urlDeleteAttachment = '/xoa-tai-lieu';
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
     
@@ -199,4 +201,22 @@ export class IndustryManagementService {
             catchError(this.handleError)
         );
     }
+
+    // ATTACHMENTS
+    public PostAttachment(fd: FormData) {
+        var apiUrl = this.urlPostAttachment;
+        // var apiUrl = "http://localhost:5000/api/upload-file";
+        let headers = new HttpHeaders();
+        return this.http.post<any>(apiUrl, fd, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // public DeleteAttachment(fd: FormData) {
+    //     var apiUrl = this.endpoint + this.urlDeleteAttachment;
+    //     return this.http.post(apiUrl, fd, { headers: HEADERS })
+    //         .pipe(
+    //             catchError(this.handleError)
+    //         );
+    // }
 }

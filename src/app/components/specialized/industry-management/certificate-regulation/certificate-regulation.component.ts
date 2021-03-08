@@ -5,6 +5,7 @@ import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificat
 
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment';
 
@@ -19,6 +20,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   public filteredDataSource: MatTableDataSource<ConformityAnnouncementModel>;
 
   displayedFields = {
+    duong_dan_nhan_san_pham: "Đường dẫn",
     mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
     dia_chi_day_du: "Địa chỉ",
@@ -37,6 +39,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+  selectedFile: File = null;
   
   ds_sp: any[] = [
     {id_loai_san_pham: 1, ten_san_pham: "Thực phẩm"},
@@ -45,7 +48,8 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   constructor(
     private injector: Injector,
-    private industryManagementService: IndustryManagementService
+    private modalService: NgbModal,
+    private industryManagementService: IndustryManagementService,
   ) {
       super(injector);
   }
@@ -68,7 +72,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       ten_san_pham: new FormControl(),
       ban_cong_bo_hop_quy: new FormControl(),
       ngay_tiep_nhan: new FormControl(),
-      // duong_dan_nhan_san_pham: new FormControl(),
+      duong_dan_nhan_san_pham: { value:'', disabled: true },
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl(),
       id_loai_san_pham: new FormControl(),
@@ -110,6 +114,13 @@ export class CertificateRegulationComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  onFileSelected(event) {
+    if (event.target.files.length) {
+      this.selectedFile = <File>event.target.files[0];
+      this.formData.controls['duong_dan_nhan_san_pham'].setValue(event.target.files[0].name);
+    }
+  }
+
   private _prepareData() {
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
   }
@@ -125,7 +136,20 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.industryManagementService.PostComformityAnnounce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    let self = this;
+    if (this.selectedFile !== null) {
+      
+      const fd = new FormData();
+      fd.append(this.selectedFile.name, this.selectedFile);
+      this.industryManagementService.PostAttachment(fd).subscribe(response => {
+        if (response.length) {
+          data.duong_dan_nhan_san_pham = response[0].file_name;
+          self.industryManagementService.PostComformityAnnounce([data]).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
+        }
+      }, error => this.errorNotify(error));
+    } else {
+      self.industryManagementService.PostComformityAnnounce([data]).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
+    } 
   }
 
   callEditService(data) {
@@ -136,4 +160,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       this.industryManagementService.DeleteCBHQ(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  private openPreviewer(content) {
+      this.modalService.open(content, {size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true});
+  }
 }
