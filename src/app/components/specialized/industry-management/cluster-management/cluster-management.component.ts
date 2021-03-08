@@ -1,17 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
-import { MatTable, MatTableDataSource } from '@angular/material';
-import { element } from 'protractor';
-import { ReportService } from 'src/app/_services/APIService/report.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
+import { Component, OnInit, ViewChild, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { ClusterFilterModel, ClusterModel } from 'src/app/_models/APIModel/cluster.model';
-import { each } from 'highcharts';
 import { Router } from '@angular/router';
-import { LinkModel } from 'src/app/_models/link.model';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BaseComponent } from '../../specialized-base.component';
 import { FormControl } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
@@ -25,7 +15,7 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 })
 
 export class ClusterManagementComponent extends BaseComponent {
-    
+
     showColumns: string[] = [];
     showSubColumns: string[] = [];
     subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
@@ -34,17 +24,8 @@ export class ClusterManagementComponent extends BaseComponent {
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     years: number[] = [];
-    // districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    // { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    // { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    // { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    // { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    // { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    // { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    // { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    // { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    // { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    // { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+    imageUrl: string = "";
+    fileToUpload: File = null;
 
     hienTrangHaTang: any[] = [{ id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
     { id: 2, ten_hien_trang_ha_tang: 'Có quy hoạch chi tiết' },
@@ -61,16 +42,11 @@ export class ClusterManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
     filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
-    @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild('TABLE', { static: false }) table: ElementRef;
-
     ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
     constructor(
-        public excelService: ExcelService,
         public indService: IndustryManagementService,
         public router: Router,
         private injector: Injector
@@ -87,8 +63,8 @@ export class ClusterManagementComponent extends BaseComponent {
         this.autoOpen();
         this.initWards();
     }
-    
-    getLinkDefault(){
+
+    getLinkDefault() {
         this.LINK_DEFAULT = "/specialized/industry-management/cluster";
         this.TITLE_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
         this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
@@ -107,14 +83,6 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    // ngAfterViewInit(): void {
-    //     this.accordion.openAll();
-    // }
-
-    autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
-    }
-
     getDanhSachQuanLyCumCongNghiep() {
         this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
             // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
@@ -122,16 +90,8 @@ export class ClusterManagementComponent extends BaseComponent {
             this.filteredDataSource.data = [...this.dataSource.data];
             // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
-            // this.filteredDataSource.paginator = this.paginator;
-            // this.paginator._intl.itemsPerPageLabel = 'Số cụm công nghiệp đang hiển thị';
-            // this.paginator._intl.firstPageLabel = "Trang Đầu";
-            // this.paginator._intl.lastPageLabel = "Trang Cuối";
-            // this.paginator._intl.previousPageLabel = "Trang Trước";
-            // this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            this.paginatorAgain();
         })
-    }
-
-    log(any) {
     }
 
     getYears() {
@@ -190,9 +150,8 @@ export class ClusterManagementComponent extends BaseComponent {
         })
         return temp;
     }
-    @ViewChild('autosize', {static: false}) autosize: CdkTextareaAutosize;
-    getFormParams(){
-        return{
+    getFormParams() {
+        return {
             ten_cum: new FormControl(''),
             chu_dau_tu: new FormControl(''),
             dien_tich_theo_qh: new FormControl(0),
@@ -207,7 +166,7 @@ export class ClusterManagementComponent extends BaseComponent {
             tong_muc_dau_tu: new FormControl(0),
             quy_mo_dien_tich: new FormControl(0),
             dien_giai: new FormControl(''),
-            duong_dan: new FormControl(''),
+            duong_dan: new FormControl(),
             dien_tich_qhct: new FormControl(0),
             dien_tich_ddtht: new FormControl(0),
             id_htdtht: new FormControl(),
@@ -223,16 +182,28 @@ export class ClusterManagementComponent extends BaseComponent {
         { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
     ];
 
-    public prepareData(data) { 
-        return data 
+    public prepareData(data) {
+        data['duong_dan'] = this.fileToUpload;
+        return data
     }
 
     public callService(data) {
-        // console.log(data);
-        this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(res => {
+        console.log(data);
+        this.indService.PostDataGroupCompany(data).subscribe(res => {
             // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
             this.successNotify(res);
             this.autopaging();
         })
     }
+
+    handleFileInput(file: FileList) {
+        this.fileToUpload = file.item(0);
+        //Show image preview
+        var reader = new FileReader();
+        reader.onload = (event: any) => {
+            this.imageUrl = event.target.result;
+        }
+        reader.readAsDataURL(this.fileToUpload);
+    }
+
 }

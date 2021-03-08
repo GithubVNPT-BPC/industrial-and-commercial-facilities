@@ -20,6 +20,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   public filteredDataSource: MatTableDataSource<ConformityAnnouncementModel>;
 
   displayedFields = {
+    duong_dan_nhan_san_pham: "Đường dẫn",
     mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
     dia_chi_day_du: "Địa chỉ",
@@ -134,14 +135,21 @@ export class CertificateRegulationComponent extends BaseComponent {
     return datas;
   }
 
-  async callService(data) {
+  callService(data) {
+    let self = this;
     if (this.selectedFile !== null) {
+      
       const fd = new FormData();
       fd.append(this.selectedFile.name, this.selectedFile);
-      this.formData.duong_dan_nhan_san_pham = await this.industryManagementService.PostAttachment(fd).toPromise();
-    }
-
-    await this.industryManagementService.PostComformityAnnounce([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+      this.industryManagementService.PostAttachment(fd).subscribe(response => {
+        if (response.length) {
+          data.duong_dan_nhan_san_pham = response[0].file_name;
+          self.industryManagementService.PostComformityAnnounce([data]).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
+        }
+      }, error => this.errorNotify(error));
+    } else {
+      self.industryManagementService.PostComformityAnnounce([data]).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
+    } 
   }
 
   callEditService(data) {

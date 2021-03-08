@@ -66,6 +66,9 @@ import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/t
 import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
 import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
+import { MatSelectFilterModule } from 'mat-select-filter';
+import { SearchBusinessComponent } from './business/search/search-business.component';
+import { EditBusinessComponent } from './business/edit/edit-business.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -93,6 +96,7 @@ export const customCurrencyMaskConfig = {
     PipeModule,
     MatTabsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    MatSelectFilterModule
   ],
   exports: [
     MatPaginatorModule,
@@ -152,6 +156,8 @@ export const customCurrencyMaskConfig = {
     AddTobaccoSupplyBusinessComponent,
     AddLiquorBusinessComponent,
     AddLiquorSupplyBusinessComponent,
+    SearchBusinessComponent,
+    EditBusinessComponent
   ],
   entryComponents: [
     ModalComponent,

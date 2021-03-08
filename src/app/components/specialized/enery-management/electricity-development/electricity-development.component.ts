@@ -185,4 +185,11 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
           this.successNotify(res);
       })
   }
+
+  getLinkDefault(){
+    //Constant
+    this.LINK_DEFAULT = "/specialized/enery-management/35kv_electricity_development";
+    this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Công tác phát triển lưới điện 35KV";
+    this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Công tác phát triển lưới điện 35KV";
+  }
 }

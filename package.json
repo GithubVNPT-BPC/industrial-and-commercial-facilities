@@ -37,6 +37,7 @@
     "highcharts-angular": "^2.8.0",
     "i": "^0.3.6",
     "jquery": "^3.5.1",
+    "mat-select-filter": "^2.3.7",
     "mat-table-filter": "1.2.5",
     "moment": "^2.27.0",
     "ng2-charts": "^2.3.2",

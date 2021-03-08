@@ -255,7 +255,7 @@
                                     <mat-form-field appearance="outline" (click)="fileInput.click()" class="cursor-pointer"> 
                                         <input matInput type="text" formControlName="duong_dan_nhan_san_pham">
                                         <mat-icon matSuffix >upload_file</mat-icon>
-                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".pdf" >
+                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".*" >
                                     </mat-form-field>
                                 </div>
 

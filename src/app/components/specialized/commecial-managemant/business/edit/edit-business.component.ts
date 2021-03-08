@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, QueryList, ViewChildren
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
-import { InformationService } from '../../../../shared/information/information.service';
-import { MarketService } from "../../../../_services/APIService/market.service";
+import { InformationService } from 'src/app/shared/information/information.service';
+import { MarketService } from "src/app/_services/APIService/market.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
@@ -20,7 +20,7 @@ import {
   BusinessTypeModel,
   Career,
   DeleteModel1
-} from "../../../../_models/APIModel/domestic-market.model";
+} from "src/app/_models/APIModel/domestic-market.model";
 
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -44,7 +44,7 @@ export const DDMMYY_FORMAT = {
 @Component({
   selector: "app-edit-business",
   templateUrl: "./edit-business.component.html",
-  styleUrls: ['../../manager_layout.scss'],
+  styleUrls: ['../../../special_layout.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -445,11 +445,8 @@ export class EditBusinessComponent implements OnInit {
   GetCompanyInfoById() {
     this._Service.GetCompanyInfoById(this.mst).subscribe(
       allrecords => {
-        // thong tin chung
         this.companyList1 = allrecords.data[0]
-        // thong tin nganh nghe
         this.companyList2 = allrecords.data[1]
-        // thong tin
         this.companyList3 = allrecords.data[2]
 
         this.companyList4 = this.companyList1.map(a => {
@@ -604,7 +601,7 @@ export class EditBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['manager/business/search/']);
+    this.router.navigate(['specialized/commecial-management/domestic/search']);
   }
 
 }

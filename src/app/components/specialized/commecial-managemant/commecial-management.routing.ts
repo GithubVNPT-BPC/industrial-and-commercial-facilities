@@ -31,6 +31,8 @@ import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/t
 import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
 import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
+import { SearchBusinessComponent } from './business/search/search-business.component';
+import { EditBusinessComponent } from './business/edit/edit-business.component';
 
 const routes: Routes = [
   {
@@ -68,6 +70,20 @@ const routes: Routes = [
       //     title: 'Quản lý TTTM',
       //   }
       // },
+      {
+        path: 'search',
+        component: SearchBusinessComponent,
+        data: {
+          title: 'Quản lý doanh nghiệp',
+        }
+      },
+      {
+        path: 'edit/:mst',
+        component: EditBusinessComponent,
+        data: {
+          title: 'Chỉnh sửa doanh nghiệp',
+        }
+      },
       {
         path: 'cbl',
         component: ConditionalBusinessLineComponent,

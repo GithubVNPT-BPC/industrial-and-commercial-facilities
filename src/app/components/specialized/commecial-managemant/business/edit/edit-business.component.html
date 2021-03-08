@@ -1,0 +1,310 @@
+<mat-card class="material">
+    <mat-card-header>
+        <!-- <mat-card-title></mat-card-title> -->
+        <mat-card-subtitle hidden>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <!-- <button (click)="addCareer()" mat-raised-button>Thêm ngành nghề</button> -->
+
+        <form [formGroup]="doanh_nghiep" autocomplete="off" (ngSubmit)="onSubmit(doanh_nghiep.getRawValue())">
+            <div class="row">
+                <div class="col-6 button-control -align-left my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+
+                    <button mat-raised-button type="reset" (click)="onReset()">Nhập lại</button>
+                </div>
+
+                <div class="col-6 button-control -align-right my-auto">
+                    <button mat-raised-button (click)="Back()">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <!-- <div formArrayName="danh_sach_nganh_nghe"
+                        *ngFor="let item of doanh_nghiep.get('danh_sach_nganh_nghe')['controls']; let i = index;">
+                        <div [formGroupName]="i">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Ngành nghề kinh doanh</mat-label>
+                                <mat-select formControlName="id_nganh_nghe_kinh_doanh">
+                                    <mat-option *ngFor="let item of career" [value]="item.id_nganh_nghe_kinh_doanh">
+                                        {{item.ma_nganh_nghe}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Ngành nghề kinh doanh chính</mat-label>
+                                <input formControlName="nganh_nghe_kd_chinh" matInput placeholder="">
+                            </mat-form-field>
+                        </div>
+                        <button (click)="removeCareer(i)" mat-raised-button>Xóa ngành nghề</button>
+                    </div> -->
+
+                    <section class="cb-section">
+                        <mat-checkbox class="cb" formControlName="hoat_dong"
+                            [(ngModel)]="_Service.companyinfo.hoat_dong"> Còn hoạt động
+                        </mat-checkbox>
+                    </section>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên doanh nghiệp (*)</mat-label>
+                        <input formControlName="ten_doanh_nghiep" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.ten_doanh_nghiep"
+                            [ngClass]="{ 'is-invalid': submitted && f.ten_doanh_nghiep.errors }">
+                        <div *ngIf="submitted && f.ten_doanh_nghiep.errors" class="invalid-feedback">
+                            <div *ngIf="f.ten_doanh_nghiep.errors.required">Vui lòng nhập tên doanh nghiệp</div>
+                        </div>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên loại hình hoạt động (*)</mat-label>
+                        <mat-select formControlName="id_loai_hinh_hoat_dong"
+                            [(ngModel)]="_Service.companyinfo.id_loai_hinh_hoat_dong">
+                            <mat-option *ngFor="let item of Business" [value]="item.id_loai_hinh_hoat_dong">
+                                {{item.ten_loai_hinh}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Phường xã (*)</mat-label>
+                        <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.companyinfo.id_phuong_xa">
+                            <mat-option *ngFor="let item of subdistrict" [value]="item.id_phuong_xa">
+                                {{item.ten_phuong_xa}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mã số thuế (*)</mat-label>
+                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
+                            [ngClass]="{ 'is-invalid': submitted && f.mst.errors }">
+                        <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
+                            <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
+                        </div>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mã số thuế cha (*)</mat-label>
+                        <input formControlName="mst_parent" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.mst_parent"
+                            [ngClass]="{ 'is-invalid': submitted && f.mst_parent.errors }">
+                        <div *ngIf="submitted && f.mst_parent.errors" class="invalid-feedback">
+                            <div *ngIf="f.mst_parent.errors.required">Vui lòng nhập mã số thuế cha</div>
+                        </div>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Người đại diện theo pháp luật (*)</mat-label>
+                        <input formControlName="nguoi_dai_dien" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nguoi_dai_dien"
+                            [ngClass]="{ 'is-invalid': submitted && f.nguoi_dai_dien.errors }">
+                        <div *ngIf="submitted && f.nguoi_dai_dien.errors" class="invalid-feedback">
+                            <div *ngIf="f.nguoi_dai_dien.errors.required">Vui lòng nhập người đại diện</div>
+                        </div>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Địa chỉ (*)</mat-label>
+                        <input formControlName="dia_chi" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.dia_chi"
+                            [ngClass]="{ 'is-invalid': submitted && f.dia_chi.errors }">
+                        <div *ngIf="submitted && f.dia_chi.errors" class="invalid-feedback">
+                            <div *ngIf="f.dia_chi.errors.required">Vui lòng nhập địa chỉ</div>
+                        </div>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Điện thoại</mat-label>
+                        <span matPrefix style="position: relative;vertical-align: 3px;">+84 &nbsp;&nbsp;</span>
+                        <input formControlName="so_dien_thoai" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.so_dien_thoai">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input formControlName="email" matInput placeholder="" [(ngModel)]="_Service.companyinfo.email">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email (Nguồn: SCT)</mat-label>
+                        <input formControlName="email_sct" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.email_sct">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu bán</mat-label>
+                        <textarea formControlName="nhu_cau_ban" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu mua</mat-label>
+                        <textarea formControlName="nhu_cau_mua" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tiêu chuẩn sản phẩm</mat-label>
+                        <textarea formControlName="tieu_chuan_san_pham" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham"></textarea>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <section class="cb-section">
+                    </section>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngày bắt đầu kinh doanh</mat-label>
+                        <input formControlName="ngay_bd_kd" matInput readonly [matDatepicker]="datePicker"
+                            [(ngModel)]="bdkddate" (ngModelChange)="getChange($event)">
+                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #datePicker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Vốn điều lệ</mat-label>
+                        <input currencyMask formControlName="von_dieu_le" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.von_dieu_le">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Doanh thu</mat-label>
+                        <input formControlName="doanh_thu" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.doanh_thu">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Lợi nhuận</mat-label>
+                        <input formControlName="loi_nhuan" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.loi_nhuan">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quy mô tài sản</mat-label>
+                        <input formControlName="quy_mo_tai_san" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.quy_mo_tai_san">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số lao động</mat-label>
+                        <input currencyMask formControlName="so_lao_dong" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.so_lao_dong">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số lao động (Nguồn: SCT)</mat-label>
+                        <input currencyMask formControlName="so_lao_dong_sct" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.so_lao_dong_sct">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Công suất thiết kế</mat-label>
+                        <input currencyMask formControlName="cong_suat_thiet_ke" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Công suất thiết kế (Nguồn: SCT)</mat-label>
+                        <input currencyMask formControlName="cong_suat_thiet_ke_sct" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke_sct">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Sản lượng</mat-label>
+                        <input currencyMask formControlName="san_luong" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.san_luong">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Sản lượng (Nguồn: SCT)</mat-label>
+                        <input currencyMask formControlName="san_luong_sct" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.san_luong_sct">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu hợp tác</mat-label>
+                        <textarea formControlName="nhu_cau_hop_tac" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_hop_tac"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col-12 button-control -align-left my-auto">
+                <button mat-raised-button class="white" (click)="addRow()">
+                    <mat-icon>add_circle_outline</mat-icon> Thêm dòng
+                </button>
+                <button mat-raised-button class="white" (click)="insertRow()">
+                    <mat-icon>add_circle</mat-icon> Chèn dòng
+                </button>
+                <button mat-raised-button class="white" (click)="deleteRow()">
+                    <mat-icon>block</mat-icon> Xóa dòng
+                </button>
+            </div>
+        </div>
+
+        <div class="layout" id="small" #TABLE>
+            <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">
+
+                <!-- <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row" class="center-cell">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container> -->
+
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef> STT </th>
+                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">{{i + 1 +
+                        (paginator.pageIndex * paginator.pageSize)}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="id_nganh_nghe_kinh_doanh">
+                    <th mat-header-cell *matHeaderCellDef> Ngành nghề kinh doanh </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-select [(ngModel)]="element.id_nganh_nghe_kinh_doanh">
+                            <mat-option *ngFor="let item of career" [value]="item.id_nganh_nghe_kinh_doanh">
+                                {{item.ma_nganh_nghe}}
+                            </mat-option>
+                        </mat-select>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="nganh_nghe_kd_chinh">
+                    <th mat-header-cell *matHeaderCellDef> Ngành nghề kinh doanh chính </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input appSpecial class="text-left" [(ngModel)]="element.nganh_nghe_kd_chinh">
+                    </td>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="id_linh_vuc">
+                    <th mat-header-cell *matHeaderCellDef> ID lĩnh vực </th>
+                    <td mat-cell *matCellDef="let element">
+                        <input appSpecial class="text-left" [(ngModel)]="element.id_linh_vuc">
+                    </td>
+                </ng-container> -->
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index;"
+                    (click)="changeRow(i)">
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

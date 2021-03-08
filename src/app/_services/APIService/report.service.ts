@@ -182,7 +182,7 @@ export class ReportService {
         );
     }
 
-    public GetList_ReportPowerProduction(year : number) {
+    public GetList_ReportPowerProduction(year: number) {
         var apiUrl = this.apiReport + this.urlReportPowerProduction;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('year', year.toString());

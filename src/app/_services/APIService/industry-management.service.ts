@@ -25,7 +25,7 @@ export class IndustryManagementService {
     private urlGetComformityAnnounce = '/cbhq';
     private urlGetExplosiveMat = '/vlncn';
 
-    private urlPostAttachment = '/tai-lieu';
+    private urlPostAttachment = environment.apiEndpoint + 'api/upload-file';
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
@@ -204,8 +204,8 @@ export class IndustryManagementService {
 
     // ATTACHMENTS
     public PostAttachment(fd: FormData) {
-        var apiUrl = this.endpoint + this.urlPostAttachment;
-        // var apiUrl = 'http://localhost:5000/api/qlcn/tai-lieu';
+        var apiUrl = this.urlPostAttachment;
+        // var apiUrl = "http://localhost:5000/api/upload-file";
         let headers = new HttpHeaders();
         return this.http.post<any>(apiUrl, fd, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
