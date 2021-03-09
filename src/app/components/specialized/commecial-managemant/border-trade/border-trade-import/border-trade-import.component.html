@@ -255,7 +255,7 @@
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
                                     Danh sách doanh nghiệp
                                 </th>
-                                <td mat-cell *matCellDef="let element" id="jump">
+                                <td mat-cell *matCellDef="let element" class="jump">
                                     <mat-icon
                                         (click)="openDanh_sach_doanh_nghiep(element.id_mat_hang,element.ten_san_pham)">
                                         equalizer</mat-icon>
@@ -266,7 +266,7 @@
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
                                     Chi tiết xuất khẩu từng cửa khẩu
                                 </th>
-                                <td mat-cell *matCellDef="let element" id="jump">
+                                <td mat-cell *matCellDef="let element" class="jump">
                                     <mat-icon (click)="openDialog(element.id_mat_hang)">
                                         business</mat-icon>
                                 </td>

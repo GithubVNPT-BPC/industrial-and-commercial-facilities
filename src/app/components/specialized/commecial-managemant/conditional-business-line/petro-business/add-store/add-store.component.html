@@ -40,7 +40,9 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Phường xã</mat-label>
                         <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.petrol.id_phuong_xa">
-                            <mat-option *ngFor="let item of subdistrict" [value]="item.id_phuong_xa">
+                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
+                                [array]="subdistrict" (filteredReturn)="filtersubdistrict =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filtersubdistrict" [value]="item.id_phuong_xa">
                                 {{item.ten_phuong_xa}}
                             </mat-option>
                         </mat-select>
@@ -48,6 +50,16 @@
                 </div>
 
                 <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Trạng thái hoạt động</mat-label>
+                        <mat-select formControlName="id_tinh_trang_hoat_dong"
+                            [(ngModel)]="_Service.petrol.id_tinh_trang_hoat_dong">
+                            <mat-option *ngFor="let item of trangthai" [value]="item.id_tinh_trang_hoat_dong">
+                                {{item.tinh_trang_hoat_dong}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
                     <mat-form-field appearance="outline">
                         <mat-label>Số điện thoại</mat-label>
                         <input formControlName="so_dien_thoai" matInput placeholder=""

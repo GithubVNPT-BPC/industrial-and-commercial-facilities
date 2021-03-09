@@ -107,7 +107,6 @@ export class ManagePetrolValueComponent implements OnInit {
   SLDoanhNghiep: number;
 
   displayedColumns: string[] = [
-    'cap_nhat',
     'index',
     'mst',
     'ten_doanh_nghiep',
@@ -122,8 +121,8 @@ export class ManagePetrolValueComponent implements OnInit {
     'ten_nhan_vien',
     'ten_thuong_nhan',
     'san_luong',
-    'ghi_chu',
     'tinh_trang_hoat_dong',
+    'ghi_chu',
 
     'ten_quan_huyen',
     'id_cua_hang_xang_dau',
@@ -187,9 +186,7 @@ export class ManagePetrolValueComponent implements OnInit {
 
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
       this.SLThuongNhan = this.petrollist1.length;
-
       let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
-
       this.SLDoanhNghiep = unique.length;
 
       this.dataSource1.paginator = this.paginator;
@@ -242,11 +239,15 @@ export class ManagePetrolValueComponent implements OnInit {
     }
 
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
-
+    let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
+    this.SLDoanhNghiep = unique.length;
   }
 
   applyExpireCheck(event) {
     this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+    this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
+    let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
+    this.SLDoanhNghiep = unique.length;
   }
 
   public getCurrentDate() {
@@ -286,15 +287,21 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   ManageStore() {
-    this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+    this.router.navigate(['specialized/commecial-management/domestic/petrolstore']);
   }
 
-  ManageBusiness() {
-    this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
+  type: string = 'Petrol'
+
+  ManageBusiness(type: string) {
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
   }
 
   Back() {
     this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+  }
+
+  OpenDetailPetrol(id: number, mst: string, time: string, id_san_luong: string) {
+    this.router.navigate(['specialized/commecial-management/domestic/update-petrol/' + id + '/' + mst + '/' + time + '/' + id_san_luong])
   }
 
 }

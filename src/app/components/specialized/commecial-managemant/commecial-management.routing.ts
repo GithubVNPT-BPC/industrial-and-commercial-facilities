@@ -78,6 +78,13 @@ const routes: Routes = [
         }
       },
       {
+        path: 'edit',
+        component: EditBusinessComponent,
+        data: {
+          title: 'Thêm doanh nghiệp',
+        }
+      },
+      {
         path: 'edit/:mst',
         component: EditBusinessComponent,
         data: {
@@ -92,7 +99,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'petrol',
+        path: 'petrolstore',
         component: PetrolBusinessComponent,
         data: {
           title: 'Quản lý cửa hàng xăng dầu',
@@ -106,21 +113,21 @@ const routes: Routes = [
         }
       },
       {
-        path: 'update-petrol/:id/:mst',
+        path: 'update-petrol/:id/:mst/:time/:id_san_luong',
         component: UpdatePetrolComponent,
         data: {
           title: 'Cập nhật thông tin cửa hàng xăng dầu',
         }
       },
       {
-        path: 'managevalue',
+        path: 'petrol',
         component: ManagePetrolValueComponent,
         data: {
           title: 'Quản lý sản lượng xăng dầu',
         }
       },
       {
-        path: 'managebusiness',
+        path: 'managebusiness/:type',
         component: ManageBusinessmanComponent,
         data: {
           title: 'Quản lý thương nhân',
@@ -134,7 +141,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'updatebusiness/:id',
+        path: 'updatebusiness/:id/:type',
         component: UpdateBusinessmanComponent,
         data: {
           title: 'Cập nhật thương nhân',

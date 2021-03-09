@@ -54,7 +54,7 @@ export const MY_FORMATS = {
 })
 
 export class PetrolBusinessComponent implements OnInit {
-    displayedColumns: string[] = ['select', 'cap_nhat',
+    displayedColumns: string[] = ['select',
         'index',
         'ten_cua_hang',
         'mst',
@@ -302,6 +302,6 @@ export class PetrolBusinessComponent implements OnInit {
     }
 
     Back() {
-        this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
+        this.router.navigate(['specialized/commecial-management/domestic/petrol']);
     }
 }

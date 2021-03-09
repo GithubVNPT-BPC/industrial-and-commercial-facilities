@@ -1,4 +1,10 @@
 <mat-card class="material">
+    <mat-card-header>
+        <!-- <mat-card-title><strong></strong></mat-card-title> -->
+        <mat-card-subtitle hidden>
+            type={{type}}
+        </mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -14,7 +20,7 @@
                     <button type="submit" mat-raised-button>Lưu</button>
                 </div>
                 <div class="col-6 button-control -align-right my-auto">
-                    <button mat-raised-button (click)="Back()">
+                    <button mat-raised-button (click)="Back(type)">
                         <mat-icon>keyboard_backspace</mat-icon>
                     </button>
                 </div>

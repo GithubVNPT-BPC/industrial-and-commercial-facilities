@@ -61,11 +61,6 @@ export class EditBusinessComponent implements OnInit {
   @ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  public career: Array<CareerModel> = new Array<CareerModel>();
-  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  public district: Array<DistrictModel> = new Array<DistrictModel>();
-  public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
-
   selection = new SelectionModel<Career>(true, []);
 
   isAllSelected() {
@@ -130,22 +125,30 @@ export class EditBusinessComponent implements OnInit {
     });
   }
 
+  public career: Array<CareerModel> = new Array<CareerModel>();
+  public filtercareer: Array<CareerModel> = new Array<CareerModel>();
+  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  public filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  public district: Array<DistrictModel> = new Array<DistrictModel>();
+  public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
+
   GetAllNganhNghe() {
     this._Service.GetAllCareer().subscribe((allrecords) => {
       this.career = allrecords.data as CareerModel[];
+      this.filtercareer = this.career.slice();
     });
   }
 
   GetAllPhuongXa() {
     this._Service.GetAllSubDistrict().subscribe((allrecords) => {
       this.subdistrict = allrecords.data as SubDistrictModel[];
+      this.filtersubdistrict = this.subdistrict.slice();
     });
   }
 
   getQuan_Huyen() {
     this._Service.GetAllDistrict().subscribe((allDistrict) => {
       this.district = allDistrict["data"] as DistrictModel[];
-
     });
   }
 
@@ -169,7 +172,7 @@ export class EditBusinessComponent implements OnInit {
     this.doanh_nghiep = this.formbuilder.group({
       mst: ['', Validators.required],
       id_loai_hinh_hoat_dong: [null, Validators.required],
-      mst_parent: ['', Validators.required],
+      mst_parent: '',
       sct: true,
       hoat_dong: true,
       dia_chi: ['', Validators.required],
@@ -239,7 +242,7 @@ export class EditBusinessComponent implements OnInit {
           // debugger;
           // this.resetForm(companyinput);
           this.info.msgSuccess('Thêm thành công')
-          this.router.navigate(['manager/business/search/']);
+          this.router.navigate(['specialized/commecial-management/domestic/search']);
         },
         err => {
           // debugger;
@@ -252,7 +255,7 @@ export class EditBusinessComponent implements OnInit {
           // debugger;
           // this.resetForm(companyinput);
           this.info.msgSuccess('Thêm thành công')
-          this.router.navigate(['manager/business/search/']);
+          this.router.navigate(['specialized/commecial-management/domestic/search']);
         },
         err => {
           // debugger;

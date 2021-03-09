@@ -4,7 +4,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
-import { DeleteModel, PetrolPost, PetrolValuePost, Businessman, PostBusinessmanValue, TobaccoPost, LiquorPost } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { DeleteModel, PetrolPost, PetrolValuePost, Businessman, PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore } from 'src/app/_models/APIModel/conditional-business-line.model';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,7 @@ export class ConditionBusinessService {
 
   //Petrol
   petrol: PetrolPost
-  public PostPetrol(petrol: Array<PetrolPost>) {
+  public PostPetrol(petrol: Array<PetrolStore>) {
     var apiUrl = this.apiHome + this.urlpostPetrol;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);

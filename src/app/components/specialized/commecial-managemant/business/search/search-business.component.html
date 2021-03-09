@@ -125,7 +125,7 @@
 
                 <ng-container matColumnDef="ten_doanh_nghiep">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tên doanh nghiệp </th>
-                    <td (click)="OpenDetailCompany(element.mst)" mat-cell *matCellDef="let element" id="jump"
+                    <td (click)="OpenDetailCompany(element.mst)" mat-cell *matCellDef="let element" class="jump"
                         style="width: 420px;">
                         {{element.ten_doanh_nghiep}} </td>
                 </ng-container>

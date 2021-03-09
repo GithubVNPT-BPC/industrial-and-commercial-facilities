@@ -129,12 +129,15 @@ export class AddSupplyBusinessComponent implements OnInit {
   }
 
   Businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
+  filterbusinessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
 
   GetBusinessman() {
     this._Service.GetBusinessman().subscribe((allrecords) => {
       this.Businessman = allrecords.data as BusinessmanSelect[];
+      this.filterbusinessman = this.Businessman.slice();
     });
   }
+
 
   ngOnInit() {
     this._keyboardservice.keyBoard.subscribe(res => {
@@ -205,6 +208,7 @@ export class AddSupplyBusinessComponent implements OnInit {
     newRow.id_linh_vuc = 6;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+    this.filterbusinessman = this.Businessman.slice();
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -220,6 +224,7 @@ export class AddSupplyBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+    this.filterbusinessman = this.Businessman.slice();
 
     this._rows = this.dataSource.data.length
   }
@@ -271,7 +276,7 @@ export class AddSupplyBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
+    this.router.navigate(['specialized/commecial-management/domestic/petrol']);
   }
 
 }
