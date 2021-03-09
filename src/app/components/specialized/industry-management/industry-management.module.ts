@@ -15,6 +15,8 @@ import { LPGManagementComponent } from './lpg-management/lpg-management.componen
 import { CertificateRegulationComponent } from './certificate-regulation/certificate-regulation.component';
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
 import { registerLocaleData } from '@angular/common';
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 
@@ -25,6 +27,7 @@ registerLocaleData(localevi, 'vi');
         MaterialModule,
         ReactiveFormsModule,
         PipeModule,
+        PdfViewerModule,
         IndustryManagementRoutingModule,
       ],
       exports: [

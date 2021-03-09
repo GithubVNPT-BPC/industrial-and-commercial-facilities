@@ -243,6 +243,30 @@
                     </div>
 
                     <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                File đính kèm
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <input matInput formControlName="id" type="text" class="o_invisible">
+                                <div class="col-md-4" >
+                                    <mat-form-field appearance="outline" (click)="fileInput.click()" class="cursor-pointer"> 
+                                        <input matInput type="text" formControlName="duong_dan_nhan_san_pham">
+                                        <mat-icon matSuffix >upload_file</mat-icon>
+                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".*" >
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-4 mt-3" *ngIf="selectedFile">
+                                    <strong class="cursor-pointer" (click)="openPreviewer(filePreviewer)">Xem file</strong>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
                         <button type="submit" class="btn btn-success float-right">Lưu thông tin</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
@@ -251,3 +275,21 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
+
+<ng-template #filePreviewer let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Xem file</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <pdf-viewer [src]="selectedFile"
+            [render-text]="true"
+            style="display: block;"
+        ></pdf-viewer>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('')">Ẩn</button>
+    </div>
+</ng-template>
