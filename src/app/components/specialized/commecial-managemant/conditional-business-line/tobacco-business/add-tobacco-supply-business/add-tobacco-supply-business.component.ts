@@ -13,7 +13,6 @@ import {
   BusinessmanSelect,
   PostBusinessmanValue,
   TobaccoList,
-  Businessman
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -132,14 +131,14 @@ export class AddTobaccoSupplyBusinessComponent implements OnInit {
   }
 
   Businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
+  filterbusinessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
 
   GetBusinessman() {
     this._Service.GetBusinessman().subscribe((allrecords) => {
       this.Businessman = allrecords.data as BusinessmanSelect[];
+      this.filterbusinessman = this.Businessman.slice();
     });
   }
-
-  public filteredList = this.Businessman.slice();
 
   ngOnInit() {
     this._keyboardservice.keyBoard.subscribe(res => {
@@ -215,6 +214,7 @@ export class AddTobaccoSupplyBusinessComponent implements OnInit {
     newRow.id_linh_vuc = 7;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+    this.filterbusinessman = this.Businessman.slice();
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -230,6 +230,7 @@ export class AddTobaccoSupplyBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+    this.filterbusinessman = this.Businessman.slice();
 
     this._rows = this.dataSource.data.length
   }

@@ -144,18 +144,18 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="cap_nhat">
+                        <!-- <ng-container matColumnDef="cap_nhat">
                             <th mat-header-cell *matHeaderCellDef> Cập nhật thông tin </th>
                             <td mat-cell *matCellDef="let element" (click)="Addliquorbusiness(element.id_ruou)"
-                                id="jump" class="center-cell">
+                                class="jump" class="center-cell">
                                 <mat-icon>update</mat-icon>
                             </td>
-                        </ng-container>
+                        </ng-container> -->
 
                         <ng-container matColumnDef="them_thuong_nhan">
                             <th mat-header-cell *matHeaderCellDef> Thêm thương nhân</th>
                             <td (click)="Addliquorsupply(element.id_ruou, element.time_id)" mat-cell
-                                *matCellDef="let element" class="center-cell" id="jump">
+                                *matCellDef="let element" class="center-cell" class="jump">
                                 <ng-container *ngIf="element.ten_thuong_nhan == ''; else elseTemplate">
                                     <mat-icon> chat</mat-icon> (Chưa cập nhật thương nhân)
                                 </ng-container>
@@ -187,7 +187,8 @@
 
                         <ng-container matColumnDef="mst">
                             <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
-                            <td mat-cell *matCellDef="let element"> {{element.mst}} </td>
+                            <td mat-cell *matCellDef="let element" (click)="Addliquorbusiness(element.id_ruou)" class="jump">
+                                {{element.mst}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="so_luong">

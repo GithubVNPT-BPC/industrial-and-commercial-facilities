@@ -158,7 +158,6 @@ export class LiquorBusinessComponent implements OnInit {
     SLThuongNhan: number;
 
     displayedColumns: string[] = [
-        'cap_nhat',
         'them_thuong_nhan',
         'index',
         'mst',

@@ -21,6 +21,16 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
+                        <mat-label>Trạng thái hoạt động</mat-label>
+                        <mat-select formControlName="id_tinh_trang_hoat_dong"
+                            [(ngModel)]="_Service.tobacco.id_tinh_trang_hoat_dong">
+                            <mat-option *ngFor="let item of trangthai" [value]="item.id_tinh_trang_hoat_dong">
+                                {{item.tinh_trang_hoat_dong}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
                         <mat-label>Mã số thuế</mat-label>
                         <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.tobacco.mst">
                     </mat-form-field>
@@ -52,6 +62,13 @@
                         <input matInput currencyMask class="text-right" formControlName="tri_gia"
                             [(ngModel)]="_Service.tobacco.tri_gia">
                     </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ghi chú</mat-label>
+                        <textarea formControlName="ghi_chu" matInput placeholder=""
+                            [(ngModel)]="_Service.tobacco.ghi_chu"></textarea>
+                    </mat-form-field>
+
                 </div>
             </div>
         </form>

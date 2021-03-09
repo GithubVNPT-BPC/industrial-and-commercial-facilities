@@ -71,6 +71,7 @@ export class UpdateBusinessmanComponent implements OnInit {
   }
 
   id: string;
+  type: string;
 
   constructor(
     // @Inject(MAT_DIALOG_DATA) public data: any,
@@ -84,6 +85,7 @@ export class UpdateBusinessmanComponent implements OnInit {
   ) {
     this.route.params.subscribe((params) => {
       this.id = params["id"];
+      this.type = params["type"]
     });
   }
 
@@ -105,7 +107,7 @@ export class UpdateBusinessmanComponent implements OnInit {
         // debugger;
         this._info.msgSuccess('Thêm thành công')
         // this.dialogRef.close()
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + this.type]);
       },
       err => {
         // debugger;
@@ -162,8 +164,8 @@ export class UpdateBusinessmanComponent implements OnInit {
     return formatDate(date, 'yyyy', 'en-US');
   }
 
-  Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/managebusiness']);
+  Back(type: string) {
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
   }
 
 }

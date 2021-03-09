@@ -66,18 +66,6 @@ export class TobaccoBusinessComponent implements OnInit {
     ) {
     }
 
-    Addtobaccobusiness(id: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco/' + id]);
-    }
-
-    Addtobaccosupply(id: string, time: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco-supply/' + id + '/' + time]);
-    }
-
-    Back() {
-        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
-    }
-
     public district: Array<DistrictModel> = new Array<DistrictModel>();
     getQuan_Huyen() {
         this._Service.GetAllDistrict().subscribe((allDistrict) => {
@@ -155,23 +143,25 @@ export class TobaccoBusinessComponent implements OnInit {
     SanLuongBanRa: number;
     TriGiaBanRa: number;
     SLThuongNhan: number;
+    type: string = 'Tobacco'
 
     displayedColumns: string[] = [
         'select',
-        'cap_nhat',
         'them_thuong_nhan',
         'index',
         'mst',
         'ten_doanh_nghiep',
         'dia_chi_day_du',
+        'nguoi_dai_dien',
         'so_dien_thoai',
         'so_giay_phep',
         'ngay_cap',
         'ngay_het_han',
-        'nguoi_dai_dien',
         'ten_thuong_nhan',
         'so_luong',
         'tri_gia',
+        'tinh_trang_hoat_dong',
+        'ghi_chu',
 
         'ten_quan_huyen',
         'id_thuoc_la',
@@ -318,6 +308,22 @@ export class TobaccoBusinessComponent implements OnInit {
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    ManageBusiness(type: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+    }
+
+    Addtobaccobusiness(id: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco/' + id]);
+    }
+
+    Addtobaccosupply(id: string, time: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco-supply/' + id + '/' + time]);
+    }
+
+    Back() {
+        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 
 }

@@ -10,6 +10,7 @@ import {
   SubDistrictModel,
   CertificateModel,
   PetrolPost,
+  Status
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -42,12 +43,14 @@ export class AddStoreComponent implements OnInit {
   }
 
   subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   district: Array<DistrictModel> = new Array<DistrictModel>();
   Certificate: Array<CertificateModel> = new Array<CertificateModel>();
 
   GetAllPhuongXa() {
     this._Service.GetAllSubDistrict().subscribe((allrecords) => {
       this.subdistrict = allrecords.data as SubDistrictModel[];
+      this.filtersubdistrict = this.subdistrict.slice();
     });
   }
 
@@ -57,6 +60,21 @@ export class AddStoreComponent implements OnInit {
     });
   }
 
+  trangthai: Array<Status> = [
+    {
+      id_tinh_trang_hoat_dong: 1,
+      tinh_trang_hoat_dong: 'Hoạt động'
+    },
+    {
+      id_tinh_trang_hoat_dong: 2,
+      tinh_trang_hoat_dong: 'Ngừng hoạt động'
+    },
+    {
+      id_tinh_trang_hoat_dong: 3,
+      tinh_trang_hoat_dong: 'Cho thuê lại'
+    }
+  ]
+
   resetForm(form?: NgForm) {
     if (form != null)
       form.form.reset();
@@ -65,12 +83,15 @@ export class AddStoreComponent implements OnInit {
       ten_cua_hang: '',
       mst: '',
       dia_chi: '',
-      id_phuong_xa: null,
+      id_phuong_xa: 25195,
       so_dien_thoai: '',
       id_tinh_trang_hoat_dong: 1,
       ten_quan_ly: '',
       ten_nhan_vien: '',
-      id_giay_phep: 0
+      id_giay_phep: 0,
+      san_luong: 0,
+      ghi_chu: '',
+      time_id: ''
     }
   }
 
@@ -86,7 +107,7 @@ export class AddStoreComponent implements OnInit {
       ten_cua_hang: '',
       mst: '',
       dia_chi: '',
-      id_phuong_xa: null,
+      id_phuong_xa: 25195,
       so_dien_thoai: '',
       id_tinh_trang_hoat_dong: 1,
       ten_quan_ly: '',
@@ -100,7 +121,7 @@ export class AddStoreComponent implements OnInit {
       res => {
         // debugger;
         this._info.msgSuccess('Thêm thành công')
-        this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+        this.router.navigate(['specialized/commecial-management/domestic/petrolstore']);
       },
       err => {
         // debugger;
@@ -119,6 +140,6 @@ export class AddStoreComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+    this.router.navigate(['specialized/commecial-management/domestic/petrolstore']);
   }
 }

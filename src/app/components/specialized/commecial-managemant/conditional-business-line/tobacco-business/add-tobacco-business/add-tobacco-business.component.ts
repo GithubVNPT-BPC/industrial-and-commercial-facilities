@@ -11,7 +11,8 @@ import {
   SubDistrictModel,
   CertificateModel,
   TobaccoPost,
-  TobaccoList
+  TobaccoList,
+  Status
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -101,7 +102,9 @@ export class AddTobaccoBusinessComponent implements OnInit {
       mst: '',
       so_luong: null,
       tri_gia: null,
-      time_id: ''
+      time_id: '',
+      ghi_chu: '',
+      id_tinh_trang_hoat_dong: 1
     }
   }
 
@@ -123,17 +126,11 @@ export class AddTobaccoBusinessComponent implements OnInit {
           so_luong: this.tobaccoobject.so_luong,
           tri_gia: this.tobaccoobject.tri_gia,
           time_id: this.tobaccoobject.time_id,
+          ghi_chu: '',
+          id_tinh_trang_hoat_dong: 1
         }
       }
     })
-  }
-
-
-  jQuery: any;
-
-  ngAfterViewInit() {
-    document.getElementById('preloader').classList.add('hide');
-    this.jQuery('select').selectpicker();
   }
 
   @ViewChild('selectpicker', { static: false }) selectPicker: ElementRef;
@@ -150,7 +147,9 @@ export class AddTobaccoBusinessComponent implements OnInit {
       mst: '',
       so_luong: null,
       tri_gia: null,
-      time_id: ''
+      time_id: '',
+      ghi_chu: '',
+      id_tinh_trang_hoat_dong: null
     })
   }
 
@@ -167,6 +166,21 @@ export class AddTobaccoBusinessComponent implements OnInit {
     )
   }
 
+  trangthai: Array<Status> = [
+    {
+      id_tinh_trang_hoat_dong: 1,
+      tinh_trang_hoat_dong: 'Hoạt động'
+    },
+    {
+      id_tinh_trang_hoat_dong: 2,
+      tinh_trang_hoat_dong: 'Ngừng hoạt động'
+    },
+    {
+      id_tinh_trang_hoat_dong: 3,
+      tinh_trang_hoat_dong: 'Cho thuê lại'
+    }
+  ]
+
   input: Array<TobaccoPost> = new Array<TobaccoPost>();
   onSubmit() {
     this.input.push({
@@ -175,6 +189,8 @@ export class AddTobaccoBusinessComponent implements OnInit {
       so_luong: null,
       tri_gia: null,
       time_id: '',
+      ghi_chu: '',
+      id_tinh_trang_hoat_dong: null
     })
 
     if (this.id != 'undefined') {
@@ -185,6 +201,8 @@ export class AddTobaccoBusinessComponent implements OnInit {
     this.input[0].so_luong = this.tobacco_data.value.so_luong
     this.input[0].tri_gia = this.tobacco_data.value.tri_gia
     this.input[0].time_id = this.tobacco_data.value.time_id
+    this.input[0].ghi_chu = this.tobacco_data.value.ghi_chu
+    this.input[0].id_tinh_trang_hoat_dong = this.tobacco_data.value.id_tinh_trang_hoat_dong
 
     this.SaveData(this.input);
   }

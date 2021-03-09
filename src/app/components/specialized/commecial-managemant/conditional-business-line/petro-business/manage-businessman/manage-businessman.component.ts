@@ -62,7 +62,6 @@ export class ManageBusinessmanComponent implements OnInit {
     'ten_thuong_nhan',
     'dia_chi',
     'so_dien_thoai',
-    'cap_nhat'
   ];
   dataSource: MatTableDataSource<Businessman> = new MatTableDataSource<Businessman>();
 
@@ -70,14 +69,20 @@ export class ManageBusinessmanComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
+  type: string;
+
   constructor(
     public excelService: ExcelService,
     public _Service: ConditionBusinessService,
     public router: Router,
     public _info: InformationService,
     public dialog: MatDialog,
-    private _location: Location
+    private _location: Location,
+    public route: ActivatedRoute
   ) {
+    this.route.params.subscribe((params) => {
+      this.type = params["type"];
+    });
   }
 
   // public AddBusiness(data: any) {
@@ -223,12 +228,20 @@ export class ManageBusinessmanComponent implements OnInit {
   //   this._location.back();
   // }
 
-  AddBusiness(id: number) {
-    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id]);
+  id: string = undefined
+
+  AddBusiness(id: number, type: string) {
+    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id + '/' + type]);
   }
 
   Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/managevalue']);
+    switch (this.type) {
+      case 'Tobacco':
+        this.router.navigate(['specialized/commecial-management/domestic/tobacco']);
+        break;
+      case 'Petrol':
+        this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+        break;
+    }
   }
-
 }

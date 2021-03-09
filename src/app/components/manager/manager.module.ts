@@ -12,6 +12,7 @@ import { ManagerDirective } from './../../shared/manager.directive';
 import { ExportTopCompanyManager } from './export-top-company-manager/export-top-company-manager.component';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
+import { MatSelectFilterModule } from 'mat-select-filter';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -36,6 +37,7 @@ export const customCurrencyMaskConfig = {
     MaterialModule,
     ReactiveFormsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    MatSelectFilterModule
   ],
   exports: [
   ],
