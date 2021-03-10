@@ -23,7 +23,6 @@ export class ClusterManagementComponent extends BaseComponent {
     totalColumns: string[] = ['index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
-    years: number[] = [];
     imageUrl: string = "";
     fileToUpload: File = null;
 
@@ -42,10 +41,6 @@ export class ClusterManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
     filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
-    ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
     constructor(
         public indService: IndustryManagementService,
         public router: Router,
@@ -58,9 +53,7 @@ export class ClusterManagementComponent extends BaseComponent {
         super.ngOnInit();
         this.showColumns = this.topColumns;
         this.showSubColumns = [];
-        this.years = this.getYears();
         this.getDanhSachQuanLyCumCongNghiep();
-        this.autoOpen();
         this.initWards();
     }
 
@@ -92,10 +85,6 @@ export class ClusterManagementComponent extends BaseComponent {
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
             this.paginatorAgain();
         })
-    }
-
-    getYears() {
-        return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
     }
 
     changeTable(event) {
@@ -188,7 +177,6 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     public callService(data) {
-        console.log(data);
         this.indService.PostDataGroupCompany(data).subscribe(res => {
             // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
             this.successNotify(res);
