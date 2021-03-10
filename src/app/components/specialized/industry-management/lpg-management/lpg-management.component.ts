@@ -117,14 +117,22 @@ export class LPGManagementComponent extends BaseComponent {
 
     GetLGPManagementData(time_id: number) {
         this.industryManagementService.GetLPGManagement(time_id).subscribe(result => {
-            this.dataSource = new MatTableDataSource<LPGManagementModel>(result.data);
-            this.dataSource.data.forEach(element => {
-                element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
-            });
+            if (result.data && result.data.length) {
+                result.data.forEach(element => {
+                    element.ngay_cap = this.formatDate(element.ngay_cap);
+                    element.ngay_het_han = this.formatDate(element.ngay_het_han);
+                });
 
-            this.filteredDataSource.data = [...this.dataSource.data];
-            this._prepareData();
-            this.paginatorAgain();
+                this.dataSource = new MatTableDataSource<LPGManagementModel>(result.data);
+                this.dataSource.data.forEach(element => {
+                    element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+                });
+
+                this.filteredDataSource.data = [...this.dataSource.data];
+                this._prepareData();
+                this.paginatorAgain();
+            }
+            
         })
     }
 

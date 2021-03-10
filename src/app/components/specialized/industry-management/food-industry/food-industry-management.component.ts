@@ -63,13 +63,20 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     GetFoodIndustryData(time_id) {
         this.industryManagementService.GetFoodIndustry(time_id).subscribe(result => {
-            this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
-            this.dataSource.data.forEach(element => {
-                element.is_expired = !element.tinh_trang_hoat_dong;
-            });
-            this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
-            this._prepareData();
-            this.paginatorAgain();
+            if (result.data && result.data.length) {
+                result.data.forEach(element => {
+                    element.ngay_cap = this.formatDate(element.ngay_cap);
+                    element.ngay_het_han = this.formatDate(element.ngay_het_han);
+                });
+                
+                this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
+                this.dataSource.data.forEach(element => {
+                    element.is_expired = !element.tinh_trang_hoat_dong;
+                });
+                this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
+                this._prepareData();
+                this.paginatorAgain();
+            }
         })
     }
 

@@ -3,7 +3,6 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { formatDate } from '@angular/common';
 
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -50,7 +49,6 @@ export abstract class BaseComponent implements OnInit {
     public selection = new SelectionModel(true, []);
 
     public readonly dateFormat = 'YYYY/MM/DD';
-    public readonly dateLocale = 'vi-VN';
 
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
