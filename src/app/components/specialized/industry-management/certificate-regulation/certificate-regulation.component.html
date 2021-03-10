@@ -108,7 +108,7 @@
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
-                                        <ng-container *ngIf="![].includes(field.key) ;else dateFieldCond">
+                                        <ng-container *ngIf="!['ngay_tiep_nhan'].includes(field.key) ;else dateFieldCond">
                                             <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
                                         </ng-container>
                                     </ng-container>
@@ -250,16 +250,16 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <input matInput formControlName="id" type="text" class="o_invisible">
+                                <input matInput formControlName="attachment_id" type="text" class="o_invisible">
                                 <div class="col-md-4" >
                                     <mat-form-field appearance="outline" (click)="fileInput.click()" class="cursor-pointer"> 
-                                        <input matInput type="text" formControlName="duong_dan_nhan_san_pham">
+                                        <input matInput type="text" formControlName="file_name" disabled>
                                         <mat-icon matSuffix >upload_file</mat-icon>
-                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".*" >
+                                        <input hidden (change)="onFileSelected($event)" #fileInput type="file" accept=".pdf" >
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-4 mt-3" *ngIf="selectedFile">
+                                <div class="col-md-4 mt-3" *ngIf="fileBin">
                                     <strong class="cursor-pointer" (click)="openPreviewer(filePreviewer)">Xem file</strong>
                                 </div>
                             </div>
@@ -284,7 +284,7 @@
       </button>
     </div>
     <div class="modal-body">
-        <pdf-viewer [src]="selectedFile"
+        <pdf-viewer [src]="fileBin"
             [render-text]="true"
             style="display: block;"
         ></pdf-viewer>
