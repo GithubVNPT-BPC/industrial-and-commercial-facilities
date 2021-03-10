@@ -87,7 +87,7 @@ export class CertificateRegulationComponent extends BaseComponent {
         this.formData.controls['mst'].setValue(selectedRecord.mst);
         this.formData.controls['ten_san_pham'].setValue(selectedRecord.ten_san_pham);
         this.formData.controls['ban_cong_bo_hop_quy'].setValue(selectedRecord.ban_cong_bo_hop_quy);
-        this.formData.controls['ngay_tiep_nhan'].setValue(selectedRecord.ngay_tiep_nhan);
+        this.formData.controls['ngay_tiep_nhan'].setValue(new Date(selectedRecord.ngay_tiep_nhan));
         this.formData.controls['tieu_chuan_san_pham'].setValue(selectedRecord.tieu_chuan_san_pham);
         this.formData.controls['noi_cap'].setValue(selectedRecord.noi_cap);
         this.formData.controls['id_loai_san_pham'].setValue(selectedRecord.id_loai_san_pham);
