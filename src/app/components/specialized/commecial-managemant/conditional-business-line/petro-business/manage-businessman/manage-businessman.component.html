@@ -3,6 +3,7 @@
         <!-- <mat-card-title><strong></strong></mat-card-title> -->
         <mat-card-subtitle hidden>
             type={{type}}
+            id_linh_vuc={{id_linh_vuc}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -28,7 +29,7 @@
 
                 <div class="row">
                     <div class="col-8 button-control -align-left my-auto">
-                        <button mat-raised-button (click)="AddBusiness(id, type)">Thêm thương nhân</button>
+                        <button mat-raised-button (click)="AddBusiness(id, type, id_linh_vuc)">Thêm thương nhân</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa thương nhân</button>
 
@@ -83,10 +84,15 @@
                             <td hidden mat-cell *matCellDef="let element"> {{element.id_thuong_nhan}} </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="id_linh_vuc">
+                            <th hidden mat-header-cell *matHeaderCellDef> ID lĩnh vực </th>
+                            <td hidden mat-cell *matCellDef="let element"> {{element.id_linh_vuc}} </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="ten_thuong_nhan">
                             <th mat-header-cell *matHeaderCellDef> Tên thương nhân </th>
-                            <td mat-cell *matCellDef="let element" (click)="AddBusiness(element.id_thuong_nhan, type)"
-                                class="jump">
+                            <td mat-cell *matCellDef="let element"
+                                (click)="AddBusiness(element.id_thuong_nhan, type, id_linh_vuc)" class="jump">
                                 {{element.ten_thuong_nhan}} </td>
                         </ng-container>
 
