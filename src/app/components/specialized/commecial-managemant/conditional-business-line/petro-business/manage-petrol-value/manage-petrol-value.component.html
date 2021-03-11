@@ -3,6 +3,7 @@
         <mat-card-title><strong>CỬA HÀNG BÁN LẺ XĂNG DẦU</strong></mat-card-title>
         <mat-card-subtitle hidden>
             type={{type}}
+            id_linh_vuc={{id_linh_vuc}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -90,7 +91,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col-1">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian</mat-label>
                             <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
@@ -118,10 +119,10 @@
                         </mat-checkbox>
                     </div>
 
-                    <div class="col-7 button-control -align-right my-auto">
+                    <div class="col-8 button-control -align-right my-auto">
                         <button mat-raised-button (click)="OpenDetailPetrol()">Thêm sản lượng</button>
 
-                        <button mat-raised-button (click)="ManageBusiness(type)">QL thương nhân</button>
+                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">QL thương nhân</button>
 
                         <button mat-raised-button (click)="ManageStore()">QL cửa hàng</button>
 

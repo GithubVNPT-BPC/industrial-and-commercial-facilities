@@ -195,6 +195,7 @@ export class Businessman {
     ten_thuong_nhan: string;
     dia_chi: string;
     so_dien_thoai: string;
+    id_linh_vuc: number;
 }
 
 export class ConditionalBusinessLineModel {

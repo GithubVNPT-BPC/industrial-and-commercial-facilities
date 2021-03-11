@@ -340,9 +340,10 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   type: string = 'Petrol'
+  id_linh_vuc: number = 6
 
-  ManageBusiness(type: string) {
-    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+  ManageBusiness(type: string, id_linh_vuc: number) {
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
   }
 
   Back() {

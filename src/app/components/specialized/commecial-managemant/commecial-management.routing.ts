@@ -128,7 +128,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'managebusiness/:type',
+        path: 'managebusiness/:type/:id_linh_vuc',
         component: ManageBusinessmanComponent,
         data: {
           title: 'Quản lý thương nhân',
@@ -142,7 +142,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'updatebusiness/:id/:type',
+        path: 'updatebusiness/:id/:type/:id_linh_vuc',
         component: UpdateBusinessmanComponent,
         data: {
           title: 'Cập nhật thương nhân',

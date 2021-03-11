@@ -312,8 +312,10 @@ export class TobaccoBusinessComponent implements OnInit {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
-    ManageBusiness(type: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+    id_linh_vuc: number = 7
+
+    ManageBusiness(type: string, id_linh_vuc: number) {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
     }
 
     Addtobaccobusiness(id: string, time: string) {

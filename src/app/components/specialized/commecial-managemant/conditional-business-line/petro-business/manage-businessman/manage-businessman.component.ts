@@ -62,14 +62,17 @@ export class ManageBusinessmanComponent implements OnInit {
     'ten_thuong_nhan',
     'dia_chi',
     'so_dien_thoai',
+
+    'id_linh_vuc'
   ];
-  dataSource: MatTableDataSource<Businessman> = new MatTableDataSource<Businessman>();
+
 
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   type: string;
+  id_linh_vuc: number;
 
   constructor(
     public excelService: ExcelService,
@@ -82,6 +85,7 @@ export class ManageBusinessmanComponent implements OnInit {
   ) {
     this.route.params.subscribe((params) => {
       this.type = params["type"];
+      this.id_linh_vuc = params["id_linh_vuc"];
     });
   }
 
@@ -160,9 +164,16 @@ export class ManageBusinessmanComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  dataSource: MatTableDataSource<Businessman> = new MatTableDataSource<Businessman>();
+  filterdatasource: Array<Businessman> = new Array<Businessman>();
+  filterdatasource1: Array<Businessman> = new Array<Businessman>();
+
   getBusinessList() {
     this._Service.GetBusinessman().subscribe(all => {
-      this.dataSource = new MatTableDataSource<Businessman>(all.data);
+      this.filterdatasource = all.data
+      this.filterdatasource1 = this.filterdatasource.filter(x => x.id_linh_vuc == this.id_linh_vuc)
+
+      this.dataSource.data = this.filterdatasource1
 
       this.dataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -230,8 +241,8 @@ export class ManageBusinessmanComponent implements OnInit {
 
   id: string = undefined
 
-  AddBusiness(id: number, type: string) {
-    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id + '/' + type]);
+  AddBusiness(id: number, type: string, id_linh_vuc: number) {
+    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id + '/' + type + '/' + id_linh_vuc]);
   }
 
   Back() {

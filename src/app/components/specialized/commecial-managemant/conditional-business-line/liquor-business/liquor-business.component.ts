@@ -311,8 +311,9 @@ export class LiquorBusinessComponent implements OnInit {
     }
 
     type: string = 'Liquor'
-    ManageBusiness(type: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+    id_linh_vuc: number = 8;
+    ManageBusiness(type: string, id_linh_vuc: number) {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
     }
 
     Addliquorbusiness(id: string, time: string) {
