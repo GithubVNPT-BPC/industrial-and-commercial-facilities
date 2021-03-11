@@ -7,7 +7,7 @@ import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 @Component({
   selector: 'app-block-electric',

@@ -7,7 +7,7 @@ import { formatDate } from '@angular/common';
 //Import Model
 import { FoodCommerceModel } from 'src/app/_models/APIModel/commecial-management.model';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { element } from 'protractor';

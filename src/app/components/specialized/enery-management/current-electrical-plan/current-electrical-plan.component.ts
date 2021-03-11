@@ -4,7 +4,7 @@ import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/materia
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricalPlan, ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
-import { BaseComponent } from '../../specialized-base.component';
+import { BaseComponent } from '../../base.component';
 
 @Component({
     selector: 'current-electrical-plan',
