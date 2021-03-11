@@ -1,18 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, Input, Injector } from "@angular/core";
-import {
-  MatAccordion,
-  MatPaginator,
-  MatTableDataSource,
-} from "@angular/material";
+import { MatTableDataSource } from "@angular/material";
 import { ManageAproveElectronic } from "src/app/_models/APIModel/electric-management.module";
 import { DistrictModel } from "src/app/_models/APIModel/domestic-market.model";
-import { consualtantData } from "../dataMGN";
 import { ExcelService } from "src/app/_services/excelUtil.service";
 import * as XLSX from "xlsx";
 import { EnergyService } from "src/app/_services/APIService/energy.service";
 import { FormControl } from "@angular/forms";
-import { BaseComponent } from "../../../specialized-base.component";
-import { Router } from "@angular/router";
+import { BaseComponent } from "../../../base.component";
 import moment from "moment";
 @Component({
   selector: "app-consultant-electric",
@@ -24,7 +18,6 @@ export class ConsultantElectricComponent extends BaseComponent {
   //ViewChild
   // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild("TABLE", { static: false }) table: ElementRef;
   // Input
   @Input('consualtantData') input_data: ManageAproveElectronic[];
   exportExcel() {

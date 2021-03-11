@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ClusterFilterModel, ClusterModel } from 'src/app/_models/APIModel/cluster.model';
 import { Router } from '@angular/router';
-import { BaseComponent } from '../../specialized-base.component';
+import { BaseComponent } from '../../base.component';
 import { FormControl } from '@angular/forms';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
 

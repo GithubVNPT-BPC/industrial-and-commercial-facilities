@@ -5,7 +5,7 @@ import { FormControl } from '@angular/forms';
 
 import { ConvenienceStoreModel } from 'src/app/_models/APIModel/commecial-management.model';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 
@@ -85,8 +85,15 @@ export class StoreManagementComponent extends BaseComponent {
   getConvenienceStoreData () {
     this.commerceManagementService.getConvenienceStoreData().subscribe(
       allrecords => {
-        if (allrecords.data && allrecords.data.length > 0) {
+        if (allrecords.data && allrecords.data.length) {
           let data = allrecords.data;
+
+          data.forEach(element => {
+            element.ngay_cap_giay_chung_nhan = this.formatDate(element.ngay_cap_giay_chung_nhan);
+            element.ngay_cap_giay_phep = this.formatDate(element.ngay_cap_giay_phep);
+            element.ngay_het_han_giay_phep = this.formatDate(element.ngay_het_han_giay_phep);
+          });
+
           let currentDate = moment();
           data.map(x => {
               let expiredDate = moment(x.ngay_het_han_giay_phep, "DD/MM/YYYY");

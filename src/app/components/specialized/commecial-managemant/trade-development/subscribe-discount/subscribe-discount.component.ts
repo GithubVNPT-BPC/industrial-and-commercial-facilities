@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { District } from 'src/app/_models/district.model';
 import { dia_diem_km, SDModel} from 'src/app/_models/APIModel/trade-development.model';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 import moment from 'moment';

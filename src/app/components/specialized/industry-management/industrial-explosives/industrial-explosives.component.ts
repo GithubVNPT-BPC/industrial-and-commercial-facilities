@@ -5,7 +5,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { District } from 'src/app/_models/district.model';
 import { IndustrialExplosivesFilterModel, IndustrialExplosivesModel } from 'src/app/_models/APIModel/industrial-explosives.model';
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 // Services
 import { SCTService } from 'src/app/_services/APIService/sct.service';
