@@ -19,7 +19,8 @@ import {
   Status,
   PetrolStore,
   PostBusinessmanValue,
-  BusinessmanSelect
+  BusinessmanSelect,
+  StoreSelect
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -72,7 +73,7 @@ export class UpdatePetrolComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChildren(SpecialDirective) inputs: QueryList<SpecialDirective>
 
-  id: string;
+  id: number;
   mst: string;
   years: any[] = [];
   time: string;
@@ -149,6 +150,16 @@ export class UpdatePetrolComponent implements OnInit {
       this.Businessman = allrecords.data as BusinessmanSelect[];
       this.filterbusinessman = this.Businessman.slice();
     });
+  }
+
+  PetrolStore: Array<StoreSelect> = new Array<StoreSelect>();
+  filterpetrolstore: Array<StoreSelect> = new Array<StoreSelect>();
+
+  GetStore() {
+    this._Service.GetAllPetrolStore().subscribe((all) => {
+      this.PetrolStore = all.data as StoreSelect[];
+      this.filterpetrolstore = this.PetrolStore.slice();
+    })
   }
 
   dataSource: MatTableDataSource<PostBusinessmanValue> = new MatTableDataSource<PostBusinessmanValue>();
@@ -259,6 +270,7 @@ export class UpdatePetrolComponent implements OnInit {
     this.getPetrolInfo();
     this.getBusinessmanvalue();
     this.GetBusinessman();
+    this.GetStore();
 
     this.petrol_data = this.formbuilder.group({
       id_cua_hang_xang_dau: null,
@@ -294,15 +306,15 @@ export class UpdatePetrolComponent implements OnInit {
       }
     );
 
-    this._Service.PostPetrol(input2).subscribe(
-      res => {
-        // debugger;
-        this._info.msgSuccess('Thêm thành công')
-      },
-      err => {
-        // debugger;
-      }
-    )
+    // this._Service.PostPetrol(input2).subscribe(
+    //   res => {
+    //     // debugger;
+    //     this._info.msgSuccess('Thêm thành công')
+    //   },
+    //   err => {
+    //     // debugger;
+    //   }
+    // )
 
     if (this.dataSource.data) {
       this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
@@ -335,16 +347,20 @@ export class UpdatePetrolComponent implements OnInit {
       ghi_chu: '',
       san_luong: null,
       time_id: '',
-      id: this.id_san_luong,
-      id_cua_hang_xang_dau: this.id
+      id: null,
+      id_cua_hang_xang_dau: null
     })
 
     this.petrolvaluepost[0].ghi_chu = this.input.ghi_chu
     this.petrolvaluepost[0].san_luong = this.input.san_luong
     this.petrolvaluepost[0].time_id = this.input.time_id
+    this.petrolvaluepost[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
+    if (this.id_san_luong != 'undefined') {
+      this.petrolvaluepost[0].id = this.id_san_luong
+    }
 
     this.petrolstorepost.push({
-      id_cua_hang_xang_dau: this.id,
+      id_cua_hang_xang_dau: null,
       ten_cua_hang: '',
       mst: '',
       dia_chi: '',
@@ -355,10 +371,6 @@ export class UpdatePetrolComponent implements OnInit {
       ten_nhan_vien: '',
       id_giay_phep: 0
     })
-
-    if (this.id == 'undefined') {
-      this.petrolstorepost[0].id_cua_hang_xang_dau = null
-    }
 
     this.petrolstorepost[0].ten_cua_hang = this.input.ten_cua_hang
     this.petrolstorepost[0].mst = this.input.mst
@@ -404,7 +416,7 @@ export class UpdatePetrolComponent implements OnInit {
       this.petrolobject = this.dataSource2.data[0]
 
       this._Service.petrol = {
-        id_cua_hang_xang_dau: this.id,
+        id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
         ten_cua_hang: this.petrolobject.ten_cua_hang,
         mst: this.petrolobject.mst,
         dia_chi: this.petrolobject.dia_chi,

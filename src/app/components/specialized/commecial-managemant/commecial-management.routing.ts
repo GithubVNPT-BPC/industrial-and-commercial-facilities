@@ -107,7 +107,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'addstore',
+        path: 'addstore/:id/:mst',
         component: AddStoreComponent,
         data: {
           title: 'Thêm cửa hàng xăng dầu',
