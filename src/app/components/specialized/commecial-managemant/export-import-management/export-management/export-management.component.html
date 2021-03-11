@@ -1,4 +1,4 @@
-<mat-card class="material">
+<mat-card class="material" >
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -140,7 +140,7 @@
                 <div class="layout" #table *ngIf="dataSource.data.length; else ShowEmpty">
                     <ng-container>
                         <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
-                            <ng-container matColumnDef="delete_checkbox">
+                            <!-- <ng-container matColumnDef="delete_checkbox">
 
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
                                     <mat-checkbox [(ngModel)]="allComplete" (ngModelChange)="setAll()">
@@ -151,7 +151,7 @@
                                     (ngModelChange)="setSomeIten(element)">
                                     </mat-checkbox>
                                 </td>
-                            </ng-container>
+                            </ng-container> -->
 
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
@@ -309,3 +309,7 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
+<!-- *ngIf="view == 'all'; else detail" -->
+<!-- <ng-template #detail>
+    <jw-modal></jw-modal>
+</ng-template> -->

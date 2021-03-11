@@ -35,22 +35,7 @@ export class DialogECommerceComponent implements OnInit {
 
   onSubmit() {
     
-    // alert(JSON.stringify(this.form.value));
-    this.data.saleWebsite ?
-    this.sctService.CapNhatDanhSachWebBH(Object.assign([this.form.value], this.form.value)).subscribe(res => {
-      if(res.id === 1){
-        alert(res.message)
-      }
-    })
-    :
-    // console.log(Object.assign([this.form_TMDT.value], this.form_TMDT.value))
-    this.sctService.CapNhatDanhSachWebTMDT(Object.assign([this.form_TMDT.value], this.form_TMDT.value)).subscribe(res => {
-      debugger
-      console.log(res)
-      if(res.id === 1) {
-        alert(res.message)
-      }
-    })
+    
   }
 
 

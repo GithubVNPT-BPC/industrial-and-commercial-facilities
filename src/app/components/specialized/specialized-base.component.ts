@@ -3,6 +3,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
+import { formatDate } from '@angular/common';
 
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
@@ -48,6 +49,9 @@ export abstract class BaseComponent implements OnInit {
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
 
+    public readonly dateFormat = 'YYYY/MM/DD';
+    public readonly dateLocale = 'vi-VN';
+
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
     public filterModel = {}
@@ -79,6 +83,7 @@ export abstract class BaseComponent implements OnInit {
         // In case we have already declared all field in displayed Columns
         if (this.displayedColumns.length == 2 && Object.keys(this.displayedFields).length > 0) {
             this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+            // console.log(this.displayedColumns)
         }
     }
 
@@ -102,6 +107,7 @@ export abstract class BaseComponent implements OnInit {
             this.view = 'list';
             this.mode = 'create';
             this.formData.reset();
+            this.selection.clear();
             this.autoOpen();
         }
     }
@@ -281,5 +287,8 @@ export abstract class BaseComponent implements OnInit {
 
     remove(){}
 
-    
+    protected formatDate(date) {
+        let formattedDate = moment(date, this.dateFormat);
+        return formattedDate
+    }
 }

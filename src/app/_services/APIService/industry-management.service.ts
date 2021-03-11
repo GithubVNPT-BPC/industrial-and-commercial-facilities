@@ -25,7 +25,7 @@ export class IndustryManagementService {
     private urlGetComformityAnnounce = '/cbhq';
     private urlGetExplosiveMat = '/vlncn';
 
-    private urlPostAttachment = environment.apiEndpoint + 'api/upload-file';
+    
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
@@ -36,10 +36,17 @@ export class IndustryManagementService {
     private urlGetDetailGroupCompany = '/ccn/chi-tiet';
     private urlGroupCompany = '/ccn/';
 
+    // Update
+    private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
+
     // Delete URLs
-    private urlDeleteAttachment = '/xoa-tai-lieu';
+    
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
+
+    private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
+    private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
+    private urlDeleteAttachment = environment.apiEndpoint + 'api/delete-attachment';
     
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
@@ -133,6 +140,16 @@ export class IndustryManagementService {
 
     public PostComformityAnnounce(datas) {
         let apiUrl = this.endpoint + this.urlPostComformityAnnounce;
+        // apiUrl = "https://localhost:5001/api/qlcn" +  this.urlPostComformityAnnounce;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public UpdateComformityAnnounce(datas) {
+        let apiUrl = this.endpoint + this.urlUpdateComformityAnnounce;
+        // apiUrl = "https://localhost:5001/api/qlcn" +  this.urlUpdateComformityAnnounce;
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
@@ -203,20 +220,25 @@ export class IndustryManagementService {
     }
 
     // ATTACHMENTS
-    public PostAttachment(fd: FormData) {
+    public PostAttachment(datas) {
         var apiUrl = this.urlPostAttachment;
-        // var apiUrl = "http://localhost:5000/api/upload-file";
-        let headers = new HttpHeaders();
-        return this.http.post<any>(apiUrl, fd, { headers: headers}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    // public DeleteAttachment(fd: FormData) {
-    //     var apiUrl = this.endpoint + this.urlDeleteAttachment;
-    //     return this.http.post(apiUrl, fd, { headers: HEADERS })
-    //         .pipe(
-    //             catchError(this.handleError)
-    //         );
-    // }
+    public UpdateAttachment(datas) {
+        var apiUrl = this.urlUpdateAttachment;
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteAttachment(id) {
+        var apiUrl = this.urlDeleteAttachment;
+        return this.http.post<any>(apiUrl, id, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
 }

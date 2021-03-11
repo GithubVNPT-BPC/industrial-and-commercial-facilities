@@ -14,4 +14,6 @@ export class ConformityAnnouncementModel {
     id_quan_huyen: number;
     email: string;
     so_dien_thoai: string;
+    datas: string;
+    file_name: string;
 }

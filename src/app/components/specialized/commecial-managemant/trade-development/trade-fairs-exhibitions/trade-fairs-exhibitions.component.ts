@@ -1,19 +1,15 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatDatepicker, MatTableDataSource } from '@angular/material';
 
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter} from '@angular/material/core';
 
 import { District } from 'src/app/_models/district.model';
 import { TFEModel } from 'src/app/_models/APIModel/trade-development.model';
-
 import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
-
 import moment from 'moment';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { LinkModel } from 'src/app/_models/link.model';
 
 export const DATE_FORMAT_DATEPICKER = {
   parse: {
@@ -27,6 +23,13 @@ export const DATE_FORMAT_DATEPICKER = {
   },
 }
 
+class CustomDateAdapter extends NativeDateAdapter {
+  format(date: Date, displayFormat: Object): string {
+    var formatString = 'YYYY';
+    return moment(date).format(formatString);
+  }
+}
+
 @Component({
   selector: 'app-trade-fairs-exhibitions',
   templateUrl: './trade-fairs-exhibitions.component.html',
@@ -35,9 +38,13 @@ export const DATE_FORMAT_DATEPICKER = {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },{
+    },
+    {
       provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DATEPICKER
     },
+    // {
+    //   provide: DateAdapter, useClass: CustomDateAdapter
+    // }
   ],
 })
 
@@ -45,7 +52,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   displayedColumns: string[] = ['select', 'index'];
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
-
+  @ViewChild(MatDatepicker, {static: true}) filteredDatePicker;
   displayedFields = {
     mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -59,30 +66,16 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     so_van_ban: "Số văn bản",
     co_quan_ban_hanh: "Cơ quan ban hành",
     ngay_thang_nam_van_ban: "Ngày tháng năm",
-    id_trang_thai: "Tình trạng",
+    // id_trang_thai: "Tình trạng",
 
 }
   
   // Modify to get districts from API
-  districts: District[] = [
-    { id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }
-  ];
   sanLuongBanRa: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
-  filteredDate = new FormControl(moment());
-  private currentDate = moment().format('yyyyMM');
-
+  filteredDate = new FormControl(new Date());
+  
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
@@ -95,8 +88,8 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   ngOnInit() {
     super.ngOnInit();
     this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
-    this.getTFEList(this.currentDate);
-    
+    this.getTFEList(new Date().getFullYear());
+    this.initWards();
   }
 
   getLinkDefault(){
@@ -123,22 +116,25 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     }
   }
 
-  private chosenYearHandler(normalizedYear) {
-    let ctrlValue = this.filteredDate.value;
-    ctrlValue.year(normalizedYear.year());
-    this.filteredDate.setValue(ctrlValue);
-  }
-
-  private chosenMonthHandler(normalizedMonth, datepicker) {
-    let ctrlValue = this.filteredDate.value;
-    ctrlValue.month(normalizedMonth.month());
-    this.filteredDate.setValue(ctrlValue);
+  private chosenYearHandler(normalizedYear, datepicker) {
+    // let ctrlValue = this.filteredDate.value;
+    // ctrlValue.year(normalizedYear.year());
+    this.filteredDate.setValue(normalizedYear);
+    console.log(this.filteredDate.value.getFullYear())
     datepicker.close();
   }
 
+  // private chosenMonthHandler(normalizedMonth, datepicker) {
+  //   let ctrlValue = this.filteredDate.value;
+  //   ctrlValue.month(normalizedMonth.month());
+  //   this.filteredDate.setValue(ctrlValue);
+  //   datepicker.close();
+  // }
+
   public onFiltededDateChange(event): void {
-    let filteredDateInput = event.format('yyyyMM');
-    this.getTFEList(filteredDateInput);
+    // let filteredDateInput = event.format('yyyy');
+    this.getTFEList(event.getFullYear()
+    );
   }
 
   applyFilter(event) {
@@ -160,12 +156,12 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     }
   }
 
-  getTFEList(date): void {
-    this.commerceManagementService.getExpoData(date).subscribe(
+  getTFEList(time_id): void {
+    this.commerceManagementService.getExpoData(time_id).subscribe(
       result => {
+        this.dataSource = new MatTableDataSource<TFEModel>(result.data);
+        this.filteredDataSource = new MatTableDataSource<TFEModel>(result.data);
         if (result.data && result.data.length > 0) {
-          this.dataSource = new MatTableDataSource<TFEModel>(result.data);
-          this.filteredDataSource = new MatTableDataSource<TFEModel>(result.data);
           this.filteredDataSource.paginator = this.paginator;
         }
       },
@@ -193,7 +189,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
 
     data = {...data, ...{
       id_trang_thai: 1,
-      time_id: this.currentDate,
+      time_id: 2020,
     }};
     return data;
   }
