@@ -3,7 +3,7 @@ import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
 import { SaleWebsiteFilterModel, regisWebsiteModel } from 'src/app/_models/APIModel/e-commerce.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FormControl } from '@angular/forms';
-import { BaseComponent } from '../../../specialized-base.component';
+import { BaseComponent } from '../../../base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 @Component({

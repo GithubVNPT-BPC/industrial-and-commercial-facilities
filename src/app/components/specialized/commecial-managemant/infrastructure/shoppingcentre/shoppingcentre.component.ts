@@ -8,7 +8,7 @@ import { ReportService } from 'src/app/_services/APIService/report.service';
 
 import { SuperMarketCommonModel, } from 'src/app/_models/APIModel/commecial-management.model';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { FilterService } from 'src/app/_services/filter.service';
 

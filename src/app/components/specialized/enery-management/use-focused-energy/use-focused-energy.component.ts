@@ -7,7 +7,7 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FormControl } from '@angular/forms';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
-import { BaseComponent } from '../../specialized-base.component';
+import { BaseComponent } from '../../base.component';
 
 
 @Component({
@@ -18,13 +18,8 @@ import { BaseComponent } from '../../specialized-base.component';
 export class UseFocusedEnergyComponent extends BaseComponent {
   //ViewChild 
   // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
   // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('district', {static: false}) district: ElementRef
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
   
   public readonly displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_tieu_thu', 'nang_luong_quy_doi', 'suat_tieu_hao'];
   public readonly displayMergeColumns: string[] = ['indexM', 'ten_doanh_nghiepM', 'nganh_ngheM', 'nang_luong_trong_diemM'];

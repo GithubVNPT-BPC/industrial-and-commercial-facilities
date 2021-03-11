@@ -4,7 +4,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { New_RuralElectricModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { BaseComponent } from '../../specialized-base.component';
+import { BaseComponent } from '../../base.component';
 
 @Component({
   selector: 'rural-electric-management',

@@ -1,13 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef, Input, Injector } from '@angular/core';
+import { Component, ViewChild, ElementRef, Input, Injector } from '@angular/core';
 import { consualtantData } from '../dataMGN';
-import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { ManageAproveElectronic } from 'src/app/_models/APIModel/electric-management.module';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import * as XLSX from 'xlsx';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { FormControl } from '@angular/forms';
-import { BaseComponent } from '../../../specialized-base.component';
+import { BaseComponent } from '../../../base.component';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 @Component({
@@ -16,12 +15,6 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
   styleUrls: ['../../../special_layout.scss']
 })
 export class ManufacturingElectronicComponent extends BaseComponent {
-
-  
-  //ViewChild 
-  // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
   // Input
   @Input('manufacturingData')  input_data: ManageAproveElectronic[];
   exportExcel() {
@@ -31,10 +24,6 @@ export class ManufacturingElectronicComponent extends BaseComponent {
 
     XLSX.writeFile(wb, 'Quản lý cấp phép HĐĐL.xlsx');
 
-  }
-
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   //Constant variable
@@ -66,7 +55,6 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     super.ngOnInit();
     this.years = this.getYears();
     this.getDataManufacturing();
-    // this.autoOpen();
   }
 
   getDataManufacturing(){
@@ -84,7 +72,6 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     this.dataSource.data = this.filteredDataSource.data;
     this.caculatorValue();
     this.paginatorAgain();
-    // console.log(this.filteredDataSource.data)
   }
 
   autoOpen() {
@@ -98,13 +85,6 @@ export class ManufacturingElectronicComponent extends BaseComponent {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  get(time_id: number) {
-
-  }
-
-  log(any) {
   }
 
   getYears() {
