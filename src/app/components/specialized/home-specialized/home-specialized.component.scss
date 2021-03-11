@@ -61,10 +61,11 @@
 
 .cards-1 .card {
 	display: inline-block;
-	max-width: 17.5rem;
-	text-align: left;
+	max-width: 21rem;
+	text-align: center;
 	vertical-align: top;
-	cursor: pointer !important;
+	margin-bottom: 2.5rem;
+	border: none;
 }
 
 .cards-1 div.card:nth-child(3n + 2) {
@@ -72,9 +73,6 @@
 	margin-left: 2.5rem;
 }
 /* Description */
-.cards-1 .card {
-	max-width: 21rem;
-}
 
 .cards-1 div.card:nth-child(3n + 2) {
 	margin-right: 2.875rem;
@@ -90,12 +88,6 @@
 	/* padding-bottom: 2.875rem; */
 }
 
-.cards-1 .card {
-	margin-bottom: 2.5rem;
-	border: none;
-	text-align: center;
-}
-
 .cards-1 .fa-stack {
 	width: 6rem;
 	height: 6rem;
@@ -104,13 +96,14 @@
 	margin-left: auto;
 	line-height: 6rem;
 	text-align: left;
+	cursor: pointer;	
 }
 
 .cards-1 .fa-stack .hexagon {
 	position: absolute;
 	width: 6rem;
 	height: 6rem;
-	background: url("src/assets/img/background/hexagon-green.svg") center center no-repeat;
+	// background: url("src/assets/img/background/hexagon-green.svg") center center no-repeat;
 	background-size: 6rem 6rem;
 }
 
@@ -125,6 +118,7 @@
 
 .cards-1 .card-title {
 	margin-bottom: 0.625rem;
+	color: #1f7ed0;
 }
 
 /*------------------------------------*/

@@ -110,6 +110,11 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     getPostExplosiveMatData(time_id) {
         this.industryManagementService.GetExplosiveMat(time_id).subscribe(result => {
             if (result.data && result.data.length > 0) {
+                result.data.forEach(element => {
+                    element.ngay_cap = this.formatDate(element.ngay_cap);
+                    element.ngay_het_han = this.formatDate(element.ngay_het_han);
+                });
+
                 this.dataSource = new MatTableDataSource<IndustrialExplosivesModel>(result.data);
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;

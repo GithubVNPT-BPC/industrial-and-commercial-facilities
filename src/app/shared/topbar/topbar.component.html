@@ -28,30 +28,34 @@
                         <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
                     <a (click)="openAccountDropdown()" class="user-menu">
-                        <img class="avatar" src="{{img_avatar}}" alt="{{username}}">
-                        <span id='username'>{{ username }} </span>
+                        <img class="avatar mt-1" src="{{img_avatar}}" alt="{{username}}">
                     </a>
 
                     <div class="dropdown-content" [style.display]="this.open ? 'block' : 'none' ">
-                        <div id="text-btn">
+                        <div class="d-block username-display mt-2 pb-1 pl-3 pr-3">
+                            <span>Xin chào, </span>
+                            <span id='username'>{{ username }}</span>
+                        </div>
+
+                        <div class="dropdown-item">
                             <mat-icon>account_box</mat-icon>
-                            <span (click)="openForm()">Thông tin tài khoản</span>
+                            <span (click)="openForm()" class="display-item" >Thông tin tài khoản</span>
                         </div>
-                        <div id="text-btn">
+                        <div class="dropdown-item">
+                            <mat-icon>storefront</mat-icon>
+                            <span (click)="openManagerModule()" class="display-item">Quản lý thị trường</span>
+                        </div>
+                        <div class="dropdown-item">
+                            <mat-icon>list</mat-icon>
+                            <span (click)="openSpecializedModule()" class="display-item">Dữ liệu chuyên ngành</span>
+                        </div>
+                        <div class="dropdown-item">
                             <mat-icon>wysiwyg</mat-icon>
-                            <span (click)="openManagerModule()">Quản lý thị trường</span>
+                            <span (click)="openReportModule()" class="display-item">Quản lý báo cáo</span>
                         </div>
-                        <div id="text-btn">
-                            <mat-icon>wysiwyg</mat-icon>
-                            <span (click)="openSpecializedModule()">Dữ liệu chuyên ngành</span>
-                        </div>
-                        <div id="text-btn">
-                            <mat-icon>wysiwyg</mat-icon>
-                            <span (click)="openReportModule()">Quản lý báo cáo</span>
-                        </div>
-                        <div id="text-btn">
+                        <div class="dropdown-item">
                             <mat-icon>login</mat-icon>
-                            <span (click)="logout()">Đăng xuất</span>
+                            <span (click)="logout()" class="display-item">Đăng xuất</span>
                         </div>
                     </div>
                 </div>
