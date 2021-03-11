@@ -96,7 +96,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
       id_hinh_thuc: new FormControl(),
 
       // array address discount
-      danh_sach_dia_diem: this.formBuilder1.array([]),
+      danh_sach_dia_diem: this.formBuilder.array([]),
       id_temp: new FormControl(1)
     }
   }
@@ -106,7 +106,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   newAddress(): FormGroup{
-    return this.formBuilder1.group(
+    return this.formBuilder.group(
       {
           dia_diem: new FormControl(),
           id_quan_huyen: new FormControl(),

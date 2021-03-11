@@ -304,37 +304,6 @@ export class SCTService {
         );
     }
 
-    public GetDanhSachWebTMDT() {
-        var apiUrl = this.apiSpecialized + this.urlDanhSachWebTMDT;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-    public CapNhatDanhSachWebTMDT(body:any[]) {
-        var apiUrl = this.apiSpecialized + this.urlCapNhatDanhSachWebTMDT;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public GetDanhSachWebBH() {
-        var apiUrl = this.apiSpecialized + this.urlDanhSachWebBH;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    CapNhatDanhSachWebBH(body: any[]){
-        var apiUrl = this.apiSpecialized + this.urlSaleWebsite;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
     public GetDanhSachBHDaCap() {
         var apiUrl = this.apiSpecialized + this.urlDanhSachDaCap;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });

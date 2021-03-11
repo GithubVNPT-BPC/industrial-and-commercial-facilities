@@ -141,7 +141,7 @@
                 <div class="layout" #table *ngIf="dataSource?.data.length; else ShowEmpty">
                     <ng-container>
                         <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table" >
-                            <ng-container matColumnDef="delete_checkbox">
+                            <!-- <ng-container matColumnDef="delete_checkbox">
 
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
                                     <mat-checkbox [(ngModel)]="allComplete" (ngModelChange)="setAll()">
@@ -152,7 +152,7 @@
                                     (ngModelChange)="setSomeIten(element)">
                                     </mat-checkbox>
                                 </td>
-                            </ng-container>
+                            </ng-container> -->
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
                                 <td mat-cell *matCellDef="let element; let i = index" >

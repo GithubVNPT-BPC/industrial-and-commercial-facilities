@@ -235,11 +235,13 @@ const routes: Routes = [
     path: 'e-commerce',
     children: [
       {
-        path: 'ecommerce-website',
+        // Quản lý đăng ký website cung cấp dịch vụ TMĐT
+        path: 'inform-website',
         component: InformedEcommerceWebsiteComponent
       },
       {
-        path: 'sale-website',
+        // Quản lý thông báo website bán hàng
+        path: 'register-website',
         component: RegisteredSaleWebsiteComponent
       }
     ]

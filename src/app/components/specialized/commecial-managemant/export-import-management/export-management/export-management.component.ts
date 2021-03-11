@@ -32,7 +32,7 @@ export class ExportManagementComponent implements OnInit {
     private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
     displayedColumns = [
-        "delete_checkbox",
+        // "delete_checkbox",
         "index",
         "ten_san_pham",
         "luong_thang",
@@ -48,7 +48,7 @@ export class ExportManagementComponent implements OnInit {
         "chi_tiet_doanh_nghiep",
     ];
     displayRow1Header = [
-        "delete_checkbox",
+        // "delete_checkbox",
         "index",
         "ten_san_pham",
         "thuc_hien_bao_cao_thang",
@@ -234,8 +234,15 @@ export class ExportManagementComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
+    // view: string = 'list';
+    // showView(){
+    //     // this.view == 'list' ? this.view = 
+    // }
+
     openDialog(id_san_pham) {
-        // if (this.kiem_tra(id_mat_hang)) {
+        // this.view = 'detail';
+        // this
+
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
             data: this.handelDataDialog(id_san_pham),
