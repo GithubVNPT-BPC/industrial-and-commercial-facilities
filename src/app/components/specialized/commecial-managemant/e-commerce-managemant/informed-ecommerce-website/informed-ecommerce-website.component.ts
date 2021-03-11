@@ -1,48 +1,32 @@
 import {
-  ChangeDetectorRef,
   Component,
-  OnInit,
   ViewChild,
   ElementRef,
+  Injector,
 } from "@angular/core";
 import {
-  MatDialog,
-  MatDialogConfig,
   MatOption,
   MatSelect,
   MatTableDataSource,
 } from "@angular/material";
 import {
-  ECommerceWebsite,
   ECommerceWebsiteFilterModel,
+  InformWebsiteModel,
 } from "src/app/_models/APIModel/e-commerce.model";
 import { District } from "src/app/_models/district.model";
 import { SCTService } from "src/app/_services/APIService/sct.service";
-import { notification_management } from "../../../../../_models/APIModel/ecommerce.model";
-import { MatAccordion } from "@angular/material/expansion";
-import { MatPaginator } from "@angular/material/paginator";
-import { LinkModel } from "src/app/_models/link.model";
-import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
 import { ExcelService } from "src/app/_services/excelUtil.service";
-import { DialogECommerceComponent } from "../dialog-e-commerce/dialog-e-commerce.component";
+import { BaseComponent } from "../../../specialized-base.component";
+import { FormControl } from "@angular/forms";
+import { CommerceManagementService } from "src/app/_services/APIService/commerce-management.service";
 
 @Component({
   selector: "app-informed-ecommerce-website",
   templateUrl: "./informed-ecommerce-website.component.html",
   styleUrls: ["../../../special_layout.scss"],
 })
-export class InformedEcommerceWebsiteComponent implements OnInit {
-  //Constant
-  private readonly LINK_DEFAULT: string =
-    "/specialized/commecial-management/e-commerce/ecommerce-website";
-  private readonly TITLE_DEFAULT: string =
-    "Quản lý đăng ký website cung cấp dịch vụ TMĐT";
-  private readonly TEXT_DEFAULT: string =
-    "Quản lý đăng ký website cung cấp dịch vụ TMĐT";
-  //Variable for only ts
-  private _linkOutput: LinkModel = new LinkModel();
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+export class InformedEcommerceWebsiteComponent extends BaseComponent {
+
   @ViewChild("TABLE", { static: false }) table: ElementRef;
 
   ExportTOExcel(filename: string, sheetname: string) {
@@ -55,37 +39,33 @@ export class InformedEcommerceWebsiteComponent implements OnInit {
 
   displayedColumns: string[] = [
     "index",
-    "ten_doanh_nghiep",
     "mst",
+    "ten_doanh_nghiep",
+    "nguoi_dai_dien",
     "dia_chi",
     "dien_thoai",
     "ten_mien",
-    "loai_hhdv",
-    "email",
-    "so_gian_hang",
+    "nganh_nghe",
+    // "ma_nganh_nghe",
+    "san_pham_tren_website",
+    "ghi_chu"
   ];
-  dataSource: MatTableDataSource<ECommerceWebsite>;
-  filteredDataSource: MatTableDataSource<ECommerceWebsite> = new MatTableDataSource<ECommerceWebsite>();
+  dataSource: MatTableDataSource<InformWebsiteModel>;
+  filteredDataSource: MatTableDataSource<InformWebsiteModel> = new MatTableDataSource<InformWebsiteModel>();
   filterModel: ECommerceWebsiteFilterModel = { id_quan_huyen: [] };
   constructor(
     public excelService: ExcelService,
-    public sctService: SCTService,
-    private _breadCrumService: BreadCrumService,
-    public matDialog: MatDialog
-  ) {}
+    public commerceService: CommerceManagementService,
+    private injecttor: Injector
+  ) {
+    super(injecttor);
+  }
 
   ngOnInit() {
+    super.ngOnInit()
     this.GetDanhSachWebsiteTMDT();
     this.autoOpen();
     this.sendLinkToNext(true);
-  }
-
-  public sendLinkToNext(type: boolean) {
-    this._linkOutput.link = this.LINK_DEFAULT;
-    this._linkOutput.title = this.TITLE_DEFAULT;
-    this._linkOutput.text = this.TEXT_DEFAULT;
-    this._linkOutput.type = type;
-    this._breadCrumService.sendLink(this._linkOutput);
   }
 
   applyFilter1(event: Event) {
@@ -94,32 +74,13 @@ export class InformedEcommerceWebsiteComponent implements OnInit {
   }
 
   districts: District[] = [
-    { id: 1, ten_quan_huyen: "Thị xã Phước Long" },
-    { id: 2, ten_quan_huyen: "Thành phố Đồng Xoài" },
-    { id: 3, ten_quan_huyen: "Thị xã Bình Long" },
-    { id: 4, ten_quan_huyen: "Huyện Bù Gia Mập" },
-    { id: 5, ten_quan_huyen: "Huyện Lộc Ninh" },
-    { id: 6, ten_quan_huyen: "Huyện Bù Đốp" },
-    { id: 7, ten_quan_huyen: "Huyện Hớn Quản" },
-    { id: 8, ten_quan_huyen: "Huyện Đồng Phú" },
-    { id: 9, ten_quan_huyen: "Huyện Bù Đăng" },
-    { id: 10, ten_quan_huyen: "Huyện Chơn Thành" },
-    { id: 11, ten_quan_huyen: "Huyện Phú Riềng" },
+
   ];
 
   GetDanhSachWebsiteTMDT() {
-    this.sctService.GetDanhSachWebTMDT().subscribe((response) => {
-      this.dataSource = new MatTableDataSource<ECommerceWebsite>(response.data);
+    this.commerceService.LayDanhSachThongBaoWeb().subscribe((response) => {
+      this.dataSource = new MatTableDataSource<InformWebsiteModel>(response.data);
       this.filteredDataSource.data = [...this.dataSource.data];
-      // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-      // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-      // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = "Số hàng";
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
     });
   }
 
@@ -165,13 +126,35 @@ export class InformedEcommerceWebsiteComponent implements OnInit {
     this.dSelect.close();
   }
 
-  public ImportTOExcel() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {
-      saleWebsite: false,
-    };
-    // dialogConfig.minWidth = window.innerWidth - 100;
-    // dialogConfig.minHeight = window.innerHeight - 300;
-    this.matDialog.open(DialogECommerceComponent, dialogConfig);
+  getLinkDefault() {
+    //Constant
+    this.LINK_DEFAULT = "/specialized/commecial-management/e-commerce/inform-website";
+    this.TITLE_DEFAULT = "Thương mại điện tử - Quản lý thông báo website bán hàng";
+    this.TEXT_DEFAULT = "Thương mại điện tử - Quản lý thông báo website bán hàng";
+  }
+
+  getFormParams() {
+    return {
+      mst: new FormControl(),
+      to_chu_ca_nhan: new FormControl(),
+      dia_diem: new FormControl(),
+      nguoi_dai_dien: new FormControl(),
+      dien_thoai: new FormControl(),
+      ten_mien: new FormControl(),
+      // ma_so_nganh_nghe: new FormControl(),
+      nganh_nghe: new FormControl(),
+      san_pham_ban_website: new FormControl(),
+      ghi_chu: new FormControl(),
+    }
+  }
+
+  prepareData(data){
+    return [data];
+  }
+
+  callService(data){
+    this.commerceService.CapNhatDanhSachThongBaoWeb(data).subscribe(res => {
+      this.successNotify(res);
+    })
   }
 }

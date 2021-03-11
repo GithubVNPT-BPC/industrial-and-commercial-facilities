@@ -26,7 +26,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     private readonly TITLE_DEFAULT: string = "Thông tin nhập khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin nhập khẩu";
     displayedColumns = [
-        'delete_checkbox',
+        // 'delete_checkbox',
         'index', 'ten_san_pham',
         'luong_thang', 'gia_tri_thang',
         'uoc_th_so_cungky_tht',
@@ -38,7 +38,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         'danh_sach_doanh_nghiep',
         'chi_tiet_doanh_nghiep'];
     displayRow1Header = [
-        'delete_checkbox',
+        // 'delete_checkbox',
         'index',
         'ten_san_pham',
         'thuc_hien_bao_cao_thang',

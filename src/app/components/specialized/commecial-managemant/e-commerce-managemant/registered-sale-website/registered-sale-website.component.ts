@@ -1,76 +1,35 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatOption, MatSelect, MatTableDataSource } from '@angular/material';
-import { SaleWebsite, SaleWebsiteFilterModel, ECommerceWebsite } from 'src/app/_models/APIModel/e-commerce.model';
-import { District } from 'src/app/_models/district.model';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
-import { registration_management } from "../../../../../_models/APIModel/ecommerce.model";
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
-import { LinkModel } from 'src/app/_models/link.model';
+import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
+import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
+import { SaleWebsiteFilterModel, regisWebsiteModel } from 'src/app/_models/APIModel/e-commerce.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { DialogECommerceComponent } from '../dialog-e-commerce/dialog-e-commerce.component';
+import { FormControl } from '@angular/forms';
+import { BaseComponent } from '../../../specialized-base.component';
+import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 @Component({
   selector: 'registered-sale-website',
   templateUrl: './registered-sale-website.component.html',
   styleUrls: ['../../../special_layout.scss'],
 })
-export class RegisteredSaleWebsiteComponent implements OnInit {
-
-  //Constant
-  private readonly LINK_DEFAULT: string = "/specialized/commecial-management/e-commerce/sale-website";
-  private readonly TITLE_DEFAULT: string = "Quản lý thông báo website bán hàng";
-  private readonly TEXT_DEFAULT: string = "Quản lý thông báo website bán hàng";
-  //Variable for only ts
-  private _linkOutput: LinkModel = new LinkModel();
-  displayedColumns: string[] = ['index', 'ten_tc_cn', 'mst', 'dia_chi', 'dien_thoai', 'ten_mien', 'nganh_nghe', 'ma_so_nganh_nghe'];
-  dataSource: MatTableDataSource<SaleWebsite>;
-  filteredDataSource: MatTableDataSource<SaleWebsite> = new MatTableDataSource<SaleWebsite>();
+export class RegisteredSaleWebsiteComponent extends BaseComponent {
+  displayedColumns: string[] =
+    ['index', 'ten_tc_cn', 'mst', 'dia_chi', 'nguoi_dai_dien',
+      'dien_thoai', 'ten_mien', 'loai_hang_hoa', 'email', 'so_gian_hang', 'ghi_chu'];
+  dataSource: MatTableDataSource<regisWebsiteModel>;
+  filteredDataSource: MatTableDataSource<regisWebsiteModel> = new MatTableDataSource<regisWebsiteModel>();
   filterModel: SaleWebsiteFilterModel = { id_quan_huyen: [] };
   constructor(
+    private inject: Injector,
     public excelService: ExcelService,
-    public sctService: SCTService) { }
+    public commerceService: CommerceManagementService) {
+    super(inject)
+  }
 
   ngOnInit() {
+    super.ngOnInit();
     this.GetDanhSachWebsiteTMDT();
-    this.autoOpen();
-    this.sendLinkToNext(true);
   }
 
-  public sendLinkToNext(type: boolean) {
-    this._linkOutput.link = this.LINK_DEFAULT;
-    this._linkOutput.title = this.TITLE_DEFAULT;
-    this._linkOutput.text = this.TEXT_DEFAULT;
-    this._linkOutput.type = type;
-  }
-
-  districts: District[] = [
-    { id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }
-  ];
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
-
-  // ngAfterViewInit(): void {
-  //   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-  //   //Add 'implements AfterViewInit' to the class.
-  //   this.accordion.openAll();
-  // }
-
-
-  @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   ExportTOExcel(filename: string, sheetname: string) {
@@ -78,15 +37,9 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
   }
 
   GetDanhSachWebsiteTMDT() {
-    this.sctService.GetDanhSachWebBH().subscribe(response => {
-      this.dataSource = new MatTableDataSource<SaleWebsite>(response.data);
-      this.filteredDataSource.data = [...this.dataSource.data];
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
+    this.commerceService.LayDanhSachDangKiWeb().subscribe(response => {
+      this.filteredDataSource = new MatTableDataSource<regisWebsiteModel>(response.data);
+      this.dataSource = new MatTableDataSource<regisWebsiteModel>(response.data);
     })
   }
 
@@ -134,5 +87,38 @@ export class RegisteredSaleWebsiteComponent implements OnInit {
       this.dSelect.options.forEach((item: MatOption) => item.deselect());
     }
     this.dSelect.close();
+  }
+
+  getFormParams() {
+    return {
+      mst_quyet_dinh: new FormControl(),
+      to_chu_ca_nhan: new FormControl(),
+      dia_diem: new FormControl(),
+      nguoi_dai_dien: new FormControl(),
+      dien_thoai: new FormControl(),
+      ten_mien: new FormControl(),
+      san_pham_tren_website: new FormControl(),
+      email: new FormControl(),
+      so_gian_hang: new FormControl(),
+      ghi_chu: new FormControl(),
+      id_quan_huyen: new FormControl(),
+    }
+  }
+
+  getLinkDefault() {
+    //Constant
+    this.LINK_DEFAULT = "/specialized/commecial-management/e-commerce/register-website";
+    this.TITLE_DEFAULT = "Thương mại điện tử - Quản lý đăng ký website cung cấp dịch vụ TMĐT";
+    this.TEXT_DEFAULT = "Thương mại điện tử - Quản lý đăng ký website cung cấp dịch vụ TMĐT";
+  }
+
+  prepareData(data){
+    return [data];
+  }
+
+  callService(data){
+    this.commerceService.CapNhatDanhSachDangKiWeb(data).subscribe(res => {
+      this.successNotify(res);
+    })
   }
 }

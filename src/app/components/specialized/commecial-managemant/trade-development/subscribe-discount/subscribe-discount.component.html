@@ -189,9 +189,9 @@
 
                                 <ng-template #listAddress>
                                     <td mat-cell *matCellDef="let element">
-                                        <ol *ngFor="let item of element[field.key]">
-                                            <li>{{item.dia_diem}}, {{item.ten_quan_huyen}}</li>
-                                        </ol>
+                                        <ul *ngFor="let item of element[field.key]; let i = index" style="list-style-type:none;">
+                                            Địa điểm {{i}} : <li >{{item.dia_diem}}, {{item.ten_quan_huyen}}</li>
+                                        </ul>
                                     </td>
                                 </ng-template>
 

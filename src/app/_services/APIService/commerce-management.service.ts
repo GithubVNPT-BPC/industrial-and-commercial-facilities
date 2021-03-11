@@ -23,6 +23,8 @@ export class CommerceManagementService {
     private urlGetFoodCommerce = 'api/qltm/httm/kdtp';
     private urlGetConvenienceStore = 'api/qltm/httm/chtl';
     private urlGetCountrSide = 'api/qltm/dsNTM';
+    private urlGetInformWebsite = this.prefix + '/danh-sach-website';
+    private urlGetRegisWebsite = this.prefix + '/danh-sach-dang-ki-tmdt';
 
     // POST
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
@@ -34,11 +36,13 @@ export class CommerceManagementService {
     private urlPostConvenienceStore = 'api/qltm/httm/chtl';
     private urlPostPromoAdress = "api/qltm/cap-nhat-dia-diem-khuyen-mai";
     private urlPostCountrSide = 'api/qltm/adddsNTM';
+    private urlPostInformWebsite = this.prefix + '/cap-nhat-danh-sach-website';
+    private urlPostRegisWebsite = this.prefix + '/cap-nhat-danh-sach-dang-ki-tmdt';
 
     // DELETE
     private urldeletePromo = "api/qltm/khuyen-mai/xoa";
     private urldeleteMultiLevel = "api/qltm/da-cap/xoa";
-    private urldeleteTradeFairs = "api/qltm/hoi-cho/xoa";
+    private urldeleteTradeFairs = "api/qltm/hoi-cho-trien-lam/xoa";
     
     constructor(public http: HttpClient) { }
 
@@ -239,6 +243,38 @@ export class CommerceManagementService {
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+
+    LayDanhSachThongBaoWeb() {
+        var apiUrl = this.apiHome + this.urlGetInformWebsite;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    CapNhatDanhSachThongBaoWeb(body:any[]) {
+        var apiUrl = this.apiHome + this.urlPostInformWebsite;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    LayDanhSachDangKiWeb() {
+        var apiUrl = this.apiHome + this.urlGetRegisWebsite;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    CapNhatDanhSachDangKiWeb(body: any[]){
+        var apiUrl = this.apiHome + this.urlPostRegisWebsite;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
