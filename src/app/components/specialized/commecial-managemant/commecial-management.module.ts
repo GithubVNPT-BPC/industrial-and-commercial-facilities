@@ -69,6 +69,7 @@ import { ManageBusinessmanComponent } from './conditional-business-line/petro-bu
 import { MatSelectFilterModule } from 'mat-select-filter';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
+import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -157,7 +158,8 @@ export const customCurrencyMaskConfig = {
     AddLiquorBusinessComponent,
     AddLiquorSupplyBusinessComponent,
     SearchBusinessComponent,
-    EditBusinessComponent
+    EditBusinessComponent,
+    AddLpgComponent
   ],
   entryComponents: [
     ModalComponent,

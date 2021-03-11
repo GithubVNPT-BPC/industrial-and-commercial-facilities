@@ -24,6 +24,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { time } from 'highcharts';
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
     parse: {
@@ -53,6 +54,28 @@ export const MY_FORMATS = {
 })
 
 export class TobaccoBusinessComponent implements OnInit {
+    displayedColumns: string[] = [
+        'select',
+        'index',
+        'mst',
+        'ten_doanh_nghiep',
+        'dia_chi_day_du',
+        'nguoi_dai_dien',
+        'so_dien_thoai',
+        'so_giay_phep',
+        'ngay_cap',
+        'ngay_het_han',
+        'ten_thuong_nhan',
+        'so_luong',
+        'tri_gia',
+        'tinh_trang_hoat_dong',
+        'ghi_chu',
+
+        'ten_quan_huyen',
+        'id_thuoc_la',
+        'time_id'
+    ];
+
     @ViewChild('table', { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -145,28 +168,6 @@ export class TobaccoBusinessComponent implements OnInit {
     SLThuongNhan: number;
     type: string = 'Tobacco'
 
-    displayedColumns: string[] = [
-        'select',
-        'them_thuong_nhan',
-        'index',
-        'mst',
-        'ten_doanh_nghiep',
-        'dia_chi_day_du',
-        'nguoi_dai_dien',
-        'so_dien_thoai',
-        'so_giay_phep',
-        'ngay_cap',
-        'ngay_het_han',
-        'ten_thuong_nhan',
-        'so_luong',
-        'tri_gia',
-        'tinh_trang_hoat_dong',
-        'ghi_chu',
-
-        'ten_quan_huyen',
-        'id_thuoc_la',
-        'time_id'
-    ];
     dataSource: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
     dataSource1: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
     TobaccoList: Array<TobaccoList> = new Array<TobaccoList>();
@@ -271,6 +272,7 @@ export class TobaccoBusinessComponent implements OnInit {
         }
 
         this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
 
     }
 
@@ -314,8 +316,8 @@ export class TobaccoBusinessComponent implements OnInit {
         this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
     }
 
-    Addtobaccobusiness(id: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco/' + id]);
+    Addtobaccobusiness(id: string, time: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-tobacco/' + id + '/' + time]);
     }
 
     Addtobaccosupply(id: string, time: string) {

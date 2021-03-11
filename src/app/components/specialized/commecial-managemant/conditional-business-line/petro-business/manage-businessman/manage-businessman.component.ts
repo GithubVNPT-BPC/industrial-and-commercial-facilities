@@ -242,6 +242,12 @@ export class ManageBusinessmanComponent implements OnInit {
       case 'Petrol':
         this.router.navigate(['specialized/commecial-management/domestic/petrol']);
         break;
+      case 'Liquor':
+        this.router.navigate(['specialized/commecial-management/domestic/liquor']);
+        break;
+      case 'LPG':
+        this.router.navigate(['specialized/commecial-management/domestic/lpg']);
+        break;
     }
   }
 }

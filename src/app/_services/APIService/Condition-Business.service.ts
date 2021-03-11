@@ -4,7 +4,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
-import { DeleteModel, PetrolPost, PetrolValuePost, Businessman, PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { DeleteModel, PetrolPost, PetrolValuePost, Businessman, PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore, LPGPost } from 'src/app/_models/APIModel/conditional-business-line.model';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +32,11 @@ export class ConditionBusinessService {
   urlpostLiquor = "api/qltm/ruou";
   urldeleteLiquor = "api/qltm/ruou/xoa";
 
+  urlgetLPGValue = "api/qltm/lpg";
+  urlgetAllLPGValue = "api/qltm/lpg";
+  urlpostLPG = "api/qltm/lpg";
+  urldeleteLPG = "api/qltm/lpg/xoa";
+
   urlgetPetrolValue = "api/qltm/xang-dau/san-luong";
   urlgetAllPetrolValue = "api/qltm/xang-dau/tat-ca-san-luong";
   urlgetAllPetrolStore = "api/qltm/xang-dau/cua-hang";
@@ -57,7 +62,7 @@ export class ConditionBusinessService {
   public PostPetrol(petrol: Array<PetrolStore>) {
     var apiUrl = this.apiHome + this.urlpostPetrol;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`).append("Access-Control-Allow-Origin", "*");
     return this.http.post<any>(apiUrl, petrol, { headers: headers }).pipe(tap(data => data),
       catchError(this.handleError)
     );
@@ -202,6 +207,39 @@ export class ConditionBusinessService {
   }
   public DeleteLiquorValue(deletemodel: Array<DeleteModel>) {
     var apiUrl = this.apiHome + this.urldeleteLiquor
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+  }
+  //Liquor
+
+  //LPG
+  lpg: LPGPost
+  public PostLPG(lpg: Array<LPGPost>) {
+    var apiUrl = this.apiHome + this.urlpostLPG;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, lpg, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetLPGValue(time: string) {
+    var apiUrl = this.apiHome + this.urlgetLPGValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let params = new HttpParams().set('time_id', time);
+    return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetAllLPGValue() {
+    var apiUrl = this.apiHome + this.urlgetAllLPGValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public DeleteLPGValue(deletemodel: Array<DeleteModel>) {
+    var apiUrl = this.apiHome + this.urldeleteLPG
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
     return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))

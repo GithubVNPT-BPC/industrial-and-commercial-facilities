@@ -51,6 +51,7 @@ export class TobaccoList {
     is_het_han: boolean;
     ghi_chu: string;
     tinh_trang_hoat_dong: string;
+    id_tinh_trang_hoat_dong: number;
 
     id_thuong_nhan: string;
     ten_thuong_nhan: string;
@@ -76,6 +77,36 @@ export class LiquorList {
     ngay_cap: string;
     ngay_het_han: string;
     is_het_han: boolean;
+    ghi_chu: string;
+    tinh_trang_hoat_dong: string;
+    id_tinh_trang_hoat_dong: number;
+
+    id_thuong_nhan: string;
+    ten_thuong_nhan: string;
+    dia_chi_tn: string;
+    so_dien_thoai_tn: string;
+    id_san_luong: string;
+    id: string;
+}
+
+export class LPGList {
+    id_lpg: string;
+    mst: string;
+    so_luong: number;
+    time_id: string;
+    dia_chi_day_du: string;
+    id_quan_huyen: number;
+    ten_quan_huyen: string;
+    so_dien_thoai: string;
+    nguoi_dai_dien: string;
+    ten_doanh_nghiep: string;
+    so_giay_phep: string
+    ngay_cap: string;
+    ngay_het_han: string;
+    is_het_han: boolean;
+    ghi_chu: string;
+    tinh_trang_hoat_dong: string;
+    id_tinh_trang_hoat_dong: number;
 
     id_thuong_nhan: string;
     ten_thuong_nhan: string;
@@ -139,8 +170,18 @@ export class LiquorPost {
     so_luong: number;
     tri_gia: number;
     time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
 }
 
+export class LPGPost {
+    id: string;
+    mst: string;
+    so_luong: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+}
 
 export class PostBusinessmanValue {
     id: string;
