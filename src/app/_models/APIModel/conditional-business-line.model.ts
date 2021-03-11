@@ -3,7 +3,7 @@ export class DeleteModel {
 }
 
 export class PetrolList {
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
@@ -117,7 +117,7 @@ export class LPGList {
 }
 
 export class PetrolPost {
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
@@ -134,7 +134,7 @@ export class PetrolPost {
 }
 
 export class PetrolStore {
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
@@ -148,7 +148,7 @@ export class PetrolStore {
 
 export class PetrolValuePost {
     id: string;
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     time_id: string;
     san_luong: number;
     ghi_chu: string;
@@ -254,10 +254,15 @@ export class CertificateModel {
     id_linh_vuc: number;
     ten_giay_phep: string;
 }
+
 export class BusinessmanSelect {
     id_thuong_nhan: number;
     ten_thuong_nhan: string;
-    dia_chi: string;
-    so_dien_thoai: string;
+}
+
+export class StoreSelect {
+    mst: string;
+    storeselect: string;
+    id_cua_hang_xang_dau: number;
 }
 //mat-select model
