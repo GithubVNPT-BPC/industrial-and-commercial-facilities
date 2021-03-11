@@ -35,7 +35,7 @@
                     <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
                 </mat-form-field> -->
 
-            <table mat-table [dataSource]="dataSource" class="table-layout">
+            <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index" sticky>
                     <th mat-header-cell *matHeaderCellDef>STT</th>

@@ -2,19 +2,71 @@
     <mat-card-header>
     </mat-card-header>
     <mat-card-content>
-        <div class="row">
-            <div class="col-6 button-control -align-left my-auto">
-                <button (click)="SaveData()" mat-raised-button>Lưu</button>
+        <form [formGroup]="lpg_data" autocomplete="off" (ngSubmit)="onSubmit(lpg_data.getRawValue())">
+            <div class="row">
+                <div class="col-6 button-control -align-left my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+                </div>
+                <div class="col-6 button-control -align-right my-auto">
+                    <button mat-raised-button (click)="Back()">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <mat-form-field appearance="outline" hidden>
+                        <mat-label> ID </mat-label>
+                        <input formControlName="id" matInput placeholder="" [(ngModel)]="_Service.lpg.id">
+                    </mat-form-field>
 
-                <button mat-raised-button class="red" (click)="removeRows()">Xóa TN cung cấp</button>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Trạng thái hoạt động</mat-label>
+                        <mat-select formControlName="id_tinh_trang_hoat_dong"
+                            [(ngModel)]="_Service.lpg.id_tinh_trang_hoat_dong">
+                            <mat-option *ngFor="let item of trangthai" [value]="item.id_tinh_trang_hoat_dong">
+                                {{item.tinh_trang_hoat_dong}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Mã số thuế</mat-label>
+                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.lpg.mst">
+                    </mat-form-field>
+
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Năm</mat-label>
+                        <input formControlName="time_id" matInput placeholder="" [(ngModel)]="_Service.lpg.time_id">
+                    </mat-form-field> -->
+
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Thời gian</mat-label>
+                        <input [(ngModel)]="year" matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)"
+                            panelClass="example-month-picker">
+                        </mat-datepicker>
+                    </mat-form-field> -->
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số lượng cơ sở phân phối LPG thuộc hệ thống</mat-label>
+                        <input matInput currencyMask class="text-right" formControlName="so_luong"
+                            [(ngModel)]="_Service.lpg.so_luong">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ghi chú</mat-label>
+                        <textarea formControlName="ghi_chu" matInput placeholder=""
+                            [(ngModel)]="_Service.lpg.ghi_chu"></textarea>
+                    </mat-form-field>
+
+                </div>
             </div>
-            <div class="col-6 button-control -align-right my-auto">
-                <button mat-raised-button (click)="Back()">
-                    <mat-icon>keyboard_backspace</mat-icon>
-                </button>
-            </div>
-        </div>
-        
+        </form>
+
         <div class="row">
             <div class="col-12 button-control -align-left my-auto">
                 <button mat-raised-button class="white" (click)="addRow()">
@@ -26,6 +78,7 @@
                 <button mat-raised-button class="white" (click)="deleteRow()">
                     <mat-icon>block</mat-icon> Xóa dòng
                 </button>
+                <button mat-raised-button class="red" (click)="removeRows()">Xóa TN cung cấp</button>
             </div>
         </div>
 
@@ -89,6 +142,5 @@
             </table>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
-
     </mat-card-content>
 </mat-card>

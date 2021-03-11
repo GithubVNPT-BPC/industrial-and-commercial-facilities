@@ -12,8 +12,8 @@ import {
   DistrictModel,
   SubDistrictModel,
   CertificateModel,
-  TobaccoPost,
-  TobaccoList,
+  LPGPost,
+  LPGList,
   Status,
   PostBusinessmanValue,
   BusinessmanSelect,
@@ -48,8 +48,8 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-add-tobacco-business',
-  templateUrl: './add-tobacco-business.component.html',
+  selector: 'app-add-lpg',
+  templateUrl: './add-lpg.component.html',
   styleUrls: ['../../../../special_layout.scss'],
   providers: [
     {
@@ -62,7 +62,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
   ],
 })
-export class AddTobaccoBusinessComponent implements OnInit {
+export class AddLpgComponent implements OnInit {
   displayedColumns: string[] = ['select', 'index', 'id', 'id_thuong_nhan', 'id_quan_ly', 'id_linh_vuc'];
 
   @ViewChild('table', { static: false }) table: ElementRef;
@@ -144,18 +144,18 @@ export class AddTobaccoBusinessComponent implements OnInit {
   }
 
   dataSource: MatTableDataSource<PostBusinessmanValue> = new MatTableDataSource<PostBusinessmanValue>();
-  businessmanvalue: Array<TobaccoList> = new Array<TobaccoList>();
-  businessmanvalue1: Array<TobaccoList> = new Array<TobaccoList>();
+  businessmanvalue: Array<LPGList> = new Array<LPGList>();
+  businessmanvalue1: Array<LPGList> = new Array<LPGList>();
 
-  getBusinessmanvalue(time: string) {
-    this._Service.GetTobaccoValue(time).subscribe(all => {
+  getBusinessmanvalue() {
+    this._Service.GetAllLiquorValue().subscribe(all => {
 
       this.businessmanvalue = all.data[1]
       this.businessmanvalue1 = this.businessmanvalue.filter(x => x.id_san_luong == this.id)
 
       this.businessmanvalue1.forEach(x => {
         this.dataSource.data.push({
-          id_linh_vuc: 7,
+          id_linh_vuc: 9,
           id: '',
           id_quan_ly: '',
           id_thuong_nhan: ''
@@ -186,7 +186,7 @@ export class AddTobaccoBusinessComponent implements OnInit {
   addRow(): void {
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
     newRow.id_quan_ly = this.id;
-    newRow.id_linh_vuc = 7;
+    newRow.id_linh_vuc = 9;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
     this.filterbusinessman = this.Businessman.slice();
@@ -199,7 +199,7 @@ export class AddTobaccoBusinessComponent implements OnInit {
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
     newRow.id_quan_ly = this.id;
-    newRow.id_linh_vuc = 7;
+    newRow.id_linh_vuc = 9;
     this.dataSource.data.push(newRow);
     data.forEach(element => {
       this.dataSource.data.push(element);
@@ -265,33 +265,31 @@ export class AddTobaccoBusinessComponent implements OnInit {
   resetForm(form?: NgForm) {
     if (form != null)
       form.form.reset();
-    this._Service.tobacco = {
+    this._Service.lpg = {
       id: null,
       mst: '',
       so_luong: null,
-      tri_gia: null,
       time_id: '',
       ghi_chu: '',
       id_tinh_trang_hoat_dong: 1
     }
   }
 
-  tobacco_data: FormGroup;
-  TobaccoList: Array<TobaccoList> = new Array<TobaccoList>();
-  TobaccoList1: Array<TobaccoList> = new Array<TobaccoList>();
-  tobaccoobject = new TobaccoList();
+  lpg_data: FormGroup;
+  LPGList: Array<LPGList> = new Array<LPGList>();
+  LPGList1: Array<LPGList> = new Array<LPGList>();
+  tobaccoobject = new LPGList();
 
-  getTobaccoList() {
-    this._Service.GetAllTobaccoValue().subscribe(all => {
-      this.TobaccoList = all.data[0];
-      this.TobaccoList1 = this.TobaccoList.filter(x => x.id_thuoc_la == this.id)
-      this.tobaccoobject = this.TobaccoList1[0]
+  getLPGList() {
+    this._Service.GetAllLPGValue().subscribe(all => {
+      this.LPGList = all.data[0];
+      this.LPGList1 = this.LPGList.filter(x => x.id_lpg == this.id)
+      this.tobaccoobject = this.LPGList1[0]
 
-      this._Service.tobacco = {
+      this._Service.lpg = {
         id: this.id,
         mst: this.tobaccoobject.mst,
         so_luong: this.tobaccoobject.so_luong,
-        tri_gia: this.tobaccoobject.tri_gia,
         time_id: this.tobaccoobject.time_id,
         ghi_chu: this.tobaccoobject.ghi_chu,
         id_tinh_trang_hoat_dong: this.tobaccoobject.id_tinh_trang_hoat_dong
@@ -306,11 +304,11 @@ export class AddTobaccoBusinessComponent implements OnInit {
     this.getQuan_Huyen();
     this.GetAllPhuongXa();
     this.theYear = parseInt(this.getCurrentYear());
-    this.getTobaccoList()
-    this.getBusinessmanvalue(this.time)
+    this.getLPGList()
+    this.getBusinessmanvalue()
     this.GetBusinessman()
 
-    this.tobacco_data = this.formbuilder.group({
+    this.lpg_data = this.formbuilder.group({
       id: null,
       mst: '',
       so_luong: null,
@@ -322,7 +320,7 @@ export class AddTobaccoBusinessComponent implements OnInit {
   }
 
   SaveData(input) {
-    this._Service.PostTobacco(input).subscribe(
+    this._Service.PostLPG(input).subscribe(
       res => {
         // debugger;
         this._info.msgSuccess('Thêm thành công')
@@ -365,13 +363,12 @@ export class AddTobaccoBusinessComponent implements OnInit {
     }
   ]
 
-  input: Array<TobaccoPost> = new Array<TobaccoPost>();
+  input: Array<LPGPost> = new Array<LPGPost>();
   onSubmit() {
     this.input.push({
       id: this.id,
       mst: '',
       so_luong: null,
-      tri_gia: null,
       time_id: '',
       ghi_chu: '',
       id_tinh_trang_hoat_dong: null
@@ -381,12 +378,11 @@ export class AddTobaccoBusinessComponent implements OnInit {
       this.input[0].id = null
     }
 
-    this.input[0].mst = this.tobacco_data.value.mst
-    this.input[0].so_luong = this.tobacco_data.value.so_luong
-    this.input[0].tri_gia = this.tobacco_data.value.tri_gia
-    this.input[0].time_id = this.tobacco_data.value.time_id
-    this.input[0].ghi_chu = this.tobacco_data.value.ghi_chu
-    this.input[0].id_tinh_trang_hoat_dong = this.tobacco_data.value.id_tinh_trang_hoat_dong
+    this.input[0].mst = this.lpg_data.value.mst
+    this.input[0].so_luong = this.lpg_data.value.so_luong
+    this.input[0].time_id = this.lpg_data.value.time_id
+    this.input[0].ghi_chu = this.lpg_data.value.ghi_chu
+    this.input[0].id_tinh_trang_hoat_dong = this.lpg_data.value.id_tinh_trang_hoat_dong
 
     this.SaveData(this.input);
   }
@@ -423,7 +419,6 @@ export class AddTobaccoBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/tobacco']);
+    this.router.navigate(['specialized/commecial-management/domestic/lpg']);
   }
-
 }

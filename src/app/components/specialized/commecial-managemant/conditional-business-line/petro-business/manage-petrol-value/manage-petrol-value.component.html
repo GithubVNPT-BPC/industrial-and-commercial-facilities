@@ -101,7 +101,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
                             <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple>
@@ -118,10 +118,13 @@
                         </mat-checkbox>
                     </div>
 
-                    <div class="col-6 button-control -align-right my-auto">
-                        <button mat-raised-button (click)="ManageBusiness(type)">Quản lý thương nhân</button>
+                    <div class="col-7 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="OpenDetailPetrol()">Thêm cửa
+                            hàng</button>
 
-                        <button mat-raised-button (click)="ManageStore()">Quản lý cửa hàng</button>
+                        <button mat-raised-button (click)="ManageBusiness(type)">QL thương nhân</button>
+
+                        <button mat-raised-button (click)="ManageStore()">QL cửa hàng</button>
 
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
