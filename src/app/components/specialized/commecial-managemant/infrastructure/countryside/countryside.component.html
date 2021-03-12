@@ -27,7 +27,7 @@
                                         Số chợ truyền thống: <span>{{sumOfMarket}} chợ</span>
                                     </li>
                                     <li>
-                                        Số xã trong huyện/ thị xã/ thành phố: <span>{{sumOfWards}} xã</span>
+                                        Số chợ trong huyện/ thị xã/ thành phố: <span>{{sumOfWards}} xã</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -48,7 +48,7 @@
                                         Số chợ đạt TC số 7: <span>{{sumOf7thStandard}} chợ</span>
                                     </li>
                                     <li>
-                                        Số chợ đạt chuẩn NTM: <span>{{sumOfImplStandard}} chợ</span>
+                                        Số chợ đạt chuẩn: <span>{{sumOfImplStandard}} chợ</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -69,7 +69,7 @@
                                         Số chợ đạt TC số 7: <span>{{sumOf7thStandardPrevYear}} chợ</span>
                                     </li>
                                     <li>
-                                        Số chợ đạt chuẩn NTM: <span>{{sumOfImplStandardPrevYear}} chợ</span>
+                                        Số chợ đạt chuẩn: <span>{{sumOfImplStandardPrevYear}} chợ</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -95,7 +95,7 @@
                                                 Số chợ đạt TC số 7: <span>{{sumOf7thStandardReportYearByPlan}} chợ</span>
                                             </li>
                                             <li>
-                                                Số chợ đạt chuẩn NTM: <span>{{sumOfImplStandardReportYearByPlan}} chợ</span>
+                                                Số chợ đạt chuẩn: <span>{{sumOfImplStandardReportYearByPlan}} chợ</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -108,7 +108,7 @@
                                                 Số chợ đạt TC số 7: <span>{{sumOf7thStandardReportYearByPrepare}} chợ</span>
                                             </li>
                                             <li>
-                                                Số chợ đạt chuẩn NTM: <span>{{sumOfImplStandardReportYearByPrepare}} chợ</span>
+                                                Số chợ đạt chuẩn: <span>{{sumOfImplStandardReportYearByPrepare}} chợ</span>
                                             </li>
                                         </ul>
                                     </div>
@@ -142,7 +142,7 @@
 
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <mat-form-field appearance="outline">
-                            <mat-label>Năm thực hiện đạt chuẩn NTM</mat-label>
+                            <mat-label>Năm thực hiện đạt chuẩn</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_dat_NTM" multiple>
                                 <mat-option *ngFor='let year of yearOfStd' [value]='year'>{{year}}</mat-option>
                             </mat-select>
