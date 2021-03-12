@@ -109,7 +109,8 @@ export class ProductManagerComponent implements OnInit {
             }
             this.marketService.DeleteProductValue(this.deletemodel1).subscribe(res => {
                 this._infor.msgSuccess('Xóa thành công')
-                this.getALLProductValueList();
+                this.ngOnInit();
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })

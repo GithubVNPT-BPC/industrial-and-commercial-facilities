@@ -157,6 +157,7 @@ export class TobaccoBusinessComponent implements OnInit {
             this._Service.DeleteTobaccoValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
                 this.ngOnInit()
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })

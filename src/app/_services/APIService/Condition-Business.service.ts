@@ -4,7 +4,10 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
-import { DeleteModel, PetrolPost, PetrolValuePost, Businessman, PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore, LPGPost } from 'src/app/_models/APIModel/conditional-business-line.model';
+import {
+  DeleteModel, PetrolPost, PetrolValuePost, Businessman,
+  PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore, LPGPost, CertificateModel, PetrolValuePostNEW
+} from 'src/app/_models/APIModel/conditional-business-line.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +24,10 @@ export class ConditionBusinessService {
   public urlSubDistrict = "api/danh-sach/phuong-xa";
   public urlLHHD = "api/danh-sach/loai-hinh-hoat-dong";
   public urlCer = "api/doanh-nghiep/giay-phep";
+  public DeleteCer = "api/doanh-nghiep/xoa-giay-phep";
+  public PostCer = "api/doanh-nghiep/giay-phep";
+  public GetCerType = "api/danh-sach/loai-giay-phep";
+  public GeturlField = "api/danh-sach/linh-vuc-quan-ly";
 
   urlgetTobaccoValue = "api/qltm/thuoc-la";
   urlgetAllTobaccoValue = "api/qltm/thuoc-la/tat-ca";
@@ -44,6 +51,7 @@ export class ConditionBusinessService {
 
   urlpostPetrol = "api/qltm/xang-dau/cua-hang";
   urlpostPetrolValue = "api/qltm/xang-dau/san-luong";
+  urlpostPetrolValueNEW = "api/qltm/xang-dau/them-san-luong";
   urlpostBusinessman = "api/qltm/thuong-nhan";
   urlpostBusinessmanValue = "api/qltm/thuong-nhan/cung-cap";
 
@@ -69,6 +77,14 @@ export class ConditionBusinessService {
   }
   public PostPetrolValue(petrolvalue: Array<PetrolValuePost>) {
     var apiUrl = this.apiHome + this.urlpostPetrolValue;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, petrolvalue, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public PostPetrolValueNEW(petrolvalue: Array<PetrolValuePostNEW>) {
+    var apiUrl = this.apiHome + this.urlpostPetrolValueNEW;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
     return this.http.post<any>(apiUrl, petrolvalue, { headers: headers }).pipe(tap(data => data),
@@ -288,6 +304,35 @@ export class ConditionBusinessService {
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     let params = new HttpParams().set('mst', mst);
     return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public DeleteCertificate(deletemodel: Array<DeleteModel>) {
+    var apiUrl = this.apiHome + this.DeleteCer
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
+  }
+  certificate: CertificateModel
+  public PostCertificate(certificate: Array<CertificateModel>) {
+    var apiUrl = this.apiHome + this.PostCer;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, certificate, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetCertificateType() {
+    var apiUrl = this.apiHome + this.GetCerType;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public GetField() {
+    var apiUrl = this.apiHome + this.GeturlField;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
       catchError(this.handleError)
     );
   }

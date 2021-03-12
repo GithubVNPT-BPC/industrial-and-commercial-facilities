@@ -112,7 +112,8 @@ export class ForeignManagerComponent implements OnInit {
       }
       this.marketService.DeleteForeignMarket(this.deletemodel1).subscribe(res => {
         this._infor.msgSuccess('Xóa thành công')
-        this.GetAllForeignMarketPrice();
+        this.ngOnInit();
+        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
