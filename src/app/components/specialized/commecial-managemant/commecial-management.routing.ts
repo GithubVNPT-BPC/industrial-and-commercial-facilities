@@ -34,6 +34,8 @@ import { ManageBusinessmanComponent } from './conditional-business-line/petro-bu
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
+import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
+import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 
 const routes: Routes = [
   {
@@ -93,6 +95,20 @@ const routes: Routes = [
         }
       },
       {
+        path: 'certificate',
+        component: CertificateListComponent,
+        data: {
+          title: 'Quản lý giấy phép',
+        }
+      },
+      {
+        path: 'add-certificate/:id',
+        component: AddCertificateComponent,
+        data: {
+          title: 'Thêm giấy phép',
+        }
+      },
+      {
         path: 'cbl',
         component: ConditionalBusinessLineComponent,
         data: {
@@ -107,7 +123,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'addstore',
+        path: 'addstore/:id/:mst',
         component: AddStoreComponent,
         data: {
           title: 'Thêm cửa hàng xăng dầu',
@@ -128,7 +144,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'managebusiness/:type',
+        path: 'managebusiness/:type/:id_linh_vuc',
         component: ManageBusinessmanComponent,
         data: {
           title: 'Quản lý thương nhân',
@@ -142,7 +158,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'updatebusiness/:id/:type',
+        path: 'updatebusiness/:id/:type/:id_linh_vuc',
         component: UpdateBusinessmanComponent,
         data: {
           title: 'Cập nhật thương nhân',

@@ -120,6 +120,8 @@ export class SearchBusinessComponent implements OnInit {
       this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
         this.GetAllCompany();
         this.info.msgSuccess('Xóa thành công')
+        this.ngOnInit();
+        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
@@ -148,6 +150,10 @@ export class SearchBusinessComponent implements OnInit {
 
   AddCompany() {
     this.router.navigate(['specialized/commecial-management/domestic/edit/']);
+  }
+
+  AddCertificate() {
+    this.router.navigate(['specialized/commecial-management/domestic/certificate/']);
   }
 
   selected_field: string = 'ten_doanh_nghiep';

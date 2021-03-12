@@ -14,9 +14,8 @@ import {
   InformWebsiteModel,
 } from "src/app/_models/APIModel/e-commerce.model";
 import { District } from "src/app/_models/district.model";
-import { SCTService } from "src/app/_services/APIService/sct.service";
 import { ExcelService } from "src/app/_services/excelUtil.service";
-import { BaseComponent } from "../../../specialized-base.component";
+import { BaseComponent } from "../../../base.component";
 import { FormControl } from "@angular/forms";
 import { CommerceManagementService } from "src/app/_services/APIService/commerce-management.service";
 

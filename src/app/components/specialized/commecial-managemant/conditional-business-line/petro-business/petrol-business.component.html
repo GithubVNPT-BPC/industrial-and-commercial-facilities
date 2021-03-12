@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="col-8 button-control -align-right my-auto">
-                        <!-- <button mat-raised-button (click)="AddStore()">Thêm cửa hàng</button> -->
+                        <button mat-raised-button (click)="AddStore()">Thêm cửa hàng</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa cửa hàng</button>
 
@@ -96,7 +96,7 @@
                         <ng-container matColumnDef="ten_cua_hang">
                             <th mat-header-cell *matHeaderCellDef> Tên cửa hàng </th>
                             <td mat-cell *matCellDef="let element"
-                                (click)="OpenDetailPetrol(element.id_cua_hang_xang_dau, element.mst)" class="jump"
+                                (click)="AddStore(element.id_cua_hang_xang_dau, element.mst)" class="jump"
                                 [ngClass]="{'warning': element.san_luong == null}">
                                 {{element.ten_cua_hang}}
                                 <ng-container *ngIf="element.san_luong == null; else elseTemplate">

@@ -70,6 +70,8 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
+import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
+import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -159,7 +161,9 @@ export const customCurrencyMaskConfig = {
     AddLiquorSupplyBusinessComponent,
     SearchBusinessComponent,
     EditBusinessComponent,
-    AddLpgComponent
+    AddLpgComponent,
+    CertificateListComponent,
+    AddCertificateComponent
   ],
   entryComponents: [
     ModalComponent,

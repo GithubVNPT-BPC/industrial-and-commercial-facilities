@@ -4,6 +4,7 @@
             <mat-card-title><strong>DOANH NGHIỆP BÁN BUÔN RƯỢU</strong></mat-card-title>
             <mat-card-subtitle hidden>
                 type={{type}}
+                id_linh_vuc={{id_linh_vuc}}
             </mat-card-subtitle>
         </mat-card-header>
         <!-- <div class="button-control">
@@ -109,7 +110,8 @@
                     <div class="col-6 button-control -align-right my-auto">
                         <button mat-raised-button (click)="Addliquorbusiness()">Thêm DN</button>
 
-                        <button mat-raised-button (click)="ManageBusiness(type)">Quản lý thương nhân</button>
+                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">Quản lý thương
+                            nhân</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa DN</button>
 

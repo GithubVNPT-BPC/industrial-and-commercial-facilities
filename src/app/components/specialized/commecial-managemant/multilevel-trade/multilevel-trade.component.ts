@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 // Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 import { LinkModel } from 'src/app/_models/link.model';

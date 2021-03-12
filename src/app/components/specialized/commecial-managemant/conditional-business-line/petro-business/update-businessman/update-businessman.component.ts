@@ -67,11 +67,13 @@ export class UpdateBusinessmanComponent implements OnInit {
       ten_thuong_nhan: '',
       dia_chi: '',
       so_dien_thoai: '',
+      id_linh_vuc: null
     }
   }
 
   id: string;
   type: string;
+  id_linh_vuc: number;
 
   constructor(
     // @Inject(MAT_DIALOG_DATA) public data: any,
@@ -86,6 +88,7 @@ export class UpdateBusinessmanComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.id = params["id"];
       this.type = params["type"]
+      this.id_linh_vuc = params["id_linh_vuc"]
     });
   }
 
@@ -107,7 +110,7 @@ export class UpdateBusinessmanComponent implements OnInit {
         // debugger;
         this._info.msgSuccess('Thêm thành công')
         // this.dialogRef.close()
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + this.type]);
+        this.Back(this.type)
       },
       err => {
         // debugger;
@@ -123,6 +126,7 @@ export class UpdateBusinessmanComponent implements OnInit {
       ten_thuong_nhan: '',
       dia_chi: '',
       so_dien_thoai: '',
+      id_linh_vuc: this.id_linh_vuc
     })
 
     if (this.id != 'undefined') {
@@ -132,6 +136,7 @@ export class UpdateBusinessmanComponent implements OnInit {
     this.input[0].ten_thuong_nhan = this.businessman.value.ten_thuong_nhan
     this.input[0].dia_chi = this.businessman.value.dia_chi
     this.input[0].so_dien_thoai = this.businessman.value.so_dien_thoai
+
     this.SaveData(this.input);
   }
 
@@ -150,6 +155,7 @@ export class UpdateBusinessmanComponent implements OnInit {
         ten_thuong_nhan: this.businessmanobject.ten_thuong_nhan,
         dia_chi: this.businessmanobject.dia_chi,
         so_dien_thoai: this.businessmanobject.so_dien_thoai,
+        id_linh_vuc: this.id_linh_vuc
       }
     })
   }
@@ -165,7 +171,7 @@ export class UpdateBusinessmanComponent implements OnInit {
   }
 
   Back(type: string) {
-    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + this.id_linh_vuc]);
   }
 
 }

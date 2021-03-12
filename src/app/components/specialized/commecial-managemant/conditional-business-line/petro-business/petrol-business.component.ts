@@ -113,7 +113,7 @@ export class PetrolBusinessComponent implements OnInit {
     removeRows() {
         if (confirm('Bạn Có Chắc Muốn Xóa?')) {
             this.selection.selected.forEach(x => {
-                this.selectionarray = this.selection.selected.map(item => item.id_cua_hang_xang_dau)
+                this.selectionarray = this.selection.selected.map(item => item.id_cua_hang_xang_dau.toString())
                 this.deletemodel1.push({
                     id: ''
                 })
@@ -124,7 +124,8 @@ export class PetrolBusinessComponent implements OnInit {
             }
             this._Service.DeletePetrol(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
-                this.getPetrolList();
+                this.ngOnInit();
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
@@ -293,8 +294,8 @@ export class PetrolBusinessComponent implements OnInit {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
-    AddStore() {
-        this.router.navigate(['specialized/commecial-management/domestic/addstore']);
+    AddStore(id: number, mst: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/addstore/' + id + '/' + mst]);
     }
 
     OpenDetailPetrol(id: number, mst: string) {

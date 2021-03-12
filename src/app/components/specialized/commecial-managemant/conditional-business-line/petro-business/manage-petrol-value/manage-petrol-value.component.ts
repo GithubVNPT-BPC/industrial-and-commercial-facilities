@@ -6,10 +6,13 @@ import { InformationService } from 'src/app/shared/information/information.servi
 
 import { MatDialog } from '@angular/material';
 import { AddSupplyBusinessComponent } from '../add-supply-business/add-supply-business.component';
+import { SelectionModel } from '@angular/cdk/collections';
+
 
 import {
   PetrolList,
   DistrictModel,
+  DeleteModel
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -74,6 +77,52 @@ export class ManagePetrolValueComponent implements OnInit {
   //   });
   // }
 
+  selection = new SelectionModel<PetrolList>(true, []);
+
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    // const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource1.connect().value.length;
+    return numSelected === numRows;
+  }
+
+  masterToggle() {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+  }
+
+  checkboxLabel(row?: PetrolList): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  }
+
+  deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+  selectionarray: string[];
+  removeRows() {
+    if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+      this.selection.selected.forEach(x => {
+        this.selectionarray = this.selection.selected.map(item => item.id_san_luong)
+        this.deletemodel1.push({
+          id: ''
+        })
+      })
+      for (let index = 0; index < this.selectionarray.length; index++) {
+        const element = this.deletemodel1[index];
+        element.id = this.selectionarray[index]
+      }
+      this._Service.DeletePetrolValue(this.deletemodel1).subscribe(res => {
+        this._info.msgSuccess('Xóa thành công')
+        this.ngOnInit();
+        this.deletemodel1 = []
+        this.selection.clear();
+        this.paginator.pageIndex = 0;
+      })
+    }
+  }
+
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   getQuan_Huyen() {
     this._Service.GetAllDistrict().subscribe((allDistrict) => {
@@ -107,6 +156,7 @@ export class ManagePetrolValueComponent implements OnInit {
   SLDoanhNghiep: number;
 
   displayedColumns: string[] = [
+    'select',
     'index',
     'mst',
     'ten_doanh_nghiep',
@@ -291,9 +341,10 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   type: string = 'Petrol'
+  id_linh_vuc: number = 6
 
-  ManageBusiness(type: string) {
-    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+  ManageBusiness(type: string, id_linh_vuc: number) {
+    this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
   }
 
   Back() {

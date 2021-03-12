@@ -21,7 +21,7 @@
                     <mat-panel-title>
                         <mat-icon>folder_open</mat-icon>
                         &nbsp;
-                        <strong>DANH SÁCH THƯƠNG NHÂN</strong>
+                        <strong>DANH SÁCH GIẤY PHÉP</strong>
                     </mat-panel-title>
                     <mat-panel-description>
                     </mat-panel-description>
@@ -29,12 +29,12 @@
 
                 <div class="row">
                     <div class="col-8 button-control -align-left my-auto">
-                        <button mat-raised-button (click)="AddBusiness(id, type, id_linh_vuc)">Thêm thương nhân</button>
+                        <button mat-raised-button (click)="AddCertificate(id)">Thêm giấy phép</button>
 
-                        <button mat-raised-button class="red" (click)="removeRows()">Xóa thương nhân</button>
+                        <button mat-raised-button class="red" (click)="removeRows()">Xóa giấy phép</button>
 
                         <button mat-raised-button class="green"
-                            (click)="ExportTOExcel('Danh sách thương nhân','Danh sách thương nhân')">Xuất
+                            (click)="ExportTOExcel('Danh sách giấy phép','Danh sách giấy phép')">Xuất
                             Excel</button>
 
                         <button mat-raised-button (click)="Back()">
@@ -79,31 +79,45 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="id_thuong_nhan">
+                        <ng-container matColumnDef="id_giay_phep">
                             <th hidden mat-header-cell *matHeaderCellDef> ID </th>
-                            <td hidden mat-cell *matCellDef="let element"> {{element.id_thuong_nhan}} </td>
+                            <td hidden mat-cell *matCellDef="let element"> {{element.id_giay_phep}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="id_linh_vuc">
-                            <th hidden mat-header-cell *matHeaderCellDef> ID lĩnh vực </th>
-                            <td hidden mat-cell *matCellDef="let element"> {{element.id_linh_vuc}} </td>
+                        <ng-container matColumnDef="mst">
+                            <th mat-header-cell *matHeaderCellDef> MST </th>
+                            <td mat-cell *matCellDef="let element">{{element.mst}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="ten_thuong_nhan">
-                            <th mat-header-cell *matHeaderCellDef> Tên thương nhân </th>
-                            <td mat-cell *matCellDef="let element"
-                                (click)="AddBusiness(element.id_thuong_nhan, type, id_linh_vuc)" class="jump">
-                                {{element.ten_thuong_nhan}} </td>
+                        <ng-container matColumnDef="so_giay_phep">
+                            <th mat-header-cell *matHeaderCellDef> Số giấy phép </th>
+                            <td mat-cell *matCellDef="let element" (click)="AddCertificate(element.id_giay_phep)"
+                                class="jump"> {{element.so_giay_phep}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dia_chi">
-                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dia_chi}} </td>
+                        <ng-container matColumnDef="ngay_cap">
+                            <th mat-header-cell *matHeaderCellDef> Ngày cấp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_cap}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="so_dien_thoai">
-                            <th mat-header-cell *matHeaderCellDef> Số điện thoại </th>
-                            <td mat-cell *matCellDef="let element"> {{element.so_dien_thoai}}</td>
+                        <ng-container matColumnDef="ngay_het_han">
+                            <th mat-header-cell *matHeaderCellDef> Ngày hết hạn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_het_han}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="noi_cap">
+                            <th mat-header-cell *matHeaderCellDef> Nơi cấp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.noi_cap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="co_quan_cap">
+                            <th mat-header-cell *matHeaderCellDef> Cơ quan cấp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.co_quan_cap}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ghi_chu">
+                            <th mat-header-cell *matHeaderCellDef> Ghi chú </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ghi_chu}}</td>
                         </ng-container>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>

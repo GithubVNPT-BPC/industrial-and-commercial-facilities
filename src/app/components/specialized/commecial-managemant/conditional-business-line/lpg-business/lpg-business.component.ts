@@ -157,6 +157,7 @@ export class LPGBusinessComponent implements OnInit {
             this._Service.DeleteLPGValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
                 this.ngOnInit()
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
@@ -309,8 +310,10 @@ export class LPGBusinessComponent implements OnInit {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
-    ManageBusiness(type: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type]);
+    id_linh_vuc: number = 9;
+
+    ManageBusiness(type: string, id_linh_vuc: number) {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
     }
 
     AddLPG(id: string, time: string) {

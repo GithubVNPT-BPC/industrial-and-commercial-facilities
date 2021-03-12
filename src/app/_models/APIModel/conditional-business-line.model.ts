@@ -3,7 +3,7 @@ export class DeleteModel {
 }
 
 export class PetrolList {
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
@@ -117,7 +117,7 @@ export class LPGList {
 }
 
 export class PetrolPost {
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
@@ -134,7 +134,7 @@ export class PetrolPost {
 }
 
 export class PetrolStore {
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
@@ -148,10 +148,19 @@ export class PetrolStore {
 
 export class PetrolValuePost {
     id: string;
-    id_cua_hang_xang_dau: string;
+    id_cua_hang_xang_dau: number;
     time_id: string;
     san_luong: number;
     ghi_chu: string;
+}
+
+export class PetrolValuePostNEW {
+    id: string;
+    id_cua_hang_xang_dau: number;
+    time_id: string;
+    san_luong: number;
+    ghi_chu: string;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
 }
 
 export class TobaccoPost {
@@ -187,7 +196,7 @@ export class PostBusinessmanValue {
     id: string;
     id_thuong_nhan: string;
     id_linh_vuc: number;
-    id_quan_ly: string;
+    id_quan_ly: number;
 }
 
 export class Businessman {
@@ -195,6 +204,7 @@ export class Businessman {
     ten_thuong_nhan: string;
     dia_chi: string;
     so_dien_thoai: string;
+    id_linh_vuc: number;
 }
 
 export class ConditionalBusinessLineModel {
@@ -252,12 +262,26 @@ export class CertificateModel {
     co_quan_cap: string;
     ghi_chu: string;
     id_linh_vuc: number;
+}
+
+export class CertificateType {
+    id_loai_giay_phep: number;
     ten_giay_phep: string;
 }
+
+export class FieldList {
+    id_linh_vuc: number;
+    ten_linh_vuc: string;
+}
+
 export class BusinessmanSelect {
     id_thuong_nhan: number;
     ten_thuong_nhan: string;
-    dia_chi: string;
-    so_dien_thoai: string;
+}
+
+export class StoreSelect {
+    mst: string;
+    storeselect: string;
+    id_cua_hang_xang_dau: number;
 }
 //mat-select model

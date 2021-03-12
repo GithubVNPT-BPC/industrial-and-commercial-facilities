@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificate-regulation';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 

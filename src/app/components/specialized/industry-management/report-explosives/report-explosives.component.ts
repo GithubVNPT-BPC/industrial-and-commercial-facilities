@@ -1,14 +1,6 @@
-import { Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { element } from 'protractor';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { ReportService } from 'src/app/_services/APIService/report.service';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
-import { ChemicalLPGFoodManagementModel } from 'src/app/_models/APIModel/industry-management.module';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
-import { LinkModel } from 'src/app/_models/link.model';
-import * as XLSX from 'xlsx';
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from 'src/app/_models/APIModel/report.model';
 import { ActivatedRoute } from '@angular/router';
 import { TreeviewItem } from 'ngx-treeview';
@@ -17,7 +9,7 @@ import { TreeviewItem } from 'ngx-treeview';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 import { InformationService } from 'src/app/shared/information/information.service';
-import { BaseComponent } from '../../specialized-base.component';
+import { BaseComponent } from '../../base.component';
 
 interface HashTableNumber<T> {
   [key: number]: T;

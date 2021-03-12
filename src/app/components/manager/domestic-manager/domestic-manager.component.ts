@@ -113,7 +113,8 @@ export class DomesticManagerComponent implements OnInit {
       }
       this.marketService.DeleteDomesticMarket(this.deletemodel1).subscribe(res => {
         this._infor.msgSuccess('Xóa thành công')
-        this.getALLDomesticMarketPrice();
+        this.ngOnInit();
+        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })

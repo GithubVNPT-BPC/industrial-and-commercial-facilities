@@ -3,6 +3,7 @@
         <mat-card-title><strong>CỬA HÀNG BÁN LẺ XĂNG DẦU</strong></mat-card-title>
         <mat-card-subtitle hidden>
             type={{type}}
+            id_linh_vuc={{id_linh_vuc}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -119,12 +120,13 @@
                     </div>
 
                     <div class="col-7 button-control -align-right my-auto">
-                        <button mat-raised-button (click)="OpenDetailPetrol()">Thêm cửa
-                            hàng</button>
+                        <button mat-raised-button (click)="OpenDetailPetrol()">Thêm sản lượng</button>
 
-                        <button mat-raised-button (click)="ManageBusiness(type)">QL thương nhân</button>
+                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">QL thương nhân</button>
 
                         <button mat-raised-button (click)="ManageStore()">QL cửa hàng</button>
+
+                        <button mat-raised-button class="red" (click)="removeRows()">Xóa DN</button>
 
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
@@ -143,6 +145,22 @@
                     </mat-form-field>
 
                     <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table3">
+
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef>
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let row" class="center-cell">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(row) : null"
+                                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
 
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>

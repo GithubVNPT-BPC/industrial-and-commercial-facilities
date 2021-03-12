@@ -5,9 +5,8 @@ import { MatDatepicker, MatTableDataSource } from '@angular/material';
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter} from '@angular/material/core';
 
-import { District } from 'src/app/_models/district.model';
 import { TFEModel } from 'src/app/_models/APIModel/trade-development.model';
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import moment from 'moment';
 
