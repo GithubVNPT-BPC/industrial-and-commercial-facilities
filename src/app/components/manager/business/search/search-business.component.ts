@@ -121,6 +121,8 @@ export class SearchBusinessComponent implements OnInit {
       this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
         this.GetAllCompany();
         this.info.msgSuccess('Xóa thành công')
+        this.ngOnInit();
+        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })

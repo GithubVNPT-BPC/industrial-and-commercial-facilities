@@ -34,6 +34,8 @@ import { ManageBusinessmanComponent } from './conditional-business-line/petro-bu
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
+import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
+import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 
 const routes: Routes = [
   {
@@ -90,6 +92,20 @@ const routes: Routes = [
         component: EditBusinessComponent,
         data: {
           title: 'Chỉnh sửa doanh nghiệp',
+        }
+      },
+      {
+        path: 'certificate',
+        component: CertificateListComponent,
+        data: {
+          title: 'Quản lý giấy phép',
+        }
+      },
+      {
+        path: 'add-certificate/:id',
+        component: AddCertificateComponent,
+        data: {
+          title: 'Thêm giấy phép',
         }
       },
       {

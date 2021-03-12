@@ -1,0 +1,112 @@
+<mat-card class="material">
+    <mat-card-header>
+        <!-- <mat-card-title><strong></strong></mat-card-title> -->
+        <mat-card-subtitle hidden>
+            type={{type}}
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <!-- <div class="button-control">
+            <button mat-raised-button (click)="accordion.openAll()">
+                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
+            </button>
+            <button mat-raised-button (click)="accordion.closeAll()">
+                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
+            </button>
+        </div> -->
+        <form [formGroup]="certificate" autocomplete="off" (ngSubmit)="onSubmit(certificate.getRawValue())">
+            <div class="row">
+                <div class="col-6 button-control -align-left my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+                </div>
+                <div class="col-6 button-control -align-right my-auto">
+                    <button mat-raised-button (click)="Back(type)">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <mat-form-field appearance="outline" hidden>
+                        <mat-label> ID </mat-label>
+                        <input formControlName="id_giay_phep" matInput placeholder=""
+                            [(ngModel)]="_Service.certificate.id_giay_phep">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>MST</mat-label>
+                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.certificate.mst">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Số giấy phép</mat-label>
+                        <input formControlName="so_giay_phep" matInput placeholder=""
+                            [(ngModel)]="_Service.certificate.so_giay_phep">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Lĩnh vực quản lý (*) </mat-label>
+                        <mat-select formControlName="id_linh_vuc" [(ngModel)]="_Service.certificate.id_linh_vuc">
+                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_linh_vuc'"
+                                [array]="LoaiLinhVuc" (filteredReturn)="filterloailinhvuc =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filterloailinhvuc" [value]="item.id_linh_vuc">
+                                {{item.ten_linh_vuc}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngày cấp</mat-label>
+                        <input formControlName="ngay_cap" matInput readonly [matDatepicker]="datePicker"
+                            [(ngModel)]="ngaycap" (ngModelChange)="getChange($event)">
+                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #datePicker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngày hết hạn</mat-label>
+                        <input formControlName="ngay_het_han" matInput readonly [matDatepicker]="datePicker1"
+                            [(ngModel)]="ngayhethan" (ngModelChange)="getChange($event)">
+                        <mat-datepicker-toggle matSuffix [for]="datePicker1" onclick="this.blur()">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #datePicker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Loại giấy phép</mat-label>
+                        <mat-select formControlName="id_loai_giay_phep"
+                            [(ngModel)]="_Service.certificate.id_loai_giay_phep">
+                            <mat-option *ngFor="let item of LoaiGiayPhep" [value]="item.id_loai_giay_phep">
+                                {{item.ten_giay_phep}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nơi cấp</mat-label>
+                        <input formControlName="noi_cap" matInput placeholder=""
+                            [(ngModel)]="_Service.certificate.noi_cap">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Cơ quan cấp</mat-label>
+                        <input formControlName="co_quan_cap" matInput placeholder=""
+                            [(ngModel)]="_Service.certificate.co_quan_cap">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ghi chú</mat-label>
+                        <input formControlName="ghi_chu" matInput placeholder=""
+                            [(ngModel)]="_Service.certificate.ghi_chu">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+    <!-- <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Đóng</button>
+    </mat-dialog-actions> -->
+</mat-card>
