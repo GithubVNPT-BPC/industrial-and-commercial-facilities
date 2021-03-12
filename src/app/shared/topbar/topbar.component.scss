@@ -6,6 +6,15 @@
     border-bottom: 1px solid beige;
     color:black;
   }
+
+  .toggle-sidebar{
+    &:hover {
+      color: var(--primary-color);
+      background-color: white;
+      border-radius: 50%;
+    }
+  }
+
   .mat-elevation-z5.main-contain {
     background-color: $blue;
     color: $white;
@@ -40,27 +49,40 @@
         color: $blue;
         background-color: $white;
       }
+
       .btn-sct-page {
         color: $blue;
         background-color: $white;
         text-decoration: none;
         margin-left: 10px;
       }
+
       .btn-sct-page:hover {
         color: $white;
-        background-color: $blue;
+        background-color: var(--primary-color);
+        -webkit-transition: background-color 300ms linear;
+        -ms-transition: background-color 300ms linear;
+        transition: background-color 300ms linear;
+        transition: color 300ms linear;
       }
+
       .user-menu {
         cursor: pointer;
         margin-left: 10px;
+
         .avatar {
-          width: 30px;
-          height: 30px;
+          width: 40px;
+          height: 40px;
           object-fit: cover;
           border-radius: 50%;
-          margin-right: 10px;
+          transition: transform .3s;
+
+          &:hover {
+            transform: scale(1.1); 
+          }
         }
       }
+      
       .dropdown-content {
         display: none;
         position: absolute;

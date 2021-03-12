@@ -181,7 +181,8 @@ export class CertificateRegulationComponent extends BaseComponent {
       this.industryManagementService.DeleteCBHQ(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  private openPreviewer(content) {
+  private openPreviewer(content, file_data=false) {
+      this.fileBin = file_data ? file_data : this.fileBin;
       this.modalService.open(content, {size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true});
   }
 }
