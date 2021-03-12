@@ -7,8 +7,12 @@
     color:black;
   }
 
-  .toggle-sidebar{ 
-    border-right: 1px solid 
+  .toggle-sidebar{
+    &:hover {
+      color: var(--primary-color);
+      background-color: white;
+      border-radius: 50%;
+    }
   }
 
   .mat-elevation-z5.main-contain {
