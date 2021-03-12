@@ -303,6 +303,7 @@ export class LPGBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
+        this.selection.clear();
         // this.getLPGListbyYear(this.theYear.toString()
     }
 

@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
 import {
   DeleteModel, PetrolPost, PetrolValuePost, Businessman,
-  PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore, LPGPost, CertificateModel, PetrolValuePostNEW
+  PostBusinessmanValue, TobaccoPost, LiquorPost, PetrolStore, LPGPost, CertificateModel, PetrolValuePostNEW, TobaccoPostNEW, LiquorPostNEW, LPGPostNEW
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 
 @Injectable({
@@ -33,15 +33,18 @@ export class ConditionBusinessService {
   urlgetAllTobaccoValue = "api/qltm/thuoc-la/tat-ca";
   urlpostTobacco = "api/qltm/thuoc-la";
   urldeleteTobacco = "api/qltm/thuoc-la/xoa";
+  urlpostTobaccoValueNEW = "api/qltm/them-thuoc-la";
 
   urlgetLiquorValue = "api/qltm/ruou";
   urlgetAllLiquorValue = "api/qltm/ruou/tat-ca";
   urlpostLiquor = "api/qltm/ruou";
+  urlpostLiquorNEW = "api/qltm/them-ruou";
   urldeleteLiquor = "api/qltm/ruou/xoa";
 
   urlgetLPGValue = "api/qltm/lpg";
   urlgetAllLPGValue = "api/qltm/lpg";
   urlpostLPG = "api/qltm/lpg";
+  urlpostLPGNEW = "api/qltm/them-lpg";
   urldeleteLPG = "api/qltm/lpg/xoa";
 
   urlgetPetrolValue = "api/qltm/xang-dau/san-luong";
@@ -173,6 +176,14 @@ export class ConditionBusinessService {
       catchError(this.handleError)
     );
   }
+  public PostTobaccoValueNEW(tobaccovalue: Array<TobaccoPostNEW>) {
+    var apiUrl = this.apiHome + this.urlpostTobaccoValueNEW;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, tobaccovalue, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
   public GetTobaccoValue(time: string) {
     var apiUrl = this.apiHome + this.urlgetTobaccoValue;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -206,6 +217,14 @@ export class ConditionBusinessService {
       catchError(this.handleError)
     );
   }
+  public PostLiquorNEW(liquor: Array<LiquorPostNEW>) {
+    var apiUrl = this.apiHome + this.urlpostLiquorNEW;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, liquor, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
   public GetLiquorValue(time: string) {
     var apiUrl = this.apiHome + this.urlgetLiquorValue;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -233,6 +252,14 @@ export class ConditionBusinessService {
   lpg: LPGPost
   public PostLPG(lpg: Array<LPGPost>) {
     var apiUrl = this.apiHome + this.urlpostLPG;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+    return this.http.post<any>(apiUrl, lpg, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  public PostLPGNEW(lpg: Array<LPGPostNEW>) {
+    var apiUrl = this.apiHome + this.urlpostLPGNEW;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
     return this.http.post<any>(apiUrl, lpg, { headers: headers }).pipe(tap(data => data),

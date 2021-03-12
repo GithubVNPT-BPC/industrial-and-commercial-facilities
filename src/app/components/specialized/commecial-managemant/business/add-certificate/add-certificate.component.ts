@@ -183,9 +183,7 @@ export class AddCertificateComponent implements OnInit {
     this.input[0].ghi_chu = this.certificate.value.ghi_chu
     this.input[0].id_linh_vuc = this.certificate.value.id_linh_vuc
 
-    console.log(this.input)
-
-    // this.SaveData(this.input);
+    this.SaveData(this.input);
   }
 
   CertificateModelobject = new CertificateModel();

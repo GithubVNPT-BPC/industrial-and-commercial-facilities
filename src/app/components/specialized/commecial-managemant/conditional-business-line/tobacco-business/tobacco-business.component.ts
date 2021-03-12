@@ -306,6 +306,7 @@ export class TobaccoBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
+        this.selection.clear();
         this.getTobaccoListbyYear(this.theYear.toString())
     }
 

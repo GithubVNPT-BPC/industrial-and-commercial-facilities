@@ -304,6 +304,7 @@ export class LiquorBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
+        this.selection.clear();
         this.getLiquorListbyYear(this.theYear.toString())
     }
 
