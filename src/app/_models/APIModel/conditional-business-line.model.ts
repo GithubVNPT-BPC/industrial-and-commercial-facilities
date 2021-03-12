@@ -173,6 +173,17 @@ export class TobaccoPost {
     id_tinh_trang_hoat_dong: number;
 }
 
+export class TobaccoPostNEW {
+    id: string;
+    mst: string;
+    so_luong: number;
+    tri_gia: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
+}
+
 export class LiquorPost {
     id: string;
     mst: string;
@@ -183,6 +194,17 @@ export class LiquorPost {
     id_tinh_trang_hoat_dong: number;
 }
 
+export class LiquorPostNEW {
+    id: string;
+    mst: string;
+    so_luong: number;
+    tri_gia: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
+}
+
 export class LPGPost {
     id: string;
     mst: string;
@@ -190,6 +212,16 @@ export class LPGPost {
     time_id: string;
     ghi_chu: string;
     id_tinh_trang_hoat_dong: number;
+}
+
+export class LPGPostNEW {
+    id: string;
+    mst: string;
+    so_luong: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
 }
 
 export class PostBusinessmanValue {

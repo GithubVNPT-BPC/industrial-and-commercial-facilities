@@ -17,7 +17,8 @@ import {
   DeleteModel,
   PostBusinessmanValue,
   BusinessmanSelect,
-  Status
+  Status,
+  LiquorPostNEW
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -161,10 +162,6 @@ export class AddLiquorBusinessComponent implements OnInit {
         })
       })
 
-      if (this.id == 'undefined') {
-        this.id = null
-      }
-
       for (let index = 0; index < this.businessmanvalue1.length; index++) {
         this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue1[index].id_thuong_nhan ? this.businessmanvalue1[index].id_thuong_nhan : null
         this.dataSource.data[index].id_quan_ly = parseInt(this.id)
@@ -184,7 +181,12 @@ export class AddLiquorBusinessComponent implements OnInit {
 
   addRow(): void {
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = parseInt(this.id);
+    if (this.id != 'undefined') {
+      newRow.id_quan_ly = parseInt(this.id)
+    }
+    else {
+      newRow.id_quan_ly = 0;
+    }
     newRow.id_linh_vuc = 8;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -197,7 +199,12 @@ export class AddLiquorBusinessComponent implements OnInit {
     let data = this.dataSource.data.slice(this._currentRow);
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = parseInt(this.id);
+    if (this.id != 'undefined') {
+      newRow.id_quan_ly = parseInt(this.id)
+    }
+    else {
+      newRow.id_quan_ly = 0;
+    }
     newRow.id_linh_vuc = 8;
     this.dataSource.data.push(newRow);
     data.forEach(element => {
@@ -333,22 +340,38 @@ export class AddLiquorBusinessComponent implements OnInit {
     })
   }
 
-  SaveData(input) {
-    this._Service.PostLiquor(input).subscribe(
-      res => {
-        // debugger;
-        this._info.msgSuccess('Thêm thành công')
-      },
-      err => {
-        // debugger;
-      }
-    )
+  SaveData(input, input1) {
+    if (this.id != 'undefined') {
+      this._Service.PostLiquor(input).subscribe(
+        res => {
+          // debugger;
+          this._info.msgSuccess('Thêm thành công')
+        },
+        err => {
+          // debugger;
+        }
+      )
 
-    if (this.dataSource.data) {
-      this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
+      if (this.dataSource.data) {
+        this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
+          next => {
+            if (next.id == -1) {
+              this._info.msgError("Lưu lỗi! Lý do: " + next.message);
+            }
+            else {
+              this._info.msgSuccess("Dữ liệu được lưu thành công!");
+              this.Back()
+            }
+          },
+          error => {
+            this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+          }
+        );
+      }
+    }
+    else {
+      this._Service.PostLiquorNEW(input1).subscribe(
         next => {
-          console.log(this.dataSource.data)
-          console.log(next.id)
           if (next.id == -1) {
             this._info.msgError("Lưu lỗi! Lý do: " + next.message);
           }
@@ -365,9 +388,10 @@ export class AddLiquorBusinessComponent implements OnInit {
   }
 
   input: Array<LiquorPost> = new Array<LiquorPost>();
+  input1: Array<LiquorPostNEW> = new Array<LiquorPostNEW>();
   onSubmit() {
     this.input.push({
-      id: null,
+      id: this.id,
       mst: '',
       so_luong: null,
       tri_gia: null,
@@ -376,10 +400,6 @@ export class AddLiquorBusinessComponent implements OnInit {
       id_tinh_trang_hoat_dong: 1
     })
 
-    if (this.id != 'undefined') {
-      this.input[0].id = this.id
-    }
-
     this.input[0].mst = this.liquor_data.value.mst
     this.input[0].so_luong = this.liquor_data.value.so_luong
     this.input[0].tri_gia = this.liquor_data.value.tri_gia
@@ -387,7 +407,26 @@ export class AddLiquorBusinessComponent implements OnInit {
     this.input[0].ghi_chu = this.liquor_data.value.ghi_chu
     this.input[0].id_tinh_trang_hoat_dong = this.liquor_data.value.id_tinh_trang_hoat_dong
 
-    this.SaveData(this.input);
+    this.input1.push({
+      id: null,
+      mst: '',
+      so_luong: null,
+      tri_gia: null,
+      time_id: '',
+      ghi_chu: '',
+      id_tinh_trang_hoat_dong: 1,
+      danh_sach_thuong_nhan: []
+    })
+
+    this.input1[0].mst = this.liquor_data.value.mst
+    this.input1[0].so_luong = this.liquor_data.value.so_luong
+    this.input1[0].tri_gia = this.liquor_data.value.tri_gia
+    this.input1[0].time_id = this.liquor_data.value.time_id
+    this.input1[0].ghi_chu = this.liquor_data.value.ghi_chu
+    this.input1[0].id_tinh_trang_hoat_dong = this.liquor_data.value.id_tinh_trang_hoat_dong
+    this.input1[0].danh_sach_thuong_nhan = this.dataSource.data
+
+    this.SaveData(this.input, this.input1[0]);
   }
 
   public exportTOExcel(filename: string, sheetname: string) {

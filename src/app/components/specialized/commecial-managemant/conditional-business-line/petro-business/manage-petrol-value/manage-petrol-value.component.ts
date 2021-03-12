@@ -325,6 +325,7 @@ export class ManagePetrolValueComponent implements OnInit {
     this.date.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
     datepicker.close();
+    this.selection.clear();
     this.getPetrolListbyYear(this.theYear.toString())
   }
 
