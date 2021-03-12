@@ -23,8 +23,6 @@ interface HashTableNumber<T> {
 
 export class ReportExplosivesComponent extends BaseComponent {
   //Constant
-
-
   public readonly OBJ_ID: number = 10588480;
   public readonly TIME_ID: number = 2020;
   public readonly ORG_ID: number = 1;
@@ -47,11 +45,8 @@ export class ReportExplosivesComponent extends BaseComponent {
     return `${startIndex + 1} - ${endIndex} của ${length}`;
   }
   //Variable for only ts
-  // private _linkOutput: LinkModel = new LinkModel();
   public years: number[] = [];
 
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
-  // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   //Variable for HTML&TS-------------------------------------------------------------------------
   public year: number = 2019;
@@ -88,25 +83,16 @@ export class ReportExplosivesComponent extends BaseComponent {
   ngOnInit(): void {
     super.ngOnInit();
     let data: any = JSON.parse(localStorage.getItem("currentUser"));
-    // this._org_id = parseInt(data.org_id);
     this._org_id = 1;
     this._obj_id = this.OBJ_ID;
     this._time_id = this.TIME_ID;
     this.GetReportById(this._obj_id, this._time_id, this._org_id);
   }
 
-  autoOpen(){
-
-  }
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/industry-management/report";
     this.TITLE_DEFAULT = "Công nghiệp - Báo cáo tình hình cụm công nghiệp";
     this.TEXT_DEFAULT = "Công nghiệp - Báo cáo tình hình cụm công nghiệp";
-  }
-
-  //Xuất excel
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   cols: Array<any> = [];

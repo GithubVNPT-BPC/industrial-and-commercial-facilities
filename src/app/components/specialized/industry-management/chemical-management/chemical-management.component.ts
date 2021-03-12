@@ -80,7 +80,13 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     public switchView() {
         super.switchView();
+        this.displayedColumns = this.reducedFieldList;
         if (this.chemistryNameList.length == 0 && this.view == 'form') this.getChemicalNameListData();
+    }
+
+    resetAll() {
+        super.resetAll();
+        this.displayedColumns = this.reducedFieldList;
     }
 
     private addQtyRow(event) {
@@ -151,6 +157,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     getChemicalManagementData(time_id: number) {
         this.industryManagementService.GetChemicalManagement(time_id).subscribe(result => {
+            this.filteredDataSource.data = [];
             if (result.data && result.data.length > 0) {
                 let chemicalManagementData = result.data[0];
                 let capacityData = result.data[1];
@@ -165,18 +172,24 @@ export class ChemicalManagementComponent extends BaseComponent {
                 });
 
                 this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
+                result.data.forEach(element => {
+                    element.ngay_cap = this.formatDate(element.ngay_cap);
+                    element.ngay_het_han = this.formatDate(element.ngay_het_han);
+                });
+                
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                 });
 
-                this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
-                this._prepareData(this.filteredDataSource.data);
+                this.filteredDataSource.data = [...this.dataSource.data];
                 this.paginatorAgain();
             }
+            this._prepareData();
         })
     }
 
-    private _prepareData(data) {
+    private _prepareData() {
+        let data = this.filteredDataSource.data;
         this.sanLuongKinhDoanh = data.length ? data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
         this.sanLuongSanXuat = data.length ? data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
     }
@@ -188,8 +201,8 @@ export class ChemicalManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
-        this._prepareData(this.filteredDataSource.data);
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)]: [...this.dataSource.data];
+        this._prepareData();
     }
 
     showMoreDetail(event) {
@@ -213,7 +226,7 @@ export class ChemicalManagementComponent extends BaseComponent {
           this.filteredDataSource.filter = filterValue.trim().toLowerCase();
         } else {
           let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-          this._prepareData(filteredData);
+          
           if (!filteredData.length) {
             if (this.filterModel)
               this.filteredDataSource.data = [];
@@ -223,22 +236,8 @@ export class ChemicalManagementComponent extends BaseComponent {
           else {
             this.filteredDataSource.data = filteredData;
           }
-          this.paginatorAgain();
         }
-    }
-
-    filterArray(array, filters) {
-        const filterKeys = Object.keys(filters);
-        let temp = [...array];
-        filterKeys.forEach(key => {
-            let temp2 = [];
-            if (filters[key].length) {
-            filters[key].forEach(criteria => {
-                temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-            });
-            temp = [...temp2];
-            }
-        })
-        return temp;
+        this._prepareData();
+        this.paginatorAgain();
     }
 }

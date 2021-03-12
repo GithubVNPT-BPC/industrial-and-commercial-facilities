@@ -287,6 +287,21 @@ export abstract class BaseComponent implements OnInit {
 
     protected formatDate(date) {
         let formattedDate = moment(date, this.dateFormat);
-        return formattedDate
+        return formattedDate.isValid() ? formattedDate : "";
+    }
+
+    filterArray(array, filters) {
+        const filterKeys = Object.keys(filters);
+        let temp = [...array];
+        filterKeys.forEach(key => {
+            let temp2 = [];
+            if (filters[key].length) {
+            filters[key].forEach(criteria => {
+                temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
+            });
+            temp = [...temp2];
+            }
+        })
+        return temp;
     }
 }

@@ -99,13 +99,14 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   GetComformityAnnounceData() {
     this.industryManagementService.GetComformityAnnounce().subscribe(res => {
+      this.filteredDataSource.data = [];
       if (res.data && res.data.length > 0 ) {
         res.data.forEach(element => element.ngay_tiep_nhan = this.formatDate(element.ngay_tiep_nhan));
         this.dataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
-        this.filteredDataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
-        this._prepareData();
-        this.paginatorAgain();
+        this.filteredDataSource.data = [...this.dataSource.data];
       }
+      this._prepareData();
+      this.paginatorAgain();
     })
   }
 

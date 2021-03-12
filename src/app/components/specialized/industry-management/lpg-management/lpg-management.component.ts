@@ -7,6 +7,8 @@ import { FormControl } from '@angular/forms';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
+import moment from 'moment';
+
 @Component({
     selector: 'lpg-management',
     templateUrl: './lpg-management.component.html',
@@ -56,7 +58,7 @@ export class LPGManagementComponent extends BaseComponent {
         super.ngOnInit();
         this.GetLGPManagementData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
-        this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
+        this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
     }
 
     getLinkDefault(){
@@ -70,13 +72,22 @@ export class LPGManagementComponent extends BaseComponent {
         this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     }
 
+    resetAll() {
+        super.resetAll();
+        this.displayedColumns = this.reducedFieldList;
+    }
+
+    switchView() {
+        super.switchView();
+        this.displayedColumns = this.reducedFieldList;
+    }
+
     getFormParams() {
         return {
             id: new FormControl(),
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
-            // pdf_file: new FormControl(),
         }
     }
 
@@ -117,6 +128,7 @@ export class LPGManagementComponent extends BaseComponent {
 
     GetLGPManagementData(time_id: number) {
         this.industryManagementService.GetLPGManagement(time_id).subscribe(result => {
+            this.filteredDataSource.data = [];
             if (result.data && result.data.length) {
                 result.data.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
@@ -127,12 +139,11 @@ export class LPGManagementComponent extends BaseComponent {
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                 });
-
+                
                 this.filteredDataSource.data = [...this.dataSource.data];
-                this._prepareData();
-                this.paginatorAgain();
             }
-            
+            this._prepareData();
+            this.paginatorAgain();
         })
     }
 
@@ -161,7 +172,7 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)]: [...this.dataSource.data];
         this._prepareData();
     }
 

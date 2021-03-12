@@ -102,19 +102,21 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   getSuperMarketData() {
     this.commerceManagementService.getMarketPlaceData(false).subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<SuperMarketCommonModel>(allrecords.data);
           this.builtYears = this.dataSource.data.map(x => x.nam_xay_dung).filter(this.filterService.onlyUnique);
           this.holdYears = this.dataSource.data.map(x => x.nam_ngung_hoat_dong).filter(this.filterService.onlyUnique);
-          this._prepareData(this.dataSource.data);
-          this.paginatorAgain();
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
   }
 
-  private _prepareData(data: Array<SuperMarketCommonModel>) {
+  private _prepareData() {
+    let data = this.dataSource.data;
     this.tongSieuThi = data.length;
     this.sieuThiHangI = data.filter(x => x.id_phan_hang == 1).length;
     this.sieuThiHangII = data.filter(x => x.id_phan_hang == 2).length;
@@ -183,7 +185,6 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    this._prepareData(filteredData);
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];
@@ -193,6 +194,7 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
     else {
       this.filteredDataSource.data = filteredData;
     }
+    this._prepareData();
   }
 
   filterArray(array, filters) {

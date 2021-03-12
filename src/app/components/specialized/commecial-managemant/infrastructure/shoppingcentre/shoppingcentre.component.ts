@@ -98,13 +98,14 @@ export class ShoppingcentreComponent extends BaseComponent {
   getShoppingCenterData() {
     this.commerceManagementService.getMarketPlaceData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<SuperMarketCommonModel>(allrecords.data);
-          this.builtYears = this.dataSource.data.map(x => x.nam_xay_dung).filter(this.filterService.onlyUnique);
-          this.holdYears = this.dataSource.data.map(x => x.nam_ngung_hoat_dong).filter(this.filterService.onlyUnique);
-          this._prepareData(this.dataSource.data);
-          this.paginatorAgain();
+          this.builtYears = this.filteredDataSource.data.map(x => x.nam_xay_dung).filter(this.filterService.onlyUnique);
+          this.holdYears = this.filteredDataSource.data.map(x => x.nam_ngung_hoat_dong).filter(this.filterService.onlyUnique);
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
@@ -152,7 +153,8 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.commerceManagementService.postMarketPlace([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  private _prepareData(data) {
+  private _prepareData() {
+    let data = this.dataSource.data;
     this.tongSieuThi = data.length;
     this.sieuThiHangI = data.filter(x => x.id_phan_hang == 1).length;
     this.sieuThiHangII = data.filter(x => x.id_phan_hang == 2).length;
@@ -174,12 +176,12 @@ export class ShoppingcentreComponent extends BaseComponent {
       else x.business_area_id = 0;
     });
 
-    this.filteredDataSource.data = [...data];
+    this.filteredDataSource.data = data;
   }
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    this._prepareData(filteredData);
+    
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];
@@ -189,21 +191,7 @@ export class ShoppingcentreComponent extends BaseComponent {
     else {
       this.filteredDataSource.data = filteredData;
     }
+    this._prepareData();
+    this.paginatorAgain();
   }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
-      }
-    })
-    return temp;
-  }
-
 }

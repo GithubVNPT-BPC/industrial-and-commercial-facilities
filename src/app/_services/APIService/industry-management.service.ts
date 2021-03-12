@@ -43,6 +43,7 @@ export class IndustryManagementService {
     
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
+    private urlDeleteFoodIndustry = '/cntp-xoa';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
     private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
@@ -211,6 +212,14 @@ export class IndustryManagementService {
     // xóa công bố hợp quy
     public DeleteCBHQ(body: any){
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteFoodIndustry(body: any){
+        var apiUrl = this.endpoint + this.urlDeleteFoodIndustry;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)

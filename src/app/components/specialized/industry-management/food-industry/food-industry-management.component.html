@@ -119,8 +119,8 @@
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('QLCN - CNTP',currentYear.toString())"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
-                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
                             mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
                     </div>
                 </div>

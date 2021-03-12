@@ -109,6 +109,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     getPostExplosiveMatData(time_id) {
         this.industryManagementService.GetExplosiveMat(time_id).subscribe(result => {
+            this.filteredDataSource.data = [];
             if (result.data && result.data.length > 0) {
                 result.data.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
@@ -120,9 +121,9 @@ export class IndustrialExplosivesComponent extends BaseComponent {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                 });
                 this.filteredDataSource.data = [...this.dataSource.data];
-                this._prepareData();
-                this.paginatorAgain();
             }
+            this._prepareData();
+            this.paginatorAgain();
         })
     }
 
