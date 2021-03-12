@@ -140,7 +140,6 @@ export class IndustryManagementService {
 
     public PostComformityAnnounce(datas) {
         let apiUrl = this.endpoint + this.urlPostComformityAnnounce;
-        // apiUrl = "https://localhost:5001/api/qlcn" +  this.urlPostComformityAnnounce;
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
@@ -149,7 +148,6 @@ export class IndustryManagementService {
 
     public UpdateComformityAnnounce(datas) {
         let apiUrl = this.endpoint + this.urlUpdateComformityAnnounce;
-        // apiUrl = "https://localhost:5001/api/qlcn" +  this.urlUpdateComformityAnnounce;
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)

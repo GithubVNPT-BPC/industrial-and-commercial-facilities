@@ -4,7 +4,7 @@ import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-manag
 import { FormControl } from '@angular/forms';
 
 // Services
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
 @Component({

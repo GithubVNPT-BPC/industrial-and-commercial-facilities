@@ -21,7 +21,7 @@
                             [(ngModel)]="_Service.petrol.id_cua_hang_xang_dau">
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
+                    <!-- <mat-form-field appearance="outline">
                         <mat-label>Trạng thái hoạt động</mat-label>
                         <mat-select formControlName="id_tinh_trang_hoat_dong"
                             [(ngModel)]="_Service.petrol.id_tinh_trang_hoat_dong">
@@ -29,7 +29,7 @@
                                 {{item.tinh_trang_hoat_dong}}
                             </mat-option>
                         </mat-select>
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                     <mat-form-field appearance="outline">
                         <mat-label>Năm</mat-label>
@@ -37,16 +37,30 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
+                        <mat-label>Cửa hàng xăng dầu</mat-label>
+                        <mat-select formControlName="id_cua_hang_xang_dau"
+                            [(ngModel)]="_Service.petrol.id_cua_hang_xang_dau">
+                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'storeselect'"
+                                [array]="PetrolStore" (filteredReturn)="filterpetrolstore =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filterpetrolstore" [value]="item.id_cua_hang_xang_dau">
+                                {{item.storeselect}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- <mat-form-field appearance="outline">
                         <mat-label>Tên cửa hàng</mat-label>
                         <input formControlName="ten_cua_hang" matInput placeholder=""
                             [(ngModel)]="_Service.petrol.ten_cua_hang">
-                    </mat-form-field>
+                    </mat-form-field> -->
 
-                    <mat-form-field appearance="outline">
+                    <!-- <mat-form-field appearance="outline">
                         <mat-label>Mã số thuế</mat-label>
                         <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.petrol.mst">
-                    </mat-form-field>
+                    </mat-form-field> -->
+                </div>
 
+                <div class="col-6">
                     <mat-form-field appearance="outline">
                         <mat-label>Sản lượng tiêu thụ</mat-label>
                         <input matInput currencyMask class="text-right" formControlName="san_luong"
@@ -55,12 +69,10 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Ghi chú</mat-label>
-                        <input formControlName="ghi_chu" matInput placeholder="" [(ngModel)]="_Service.petrol.ghi_chu">
+                        <textarea formControlName="ghi_chu" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.ghi_chu"></textarea>
                     </mat-form-field>
-                </div>
-
-                <div class="col-6">
-                    <mat-form-field appearance="outline">
+                    <!-- <mat-form-field appearance="outline">
                         <mat-label>Địa chỉ</mat-label>
                         <input formControlName="dia_chi" matInput placeholder="" [(ngModel)]="_Service.petrol.dia_chi">
                     </mat-form-field>
@@ -101,7 +113,7 @@
                         <mat-label>Tên nhân viên</mat-label>
                         <input formControlName="ten_nhan_vien" matInput placeholder=""
                             [(ngModel)]="_Service.petrol.ten_nhan_vien">
-                    </mat-form-field>
+                    </mat-form-field> -->
                 </div>
             </div>
         </form>
@@ -118,7 +130,7 @@
                     <mat-icon>block</mat-icon> Xóa dòng
                 </button>
 
-                <button mat-raised-button class="red" (click)="removeRows()">Xóa sản lượng</button>
+                <button mat-raised-button class="red" (click)="removeRows()">Xóa TN cung cấp</button>
             </div>
         </div>
 

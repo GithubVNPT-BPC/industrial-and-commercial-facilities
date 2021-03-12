@@ -16,6 +16,15 @@
             <div class="row">
                 <div class="col-6">
                     <mat-form-field appearance="outline">
+                        <mat-label>Giấy phép</mat-label>
+                        <mat-select formControlName="id_giay_phep" [(ngModel)]="_Service.petrol.id_giay_phep">
+                            <mat-option *ngFor="let item of Certificate" [value]="item.id_giay_phep">
+                                {{item.so_giay_phep}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
                         <mat-label>Tên cửa hàng</mat-label>
                         <input formControlName="ten_cua_hang" matInput placeholder=""
                             [(ngModel)]="_Service.petrol.ten_cua_hang">

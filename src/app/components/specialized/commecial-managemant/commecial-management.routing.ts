@@ -33,6 +33,7 @@ import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/li
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
+import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
 
 const routes: Routes = [
   {
@@ -106,7 +107,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'addstore',
+        path: 'addstore/:id/:mst',
         component: AddStoreComponent,
         data: {
           title: 'Thêm cửa hàng xăng dầu',
@@ -127,7 +128,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'managebusiness/:type',
+        path: 'managebusiness/:type/:id_linh_vuc',
         component: ManageBusinessmanComponent,
         data: {
           title: 'Quản lý thương nhân',
@@ -141,7 +142,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'updatebusiness/:id/:type',
+        path: 'updatebusiness/:id/:type/:id_linh_vuc',
         component: UpdateBusinessmanComponent,
         data: {
           title: 'Cập nhật thương nhân',
@@ -155,7 +156,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'add-tobacco/:id',
+        path: 'add-tobacco/:id/:time',
         component: AddTobaccoBusinessComponent,
         data: {
           title: 'Thêm doanh nghiệp buôn bán thuốc lá',
@@ -176,7 +177,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'add-liquor/:id',
+        path: 'add-liquor/:id/:time',
         component: AddLiquorBusinessComponent,
         data: {
           title: 'Thêm doanh nghiệp buôn bán rượu',
@@ -194,6 +195,13 @@ const routes: Routes = [
         component: LPGBusinessComponent,
         data: {
           title: 'Quản lý mua bán LPG',
+        }
+      },
+      {
+        path: 'add-lpg/:id/:time',
+        component: AddLpgComponent,
+        data: {
+          title: 'Thêm doanh nghiệp mua bán LPG',
         }
       },
       {

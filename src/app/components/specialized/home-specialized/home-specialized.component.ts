@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, Validators, FormArray, FormGroup } from "@angular/forms";
 import { Router } from '@angular/router';
 
 
@@ -9,8 +8,10 @@ import { Router } from '@angular/router';
     styleUrls: ["./home-specialized.component.scss"],
 })
 export class HomeSpecializedComponent implements OnInit {
+    loading = true;
+
     constructor(private _router: Router
-    ) { }
+    ) {}
 
     ngOnInit() {
 
@@ -23,6 +24,7 @@ export class HomeSpecializedComponent implements OnInit {
     public OpenQLNL() {
         this._router.navigate(['/specialized/enery-management/hydroelectric']);
     }
+
     public OpenQLCN() {
         this._router.navigate(['/specialized/industry-management/chemical']);
     }

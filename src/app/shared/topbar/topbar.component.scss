@@ -1,8 +1,10 @@
 .material {
   $blue: #1f7ed0;
   $white: white;
-  #username {
-    color: white;
+
+  .username-display {
+    border-bottom: 1px solid beige;
+    color:black;
   }
   .mat-elevation-z5.main-contain {
     background-color: $blue;
@@ -69,25 +71,25 @@
         top: 65px;
         right: 0px;
         width: auto;
+
+        .dropdown-item {
+          color: black;
+          padding: 10px 5px 10px 25px;
+          text-decoration: none;
+          display: flex;
+          cursor: pointer;
+          align-items: center;
+
+          .display-item {
+            margin-left: 13px;
+          }
+        }
+
+        :active {
+          background-color: white !important;
+        }
       }
 
-      .dropdown-content div {
-        color: black;
-        padding: 10px 5px 10px 25px;
-        text-decoration: none;
-        display: flex;
-        cursor: pointer;
-        align-items: center;
-      }
-
-      .dropdown-content span {
-        margin-left: 13px;
-      }
-
-      .dropdown-content div:hover {
-        color: $white;
-        background-color: $blue;
-      }
     }
   }
 }

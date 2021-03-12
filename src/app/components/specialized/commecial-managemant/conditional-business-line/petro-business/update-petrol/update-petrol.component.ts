@@ -19,7 +19,8 @@ import {
   Status,
   PetrolStore,
   PostBusinessmanValue,
-  BusinessmanSelect
+  BusinessmanSelect,
+  StoreSelect
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -72,7 +73,7 @@ export class UpdatePetrolComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChildren(SpecialDirective) inputs: QueryList<SpecialDirective>
 
-  id: string;
+  id: number;
   mst: string;
   years: any[] = [];
   time: string;
@@ -134,6 +135,7 @@ export class UpdatePetrolComponent implements OnInit {
       }
       this._Service.DeleteBusinessmanValue(this.deletemodel1).subscribe(res => {
         this._info.msgSuccess('Xóa thành công')
+        this.Back();
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
@@ -150,12 +152,22 @@ export class UpdatePetrolComponent implements OnInit {
     });
   }
 
+  PetrolStore: Array<StoreSelect> = new Array<StoreSelect>();
+  filterpetrolstore: Array<StoreSelect> = new Array<StoreSelect>();
+
+  GetStore() {
+    this._Service.GetAllPetrolStore().subscribe((all) => {
+      this.PetrolStore = all.data as StoreSelect[];
+      this.filterpetrolstore = this.PetrolStore.slice();
+    })
+  }
+
   dataSource: MatTableDataSource<PostBusinessmanValue> = new MatTableDataSource<PostBusinessmanValue>();
   businessmanvalue: Array<PetrolList> = new Array<PetrolList>();
   businessmanvalue1: Array<PetrolList> = new Array<PetrolList>();
 
-  getBusinessmanvalue(time: string) {
-    this._Service.GetPetrolValue(time).subscribe(all => {
+  getBusinessmanvalue() {
+    this._Service.GetAllPetrolValue().subscribe(all => {
 
       this.businessmanvalue = all.data[1]
       this.businessmanvalue1 = this.businessmanvalue.filter(x => x.id_san_luong == this.id_san_luong)
@@ -238,7 +250,7 @@ export class UpdatePetrolComponent implements OnInit {
       ten_quan_ly: '',
       ten_nhan_vien: '',
       id_giay_phep: 0,
-      san_luong: 0,
+      san_luong: null,
       ghi_chu: '',
       time_id: ''
     }
@@ -256,8 +268,9 @@ export class UpdatePetrolComponent implements OnInit {
     this.getPetrolValue();
     this.GetAllGiayPhep(this.mst);
     this.getPetrolInfo();
-    this.getBusinessmanvalue(this.time);
+    this.getBusinessmanvalue();
     this.GetBusinessman();
+    this.GetStore();
 
     this.petrol_data = this.formbuilder.group({
       id_cua_hang_xang_dau: null,
@@ -271,7 +284,7 @@ export class UpdatePetrolComponent implements OnInit {
       ten_nhan_vien: '',
       id_giay_phep: 0,
       ghi_chu: '',
-      san_luong: 0,
+      san_luong: null,
       time_id: ''
     })
 
@@ -293,6 +306,16 @@ export class UpdatePetrolComponent implements OnInit {
       }
     );
 
+    // this._Service.PostPetrol(input2).subscribe(
+    //   res => {
+    //     // debugger;
+    //     this._info.msgSuccess('Thêm thành công')
+    //   },
+    //   err => {
+    //     // debugger;
+    //   }
+    // )
+
     if (this.dataSource.data) {
       this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
         next => {
@@ -301,6 +324,7 @@ export class UpdatePetrolComponent implements OnInit {
           }
           else {
             this._info.msgSuccess("Dữ liệu được lưu thành công!");
+            this.Back()
           }
         },
         error => {
@@ -309,15 +333,6 @@ export class UpdatePetrolComponent implements OnInit {
       );
     }
 
-    this._Service.PostPetrol(input2).subscribe(
-      res => {
-        // debugger;
-        this._info.msgSuccess('Thêm thành công')
-      },
-      err => {
-        // debugger;
-      }
-    )
   }
 
   petrolvaluepost: Array<PetrolValuePost> = new Array<PetrolValuePost>();
@@ -330,18 +345,22 @@ export class UpdatePetrolComponent implements OnInit {
 
     this.petrolvaluepost.push({
       ghi_chu: '',
-      san_luong: 0,
+      san_luong: null,
       time_id: '',
-      id: this.id_san_luong,
-      id_cua_hang_xang_dau: this.id
+      id: null,
+      id_cua_hang_xang_dau: null
     })
 
     this.petrolvaluepost[0].ghi_chu = this.input.ghi_chu
     this.petrolvaluepost[0].san_luong = this.input.san_luong
     this.petrolvaluepost[0].time_id = this.input.time_id
+    this.petrolvaluepost[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
+    if (this.id_san_luong != 'undefined') {
+      this.petrolvaluepost[0].id = this.id_san_luong
+    }
 
     this.petrolstorepost.push({
-      id_cua_hang_xang_dau: this.id,
+      id_cua_hang_xang_dau: null,
       ten_cua_hang: '',
       mst: '',
       dia_chi: '',
@@ -363,7 +382,7 @@ export class UpdatePetrolComponent implements OnInit {
     this.petrolstorepost[0].ten_nhan_vien = this.input.ten_nhan_vien
     this.petrolstorepost[0].id_giay_phep = this.input.id_giay_phep
 
-    this.SaveData(this.petrolvaluepost, this.petrolstorepost);
+    this.SaveData(this.petrolvaluepost, this.petrolstorepost[0]);
   }
 
   petrolobject = new PetrolList();
@@ -397,7 +416,7 @@ export class UpdatePetrolComponent implements OnInit {
       this.petrolobject = this.dataSource2.data[0]
 
       this._Service.petrol = {
-        id_cua_hang_xang_dau: this.id,
+        id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
         ten_cua_hang: this.petrolobject.ten_cua_hang,
         mst: this.petrolobject.mst,
         dia_chi: this.petrolobject.dia_chi,

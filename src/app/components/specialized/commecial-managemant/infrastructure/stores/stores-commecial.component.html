@@ -179,12 +179,12 @@
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
-                                        <ng-container *ngIf="![].includes(field.key) ;else dateFieldCond">
+                                        <ng-container *ngIf="!['ngay_cap_giay_chung_nhan', 'ngay_cap_giay_phep', 'ngay_het_han_giay_phep'].includes(field.key) ;else dateFieldCond">
                                             <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
-
+                                
                                 <ng-template #activeFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' : 'Hết hạn'}}</td>
                                 </ng-template>

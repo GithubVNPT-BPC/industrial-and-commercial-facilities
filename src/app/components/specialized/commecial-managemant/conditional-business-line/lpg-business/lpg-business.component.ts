@@ -1,61 +1,106 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { element } from 'protractor';
-import { ConditionalBusinessLineModel } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { formatDate } from '@angular/common';
+import { Router } from '@angular/router';
+import { InformationService } from 'src/app/shared/information/information.service';
+import { SelectionModel } from '@angular/cdk/collections';
+
+import { MatDialog } from '@angular/material';
+
+import {
+    DistrictModel,
+    LPGList,
+    DeleteModel
+} from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
 
-// Services
-import { ReportService } from 'src/app/_services/APIService/report.service';
-import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { CommonFuntions } from '../common-functions.service';
+import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
+
+import { FormControl } from '@angular/forms';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import _moment from 'moment';
+import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { time } from 'highcharts';
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'YYYY',
+    },
+    display: {
+        dateInput: 'YYYY',
+        monthYearLabel: 'YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
 
 @Component({
     selector: 'lpg-business',
     templateUrl: './lpg-business.component.html',
     styleUrls: ['../../../special_layout.scss'],
+    providers: [
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+    ],
 })
 
 export class LPGBusinessComponent implements OnInit {
-    displayedColumns: string[] = ['index', 'mst', 'ten_doanh_nghiep', 'dia_chi', 'dien_thoai', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'danh_sach_thuong_nhan', 'so_luong_co_so'];
-    dataSource: MatTableDataSource<ConditionalBusinessLineModel> = new MatTableDataSource<ConditionalBusinessLineModel>();
-    filteredDataSource: MatTableDataSource<ConditionalBusinessLineModel> = new MatTableDataSource<ConditionalBusinessLineModel>();
-    years: any[] = [];
-    districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-    soLuongCoSo: number;
-    isChecked: boolean;
+    displayedColumns: string[] = [
+        'select',
+        'index',
+        'mst',
+        'ten_doanh_nghiep',
+        'dia_chi_day_du',
+        'nguoi_dai_dien',
+        'so_dien_thoai',
+        'so_giay_phep',
+        'ngay_cap',
+        'ngay_het_han',
+        'ten_thuong_nhan',
+        'so_luong',
+        'tinh_trang_hoat_dong',
+        'ghi_chu',
+
+        'ten_quan_huyen',
+        'id_lpg',
+        'time_id'
+    ];
 
     @ViewChild('table', { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
     constructor(
         public excelService: ExcelService,
-        public sctService: SCTService,
-        public commonFunctions: CommonFuntions
-        ) {
+        public _Service: ConditionBusinessService,
+        public router: Router,
+        public _info: InformationService,
+        public dialog: MatDialog
+    ) {
+    }
+
+    public district: Array<DistrictModel> = new Array<DistrictModel>();
+    getQuan_Huyen() {
+        this._Service.GetAllDistrict().subscribe((allDistrict) => {
+            this.district = allDistrict["data"] as DistrictModel[];
+        });
     }
 
     ngOnInit() {
-        this.years = this.commonFunctions.getYears();
-        this.getDanhSachBuonBanLPG(0);
-
-        // this.filteredDataSource.filterPredicate = function (data: ConditionalBusinessLineModel, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
         this.autoOpen();
+        this.getLPGListbyYear();
+        this.getQuan_Huyen();
+        this.theYear = parseInt(this.getCurrentYear());
     }
 
     autoOpen() {
@@ -70,30 +115,116 @@ export class LPGBusinessComponent implements OnInit {
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        this.dataSource1.filter = filterValue.trim().toLowerCase();
     }
 
-    getDanhSachBuonBanLPG(time_id: number) {
-        this.sctService.GetDanhSachBuonBanLPG(2020).subscribe(result => {
-            this.dataSource = new MatTableDataSource<ConditionalBusinessLineModel>(result.data[0]);
+    selection = new SelectionModel<LPGList>(true, []);
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        // const numRows = this.dataSource.data.length;
+        const numRows = this.dataSource1.connect().value.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+    }
+
+    checkboxLabel(row?: LPGList): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_lpg + 1}`;
+    }
+
+    deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+    selectionarray: string[];
+    removeRows() {
+        if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+            this.selection.selected.forEach(x => {
+                this.selectionarray = this.selection.selected.map(item => item.id_lpg)
+                this.deletemodel1.push({
+                    id: ''
+                })
+            })
+            for (let index = 0; index < this.selectionarray.length; index++) {
+                const element = this.deletemodel1[index];
+                element.id = this.selectionarray[index]
+            }
+            this._Service.DeleteLPGValue(this.deletemodel1).subscribe(res => {
+                this._info.msgSuccess('Xóa thành công')
+                this.ngOnInit()
+                this.selection.clear();
+                this.paginator.pageIndex = 0;
+            })
+        }
+    }
+
+    SoLuongCoSo: number;
+    SLThuongNhan: number;
+    type: string = 'LPG'
+
+    dataSource: MatTableDataSource<LPGList> = new MatTableDataSource<LPGList>();
+    dataSource1: MatTableDataSource<LPGList> = new MatTableDataSource<LPGList>();
+    LPGList: Array<LPGList> = new Array<LPGList>();
+    LPGList1: Array<LPGList> = new Array<LPGList>();
+    LPGList2: Array<LPGList> = new Array<LPGList>();
+
+    getLPGListbyYear() {
+        this._Service.GetAllLPGValue().subscribe(all => {
+            this.LPGList = all.data[0];
+            this.LPGList1 = all.data[1];
+            this.LPGList2 = this.LPGList.map(x => {
+                let temp = this.LPGList1.filter(y => y.id_san_luong == x.id_lpg)
+
+                let temp1 = temp.map(z => z.ten_thuong_nhan)
+                if (temp1 == undefined || temp1 == null) {
+                    x.ten_thuong_nhan = null
+                }
+                else {
+                    x.ten_thuong_nhan = temp1.join('; ')
+                }
+
+                let temp2 = temp.map(z => z.dia_chi_tn)
+                if (temp2 == undefined || temp2 == null) {
+                    x.dia_chi_tn = null
+                }
+                else {
+                    x.dia_chi_tn = temp2.join('; ')
+                }
+
+                let temp3 = temp.map(z => z.so_dien_thoai_tn)
+                if (temp3 == undefined || temp3 == null) {
+                    x.so_dien_thoai_tn = null
+                }
+                else {
+                    x.so_dien_thoai_tn = temp3.join('; ')
+                }
+
+                return x
+            })
+
+            this.dataSource.data = this.LPGList2
             this.dataSource.data.forEach(element => {
-                element.is_het_han = new Date(element.ngay_het_han) < new Date();
-                result.data[1].forEach(businessman => {
-                    if (businessman.id_kd_co_dk === element.id)
-                        element.danh_sach_thuong_nhan += businessman.ten_thuong_nhan + '\n';
-                });
+                if (element.ngay_het_han) {
+                    let temp = this.Convertdate(element.ngay_het_han)
+                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                }
+                else {
+                    element.is_het_han = false
+                }
+                element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+                element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
+            this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
 
-            if (time_id != 0)
-                this.filteredDataSource.data = [...this.dataSource.data.filter(x => new Date(x.ngay_cap).getFullYear() == time_id)];
-            else
-                this.filteredDataSource.data = [...this.dataSource.data];
+            this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+            this.SLThuongNhan = this.LPGList1.length;
 
-            // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-            // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-            // this.filteredDataSource.data = this.filteredDataSource.data.concat(this.filteredDataSource.data);
-            this.soLuongCoSo = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
-            this.filteredDataSource.paginator = this.paginator;
+            this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";
             this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -102,54 +233,93 @@ export class LPGBusinessComponent implements OnInit {
         })
     }
 
-    log(any) {
-    }
+    // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
+    // allSelected = false;
+    // toggleAllSelection() {
+    //     this.allSelected = !this.allSelected;
 
-    getYears() {
-        return [0, ...Array(5).fill(1).map((element, index) => new Date().getFullYear() - index)];
-    }
+    //     if (this.allSelected) {
+    //         this.dSelect.options.forEach((item: MatOption) => item.select());
+    //     } else {
+    //         this.dSelect.options.forEach((item: MatOption) => item.deselect());
+    //     }
+    //     this.dSelect.close();
+    // }
+
+    // OpenDetailPetrol(id: number, mst: string) {
+    //     let url = this.router.serializeUrl(
+    //         this.router.createUrlTree([encodeURI('#') + 'specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
+    //     window.open(url.replace('%23', '#'), "_blank");
+    // }
 
     applyDistrictFilter(event) {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
+            this.dataSource.data.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
             if (event.value.length)
-                this.filteredDataSource.data = [];
+                this.dataSource1.data = [];
             else
-                this.filteredDataSource.data = this.dataSource.data;
+                this.dataSource1.data = this.dataSource.data;
         }
         else {
-            this.filteredDataSource.data = filteredData;
+            this.dataSource1.data = filteredData;
         }
-        this.soLuongCoSo = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
-    }
 
-    // isHidden(row : any){
-    //     return (this.isChecked)? (row.is_het_han) : false;
-    // }
+        this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+
+    }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.filter = (event.checked) ? "true" : "";
+        this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
     }
-    
+
+    public getCurrentDate() {
+        let date = new Date;
+        return formatDate(date, 'yyyy-MM-dd', 'en-US');
+    }
+
+    public getCurrentYear() {
+        let date = new Date;
+        return formatDate(date, 'yyyy', 'en-US');
+    }
+
+    Convertdate(text: string): string {
+        let date: string
+        date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+        return date
+    }
+
+    public date = new FormControl(_moment());
+    public theYear: number;
+
+    public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+        const ctrlValue = this.date.value;
+        ctrlValue.year(normalizedYear.year());
+        this.date.setValue(ctrlValue);
+        this.theYear = normalizedYear.year();
+        datepicker.close();
+        // this.getLPGListbyYear(this.theYear.toString()
+    }
+
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
-    
-    @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    allSelected = false;
-    toggleAllSelection() {
-        this.allSelected = !this.allSelected;  // to control select-unselect
 
-        if (this.allSelected) {
-            this.dSelect.options.forEach((item: MatOption) => item.select());
-        } else {
-            this.dSelect.options.forEach((item: MatOption) => item.deselect());
-        }
-        this.dSelect.close();
+    id_linh_vuc: number = 9;
+
+    ManageBusiness(type: string, id_linh_vuc: number) {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
+    }
+
+    AddLPG(id: string, time: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-lpg/' + id + '/' + time]);
+    }
+
+    Back() {
+        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 }

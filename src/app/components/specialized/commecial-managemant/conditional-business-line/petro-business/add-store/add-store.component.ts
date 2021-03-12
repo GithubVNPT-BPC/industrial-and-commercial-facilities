@@ -4,13 +4,15 @@ import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
 import { CommonFuntions } from 'src/app/components/specialized/commecial-managemant/conditional-business-line/common-functions.service';
+import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
 
 import {
   DistrictModel,
   SubDistrictModel,
   CertificateModel,
   PetrolPost,
-  Status
+  Status,
+  PetrolList,
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -33,13 +35,21 @@ export class AddStoreComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChildren(SpecialDirective) inputs: QueryList<SpecialDirective>
 
+  id: number
+  mst: string
+
   constructor(
     public excelService: ExcelService,
     public _Service: ConditionBusinessService,
     public formbuilder: FormBuilder,
     public _info: InformationService,
     public router: Router,
+    public route: ActivatedRoute
   ) {
+    this.route.params.subscribe((params) => {
+      this.id = params["id"];
+      this.mst = params["mst"];
+    });
   }
 
   subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
@@ -57,6 +67,12 @@ export class AddStoreComponent implements OnInit {
   getQuan_Huyen() {
     this._Service.GetAllDistrict().subscribe((allDistrict) => {
       this.district = allDistrict["data"] as DistrictModel[];
+    });
+  }
+
+  GetAllGiayPhep(mst: string) {
+    this._Service.GetCertificate(mst).subscribe((allrecords) => {
+      this.Certificate = allrecords.data as CertificateModel[];
     });
   }
 
@@ -101,6 +117,8 @@ export class AddStoreComponent implements OnInit {
     this.resetForm();
     this.getQuan_Huyen();
     this.GetAllPhuongXa();
+    this.getPetrolInfo();
+    this.GetAllGiayPhep(this.mst);
 
     this.petrol_data = this.formbuilder.group({
       id_cua_hang_xang_dau: null,
@@ -127,6 +145,35 @@ export class AddStoreComponent implements OnInit {
         // debugger;
       }
     )
+  }
+
+  petrolobject = new PetrolList();
+
+  dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+  dataSource2: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+
+  getPetrolInfo() {
+    this._Service.GetAllPetrolValue().subscribe(all => {
+      this.dataSource1 = new MatTableDataSource<PetrolList>(all.data[0]);
+      this.dataSource2.data = this.dataSource1.data.filter(x => x.id_cua_hang_xang_dau == this.id)
+      this.petrolobject = this.dataSource2.data[0]
+
+      this._Service.petrol = {
+        id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
+        ten_cua_hang: this.petrolobject.ten_cua_hang,
+        mst: this.petrolobject.mst,
+        dia_chi: this.petrolobject.dia_chi,
+        id_phuong_xa: this.petrolobject.id_phuong_xa,
+        so_dien_thoai: this.petrolobject.so_dien_thoai,
+        id_tinh_trang_hoat_dong: this.petrolobject.id_tinh_trang_hoat_dong,
+        ten_quan_ly: this.petrolobject.ten_quan_ly,
+        ten_nhan_vien: this.petrolobject.ten_nhan_vien,
+        id_giay_phep: this.petrolobject.id_giay_phep,
+        time_id: this.petrolobject.time_id,
+        ghi_chu: this.petrolobject.ghi_chu,
+        san_luong: this.petrolobject.san_luong
+      }
+    })
   }
 
   input: PetrolPost

@@ -1,13 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { SolarEneryManagementModel } from 'src/app/_models/APIModel/electric-management.module';
-import { LinkModel } from 'src/app/_models/link.model';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 import { FormControl } from '@angular/forms';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
-import { BaseComponent } from 'src/app/components/specialized/specialized-base.component';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 
 @Component({

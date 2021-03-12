@@ -54,6 +54,28 @@ export const MY_FORMATS = {
 })
 
 export class LiquorBusinessComponent implements OnInit {
+    displayedColumns: string[] = [
+        'select',
+        'index',
+        'mst',
+        'ten_doanh_nghiep',
+        'dia_chi_day_du',
+        'nguoi_dai_dien',
+        'so_dien_thoai',
+        'so_giay_phep',
+        'ngay_cap',
+        'ngay_het_han',
+        'ten_thuong_nhan',
+        'so_luong',
+        'tri_gia',
+        'tinh_trang_hoat_dong',
+        'ghi_chu',
+
+        'ten_quan_huyen',
+        'id_ruou',
+        'time_id'
+    ];
+
     @ViewChild('table', { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
@@ -65,18 +87,6 @@ export class LiquorBusinessComponent implements OnInit {
         public _info: InformationService,
         public dialog: MatDialog
     ) {
-    }
-
-    Addliquorbusiness(id: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-liquor/' + id]);
-    }
-
-    Addliquorsupply(id: string, time: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-liquor-supply/' + id + '/' + time]);
-    }
-
-    Back() {
-        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 
     public district: Array<DistrictModel> = new Array<DistrictModel>();
@@ -133,7 +143,7 @@ export class LiquorBusinessComponent implements OnInit {
                 const element = this.deletemodel1[index];
                 element.id = this.selectionarray[index]
             }
-            this._Service.DeleteTobaccoValue(this.deletemodel1).subscribe(res => {
+            this._Service.DeleteLiquorValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
                 this.ngOnInit()
                 this.selection.clear();
@@ -157,25 +167,6 @@ export class LiquorBusinessComponent implements OnInit {
     TriGiaBanRa: number;
     SLThuongNhan: number;
 
-    displayedColumns: string[] = [
-        'them_thuong_nhan',
-        'index',
-        'mst',
-        'ten_doanh_nghiep',
-        'dia_chi_day_du',
-        'so_dien_thoai',
-        'so_giay_phep',
-        'ngay_cap',
-        'ngay_het_han',
-        'nguoi_dai_dien',
-        'ten_thuong_nhan',
-        'so_luong',
-        'tri_gia',
-
-        'ten_quan_huyen',
-        'id_ruou',
-        'time_id'
-    ];
     dataSource: MatTableDataSource<LiquorList> = new MatTableDataSource<LiquorList>();
     dataSource1: MatTableDataSource<LiquorList> = new MatTableDataSource<LiquorList>();
     LiquorList: Array<LiquorList> = new Array<LiquorList>();
@@ -280,7 +271,7 @@ export class LiquorBusinessComponent implements OnInit {
         }
 
         this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-
+        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
     }
 
     applyExpireCheck(event) {
@@ -317,5 +308,23 @@ export class LiquorBusinessComponent implements OnInit {
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    type: string = 'Liquor'
+    id_linh_vuc: number = 8;
+    ManageBusiness(type: string, id_linh_vuc: number) {
+        this.router.navigate(['specialized/commecial-management/domestic/managebusiness/' + type + '/' + id_linh_vuc]);
+    }
+
+    Addliquorbusiness(id: string, time: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-liquor/' + id + '/' + time]);
+    }
+
+    Addliquorsupply(id: string, time: string) {
+        this.router.navigate(['specialized/commecial-management/domestic/add-liquor-supply/' + id + '/' + time]);
+    }
+
+    Back() {
+        this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 }

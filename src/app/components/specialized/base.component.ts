@@ -1,11 +1,10 @@
-import { Component, OnInit, Injectable, ElementRef, ViewChild, Injector } from '@angular/core';
+import { OnInit, ElementRef, ViewChild, Injector } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
+import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { formatDate } from '@angular/common';
 
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
@@ -14,9 +13,10 @@ import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/co
 import { DistrictModel, SubDistrictModel, DistrictWardModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 
-import moment from 'moment';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
+import moment from 'moment';
 
 export abstract class BaseComponent implements OnInit {
 
@@ -50,7 +50,6 @@ export abstract class BaseComponent implements OnInit {
     public selection = new SelectionModel(true, []);
 
     public readonly dateFormat = 'YYYY/MM/DD';
-    public readonly dateLocale = 'vi-VN';
 
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
@@ -236,7 +235,7 @@ export abstract class BaseComponent implements OnInit {
         })
     }
 
-    initDistrictWard(sorted=true) {
+    public initDistrictWard(sorted=true) {
         this.sctService.LayDanhSachPhuongXaQuanHuyen().subscribe(res => {
             if(res['success']) {
                 let districtWardData = res['data'];
