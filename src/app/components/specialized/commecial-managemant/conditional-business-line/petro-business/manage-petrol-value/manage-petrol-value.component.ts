@@ -115,6 +115,7 @@ export class ManagePetrolValueComponent implements OnInit {
       }
       this._Service.DeletePetrolValue(this.deletemodel1).subscribe(res => {
         this._info.msgSuccess('Xóa thành công')
+        this.date = this.newdate
         this.ngOnInit();
         this.deletemodel1 = []
         this.selection.clear();
@@ -122,6 +123,8 @@ export class ManagePetrolValueComponent implements OnInit {
       })
     }
   }
+
+  public newdate = new FormControl(_moment());
 
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   getQuan_Huyen() {
