@@ -9,11 +9,6 @@ import { MarketModel } from 'src/app/_models/APIModel/commecial-management.model
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
-//Moment
-import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { YEAR_FORMAT } from '../common/common-commecial.component';
-
 @Component({
   selector: "app-market-commecial",
   templateUrl: "./market-commecial.component.html",
@@ -132,8 +127,13 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   public numOfMarket: number = 0;
   //--
 
-  public diaban_NongThon: number = 0;
-  public diaban_ThanhThi: number = 0;
+  public loaihinh_NongThon: number = 0;
+  public loaihinh_ThanhThi: number = 0;
+  public loaihinh_ChoDauMoi: number = 0;
+  public loaihinh_ChoTrongQuyHoach: number = 0;
+  public loaihinh_ChoTuPhat: number = 0;
+  public loaihinh_ChoKhac: number = 0;
+  public loaihinh_ChuaCoCho: number = 0;
 
   //--
   public hang_HangI: number = 0;
@@ -216,8 +216,8 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     this.numOfMarket = data.length;
 
     // Phân theo địa bàn
-    this.diaban_ThanhThi = data.filter(x => x.is_thanh_thi).length;
-    this.diaban_NongThon = data.filter(x => !x.is_thanh_thi).length;
+    this.loaihinh_ThanhThi = data.filter(x => x.is_thanh_thi).length;
+    this.loaihinh_NongThon = data.filter(x => !x.is_thanh_thi).length;
 
     // Phân theo hạng chợ
     this.hang_HangI = data.filter(x => x.id_hang_cho == 1).length;

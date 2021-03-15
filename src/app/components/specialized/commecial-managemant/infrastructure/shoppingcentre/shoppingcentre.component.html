@@ -30,14 +30,11 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <ul>
-                                    <li>
-                                        <span>{{tongSieuThi | number: '1.0-0':'vi'}}</span> TTTM
-                                    </li>
-                                </ul>
+                                    <span>{{tongSieuThi | number: '1.0-0':'vi'}}</span> TTTM
                             </mat-card-content>
                         </mat-card>
                     </div>
+
                     <div class="col">
                         <mat-card class="card-default">
                             <mat-card-header>
@@ -61,6 +58,36 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 3. Phân theo vốn đầu tư:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Vốn nhà nước: <span>{{sieuThiHangI}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn ngoài nhà nước: <span>{{sieuThiHangII}}</span>
+                                    </li>
+                                    <li>
+                                        Có vốn đầu tư nước ngoài: <span>{{sieuThiHangIII}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn khác: <span>{{sieuThiHangIII}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
                     <div class="col">
                         <mat-card class="card-default">
                             <mat-card-header>
@@ -82,6 +109,12 @@
                                     </li>
                                     <li>
                                         TTTM vùng: <span>0</span>
+                                    </li>
+                                    <li>
+                                        Tổng hợp: <span>0</span>
+                                    </li>
+                                    <li>
+                                        Chuyên doanh: <span>0</span>
                                     </li>
                                 </ul>
                             </mat-card-content>

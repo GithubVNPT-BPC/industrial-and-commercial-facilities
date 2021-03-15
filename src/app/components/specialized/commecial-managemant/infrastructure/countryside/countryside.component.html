@@ -13,7 +13,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4xlxl col-lg-4" >
+                    <div class="col" >
                         <mat-card class="card-default">
                             <mat-card-header>
                                 <mat-card-title>
@@ -24,17 +24,17 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Số chợ truyền thống: <span>{{sumOfMarket}} chợ</span>
+                                        Tổng số chợ: <span>{{sumOfMarket}} chợ</span>
                                     </li>
                                     <li>
-                                        Số chợ trong huyện/ thị xã/ thành phố: <span>{{sumOfWards}} xã</span>
+                                        Tổng số xã NTM: <span>{{sumOfWards}} xã</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
                         </mat-card>
                     </div>
 
-                    <div class="col-4 col-lg-4" >
+                    <div class="col" >
                         <mat-card class="card-default">
                             <mat-card-header>
                                 <mat-card-title>
@@ -45,31 +45,10 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Số chợ đạt TC số 7: <span>{{sumOf7thStandard}} chợ</span>
+                                        Tổng số xã đạt TC số 7: <span>{{sumOf7thStandard}} xã</span>
                                     </li>
                                     <li>
                                         Số chợ đạt chuẩn: <span>{{sumOfImplStandard}} chợ</span>
-                                    </li>
-                                </ul>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-
-                    <div class="col-4 col-lg-4" >
-                        <mat-card class="card-default">
-                            <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Thực hiện 6 tháng/năm cùng ký năm trước
-                                </mat-card-title>
-                                <mat-card-subtitle></mat-card-subtitle>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <ul>
-                                    <li>
-                                        Số chợ đạt TC số 7: <span>{{sumOf7thStandardPrevYear}} chợ</span>
-                                    </li>
-                                    <li>
-                                        Số chợ đạt chuẩn: <span>{{sumOfImplStandardPrevYear}} chợ</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -92,7 +71,7 @@
                                         <strong > Kế hoạch 6 tháng/năm</strong>
                                         <ul class="text-left mt-2">
                                             <li>
-                                                Số chợ đạt TC số 7: <span>{{sumOf7thStandardReportYearByPlan}} chợ</span>
+                                                Số xã đạt TC số 7: <span>{{sumOf7thStandardReportYearByPlan}} xã</span>
                                             </li>
                                             <li>
                                                 Số chợ đạt chuẩn: <span>{{sumOfImplStandardReportYearByPlan}} chợ</span>
@@ -105,7 +84,7 @@
                                         </strong>
                                         <ul class="text-left mt-2">
                                             <li>
-                                                Số chợ đạt TC số 7: <span>{{sumOf7thStandardReportYearByPrepare}} chợ</span>
+                                                Số xã đạt TC số 7: <span>{{sumOf7thStandardReportYearByPrepare}} xã</span>
                                             </li>
                                             <li>
                                                 Số chợ đạt chuẩn: <span>{{sumOfImplStandardReportYearByPrepare}} chợ</span>
@@ -151,7 +130,7 @@
 
                     <div class="col-3 col-lg-3 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('HTTM - Cửa hàng tiện lợi','HTTM - Cửa hàng tiện lợ')"><mat-icon>file_download</mat-icon></button>
+                            (click)="ExportTOExcel('HTTM - Cửa hàng tiện lợi','HTTM - Cửa hàng tiện lợi')"><mat-icon>file_download</mat-icon></button>
                         <button mat-raised-button matTooltip="Thêm mới" 
                             color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
                         <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
