@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <strong>
-                Danh sách báo cáo
+                <h3>Danh sách báo cáo</h3>
             </strong>
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="layout" *ngIf="dataSource.data.length;else ShowList">
+        <div class="layout" id="special" *ngIf="dataSource.data.length;else ShowList">
             <mat-form-field id="filter">
                 <mat-label>Lọc dữ liệu</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
@@ -80,8 +80,8 @@
 
                 <ng-container matColumnDef="obj_name">
                     <th mat-header-cell *matHeaderCellDef> Tên báo cáo </th>
-                    <td mat-cell *matCellDef="let element" class="text-primary"> <a
-                            (click)="OpenDetailObject(element.obj_id)">{{element.obj_name}}</a></td>
+                    <td mat-cell *matCellDef="let element" id="jump" (click)="OpenDetailObject(element.obj_id)">
+                        {{element.obj_name}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="org_name">
@@ -101,19 +101,16 @@
 
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef> Thao tác </th>
-                    <td mat-cell *matCellDef="let element">
-                        <a class="btn" (click)="OpenDetailObject(element.obj_id)">
-                            <mat-icon>edit</mat-icon>
-                        </a>
+                    <td mat-cell *matCellDef="let element" (click)="OpenDetailObject(element.obj_id)" id="jump">
+                        <mat-icon>edit</mat-icon>
                     </td>
                 </ng-container>
 
                 <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
-
-            <mat-paginator MatPaginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
         </div>
+        <mat-paginator MatPaginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
 
         <ng-template #ShowList>
             <p class="text-center"><strong>Không có báo cáo</strong></p>
