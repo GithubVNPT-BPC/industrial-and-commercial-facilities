@@ -98,7 +98,6 @@ export class IIPIndustrialComponent implements OnInit {
 
     private getData(time_id: number) {
         this._reportService.Get12MonthReports(2, time_id, 'SCT_CUS_CSSXCNT_ATTR_THT').subscribe(res => {
-            console.log(res);
             this.dataSource = new MatTableDataSource<IIPIndustrialModel>(res.data);
             this.dataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
