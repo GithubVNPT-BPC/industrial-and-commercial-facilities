@@ -17,7 +17,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'computed_cong_suat', 'computed_san_luong', 'ngay_cap', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'computed_cong_suat', 'computed_san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
 
     displayedFields = {
         mst: "Mã số thuế",
@@ -40,7 +40,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     filterModel = {
         id_quan_huyen: [],
-        id_loai_hinh: [],
+        nganh_nghe_kd_chinh: [],
     }
 
     dataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
@@ -53,8 +53,8 @@ export class ChemicalManagementComponent extends BaseComponent {
     public chemistryNameList = [];
     
     private typeList = [
-        { id :1, name: "Sản xuất"},
-        { id :2, name: "Kinh doanh"},
+        { name: "Sản xuất"},
+        { name: "Kinh doanh"},
     ]
 
     constructor(
@@ -113,7 +113,6 @@ export class ChemicalManagementComponent extends BaseComponent {
         return {
             mst: new FormControl(),
             time_id: new FormControl({value: this.currentYear}),
-            id_loai_hinh: new FormControl(),
             details: this.formBuilder.array([
                 this.formBuilder.group({
                     id_hoa_chat: [],
@@ -129,6 +128,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         details.map(e => {
             e['mst'] = data['mst'];
             e['time_id'] = data['time_id'];
+            // FIX: Hard code 'id_loai_hinh', must fix later
             e['id_loai_hinh'] = data['id_loai_hinh'];
         });
 
@@ -171,20 +171,18 @@ export class ChemicalManagementComponent extends BaseComponent {
                     c.cong_suat = matchingList.length ? matchingList.map(x => x.cong_suat ? parseInt(x.cong_suat) : 0).reduce((a, b) => a + b) : 0;
                 });
 
-                this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
-                result.data.forEach(element => {
+                
+                chemicalManagementData.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
                     element.ngay_het_han = this.formatDate(element.ngay_het_han);
-                });
-                
-                this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                 });
 
+                this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
                 this.filteredDataSource.data = [...this.dataSource.data];
-                this.paginatorAgain();
             }
             this._prepareData();
+            this.paginatorAgain();
         })
     }
 
@@ -239,5 +237,27 @@ export class ChemicalManagementComponent extends BaseComponent {
         }
         this._prepareData();
         this.paginatorAgain();
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(filterName => {
+            let filterCrits = [];
+            if (filters[filterName].length) {
+                if (filterName == 'nganh_nghe_kd_chinh') {
+                    filters[filterName].forEach(criteria => {
+                        filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].trim().toLowerCase().includes(criteria.trim().toLowerCase())));
+                    });
+                } else {
+                    filters[filterName].forEach(criteria => {
+                        filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName] == criteria));
+                    });
+                }
+                filteredData = [...filterCrits];
+            }
+        });
+        filteredData = filteredData.filter((v,i,a) => a.findIndex(t => (t.id_qlcn_hc === v.id_qlcn_hc)) === i)
+        return filteredData;
     }
 }
