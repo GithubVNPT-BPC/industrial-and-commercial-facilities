@@ -31,11 +31,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <ul>
-                                    <li>
-                                        <span>{{tongSieuThi | number: '1.0-0':'vi'}}</span> siêu thị
-                                    </li>
-                                </ul>
+                                <span>{{tongSieuThi}}</span> siêu thị
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -50,18 +46,48 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Hạng I: <span>{{sieuThiHangI | number: '1.0-0':'vi'}}</span>
+                                        Hạng I: <span>{{sieuThiHangI }}</span>
                                     </li>
                                     <li>
-                                        Hạng II: <span>{{sieuThiHangII | number: '1.0-0':'vi'}}</span>
+                                        Hạng II: <span>{{sieuThiHangII }}</span>
                                     </li>
                                     <li>
-                                        Hạng III: <span>{{sieuThiHangIII | number: '1.0-0':'vi'}}</span>
+                                        Hạng III: <span>{{sieuThiHangIII }}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
                         </mat-card>
                     </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col">
+                        <mat-card class="card-default">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> 3. Phân theo vốn đầu tư:
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <ul>
+                                    <li>
+                                        Vốn nhà nước: <span>{{sieuThiHangI}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn ngoài nhà nước: <span>{{sieuThiHangII}}</span>
+                                    </li>
+                                    <li>
+                                        Có vốn đầu tư nước ngoài: <span>{{sieuThiHangIII}}</span>
+                                    </li>
+                                    <li>
+                                        Vốn khác: <span>{{sieuThiHangIII}}</span>
+                                    </li>
+                                </ul>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    
                     <div class="col">
                         <mat-card class="card-default">
                             <mat-card-header>
@@ -73,10 +99,10 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Tổng hợp: <span>{{sieuThiTongHop | number: '1.0-0':'vi'}}</span>
+                                        Tổng hợp: <span>{{sieuThiTongHop }}</span>
                                     </li>
                                     <li>
-                                        Chuyên doanh: <span>{{sieuThiChuyenDanh | number: '1.0-0':'vi'}}</span>
+                                        Chuyên doanh: <span>{{sieuThiChuyenDanh }}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -94,7 +120,7 @@
                                 <ul>
                                     <li>
                                         Thành lập mới năm <span>{{currentYear}}</span> là:
-                                        <span>{{sieuThiDauTuTrongNam | number: '1.0-0':'vi'}}</span>
+                                        <span>{{sieuThiDauTuTrongNam }}</span>
                                     </li>
                                     <li>
                                         Ngừng hoạt động năm <span>{{currentYear}}</span> là:
