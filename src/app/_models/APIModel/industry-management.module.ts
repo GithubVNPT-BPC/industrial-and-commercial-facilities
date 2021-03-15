@@ -69,8 +69,6 @@ export class LPGManagementModel{
     so_giay_phep: string;
     ngay_cap: string;
     ngay_het_han: string;
-    computed_cong_suat: string;
-    computed_san_luong: string;
     is_expired: boolean;
 }
 
@@ -92,9 +90,7 @@ export class ChemicalManagementModel{
     ngay_cap: string;
     ngay_het_han: string;
     cong_suat: string;
-    computed_cong_suat: string;
     san_luong: string;
-    computed_san_luong: string;
     is_expired: boolean;
     id_loai_hinh: number;
     ten_loai_hinh: string;

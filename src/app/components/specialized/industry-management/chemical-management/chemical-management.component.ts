@@ -169,6 +169,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                     c.computed_cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
                     c.san_luong = matchingList.length ? matchingList.map(x => x.san_luong ? parseInt(x.san_luong) : 0).reduce((a, b) => a + b) : 0;
                     c.cong_suat = matchingList.length ? matchingList.map(x => x.cong_suat ? parseInt(x.cong_suat) : 0).reduce((a, b) => a + b) : 0;
+                    c.chemistryQtyIds = matchingList.map(element => new Object({ id: element.id }));
                 });
 
                 
@@ -208,14 +209,24 @@ export class ChemicalManagementComponent extends BaseComponent {
     }
 
     prepareRemoveData() {
-        let datas = this.selection.selected.map(element => new Object({ id: element.id }));
+        let data = this.selection.selected;
+        let chemistryDetailsIds = data.map(element => element.chemistryQtyIds)
+        let datas = {
+            chemistryIds: data.map(element => new Object({ id: element.id_qlcn_hc })),
+            chemistryDetailsIds: [].concat.apply([], chemistryDetailsIds)
+        }
         return datas;
     }
 
-    callRemoveService(data) {
-        // this.industryManagementService.deleteMultiLevel(data).subscribe(res => {
-        //     this.successNotify(res);
-        // });
+    callRemoveService(datas) {
+        let self = this;
+        let chemistryIds = datas.chemistryIds;
+        let chemistryDetailsIds = datas.chemistryDetailsIds;
+        this.industryManagementService.DeleteChemistryQty(chemistryDetailsIds).subscribe(response => {
+            if (response.id != -1) {
+                self.industryManagementService.DeleteChemistry(chemistryIds).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
+            }
+        }, error => this.errorNotify(error));
     }
 
     applyFilter(event) {

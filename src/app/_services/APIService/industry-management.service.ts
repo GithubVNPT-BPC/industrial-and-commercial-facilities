@@ -44,6 +44,8 @@ export class IndustryManagementService {
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
     private urlDeleteFoodIndustry = '/cntp-xoa';
+    private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
+    private urlDeleteChemistry = '/hoa-chat-xoa';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
     private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
@@ -220,6 +222,22 @@ export class IndustryManagementService {
 
     public DeleteFoodIndustry(body: any){
         var apiUrl = this.endpoint + this.urlDeleteFoodIndustry;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteChemistry(body: any){
+        var apiUrl = this.endpoint + this.urlDeleteChemistry;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteChemistryQty(body: any){
+        var apiUrl = this.endpoint + this.urlDeleteChemistryQty;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)
