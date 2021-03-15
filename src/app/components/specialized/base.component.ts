@@ -290,18 +290,18 @@ export abstract class BaseComponent implements OnInit {
         return formattedDate.isValid() ? formattedDate : "";
     }
 
-    filterArray(array, filters) {
+    filterArray(dataSource, filters) {
         const filterKeys = Object.keys(filters);
-        let temp = [...array];
+        let filteredData = [...dataSource];
         filterKeys.forEach(key => {
-            let temp2 = [];
+            let filterCrits = [];
             if (filters[key].length) {
-            filters[key].forEach(criteria => {
-                temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-            });
-            temp = [...temp2];
+                filters[key].forEach(criteria => {
+                    filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+                });
+                filteredData = [...filterCrits];
             }
         })
-        return temp;
+        return filteredData;
     }
 }
