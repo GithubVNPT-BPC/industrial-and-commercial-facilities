@@ -93,21 +93,25 @@ export class CountrysideComponent extends BaseComponent {
   getCountrySideData () {
     this.commerceManagementService.getCountrySideData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           let data = allrecords.data;
           this.dataSource = new MatTableDataSource<CountrySideModel>(data);
           this.filteredDataSource.data = [...this.dataSource.data];
-          this.yearOfTC7 = this.filteredDataSource.data.map(x => x.nam_dat_TC_7).filter(this.filterService.onlyUnique);
-          this.yearOfStd = this.dataSource.data.map(x => x.nam_dat_NTM).filter(this.filterService.onlyUnique);
-          this._prepareData(this.filteredDataSource.data);
-          this.paginatorAgain();
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
   }
 
-  private _prepareData(data): void {
+  _prepareData() {
+    let data = this.filteredDataSource.data;
+    // Need to modify
+    this.yearOfTC7 = data.map(x => x.nam_dat_TC_7).filter(this.filterService.onlyUnique);
+    this.yearOfStd = data.map(x => x.nam_dat_NTM).filter(this.filterService.onlyUnique);
+
     this.sumOfMarket = data.map(x => x.cho_truyen_thong).length;
     this.sumOfWards = data.map(x => x.id_phuong_xa).length;
 
@@ -135,7 +139,7 @@ export class CountrysideComponent extends BaseComponent {
       this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     } else {
       let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-      this._prepareData(filteredData);
+      
       if (!filteredData.length) {
         if (this.filterModel)
           this.filteredDataSource.data = [];
@@ -145,23 +149,10 @@ export class CountrysideComponent extends BaseComponent {
       else {
         this.filteredDataSource.data = filteredData;
       }
-      this.paginatorAgain();
+      
     }
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
-      }
-    })
-    return temp;
+    this._prepareData();
+    this.paginatorAgain();
   }
 
 }

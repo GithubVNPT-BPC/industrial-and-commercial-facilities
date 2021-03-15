@@ -85,6 +85,7 @@ export class StoreManagementComponent extends BaseComponent {
   getConvenienceStoreData () {
     this.commerceManagementService.getConvenienceStoreData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length) {
           let data = allrecords.data;
 
@@ -101,10 +102,11 @@ export class StoreManagementComponent extends BaseComponent {
           });          
           this.dataSource = new MatTableDataSource<ConvenienceStoreModel>(data);
           
-          this._prepareData(this.dataSource.data);
+          
           this.filteredDataSource.data = [...this.dataSource.data];
-          this.paginatorAgain();
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
@@ -132,7 +134,8 @@ export class StoreManagementComponent extends BaseComponent {
     super.resetAll();
   }
 
-  private _prepareData(data: ConvenienceStoreModel[]): void {
+  _prepareData() {
+    let data = this.filteredDataSource.data;
     this.soCuaHangTL = data.length;
     this.soCuaHangKhac = data.length - this.soCuaHangTL;
     this.tongCuaHang = this.dataSource.data.length;
@@ -157,7 +160,7 @@ export class StoreManagementComponent extends BaseComponent {
       this.filteredDataSource.data = filteredData;
     }
     this.paginatorAgain();
-    this._prepareData(filteredData);
+    this._prepareData();
   }
 
   filterArray(array, filters) {
@@ -171,12 +174,6 @@ export class StoreManagementComponent extends BaseComponent {
           temp = [...temp2];
         }
       }
-      // if (key == 'ngaycapgcn') {
-      //   if (filters[key] != 0) {
-      //     temp2 = temp2.concat(temp.filter(x => x[key].getFullYear() == filters[key]));
-      //     temp = [...temp2];
-      //   }
-      // }
       else {
         if (filters[key])
           if (filters[key].length) {

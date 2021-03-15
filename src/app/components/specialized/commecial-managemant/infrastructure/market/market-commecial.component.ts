@@ -199,19 +199,20 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   getMarketData() {
     this.commerceManagementService.getMarketData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<MarketModel>(allrecords.data);
           this.filteredDataSource = new MatTableDataSource<MarketModel>(allrecords.data);
-
-          this._prepareData(this.dataSource.data);
-          this.paginatorAgain();
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
   }
 
-  private _prepareData(data) {
+  _prepareData() {
+    let data = this.filteredDataSource.data;
     this.numOfMarket = data.length;
 
     // Phân theo địa bàn
@@ -242,7 +243,6 @@ export class MarketCommecialManagementComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    // this._prepareData(filteredData);
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];
@@ -252,21 +252,9 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     else {
       this.filteredDataSource.data = filteredData;
     }
-  }
 
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
-      }
-    })
-    return temp;
+    this._prepareData();
+    this.paginatorAgain();
   }
 
   private chosenYearHandler(normalizedYear, datepicker) {

@@ -67,10 +67,6 @@ export class FoodManagementComponent extends BaseComponent {
     this.getFoodCommerceData();
   }
 
-  ngAfterViewInit() {
-    this.paginatorAgain();
-  }
-
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
@@ -80,6 +76,7 @@ export class FoodManagementComponent extends BaseComponent {
   getFoodCommerceData() {
     this.commerceManagementService.getFoodCommerceData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
           this.dataSource.data.forEach(element => {
@@ -95,9 +92,10 @@ export class FoodManagementComponent extends BaseComponent {
           })
 
           this.filteredDataSource.data = [...this.dataSource.data].filter(x=>x.is_het_han == false)
-          this._prepareData(this.dataSource.data);
-          this.paginatorAgain();
+          
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
@@ -131,8 +129,8 @@ export class FoodManagementComponent extends BaseComponent {
     super.resetAll();
   }
 
-  private _prepareData(data: FoodCommerceModel[]) {
-    this.tongDoanhNghiep = data.length;
+  private _prepareData() {
+    this.tongDoanhNghiep = this.filteredDataSource.data.length;
   }
 
   applyFilter1(event: Event) {
@@ -142,7 +140,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    this._prepareData(filteredData);
+    
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];
@@ -152,22 +150,8 @@ export class FoodManagementComponent extends BaseComponent {
     else {
       this.filteredDataSource.data = filteredData;
     }
+    this._prepareData();
     this.paginatorAgain();
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
-      }
-    })
-    return temp;
   }
 
   applyExpireCheck(event) {
