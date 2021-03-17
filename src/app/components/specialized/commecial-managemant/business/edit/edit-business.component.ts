@@ -80,7 +80,7 @@ export class EditBusinessComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_nganh_nghe_kinh_doanh + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_nganh_nghe + 1}`;
   }
 
   deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
@@ -88,7 +88,7 @@ export class EditBusinessComponent implements OnInit {
   removeRows() {
     if (confirm('Bạn Có Chắc Muốn Xóa?')) {
       this.selection.selected.forEach(x => {
-        this.selectionarray = this.selection.selected.map(item => item.id_nganh_nghe_kinh_doanh)
+        this.selectionarray = this.selection.selected.map(item => item.id_nganh_nghe)
         this.deletemodel1.push({
           id: ''
         })
@@ -99,7 +99,7 @@ export class EditBusinessComponent implements OnInit {
       }
       this._Service.DeleteCareer(this.deletemodel1).subscribe(res => {
         this.info.msgSuccess('Xóa thành công')
-        this.ngOnInit();
+        window.location.reload();
         this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
@@ -220,47 +220,27 @@ export class EditBusinessComponent implements OnInit {
   // removeCareer(i: number) {
   //   this.danh_sach_nganh_nghe.removeAt(i);
   // }
-  checkmst: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
-  checkmstobject = new CompanyDetailModel();
-  existmst: boolean
-  Checkexistmst(mstinput: string) {
-    this._Service.GetCompanyInfoById(mstinput).subscribe(
-      allrecords => {
-        this.checkmst = allrecords.data[0]
-        this.checkmstobject = this.checkmst[0]
-        if (this.checkmstobject == undefined) {
-          this.existmst = false
-        }
-        else {
-          this.existmst = true
-        }
-      });
-  }
 
   public SaveData(companyinput) {
     if (this.mst == undefined) {
       this._Service.PostCompany(companyinput).subscribe(
-        res => {
-          // debugger;
-          // this.resetForm(companyinput);
-          this.info.msgSuccess('Thêm thành công')
-          this.router.navigate(['specialized/commecial-management/domestic/search']);
+        next => {
+          this.info.msgSuccess("Thêm doanh nghiệp thành công");
+          this.Back()
         },
-        err => {
-          // debugger;
+        error => {
+          this.info.msgError("Mã số thuế đã tồn tại");
         }
       )
     }
     else {
       this._Service.UpdateCompany(companyinput).subscribe(
         res => {
-          // debugger;
           // this.resetForm(companyinput);
-          this.info.msgSuccess('Thêm thành công')
-          this.router.navigate(['specialized/commecial-management/domestic/search']);
+          this.info.msgSuccess('Cập nhật doanh nghiệp thành công')
+          this.Back()
         },
         err => {
-          // debugger;
         }
       )
     }
@@ -284,11 +264,6 @@ export class EditBusinessComponent implements OnInit {
 
     if (this.doanh_nghiep.invalid) {
       return;
-    }
-
-    this.Checkexistmst(this.doanh_nghiep.value.mst)
-    if (this.existmst == true) {
-      return
     }
 
     this.companyinput = this.doanh_nghiep.value
@@ -338,7 +313,7 @@ export class EditBusinessComponent implements OnInit {
     }
   }
   dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
-  public displayedColumns: string[] = ['index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh'];
+  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh', 'id_nganh_nghe'];
 
   public _currentRow: number = 0;
 
@@ -541,6 +516,7 @@ export class EditBusinessComponent implements OnInit {
         if (this.companyList2) {
           this.companyList2.forEach(x => {
             this.careerarray.push({
+              id_nganh_nghe: null,
               id_nganh_nghe_kinh_doanh: null,
               nganh_nghe_kd_chinh: '',
               id_linh_vuc: null
@@ -550,6 +526,7 @@ export class EditBusinessComponent implements OnInit {
           for (let index = 0; index < this.companyList2.length; index++) {
             this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
             this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
+            this.careerarray[index].id_nganh_nghe = this.companyList2[index].id_nganh_nghe
           }
           this.dataSource.data = this.careerarray
 

@@ -95,7 +95,7 @@ const routes: Routes = [
         }
       },
       {
-        path: 'certificate',
+        path: 'certificate/:type',
         component: CertificateListComponent,
         data: {
           title: 'Quản lý giấy phép',

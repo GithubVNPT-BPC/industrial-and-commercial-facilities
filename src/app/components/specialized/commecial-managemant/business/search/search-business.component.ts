@@ -116,7 +116,6 @@ export class SearchBusinessComponent implements OnInit {
         element.mst = this.selectionarray[index]
       }
       this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
-        this.GetAllCompany();
         this.info.msgSuccess('Xóa thành công')
         this.ngOnInit();
         this.deletemodel1 = []
@@ -200,6 +199,7 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
     let date: string
@@ -307,7 +307,9 @@ export class SearchBusinessComponent implements OnInit {
           }
         })
 
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
+        this.companyList6 = this.companyList5.filter(x => x.sct == true)
+
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

@@ -153,6 +153,10 @@ export class SearchBusinessComponent implements OnInit {
     this.router.navigate(['manager/business/edit/']);
   }
 
+  AddCertificate() {
+    this.router.navigate(['manager/business/certificate/']);
+  }
+
   selected_field: string = 'ten_doanh_nghiep';
   countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
   count: number = 1;
@@ -199,6 +203,7 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
     let date: string
@@ -304,7 +309,9 @@ export class SearchBusinessComponent implements OnInit {
           }
         })
 
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
+        this.companyList6 = this.companyList5.filter(x => x.sct == false)
+
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

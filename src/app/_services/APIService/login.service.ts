@@ -214,7 +214,6 @@ export class LoginService {
         } else {
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
         }
-        window.alert(errorMessage);
         return throwError(errorMessage);
     }
 }
