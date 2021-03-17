@@ -8,8 +8,7 @@
     </mat-card-header>
     <mat-card-content>
         <div class="row">
-            <div class="col-6"></div>
-            <div class="col-6 button-control -align-right my-auto">
+            <div class="col-12 button-control -align-right my-auto">
                 <button mat-raised-button (click)="AddCertificate()">DS giấy phép</button>
                 <button mat-raised-button (click)="AddCompany()">Thêm doanh nghiệp</button>
                 <button mat-raised-button class="green"
@@ -18,6 +17,7 @@
                 <button mat-raised-button class="red" (click)="removeRows()">Xóa doanh nghiệp</button>
             </div>
         </div>
+        <hr/> 
         <div class="row" *ngIf="isSearch_Advanced">
             <div class="col-4 button-control -align-left my-auto">
                 <button mat-raised-button (click)="filter()">Tìm kiếm</button>
