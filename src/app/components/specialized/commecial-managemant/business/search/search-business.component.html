@@ -17,7 +17,6 @@
                 <button mat-raised-button class="red" (click)="removeRows()">Xóa doanh nghiệp</button>
             </div>
         </div>
-        <hr/> 
         <div class="row" *ngIf="isSearch_Advanced">
             <div class="col-4 button-control -align-left my-auto">
                 <button mat-raised-button (click)="filter()">Tìm kiếm</button>
@@ -148,7 +147,7 @@
 
                 <ng-container matColumnDef="dia_chi_day_du">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}} </td>
+                    <td mat-cell *matCellDef="let element" style="width: 500px;"> {{element.dia_chi_day_du}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="so_dien_thoai">

@@ -210,9 +210,7 @@ export class SearchBusinessComponent implements OnInit {
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        // data[0] = "Thông tin cơ bản"
         this.companyList1 = allrecords.data[0];
-        // data[1] = ""
         this.companyList2 = allrecords.data[1];
         this.companyList3 = allrecords.data[2];
 
