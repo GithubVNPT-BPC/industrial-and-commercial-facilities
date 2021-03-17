@@ -14,6 +14,8 @@ import { PageNotFoundComponent, LoaderInterceptor } from '../../shared';
 import { DomesticManagerComponent } from './domestic-manager/domestic-manager.component';
 import { ForeignManagerComponent } from './foreign-manager/foreign-manager.component';
 import { ProductManagerComponent } from './product-manager/product-manager.component';
+import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
+import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,20 @@ const routes: Routes = [
             component: EditBusinessComponent,
             data: {
               title: 'Thêm doanh nghiệp'
+            },
+          },
+          {
+            path: 'certificate',
+            component: CertificateListComponent,
+            data: {
+              title: 'Quản lý giấy phép'
+            },
+          },
+          {
+            path: 'add-certificate/:id',
+            component: AddCertificateComponent,
+            data: {
+              title: 'Thêm giấy phép'
             },
           },
           {

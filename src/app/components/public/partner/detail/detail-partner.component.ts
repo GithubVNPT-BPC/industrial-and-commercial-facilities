@@ -491,6 +491,7 @@ export class CompanyDetailComponent implements OnInit {
 				if (this.companyList2) {
 					this.companyList2.forEach(x => {
 						this.careerarray.push({
+							id_nganh_nghe: null,
 							id_nganh_nghe_kinh_doanh: null,
 							nganh_nghe_kd_chinh: '',
 							id_linh_vuc: null

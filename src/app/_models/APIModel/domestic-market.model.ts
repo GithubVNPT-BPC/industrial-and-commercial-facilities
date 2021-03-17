@@ -148,6 +148,7 @@ export class CompanyDetailModel {
     public sct: boolean;
     public id_loai_hinh_hoat_dong: number;
 
+    public id_nganh_nghe: string;
     public id_nganh_nghe_kd: string;
     public nganh_nghe_kd_chinh: string;
     public id_linh_vuc: number;
@@ -197,6 +198,7 @@ export class CompanyPost {
 }
 
 export class Career {
+    id_nganh_nghe: string;
     id_nganh_nghe_kinh_doanh: string;
     nganh_nghe_kd_chinh: string;
     id_linh_vuc: number

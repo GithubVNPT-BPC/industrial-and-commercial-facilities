@@ -160,7 +160,7 @@ export class DashboardService {
     public GetAllProduct() {
         var apiUrl = this.apiProduct + this.urlAllProduct;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -173,11 +173,11 @@ export class DashboardService {
             catchError(this.handleError)
         );
     }
-    public GetPriceAllProduct(period: number, productList : any[]) {
+    public GetPriceAllProduct(period: number, productList: any[]) {
         var apiUrl = this.apiMarketUrl + this.urlProductAll;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('so_dong', period.toString());
-        return this.http.post<any>(apiUrl,productList, { headers: headers, params: params }).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, productList, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -191,7 +191,6 @@ export class DashboardService {
             // server-side error
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.message}`;
         }
-        window.alert(errorMessage);
         return throwError(errorMessage);
     }
 
