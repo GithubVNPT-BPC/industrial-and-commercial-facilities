@@ -2,6 +2,7 @@
     <mat-card-header>
         <!-- <mat-card-title></mat-card-title> -->
         <mat-card-subtitle hidden>
+            mst={{mst}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -81,14 +82,26 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Mã số thuế (*)</mat-label>
-                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
-                            [ngClass]="{ 'is-invalid': submitted && f.mst.errors }">
-                        <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
-                            <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
-                        </div>
-                    </mat-form-field>
+                    <ng-container *ngIf="mst != undefined; else elseTemplate">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mã số thuế (*)</mat-label>
+                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
+                                [ngClass]="{ 'is-invalid': submitted && f.mst.errors }" readonly style="color: red;">
+                            <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
+                                <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
+                            </div>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mã số thuế (*)</mat-label>
+                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
+                                [ngClass]="{ 'is-invalid': submitted && f.mst.errors }">
+                            <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
+                                <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
+                            </div>
+                        </mat-form-field>
+                    </ng-template>
 
                     <!-- <mat-form-field appearance="outline">
                         <mat-label>Mã số thuế cha (*)</mat-label>
