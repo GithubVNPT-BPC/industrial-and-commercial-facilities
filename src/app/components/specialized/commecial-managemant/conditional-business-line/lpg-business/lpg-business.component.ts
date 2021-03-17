@@ -156,6 +156,7 @@ export class LPGBusinessComponent implements OnInit {
             }
             this._Service.DeleteLPGValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
+                this.date = this.newdate
                 this.ngOnInit()
                 this.deletemodel1 = []
                 this.selection.clear();
@@ -163,6 +164,8 @@ export class LPGBusinessComponent implements OnInit {
             })
         }
     }
+
+    public newdate = new FormControl(_moment());
 
     SoLuongCoSo: number;
     SLThuongNhan: number;

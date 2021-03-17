@@ -143,10 +143,11 @@ export class ProductManagerComponent implements OnInit {
             this.move(res)
         })
         this.getALLProductValueList();
+        this.date = null
     }
 
     resetAll() {
-        this.getALLProductValueList()
+        this.ngOnInit();
     }
 
     public getListProduct(): void {
@@ -177,12 +178,14 @@ export class ProductManagerComponent implements OnInit {
     }
 
     public date = new FormControl(_moment());
+    public newdate = new FormControl(_moment());
     public theYear: number;
     public theMonth: number;
     public stringmonth: string
     public time: string
 
     public chosenYearHandler(normalizedYear: Moment) {
+        this.date = this.newdate
         const ctrlValue = this.date.value;
         ctrlValue.year(normalizedYear.year());
         this.date.setValue(ctrlValue);

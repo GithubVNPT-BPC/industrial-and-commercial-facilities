@@ -184,7 +184,7 @@ export class IIPMonthComponent implements OnInit {
             allRecord => {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
-                    this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+                    // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];
                     this.object = allRecord.data[0];
