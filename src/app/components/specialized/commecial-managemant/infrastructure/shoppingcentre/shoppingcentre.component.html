@@ -22,7 +22,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <mat-card class="card-default">
+                        <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
                                     <mat-icon>filter</mat-icon> 1. Tổng số TTTM:
@@ -72,16 +72,16 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Vốn nhà nước: <span>{{sieuThiHangI}}</span>
+                                        Vốn nhà nước: <span>{{VonNhaNuoc | number: '1.0-0':'vi'}}</span>
                                     </li>
                                     <li>
-                                        Vốn ngoài nhà nước: <span>{{sieuThiHangII}}</span>
+                                        Vốn ngoài nhà nước: <span>{{VonNgoaiNhaNuoc | number: '1.0-0':'vi'}}</span>
                                     </li>
                                     <li>
-                                        Có vốn đầu tư nước ngoài: <span>{{sieuThiHangIII}}</span>
+                                        Có vốn đầu tư nước ngoài: <span>{{VonNuocNgoai | number: '1.0-0':'vi'}}</span>
                                     </li>
                                     <li>
-                                        Vốn khác: <span>{{sieuThiHangIII}}</span>
+                                        Vốn khác: <span>{{VonKhac | number: '1.0-0':'vi'}}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -98,7 +98,7 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <li>
+                                    <!-- <li>
                                         TTTM tiện lợi: <span>0</span>
                                     </li>
                                     <li>
@@ -109,12 +109,12 @@
                                     </li>
                                     <li>
                                         TTTM vùng: <span>0</span>
+                                    </li> -->
+                                    <li>
+                                        Tổng hợp: <span>{{ loaihinh_TongHop }}</span>
                                     </li>
                                     <li>
-                                        Tổng hợp: <span>0</span>
-                                    </li>
-                                    <li>
-                                        Chuyên doanh: <span>0</span>
+                                        Chuyên doanh: <span>{{ loaihinh_ChuyenDoanh }}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -133,12 +133,12 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        TTTM thành lập mới năm <span>{{currentYear}}</span>:<span>{{sieuThiDauTuTrongNam |
+                                        TTTM thành lập mới năm <span>{{currentYear}}</span>: <span>{{ HoatDong |
                                             number: '1.0-0':'vi'}}</span>
                                     </li>
 
                                     <li>
-                                        TTTM ngừng hoạt động năm <span>{{currentYear}}</span>:<span>0</span>
+                                        TTTM ngừng hoạt động năm <span>{{currentYear}}</span>: <span> {{ NgungHoatDong }}</span>
                                     </li>
 
                                 </ul>
@@ -197,9 +197,9 @@
                     <div class="col-3 col-lg-3 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            <button mat-raised-button matTooltip="Thêm mới" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
                             mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
                     </div>
 
@@ -308,7 +308,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="dien_tich_dat">
-                            <th mat-header-cell *matHeaderCellDef> Diện tích đất </th>
+                            <th mat-header-cell *matHeaderCellDef> Diện tích (m2) </th>
                             <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat | number: '1.0-0':'vi'}} </td>
                         </ng-container>
 
@@ -456,7 +456,7 @@
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Diện tích đất</mat-label>
+                                        <mat-label>Diện tích (m<sup>2</sup>)</mat-label>
                                         <input matInput  type="number" formControlName="dien_tich_dat">
                                     </mat-form-field>
                                 </div>

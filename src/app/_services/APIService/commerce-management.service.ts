@@ -43,6 +43,11 @@ export class CommerceManagementService {
     private urldeletePromo = "api/qltm/khuyen-mai/xoa";
     private urldeleteMultiLevel = "api/qltm/da-cap/xoa";
     private urldeleteTradeFairs = "api/qltm/hoi-cho-trien-lam/xoa";
+    private urlDeleteMarket = "api/qltm/httm/xoa-cho";
+    private urlDeleteSuperMarket = "api/qltm/httm/xoa-sieu-thi";
+    private urlDeleteShoppingCenter = "api/qltm/httm/xoa-tttm";
+    private urlDeleteConvenienceStore = "api/qltm/httm/xoa-chtl";
+    private urlDeleteFoodCommerce = "api/qltm/httm/xoa-kdtp";
     
     constructor(public http: HttpClient) { }
 
@@ -240,6 +245,51 @@ export class CommerceManagementService {
 
     deleteTradeFairs(datas) {
         let apiUrl = this.apiHome + this.urldeleteTradeFairs;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteMarket(datas) {
+        let apiUrl = this.apiHome + this.urlDeleteMarket;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteSuperMarket(datas) {
+        let apiUrl = this.apiHome + this.urlDeleteSuperMarket;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteShoppingCenter(datas) {
+        let apiUrl = this.apiHome + this.urlDeleteShoppingCenter;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteConvenienceStore(datas) {
+        let apiUrl = this.apiHome + this.urlDeleteConvenienceStore;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteFoodCommerce(datas) {
+        let apiUrl = this.apiHome + this.urlDeleteFoodCommerce;
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),

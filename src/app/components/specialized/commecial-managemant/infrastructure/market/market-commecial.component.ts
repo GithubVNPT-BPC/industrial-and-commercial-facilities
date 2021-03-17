@@ -13,16 +13,6 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
   selector: "app-market-commecial",
   templateUrl: "./market-commecial.component.html",
   styleUrls: ['../../../special_layout.scss'],
-//   providers: [
-//     {
-//         provide: DateAdapter,
-//         useClass: MomentDateAdapter,
-//         deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-//     },
-
-//     { provide: MAT_DATE_FORMATS, useValue: YEAR_FORMAT },
-//     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
-// ],
 })
 export class MarketCommecialManagementComponent extends BaseComponent {
 
@@ -31,23 +21,36 @@ export class MarketCommecialManagementComponent extends BaseComponent {
 
   filterModel = {
     id_tinh_chat_cho: [],
+    id_loai_cho: [],
     id_hang_cho: [],
     id_quan_huyen: []
   }
 
-  marketTypeList = [
+  marketLevelList = [
     { id_hang_cho: 1, loai_hang_cho: "Hạng I"},
     { id_hang_cho: 2, loai_hang_cho: "Hạng II"},
     { id_hang_cho: 3, loai_hang_cho: "Hạng III"},
     { id_hang_cho: 4, loai_hang_cho: "Làm tạm"},
     { id_hang_cho: 5, loai_hang_cho: "Chưa có"}, 
   ];
+
   landUseTypeList = [
     { id_hinh_thuc_su_dung_dat: 1, hinh_thuc_su_dung_dat: "Phường/Xã quản lý"},
     { id_hinh_thuc_su_dung_dat: 2, hinh_thuc_su_dung_dat: "Huyện/Thị xã/Thành phố quản lý"},
     { id_hinh_thuc_su_dung_dat: 3, hinh_thuc_su_dung_dat: "Dự án chợ đầu mối"},
     { id_hinh_thuc_su_dung_dat: 4, hinh_thuc_su_dung_dat: "Giao đất"},
   ]
+
+  marketTypeList = [
+    { id_loai_cho: 1, ten_loai_cho: "Thành thị"},
+    { id_loai_cho: 2, ten_loai_cho: "Nông thôn"},
+    { id_loai_cho: 3, ten_loai_cho: "Chợ đầu mối"},
+    { id_loai_cho: 4, ten_loai_cho: "Chợ trong quy hoạch"},
+    { id_loai_cho: 5, ten_loai_cho: "Chợ tự phát (lán tạm)"},
+    { id_loai_cho: 6, ten_loai_cho: "Chợ khác"},
+    { id_loai_cho: 7, ten_loai_cho: "Chưa có chợ"},
+  ];
+
   marketPropTypeList = [
     {id_tinh_chat_cho: 1, tinh_chat_cho: "Kiên cố"},
     {id_tinh_chat_cho: 2, tinh_chat_cho: "Bán kiên cố"},
@@ -57,69 +60,74 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     {id_tinh_chat_cho: 6, tinh_chat_cho: "Khác"},
     {id_tinh_chat_cho: 7, tinh_chat_cho: "Chợ tạm"},
   ]
+
+  marketPropCommerceList = [
+    {id_tinh_chat_kinh_doanh: 1, ten_tinh_chat_kinh_doanh: "Chuyên doanh"},
+    {id_tinh_chat_kinh_doanh: 2, ten_tinh_chat_kinh_doanh: "Tổng hợp"}, 
+    {id_tinh_chat_kinh_doanh: 3, ten_tinh_chat_kinh_doanh: "Bán lẻ"}
+  ]
   
   displayedFields = {
     ten_cho: "Tên chợ",
-    DIA_CHI: "Địa chỉ",
-    is_thanh_thi: "Nông thôn/Thành thị",
-    dien_tich: "Diện tích",
-    loai_hang_cho: "Loại hạng chợ", 
-    tinh_chat_cho: "Tính chất chợ", 
-    so_diem_kinh_doanh: "Số điểm kinh doanh",
-    so_ho_kinh_doanh_co_dinh: "Số hộ kinh doanh cố định",
-    hien_trang_hoat_dong: "Hiện trạng hoạt động",
-    de_xuat_thuc_hien: "Đề xuất thực hiện",
-    ke_hoach_thuc_hien: "Kế hoặch thực hiện",
-    uu_tien_de_xuat_dau_tu: "Ưu tiên đề xuất đầu tư",
-    htql_so_nguoi: "Số người",
-    htql_ban_ql: "Ban quản lý",
-    htql_to_ql: "Tổ quản lý",
-    htql_dn_htx: "Doanh nghiệp/Hợp tác xã",
-    hinh_thuc_quan_ly: "Cơ quan quản lý",
-    hinh_thuc_su_dung_dat: "Hình thức sử dụng đất",
-    ttll_cq_ho_ten: "Họ và tên (Cơ quan/BQL chợ)",
-    ttll_cq_dien_thoai: "Điện thoại (Cơ quan/BQL chợ)",
-    ttll_dn_ho_ten: "Họ và tên (Doanh nghiệp)",
-    ttll_dn_dien_thoai: "Điện thoại (Doanh nghiệp)",
-    vdt_tong: "Tổng",
-    vdt_ngan_sach: "Ngân sách",
-    vdt_xa_hoi_hoa: "Xẫ hội hóa",
-    nam: "Năm",
+    ten_quan_huyen: "Địa bàn",
+    dia_chi: "Địa chỉ",
+    ten_tinh_chat_kinh_doanh: "Tính chất kinh doanh",
+    loai_hang_cho: "Hạng chợ",
+    tinh_chat_cho: "Tính chất công trình",
+    ten_loai_cho: "Loại chợ",
+    ke_hoach_dau_tu: "Kế hoạch đầu tư",
+    hinh_thuc_quan_ly: "Hình thức quản lý",
+
     xay_moi: "Xây mới",
     nang_cap: "Nâng cấp",
+    dau_tu: "Đầu tư",
+    so_ho_duoi_30: "Số hộ KD dưới 30%",
+    so_chuyen_doi_chuc_nang: "Số chợ chuyển đổi CNHĐ",
+    so_chuyen_doi_hinh_thuc_quan_ly: "Số chợ chuyển đổi MHQL",
+    
+    tong_von: "Tổng vốn",
+    von_nstw: "Vốn NSTW",
+    von_nsdp: "Vốn NSĐP",
+    von_dn_htx_hkd: "Vốn DN/HTX/HKD",
+    von_khac: "Vốn khác",
+    
+    so_nguoi: "Số người",
+    ban_quan_ly: "Ban quản lý",
+    to_quan_ly: "Tổ quản lý",
+    doanh_nghiep: "Doanh nghiệp",
+    hop_tac_xa: "Hợp tác xã",
+    ho_kinh_doanh: "Hộ kinh doanh"
   }
 
   getFormParams() {
     return {
       ten_cho: new FormControl(),
       id_phuong_xa: new FormControl(),
-      is_thanh_thi: new FormControl(),
-      dien_tich: new FormControl(),
+      id_tinh_chat_kinh_doanh: new FormControl(),
       id_hang_cho: new FormControl(),
       id_tinh_chat_cho: new FormControl(),
-      so_diem_kinh_doanh: new FormControl(),
-      so_ho_kinh_doanh_co_dinh: new FormControl(),
-      hien_trang_hoat_dong: new FormControl(),
-      de_xuat_thuc_hien: new FormControl(),
-      ke_hoach_thuc_hien: new FormControl(),
-      uu_tien_de_xuat_dau_tu: new FormControl(),
-      htql_so_nguoi: new FormControl(),
-      htql_ban_ql: new FormControl(),
-      htql_to_ql: new FormControl(),
-      htql_dn_htx: new FormControl(),
+      id_loai_cho: new FormControl(),
+      id_hinh_thuc_quan_ly: new FormControl(0),
+      ke_hoach_dau_tu: new FormControl(),
       hinh_thuc_quan_ly: new FormControl(),
-      id_hinh_thuc_su_dung_dat: new FormControl(),
-      ttll_cq_ho_ten: new FormControl(),
-      ttll_cq_dien_thoai: new FormControl(),
-      ttll_dn_ho_ten: new FormControl(),
-      ttll_dn_dien_thoai: new FormControl(),
-      vdt_tong: new FormControl(),
-      vdt_ngan_sach: new FormControl(),
-      vdt_xa_hoi_hoa: new FormControl(),
-      nam: new FormControl(),
-      xay_moi: new FormControl(),
-      nang_cap: new FormControl(),
-      ghi_chu: new FormControl()
+
+      nam_xay_dung: new FormControl(),
+      nam_nang_cap: new FormControl(),
+      dau_tu: new FormControl(),
+      so_ho_duoi_30: new FormControl(),
+      so_chuyen_doi_chuc_nang: new FormControl(),
+      so_chuyen_doi_hinh_thuc_quan_ly: new FormControl(),
+      
+      von_nstw: new FormControl(),
+      von_nsdp: new FormControl(),
+      von_dn_htx_hkd: new FormControl(),
+      von_khac: new FormControl(),
+      
+      ban_quan_ly: new FormControl(),
+      to_quan_ly: new FormControl(),
+      doanh_nghiep: new FormControl(),
+      hop_tac_xa: new FormControl(),
+      ho_kinh_doanh: new FormControl(),
     }
   }
 
@@ -150,9 +158,10 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   //--
   public xaydung_Moi: number = 0;
   public xaydung_CaiTao:number = 0;
-  public xaydung_KhongHoatDong: number = 0;
-  public xaydung_KhongHoatDong70:number = 0;
-  public xaydung_ChuyenDoi: number = 0;
+  public xaydung_CD_MoHinh: number = 0;
+  public xaydung_CD_CongNang:number = 0;
+  public xaydung_CD_ChucNang: number = 0;
+  public xaydung_HD_Duoi30: number = 0;
   //--
   public quanly_BanTo:number = 0;
   public quanly_DoanhNghiep:number = 0;
@@ -215,9 +224,14 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     let data = this.filteredDataSource.data;
     this.numOfMarket = data.length;
 
-    // Phân theo địa bàn
-    this.loaihinh_ThanhThi = data.filter(x => x.is_thanh_thi).length;
-    this.loaihinh_NongThon = data.filter(x => !x.is_thanh_thi).length;
+    // Phân theo loại hình
+    this.loaihinh_ThanhThi = data.filter(x => x.id_loai_cho == 1).length;
+    this.loaihinh_NongThon = data.filter(x => x.id_loai_cho == 2).length;
+    this.loaihinh_ChoDauMoi = data.filter(x => x.id_loai_cho == 3).length;
+    this.loaihinh_ChoTrongQuyHoach = data.filter(x => x.id_loai_cho == 4).length;
+    this.loaihinh_ChoTuPhat = data.filter(x => x.id_loai_cho == 5).length;
+    this.loaihinh_ChoKhac = data.filter(x => x.id_loai_cho == 6).length;
+    this.loaihinh_ChuaCoCho = data.filter(x => x.id_loai_cho == 7).length;
 
     // Phân theo hạng chợ
     this.hang_HangI = data.filter(x => x.id_hang_cho == 1).length;
@@ -226,33 +240,69 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     this.hang_LamTam = data.filter(x => x.id_hang_cho == 4).length;
     this.hang_ChuaCo = data.filter(x => x.id_hang_cho == 5).length;
 
+    // Phân theo tính chất công trình
     this.congtrinh_KienCo = data.filter(x => x.id_tinh_chat_cho == 1).length;
     this.congtrinh_BanKienCo = data.filter(x => x.id_tinh_chat_cho == 2).length;
     this.congtrinh_Tam = data.filter(x => x.id_tinh_chat_cho == 7).length;
 
+    // Phân theo tính chất kinh doanh
+    this.kinhdoanh_choDauMoiChuyenDoanh = data.filter(x => x.id_tinh_chat_kinh_doanh == 1).length;
+    this.kinhdoanh_choDauMoiTongHop = data.filter(x => x.id_tinh_chat_kinh_doanh == 2).length;
+    this.kinhdoanh_choBanLe = data.filter(x => x.id_tinh_chat_kinh_doanh == 3).length;
+
+    // Phân theo hình thức quản lý
+    this.quanly_BanTo = data.map(x => x.ban_quan_ly).reduce((a, b) => a + b, 0) + data.map(x => x.to_quan_ly).reduce((a, b) => a + b, 0);
+    this.quanly_DoanhNghiep = data.map(x => x.doanh_nghiep).reduce((a, b) => a + b, 0);
+    this.quanly_HoKinhDoanh = data.map(x => x.ho_kinh_doanh).reduce((a, b) => a + b, 0);
+
+    // Tổng vốn đầu tư chợ
+    this.tongvon_VonNganSachTW = data.map(x => x.von_nstw).reduce((a, b) => a + b, 0);
+    this.tongvon_VonNganSachDiaPhuong = data.map(x => x.von_nsdp).reduce((a, b) => a + b, 0);
+    this.tongvon_DNHTXHL = data.map(x => x.von_nsdp).reduce((a, b) => a + b, 0);
+    this.tongvon_Khac = data.map(x => x.von_khac).reduce((a, b) => a + b, 0);
+
+    // Hoạt động đầu tư phát triển chợ
+    this.xaydung_Moi = this.dataSource.data.filter(x => x.nam_xay_dung == this.currentYear.toString()).length;
+    this.xaydung_CaiTao = this.dataSource.data.filter(x => x.nam_nang_cap == this.currentYear.toString()).length;
+    this.xaydung_CD_MoHinh = data.filter(x => x.so_chuyen_doi_hinh_thuc_quan_ly).length;
+    this.xaydung_CD_CongNang = data.filter(x => x.so_chuyen_doi_chuc_nang).length;
+    this.xaydung_HD_Duoi30 = data.filter(x => x.so_ho_duoi_30).length;
   }
   
   prepareData(data) {
-    if (data['is_thanh_thi']) data['is_thanh_thi']= parseInt(data['is_thanh_thi']);
     return data;        
   }
 
   callService(data) {
-    this.commerceManagementService.postMarket([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.commerceManagementService.postMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
-    }
+  prepareRemoveData(data) { 
+    let datas = data.map(element => new Object({id: element.id}));
+    return datas;
+  }
 
+  callRemoveService(data) {
+    this.commerceManagementService.deleteMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+      
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+    }
     this._prepareData();
     this.paginatorAgain();
   }

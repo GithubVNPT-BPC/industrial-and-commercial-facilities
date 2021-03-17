@@ -78,13 +78,12 @@
                             (click)="ExportTOExcel('HTTM - Thực phẩm','HTTM - Thực phẩm')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()">
-                            <mat-icon>add_circle_outline</mat-icon>
-                        </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
-                            (click)="openRemoveDialog()">
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                        <button mat-raised-button matTooltip="Thêm mới" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
+                            mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
                 </div>
                 <hr>
