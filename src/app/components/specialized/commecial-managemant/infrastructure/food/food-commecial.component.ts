@@ -124,6 +124,16 @@ export class FoodManagementComponent extends BaseComponent {
     this.commerceManagementService.postFoodCommerce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  prepareRemoveData(data) { 
+    let datas = data.map(element => new Object({id: element.id}));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.commerceManagementService.deleteMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+
   resetAll() {
     this.isFound = false;
     super.resetAll();
