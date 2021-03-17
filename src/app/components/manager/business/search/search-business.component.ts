@@ -203,7 +203,6 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
-  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
     let date: string
@@ -309,9 +308,7 @@ export class SearchBusinessComponent implements OnInit {
           }
         })
 
-        this.companyList6 = this.companyList5.filter(x => x.sct == false)
-
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
