@@ -22,7 +22,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <mat-card class="card-default">
+                        <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
                                     <mat-icon>filter</mat-icon> 1. Tổng số siêu thị:
@@ -72,16 +72,16 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Vốn nhà nước: <span>{{sieuThiHangI}}</span>
+                                        Vốn nhà nước: <span>{{VonNhaNuoc | number: '1.0-0':'vi'}}</span>
                                     </li>
                                     <li>
-                                        Vốn ngoài nhà nước: <span>{{sieuThiHangII}}</span>
+                                        Vốn ngoài nhà nước: <span>{{VonNgoaiNhaNuoc | number: '1.0-0':'vi'}}</span>
                                     </li>
                                     <li>
-                                        Có vốn đầu tư nước ngoài: <span>{{sieuThiHangIII}}</span>
+                                        Có vốn đầu tư nước ngoài: <span>{{VonNuocNgoai | number: '1.0-0':'vi'}}</span>
                                     </li>
                                     <li>
-                                        Vốn khác: <span>{{sieuThiHangIII}}</span>
+                                        Vốn khác: <span>{{VonKhac | number: '1.0-0':'vi'}}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -99,10 +99,10 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Tổng hợp: <span>{{sieuThiTongHop }}</span>
+                                        Tổng hợp: <span>{{ sieuThiTongHop }}</span>
                                     </li>
                                     <li>
-                                        Chuyên doanh: <span>{{sieuThiChuyenDanh }}</span>
+                                        Chuyên doanh: <span>{{ sieuThiChuyenDanh }}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -120,11 +120,11 @@
                                 <ul>
                                     <li>
                                         Thành lập mới năm <span>{{currentYear}}</span> là:
-                                        <span>{{sieuThiDauTuTrongNam }}</span>
+                                        <span>{{sieuThi_ThanhLapMoi }}</span>
                                     </li>
                                     <li>
                                         Ngừng hoạt động năm <span>{{currentYear}}</span> là:
-                                        <span>0</span>
+                                        <span>{{ sieuThi_NgungHoatDong }}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -182,10 +182,12 @@
                     <div class="col-3 col-lg-3 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            <button mat-raised-button matTooltip="Thêm mới" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
                             mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
 
                     <div class="col-3 col-lg-3">

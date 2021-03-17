@@ -63,6 +63,7 @@ export class FilterService {
     }
     
     public onlyUnique(value, index, self) {
+        if (!value) return false;
         return self.indexOf(value) === index;
     }
 }

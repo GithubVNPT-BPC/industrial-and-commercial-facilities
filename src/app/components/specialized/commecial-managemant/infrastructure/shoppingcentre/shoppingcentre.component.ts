@@ -20,19 +20,21 @@ import { marketTypeList } from '../common/common-commecial.component';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class ShoppingcentreComponent extends BaseComponent {
-  public tongSieuThi: number;
-  public sieuThiTongHop: number;
-  public sieuThiChuyenDanh: number;
+  public tongSieuThi: number = 0;
+  public loaihinh_TongHop: number = 0;
+  public loaihinh_ChuyenDoanh: number = 0;
   //
-  public sieuThiHangI: number;
-  public sieuThiHangII: number;
-  public sieuThiHangIII: number;
+  public sieuThiHangI: number = 0;
+  public sieuThiHangII: number = 0;
+  public sieuThiHangIII: number = 0;
   //
-  public sieuThiDauTuTrongNam: number;
-  public sieuThiDauTuNamTruoc: number;
-  public sieuThiDauTuNamTruoc1: number;
-  public sieuThiNgungHoatDong: number;
-  public sieuThiDangXayDung: number;
+  public HoatDong: number = 0;
+  public NgungHoatDong: number = 0;
+
+  public VonNhaNuoc = 0;
+  public VonNgoaiNhaNuoc = 0;
+  public VonNuocNgoai = 0;
+  public VonKhac = 0;
   //
   public filterModel = {
     id_dia_ban: [],
@@ -101,8 +103,9 @@ export class ShoppingcentreComponent extends BaseComponent {
         this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           this.dataSource = new MatTableDataSource<SuperMarketCommonModel>(allrecords.data);
-          this.builtYears = this.filteredDataSource.data.map(x => x.nam_xay_dung).filter(this.filterService.onlyUnique);
-          this.holdYears = this.filteredDataSource.data.map(x => x.nam_ngung_hoat_dong).filter(this.filterService.onlyUnique);
+          this.filteredDataSource = new MatTableDataSource<SuperMarketCommonModel>(allrecords.data);
+          this.builtYears = this.dataSource.data.map(x => x.nam_xay_dung).filter(this.filterService.onlyUnique);
+          this.holdYears = this.dataSource.data.map(x => x.nam_ngung_hoat_dong).filter(this.filterService.onlyUnique);
         }
         this._prepareData();
         this.paginatorAgain();
@@ -153,19 +156,28 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.commerceManagementService.postMarketPlace([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  prepareRemoveData(data) { 
+    let datas = data.map(element => new Object({id: element.id}));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.commerceManagementService.deleteShoppingCenter(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
   private _prepareData() {
-    let data = this.dataSource.data;
+    let data = this.filteredDataSource.data;
+
     this.tongSieuThi = data.length;
     this.sieuThiHangI = data.filter(x => x.id_phan_hang == 1).length;
     this.sieuThiHangII = data.filter(x => x.id_phan_hang == 2).length;
     this.sieuThiHangIII = data.filter(x => x.id_phan_hang == 3).length;
-    this.sieuThiDangXayDung = data.length - this.sieuThiHangI - this.sieuThiHangII - this.sieuThiHangIII;
 
-    this.sieuThiDauTuTrongNam = data.filter(x => x.nam_xay_dung == this.currentYear.toString()).length;
-    this.sieuThiDauTuNamTruoc = data.filter(x => x.nam_xay_dung == (this.currentYear - 1).toString()).length;
+    this.HoatDong = this.dataSource.data.filter(x => x.nam_xay_dung == this.currentYear.toString()).length;
+    this.NgungHoatDong = this.dataSource.data.filter(x => x.nam_ngung_hoat_dong == this.currentYear.toString()).length;
 
-    this.sieuThiChuyenDanh = data.filter(x => x.chuyen_doanh != null).length;
-    this.sieuThiTongHop = data.filter(x => x.tong_hop != null).length;
+    this.loaihinh_ChuyenDoanh = data.filter(x => x.chuyen_doanh != null).length;
+    this.loaihinh_TongHop = data.filter(x => x.tong_hop != null).length;
 
     // Compute Business Area ID
     data.map(x => {
@@ -176,7 +188,10 @@ export class ShoppingcentreComponent extends BaseComponent {
       else x.business_area_id = 0;
     });
 
-    this.filteredDataSource.data = data;
+    this.VonNhaNuoc = data.map(x => x.nha_nuoc).reduce((a, b) => a + b, 0);
+    this.VonNgoaiNhaNuoc = data.map(x => x.ngoai_nha_nuoc).reduce((a, b) => a + b, 0);
+    this.VonNuocNgoai = data.map(x => x.co_von_dau_tu_nuoc_ngoai).reduce((a, b) => a + b, 0);
+    this.VonKhac = data.map(x => x.von_khac).reduce((a, b) => a + b, 0);
   }
 
   applyFilter() {
