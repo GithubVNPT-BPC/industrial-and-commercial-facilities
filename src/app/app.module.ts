@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { InformationService } from './shared/information/information.service';
 import { InformationComponent } from './shared/information/information.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,6 +19,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { PipeModule } from './pipe.module';
 import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { LoggerComponent } from './components/specialized/logger/logger.component';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
   declarations: [
     InformationComponent,
     ConfirmationDialogComponent,
+    LoggerComponent,
   ],
   exports: [
   ],
@@ -47,7 +49,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy,
+      useClass: PathLocationStrategy,
     },
     InformationService,
     ConfirmationDialogService,

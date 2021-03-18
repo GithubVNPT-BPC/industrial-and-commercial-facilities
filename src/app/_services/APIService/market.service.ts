@@ -49,14 +49,15 @@ export class MarketService {
     public urlDeleteCareer = "api/doanh-nghiep/xoa-nganh-nghe";
 
     constructor(public http: HttpClient) {
-        // this.data = JSON.parse(localStorage.getItem('currentUser'));
-        // this.token = this.data.token;
+        this.data = JSON.parse(localStorage.getItem('currentUser'));
+        this.token = this.data.token;
     }
 
     //company list
     companyinfo: CompanyPost;
     public PostCompany(companyinfo: Array<CompanyPost>) {
         var apiUrl = this.apiHome + this.urlPostCompany;
+        var apiUrl = "http://localhost:5000/api/doanh-nghiep/them-doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, companyinfo, { headers: headers }).pipe(tap(data => data),
@@ -65,6 +66,7 @@ export class MarketService {
     }
     public UpdateCompany(companyinfo: Array<CompanyPost>) {
         var apiUrl = this.apiHome + this.urlUpdateCompany;
+        var apiUrl = "http://localhost:5000/api/doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, companyinfo, { headers: headers }).pipe(tap(data => data),
@@ -87,7 +89,8 @@ export class MarketService {
         );
     }
     public DeleteCompany(deletemodel: Array<DeleteModel>) {
-        var apiUrl = this.apiHome + this.urlDeleteCompany
+        var apiUrl = this.apiHome + this.urlDeleteCompany;
+        var apiUrl = "http://localhost:5000/api/doanh-nghiep/xoa-nhieu-doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
