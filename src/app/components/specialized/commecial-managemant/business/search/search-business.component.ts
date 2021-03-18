@@ -11,6 +11,8 @@ import { MatTableFilter } from 'mat-table-filter';
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 @Component({
   selector: 'app-search-business',
@@ -23,6 +25,19 @@ export class SearchBusinessComponent implements OnInit {
   @ViewChild('new_element', { static: false }) ele: ElementRef;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+
+  protected LINK_DEFAULT: string = "";
+  protected TITLE_DEFAULT: string = "QUẢN LÝ DOANH NGHIỆP";
+  protected TEXT_DEFAULT: string = "QUẢN LÝ DOANH NGHIỆP";
+  private _linkOutput: LinkModel = new LinkModel();
+
+  private sendLinkToNext(type: boolean): void {
+    this._linkOutput.link = this.LINK_DEFAULT;
+    this._linkOutput.title = this.TITLE_DEFAULT;
+    this._linkOutput.text = this.TEXT_DEFAULT;
+    this._linkOutput.type = type;
+    this._breadCrumService.sendLink(this._linkOutput);
+  }
 
   public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
     'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
@@ -71,6 +86,7 @@ export class SearchBusinessComponent implements OnInit {
     public router: Router,
     public excelService: ExcelService,
     public info: InformationService,
+    private _breadCrumService: BreadCrumService,
   ) { }
 
   ngOnInit(): void {
@@ -78,6 +94,7 @@ export class SearchBusinessComponent implements OnInit {
     this.filterEntity = new CompanyDetailModel();
     this.tempFilter = new CompanyDetailModel();
     this.filterType = MatTableFilter.ANYWHERE;
+    this.sendLinkToNext(true);
   }
   selection = new SelectionModel<CompanyDetailModel>(true, []);
 
@@ -116,7 +133,6 @@ export class SearchBusinessComponent implements OnInit {
         element.mst = this.selectionarray[index]
       }
       this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
-        this.GetAllCompany();
         this.info.msgSuccess('Xóa thành công')
         this.ngOnInit();
         this.deletemodel1 = []
@@ -200,6 +216,7 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
     let date: string
@@ -210,9 +227,7 @@ export class SearchBusinessComponent implements OnInit {
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        // data[0] = "Thông tin cơ bản"
         this.companyList1 = allrecords.data[0];
-        // data[1] = ""
         this.companyList2 = allrecords.data[1];
         this.companyList3 = allrecords.data[2];
 
@@ -307,7 +322,9 @@ export class SearchBusinessComponent implements OnInit {
           }
         })
 
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
+        this.companyList6 = this.companyList5.filter(x => x.sct == true)
+
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

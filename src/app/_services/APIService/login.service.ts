@@ -3,6 +3,7 @@ import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs'
 import { catchError, tap, map } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { UserModel } from '../../_models/APIModel/user.model';
+import { ChangePassword } from "src/app/_models/user.model";
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';
@@ -23,9 +24,9 @@ export class LoginService {
     public apiUrl = environment.apiEndpoint + "api/dang-nhap/dang-nhap-sct";
     public apiRegister = environment.apiEndpoint + "api/dang-ky";
     public apiGetUserInfor = environment.apiEndpoint + "api/tai-khoan";
-    public apiUpdateUser = environment.apiEndpoint + "api/tai-khoan";
     public apiLogout = environment.apiEndpoint + "api/dang-xuat";
     public apiRefreshToken = environment.apiEndpoint + "api/cap-lai-token";
+    public apiUpdateUser = environment.apiEndpoint + "api/dang-nhap/admin-dat-lai-mat-khau";
 
     /**
      * @param _http 
@@ -34,6 +35,16 @@ export class LoginService {
     constructor(public _http: HttpClient, public router: Router,) {
         this.userSubject = new BehaviorSubject<UserModel>(null);
         this.user = this.userSubject.asObservable();
+    }
+
+    userupdate: ChangePassword
+    public ChangePassword(user: Array<ChangePassword>) {
+        var apiUrl = this.apiUpdateUser;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this._http.post<any>(apiUrl, user, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
     }
 
     public get userValue(): UserModel {
@@ -214,7 +225,6 @@ export class LoginService {
         } else {
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
         }
-        window.alert(errorMessage);
         return throwError(errorMessage);
     }
 }

@@ -1,12 +1,27 @@
 <mat-card class="material">
     <mat-card-content>
-        <div class="button-control">
-            <button mat-raised-button (click)="exportToExcel('Chỉ số IIP chi tiết','Chỉ số IIP chi tiết')">Xuất
-                Excel</button>
+        <div class="row">
+            <div class="col-9 col-lg-9">
+                <mat-card-header *ngIf="object[0]">
+                    <mat-card-title>
+                        <h2 style="padding-left: 20px;">{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
+                        </h2>
+                    </mat-card-title>
+                    <mat-card-subtitle>
+                        <p style="padding-left: 40px;">Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
+                            ngày <strong>{{ngayketthucbaocao}}</strong></p>
+                    </mat-card-subtitle>
+                </mat-card-header>
+            </div>
 
-            <button mat-raised-button (click)="Back()">
-                <mat-icon>keyboard_backspace</mat-icon>
-            </button>
+            <div class="col-3 col-lg-3 button-control">
+                <button mat-raised-button (click)="exportToExcel('Chỉ số IIP chi tiết','Chỉ số IIP chi tiết')">Xuất
+                    Excel</button>
+
+                <button mat-raised-button (click)="Back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                </button>
+            </div>
         </div>
 
         <mat-card-header *ngIf="object[0]">

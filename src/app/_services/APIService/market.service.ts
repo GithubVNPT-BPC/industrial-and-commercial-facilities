@@ -280,7 +280,7 @@ export class MarketService {
             // server-side error
             errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.message}`;
         }
-        window.alert(errorMessage);
+        // window.alert(errorMessage);
         return throwError(errorMessage);
     }
 

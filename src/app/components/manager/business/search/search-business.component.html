@@ -10,6 +10,7 @@
         <div class="row">
             <div class="col-6"></div>
             <div class="col-6 button-control -align-right my-auto">
+                <button mat-raised-button (click)="AddCertificate()">DS giấy phép</button>
                 <button mat-raised-button (click)="AddCompany()">Thêm doanh nghiệp</button>
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
@@ -135,10 +136,10 @@
                     <td mat-cell *matCellDef="let element"> {{element.mst}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="mst_cha">
+                <!-- <ng-container matColumnDef="mst_cha">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã số thuế cha </th>
                     <td mat-cell *matCellDef="let element"> {{element.mst_cha}} </td>
-                </ng-container>
+                </ng-container> -->
 
                 <ng-container matColumnDef="ten_loai_hinh_hoat_dong">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Tên loại hình hoạt động </th>

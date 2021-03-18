@@ -29,27 +29,13 @@ export class LoginComponent implements OnInit {
     public location: Location) {
   }
   ngOnInit() {
-    // reset login status
-    this.LogOut();
-
-    // get return url from route parameters or default to '/'
-    // this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    // if ((this.returnUrl.indexOf('specialized')) == -1 || (this.returnUrl.indexOf('manager') == -1)) {
-    //   this.returnUrl = '';
-    // }
   }
+
   Login() {
     this.loading = true;
     this.loginService.validateLoginUser(this.userModel, this.isBusiness).subscribe({
       next: (response) => {
-        if (response.data == null) {
-          let config = new MatSnackBarConfig();
-          config.duration = this.setAutoHide ? this.autoHide : 0;
-          config.verticalPosition = this.verticalPosition;
-          this.info.msgError("Tài khoản hoặc mật khẩu không chính xác");
-          this.router.navigate(['login']);
-        }
-        else if (response.data.user_role_id == 1) {
+        if (response.data.user_role_id == 1) {
           this.info.msgSuccess("Đăng nhập thành công");
           this.returnUrl = '/specialized/home'
           this.router.navigateByUrl(this.returnUrl);
@@ -71,7 +57,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error: error => {
-        this.error = error;
+        this.info.msgError("Tài khoản hoặc mật khẩu không chính xác");
         this.loading = false;
       }
     });

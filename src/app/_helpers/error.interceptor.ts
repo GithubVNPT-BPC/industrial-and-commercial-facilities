@@ -10,7 +10,7 @@ import { InformationService } from '../shared/information/information.service';
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
     constructor(
-        public authenticationService: LoginService, 
+        public authenticationService: LoginService,
         public info: InformationService,
         public router: Router) { }
 
@@ -24,15 +24,15 @@ export class ErrorInterceptor implements HttpInterceptor {
                 if (['1'].includes(errorResponse.message)) {
                     this.info.msgError("User đang sử dụng đã bị xóa!")
                     this.authenticationService.LogoutUser();
-                }else if(['2'].includes(errorResponse.message)){
+                } else if (['2'].includes(errorResponse.message)) {
                     this.info.msgError("Hết phiên đăng nhập! Vui lòng đăng nhập lại.");
                     this.authenticationService.LogoutUser();
                     this.router.navigate['/login'];
-                }else if(['3'].includes(errorResponse.message)){
+                } else if (['3'].includes(errorResponse.message)) {
                     this.info.msgError("Hết phiên đăng nhập! Vui lòng đăng nhập lại.");
                     this.authenticationService.LogoutUser();
                     this.router.navigate['/login'];
-                }else{
+                } else {
                     this.info.msgError("Hết phiên đăng nhập! Quay về trang chủ");
                     this.authenticationService.LogoutUser();
                 }
@@ -41,7 +41,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 this.router.navigate['/404'];
             } else {
                 if ([400].includes(err.status)) {
-                    this.authenticationService.LogoutUser();
+                    // this.authenticationService.LogoutUser();
                 }
             }
             const error = (err && err.error && err.error.message) || err.statusText;

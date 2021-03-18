@@ -18,17 +18,17 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 })
 
 export class IndustrialExplosivesComponent extends BaseComponent {
-    
-    displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 
-    'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
-    
-    totalColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong', 
-    'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no', 
-    'moi_no', 'day_no'];
+
+    displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+        'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
+
+    totalColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+        'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no',
+        'moi_no', 'day_no'];
 
     dataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
     filteredDataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
-    
+
     tinhTrangHoatDong: any[] = [
         { id: 1, tinh_trang: 'Đang hoạt động' },
         { id: 2, tinh_trang: 'Ngưng hoạt động' },
@@ -53,7 +53,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.getPostExplosiveMatData(this.currentYear);
     }
 
-    getLinkDefault(){
+    getLinkDefault() {
         this.LINK_DEFAULT = "/specialized/industry-management/explosives";
         this.TITLE_DEFAULT = "Công nghiệp - Vật liệu nổ công nghiệp";
         this.TEXT_DEFAULT = "Công nghiệp - Vật liệu nổ công nghiệp";
@@ -61,18 +61,18 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     getFormParams() {
         return {
-          mst: new FormControl(),
-          dia_chi: new FormControl(),
-          id_phuong_xa: new FormControl(),
-          
-          thuoc_no: new FormControl(),
-          kip_no: new FormControl(),
-          moi_no: new FormControl(),
-          day_no: new FormControl(),
-          thuoc_no_6thang: new FormControl(),
-          kip_no_6thang: new FormControl(),
-          moi_no_6thang: new FormControl(),
-          day_no_6thang: new FormControl(),
+            mst: new FormControl(),
+            dia_chi: new FormControl(),
+            id_phuong_xa: new FormControl(),
+
+            thuoc_no: new FormControl(),
+            kip_no: new FormControl(),
+            moi_no: new FormControl(),
+            day_no: new FormControl(),
+            thuoc_no_6thang: new FormControl(),
+            kip_no_6thang: new FormControl(),
+            moi_no_6thang: new FormControl(),
+            day_no_6thang: new FormControl(),
         }
     }
 
@@ -91,13 +91,13 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         if (!event.target) {
             let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
             if (!filteredData.length) {
-            if (this.filterModel)
-                this.filteredDataSource.data = [];
-            else
-                this.filteredDataSource.data = this.dataSource.data;
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
             }
             else {
-            this.filteredDataSource.data = filteredData;
+                this.filteredDataSource.data = filteredData;
             }
         } else {
             const filterValue = (event.target as HTMLInputElement).value;

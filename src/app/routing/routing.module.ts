@@ -16,7 +16,6 @@ import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { LogoutComponent } from '../components/logout/logout.component';
-import { UpdateuserComponent } from '../components/updateuser/updateuser.component';
 import { LoggerComponent } from '../components/specialized/logger/logger.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataSCTComponent } from '../components/data-sct/data-sct.component';
@@ -68,18 +67,12 @@ const routes: Routes = [
       title: 'Quản lý chuyên ngành'
     }
   },
+
   {//System Log
     path: 'system-log',
     component: LoggerComponent,
     data: {
       title: 'System Log'
-    }
-  },
-  {//Update user
-    path: 'update_user',
-    component: UpdateuserComponent,
-    data: {
-      title: 'Đăng nhập'
     }
   },
   {//Default first page
@@ -168,7 +161,6 @@ const routes: Routes = [
     HomeSpecializedComponent,
     LogoutComponent,
     RegisterComponent,
-    UpdateuserComponent,
     DataSCTComponent,
     EnergyLayoutComponent,
   ],

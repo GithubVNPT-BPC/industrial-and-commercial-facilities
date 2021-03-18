@@ -44,6 +44,10 @@ export abstract class BaseComponent implements OnInit {
     public errorMessage: any;
     public currentYear = new Date().getFullYear();
     public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
+    public terms = [
+        {id: 6, value: '6 Tháng'}, 
+        {id: 12, value: '1 Năm'}
+    ];
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);
@@ -81,6 +85,7 @@ export abstract class BaseComponent implements OnInit {
         // In case we have already declared all field in displayed Columns
         if (this.displayedColumns.length == 2 && Object.keys(this.displayedFields).length > 0) {
             this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+            // console.log(this.displayedColumns)
         }
     }
 

@@ -14,9 +14,13 @@ import { PageNotFoundComponent, LoaderInterceptor } from '../../shared';
 import { DomesticManagerComponent } from './domestic-manager/domestic-manager.component';
 import { ForeignManagerComponent } from './foreign-manager/foreign-manager.component';
 import { ProductManagerComponent } from './product-manager/product-manager.component';
+import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
+import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
+import { UpdateUserComponent } from './update-user/update-user.component';
 
 const routes: Routes = [
   {
+
     path: '',
     data: {
       title: 'Quản lý'
@@ -43,6 +47,20 @@ const routes: Routes = [
             },
           },
           {
+            path: 'certificate',
+            component: CertificateListComponent,
+            data: {
+              title: 'Quản lý giấy phép'
+            },
+          },
+          {
+            path: 'add-certificate/:id',
+            component: AddCertificateComponent,
+            data: {
+              title: 'Thêm giấy phép'
+            },
+          },
+          {
             path: 'edit/:mst',
             component: EditBusinessComponent,
             data: {
@@ -50,6 +68,14 @@ const routes: Routes = [
             },
           },
         ],
+      },
+
+      {
+        path: 'user',
+        component: UpdateUserComponent,
+        data: {
+          title: 'Cập nhật thông tin tài khoản'
+        },
       },
 
       {
