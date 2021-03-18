@@ -544,7 +544,7 @@ export class EditBusinessComponent implements OnInit {
             mst: this.company.mst,
             id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
             mst_parent: this.company.mst_cha,
-            sct: false,
+            sct: this.company.sct,
             hoat_dong: this.company.hoat_dong,
             dia_chi: this.company.dia_chi,
             id_phuong_xa: this.company.id_phuong_xa,

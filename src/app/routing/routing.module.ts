@@ -17,7 +17,6 @@ import { RegisterComponent } from '../components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { InformationService } from '../shared/information/information.service';
 import { LogoutComponent } from '../components/logout/logout.component';
-import { UpdateuserComponent } from '../components/updateuser/updateuser.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataSCTComponent } from '../components/data-sct/data-sct.component';
 import { CommecialManagementModule } from '../components/specialized/commecial-managemant/commecial-management.module';
@@ -66,13 +65,6 @@ const routes: Routes = [
     component: HomeSpecializedComponent,
     data: {
       title: 'Quản lý chuyên ngành'
-    }
-  },
-  {//Update user
-    path: 'update_user',
-    component: UpdateuserComponent,
-    data: {
-      title: 'Đăng nhập'
     }
   },
   {//Default first page
@@ -161,7 +153,6 @@ const routes: Routes = [
     HomeSpecializedComponent,
     LogoutComponent,
     RegisterComponent,
-    UpdateuserComponent,
     DataSCTComponent,
     EnergyLayoutComponent,
   ],

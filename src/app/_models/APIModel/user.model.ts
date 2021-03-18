@@ -1,14 +1,11 @@
 export class UserModel {
-    public full_name: string = "";
-    public username: string = "";
-    public password: string = "";
-    public user_id: number = 0;
-    public token?: string = "";
-    public refresh_token?: string = "";
-    public user_role_id: number = 0;
-    public imageUrl: string = "";
-    public org_id: number;
-    // constructor(data){
-    //     Object.assign(this, data);
-    // }
+    full_name: string = "";
+    username: string = "";
+    password: string = "";
+    user_id: number = 0;
+    token?: string = "";
+    refresh_token?: string = "";
+    user_role_id: number = 0;
+    imageUrl: string = "";
+    org_id: number;
 }
