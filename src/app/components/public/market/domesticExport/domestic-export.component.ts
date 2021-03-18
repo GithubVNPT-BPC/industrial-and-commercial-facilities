@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material';
-import { MarketService } from '../../../../_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ExportMarketModel } from '../../../../_models/APIModel/domestic-market.model';
@@ -18,6 +17,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
   parse: {
@@ -58,7 +58,7 @@ export class DomesticExportComponent implements OnInit {
   public time: string;
 
   constructor(
-    public marketService: MarketService,
+    public marketService: MarketServicePublic,
     public excelService: ExcelService,
     public router: Router,
     public dialog: MatDialog) {

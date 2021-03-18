@@ -7,9 +7,9 @@ import { MatSort } from '@angular/material/sort';
 import { CompanyDetailModel, filter } from '../../../../_models/APIModel/domestic-market.model';
 import { MatTableFilter } from 'mat-table-filter';
 
-import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FilterService } from 'src/app/_services/filter.service';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 
 @Component({
   selector: 'app-search-business',
@@ -66,7 +66,7 @@ export class SearchPartnerComponent implements OnInit {
   ];
 
   constructor(
-    public _marketService: MarketService,
+    public _marketService: MarketServicePublic,
     public router: Router,
     public excelService: ExcelService,
     public filterService: FilterService,

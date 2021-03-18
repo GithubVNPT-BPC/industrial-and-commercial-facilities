@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from '../../../../shared/information/information.service';
-import { MarketService } from "../../../../_services/APIService/market.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
@@ -28,6 +27,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
+import { MarketServicePublic } from "src/app/_services/APIService/market.service public";
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
 	parse: {
@@ -124,7 +124,7 @@ export class CompanyDetailComponent implements OnInit {
 		public router: Router,
 		public datepipe: DatePipe,
 		public dialog: MatDialog,
-		public _Service: MarketService,
+		public _Service: MarketServicePublic,
 		public info: InformationService,
 		private formbuilder: FormBuilder,
 		public _keyboardservice: KeyboardService,
