@@ -10,7 +10,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { BaseComponent } from '../../base.component';
-
+import { LoaderService } from 'src/app/shared/loader/loader.service';
 interface HashTableNumber<T> {
   [key: number]: T;
 }
@@ -23,8 +23,9 @@ interface HashTableNumber<T> {
 
 export class ReportExplosivesComponent extends BaseComponent {
   //Constant
-  public readonly OBJ_ID: number = 10588480;
-  public readonly TIME_ID: number = 2020;
+  public readonly OBJ_ID_6TH: number = 9;
+  public readonly OBJ_ID_12TH: number =  10;
+  public TIME_ID: number = new Date().getFullYear();
   public readonly ORG_ID: number = 1;
   public readonly TYPE_INDICATOR_INPUT: number = 1;
   public readonly ATTRIBUTE_CODE: string = "IND_NAME";
@@ -32,11 +33,8 @@ export class ReportExplosivesComponent extends BaseComponent {
   public readonly ATTRIBUTE_DEFAULT: number = 1;
   public readonly RANK_LABLE = (page: number, pageSize: number, length: number) => {
     if (length == 0 || pageSize == 0) { return `0 của ${length}`; }
-
     length = Math.max(length, 0);
-
     const startIndex = page * pageSize;
-
     // If the start index exceeds the list length, do not try and fix the end index to the end.
     const endIndex = startIndex < length ?
       Math.min(startIndex + pageSize, length) :
@@ -50,6 +48,8 @@ export class ReportExplosivesComponent extends BaseComponent {
 
   //Variable for HTML&TS-------------------------------------------------------------------------
   public year: number = 2019;
+  // 6 tháng
+  public term: number = 6;
   //Variable for Total---------------------------------------------------------------------------
 
   public tableMergeHader: Array<ToltalHeaderMerge> = [];
@@ -65,9 +65,12 @@ export class ReportExplosivesComponent extends BaseComponent {
   private _org_id: number = 0;
   private _rows: number = 0;
   private _indicators: Array<ReportIndicator> = [];
+  private _indicatorsLastyear: Array<ReportIndicator> = [];
   private _datarows: Array<ReportDatarow> = [];
+  private _datarowsLastYear: Array<ReportDatarow> = [];
   private _object: ReportOject[] = [];
   private _tableData: MatTableDataSource<ReportTable> = new MatTableDataSource<ReportTable>();
+  private _tableDataLastYear: MatTableDataSource<ReportTable> = new MatTableDataSource<ReportTable>();
   //Angular FUnction --------------------------------------------------------------------
   constructor(
     private injector: Injector,
@@ -75,7 +78,8 @@ export class ReportExplosivesComponent extends BaseComponent {
     public route: ActivatedRoute,
     public keyboardservice: KeyboardService,
     public excelService: ExcelService,
-    public info: InformationService
+    public info: InformationService,
+    public loaderService: LoaderService
   ) {
     super(injector);
   }
@@ -84,9 +88,9 @@ export class ReportExplosivesComponent extends BaseComponent {
     super.ngOnInit();
     let data: any = JSON.parse(localStorage.getItem("currentUser"));
     this._org_id = 1;
-    this._obj_id = this.OBJ_ID;
+    this._obj_id = this.getMaBC(this.term);
     this._time_id = this.TIME_ID;
-    this.GetReportById(this._obj_id, this._time_id, this._org_id);
+    this.GetReportById(this._time_id, this._obj_id);
   }
 
   getLinkDefault() {
@@ -101,36 +105,95 @@ export class ReportExplosivesComponent extends BaseComponent {
     return list.map((x) => x.name);
   }
 
-  GetReportById(obj_id: number, time_id: number, org_id: number) {
-    this.reportSevice
-      .GetReportByKey(obj_id, time_id, org_id)
-      .subscribe((allRecord) => {
-        this.cols = [];
-        allRecord.data[1].forEach((element) => {
-          if (element.attr_code != "IND_NAME")
-            this.cols.push({
-              field: element.fld_code,
-              header: element.attr_name,
-            });
-          else
-            this.cols.push({
-              field: element.attr_code,
-              header: element.attr_name,
-            });
-        });
+  GetReport(){
+    console.log(this.term, this._time_id);
+    let mabc = this.getMaBC(this.term);
+    this.GetReportById(this._time_id, mabc);
+  }
 
-        this.attributes = allRecord.data[1] as ReportAttribute[];
+  getMaBC(term){
+    return term == 6 ? this.OBJ_ID_6TH : this.OBJ_ID_12TH;
+  }
+
+  modifyAllRecords(allRecords: any[], cols: any[]){
+    allRecords['data'][1].forEach((element) => {
+      if (element.attr_code != "IND_NAME")
+        this.cols.push({
+          field: element.fld_code,
+          header: element.attr_name,
+        });
+      else
+        this.cols.push({
+          field: element.attr_code,
+          header: element.attr_name,
+        });
+    });
+  }
+
+  GetReportById(time_id: number, mabc: number) {
+      this._tableData.data = [];
+      this._tableDataLastYear.data = [];
+      // get data last year
+      this.getReportLastYear(mabc, time_id - 1);
+      this.reportSevice
+      .GetReportByKey(mabc, time_id, this._org_id)
+      .subscribe((allRecord) => {
+        // this.attributes = allRecord.data[1] as ReportAttribute[];
+        this.attributes = this.init2Col(allRecord.data[1] as ReportAttribute[]);
+        // console.log(this.attributes);
         this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
         this._indicators = allRecord.data[2] as ReportIndicator[];
         this._indicators.sort((a, b) =>
           a.ind_code.toLocaleString().localeCompare(b.ind_code.toLocaleString())
         );
+        // console.log('indiccator :    ',this._indicators);
+        
         this._datarows = allRecord.data[3] as ReportDatarow[];
-        this._object = allRecord.data[0];
-        this.CreateMergeHeaderTable(this.attributes);
+        this.setValueLastyear2Now();
+        // this._object = allRecord.data[0];
+        // this.CreateMergeHeaderTable(this.attributes);
         this.CreateReportTable();
         this._paginatorAgain();
       });
+  }
+
+  setValueLastyear2Now(){
+    if(this._datarowsLastYear.length){
+      this._datarows.forEach((element, index) => {
+        element.fn02 = this._datarowsLastYear[index].fn01;
+        if(this._datarowsLastYear[index].fn01 && this._datarows[index].fn01){
+          element.fn03 = ((this._datarows[index].fn01 / this._datarowsLastYear[index].fn01) - 1)*100;
+        }
+      });
+    }
+    // console.log('xxxxxxxxxxx', this._datarows, this._datarowsLastYear);
+  }
+
+  getReportLastYear(mabc, time_id){
+    this.reportSevice
+      .GetReportByKey(mabc, time_id, this._org_id)
+      .subscribe((allRecord) => {
+        this._datarowsLastYear = allRecord.data[3] as ReportDatarow[];
+        // console.log('lastyear:     ',this._datarowsLastYear);
+      });
+  }
+
+  init2Col(allrecords : ReportAttribute[]){
+    let attributesTemp = {...allrecords[2]};
+    let attributesTemp1 = {...allrecords[2]};
+    attributesTemp.attr_name = 'SỐ LƯỢNG NĂM TRƯỚC';
+    attributesTemp.attr_code = 'SLNT'
+    attributesTemp.attr_id = 465046;
+    attributesTemp.fld_code = "fn02";
+    attributesTemp.is_default = 0;
+
+    attributesTemp1.attr_name = 'SO SÁNH (%)';
+    attributesTemp1.attr_code = 'SS';
+    attributesTemp1.attr_id = 465047;
+    attributesTemp1.fld_code = "fn03";
+    attributesTemp1.is_default = 0;
+    // console.log(attributesTemp,attributesTemp1);
+    return [...allrecords, ...[attributesTemp, attributesTemp1]];
   }
 
   convertTimeIdToTimePeriod(time_id: number): string {
@@ -225,6 +288,7 @@ export class ReportExplosivesComponent extends BaseComponent {
       }
     }
     this.tableMergeHader.pop();
+    // console.log(this.tableMergeHader);
   }
 
   CreateReportTable() {
@@ -236,12 +300,13 @@ export class ReportExplosivesComponent extends BaseComponent {
         a.attr_code.toLowerCase() != "rn"
     );
     this.attributeHeaders = this.attributes
-      .sort((a, b) => b.is_default - a.is_default)
-      .filter((a) => a.fld_code.toLowerCase() != null)
-      .map((c) =>
-        c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
-      );
-
+    .sort((a, b) => b.is_default - a.is_default)
+    .filter((a) => a.fld_code.toLowerCase() != null)
+    .map((c) =>
+    c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
+    );
+    
+    // console.log(this.attributes);
     this.attributeHeaders = this.attributeHeaders.filter(
       (a) => a.toLowerCase() != "ind_code" && a.toLowerCase() != "rn"
     );
@@ -251,7 +316,6 @@ export class ReportExplosivesComponent extends BaseComponent {
       const elementDatarow = this._datarows.find(
         (e) => e.ind_id == elementIndicator.ind_id
       );
-
       let tableRow: ReportTable = new ReportTable();
       tableRow.ind_formula = elementIndicator.formula;
       tableRow.ind_id = elementIndicator.ind_id;
@@ -352,8 +416,8 @@ export class ReportExplosivesComponent extends BaseComponent {
     });
     this.dataSource.data = [...this._tableData.data];
     this._caculator(this.dataSource.data);
+    
   }
-
 
   getNestedChildren(indicators: Array<ReportIndicator>, parent: number) {
     var out = [];
@@ -463,5 +527,9 @@ export class ReportExplosivesComponent extends BaseComponent {
     this.paginator._intl.previousPageLabel = "Trang Trước";
     this.paginator._intl.nextPageLabel = "Trang Tiếp";
     this.paginator._intl.getRangeLabel = this.RANK_LABLE;
+  }
+
+  compareToLastYear(e){ 
+    // console.log(e)
   }
 }
