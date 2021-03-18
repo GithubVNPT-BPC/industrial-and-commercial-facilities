@@ -1,0 +1,64 @@
+<mat-card class="material">
+    <mat-card-header>
+        <mat-card-title><strong>
+                <h3>Cập nhật thông tin tài khoản</h3>
+            </strong></mat-card-title>
+        <mat-card-subtitle hidden>
+            show={{show}}
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="userupdate" autocomplete="off" (ngSubmit)="onSubmit(userupdate.getRawValue())">
+            <div class="row">
+                <div class="col-12 button-control my-auto">
+                    <button type="submit" mat-raised-button>Lưu</button>
+                    <button mat-raised-button type="button" (click)="toggle()">Hiển thị mật khẩu</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tên Đăng nhập</mat-label>
+                        <input formControlName="username" matInput placeholder=""
+                            [(ngModel)]="_Service.userupdate.username" readonly style="color: red;">
+                    </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <ng-container *ngIf="show; else elseTemplate">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Xác nhận mật khẩu cũ
+                            </mat-label>
+                            <input formControlName="password" type="password" matInput placeholder=""
+                                [(ngModel)]="_Service.userupdate.password">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mật khẩu mới</mat-label>
+                            <input formControlName="nPassword" type="password" matInput placeholder=""
+                                [(ngModel)]="_Service.userupdate.nPassword">
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Xác nhận mật khẩu cũ
+                            </mat-label>
+                            <input formControlName="password" type="text" matInput placeholder=""
+                                [(ngModel)]="_Service.userupdate.password">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mật khẩu mới</mat-label>
+                            <input formControlName="nPassword" type="text" matInput placeholder=""
+                                [(ngModel)]="_Service.userupdate.nPassword">
+                        </mat-form-field>
+                    </ng-template>
+
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+    <!-- <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close>Đóng</button>
+    </mat-dialog-actions> -->
+</mat-card>

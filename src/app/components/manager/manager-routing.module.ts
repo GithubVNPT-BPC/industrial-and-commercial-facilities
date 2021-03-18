@@ -16,9 +16,11 @@ import { ForeignManagerComponent } from './foreign-manager/foreign-manager.compo
 import { ProductManagerComponent } from './product-manager/product-manager.component';
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
+import { UpdateUserComponent } from './update-user/update-user.component';
 
 const routes: Routes = [
   {
+
     path: '',
     data: {
       title: 'Quản lý'
@@ -66,6 +68,14 @@ const routes: Routes = [
             },
           },
         ],
+      },
+
+      {
+        path: 'user',
+        component: UpdateUserComponent,
+        data: {
+          title: 'Cập nhật thông tin tài khoản'
+        },
       },
 
       {
