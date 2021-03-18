@@ -63,6 +63,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     GetFoodIndustryData(time_id) {
         this.industryManagementService.GetFoodIndustry(time_id).subscribe(result => {
+            this.filteredDataSource.data = [];
             if (result.data && result.data.length) {
                 result.data.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
@@ -73,10 +74,10 @@ export class FoodIndustryManagementComponent extends BaseComponent {
                 this.dataSource.data.forEach(element => {
                     element.is_expired = !element.tinh_trang_hoat_dong;
                 });
-                this.filteredDataSource.data = [...this.dataSource.data.filter(d => !d.is_expired)];
-                this._prepareData();
-                this.paginatorAgain();
+                this.filteredDataSource.data = [...this.dataSource.data];
             }
+            this._prepareData();
+            this.paginatorAgain();
         })
     }
 
@@ -112,8 +113,17 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         return data;        
     }
 
+    prepareRemoveData(data) { 
+        let datas = data.map(element => new Object({id: element.id}));
+        return datas;
+    }
+
     callService(data) {
         this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    callRemoveService(data) {
+        this.industryManagementService.DeleteFoodIndustry(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     applyDistrictFilter(event) {
@@ -136,7 +146,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = [...this.dataSource.data.filter(d => d.is_expired == event.checked ? true:false)];
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)]: [...this.dataSource.data];
         this._prepareData();
     }
 
@@ -147,4 +157,6 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     showRightUnit(value, type) {
         return value + (type == 1 ? ' tấn' : ' lít');
     }
+
+
 }

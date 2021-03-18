@@ -111,6 +111,8 @@ export class CompanyDetailComponent implements OnInit {
 			}
 			this._Service.DeleteCareer(this.deletemodel1).subscribe(res => {
 				this.info.msgSuccess('Xóa thành công')
+				this.ngOnInit();
+				this.deletemodel1 = []
 				this.selection.clear();
 				this.paginator.pageIndex = 0;
 			})
@@ -489,6 +491,7 @@ export class CompanyDetailComponent implements OnInit {
 				if (this.companyList2) {
 					this.companyList2.forEach(x => {
 						this.careerarray.push({
+							id_nganh_nghe: null,
 							id_nganh_nghe_kinh_doanh: null,
 							nganh_nghe_kd_chinh: '',
 							id_linh_vuc: null

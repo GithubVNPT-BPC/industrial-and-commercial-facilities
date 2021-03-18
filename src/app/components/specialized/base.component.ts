@@ -288,6 +288,21 @@ export abstract class BaseComponent implements OnInit {
 
     protected formatDate(date) {
         let formattedDate = moment(date, this.dateFormat);
-        return formattedDate
+        return formattedDate.isValid() ? formattedDate : "";
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(key => {
+            let filterCrits = [];
+            if (filters[key].length) {
+                filters[key].forEach(criteria => {
+                    filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+                });
+                filteredData = [...filterCrits];
+            }
+        })
+        return filteredData;
     }
 }

@@ -13,6 +13,8 @@ import { ExportTopCompanyManager } from './export-top-company-manager/export-top
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
+import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -49,6 +51,8 @@ export const customCurrencyMaskConfig = {
     ExportTopCompanyManager,
     SearchBusinessComponent,
     EditBusinessComponent,
+    AddCertificateComponent,
+    CertificateListComponent,
   ],
   entryComponents: [ExportTopCompanyManager]
 })

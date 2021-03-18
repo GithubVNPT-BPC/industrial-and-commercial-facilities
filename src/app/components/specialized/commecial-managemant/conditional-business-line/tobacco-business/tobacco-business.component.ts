@@ -156,12 +156,16 @@ export class TobaccoBusinessComponent implements OnInit {
             }
             this._Service.DeleteTobaccoValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
+                this.date = this.newdate
                 this.ngOnInit()
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
         }
     }
+
+    public newdate = new FormControl(_moment());
 
     SanLuongBanRa: number;
     TriGiaBanRa: number;
@@ -305,6 +309,7 @@ export class TobaccoBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
+        this.selection.clear();
         this.getTobaccoListbyYear(this.theYear.toString())
     }
 

@@ -8,8 +8,8 @@
     </mat-card-header>
     <mat-card-content>
         <div class="row">
-            <div class="col-6"></div>
-            <div class="col-6 button-control -align-right my-auto">
+            <div class="col-12 button-control -align-right my-auto">
+                <button mat-raised-button (click)="AddCertificate()">DS giấy phép</button>
                 <button mat-raised-button (click)="AddCompany()">Thêm doanh nghiệp</button>
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
@@ -147,7 +147,7 @@
 
                 <ng-container matColumnDef="dia_chi_day_du">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Địa chỉ </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}} </td>
+                    <td mat-cell *matCellDef="let element" style="width: 500px;"> {{element.dia_chi_day_du}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="so_dien_thoai">

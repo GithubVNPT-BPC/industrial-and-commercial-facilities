@@ -26,17 +26,18 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-6 col-lg-6" *ngIf="filterModel.ngaycapgcn!=0">
+                    <div class="col-6 col-lg-6" *ngIf="filterModel.ngaycapgcn != 0">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
                                     <mat-icon>filter</mat-icon> Số cửa hàng đăng ký chứng nhận
-                                    <span>{{filterModel.ngaycapgcn}}</span>:
-                                    <span>{{filteredDataSource.data.length}}</span>
                                 </mat-card-title>
-                                <mat-card-subtitle></mat-card-subtitle>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
+                                <span>{{filterModel.ngaycapgcn}}</span>/
+                                <span>{{filteredDataSource.data.length}}</span> Cửa hàng
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -136,10 +137,12 @@
                     <div class="col-3 col-lg-3 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Cửa hàng tiện lợi','HTTM - Cửa hàng tiện lợ')"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                            color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
+                            <button mat-raised-button matTooltip="Thêm mới" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
                             mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
                 </div>
                 <hr>

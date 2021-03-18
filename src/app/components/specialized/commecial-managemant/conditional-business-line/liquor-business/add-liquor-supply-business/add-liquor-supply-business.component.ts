@@ -177,7 +177,7 @@ export class AddLiquorSupplyBusinessComponent implements OnInit {
         this.dataSource.data.push({
           id_linh_vuc: 8,
           id: '',
-          id_quan_ly: '',
+          id_quan_ly: null,
           id_thuong_nhan: ''
         })
       })
@@ -188,7 +188,7 @@ export class AddLiquorSupplyBusinessComponent implements OnInit {
 
       for (let index = 0; index < this.businessmanvalue1.length; index++) {
         this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue1[index].id_thuong_nhan ? this.businessmanvalue1[index].id_thuong_nhan : null
-        this.dataSource.data[index].id_quan_ly = this.id
+        this.dataSource.data[index].id_quan_ly = parseInt(this.id)
         this.dataSource.data[index].id = this.businessmanvalue1[index].id ? this.businessmanvalue1[index].id : null
       }
 
@@ -205,7 +205,7 @@ export class AddLiquorSupplyBusinessComponent implements OnInit {
 
   addRow(): void {
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = this.id;
+    newRow.id_quan_ly = parseInt(this.id);
     newRow.id_linh_vuc = 8;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -217,7 +217,7 @@ export class AddLiquorSupplyBusinessComponent implements OnInit {
     let data = this.dataSource.data.slice(this._currentRow);
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = this.id;
+    newRow.id_quan_ly = parseInt(this.id);
     newRow.id_linh_vuc = 8;
     this.dataSource.data.push(newRow);
     data.forEach(element => {

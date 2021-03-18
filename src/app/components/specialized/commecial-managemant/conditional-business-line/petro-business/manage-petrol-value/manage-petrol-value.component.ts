@@ -115,12 +115,16 @@ export class ManagePetrolValueComponent implements OnInit {
       }
       this._Service.DeletePetrolValue(this.deletemodel1).subscribe(res => {
         this._info.msgSuccess('Xóa thành công')
+        this.date = this.newdate
         this.ngOnInit();
+        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
     }
   }
+
+  public newdate = new FormControl(_moment());
 
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   getQuan_Huyen() {
@@ -324,6 +328,7 @@ export class ManagePetrolValueComponent implements OnInit {
     this.date.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
     datepicker.close();
+    this.selection.clear();
     this.getPetrolListbyYear(this.theYear.toString())
   }
 

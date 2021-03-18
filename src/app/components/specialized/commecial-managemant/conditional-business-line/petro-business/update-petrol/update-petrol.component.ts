@@ -20,7 +20,8 @@ import {
   PetrolStore,
   PostBusinessmanValue,
   BusinessmanSelect,
-  StoreSelect
+  StoreSelect,
+  PetrolValuePostNEW
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -176,14 +177,14 @@ export class UpdatePetrolComponent implements OnInit {
         this.dataSource.data.push({
           id_linh_vuc: 6,
           id: '',
-          id_quan_ly: '',
+          id_quan_ly: 0,
           id_thuong_nhan: ''
         })
       })
 
       for (let index = 0; index < this.businessmanvalue1.length; index++) {
         this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue1[index].id_thuong_nhan ? this.businessmanvalue1[index].id_thuong_nhan : null
-        this.dataSource.data[index].id_quan_ly = this.businessmanvalue1[index].id_san_luong ? this.businessmanvalue1[index].id_san_luong : null
+        this.dataSource.data[index].id_quan_ly = parseInt(this.businessmanvalue1[index].id_san_luong) ? parseInt(this.businessmanvalue1[index].id_san_luong) : null
         this.dataSource.data[index].id = this.businessmanvalue1[index].id ? this.businessmanvalue1[index].id : null
       }
 
@@ -291,40 +292,58 @@ export class UpdatePetrolComponent implements OnInit {
     this.years = this.commonfunctions.getYears()
   }
 
-  SaveData(input1, input2) {
-    this._Service.PostPetrolValue(input1).subscribe(
-      next => {
-        if (next.id == -1) {
-          this._info.msgError("Lưu lỗi! Lý do: " + next.message);
-        }
-        else {
-          this._info.msgSuccess("Dữ liệu được lưu thành công!");
-        }
-      },
-      error => {
-        this._info.msgError("Không thể thực thi! Lý do: " + error.message);
-      }
-    );
-
-    // this._Service.PostPetrol(input2).subscribe(
-    //   res => {
-    //     // debugger;
-    //     this._info.msgSuccess('Thêm thành công')
-    //   },
-    //   err => {
-    //     // debugger;
-    //   }
-    // )
-
-    if (this.dataSource.data) {
-      this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
+  SaveData(input1, input2, input3) {
+    if (this.id.toString() != 'undefined') {
+      this._Service.PostPetrolValue(input1).subscribe(
         next => {
           if (next.id == -1) {
             this._info.msgError("Lưu lỗi! Lý do: " + next.message);
           }
           else {
             this._info.msgSuccess("Dữ liệu được lưu thành công!");
-            this.Back()
+          }
+        },
+        error => {
+          this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+        }
+      );
+
+      // this._Service.PostPetrol(input2).subscribe(
+      //   res => {
+      //     // debugger;
+      //     this._info.msgSuccess('Thêm thành công')
+      //   },
+      //   err => {
+      //     // debugger;
+      //   }
+      // )
+
+      if (this.dataSource.data) {
+        this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
+          next => {
+            if (next.id == -1) {
+              this._info.msgError("Lưu lỗi! Lý do: " + next.message);
+            }
+            else {
+              this._info.msgSuccess("Dữ liệu được lưu thành công!");
+              this.Back()
+            }
+          },
+          error => {
+            this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+          }
+        );
+      }
+    }
+    else {
+      this._Service.PostPetrolValueNEW(input3).subscribe(
+        next => {
+          if (next.id == -1) {
+            this._info.msgError("Lưu lỗi! Lý do: " + next.message);
+          }
+          else {
+            this._info.msgSuccess("Dữ liệu được lưu thành công!");
+            this.Back();
           }
         },
         error => {
@@ -332,10 +351,10 @@ export class UpdatePetrolComponent implements OnInit {
         }
       );
     }
-
   }
 
   petrolvaluepost: Array<PetrolValuePost> = new Array<PetrolValuePost>();
+  petrolvaluepost1: Array<PetrolValuePostNEW> = new Array<PetrolValuePostNEW>();
   petrolstorepost: Array<PetrolStore> = new Array<PetrolStore>();
 
   input: PetrolPost
@@ -348,7 +367,7 @@ export class UpdatePetrolComponent implements OnInit {
       san_luong: null,
       time_id: '',
       id: null,
-      id_cua_hang_xang_dau: null
+      id_cua_hang_xang_dau: null,
     })
 
     this.petrolvaluepost[0].ghi_chu = this.input.ghi_chu
@@ -358,6 +377,24 @@ export class UpdatePetrolComponent implements OnInit {
     if (this.id_san_luong != 'undefined') {
       this.petrolvaluepost[0].id = this.id_san_luong
     }
+
+    this.petrolvaluepost1.push({
+      ghi_chu: '',
+      san_luong: null,
+      time_id: '',
+      id: null,
+      id_cua_hang_xang_dau: null,
+      danh_sach_thuong_nhan: []
+    })
+
+    this.petrolvaluepost1[0].ghi_chu = this.input.ghi_chu
+    this.petrolvaluepost1[0].san_luong = this.input.san_luong
+    this.petrolvaluepost1[0].time_id = this.input.time_id
+    this.petrolvaluepost1[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
+    if (this.id_san_luong != 'undefined') {
+      this.petrolvaluepost1[0].id = this.id_san_luong
+    }
+    this.petrolvaluepost1[0].danh_sach_thuong_nhan = this.dataSource.data
 
     this.petrolstorepost.push({
       id_cua_hang_xang_dau: null,
@@ -382,7 +419,7 @@ export class UpdatePetrolComponent implements OnInit {
     this.petrolstorepost[0].ten_nhan_vien = this.input.ten_nhan_vien
     this.petrolstorepost[0].id_giay_phep = this.input.id_giay_phep
 
-    this.SaveData(this.petrolvaluepost, this.petrolstorepost[0]);
+    this.SaveData(this.petrolvaluepost, this.petrolstorepost[0], this.petrolvaluepost1[0]);
   }
 
   petrolobject = new PetrolList();
@@ -412,7 +449,7 @@ export class UpdatePetrolComponent implements OnInit {
   getPetrolInfo() {
     this._Service.GetAllPetrolValue().subscribe(all => {
       this.dataSource1 = new MatTableDataSource<PetrolList>(all.data[0]);
-      this.dataSource2.data = this.dataSource1.data.filter(x => x.id_cua_hang_xang_dau == this.id)
+      this.dataSource2.data = this.dataSource1.data.filter(x => x.id_san_luong == this.id_san_luong)
       this.petrolobject = this.dataSource2.data[0]
 
       this._Service.petrol = {
@@ -437,7 +474,12 @@ export class UpdatePetrolComponent implements OnInit {
 
   addRow(): void {
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = this.id_san_luong;
+    if (this.id_san_luong != 'undefined') {
+      newRow.id_quan_ly = parseInt(this.id_san_luong)
+    }
+    else {
+      newRow.id_quan_ly = 0;
+    }
     newRow.id_linh_vuc = 6;
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -450,7 +492,12 @@ export class UpdatePetrolComponent implements OnInit {
     let data = this.dataSource.data.slice(this._currentRow);
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = this.id_san_luong;
+    if (this.id_san_luong != 'undefined') {
+      newRow.id_quan_ly = parseInt(this.id_san_luong)
+    }
+    else {
+      newRow.id_quan_ly = 0;
+    }
     newRow.id_linh_vuc = 6;
     this.dataSource.data.push(newRow);
     data.forEach(element => {

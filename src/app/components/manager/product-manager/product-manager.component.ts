@@ -109,7 +109,8 @@ export class ProductManagerComponent implements OnInit {
             }
             this.marketService.DeleteProductValue(this.deletemodel1).subscribe(res => {
                 this._infor.msgSuccess('Xóa thành công')
-                this.getALLProductValueList();
+                this.ngOnInit();
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
@@ -142,10 +143,11 @@ export class ProductManagerComponent implements OnInit {
             this.move(res)
         })
         this.getALLProductValueList();
+        this.date = null
     }
 
     resetAll() {
-        this.getALLProductValueList()
+        this.ngOnInit();
     }
 
     public getListProduct(): void {
@@ -176,12 +178,14 @@ export class ProductManagerComponent implements OnInit {
     }
 
     public date = new FormControl(_moment());
+    public newdate = new FormControl(_moment());
     public theYear: number;
     public theMonth: number;
     public stringmonth: string
     public time: string
 
     public chosenYearHandler(normalizedYear: Moment) {
+        this.date = this.newdate
         const ctrlValue = this.date.value;
         ctrlValue.year(normalizedYear.year());
         this.date.setValue(ctrlValue);

@@ -109,7 +109,9 @@
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
                                         <ng-container *ngIf="!['ngay_tiep_nhan'].includes(field.key) ;else dateFieldCond">
-                                            <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                            <ng-container *ngIf="!['ten_doanh_nghiep'].includes(field.key) ;else viewFileCond">
+                                                <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                            </ng-container>
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
@@ -125,6 +127,21 @@
                                 <ng-template #dateFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy'}}</td>
                                 </ng-template>
+
+                                <ng-template #viewFileCond>
+                                    <td mat-cell *matCellDef="let element"> 
+                                        <div *ngIf="element.datas; else normalTitle" class="cursor-pointer text-center text-info" (click)="openPreviewer(filePreviewer, element.datas)">
+                                            {{element[field.key]}}
+                                            <!-- <mat-icon >file_present</mat-icon> -->
+                                        </div>
+
+                                        <ng-template #normalTitle>
+                                            <div class="text-center"> {{element[field.key]}}</div>
+                                        </ng-template>
+                                    </td>
+                                </ng-template>
+
+                                
 
                             </ng-container>
                         </div>
@@ -279,7 +296,7 @@
 <ng-template #filePreviewer let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Xem file</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <button type="button" class="close m-1 p-1" aria-label="Close" (click)="modal.dismiss('Cross click')">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
@@ -290,6 +307,6 @@
         ></pdf-viewer>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('')">Ẩn</button>
+      <button type="button" class="btn btn-outline-danger" (click)="modal.close('')">Ẩn</button>
     </div>
 </ng-template>

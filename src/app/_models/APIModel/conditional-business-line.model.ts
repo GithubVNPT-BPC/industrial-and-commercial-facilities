@@ -154,6 +154,15 @@ export class PetrolValuePost {
     ghi_chu: string;
 }
 
+export class PetrolValuePostNEW {
+    id: string;
+    id_cua_hang_xang_dau: number;
+    time_id: string;
+    san_luong: number;
+    ghi_chu: string;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
+}
+
 export class TobaccoPost {
     id: string;
     mst: string;
@@ -162,6 +171,17 @@ export class TobaccoPost {
     time_id: string;
     ghi_chu: string;
     id_tinh_trang_hoat_dong: number;
+}
+
+export class TobaccoPostNEW {
+    id: string;
+    mst: string;
+    so_luong: number;
+    tri_gia: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
 }
 
 export class LiquorPost {
@@ -174,6 +194,17 @@ export class LiquorPost {
     id_tinh_trang_hoat_dong: number;
 }
 
+export class LiquorPostNEW {
+    id: string;
+    mst: string;
+    so_luong: number;
+    tri_gia: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
+}
+
 export class LPGPost {
     id: string;
     mst: string;
@@ -183,11 +214,21 @@ export class LPGPost {
     id_tinh_trang_hoat_dong: number;
 }
 
+export class LPGPostNEW {
+    id: string;
+    mst: string;
+    so_luong: number;
+    time_id: string;
+    ghi_chu: string;
+    id_tinh_trang_hoat_dong: number;
+    danh_sach_thuong_nhan: Array<PostBusinessmanValue>;
+}
+
 export class PostBusinessmanValue {
     id: string;
     id_thuong_nhan: string;
     id_linh_vuc: number;
-    id_quan_ly: string;
+    id_quan_ly: number;
 }
 
 export class Businessman {
@@ -253,7 +294,16 @@ export class CertificateModel {
     co_quan_cap: string;
     ghi_chu: string;
     id_linh_vuc: number;
+}
+
+export class CertificateType {
+    id_loai_giay_phep: number;
     ten_giay_phep: string;
+}
+
+export class FieldList {
+    id_linh_vuc: number;
+    ten_linh_vuc: string;
 }
 
 export class BusinessmanSelect {

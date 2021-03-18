@@ -156,12 +156,16 @@ export class LPGBusinessComponent implements OnInit {
             }
             this._Service.DeleteLPGValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
+                this.date = this.newdate
                 this.ngOnInit()
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
         }
     }
+
+    public newdate = new FormControl(_moment());
 
     SoLuongCoSo: number;
     SLThuongNhan: number;
@@ -302,6 +306,7 @@ export class LPGBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
+        this.selection.clear();
         // this.getLPGListbyYear(this.theYear.toString()
     }
 

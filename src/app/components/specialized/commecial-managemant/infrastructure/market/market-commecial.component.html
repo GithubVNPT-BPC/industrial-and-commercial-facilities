@@ -18,11 +18,12 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> 1. Tổng số chợ: <span>{{numOfMarket}} chợ</span>
+                                    <mat-icon>filter</mat-icon> 1. Tổng số chợ: 
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
+                                <span>{{numOfMarket}} chợ</span>
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -30,30 +31,33 @@
                         <mat-card class="card-default">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> 2. Phân theo địa bàn:
+                                    <mat-icon>filter</mat-icon> 2. Phân theo loại chợ:
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Chợ nông thôn: <span>{{diaban_NongThon}}</span>
+                                        Chợ nông thôn: <span>{{loaihinh_NongThon}}</span>
                                     </li>
                                     <li>
-                                        Chợ thành thị: <span>{{diaban_ThanhThi}}</span>
-                                    </li>
-                                    <!-- <li>
-                                        Chợ đầu mối: <span>{{diaban_DauMoi}}</span>
+                                        Chợ thành thị: <span>{{loaihinh_ThanhThi}}</span>
                                     </li>
                                     <li>
-                                        Chợ trong quy hoạch: <span>{{diaban_TrongQuyHoach}}</span>
+                                        Chợ đầu mối: <span>{{loaihinh_ChoDauMoi}}</span>
                                     </li>
                                     <li>
-                                        Chợ tự phát: <span>{{diaban_TuPhat}}</span>
+                                        Chợ trong quy hoạch: <span>{{loaihinh_ChoTrongQuyHoach}}</span>
                                     </li>
                                     <li>
-                                        Chợ khác: <span>{{diaban_Khac}}</span>
-                                    </li> -->
+                                        Chợ tự phát: <span>{{loaihinh_ChoTuPhat}}</span>
+                                    </li>
+                                    <li>
+                                        Chợ khác: <span>{{loaihinh_ChoKhac}}</span>
+                                    </li>
+                                    <li>
+                                        Xã chưa có chợ: <span>{{loaihinh_ChuaCoCho}}</span>
+                                    </li>
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -123,15 +127,15 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <!-- <li>
-                                        Chợ đầu mối chuyên doanh: <span>{{kinhdoanh_choDauMoiChuyenDoanh}}</span>
+                                    <li>
+                                        Chợ chuyên doanh: <span>{{kinhdoanh_choDauMoiChuyenDoanh}}</span>
                                     </li>
                                     <li>
-                                        Chợ đầu mối tổng hợp: <span>{{kinhdoanh_choDauMoiTongHop}}</span>
+                                        Chợ tổng hợp: <span>{{kinhdoanh_choDauMoiTongHop}}</span>
                                     </li>
                                     <li>
                                         Chợ bán lẻ: <span>{{kinhdoanh_choBanLe}}</span>
-                                    </li> -->
+                                    </li>
 
                                 </ul>
                             </mat-card-content>
@@ -148,18 +152,18 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
+                                    <li>
+                                        Ban/Tổ quản lý: <span>{{quanly_BanTo}}</span>
+                                    </li>
+                                    <li>
+                                        Doanh nghiệp/HTX quản lý: <span>{{quanly_DoanhNghiep}}</span>
+                                    </li>
                                     <!-- <li>
-                                        Ban quản lý/Tổ quản lý: <span>{{quanly_BanTo}}</span>
-                                    </li>
-                                    <li>
-                                        Doanh nghiệp: <span>{{quanly_DoanhNghiep}}</span>
-                                    </li>
-                                    <li>
                                         Hợp tác xã: <span>{{quanly_HopTacXa}}</span>
-                                    </li>
+                                    </li> -->
                                     <li>
                                         Hộ kinh doanh: <span>{{quanly_HoKinhDoanh}}</span>
-                                    </li> -->
+                                    </li>
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -168,7 +172,7 @@
                 <hr>
                 <div class="row">
 
-                    <div class="col-4 col-lg-4">
+                    <div class="col-6 col-lg-6">
                         <mat-card class="card-default">
                             <mat-card-header>
                                 <mat-card-title>
@@ -178,73 +182,50 @@
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <!-- <li>
-                                        Vốn ngân sách Trung ương: <span>{{tongvon_VonNganSachTW}}</span>
+                                    <li>
+                                        Vốn ngân sách Trung Ương: <span>{{tongvon_VonNganSachTW | number:'1.0-4'}}</span>
                                     </li>
                                     <li>
-                                        Vốn ngân sách địa phương: <span>{{tongvon_VonNganSachDiaPhuong}}</span>
+                                        Vốn ngân sách địa phương: <span>{{tongvon_VonNganSachDiaPhuong | number:'1.0-4'}}</span>
                                     </li>
                                     <li>
-                                        Vốn doanh nghiệp, hợp tác xã, hộ kinh doanh: <span>{{tongvon_DNHTXH}}</span>
+                                        Vốn doanh nghiệp, hợp tác xã, hộ kinh doanh: <span>{{tongvon_DNHTXHL | number:'1.0-4'}}</span>
                                     </li>
                                     <li>
-                                        Vốn khác: <span>{{tongvon_Khac}}</span>
-                                    </li> -->
+                                        Vốn khác: <span>{{tongvon_Khac | number:'1.0-4'}}</span>
+                                    </li>
                                 </ul>
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-4 col-lg-4">
+                    <div class="col-6 col-lg-6">
                         <mat-card class="card-default">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> 8. Thống kê xây dựng:
+                                    <mat-icon>filter</mat-icon> 8. Hoạt động đầu tư phát triển chợ:
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
                                 <ul>
-                                    <!-- <li>
+                                    <li>
                                         Chợ xây dựng mới năm {{currentYear}}: <span>{{xaydung_Moi}}</span>
                                     </li>
                                     <li>
                                         Chợ nâng cấp, cải tạo năm {{currentYear}}: <span>{{xaydung_CaiTao}}</span>
                                     </li>
                                     <li>
-                                        Chợ đầu tư kiên cố, bán kiên không không hoạt động năm {{currentYear}}:
-                                        <span>{{xaydung_KhongHoatDong}}</span>
+                                        Chợ chuyển đổi mô hình:
+                                        <span>{{xaydung_CD_MoHinh}}</span>
                                     </li>
                                     <li>
-                                        Chợ đầu tư kiên cố, bán kiên kinh doanh dưới 30% năm {{currentYear}}:<span>
-                                            {{xaydung_KhongHoatDong70}}</span>
+                                        Chợ chuyển đổi công năng: <span>
+                                            {{xaydung_CD_CongNang}}</span>
                                     </li>
                                     <li>
-                                        Chợ chuyển đổi chức năng hoạt động năm
-                                        {{currentYear}}:<span>{{xaydung_ChuyenDoi}}</span>
-                                    </li> -->
-                                </ul>
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-4 col-lg-4">
-                        <mat-card class="card-default">
-                            <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>filter</mat-icon> 9. Chợ khác:
-                                </mat-card-title>
-                                <mat-card-subtitle></mat-card-subtitle>
-                            </mat-card-header>
-                            <mat-card-content>
-                                <ul>
-                                    <!-- <li>
-                                        Chợ ngoài quy hoạch: <span>{{chokhac_NgoaiQuyHoach}}</span>
+                                        Chợ hoạt động dưới 30% số điểm
+                                        <span>{{xaydung_HD_Duoi30}}</span>
                                     </li>
-                                    <li>
-                                        Chợ đêm: <span>{{chokhac_ChoDem}}</span>
-                                    </li>
-                                    <li>
-                                        Chợ biên giới:<span>{{chokhac_BienGioi}}</span>
-                                    </li> -->
                                 </ul>
                             </mat-card-content>
                         </mat-card>
@@ -267,7 +248,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen"
                                 multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
@@ -277,10 +258,21 @@
                     </div>
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
-                            <mat-label>Hạng chợ</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_hang_cho"
+                            <mat-label>Loại chợ</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_loai_cho"
                                 multiple>
-                                <mat-option *ngFor='let type of marketTypeList' [value]='type.id_hang_cho'>
+                                <mat-option *ngFor='let type of marketTypeList' [value]='type.id_loai_cho'>
+                                    {{type.ten_loai_cho}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Hạng chợ</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_hang_cho"
+                                multiple>
+                                <mat-option *ngFor='let type of marketLevelList' [value]='type.id_hang_cho'>
                                     {{type.loai_hang_cho}}
                                 </mat-option>
                             </mat-select>
@@ -289,35 +281,43 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tính chất công trình</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_tinh_chat_cho"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_tinh_chat_cho"
                                 multiple>
                                 <mat-option *ngFor='let type of marketPropTypeList' [value]='type.id_tinh_chat_cho'>
                                     {{type.tinh_chat_cho}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <!-- <div class="col-3 col-lg-3">
+
+                    <div class="col-6 col-lg-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>Hình thức quản lý</mat-label>
-                            <mat-select multiple>
-                                <mat-option *ngFor='let managerType of managerTypes' [value]='managerType.key'>
-                                    {{managerType.name}}</mat-option>
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tính chất kinh doanh</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_tinh_chat_kinh_doanh"
+                                multiple>
+                                <mat-option *ngFor='let type of marketPropCommerceList' [value]='type.id_tinh_chat_kinh_doanh'>
+                                    {{type.ten_tinh_chat_kinh_doanh}}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div> -->
+                    </div>
 
-                    <div class="col-3 col-lg-3 button-control">
+                    <div class="col-3 col-lg-3 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Chợ','HTTM - Chợ')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()">
-                            <mat-icon>add_circle_outline</mat-icon>
-                        </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
-                            (click)="openRemoveDialog()">
-                            <mat-icon>delete</mat-icon>
-                        </button>
+                        <button mat-raised-button matTooltip="Thêm mới" 
+                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
+                            mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
                 </div>
                 <hr>
@@ -351,24 +351,19 @@
 
                         <div *ngFor="let field of displayedFields | keyvalue">
                             <ng-container matColumnDef="{{field.key}}"
-                                [sticky]="field.key == 'ten_doanh_nghiep' ? true : null">
+                                [sticky]="field.key == 'ten_cho' ? true : null">
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container
-                                        *ngIf="!['dien_tich', 'so_diem_kinh_doanh', 'vdt_tong', 'vdt_ngan_sach', 'vdt_xa_hoi_hoa'].includes(field.key);else qtyFieldCond">
+                                        *ngIf="!['dau_tu', 'so_ho_duoi_30', 'so_chuyen_doi_chuc_nang', 'so_chuyen_doi_hinh_thuc_quan_ly',
+                                        'von_nstw', 'von_nsdp', 'von_dn_htx_hkd', 'von_khac', 'so_nguoi', 
+                                        'ban_quan_ly', 'to_quan_ly', 'doanh_nghiep', 'hop_tac_xa', 'ho_kinh_doanh'].includes(field.key);else qtyFieldCond">
                                         <ng-container
                                             *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
                                             <ng-container
-                                                *ngIf="!['is_thanh_thi'].includes(field.key) ;else isThanhThiFieldCond">
-                                                <ng-container
-                                                    *ngIf="!['hien_trang_hoat_dong'].includes(field.key) ;else isHienTrangFieldCond">
-                                                    <ng-container
-                                                        *ngIf="!['ten_cho'].includes(field.key) ;else isTenChoFieldCond">
-                                                        <td mat-cell *matCellDef="let element"> {{element[field.key]}}
-                                                        </td>
-                                                    </ng-container>
-                                                </ng-container>
-
+                                                *ngIf="!['ten_cho'].includes(field.key) ;else isTenChoFieldCond">
+                                                <td mat-cell *matCellDef="let element"> {{element[field.key]}}
+                                                </td>
                                             </ng-container>
                                         </ng-container>
                                     </ng-container>
@@ -380,22 +375,12 @@
                                 </ng-template>
 
                                 <ng-template #qtyFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | number:'1.0-4'}}</td>
+                                    <td mat-cell *matCellDef="let element" style="width: 75px;"> {{element[field.key] | number:'1.0-4'}}</td>
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy'}}
                                     </td>
-                                </ng-template>
-
-                                <ng-template #isThanhThiFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] ? 'Thành thị': 'Nông
-                                        thôn'}}</td>
-                                </ng-template>
-
-                                <ng-template #isHienTrangFieldCond>
-                                    <td mat-cell *matCellDef="let element" style="width: 1200px;">
-                                        {{element[field.key]}}</td>
                                 </ng-template>
 
                                 <ng-template #isTenChoFieldCond>
@@ -408,31 +393,30 @@
 
                         <!-- Table header row 2 -->
                         <ng-container matColumnDef="general">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="14">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="11">
+                                Thông tin chung
                         </ng-container>
 
                         <ng-container matColumnDef="marketManagementType">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="4">Hình
-                                thức quản lý chợ</th>
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6">
+                                Hoạt động đầu tư phát triển chợ</th>
                         </ng-container>
 
                         <ng-container matColumnDef="managementType">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">Hình
-                                thức quản lý</th>
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="5">Vốn đầu tư</th>
                         </ng-container>
 
                         <ng-container matColumnDef="marketManageInfo">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="4">Thông
-                                tin liên lạc đơn vị quản lý chợ</th>
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6">Hình thức quản lý</th>
                         </ng-container>
 
-                        <ng-container matColumnDef="investment">
+                        <!-- <ng-container matColumnDef="investment">
                             <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6"> Vốn
                                 Đầu tư phát triển chợ </th>
-                        </ng-container>
+                        </ng-container> -->
 
                         <tr mat-header-row class="table-header"
-                            *matHeaderRowDef="['general', 'marketManagementType', 'managementType', 'marketManageInfo', 'investment']; sticky: true">
+                            *matHeaderRowDef="['general', 'marketManagementType', 'managementType', 'marketManageInfo']; sticky: true">
                         </tr>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true">
@@ -475,7 +459,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-9">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên chợ</mat-label>
                                         <input matInput formControlName="ten_cho" type="text" placeholder="Chợ ...">
@@ -498,13 +482,11 @@
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Thành thị/Nông thôn</mat-label>
-                                        <mat-select formControlName="is_thanh_thi">
-                                            <mat-option value=0>
-                                                Nông thôn
-                                            </mat-option>
-                                            <mat-option value=1>
-                                                Thành thị
+                                        <mat-label>Tính chất kinh doanh</mat-label>
+                                        <mat-select formControlName="id_tinh_chat_kinh_doanh">
+                                            <mat-option *ngFor='let type of marketPropCommerceList'
+                                                [value]='type.id_tinh_chat_kinh_doanh'>
+                                                {{type.ten_tinh_chat_kinh_doanh}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
@@ -512,9 +494,9 @@
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Phân hạng</mat-label>
+                                        <mat-label>Hạng chợ</mat-label>
                                         <mat-select formControlName="id_hang_cho">
-                                            <mat-option *ngFor='let type of marketTypeList' [value]='type.id_hang_cho'>
+                                            <mat-option *ngFor='let type of marketLevelList' [value]='type.id_hang_cho'>
                                                 {{type.loai_hang_cho}}
                                             </mat-option>
                                         </mat-select>
@@ -523,7 +505,18 @@
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Tính chất</mat-label>
+                                        <mat-label>Loại chợ</mat-label>
+                                        <mat-select formControlName="id_loai_cho">
+                                            <mat-option *ngFor='let type of marketTypeList' [value]='type.id_loai_cho'>
+                                                {{type.ten_loai_cho}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Tính chất công trình</mat-label>
                                         <mat-select formControlName="id_tinh_chat_cho">
                                             <mat-option *ngFor='let type of marketPropTypeList'
                                                 [value]='type.id_tinh_chat_cho'>
@@ -533,54 +526,121 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-6 col-lg-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Diện tích đất</mat-label>
-                                        <input matInput type="number" formControlName="dien_tich">
+                                        <mat-label>Kế hoạch đầu tư</mat-label>
+                                        <input matInput type="text" formControlName="ke_hoach_dau_tu">
                                     </mat-form-field>
                                 </div>
+
+                                <div class="col-md-6 col-lg-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Hình thức quản lý</mat-label>
+                                        <input matInput type="text" formControlName="hinh_thuc_quan_ly">
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Vốn Đầu tư phát triển chợ </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <!-- <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Vốn đầu tư Tổng</mat-label>
+                                        <input matInput type="number" formControlName="vdt_tong">
+                                    </mat-form-field>
+                                </div> -->
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Số điểm kinh doanh</mat-label>
-                                        <input matInput type="number" formControlName="so_diem_kinh_doanh">
+                                        <mat-label>Vốn NSTW</mat-label>
+                                        <input matInput type="number" formControlName="von_nstw">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Số hộ kinh doanh cố định</mat-label>
-                                        <input matInput type="number" formControlName="so_ho_kinh_doanh_co_dinh">
+                                        <mat-label>Vốn NSĐP</mat-label>
+                                        <input matInput type="number" formControlName="von_nsdp">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Hiện trạng hoạt động</mat-label>
-                                        <input matInput type="text" formControlName="hien_trang_hoat_dong">
+                                        <mat-label>Vốn DN/HTX/HKD</mat-label>
+                                        <input matInput type="number" formControlName="von_dn_htx_hkd">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Đề xuất thực hiện</mat-label>
-                                        <input matInput type="text" formControlName="de_xuat_thuc_hien">
+                                        <mat-label>Vốn khác</mat-label>
+                                        <input matInput type="number" formControlName="von_khac">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Hoạt động đầu tư phát triển chợ </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+
+                                <div class="col-md-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Xây dựng mới trong năm</mat-label>
+                                        <input matInput type="number" formControlName="nam_xay_dung">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Kế hoạch thực hiện</mat-label>
-                                        <input matInput type="text" formControlName="ke_hoach_thuc_hien">
+                                        <mat-label>Nâng cấp cải tạo trong năm</mat-label>
+                                        <input matInput type="number" formControlName="nam_nang_cap">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Ưu tiên đề xuất đầu tư</mat-label>
-                                        <input matInput type="text" formControlName="uu_tien_de_xuat_dau_tu">
+                                        <mat-label>Đầu tư xây dựng nhưng không hoạt động</mat-label>
+                                        <input matInput type="number" formControlName="dau_tu">
                                     </mat-form-field>
                                 </div>
+
+                                <div class="col-md-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Số hộ kinh doanh dưới 30%</mat-label>
+                                        <input matInput type="number" formControlName="so_ho_duoi_30">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Số chợ chuyển đổi chức năng hoạt động</mat-label>
+                                        <input matInput type="number" formControlName="so_chuyen_doi_chuc_nang">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Số chợ chuyển đổi mô hình quản lý</mat-label>
+                                        <input matInput type="number" formControlName="so_chuyen_doi_hinh_thuc_quan_ly">
+                                    </mat-form-field>
+                                </div>
+                                
                             </div>
                         </mat-card-content>
                     </div>
@@ -594,163 +654,47 @@
                         <mat-card-content>
                             <div class="row">
 
-                                <div class="col-md-6 col-lg-3">
+                                <!-- <div class="col-md-6 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Số người</mat-label>
                                         <input matInput type="number" formControlName="htql_so_nguoi">
                                     </mat-form-field>
-                                </div>
+                                </div> -->
 
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Ban quản lý</mat-label>
-                                        <input matInput type="number" formControlName="htql_ban_ql">
+                                        <input matInput type="number" formControlName="ban_quan_ly">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tổ quản lý</mat-label>
-                                        <input matInput type="number" formControlName="htql_to_ql">
+                                        <input matInput type="number" formControlName="to_quan_ly">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Doanh nghiệp/Hợp tác xã</mat-label>
-                                        <input matInput type="number" formControlName="htql_dn_htx">
+                                        <input matInput type="number" formControlName="doanh_nghiep">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Cơ quan quản lý</mat-label>
-                                        <input matInput type="text" formControlName="hinh_thuc_quan_ly">
+                                        <mat-label>Hợp tác xã</mat-label>
+                                        <input matInput type="number" formControlName="hop_tac_xa">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6 col-lg-3">
+                                <div class="col-md-3 col-lg-3">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Hình thức sử dụng đất</mat-label>
-                                        <mat-select formControlName="id_hinh_thuc_su_dung_dat">
-                                            <mat-option *ngFor='let type of landUseTypeList'
-                                                [value]='type.id_hinh_thuc_su_dung_dat'>
-                                                {{type.hinh_thuc_su_dung_dat}}
-                                            </mat-option>
-                                        </mat-select>
+                                        <mat-label>Hộ kinh doanh</mat-label>
+                                        <input matInput type="number" formControlName="ho_kinh_doanh">
                                     </mat-form-field>
                                 </div>
-                            </div>
-                        </mat-card-content>
-                    </div>
-
-                    <div class="col-md-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Thông tin liên lạc đơn vị quản lý chợ </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Họ và tên (Cơ quan/BQL chợ)</mat-label>
-                                        <input matInput type="number" formControlName="ttll_cq_ho_ten">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Điện thoại (Cơ quan/BQL chợ)</mat-label>
-                                        <input matInput type="number" formControlName="ttll_cq_dien_thoai">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Họ và tên (Doanh nghiệp)</mat-label>
-                                        <input matInput type="number" formControlName="ttll_dn_ho_ten">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Điện thoại (Doanh nghiệp)</mat-label>
-                                        <input matInput type="number" formControlName="ttll_dn_dien_thoai">
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </div>
-
-                    <div class="col-md-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Vốn Đầu tư phát triển chợ </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Vốn đầu tư Tổng</mat-label>
-                                        <input matInput type="number" formControlName="vdt_tong">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Vốn đầu tư Ngân sách</mat-label>
-                                        <input matInput type="number" formControlName="vdt_ngan_sach">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Vốn đầu tư Xã hội hóa</mat-label>
-                                        <input matInput type="number" formControlName="vdt_xa_hoi_hoa">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Năm</mat-label>
-                                        <input matInput type="text" formControlName="nam">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Xây mới</mat-label>
-                                        <input matInput type="text" formControlName="xay_moi">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-3">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Nâng cấp</mat-label>
-                                        <input matInput type="text" formControlName="nang_cap">
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </div>
-
-                    <div class="col-md-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Ghi chú </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-12 col-md-12">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Ghi chú</mat-label>
-                                        <input matInput type="textarea" formControlName="ghi_chu">
-                                    </mat-form-field>
-                                </div>
-
                             </div>
                         </mat-card-content>
                     </div>

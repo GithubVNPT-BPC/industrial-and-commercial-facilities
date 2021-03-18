@@ -9,11 +9,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CommonFuntions } from 'src/app/components/specialized/commecial-managemant/conditional-business-line/common-functions.service';
 
 import { MatDialog } from '@angular/material';
-import { UpdateBusinessmanComponent } from '../update-businessman/update-businessman.component';
 
 import {
   DeleteModel,
-  Businessman,
+  CertificateModel
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -41,9 +40,9 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-manage-businessman',
-  templateUrl: './manage-businessman.component.html',
-  styleUrls: ['../../../../special_layout.scss'],
+  selector: 'app-certificate-list',
+  templateUrl: './certificate-list.component.html',
+  styleUrls: ['/../../manager_layout.scss'],
   providers: [
     {
       provide: DateAdapter,
@@ -55,17 +54,21 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
   ],
 })
-export class ManageBusinessmanComponent implements OnInit {
+export class CertificateListComponent implements OnInit {
+
   displayedColumns: string[] = [
     'select',
     'index',
-    'ten_thuong_nhan',
-    'dia_chi',
-    'so_dien_thoai',
+    'mst',
+    'so_giay_phep',
+    'ngay_cap',
+    'ngay_het_han',
+    'noi_cap',
+    'co_quan_cap',
+    'ghi_chu',
 
-    'id_linh_vuc'
+    'id_giay_phep',
   ];
-
 
   @ViewChild('table', { static: false }) table: ElementRef;
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
@@ -90,7 +93,7 @@ export class ManageBusinessmanComponent implements OnInit {
   }
 
   // public AddBusiness(data: any) {
-  //   const dialogRef = this.dialog.open(UpdateBusinessmanComponent, {
+  //   const dialogRef = this.dialog.open(UpdateCertificateModelComponent, {
   //     data: {
   //       message: 'Dữ liệu top doanh nghiệp sản xuất',
   //       business_data: data,
@@ -98,7 +101,7 @@ export class ManageBusinessmanComponent implements OnInit {
   //   });
   // }
 
-  selection = new SelectionModel<Businessman>(true, []);
+  selection = new SelectionModel<CertificateModel>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -113,11 +116,11 @@ export class ManageBusinessmanComponent implements OnInit {
       this.dataSource.connect().value.forEach(row => this.selection.select(row));
   }
 
-  checkboxLabel(row?: Businessman): string {
+  checkboxLabel(row?: CertificateModel): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_thuong_nhan + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_giay_phep + 1}`;
   }
 
   deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
@@ -125,7 +128,7 @@ export class ManageBusinessmanComponent implements OnInit {
   removeRows() {
     if (confirm('Bạn Có Chắc Muốn Xóa?')) {
       this.selection.selected.forEach(x => {
-        this.selectionarray = this.selection.selected.map(item => item.id_thuong_nhan)
+        this.selectionarray = this.selection.selected.map(item => item.id_giay_phep.toString())
         this.deletemodel1.push({
           id: ''
         })
@@ -134,8 +137,7 @@ export class ManageBusinessmanComponent implements OnInit {
         const element = this.deletemodel1[index];
         element.id = this.selectionarray[index]
       }
-      console.log(this.deletemodel1)
-      this._Service.DeleteBusinessman(this.deletemodel1).subscribe(res => {
+      this._Service.DeleteCertificate(this.deletemodel1).subscribe(res => {
         this._info.msgSuccess('Xóa thành công')
         this.ngOnInit();
         this.deletemodel1 = []
@@ -165,16 +167,15 @@ export class ManageBusinessmanComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  dataSource: MatTableDataSource<Businessman> = new MatTableDataSource<Businessman>();
-  filterdatasource: Array<Businessman> = new Array<Businessman>();
-  filterdatasource1: Array<Businessman> = new Array<Businessman>();
+  dataSource: MatTableDataSource<CertificateModel> = new MatTableDataSource<CertificateModel>();
 
   getBusinessList() {
-    this._Service.GetBusinessman().subscribe(all => {
-      this.filterdatasource = all.data
-      this.filterdatasource1 = this.filterdatasource.filter(x => x.id_linh_vuc == this.id_linh_vuc)
-
-      this.dataSource.data = this.filterdatasource1
+    this._Service.GetCertificate('').subscribe(all => {
+      this.dataSource.data = all.data
+      this.dataSource.data.forEach(x => {
+        x.ngay_cap = x.ngay_cap ? this.Convertdate(x.ngay_cap) : null
+        x.ngay_het_han = x.ngay_het_han ? this.Convertdate(x.ngay_het_han) : null
+      })
 
       this.dataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -240,26 +241,12 @@ export class ManageBusinessmanComponent implements OnInit {
   //   this._location.back();
   // }
 
-  id: string = undefined
-
-  AddBusiness(id: number, type: string, id_linh_vuc: number) {
-    this.router.navigate(['specialized/commecial-management/domestic/updatebusiness/' + id + '/' + type + '/' + id_linh_vuc]);
+  AddCertificate(id: number) {
+    this.router.navigate(['manager/business/add-certificate/' + id]);
   }
 
   Back() {
-    switch (this.type) {
-      case 'Tobacco':
-        this.router.navigate(['specialized/commecial-management/domestic/tobacco']);
-        break;
-      case 'Petrol':
-        this.router.navigate(['specialized/commecial-management/domestic/petrol']);
-        break;
-      case 'Liquor':
-        this.router.navigate(['specialized/commecial-management/domestic/liquor']);
-        break;
-      case 'LPG':
-        this.router.navigate(['specialized/commecial-management/domestic/lpg']);
-        break;
-    }
+    this.router.navigate(['manager/business/search']);
   }
+
 }

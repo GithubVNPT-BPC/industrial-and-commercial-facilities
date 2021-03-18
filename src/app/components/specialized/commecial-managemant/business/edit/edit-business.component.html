@@ -2,6 +2,7 @@
     <mat-card-header>
         <!-- <mat-card-title></mat-card-title> -->
         <mat-card-subtitle hidden>
+            mst={{mst}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -81,14 +82,27 @@
                         </mat-select>
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Mã số thuế (*)</mat-label>
-                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
-                            [ngClass]="{ 'is-invalid': submitted && f.mst.errors }">
-                        <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
-                            <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
-                        </div>
-                    </mat-form-field>
+                    <ng-container *ngIf="mst != undefined; else elseTemplate">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mã số thuế (*)</mat-label>
+                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
+                                [ngClass]="{ 'is-invalid': submitted && f.mst.errors }" readonly style="color: red;">
+                            <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
+                                <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
+                            </div>
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mã số thuế (*)</mat-label>
+                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.companyinfo.mst"
+                                [ngClass]="{ 'is-invalid': submitted && f.mst.errors }">
+                            <div *ngIf="submitted && f.mst.errors" class="invalid-feedback">
+                                <div *ngIf="f.mst.errors.required">Vui lòng nhập mã số thuế</div>
+                            </div>
+                        </mat-form-field>
+                    </ng-template>
+
 
                     <!-- <mat-form-field appearance="outline">
                         <mat-label>Mã số thuế cha (*)</mat-label>
@@ -250,13 +264,14 @@
                 <button mat-raised-button class="white" (click)="deleteRow()">
                     <mat-icon>block</mat-icon> Xóa dòng
                 </button>
+                <button mat-raised-button class="red" (click)="removeRows()">Xóa ngành nghề</button>
             </div>
         </div>
 
         <div class="layout" id="small" #TABLE>
             <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">
 
-                <!-- <ng-container matColumnDef="select">
+                <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef>
                         <mat-checkbox (change)="$event ? masterToggle() : null"
                             [checked]="selection.hasValue() && isAllSelected()"
@@ -269,7 +284,7 @@
                             [aria-label]="checkboxLabel(row)">
                         </mat-checkbox>
                     </td>
-                </ng-container> -->
+                </ng-container>
 
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
@@ -294,6 +309,12 @@
                     <th mat-header-cell *matHeaderCellDef> Ngành nghề kinh doanh chính </th>
                     <td mat-cell *matCellDef="let element">
                         <input appSpecial class="text-left" [(ngModel)]="element.nganh_nghe_kd_chinh">
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="id_nganh_nghe">
+                    <th mat-header-cell *matHeaderCellDef hidden> ID </th>
+                    <td mat-cell *matCellDef="let element" hidden>
                     </td>
                 </ng-container>
 

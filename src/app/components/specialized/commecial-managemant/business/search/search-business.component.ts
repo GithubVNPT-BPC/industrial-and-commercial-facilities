@@ -10,7 +10,6 @@ import { MatTableFilter } from 'mat-table-filter';
 
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { FilterService } from 'src/app/_services/filter.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 
 @Component({
@@ -71,7 +70,6 @@ export class SearchBusinessComponent implements OnInit {
     public _marketService: MarketService,
     public router: Router,
     public excelService: ExcelService,
-    public filterService: FilterService,
     public info: InformationService,
   ) { }
 
@@ -118,8 +116,9 @@ export class SearchBusinessComponent implements OnInit {
         element.mst = this.selectionarray[index]
       }
       this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
-        this.GetAllCompany();
         this.info.msgSuccess('Xóa thành công')
+        this.ngOnInit();
+        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
@@ -148,6 +147,10 @@ export class SearchBusinessComponent implements OnInit {
 
   AddCompany() {
     this.router.navigate(['specialized/commecial-management/domestic/edit/']);
+  }
+
+  AddCertificate() {
+    this.router.navigate(['specialized/commecial-management/domestic/certificate/']);
   }
 
   selected_field: string = 'ten_doanh_nghiep';
@@ -196,6 +199,7 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
     let date: string
@@ -206,9 +210,9 @@ export class SearchBusinessComponent implements OnInit {
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        this.companyList1 = allrecords.data[0]
-        this.companyList2 = allrecords.data[1]
-        this.companyList3 = allrecords.data[2]
+        this.companyList1 = allrecords.data[0];
+        this.companyList2 = allrecords.data[1];
+        this.companyList3 = allrecords.data[2];
 
         this.companyList4 = this.companyList1.map(a => {
           let temp = this.companyList2.filter(b => b.mst === a.mst)
@@ -301,7 +305,9 @@ export class SearchBusinessComponent implements OnInit {
           }
         })
 
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
+        this.companyList6 = this.companyList5.filter(x => x.sct == true)
+
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -309,9 +315,6 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-
-        // // Overrride default filter behaviour of Material Datatable
-        // this.dataSource.filterPredicate = this.filterService.createFilter();
       });
   }
 
@@ -319,45 +322,5 @@ export class SearchBusinessComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
-  // private DEFAULT_FIELD: string = 'ten_doanh_nghiep';
-  // private filterConditions: any[] = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
-  // private filterCount: number = 1;
-
-  // private addMoreFilter() {
-  //   this.filterCount++;
-  //   this.filterConditions.push({ id: this.filterCount, field_name: this.DEFAULT_FIELD, field_value: '' });
-  // }
-
-  // private removeFilter() {
-  //   // TODO: Check error when remove the same filter immediately. Need to check!
-  //   if (this.filterConditions.length != 1) {
-  //     let cloneArray = [...this.filterConditions];
-  //     this.filterConditions = cloneArray.filter(item => item.id !== parseInt(this.ele.nativeElement.id));
-  //     this.filterService.removeCondition(this.ele.nativeElement.getAttribute('data-field-name'));
-  //     this.dataSource.filter = this.filterService.getFilters();
-  //   }
-  // }
-
-  // private changeFilter(event) {
-  //   let filterCondition, filterValue;
-  //   if (event.source) {
-  //     // Change Select 
-  //     filterCondition = event.value;
-  //     filterValue = event.source._elementRef.nativeElement.closest(".filter-row").querySelector('.filter-value').value;
-  //   } else {
-  //     // Change input
-  //     filterCondition = event.currentTarget.closest(".filter-row").querySelector('.selected-condition').getAttribute('ng-reflect-model');
-  //     filterValue = event.target.value;
-  //   }
-  //   this.filterService.addFilter(filterCondition, filterValue);
-  //   this.dataSource.filter = this.filterService.getFilters();
-  // }
-
-  // private clearFilter() {
-  //   this.filterConditions = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
-  //   this.filterService.setFilterVals();
-  //   this.dataSource.filter = this.filterService.getFilters();
-  // }
 
 }

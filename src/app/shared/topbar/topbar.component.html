@@ -1,9 +1,11 @@
 <div class="{{styleOfScss}}">
     <mat-toolbar class="mat-elevation-z5 main-contain">
         <mat-toolbar-row>
-            <a mat-raised-button class="btn-sct-page" (click)="sidebar.toggle();">
-                <mat-icon>menu</mat-icon>
-            </a>
+            <div class="toggle-sidebar">
+                <a mat-icon-button class="btn-sct-page" (click)="sidebar.toggle();">
+                    <mat-icon matTooltip="Ẩn/ Hiện Menu">menu</mat-icon>
+                </a>
+            </div>
 
             <div class="navbar-brand">
                 <a class="navbar-item" (click)="openHome()" [routerLink]="['/']" routerLinkActive="router-link-active">
@@ -28,7 +30,7 @@
                         <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
                     <a (click)="openAccountDropdown()" class="user-menu">
-                        <img class="avatar mt-1" src="{{img_avatar}}" alt="{{username}}">
+                        <img class="avatar m-2" src="{{img_avatar}}" alt="{{username}}">
                     </a>
 
                     <div class="dropdown-content" [style.display]="this.open ? 'block' : 'none' ">

@@ -145,12 +145,16 @@ export class LiquorBusinessComponent implements OnInit {
             }
             this._Service.DeleteLiquorValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
+                this.date = this.newdate
                 this.ngOnInit()
+                this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
             })
         }
     }
+
+    public newdate = new FormControl(_moment());
 
     // ngAfterViewInit(): void {
     //     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
@@ -303,6 +307,7 @@ export class LiquorBusinessComponent implements OnInit {
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
+        this.selection.clear();
         this.getLiquorListbyYear(this.theYear.toString())
     }
 
