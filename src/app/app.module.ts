@@ -19,7 +19,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { PipeModule } from './pipe.module';
 import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { LoggerComponent } from './components/specialized/logger/logger.component';
 
 @NgModule({
   imports: [
@@ -40,7 +39,6 @@ import { LoggerComponent } from './components/specialized/logger/logger.componen
   declarations: [
     InformationComponent,
     ConfirmationDialogComponent,
-    LoggerComponent,
   ],
   exports: [
   ],

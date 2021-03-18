@@ -17,6 +17,7 @@ import { ProductManagerComponent } from './product-manager/product-manager.compo
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
+import { SystemLogComponent } from './system-log/system-log.component';
 
 const routes: Routes = [
   {
@@ -75,6 +76,14 @@ const routes: Routes = [
         component: UpdateUserComponent,
         data: {
           title: 'Cập nhật thông tin tài khoản'
+        },
+      },
+
+      {
+        path: 'system-log',
+        component: SystemLogComponent,
+        data: {
+          title: 'Lịch sử hệ thống'
         },
       },
 

@@ -16,6 +16,7 @@ import { MatSelectFilterModule } from 'mat-select-filter';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
+import { SystemLogComponent } from './system-log/system-log.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -55,6 +56,7 @@ export const customCurrencyMaskConfig = {
     AddCertificateComponent,
     CertificateListComponent,
     UpdateUserComponent,
+    SystemLogComponent,
   ],
   entryComponents: [ExportTopCompanyManager]
 })

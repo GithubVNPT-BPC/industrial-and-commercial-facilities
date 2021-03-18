@@ -23,7 +23,7 @@ export class LoggerService {
 
     public GetLogger() {
         var apiUrl = this.apiHome + this.getLogger;
-        var apiUrl = "http://localhost:5000/api/log";
+        // var apiUrl = "http://localhost:5000/api/log";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

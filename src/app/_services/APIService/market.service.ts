@@ -57,7 +57,7 @@ export class MarketService {
     companyinfo: CompanyPost;
     public PostCompany(companyinfo: Array<CompanyPost>) {
         var apiUrl = this.apiHome + this.urlPostCompany;
-        var apiUrl = "http://localhost:5000/api/doanh-nghiep/them-doanh-nghiep";
+        // var apiUrl = "http://localhost:5000/api/doanh-nghiep/them-doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, companyinfo, { headers: headers }).pipe(tap(data => data),
@@ -66,7 +66,7 @@ export class MarketService {
     }
     public UpdateCompany(companyinfo: Array<CompanyPost>) {
         var apiUrl = this.apiHome + this.urlUpdateCompany;
-        var apiUrl = "http://localhost:5000/api/doanh-nghiep";
+        // var apiUrl = "http://localhost:5000/api/doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, companyinfo, { headers: headers }).pipe(tap(data => data),
@@ -90,7 +90,7 @@ export class MarketService {
     }
     public DeleteCompany(deletemodel: Array<DeleteModel>) {
         var apiUrl = this.apiHome + this.urlDeleteCompany;
-        var apiUrl = "http://localhost:5000/api/doanh-nghiep/xoa-nhieu-doanh-nghiep";
+        // var apiUrl = "http://localhost:5000/api/doanh-nghiep/xoa-nhieu-doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))

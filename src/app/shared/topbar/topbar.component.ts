@@ -84,7 +84,7 @@ export class TopbarComponent implements OnInit {
   }
 
   public openLogger() {
-    this._router.navigate(['/system-log']);
+    this._router.navigate(['manager/system-log']);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }

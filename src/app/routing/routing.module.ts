@@ -16,7 +16,6 @@ import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { LogoutComponent } from '../components/logout/logout.component';
-import { LoggerComponent } from '../components/specialized/logger/logger.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataSCTComponent } from '../components/data-sct/data-sct.component';
 import { CommecialManagementModule } from '../components/specialized/commecial-managemant/commecial-management.module';
@@ -68,13 +67,6 @@ const routes: Routes = [
     }
   },
 
-  {//System Log
-    path: 'system-log',
-    component: LoggerComponent,
-    data: {
-      title: 'System Log'
-    }
-  },
   {//Default first page
     path: 'logout',
     component: LogoutComponent,

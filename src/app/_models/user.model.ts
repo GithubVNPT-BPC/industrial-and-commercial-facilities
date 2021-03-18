@@ -18,6 +18,7 @@ export class user_model {
 
 export class ChangePassword {
     username: string;
+    full_name: string;
     password: string;
     nPassword: string;
 }

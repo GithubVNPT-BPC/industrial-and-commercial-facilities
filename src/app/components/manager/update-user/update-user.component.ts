@@ -61,6 +61,7 @@ export class UpdateUserComponent implements OnInit {
       form.form.reset();
     this._Service.userupdate = {
       username: '',
+      full_name: '',
       password: '',
       nPassword: ''
     }
@@ -87,12 +88,14 @@ export class UpdateUserComponent implements OnInit {
 
     this.userupdate = this.formbuilder.group({
       username: '',
+      full_name: '',
       password: '',
       nPassword: ''
     })
 
     this._Service.userupdate = {
       username: this._Service.userValue.username,
+      full_name: this._Service.userValue.full_name,
       password: '',
       nPassword: ''
     }
@@ -106,6 +109,7 @@ export class UpdateUserComponent implements OnInit {
         this.router.navigate(['login']);
       },
       err => {
+        this._info.msgError('Thay đổi thông tin không thành công')
       }
     )
   }
