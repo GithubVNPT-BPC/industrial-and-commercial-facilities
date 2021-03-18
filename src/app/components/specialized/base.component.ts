@@ -45,6 +45,10 @@ export abstract class BaseComponent implements OnInit {
     public errorMessage: any;
     public currentYear = new Date().getFullYear();
     public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
+    public terms = [
+        {id: 6, value: '6 Tháng'}, 
+        {id: 12, value: '1 Năm'}
+    ];
     public dataSource = new MatTableDataSource();
     public filteredDataSource = new MatTableDataSource();
     public selection = new SelectionModel(true, []);

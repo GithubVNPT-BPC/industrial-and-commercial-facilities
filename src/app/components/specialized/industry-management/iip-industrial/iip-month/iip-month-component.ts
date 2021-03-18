@@ -1,22 +1,16 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from '@angular/core';
-import * as XLSX from 'xlsx';
-
 import { ReportService } from '../../../../../_services/APIService/report.service';
-
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { ReportDirective } from '../../../../../shared/report.directive';
 import { KeyboardService } from '../../../../../shared/services/keyboard.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-
 import { Location } from '@angular/common';
-import { element } from 'protractor';
-import { merge } from 'rxjs';
 import moment from 'moment';
-
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 interface HashTableNumber<T> {
     [key: string]: T;
@@ -27,9 +21,14 @@ interface HashTableNumber<T> {
     templateUrl: './iip-month-component.html',
     styleUrls: ['../../../special_layout.scss'],
 })
-
-
 export class IIPMonthComponent implements OnInit {
+    //Constant variable -----------------------------------------------------------
+    private readonly REDIRECT_PAGE: string = "/specialized/industry-management/iip/iip-detail";
+    private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip";
+    private readonly TITLE_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp - Báo cáo chi tiết";
+    private readonly TEXT_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp - Báo cáo chi tiết";
+    //Only TS Variable ------------------------------------------------------------
+    private _linkOutput: LinkModel = new LinkModel();
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
     public readonly TYPE_INDICATOR_INPUT: number = 1;
@@ -79,6 +78,7 @@ export class IIPMonthComponent implements OnInit {
         public info: InformationService,
         public location: Location,
         public excelService: ExcelService,
+        private _breadCrumService: BreadCrumService,
     ) {
         this.route.queryParams.subscribe(params => {
             this.time_id = params['time_id'];
@@ -112,11 +112,19 @@ export class IIPMonthComponent implements OnInit {
     ngOnInit(): void {
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
         this.org_id = parseInt(data.org_id);
-
+        this.sendLinkToNext(true);
         this.GetReportById(this.time_id);
         this.keyboardservice.keyBoard.subscribe(res => {
             this.move(res)
         })
+    }
+
+    private sendLinkToNext(type: boolean): void {
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this._breadCrumService.sendLink(this._linkOutput);
     }
 
     checkAccessObj() {
