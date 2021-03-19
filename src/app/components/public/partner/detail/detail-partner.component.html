@@ -5,11 +5,12 @@
         <!-- <button (click)="addCareer()" mat-raised-button>Thêm ngành nghề</button> -->
 
         <form [formGroup]="doanh_nghiep" autocomplete="off" (ngSubmit)="onSubmit(doanh_nghiep.getRawValue())">
-            <!-- <div class="row">
-                <div class="col-6 button-control -align-left my-auto">
-                    <button type="submit" mat-raised-button>Lưu</button>
-                </div>
-            </div> -->
+            <div class="button-control">
+                <button type="button" mat-raised-button (click)="Back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                </button>
+            </div>
+
             <div class="row">
                 <div class="col-6">
                     <!-- <div formArrayName="danh_sach_nganh_nghe"

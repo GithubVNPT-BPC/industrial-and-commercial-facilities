@@ -106,8 +106,7 @@
                 <ng-container matColumnDef="ten_doanh_nghiep">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tên doanh nghiệp </th>
                     <td mat-cell *matCellDef="let element" class="jump" style="width: 420px;">
-                        <a [routerLink]="['/public/partner/search/' + element.mst]"
-                            target="_blank">{{element.ten_doanh_nghiep}}</a>
+                        <a [routerLink]="['/public/partner/search/' + element.mst]">{{element.ten_doanh_nghiep}}</a>
                     </td>
                 </ng-container>
 

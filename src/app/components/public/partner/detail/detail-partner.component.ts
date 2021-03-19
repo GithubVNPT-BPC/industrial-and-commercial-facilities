@@ -555,4 +555,8 @@ export class CompanyDetailComponent implements OnInit {
 		let date = new Date(year, month - 1, day);
 		return date
 	}
+
+	Back() {
+		this.router.navigate(['public/partner/search']);
+	}
 }
