@@ -34,6 +34,7 @@ const routes: Routes = [
         },
         children: [
           {
+            canActivate: [Manager],
             path: 'search',
             component: SearchBusinessComponent,
             data: {
@@ -41,6 +42,7 @@ const routes: Routes = [
             },
           },
           {
+            canActivate: [Manager],
             path: 'edit',
             component: EditBusinessComponent,
             data: {
@@ -48,6 +50,7 @@ const routes: Routes = [
             },
           },
           {
+            canActivate: [Manager],
             path: 'certificate',
             component: CertificateListComponent,
             data: {
@@ -55,6 +58,7 @@ const routes: Routes = [
             },
           },
           {
+            canActivate: [Manager],
             path: 'add-certificate/:id',
             component: AddCertificateComponent,
             data: {
@@ -72,6 +76,7 @@ const routes: Routes = [
       },
 
       {
+        canActivate: [Manager],
         path: 'user',
         component: UpdateUserComponent,
         data: {
@@ -80,6 +85,7 @@ const routes: Routes = [
       },
 
       {
+        canActivate: [Manager],
         path: 'system-log',
         component: SystemLogComponent,
         data: {
@@ -88,6 +94,7 @@ const routes: Routes = [
       },
 
       {
+        canActivate: [Manager],
         path: 'market',
         data: {
           title: ''
@@ -117,6 +124,7 @@ const routes: Routes = [
           },
 
           {
+            canActivate: [Manager],
             path: 'foreign',
             data: {
               title: 'Thị trường'
