@@ -28,6 +28,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
+import { LoginService } from "src/app/_services/APIService/login.service";
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
   parse: {
@@ -121,6 +122,7 @@ export class EditBusinessComponent implements OnInit {
     public info: InformationService,
     private formbuilder: FormBuilder,
     public _keyboardservice: KeyboardService,
+    public _login: LoginService
   ) {
     this.route.params.subscribe((params) => {
       this.mst = params["mst"];
@@ -544,7 +546,7 @@ export class EditBusinessComponent implements OnInit {
             mst: this.company.mst,
             id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
             mst_parent: this.company.mst_cha,
-            sct: false,
+            sct: this.company.sct,
             hoat_dong: this.company.hoat_dong,
             dia_chi: this.company.dia_chi,
             id_phuong_xa: this.company.id_phuong_xa,
@@ -583,7 +585,11 @@ export class EditBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['manager/business/search/']);
+    if (this._login.userValue.user_role_id == 2) {
+      this.router.navigate(['public/partner/search/']);
+    }
+    else {
+      this.router.navigate(['manager/business/search/']);
+    }
   }
-
 }

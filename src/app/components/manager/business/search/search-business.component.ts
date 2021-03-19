@@ -25,7 +25,7 @@ export class SearchBusinessComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
+  public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
     'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
     'so_dien_thoai', 'email', 'email_sct', 'ngay_bd_kd', 'von_dieu_le', 'quy_mo_tai_san', 'doanh_thu', 'loi_nhuan', 'cong_suat_thiet_ke', 'cong_suat_thiet_ke_sct',
     'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 'hoat_dong',
@@ -34,7 +34,6 @@ export class SearchBusinessComponent implements OnInit {
   public filter1: filter[] = [
     { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
     { filed_name: 'mst', detail_name: 'Mã số thuế' },
-    { filed_name: 'mst_cha', detail_name: 'Mã số thuế cha' },
     { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
     { filed_name: 'nguoi_dai_dien', detail_name: 'Người đại diện' },
     { filed_name: 'dia_chi_day_du', detail_name: 'Địa chỉ đầy đủ' },
@@ -135,8 +134,8 @@ export class SearchBusinessComponent implements OnInit {
 
   // OpenDetailCompany(mst: string) {
   //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/' + mst]));
-  //   window.open(url.replace('%23', '#'), "_blank");
+  //     this.router.createUrlTree(['manager/business/edit/' + mst]));
+  //   window.open(url, "_blank");
   // }
 
   OpenDetailCompany(mst: string) {
@@ -145,8 +144,8 @@ export class SearchBusinessComponent implements OnInit {
 
   // AddCompany() {
   //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/']));
-  //   window.open(url.replace('%23', '#'), "_blank");
+  //     this.router.createUrlTree(['manager/business/edit/']));
+  //   window.open(url, "_blank");
   // }
 
   AddCompany() {

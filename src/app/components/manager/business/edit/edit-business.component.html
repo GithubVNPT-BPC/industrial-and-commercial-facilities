@@ -17,7 +17,7 @@
                 </div>
 
                 <div class="col-6 button-control -align-right my-auto">
-                    <button mat-raised-button (click)="Back()">
+                    <button type="button" mat-raised-button (click)="Back()">
                         <mat-icon>keyboard_backspace</mat-icon>
                     </button>
                 </div>
@@ -48,6 +48,10 @@
                     <section class="cb-section">
                         <mat-checkbox class="cb" formControlName="hoat_dong"
                             [(ngModel)]="_Service.companyinfo.hoat_dong"> Còn hoạt động
+                        </mat-checkbox>
+
+                        <mat-checkbox class="cb" formControlName="sct" [(ngModel)]="_Service.companyinfo.sct"> Doanh
+                            nghiệp thuộc dữ liệu chuyên ngành
                         </mat-checkbox>
                     </section>
 

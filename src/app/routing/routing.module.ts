@@ -15,13 +15,9 @@ import { P500Component } from '../components/error/500.component';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { FormsModule } from '@angular/forms';
-import { InformationService } from '../shared/information/information.service';
 import { LogoutComponent } from '../components/logout/logout.component';
-import { UpdateuserComponent } from '../components/updateuser/updateuser.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataSCTComponent } from '../components/data-sct/data-sct.component';
-import { CommecialManagementModule } from '../components/specialized/commecial-managemant/commecial-management.module';
-import { CommecialManagementRoutingModule } from '../components/specialized/commecial-managemant/commecial-management.routing';
 import { SpecializedLayoutComponent } from './specialized-layout/specialized-layout.component';
 import { EnergyLayoutComponent } from './energy-layout/energy-layout.component';
 import { ReportLayoutComponent } from './report-layout/report-layout.component';
@@ -68,13 +64,7 @@ const routes: Routes = [
       title: 'Quản lý chuyên ngành'
     }
   },
-  {//Update user
-    path: 'update_user',
-    component: UpdateuserComponent,
-    data: {
-      title: 'Đăng nhập'
-    }
-  },
+
   {//Default first page
     path: 'logout',
     component: LogoutComponent,
@@ -137,7 +127,6 @@ const routes: Routes = [
     loadChildren: () => import('../components/report/report.module').then(m => m.ReportModule)
   },
   {
-    canActivate: [Manager],
     path: 'manager',
     component: ManagerLayoutComponent,
     loadChildren: () => import('../components/manager/manager.module').then(m => m.ManagerModule),
@@ -161,7 +150,6 @@ const routes: Routes = [
     HomeSpecializedComponent,
     LogoutComponent,
     RegisterComponent,
-    UpdateuserComponent,
     DataSCTComponent,
     EnergyLayoutComponent,
   ],

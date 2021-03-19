@@ -26,6 +26,11 @@
             <ng-template #divUser>
                 <div class="btn-color">
 
+                    <div hidden>
+                        userrole={{userrole}}
+                        mst={{mst}}
+                    </div>
+
                     <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
                         <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
@@ -39,22 +44,43 @@
                             <span id='username'>{{ username }}</span>
                         </div>
 
-                        <div class="dropdown-item">
-                            <mat-icon>account_box</mat-icon>
-                            <span (click)="openForm()" class="display-item" >Thông tin tài khoản</span>
-                        </div>
-                        <div class="dropdown-item">
-                            <mat-icon>storefront</mat-icon>
-                            <span (click)="openManagerModule()" class="display-item">Quản lý thị trường</span>
-                        </div>
-                        <div class="dropdown-item">
-                            <mat-icon>list</mat-icon>
-                            <span (click)="openSpecializedModule()" class="display-item">Dữ liệu chuyên ngành</span>
-                        </div>
-                        <div class="dropdown-item">
-                            <mat-icon>wysiwyg</mat-icon>
-                            <span (click)="openReportModule()" class="display-item">Quản lý báo cáo</span>
-                        </div>
+                        <ng-container *ngIf="userrole == 2; else elseTemplate">
+                            <div class="dropdown-item">
+                                <mat-icon>account_box</mat-icon>
+                                <span (click)="OpenDetailCompany(mst)" class="display-item">Thông tin tài khoản</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>public</mat-icon>
+                                <span (click)="openPublicModule()" class="display-item">Thông tin thị trường</span>
+                            </div>
+                        </ng-container>
+                        <ng-template #elseTemplate>
+                            <div class="dropdown-item">
+                                <mat-icon>account_box</mat-icon>
+                                <span (click)="openForm()" class="display-item">Thông tin tài khoản</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>public</mat-icon>
+                                <span (click)="openPublicModule()" class="display-item">Thông tin thị trường</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>storefront</mat-icon>
+                                <span (click)="openManagerModule()" class="display-item">Quản lý thị trường</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>list</mat-icon>
+                                <span (click)="openSpecializedModule()" class="display-item">Dữ liệu chuyên ngành</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>wysiwyg</mat-icon>
+                                <span (click)="openReportModule()" class="display-item">Quản lý báo cáo</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>note_alt</mat-icon>
+                                <span (click)="openLogger()" class="display-item">Lịch sử hệ thống</span>
+                            </div>
+                        </ng-template>
+
                         <div class="dropdown-item">
                             <mat-icon>login</mat-icon>
                             <span (click)="logout()" class="display-item">Đăng xuất</span>

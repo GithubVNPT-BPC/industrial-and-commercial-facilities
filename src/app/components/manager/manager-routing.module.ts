@@ -16,9 +16,12 @@ import { ForeignManagerComponent } from './foreign-manager/foreign-manager.compo
 import { ProductManagerComponent } from './product-manager/product-manager.component';
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
+import { UpdateUserComponent } from './update-user/update-user.component';
+import { SystemLogComponent } from './system-log/system-log.component';
 
 const routes: Routes = [
   {
+
     path: '',
     data: {
       title: 'Quản lý'
@@ -31,6 +34,7 @@ const routes: Routes = [
         },
         children: [
           {
+            canActivate: [Manager],
             path: 'search',
             component: SearchBusinessComponent,
             data: {
@@ -38,6 +42,7 @@ const routes: Routes = [
             },
           },
           {
+            canActivate: [Manager],
             path: 'edit',
             component: EditBusinessComponent,
             data: {
@@ -45,6 +50,7 @@ const routes: Routes = [
             },
           },
           {
+            canActivate: [Manager],
             path: 'certificate',
             component: CertificateListComponent,
             data: {
@@ -52,6 +58,7 @@ const routes: Routes = [
             },
           },
           {
+            canActivate: [Manager],
             path: 'add-certificate/:id',
             component: AddCertificateComponent,
             data: {
@@ -69,6 +76,25 @@ const routes: Routes = [
       },
 
       {
+        canActivate: [Manager],
+        path: 'user',
+        component: UpdateUserComponent,
+        data: {
+          title: 'Cập nhật thông tin tài khoản'
+        },
+      },
+
+      {
+        canActivate: [Manager],
+        path: 'system-log',
+        component: SystemLogComponent,
+        data: {
+          title: 'Lịch sử hệ thống'
+        },
+      },
+
+      {
+        canActivate: [Manager],
         path: 'market',
         data: {
           title: ''
@@ -98,6 +124,7 @@ const routes: Routes = [
           },
 
           {
+            canActivate: [Manager],
             path: 'foreign',
             data: {
               title: 'Thị trường'

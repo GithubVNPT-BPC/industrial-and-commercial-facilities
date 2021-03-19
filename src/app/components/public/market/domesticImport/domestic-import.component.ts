@@ -7,7 +7,6 @@ import { MatDialog } from '@angular/material';
 import { ImportMarketModel } from '../../../../_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
 
-import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
@@ -18,6 +17,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
   parse: {
@@ -55,7 +55,7 @@ export class DomesticImportComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   constructor(
-    public marketService: MarketService,
+    public marketService: MarketServicePublic,
     public excelService: ExcelService,
     public router: Router,
     public dialog: MatDialog) {

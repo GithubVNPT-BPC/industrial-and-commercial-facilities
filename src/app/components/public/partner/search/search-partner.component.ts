@@ -7,9 +7,9 @@ import { MatSort } from '@angular/material/sort';
 import { CompanyDetailModel, filter } from '../../../../_models/APIModel/domestic-market.model';
 import { MatTableFilter } from 'mat-table-filter';
 
-import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FilterService } from 'src/app/_services/filter.service';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 
 @Component({
   selector: 'app-search-business',
@@ -23,7 +23,7 @@ export class SearchPartnerComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'mst_cha', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
     'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
     'so_dien_thoai', 'email', 'email_sct', 'ngay_bd_kd', 'von_dieu_le', 'quy_mo_tai_san', 'doanh_thu', 'loi_nhuan', 'cong_suat_thiet_ke', 'cong_suat_thiet_ke_sct',
     'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 'hoat_dong',
@@ -32,7 +32,6 @@ export class SearchPartnerComponent implements OnInit {
   public filter1: filter[] = [
     { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
     { filed_name: 'mst', detail_name: 'Mã số thuế' },
-    { filed_name: 'mst_cha', detail_name: 'Mã số thuế cha' },
     { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
     { filed_name: 'nguoi_dai_dien', detail_name: 'Người đại diện' },
     { filed_name: 'dia_chi_day_du', detail_name: 'Địa chỉ đầy đủ' },
@@ -67,7 +66,7 @@ export class SearchPartnerComponent implements OnInit {
   ];
 
   constructor(
-    public _marketService: MarketService,
+    public _marketService: MarketServicePublic,
     public router: Router,
     public excelService: ExcelService,
     public filterService: FilterService,
@@ -90,9 +89,7 @@ export class SearchPartnerComponent implements OnInit {
   }
 
   OpenDetailCompany(mst: string) {
-    let url = this.router.serializeUrl(
-      this.router.createUrlTree([encodeURI('#') + 'public/partner/search/' + mst]));
-    window.open(url.replace('%23', '#'), "_blank");
+    this.router.navigate(['public/partner/search/' + mst]);
   }
 
   temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
@@ -142,7 +139,6 @@ export class SearchPartnerComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
-  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string) {
     let date: string
@@ -248,9 +244,7 @@ export class SearchPartnerComponent implements OnInit {
           }
         })
 
-        this.companyList6 = this.companyList5.filter(x => x.sct == false)
-
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

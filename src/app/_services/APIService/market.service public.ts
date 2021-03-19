@@ -9,7 +9,7 @@ import { DomesticPriceModel, ForeignMarketModel, ProductValueModel, CompanyPost,
     providedIn: 'root'
 })
 
-export class MarketService {
+export class MarketServicePublic {
     public data: any;
     token: any;
     username: any;
@@ -50,7 +50,7 @@ export class MarketService {
 
     constructor(public http: HttpClient) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
-        this.token = this.data.token;
+        // this.token = this.data.token;
     }
 
     //company list

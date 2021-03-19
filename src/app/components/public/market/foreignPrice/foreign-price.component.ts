@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 
 
-import { MarketService } from '../../../../_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ForeignMarketModel } from '../../../../_models/APIModel/domestic-market.model';
@@ -14,6 +13,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
   parse: {
@@ -52,7 +52,7 @@ export class ForeignMarketPriceComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(
-    public marketService: MarketService,
+    public marketService: MarketServicePublic,
     public excelService: ExcelService,
     public datepipe: DatePipe
   ) {
