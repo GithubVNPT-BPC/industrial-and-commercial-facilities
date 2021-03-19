@@ -19,15 +19,12 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-3 checkbox">
-                <!-- <mat-checkbox (change)="compareToLastYear($event)" [ngModel]="isChecked">So sánh với cùng kỳ năm trước
-                </mat-checkbox> -->
+            <div class="col-4 col-lg-4 checkbox">
+                
             </div>
 
-            <div class="col-2 col-lg-2 checkbox">
-            </div>
-
-            <div class="col-lg-3 button-control">
+            <div class="col-4 col-lg-4 checkbox">
+                <button mat-raised-button (click)="TypeReport()">Nhập báo cáo</button>
                 <button mat-raised-button (click)="ExportTOExcel('Tổng quan CCN',year.toString())">Xuất Excel</button>
             </div>
         </div>

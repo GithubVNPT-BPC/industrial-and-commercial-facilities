@@ -2,7 +2,7 @@ import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ReportService } from 'src/app/_services/APIService/report.service';
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from 'src/app/_models/APIModel/report.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TreeviewItem } from 'ngx-treeview';
 
 // Services
@@ -79,9 +79,11 @@ export class ReportExplosivesComponent extends BaseComponent {
     public keyboardservice: KeyboardService,
     public excelService: ExcelService,
     public info: InformationService,
-    public loaderService: LoaderService
+    public loaderService: LoaderService,
+    private router: Router
   ) {
     super(injector);
+    
   }
 
   ngOnInit(): void {
@@ -531,5 +533,9 @@ export class ReportExplosivesComponent extends BaseComponent {
 
   compareToLastYear(e){ 
     // console.log(e)
+  }
+
+  TypeReport(){
+    this.router.navigate(['../../report/all']);
   }
 }
