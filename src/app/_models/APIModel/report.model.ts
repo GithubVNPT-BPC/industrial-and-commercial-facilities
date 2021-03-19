@@ -125,6 +125,7 @@ export class ReportDatarow {
     fc18: string;
     fc19: string;
     fc20: string;
+    parent_id :number;
 }
 
 export class ReportColumn {
