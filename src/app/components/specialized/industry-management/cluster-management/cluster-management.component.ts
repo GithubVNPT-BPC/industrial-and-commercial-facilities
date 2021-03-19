@@ -100,8 +100,8 @@ export class ClusterManagementComponent extends BaseComponent {
 
     public openDetailCluster(id: string) {
         let url = this.router.serializeUrl(
-            this.router.createUrlTree([encodeURI('#') + '/specialized/industry-management/cluster/' + id]));
-        window.open(url.replace('%23', '#'), "_blank");
+            this.router.createUrlTree(['/specialized/industry-management/cluster/' + id]));
+        window.open(url, "_blank");
     }
 
     // applyDistrictFilter(event) {

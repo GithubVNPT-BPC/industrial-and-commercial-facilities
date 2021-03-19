@@ -124,9 +124,9 @@ export class PowerProductionManagementComponent implements OnInit {
 
     OpenDetailObject(obj: ReportOject) {
         const url = this.router.serializeUrl(
-            this.router.createUrlTree([encodeURI('#') + '/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
+            this.router.createUrlTree(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
         );
-        window.open(url.replace('%23', '#'), "_blank");
+        window.open(url, "_blank");
     }
 
     getLinkDefault() {

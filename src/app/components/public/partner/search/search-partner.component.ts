@@ -90,8 +90,8 @@ export class SearchPartnerComponent implements OnInit {
 
   OpenDetailCompany(mst: string) {
     let url = this.router.serializeUrl(
-      this.router.createUrlTree([encodeURI('#') + 'public/partner/search/' + mst]));
-    window.open(url.replace('%23', '#'), "_blank");
+      this.router.createUrlTree(['public/partner/search/' + mst]));
+    window.open(url, "_blank");
   }
 
   temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();

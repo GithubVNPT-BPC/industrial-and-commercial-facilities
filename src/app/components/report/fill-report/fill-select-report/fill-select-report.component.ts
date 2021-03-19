@@ -179,10 +179,14 @@ export class FillSelectReportComponent implements OnInit {
       default:
         break;
     }
+    // const url = this.router.serializeUrl(
+    //   this.router.createUrlTree(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
+    // );
+    // window.open(url, "_blank");
     const url = this.router.serializeUrl(
-      this.router.createUrlTree([encodeURI('#') + '/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
+      this.router.createUrlTree(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
     );
-    window.open(url.replace('%23', '#'), "_blank");
+    window.open(url, "_blank");
   }
 
   GetCurrentMonth() {
