@@ -40,19 +40,9 @@ export class LoginComponent implements OnInit {
           this.returnUrl = '/specialized/home'
           this.router.navigateByUrl(this.returnUrl);
         }
-        else if (response.data.user_role_id == 3) {
+        else if (response.data.user_role_id == 2) {
           this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
-          this.router.navigateByUrl(this.returnUrl);
-        }
-        else if (response.data.user_role_id == 4) {
-          this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
-          this.router.navigateByUrl(this.returnUrl);
-        }
-        else if (response.data.user_role_id == 5) {
-          this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
+          this.returnUrl = '/public/market/domestic/price'
           this.router.navigateByUrl(this.returnUrl);
         }
       },

@@ -18,8 +18,6 @@ import { FormsModule } from '@angular/forms';
 import { LogoutComponent } from '../components/logout/logout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DataSCTComponent } from '../components/data-sct/data-sct.component';
-import { CommecialManagementModule } from '../components/specialized/commecial-managemant/commecial-management.module';
-import { CommecialManagementRoutingModule } from '../components/specialized/commecial-managemant/commecial-management.routing';
 import { SpecializedLayoutComponent } from './specialized-layout/specialized-layout.component';
 import { EnergyLayoutComponent } from './energy-layout/energy-layout.component';
 import { ReportLayoutComponent } from './report-layout/report-layout.component';
@@ -129,7 +127,6 @@ const routes: Routes = [
     loadChildren: () => import('../components/report/report.module').then(m => m.ReportModule)
   },
   {
-    canActivate: [Manager],
     path: 'manager',
     component: ManagerLayoutComponent,
     loadChildren: () => import('../components/manager/manager.module').then(m => m.ManagerModule),
