@@ -64,7 +64,7 @@ export class IIPIndustrialComponent implements OnInit {
 
     public OpenDetail(month: number, year: number) {
         this._router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id : year * 100 + month } });
-        //     const url = this._router.serializeUrl(this._router.createUrlTree([encodeURI('#') + this.REDIRECT_PAGE], { queryParams: { month: month, year: year} })
+        //     const url = this._router.serializeUrl(this._router.createUrlTree([this.REDIRECT_PAGE], { queryParams: { month: month, year: year} })
         //   );
         //   window.open(url.replace('%23','#'));
     }

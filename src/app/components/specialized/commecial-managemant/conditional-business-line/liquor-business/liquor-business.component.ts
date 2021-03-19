@@ -253,8 +253,8 @@ export class LiquorBusinessComponent implements OnInit {
 
     // OpenDetailPetrol(id: number, mst: string) {
     //     let url = this.router.serializeUrl(
-    //         this.router.createUrlTree([encodeURI('#') + 'specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
-    //     window.open(url.replace('%23', '#'), "_blank");
+    //         this.router.createUrlTree(['specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
+    //     window.open(url, "_blank");
     // }
 
     applyDistrictFilter(event) {

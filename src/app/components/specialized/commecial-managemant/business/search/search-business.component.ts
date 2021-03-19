@@ -148,8 +148,8 @@ export class SearchBusinessComponent implements OnInit {
 
   // OpenDetailCompany(mst: string) {
   //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/' + mst]));
-  //   window.open(url.replace('%23', '#'), "_blank");
+  //     this.router.createUrlTree(['manager/business/edit/' + mst]));
+  //   window.open(url, "_blank");
   // }
 
   OpenDetailCompany(mst: string) {
@@ -158,8 +158,8 @@ export class SearchBusinessComponent implements OnInit {
 
   // AddCompany() {
   //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree([encodeURI('#') + 'manager/business/edit/']));
-  //   window.open(url.replace('%23', '#'), "_blank");
+  //     this.router.createUrlTree(['manager/business/edit/']));
+  //   window.open(url, "_blank");
   // }
 
   AddCompany() {

@@ -206,6 +206,7 @@ export class FillReportComponent implements OnInit {
         this.CreateMergeHeaderTable(this.attributes);
 
         this.CreateReportTable();
+        console.log(this.dataSource);
       }
     )
   }

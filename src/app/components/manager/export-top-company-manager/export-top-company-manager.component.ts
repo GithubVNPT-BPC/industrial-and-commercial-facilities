@@ -66,8 +66,8 @@ export class ExportTopCompanyManager implements OnInit {
 
     OpenDetailCompany(mst: string) {
         let url = this.router.serializeUrl(
-            this.router.createUrlTree([encodeURI('#') + 'public/partner/search/' + mst]));
-        window.open(url.replace('%23', '#'), "_blank");
+            this.router.createUrlTree(['public/partner/search/' + mst]));
+        window.open(url, "_blank");
     }
 
     public exportTOExcel(filename: string, sheetname: string) {
