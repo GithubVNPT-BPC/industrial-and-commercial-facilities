@@ -1,38 +1,54 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from '@angular/core';
-import * as XLSX from 'xlsx';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  OnInit,
+  AfterViewInit,
+  OnDestroy,
+  Attribute,
+  QueryList,
+  ViewChildren,
+  Input,
+} from "@angular/core";
+import * as XLSX from "xlsx";
 
-import { ReportService } from '../../../../_services/APIService/report.service';
+import { ReportService } from "../../../../_services/APIService/report.service";
 
-import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from '../../../../_models/APIModel/report.model';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
+import {
+  ReportAttribute,
+  ReportDatarow,
+  ReportIndicator,
+  ReportOject,
+  ReportTable,
+  HeaderMerge,
+  ToltalHeaderMerge,
+} from "../../../../_models/APIModel/report.model";
+import { MatTableDataSource } from "@angular/material/table";
+import { Router, ActivatedRoute } from "@angular/router";
+import { ExcelService } from "src/app/_services/excelUtil.service";
 
-import { ReportDirective } from '../../../../shared/report.directive';
-import { KeyboardService } from '../../../../shared/services/keyboard.service';
-import { InformationService } from 'src/app/shared/information/information.service';
-import { Location } from '@angular/common';
-import { element } from 'protractor';
-import { merge } from 'rxjs';
-import moment from 'moment';
-import { ThrowStmt } from '@angular/compiler';
-
+import { ReportDirective } from "../../../../shared/report.directive";
+import { KeyboardService } from "../../../../shared/services/keyboard.service";
+import { InformationService } from "src/app/shared/information/information.service";
+import { Location } from "@angular/common";
+import { element } from "protractor";
+import { merge } from "rxjs";
+import moment from "moment";
+import { ThrowStmt } from "@angular/compiler";
 
 interface HashTableNumber<T> {
   [key: string]: T;
 }
 
 @Component({
-  selector: 'app-fill-report',
-  templateUrl: 'fill-detail.component.html',
-  styleUrls: ['../../report_layout.scss'],
+  selector: "app-fill-report",
+  templateUrl: "fill-detail.component.html",
+  styleUrls: ["../../report_layout.scss"],
 })
-
-
 export class FillReportComponent implements OnInit {
   public readonly TYPE_INDICATOR_INPUT: number = 1;
-  public readonly ATTRIBUTE_CODE: string = 'IND_NAME';
-  public readonly UNIT_CODE: string = 'IND_UNIT';
+  public readonly ATTRIBUTE_CODE: string = "IND_NAME";
+  public readonly UNIT_CODE: string = "IND_UNIT";
   public readonly ATTRIBUTE_DEFAULT: number = 1;
 
   public tableMergeHader: Array<ToltalHeaderMerge> = [];
@@ -40,17 +56,116 @@ export class FillReportComponent implements OnInit {
   public indexOftableMergeHader: number = 0;
 
   columns: number = 1;
-  @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>
+  @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>;
 
-  arrayTextHeader = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-    'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG',
-    'AH', 'AI', 'AJ', 'AK', 'AL', 'AM', 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV',
-    'AW', 'AX', 'AY', 'AZ', 'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL',
-    'BM', 'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'AW', 'BX', 'BY', 'BZ', 'CA',
-    'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP',
-    'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ'];
+  arrayTextHeader = [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z",
+    "AA",
+    "AB",
+    "AC",
+    "AD",
+    "AE",
+    "AF",
+    "AG",
+    "AH",
+    "AI",
+    "AJ",
+    "AK",
+    "AL",
+    "AM",
+    "AN",
+    "AO",
+    "AP",
+    "AQ",
+    "AR",
+    "AS",
+    "AT",
+    "AU",
+    "AV",
+    "AW",
+    "AX",
+    "AY",
+    "AZ",
+    "BA",
+    "BB",
+    "BC",
+    "BD",
+    "BE",
+    "BF",
+    "BG",
+    "BH",
+    "BI",
+    "BJ",
+    "BK",
+    "BL",
+    "BM",
+    "BN",
+    "BO",
+    "BP",
+    "BQ",
+    "BR",
+    "BS",
+    "BT",
+    "BU",
+    "BV",
+    "AW",
+    "BX",
+    "BY",
+    "BZ",
+    "CA",
+    "CB",
+    "CC",
+    "CD",
+    "CE",
+    "CF",
+    "CG",
+    "CH",
+    "CI",
+    "CJ",
+    "CK",
+    "CL",
+    "CM",
+    "CN",
+    "CO",
+    "CP",
+    "CQ",
+    "CR",
+    "CS",
+    "CT",
+    "CU",
+    "CV",
+    "CW",
+    "CX",
+    "CY",
+    "CZ",
+  ];
 
-  obj_id: number;
+  obj_id: number = 0;
   time_id: number;
   org_id: number = 0;
   rows: number = 0;
@@ -61,16 +176,15 @@ export class FillReportComponent implements OnInit {
   ngaybatdaubaocao: string = "";
   ngayketthucbaocao: string = "";
 
-
   attributes: Array<ReportAttribute> = [];
   attributeHeaders: Array<any>;
-  indicators: Array<ReportIndicator> = []
+  indicators: Array<ReportIndicator> = [];
   // [{ formula: ' ', ind_code: 'CT01', ind_id: 123, ind_name: 'Chỉ tiêu 01', ind_type: 1, ind_unit: 'Tỷ đồng', obj_id: 123, parent_id: 123 },
   // { formula: ' ', ind_code: 'CT02', ind_id: 123, ind_name: 'Chỉ tiêu 02', ind_type: 1, ind_unit: 'Triệu đồng', obj_id: 123, parent_id: 123 },
   // { formula: ' ', ind_code: 'CT03', ind_id: 123, ind_name: 'Chỉ tiêu 03', ind_type: 10, ind_unit: '%', obj_id: 123, parent_id: 123 },
   // { formula: ' ', ind_code: 'CT04', ind_id: 123, ind_name: 'Chỉ tiêu 04', ind_type: 10, ind_unit: 'USD', obj_id: 123, parent_id: 123 },
   // { formula: ' ', ind_code: 'CT05', ind_id: 123, ind_name: 'Chỉ tiêu 05', ind_type: 1, ind_unit: 'Đồng', obj_id: 123, parent_id: 123 },]
-  datarows: Array<ReportDatarow> = []
+  datarows: Array<ReportDatarow> = [];
   //  [{ data_id: 123, fc01: ' ', fc02: ' ', fc03: ' ', fc04: ' ', fc05: ' ', fc06: ' ', fc07: ' ', fc08: ' ', fc09: ' ', fc10: ' ', fd01: null, fd02: null, fd03: null, fd04: null, fd05: null, fn01: 10000, fn02: 1234, fn03: 99, fn04: 342, fn05: 1000000, fn06: 0, fn07: 0, fn08: 0, fn09: 0, fn10: 0, fn11: 0, fn12: 0, fn13: 0, fn14: 0, fn15: 0, fn16: 0, fn17: 0, fn18: 0, fn19: 0, fn20: 0, ind_id: 123, obj_id: 123, org_id: 123, time_id: 202002 },
   // { data_id: 123, fc01: ' ', fc02: ' ', fc03: ' ', fc04: ' ', fc05: ' ', fc06: ' ', fc07: ' ', fc08: ' ', fc09: ' ', fc10: ' ', fd01: null, fd02: null, fd03: null, fd04: null, fd05: null, fn01: 10000, fn02: 1234, fn03: 99, fn04: 342, fn05: 1000000, fn06: 0, fn07: 0, fn08: 0, fn09: 0, fn10: 0, fn11: 0, fn12: 0, fn13: 0, fn14: 0, fn15: 0, fn16: 0, fn17: 0, fn18: 0, fn19: 0, fn20: 0, ind_id: 123, obj_id: 123, org_id: 123, time_id: 202002 },
   // { data_id: 123, fc01: ' ', fc02: ' ', fc03: ' ', fc04: ' ', fc05: ' ', fc06: ' ', fc07: ' ', fc08: ' ', fc09: ' ', fc10: ' ', fd01: null, fd02: null, fd03: null, fd04: null, fd05: null, fn01: 10000, fn02: 1234, fn03: 99, fn04: 342, fn05: 1000000, fn06: 0, fn07: 0, fn08: 0, fn09: 0, fn10: 0, fn11: 0, fn12: 0, fn13: 0, fn14: 0, fn15: 0, fn16: 0, fn17: 0, fn18: 0, fn19: 0, fn20: 0, ind_id: 123, obj_id: 123, org_id: 123, time_id: 202002 },
@@ -88,16 +202,16 @@ export class FillReportComponent implements OnInit {
     public excelService: ExcelService,
     public location: Location
   ) {
-    this.route.queryParams.subscribe(params => {
-      this.obj_id = params['obj_id'];
-      this.time_id = params['time_id'];
-      this.org_id = params['org_id'];
+    this.route.queryParams.subscribe((params) => {
+      this.obj_id = parseInt(params["obj_id"]);
+      this.time_id = params["time_id"];
+      this.org_id = params["org_id"];
     });
   }
 
   move(object) {
-    const inputToArray = this.inputs.toArray()
-    let index = inputToArray.findIndex(x => x.element == object.element);
+    const inputToArray = this.inputs.toArray();
+    let index = inputToArray.findIndex((x) => x.element == object.element);
     switch (object.action) {
       case "UP":
         index -= this.columns;
@@ -120,13 +234,13 @@ export class FillReportComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let data: any = JSON.parse(localStorage.getItem('currentUser'));
+    let data: any = JSON.parse(localStorage.getItem("currentUser"));
     this.org_id = parseInt(data.org_id);
 
     this.GetReportById(this.obj_id, this.time_id, this.org_id);
-    this.keyboardservice.keyBoard.subscribe(res => {
-      this.move(res)
-    })
+    this.keyboardservice.keyBoard.subscribe((res) => {
+      this.move(res);
+    });
   }
 
   checkAccessObj() {
@@ -190,31 +304,37 @@ export class FillReportComponent implements OnInit {
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {
-    this.reportSevice.GetReportByKey(obj_id, time_id, org_id).subscribe(
-      allRecord => {
+    this.reportSevice
+      .GetReportByKey(obj_id, time_id, org_id)
+      .subscribe((allRecord) => {
         this.attributes = allRecord.data[1] as ReportAttribute[];
         this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
-        this.is_sent = !(allRecord.data[0][0].state_id == 101 || allRecord.data[0][0].state_id == 401);
+        this.is_sent = !(
+          allRecord.data[0][0].state_id == 101 ||
+          allRecord.data[0][0].state_id == 401
+        );
         if (this.object[0]) {
           this.formatFrameReport(this.object[0]);
         }
-        this.indicators.forEach(e => { console.log(e.ind_unit) });
-        this.indicators.sort((a,b) => a.ind_id - b.ind_id);
+        this.indicators.forEach((e) => {
+          console.log(e.ind_unit);
+        });
+        this.indicators.sort((a, b) => a.ind_id - b.ind_id);
         this.CreateMergeHeaderTable(this.attributes);
 
         this.CreateReportTable();
-        console.log(this.dataSource);
-      }
-    )
+      });
   }
   formatFrameReport(report: ReportOject) {
     this.tenbaocao = report.obj_name;
-    this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));
-    this.ngaybatdaubaocao = moment(report.start_date).format('DD/MM/YYYY');
-    this.ngayketthucbaocao = moment(report.end_date).format('DD/MM/YYYY');
+    this.thoigianbaocao = this.convertTimeIdToTimePeriod(
+      parseInt(report.time_id)
+    );
+    this.ngaybatdaubaocao = moment(report.start_date).format("DD/MM/YYYY");
+    this.ngayketthucbaocao = moment(report.end_date).format("DD/MM/YYYY");
   }
 
   convertTimeIdToTimePeriod(time_id: number): string {
@@ -232,32 +352,34 @@ export class FillReportComponent implements OnInit {
   }
 
   countChildNode(attr_id: number, attributes: ReportAttribute[]): number {
-    var temp = attributes.filter(x => x.parent_id == attr_id);
-    if (temp.length == 0)
-      return 1;
+    var temp = attributes.filter((x) => x.parent_id == attr_id);
+    if (temp.length == 0) return 1;
     else {
       let sum = 0;
-      temp.forEach(attr => {
+      temp.forEach((attr) => {
         sum += this.countChildNode(attr.attr_id, attributes);
-      })
+      });
       return sum;
     }
   }
 
   CreateMergeHeaderTable(attributesValue: ReportAttribute[]) {
     let attributes: ReportAttribute[] = [];
-    attributesValue.forEach(val => attributes.push(Object.assign({}, val)));
+    attributesValue.forEach((val) => attributes.push(Object.assign({}, val)));
     let hashTableParentLength: HashTableNumber<number> = {};
-    attributes = attributes.filter(a => a.attr_code.toLowerCase() != 'rn');
+    attributes = attributes.filter((a) => a.attr_code.toLowerCase() != "rn");
 
-    attributes.forEach(element => {
+    attributes.forEach((element) => {
       // if (element.parent_id != null){
       //   if (!hashTableParentLength[element.parent_id]){
       //     hashTableParentLength[element.parent_id] = 0;
       //   }
       //   hashTableParentLength[element.parent_id]  +=1;
       // }
-      hashTableParentLength[element.attr_id] = this.countChildNode(element.attr_id, attributes);
+      hashTableParentLength[element.attr_id] = this.countChildNode(
+        element.attr_id,
+        attributes
+      );
     });
     let loopCount: number = 0;
     while (attributes.length > 3) {
@@ -265,30 +387,44 @@ export class FillReportComponent implements OnInit {
       this.indexOftableMergeHader += 1;
       let totlmerge: ToltalHeaderMerge = new ToltalHeaderMerge();
       let mergerHaders: HeaderMerge[] = [];
-      let layerTop: ReportAttribute[] = attributes.filter(element => element.parent_id == null);
+      let layerTop: ReportAttribute[] = attributes.filter(
+        (element) => element.parent_id == null
+      );
       let lengthBeforeOfAttributes: number = attributes.length;
-      attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1);
-      attributes.forEach(attribute => {
+      attributes = attributes.filter(
+        (e) =>
+          e.parent_id != null ||
+          e.is_default == 1 ||
+          hashTableParentLength[e.attr_id] == 1
+      );
+      attributes.forEach((attribute) => {
         //if (attribute.is_default == 1) {
         attribute.attr_code = attribute.attr_code + loopCount.toString();
         //}
       });
-      layerTop.forEach(layer => {
+      layerTop.forEach((layer) => {
         let mergeHeader: HeaderMerge = new HeaderMerge();
-        mergeHeader.colLenght = hashTableParentLength[layer.attr_id] ? hashTableParentLength[layer.attr_id] : 1;
+        mergeHeader.colLenght = hashTableParentLength[layer.attr_id]
+          ? hashTableParentLength[layer.attr_id]
+          : 1;
         mergeHeader.colName = (layer.attr_code + "_TEST").toLowerCase();
-        mergeHeader.colText = hashTableParentLength[layer.attr_id] > 1 && hashTableParentLength[layer.attr_id] ? layer.attr_name : "";
+        mergeHeader.colText =
+          hashTableParentLength[layer.attr_id] > 1 &&
+          hashTableParentLength[layer.attr_id]
+            ? layer.attr_name
+            : "";
         mergeHeader.colDefault = layer.is_default;
         mergerHaders.push(mergeHeader);
       });
-      this.mergeHeadersColumn = mergerHaders.sort((a, b) => b.colDefault - a.colDefault)
-        .map(c => c.colName.toLowerCase());
+      this.mergeHeadersColumn = mergerHaders
+        .sort((a, b) => b.colDefault - a.colDefault)
+        .map((c) => c.colName.toLowerCase());
       totlmerge.headerColName = this.mergeHeadersColumn;
       this.mergeHeadersColumn = [];
       totlmerge.headerMerge = mergerHaders;
       this.tableMergeHader.push(totlmerge);
-      attributes.forEach(element => {
-        layerTop.forEach(layer => {
+      attributes.forEach((element) => {
+        layerTop.forEach((layer) => {
           if (element.parent_id == layer.attr_id) {
             element.parent_id = null;
           }
@@ -302,17 +438,28 @@ export class FillReportComponent implements OnInit {
   }
 
   CreateReportTable() {
-    this.attributes = this.attributes.filter(a => a.fld_code && a.fld_code.toLowerCase() != 'null'
-      && a.attr_code.toLowerCase() != 'ind_code'
-      && a.attr_code.toLowerCase() != 'rn');
-    this.attributeHeaders = this.attributes.sort((a, b) => b.is_default - a.is_default)
-      .filter(a => a.fld_code.toLowerCase() != null)
-      .map(c => c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase());
-    this.attributeHeaders = this.attributeHeaders.filter(a => a.toLowerCase() != 'ind_code' && a.toLowerCase() != 'rn')
-    this.attributeHeaders.unshift('index');
+    this.attributes = this.attributes.filter(
+      (a) =>
+        a.fld_code &&
+        a.fld_code.toLowerCase() != "null" &&
+        a.attr_code.toLowerCase() != "ind_code" &&
+        a.attr_code.toLowerCase() != "rn"
+    );
+    this.attributeHeaders = this.attributes
+      .sort((a, b) => b.is_default - a.is_default)
+      .filter((a) => a.fld_code.toLowerCase() != null)
+      .map((c) =>
+        c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
+      );
+    this.attributeHeaders = this.attributeHeaders.filter(
+      (a) => a.toLowerCase() != "ind_code" && a.toLowerCase() != "rn"
+    );
+    this.attributeHeaders.unshift("index");
     for (let index = 0; index < this.indicators.length; index++) {
       const elementIndicator = this.indicators[index];
-      const elementDatarow = this.datarows.find(e=>e.ind_id == elementIndicator.ind_id);
+      const elementDatarow = this.datarows.find(
+        (e) => e.ind_id == elementIndicator.ind_id
+      );
 
       let tableRow: ReportTable = new ReportTable();
       tableRow.ind_formula = elementIndicator.formula;
@@ -332,7 +479,6 @@ export class FillReportComponent implements OnInit {
         tableRow.fc08 = elementDatarow.fc08 ? elementDatarow.fc08 : "";
         tableRow.fc09 = elementDatarow.fc09 ? elementDatarow.fc09 : "";
         tableRow.fc10 = elementDatarow.fc10 ? elementDatarow.fc10 : "";
-        tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
         tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
         tableRow.fn02 = elementDatarow.fn02 ? elementDatarow.fn02 : null;
         tableRow.fn03 = elementDatarow.fn03 ? elementDatarow.fn03 : null;
@@ -359,16 +505,16 @@ export class FillReportComponent implements OnInit {
         tableRow.fd04 = elementDatarow.fd04 ? elementDatarow.fd04 : new Date();
         tableRow.fd05 = elementDatarow.fd05 ? elementDatarow.fd05 : new Date();
       } else {
-        tableRow.fc01 = '';
-        tableRow.fc02 = '';
-        tableRow.fc03 = '';
-        tableRow.fc04 = '';
-        tableRow.fc05 = '';
-        tableRow.fc06 = '';
-        tableRow.fc07 = '';
-        tableRow.fc08 = '';
-        tableRow.fc09 = '';
-        tableRow.fc10 = '';
+        tableRow.fc01 = "";
+        tableRow.fc02 = "";
+        tableRow.fc03 = "";
+        tableRow.fc04 = "";
+        tableRow.fc05 = "";
+        tableRow.fc06 = "";
+        tableRow.fc07 = "";
+        tableRow.fc08 = "";
+        tableRow.fc09 = "";
+        tableRow.fc10 = "";
         tableRow.fn01 = null;
         tableRow.fn01 = null;
         tableRow.fn02 = null;
@@ -398,9 +544,73 @@ export class FillReportComponent implements OnInit {
       }
       this.dataSource.data.push(tableRow);
     }
+    this.summaryReportObjectId();
+  }
+
+  summaryReportObjectId() {
+    switch (this.obj_id) {
+      // BÁO CÁO THÁNG - TỔNG MỨC BÁN LẺ HÀNG HÓA VÀ DOANH THU DỊCH VỤ
+      case 1:
+        this.CT1();
+        break;
+      // BÁO CÁO - CHỈ SỐ SẢN XUẤT CÔNG NGHIỆP THÁNG
+      case 2:
+        this.CT2();
+        break;
+      default:
+        break;
+    }
+  }
+
+  CT1(){
+    let tem2 = 0;
+    let tem16 = 0;
+    let tem24 = 0;
+    // parent_id = 2;16;24
+    let sum_parentid2 : any[] = [];
+    let sum_parentid16 : any[] = [];
+    let sum_parentid24 : any[] = [];
     this.dataSource.data.forEach(element => {
-      if (element.ind_formula == null && element.ind_type == 1) this.rows++;
+      switch (element.ind_parent_id) {
+        case 2:
+          sum_parentid2.push(element);
+          break;
+        case 16:
+          sum_parentid16.push(element);
+          break;
+        case 24:
+          sum_parentid24.push(element);
+          break;
+        default:
+          break;
+      }
     });
+
+    this.dataSource.data.forEach(element => {
+      if(element.ind_parent_id == 1 && element.ind_id == 2){
+        sum_parentid2.forEach(ele => {
+          tem2 += ele['fn01'];
+          element.fn01 = tem2;
+        })
+      }
+      if(element.ind_parent_id == 1 && element.ind_id == 16){
+        sum_parentid16.forEach(ele => {
+          tem16 += ele['fn01'];
+          element.fn01 = tem16;
+        })
+      }
+      if(element.ind_parent_id == 1 && element.ind_id == 24){
+        sum_parentid24.forEach(ele => {
+          tem24 += ele['fn01'];
+          element.fn01 = tem24;
+        })
+      }
+    })
+    this.dataSource.data[0].fn01 = tem2 + tem16 + tem24;
+  }
+
+  CT2(){
+
   }
 
   applyFilter(event: Event) {
@@ -409,22 +619,35 @@ export class FillReportComponent implements OnInit {
   }
 
   SaveReport() {
-    this.reportSevice.PostReportData(this.obj_id, this.time_id, this.org_id, this.dataSource.data).subscribe(response => {
-      this.info.msgSuccess("Đã lưu báo cáo thành công!");
-    },
-      error => {
-        this.info.msgError("Xảy ra lỗi: " + error.message);
-      })
+    this.reportSevice
+      .PostReportData(
+        this.obj_id,
+        this.time_id,
+        this.org_id,
+        this.dataSource.data
+      )
+      .subscribe(
+        (response) => {
+          this.info.msgSuccess("Đã lưu báo cáo thành công!");
+        },
+        (error) => {
+          this.info.msgError("Xảy ra lỗi: " + error.message);
+        }
+      );
   }
 
   SendReport() {
-    this.reportSevice.SendReport(this.obj_id, this.org_id, this.time_id.toString()).subscribe(response => {
-      this.info.msgSuccess("Đã trình lãnh đạo thành công!");
-    },
-      error => {
-        this.info.msgError("Xảy ra lỗi: " + error.message);
-      })
-      this.is_sent = true;
+    this.reportSevice
+      .SendReport(this.obj_id, this.org_id, this.time_id.toString())
+      .subscribe(
+        (response) => {
+          this.info.msgSuccess("Đã trình lãnh đạo thành công!");
+        },
+        (error) => {
+          this.info.msgError("Xảy ra lỗi: " + error.message);
+        }
+      );
+    this.is_sent = true;
   }
 
   Back() {
