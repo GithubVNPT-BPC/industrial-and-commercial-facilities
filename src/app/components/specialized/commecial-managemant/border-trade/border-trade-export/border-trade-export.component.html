@@ -105,7 +105,7 @@
                     </div>
 
                     <div class="col-lg-3 button-control">
-                        <button mat-raised-button (click)="ImportTOExcel()">Import</button>
+                        <button mat-raised-button (click)="ImportTOExcel()" [hidden]=authorize>Import</button>
                         <button mat-raised-button
                             (click)="ExportTOExcel('Thương mại biên giới','Thương mại biên giới')">Xuất
                             Excel</button>
@@ -116,7 +116,8 @@
 
                 <div class="layout" #table>
                     <ng-container *ngIf="dataSource.data.length; else ShowEmpty">
-                        <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table" multiTemplateDataRows >
+                        <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table"
+                            multiTemplateDataRows>
                             <!-- <ng-container matColumnDef="delete_checkbox">
                                 <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3">
                                     <mat-checkbox [(ngModel)]="allComplete" (ngModelChange)="setAll()">
@@ -238,7 +239,7 @@
                                     <!-- {{ TongGiaTriCongDon | formatNumber }} -->
                                 </td>
                             </ng-container>
-                            
+
 
                             <ng-container matColumnDef="thuc_hien_bao_cao_thang">
                                 <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="fillColor">
@@ -278,10 +279,9 @@
                             </tr>
                             <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow3Header; sticky: true">
                             </tr>
-                            <tr mat-row class="table-row"
-                                *matRowDef="let row; columns: displayedColumns;"></tr>
+                            <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                            
+
                             <ng-container matColumnDef="groupHeader">
                                 <mat-cell colspan="999" *matCellDef="let group">
                                     <strong>{{group[groupByColumns[group.level-1]]}}</strong>

@@ -18,6 +18,7 @@ import { ExcelService } from "src/app/_services/excelUtil.service";
 import { BaseComponent } from "../../../base.component";
 import { FormControl } from "@angular/forms";
 import { CommerceManagementService } from "src/app/_services/APIService/commerce-management.service";
+import { LoginService } from "src/app/_services/APIService/login.service";
 
 @Component({
   selector: "app-informed-ecommerce-website",
@@ -55,16 +56,23 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
   constructor(
     public excelService: ExcelService,
     public commerceService: CommerceManagementService,
-    private injecttor: Injector
+    private injecttor: Injector,
+    public _login: LoginService
   ) {
     super(injecttor);
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit()
     this.GetDanhSachWebsiteTMDT();
     this.autoOpen();
     this.sendLinkToNext(true);
+
+    if (this._login.userValue.user_role_id == 3) {
+      this.authorize = false
+    }
   }
 
   applyFilter1(event: Event) {
@@ -147,11 +155,11 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
     }
   }
 
-  prepareData(data){
+  prepareData(data) {
     return [data];
   }
 
-  callService(data){
+  callService(data) {
     this.commerceService.CapNhatDanhSachThongBaoWeb(data).subscribe(res => {
       this.successNotify(res);
     })

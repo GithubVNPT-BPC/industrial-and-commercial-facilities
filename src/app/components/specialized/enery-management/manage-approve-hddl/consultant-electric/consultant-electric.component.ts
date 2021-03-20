@@ -8,6 +8,7 @@ import { EnergyService } from "src/app/_services/APIService/energy.service";
 import { FormControl } from "@angular/forms";
 import { BaseComponent } from "../../../base.component";
 import moment from "moment";
+import { LoginService } from "src/app/_services/APIService/login.service";
 @Component({
   selector: "app-consultant-electric",
   templateUrl: "./consultant-electric.component.html",
@@ -67,14 +68,21 @@ export class ConsultantElectricComponent extends BaseComponent {
     private injector: Injector,
     public excelService: ExcelService,
     private energyService: EnergyService,
+    public _login: LoginService
   ) {
     super(injector);
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit();
     this.getDataConsultantElectric();
     this.years = this.getYears();
+
+    if (this._login.userValue.user_role_id == 4) {
+      this.authorize = false
+    }
   }
 
   getDataConsultantElectric() {
@@ -169,11 +177,11 @@ export class ConsultantElectricComponent extends BaseComponent {
     let today = new Date();
 
     if (event.checked) {
-      
+
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
         return Date.parse(today.toString()) > Date.parse(this.formatMMddyyy(e.ngay_het_han))
       });
-      
+
     } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
@@ -181,11 +189,11 @@ export class ConsultantElectricComponent extends BaseComponent {
     this.paginatorAgain();
   }
 
-  formatMMddyyy(date: string){
-    let d,m,y;
+  formatMMddyyy(date: string) {
+    let d, m, y;
     y = date.slice(-4);
-    m = date.slice(3,5);
-    d = date.slice(0,2);
+    m = date.slice(3, 5);
+    d = date.slice(0, 2);
     return m + '/' + d + '/' + y;
   }
 

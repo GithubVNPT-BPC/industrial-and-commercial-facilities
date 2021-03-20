@@ -108,11 +108,12 @@
                             (click)="ExportTOExcel('Hội chợ triển lãm','Hội chợ triển lãm')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button color="primary" matTooltip="Thêm mới" (click)="switchView()">
+                        <button mat-raised-button color="primary" matTooltip="Thêm mới" (click)="switchView()"
+                            [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
                         <button *ngIf="selection.selected.length != 0" color="warn" mat-raised-button
-                            (click)="openRemoveDialog()">
+                            (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
@@ -157,7 +158,8 @@
                         </ng-container>
 
                         <div *ngFor="let field of displayedFields | keyvalue">
-                            <ng-container matColumnDef="{{field.key}}" [sticky]="field.key == 'ten_doanh_nghiep' ? true : null">
+                            <ng-container matColumnDef="{{field.key}}"
+                                [sticky]="field.key == 'ten_doanh_nghiep' ? true : null">
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'id_trang_thai';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">

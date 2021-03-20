@@ -13,6 +13,7 @@ import { ImportDataComponent } from '../import-data/import-data.component';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'app-import-management',
@@ -105,6 +106,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         private _breadCrumService: BreadCrumService,
         private excelServices: ExcelServicesService,
         public excelService: ExcelService,
+        public _login: LoginService
     ) { }
 
     handleGTXK() {
@@ -136,6 +138,8 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         return false;
     }
 
+    authorize: boolean = true;
+
     ngOnInit() {
         // this.curentmonth = 1;
         this.applyDataTarget();
@@ -146,6 +150,9 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         //     return String(data.is_het_han).includes(filter);
         // };
         // this.handleGTXK();
+        if (this._login.userValue.user_role_id == 3) {
+            this.authorize = false
+        }
     }
     public sendLinkToNext(type: boolean) {
         this._linkOutput.link = this.LINK_DEFAULT;
@@ -179,22 +186,22 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         });
     }
 
-    setSumaryData(data: any[]){
-        this.TongGiaTriThangThucHien = data.length ? data.map(item => item.tri_gia_thang).reduce((a,b) => a + b) : 0
-        this.uth_so_cungky = data.length ? data.map(item => item.uoc_thang_so_voi_ki_truoc).reduce((a,b) => a + b)/data.length : 0
-        this.TongGiaTriCongDon = data.length ? data.map(item => item.tri_gia_cong_don).reduce((a,b) => a + b) : 0
-        this.uth_so_khn = data.length ? data.map(item => item.uoc_cong_don_so_voi_cong_don_truoc).reduce((a,b) => a + b)/data.length : 0
+    setSumaryData(data: any[]) {
+        this.TongGiaTriThangThucHien = data.length ? data.map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0
+        this.uth_so_cungky = data.length ? data.map(item => item.uoc_thang_so_voi_ki_truoc).reduce((a, b) => a + b) / data.length : 0
+        this.TongGiaTriCongDon = data.length ? data.map(item => item.tri_gia_cong_don).reduce((a, b) => a + b) : 0
+        this.uth_so_khn = data.length ? data.map(item => item.uoc_cong_don_so_voi_cong_don_truoc).reduce((a, b) => a + b) / data.length : 0
     }
 
-    setDataImport(data){
+    setDataImport(data) {
         this.dataSource = new MatTableDataSource<new_import_export_model>(data);
-            if(data.length){
-                this.dataSource.paginator = this.paginator;
-                this.setSumaryData(data);
-            }
+        if (data.length) {
+            this.dataSource.paginator = this.paginator;
+            this.setSumaryData(data);
+        }
     }
 
-    setDataDetail(data){
+    setDataDetail(data) {
         this.dataDialog = [...data];
     }
 
@@ -251,16 +258,16 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
 
     openDialog(id_mat_hang) {
         // if (this.kiem_tra(id_mat_hang)) {
-            const dialogConfig = new MatDialogConfig();
-            dialogConfig.data = {
-                data: this.handelDataDialog(id_mat_hang),
-                id: 1,
-            };
-            dialogConfig.minWidth = window.innerWidth - 100;
-            dialogConfig.minHeight = window.innerHeight - 100;
-            // console.log(this.handelDataDialog(id_mat_hang));
-            // dialogConfig.panelClass = ['overflow-y: scroll;']
-            this.matDialog.open(ModalComponent, dialogConfig);
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+            data: this.handelDataDialog(id_mat_hang),
+            id: 1,
+        };
+        dialogConfig.minWidth = window.innerWidth - 100;
+        dialogConfig.minHeight = window.innerHeight - 100;
+        // console.log(this.handelDataDialog(id_mat_hang));
+        // dialogConfig.panelClass = ['overflow-y: scroll;']
+        this.matDialog.open(ModalComponent, dialogConfig);
         // }
     }
 
@@ -343,18 +350,18 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     // }
 
     setAll() {
-        this.dataSource.data.forEach(item => item.isChecked=!item.isChecked)
+        this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
         console.log(this.dataSource.data)
     }
 
-    setSomeIten(element){
+    setSomeIten(element) {
         let temp_item: Task = Object.assign({}, element);
         this.task.push(temp_item);
         console.log(this.task);
         // element.isChecked = !element.isChecked;
     }
 
-    Delete(){
+    Delete() {
         // waiting api
     }
 }

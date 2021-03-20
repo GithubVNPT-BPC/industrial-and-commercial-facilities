@@ -19,6 +19,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ImportDataComponent } from "../import-data/import-data.component";
 import { ExcelServicesService } from "src/app/shared/services/excel-services.service";
 import json_report_01 from "../test/report_export_01.json";
+import { LoginService } from "src/app/_services/APIService/login.service";
 
 @Component({
     selector: "app-export-management",
@@ -115,7 +116,8 @@ export class ExportManagementComponent implements OnInit {
         public marketService: MarketService,
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
-        private excelServices: ExcelServicesService
+        private excelServices: ExcelServicesService,
+        public _login: LoginService
     ) { }
 
     handleGTXK() {
@@ -142,6 +144,8 @@ export class ExportManagementComponent implements OnInit {
         return false;
     }
 
+    authorize: boolean = true
+
     ngOnInit() {
         // this.curentmonth = 1;
         this.applyDataTarget();
@@ -151,6 +155,9 @@ export class ExportManagementComponent implements OnInit {
         // this.filteredDataSource.filterPredicate = function (data: ex_im_model, filter): boolean {
         //     return String(data.is_het_han).includes(filter);
         // };
+        if (this._login.userValue.user_role_id == 3) {
+            this.authorize = false
+        }
     }
     public sendLinkToNext(type: boolean) {
         this._linkOutput.link = this.LINK_DEFAULT;
@@ -370,18 +377,18 @@ export class ExportManagementComponent implements OnInit {
     // }
 
     setAll() {
-        this.dataSource.data.forEach(item => item.isChecked=!item.isChecked)
+        this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
         console.log(this.dataSource.data)
     }
 
-    setSomeIten(element){
+    setSomeIten(element) {
         let temp_item: Task = Object.assign({}, element);
         this.task.push(temp_item);
         console.log(this.task);
         // element.isChecked = !element.isChecked;
     }
 
-    Delete(){
+    Delete() {
         // waiting api
     }
 }

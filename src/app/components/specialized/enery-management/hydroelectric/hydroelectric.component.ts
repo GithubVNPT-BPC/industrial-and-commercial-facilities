@@ -6,6 +6,7 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { FormControl } from '@angular/forms';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-hydroelectric',
@@ -16,21 +17,22 @@ export class HydroelectricComponent extends BaseComponent {
 
   constructor(
     private injector: Injector,
-    private energyService: EnergyService
-    ) {
-      super(injector);
+    private energyService: EnergyService,
+    public _login: LoginService
+  ) {
+    super(injector);
   }
 
   //Constant variable
-  public readonly displayedColumns: string[] = ['select','index', 'Tdn', 'Dd', 'Cx', 'Dthc', 'Sl6tck', 
-  'Slnck', 'Dt', 'Paupttcctvhd', 'Pdpauptt', 'Paupvthkcdhctd', 'Qtvhhctd', 'Qtdhctd', 'Kdd', 'Ldhtcbvhd', 
-  'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd'
+  public readonly displayedColumns: string[] = ['select', 'index', 'Tdn', 'Dd', 'Cx', 'Dthc', 'Sl6tck',
+    'Slnck', 'Dt', 'Paupttcctvhd', 'Pdpauptt', 'Paupvthkcdhctd', 'Qtvhhctd', 'Qtdhctd', 'Kdd', 'Ldhtcbvhd',
+    'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd'
   ];
 
   //TS & HTML Variable
   public dataSource: MatTableDataSource<HydroEnergyModel>;
   public filteredDataSource: MatTableDataSource<HydroEnergyModel> = new MatTableDataSource<HydroEnergyModel>();;
-  
+
   //Only TS Variable
   doanhThu: number;
   congXuat: number;
@@ -38,18 +40,24 @@ export class HydroelectricComponent extends BaseComponent {
   soLuongDoanhNghiep: number;
   isChecked: boolean;
 
+  authorize: boolean = true
+
   ngOnInit() {
     super.ngOnInit();
     this.laydulieuThuyDien();
+
+    if (this._login.userValue.user_role_id == 4) {
+      this.authorize = false
+    }
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/hydroelectric";
     this.TITLE_DEFAULT = "Năng lượng - Thủy điện";
     this.TEXT_DEFAULT = "Năng lượng - Thủy điện";
   }
 
-  laydulieuThuyDien(){
+  laydulieuThuyDien() {
     this.energyService.LayDuLieuThuyDien().subscribe(res => {
       this.dataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
       this.filteredDataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
@@ -89,7 +97,7 @@ export class HydroelectricComponent extends BaseComponent {
   }
 
   callService(data) {
-      this.energyService.PostHydroEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.energyService.PostHydroEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   // applyDistrictFilter(event) {

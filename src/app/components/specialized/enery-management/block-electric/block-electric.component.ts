@@ -8,6 +8,7 @@ import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-block-electric',
@@ -32,18 +33,25 @@ export class BlockElectricComponent extends BaseComponent {
 
   constructor(
     private injector: Injector,
-    private energyService: EnergyService
-    ) {
-      super(injector);
+    private energyService: EnergyService,
+    public _login: LoginService
+  ) {
+    super(injector);
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit();
     this.years = this.getYears();
     this.getDataBlockElectric(this.currentYear);
+
+    if (this._login.userValue.user_role_id == 4) {
+      this.authorize = false
+    }
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/block_electric";
     this.TITLE_DEFAULT = "Năng lượng - Điện sinh khối";
     this.TEXT_DEFAULT = "Năng lượng - Điện sinh khối";
@@ -71,15 +79,17 @@ export class BlockElectricComponent extends BaseComponent {
   }
 
   prepareData(data) {
-      data = {...data, ...{
-          id_trang_thai_hoat_dong: 1,
-          time_id: this.currentYear,
-      }}
-      return data;        
+    data = {
+      ...data, ...{
+        id_trang_thai_hoat_dong: 1,
+        time_id: this.currentYear,
+      }
+    }
+    return data;
   }
 
   callService(data) {
-      this.energyService.PostBlockElectricData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.energyService.PostBlockElectricData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   getDataBlockElectric(time_id: any) {

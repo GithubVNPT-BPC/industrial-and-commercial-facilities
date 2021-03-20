@@ -11,6 +11,7 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
 
 import { LinkModel } from 'src/app/_models/link.model';
 import moment from 'moment';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-multilevel-trade',
@@ -19,10 +20,10 @@ import moment from 'moment';
 })
 export class MultilevelTradeComponent extends BaseComponent {
 
-  displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'mst','thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
+  displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'mst', 'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
     'so_giay_dkbhdc', 'co_quan_ban_hanh_giay_dkbhdc', 'ngay_dang_ky_giay_dkbhdc',
     'so_giay_tchtbhdc', 'co_quan_ban_hanh_giay_tchtbhdc', 'ngay_dang_ky_giay_tchtbhdc']
-  
+
   dataSource: MatTableDataSource<MultiLevelTradeModel> = new MatTableDataSource<MultiLevelTradeModel>();
   filteredDataSource: MatTableDataSource<MultiLevelTradeModel> = new MatTableDataSource<MultiLevelTradeModel>();
   dataDialog: any[] = [];
@@ -30,13 +31,14 @@ export class MultilevelTradeComponent extends BaseComponent {
   isChecked: boolean;
 
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-  
+
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
     public marketService: MarketService,
+    public _login: LoginService
   ) {
-      super(injector);
+    super(injector);
   }
 
   getFormParams() {
@@ -56,15 +58,21 @@ export class MultilevelTradeComponent extends BaseComponent {
     }
   }
 
+  authorize: boolean = true
+
   ngOnInit() {
     super.ngOnInit();
     this.getMultiLevelTradeList();
     // this.filteredDataSource.filterPredicate = function (data: multilevel, filter): boolean {
     //     return String(data.is_het_han).includes(filter);
     // };
+
+    if (this._login.userValue.user_role_id == 3) {
+      this.authorize = false
+    }
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     //Constant
     this.LINK_DEFAULT = "/specialized/commecial-management/multilevel-trade";
     this.TITLE_DEFAULT = "Hoạt động bán hàng đa cấp";
@@ -100,9 +108,11 @@ export class MultilevelTradeComponent extends BaseComponent {
     data['ngay_dang_ky_giay_dkbhdc'] = moment(data['ngay_dang_ky_giay_dkbhdc']).format('DD/MM/yyyy');
     data['ngay_dang_ky_giay_tchtbhdc'] = moment(data['ngay_dang_ky_giay_tchtbhdc']).format('DD/MM/yyyy');
 
-    data = {...data, ...{
-      id_trang_thai: 1,
-    }};
+    data = {
+      ...data, ...{
+        id_trang_thai: 1,
+      }
+    };
     return data;
   }
 
@@ -110,12 +120,12 @@ export class MultilevelTradeComponent extends BaseComponent {
     this.commerceManagementService.postMultiLevelTradeData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(){
-    let datas = this.selection.selected.map(element => new Object({id: element.id}));
+  prepareRemoveData() {
+    let datas = this.selection.selected.map(element => new Object({ id: element.id }));
     return datas;
   }
 
-  callRemoveService(data){
+  callRemoveService(data) {
     this.commerceManagementService.deleteMultiLevel(data).subscribe(res => {
       this.successNotify(res);
     });

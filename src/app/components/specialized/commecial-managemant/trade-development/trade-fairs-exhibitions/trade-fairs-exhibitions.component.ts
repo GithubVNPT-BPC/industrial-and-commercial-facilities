@@ -2,13 +2,14 @@ import { Component, Injector, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatDatepicker, MatTableDataSource } from '@angular/material';
 
-import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter} from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
 
 import { TFEModel } from 'src/app/_models/APIModel/trade-development.model';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import moment from 'moment';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export const DATE_FORMAT_DATEPICKER = {
   parse: {
@@ -34,13 +35,13 @@ class CustomDateAdapter extends NativeDateAdapter {
   templateUrl: './trade-fairs-exhibitions.component.html',
   styleUrls: ['../../../special_layout.scss'],
   providers: [{
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
-    {
-      provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DATEPICKER
-    },
+    provide: DateAdapter,
+    useClass: MomentDateAdapter,
+    deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+  },
+  {
+    provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DATEPICKER
+  },
     // {
     //   provide: DateAdapter, useClass: CustomDateAdapter
     // }
@@ -51,7 +52,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   displayedColumns: string[] = ['select', 'index'];
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
-  @ViewChild(MatDatepicker, {static: true}) filteredDatePicker;
+  @ViewChild(MatDatepicker, { static: true }) filteredDatePicker;
   displayedFields = {
     mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -67,31 +68,38 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     ngay_thang_nam_van_ban: "Ngày tháng năm",
     // id_trang_thai: "Tình trạng",
 
-}
-  
+  }
+
   // Modify to get districts from API
   sanLuongBanRa: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
   filteredDate = new FormControl(new Date());
-  
+
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
-    
-    ) {
-      super(injector);
-      this._breadCrumService.sendLink(this._linkOutput);
+    public _login: LoginService
+
+  ) {
+    super(injector);
+    this._breadCrumService.sendLink(this._linkOutput);
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit();
     this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
     this.getTFEList(new Date().getFullYear());
     this.initWards();
+
+    if (this._login.userValue.user_role_id == 3) {
+      this.authorize = false
+    }
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/trade-development/TFE";
     this.TITLE_DEFAULT = "Hội chợ triển lãm";
     this.TEXT_DEFAULT = "Hội chợ triển lãm";
@@ -137,19 +145,19 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   applyFilter(event) {
-    let filterValues = event.target ? event.target.value: event.value;
+    let filterValues = event.target ? event.target.value : event.value;
     if (filterValues instanceof Array) {
       let filteredData = [];
       filterValues.forEach(element => {
         this.dataSource.data.filter(x => x.id_phuong_xa == element).forEach(x => filteredData.push(x));
       });
       if (!filteredData.length) {
-        this.filteredDataSource.data = filterValues.length ? []: this.dataSource.data;
+        this.filteredDataSource.data = filterValues.length ? [] : this.dataSource.data;
       }
       else {
         this.filteredDataSource.data = filteredData;
       }
-    } 
+    }
     else {
       this.filteredDataSource.filter = filterValues.trim().toLowerCase();
     }
@@ -186,10 +194,12 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
     data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('DD/MM/yyyy');
 
-    data = {...data, ...{
-      id_trang_thai: 1,
-      time_id: 2020,
-    }};
+    data = {
+      ...data, ...{
+        id_trang_thai: 1,
+        time_id: 2020,
+      }
+    };
     return data;
   }
 
@@ -197,12 +207,12 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     this.commerceManagementService.postExpoData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(){
-    let datas = this.selection.selected.map(element => new Object({id: element.id}));
+  prepareRemoveData() {
+    let datas = this.selection.selected.map(element => new Object({ id: element.id }));
     return datas;
   }
 
-  callRemoveService(data){
+  callRemoveService(data) {
     this.commerceManagementService.deleteTradeFairs(data).subscribe(res => {
       this.successNotify(res);
     });

@@ -4,6 +4,7 @@ import { MatAccordion, MatPaginator, MatTableDataSource } from '@angular/materia
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricalPlan, ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 import { BaseComponent } from '../../base.component';
 
 @Component({
@@ -14,12 +15,13 @@ import { BaseComponent } from '../../base.component';
 
 export class CurrentElectricalPlanComponent extends BaseComponent {
     formData: any = this.formData;
-    
+
     public districts: DistrictModel[] = [];
     years: number[] = [2021, 2020, 2019, 2018, 2017, 2016, 2015]
     constructor(
         private injector: Injector,
-        private energyService: EnergyService
+        private energyService: EnergyService,
+        public _login: LoginService
     ) {
         super(injector);
     }
@@ -93,9 +95,15 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
 
     displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
 
+    authorize: boolean = true
+
     ngOnInit() {
         super.ngOnInit();
         this.getDataElectric110KV();
+
+        if (this._login.userValue.user_role_id == 4) {
+            this.authorize = false
+        }
     }
 
     getDataElectric110KV() {
@@ -206,7 +214,7 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
         }
     }
 
-    getLinkDefault(){
+    getLinkDefault() {
         //Constant
         this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
         this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";

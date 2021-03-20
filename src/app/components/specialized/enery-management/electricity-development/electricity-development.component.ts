@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {  MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
 import { ElectricityDevelopment35KVModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BaseComponent } from '../../base.component';
 
@@ -54,9 +55,12 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     private injector: Injector,
     public excelService: ExcelService,
     private energyService: EnergyService,
-    ) {
-      super(injector);
+    public _login: LoginService
+  ) {
+    super(injector);
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     // this.initDistricts();
@@ -64,9 +68,13 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     this.years = this.getYears();
     this.getDataQuyHoachDienDuoi35KV();
     this.autoOpen();
+
+    if (this._login.userValue.user_role_id == 4) {
+      this.authorize = false
+    }
   }
 
-  getDataQuyHoachDienDuoi35KV(){
+  getDataQuyHoachDienDuoi35KV() {
     this.energyService.LayDuLieuQuyHoachDien35KV(this.currentYear).subscribe(res => {
       this.filteredDataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(res['data']);
       this.caculatorValue();
@@ -176,17 +184,17 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     data['time_id'] = Number(data['time_id']);
     data['id_trang_thai_hoat_dong'] = 1;
     return data;
-}
-
-  public callService(data) {
-      let list_data = [data];
-      // console.log(list_data)
-      this.energyService.CapNhatDuLieuQuyHoachDien35KV(list_data).subscribe(res => {
-          this.successNotify(res);
-      })
   }
 
-  getLinkDefault(){
+  public callService(data) {
+    let list_data = [data];
+    // console.log(list_data)
+    this.energyService.CapNhatDuLieuQuyHoachDien35KV(list_data).subscribe(res => {
+      this.successNotify(res);
+    })
+  }
+
+  getLinkDefault() {
     //Constant
     this.LINK_DEFAULT = "/specialized/enery-management/35kv_electricity_development";
     this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Công tác phát triển lưới điện 35KV";

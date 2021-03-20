@@ -25,6 +25,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { time } from 'highcharts';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
     parse: {
@@ -85,7 +86,8 @@ export class LPGBusinessComponent implements OnInit {
         public _Service: ConditionBusinessService,
         public router: Router,
         public _info: InformationService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public _login: LoginService
     ) {
     }
 
@@ -96,11 +98,17 @@ export class LPGBusinessComponent implements OnInit {
         });
     }
 
+    authorize: boolean = true
+
     ngOnInit() {
         this.autoOpen();
         this.getLPGListbyYear();
         this.getQuan_Huyen();
         this.theYear = parseInt(this.getCurrentYear());
+
+        if (this._login.userValue.user_role_id == 3) {
+            this.authorize = false
+        }
     }
 
     autoOpen() {
@@ -321,7 +329,9 @@ export class LPGBusinessComponent implements OnInit {
     }
 
     AddLPG(id: string, time: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-lpg/' + id + '/' + time]);
+        if (this.authorize == false) {
+            this.router.navigate(['specialized/commecial-management/domestic/add-lpg/' + id + '/' + time]);
+        }
     }
 
     Back() {

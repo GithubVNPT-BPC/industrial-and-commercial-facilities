@@ -23,9 +23,7 @@ import { EnergyLayoutComponent } from './energy-layout/energy-layout.component';
 import { ReportLayoutComponent } from './report-layout/report-layout.component';
 import { HomeSpecializedComponent } from '../components/specialized/home-specialized/home-specialized.component';
 
-import { Industry } from '../_authGuard/Industry';
-import { Energy } from '../_authGuard/Energy';
-import { Commercial } from '../_authGuard/Commercial';
+import { Specialize } from '../_authGuard/Specialize';
 import { Manager } from '../_authGuard/Manager';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PageNotFoundComponent, LoaderInterceptor } from '../shared';
@@ -105,17 +103,17 @@ const routes: Routes = [
     component: SpecializedLayoutComponent,
     children: [
       {
-        canActivate: [Commercial],
+        canActivate: [Specialize],
         path: 'commecial-management',
         loadChildren: () => import('../components/specialized/commecial-managemant/commecial-management.module').then(m => m.CommecialManagementModule),
       },
       {
-        canActivate: [Energy],
+        canActivate: [Specialize],
         path: 'enery-management',
         loadChildren: () => import('../components/specialized/enery-management/enery-management.module').then(m => m.EneryManagementModule),
       },
       {
-        canActivate: [Industry],
+        canActivate: [Specialize],
         path: 'industry-management',
         loadChildren: () => import('../components/specialized/industry-management/industry-management.module').then(m => m.IndustryManagement),
       },
@@ -168,9 +166,7 @@ const routes: Routes = [
   exports: [RoutingComponent],
   providers: [
     Manager,
-    Energy,
-    Industry,
-    Commercial,
+    Specialize,
     MessageService,
     SidebarService,
     //InformationService,

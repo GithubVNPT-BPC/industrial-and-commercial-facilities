@@ -5,6 +5,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FormControl } from '@angular/forms';
 import { BaseComponent } from '../../../base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'registered-sale-website',
@@ -21,13 +22,20 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
   constructor(
     private inject: Injector,
     public excelService: ExcelService,
-    public commerceService: CommerceManagementService) {
+    public commerceService: CommerceManagementService,
+    public _login: LoginService) {
     super(inject)
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit();
     this.GetDanhSachWebsiteTMDT();
+
+    if (this._login.userValue.user_role_id == 3) {
+      this.authorize = false
+    }
   }
 
   @ViewChild('TABLE', { static: false }) table: ElementRef;
@@ -112,11 +120,11 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
     this.TEXT_DEFAULT = "Thương mại điện tử - Quản lý đăng ký website cung cấp dịch vụ TMĐT";
   }
 
-  prepareData(data){
+  prepareData(data) {
     return [data];
   }
 
-  callService(data){
+  callService(data) {
     this.commerceService.CapNhatDanhSachDangKiWeb(data).subscribe(res => {
       this.successNotify(res);
     })

@@ -11,6 +11,7 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { element } from 'protractor';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-food-commecial',
@@ -58,13 +59,20 @@ export class FoodManagementComponent extends BaseComponent {
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
     public enterpriseService: EnterpriseService,
+    public _login: LoginService
   ) {
     super(injector);
   }
 
+  authorize: boolean = true;
+
   ngOnInit(): void {
     super.ngOnInit();
     this.getFoodCommerceData();
+
+    if (this._login.userValue.user_role_id == 3) {
+      this.authorize = false
+    }
   }
 
   getLinkDefault() {
@@ -91,8 +99,8 @@ export class FoodManagementComponent extends BaseComponent {
             element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
           })
 
-          this.filteredDataSource.data = [...this.dataSource.data].filter(x=>x.is_het_han == false)
-          
+          this.filteredDataSource.data = [...this.dataSource.data].filter(x => x.is_het_han == false)
+
         }
         this._prepareData();
         this.paginatorAgain();
@@ -124,8 +132,8 @@ export class FoodManagementComponent extends BaseComponent {
     this.commerceManagementService.postFoodCommerce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(data) { 
-    let datas = data.map(element => new Object({id: element.id}));
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
     return datas;
   }
 
@@ -150,7 +158,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    
+
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];

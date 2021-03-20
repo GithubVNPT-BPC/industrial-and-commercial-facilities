@@ -11,6 +11,7 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
 import { FilterService } from 'src/app/_services/filter.service';
 
 import { MarketTypeModel } from 'src/app/_models/APIModel/commecial-management.model';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-supermarket-commecial',
@@ -42,7 +43,7 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   //
   public filterModel = {
     id_dia_ban: [],
-    id_phan_hang :  [],
+    id_phan_hang: [],
     business_area_id: [],
     nam_xay_dung: [],
     nam_ngung_hoat_dong: [],
@@ -54,10 +55,10 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   ]
 
   public businessAreaList = [
-    { id: 1, name: "Nhà nước"},
-    { id: 2, name: "Ngoài nhà nước"},
-    { id: 3, name: "Có vốn đầu tư nước ngoài"},
-    { id: 4, name: "Vốn khác"},
+    { id: 1, name: "Nhà nước" },
+    { id: 2, name: "Ngoài nhà nước" },
+    { id: 3, name: "Có vốn đầu tư nước ngoài" },
+    { id: 4, name: "Vốn khác" },
   ]
 
   private builtYears = [];
@@ -82,24 +83,31 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
 
   //Angular FUnction --------------------------------------------------------------------
   constructor(
-    
+
     private injector: Injector,
     public filterService: FilterService,
+    public _login: LoginService,
     public commerceManagementService: CommerceManagementService,
   ) {
     super(injector);
   }
 
+  authorize: boolean = true
+
   ngOnInit(): void {
     super.ngOnInit();
     this.getSuperMarketData();
+
+    if (this._login.userValue.user_role_id == 3) {
+      this.authorize = false
+    }
   }
 
   ngAfterViewInit() {
     this.paginatorAgain();
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
@@ -161,13 +169,13 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
       ngoai_nha_nuoc: new FormControl(),
       co_von_dau_tu_nuoc_ngoai: new FormControl(),
       von_khac: new FormControl(),
-      
+
       tong_hop: new FormControl(),
       chuyen_doanh: new FormControl(),
 
       nam_xay_dung: new FormControl(),
       nam_ngung_hoat_dong: new FormControl(),
-      
+
       dien_tich_dat: new FormControl(),
       so_lao_dong: new FormControl(),
 
@@ -183,18 +191,20 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data = {...data, ...{
+    data = {
+      ...data, ...{
         is_tttm: "false",
-    }}
-    return data;        
+      }
+    }
+    return data;
   }
 
   callService(data) {
     this.commerceManagementService.postMarketPlace([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(data) { 
-    let datas = data.map(element => new Object({id: element.id}));
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
     return datas;
   }
 
