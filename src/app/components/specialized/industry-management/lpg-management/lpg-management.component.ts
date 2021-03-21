@@ -8,6 +8,7 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
 import moment from 'moment';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'lpg-management',
@@ -19,10 +20,10 @@ export class LPGManagementComponent extends BaseComponent {
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index']
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
-    
+
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     filteredDataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
-    
+
     isChecked: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
@@ -50,18 +51,25 @@ export class LPGManagementComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
+        public _login: LoginService
     ) {
         super(injector);
     }
+
+    authorize: boolean = true
 
     ngOnInit() {
         super.ngOnInit();
         this.GetLGPManagementData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
+
+        if (this._login.userValue.user_role_id == 5) {
+            this.authorize = false
+        }
     }
 
-    getLinkDefault(){
+    getLinkDefault() {
         this.LINK_DEFAULT = "/specialized/industry-management/lpg";
         this.TITLE_DEFAULT = "Công nghiệp - Chiết nạp khí hoá lỏng";
         this.TEXT_DEFAULT = "Công nghiệp - Chiết nạp khí hoá lỏng";
@@ -102,15 +110,17 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     prepareData(data) {
-        data = {...data, ...{
-            tinh_trang_hoat_dong: "true",
-            time_id: this.currentYear,
-        }}
-        return data;        
+        data = {
+            ...data, ...{
+                tinh_trang_hoat_dong: "true",
+                time_id: this.currentYear,
+            }
+        }
+        return data;
     }
 
-    prepareRemoveData(data) { 
-        let datas = data.map(element => new Object({id: element.id}));
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
         return datas;
     }
 
@@ -139,7 +149,7 @@ export class LPGManagementComponent extends BaseComponent {
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                 });
-                
+
                 this.filteredDataSource.data = [...this.dataSource.data];
             }
             this._prepareData();
@@ -172,14 +182,14 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)]: [...this.dataSource.data];
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
         this._prepareData();
     }
 
     showMoreDetail(event) {
         this.displayedColumns = (event.checked) ? this.fullFieldList : this.reducedFieldList;
     }
-    
+
     // async onSubmit(buttonType) {
     //     if (buttonType === "Submit") {
     //         if (this.selectedFile !== null) {
@@ -201,7 +211,7 @@ export class LPGManagementComponent extends BaseComponent {
     // }
 
     onFileSelected(event) {
-        var temp : number = event.target.files.length;
+        var temp: number = event.target.files.length;
         if (temp !== 0) {
             this.selectedFile = <File>event.target.files[0];
             this.avatarElement = <HTMLImageElement>document.getElementById('Avatar');

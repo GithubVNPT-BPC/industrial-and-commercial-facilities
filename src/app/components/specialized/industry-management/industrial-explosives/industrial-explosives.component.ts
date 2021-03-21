@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
 // Services
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'industrial-explosives',
@@ -44,13 +45,20 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         private injector: Injector,
         public sctService: SCTService,
         public industryManagementService: IndustryManagementService,
+        public _login: LoginService
     ) {
         super(injector);
     }
 
+    authorize: boolean = true
+
     ngOnInit() {
         super.ngOnInit();
         this.getPostExplosiveMatData(this.currentYear);
+
+        if (this._login.userValue.user_role_id == 5) {
+            this.authorize = false
+        }
     }
 
     getLinkDefault() {

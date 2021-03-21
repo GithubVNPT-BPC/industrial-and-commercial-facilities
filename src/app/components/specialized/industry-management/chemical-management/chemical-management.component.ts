@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 // Services
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'chemical-management',
@@ -51,24 +52,31 @@ export class ChemicalManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
 
     public chemistryNameList = [];
-    
+
     private typeList = [
-        { name: "Sản xuất"},
-        { name: "Kinh doanh"},
+        { name: "Sản xuất" },
+        { name: "Kinh doanh" },
     ]
 
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
+        public _login: LoginService
     ) {
         super(injector);
     }
+
+    authorize: boolean = true
 
     ngOnInit() {
         super.ngOnInit();
         this.getChemicalManagementData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
+
+        if (this._login.userValue.user_role_id == 5) {
+            this.authorize = false
+        }
     }
 
     getLinkDefault() {
@@ -112,7 +120,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     getFormParams() {
         return {
             mst: new FormControl(),
-            time_id: new FormControl({value: this.currentYear}),
+            time_id: new FormControl({ value: this.currentYear }),
             details: this.formBuilder.array([
                 this.formBuilder.group({
                     id_hoa_chat: [],
@@ -165,14 +173,14 @@ export class ChemicalManagementComponent extends BaseComponent {
                     let matchingList = capacityData.filter(x => x.mst == c.mst);
 
                     c.computed_san_luong = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.san_luong : x.san_luong).join(', ');
-                    
+
                     c.computed_cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
                     c.san_luong = matchingList.length ? matchingList.map(x => x.san_luong ? parseInt(x.san_luong) : 0).reduce((a, b) => a + b) : 0;
                     c.cong_suat = matchingList.length ? matchingList.map(x => x.cong_suat ? parseInt(x.cong_suat) : 0).reduce((a, b) => a + b) : 0;
                     c.chemistryQtyIds = matchingList.map(element => new Object({ id: element.id }));
                 });
 
-                
+
                 chemicalManagementData.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
                     element.ngay_het_han = this.formatDate(element.ngay_het_han);
@@ -200,7 +208,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)]: [...this.dataSource.data];
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
         this._prepareData();
     }
 
@@ -231,20 +239,20 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     applyFilter(event) {
         if (event.target) {
-          const filterValue = (event.target as HTMLInputElement).value;
-          this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
         } else {
-          let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-          
-          if (!filteredData.length) {
-            if (this.filterModel)
-              this.filteredDataSource.data = [];
-            else
-              this.filteredDataSource.data = this.dataSource.data;
-          }
-          else {
-            this.filteredDataSource.data = filteredData;
-          }
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
         }
         this._prepareData();
         this.paginatorAgain();
@@ -268,7 +276,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                 filteredData = [...filterCrits];
             }
         });
-        filteredData = filteredData.filter((v,i,a) => a.findIndex(t => (t.id_qlcn_hc === v.id_qlcn_hc)) === i)
+        filteredData = filteredData.filter((v, i, a) => a.findIndex(t => (t.id_qlcn_hc === v.id_qlcn_hc)) === i)
         return filteredData;
     }
 }

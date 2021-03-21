@@ -7,6 +7,7 @@ import { FormControl } from '@angular/forms';
 // Services
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'food-industry-management',
@@ -16,11 +17,11 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 
 export class FoodIndustryManagementComponent extends BaseComponent {
     //Constant
-  
+
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
-    
+
     displayedFields = {
         mst: "Mã số thuế",
         ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -41,24 +42,31 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     dataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
-    
+
     isChecked: boolean;
     sanLuongBotMy: number = 0;
     sanLuongRuou: number = 0;
-    
+
     constructor(
         private injector: Injector,
         public industryManagementService: IndustryManagementService,
-    
+        public _login: LoginService
+
     ) {
         super(injector);
     }
+
+    authorize: boolean = true
 
     ngOnInit() {
         super.ngOnInit();
         this.GetFoodIndustryData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
+
+        if (this._login.userValue.user_role_id == 5) {
+            this.authorize = false
+        }
     }
 
     GetFoodIndustryData(time_id) {
@@ -69,7 +77,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
                     element.ngay_het_han = this.formatDate(element.ngay_het_han);
                 });
-                
+
                 this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
                 this.dataSource.data.forEach(element => {
                     element.is_expired = !element.tinh_trang_hoat_dong;
@@ -86,7 +94,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.id_thuc_pham == 2).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
     }
 
-    getLinkDefault(){
+    getLinkDefault() {
         this.LINK_DEFAULT = "/specialized/industry-management/food";
         this.TITLE_DEFAULT = "Công nghiệp - Công nghiệp thực phẩm";
         this.TEXT_DEFAULT = "Công nghiệp - Công nghiệp thực phẩm";
@@ -106,15 +114,17 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     prepareData(data) {
-        data = {...data, ...{
-            tinh_trang_hoat_dong: "true",
-            time_id: this.currentYear,
-        }}
-        return data;        
+        data = {
+            ...data, ...{
+                tinh_trang_hoat_dong: "true",
+                time_id: this.currentYear,
+            }
+        }
+        return data;
     }
 
-    prepareRemoveData(data) { 
-        let datas = data.map(element => new Object({id: element.id}));
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
         return datas;
     }
 
@@ -146,7 +156,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)]: [...this.dataSource.data];
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
         this._prepareData();
     }
 

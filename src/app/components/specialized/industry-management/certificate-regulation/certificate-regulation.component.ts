@@ -8,6 +8,7 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-certificate-regulation',
@@ -39,30 +40,37 @@ export class CertificateRegulationComponent extends BaseComponent {
   isChecked: boolean;
   selectedFile: File = null;
   fileBin;
-  
+
   ds_sp: any[] = [
-    {id_loai_san_pham: 1, ten_san_pham: "Thực phẩm"},
-    {id_loai_san_pham: 2,	ten_san_pham: "May mặc"}
+    { id_loai_san_pham: 1, ten_san_pham: "Thực phẩm" },
+    { id_loai_san_pham: 2, ten_san_pham: "May mặc" }
   ]
 
   constructor(
     private injector: Injector,
     private modalService: NgbModal,
     private industryManagementService: IndustryManagementService,
+    public _login: LoginService
   ) {
-      super(injector);
+    super(injector);
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit();
-    this.GetComformityAnnounceData(); 
+    this.GetComformityAnnounceData();
+
+    if (this._login.userValue.user_role_id == 5) {
+      this.authorize = false
+    }
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/industry-management/cr";
     this.TITLE_DEFAULT = "Công nghiệp - Công bố hợp quy";
     this.TEXT_DEFAULT = "Công nghiệp - Công bố hợp quy";
-  } 
+  }
 
   getFormParams() {
     return {
@@ -71,7 +79,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       ten_san_pham: new FormControl(),
       ban_cong_bo_hop_quy: new FormControl(),
       ngay_tiep_nhan: new FormControl(),
-      duong_dan_nhan_san_pham: { value:'', disabled: true },
+      duong_dan_nhan_san_pham: { value: '', disabled: true },
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl("Bình Phước"),
       id_loai_san_pham: new FormControl(),
@@ -82,25 +90,25 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   setFormParams() {
     if (this.selection.selected.length) {
-        let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['mst'].setValue(selectedRecord.mst);
-        this.formData.controls['ten_san_pham'].setValue(selectedRecord.ten_san_pham);
-        this.formData.controls['ban_cong_bo_hop_quy'].setValue(selectedRecord.ban_cong_bo_hop_quy);
-        this.formData.controls['ngay_tiep_nhan'].setValue(new Date(selectedRecord.ngay_tiep_nhan));
-        this.formData.controls['tieu_chuan_san_pham'].setValue(selectedRecord.tieu_chuan_san_pham);
-        this.formData.controls['noi_cap'].setValue(selectedRecord.noi_cap);
-        this.formData.controls['id_loai_san_pham'].setValue(selectedRecord.id_loai_san_pham);
-        this.formData.controls['file_name'].setValue(selectedRecord.file_name);
-        this.formData.controls['attachment_id'].setValue(selectedRecord.attachment_id);
-        this.fileBin = selectedRecord.datas;
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
+      this.formData.controls['ten_san_pham'].setValue(selectedRecord.ten_san_pham);
+      this.formData.controls['ban_cong_bo_hop_quy'].setValue(selectedRecord.ban_cong_bo_hop_quy);
+      this.formData.controls['ngay_tiep_nhan'].setValue(new Date(selectedRecord.ngay_tiep_nhan));
+      this.formData.controls['tieu_chuan_san_pham'].setValue(selectedRecord.tieu_chuan_san_pham);
+      this.formData.controls['noi_cap'].setValue(selectedRecord.noi_cap);
+      this.formData.controls['id_loai_san_pham'].setValue(selectedRecord.id_loai_san_pham);
+      this.formData.controls['file_name'].setValue(selectedRecord.file_name);
+      this.formData.controls['attachment_id'].setValue(selectedRecord.attachment_id);
+      this.fileBin = selectedRecord.datas;
     }
   }
 
   GetComformityAnnounceData() {
     this.industryManagementService.GetComformityAnnounce().subscribe(res => {
       this.filteredDataSource.data = [];
-      if (res.data && res.data.length > 0 ) {
+      if (res.data && res.data.length > 0) {
         res.data.forEach(element => element.ngay_tiep_nhan = this.formatDate(element.ngay_tiep_nhan));
         this.dataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
         this.filteredDataSource.data = [...this.dataSource.data];
@@ -119,9 +127,9 @@ export class CertificateRegulationComponent extends BaseComponent {
     if (event.target.files.length) {
       this.selectedFile = <File>event.target.files[0];
       var reader = new FileReader();
-        reader.onload = (event: any) => {
-            this.fileBin = event.target.result;
-        }
+      reader.onload = (event: any) => {
+        this.fileBin = event.target.result;
+      }
       reader.readAsDataURL(this.selectedFile);
       this.formData.controls['file_name'].setValue(event.target.files[0].name);
     }
@@ -162,7 +170,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   prepareData(data) {
     data['ngay_tiep_nhan'] = moment(data['ngay_tiep_nhan']).format('yyyyMMDD');
     if (this.selectedFile !== null) {
-      data['attachment'] = {file_name: this.selectedFile.name, binary: this.fileBin}
+      data['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin }
     }
     return data;
   }
@@ -173,17 +181,17 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   callEditService(data) {
     if (data.attachment_id && this.selectedFile) {
-      data['attachment'] = {file_name: this.selectedFile.name, binary: this.fileBin, id: data.attachment_id}
+      data['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin, id: data.attachment_id }
     }
     this.industryManagementService.UpdateComformityAnnounce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   callRemoveService(data) {
-      this.industryManagementService.DeleteCBHQ(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.industryManagementService.DeleteCBHQ(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  private openPreviewer(content, file_data=false) {
-      this.fileBin = file_data ? file_data : this.fileBin;
-      this.modalService.open(content, {size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true});
+  private openPreviewer(content, file_data = false) {
+    this.fileBin = file_data ? file_data : this.fileBin;
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true });
   }
 }
