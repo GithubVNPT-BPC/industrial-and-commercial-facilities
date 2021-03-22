@@ -166,11 +166,15 @@ export class ViewSelectReportComponent implements OnInit {
     }
   }
 
+  // OpenDetailObject(obj: ReportOject) {
+  //   const url = this.router.serializeUrl(
+  //     this.router.createUrlTree(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
+  //   );
+  //   window.open(url, "_blank");
+  // }
+
   OpenDetailObject(obj: ReportOject) {
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
-    );
-    window.open(url, "_blank");
+    this.router.navigate(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } });
   }
 
   OpenDialog(obj: ReportOject) {
