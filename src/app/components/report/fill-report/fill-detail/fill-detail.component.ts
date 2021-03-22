@@ -563,13 +563,25 @@ export class FillReportComponent implements OnInit {
   }
 
   CT1(){
+    // Thuc hien thang truoc
     let tem2 = 0;
     let tem16 = 0;
     let tem24 = 0;
+    // Thuc hien thang nay
+    let _tem2 = 0;
+    let _tem16 = 0;
+    let _tem24 = 0;
+    
     // parent_id = 2;16;24
+    // Thuc hien thang truoc
     let sum_parentid2 : any[] = [];
     let sum_parentid16 : any[] = [];
     let sum_parentid24 : any[] = [];
+    // Thuc hien thang nay
+    // Thuc hien thang truoc
+    let _sum_parentid2 : any[] = [];
+    let _sum_parentid16 : any[] = [];
+    let _sum_parentid24 : any[] = [];
     this.dataSource.data.forEach(element => {
       switch (element.ind_parent_id) {
         case 2:
@@ -590,23 +602,36 @@ export class FillReportComponent implements OnInit {
       if(element.ind_parent_id == 1 && element.ind_id == 2){
         sum_parentid2.forEach(ele => {
           tem2 += ele['fn01'];
+          _tem2 += ele['fn02'];
           element.fn01 = tem2;
+          element.fn02 = _tem2;
+          
         })
       }
       if(element.ind_parent_id == 1 && element.ind_id == 16){
         sum_parentid16.forEach(ele => {
           tem16 += ele['fn01'];
+          _tem16 += ele['fn02'];
           element.fn01 = tem16;
+          element.fn02 = _tem16;
+          
         })
       }
       if(element.ind_parent_id == 1 && element.ind_id == 24){
         sum_parentid24.forEach(ele => {
           tem24 += ele['fn01'];
+          _tem24 += ele['fn02'];
           element.fn01 = tem24;
+          element.fn02 = _tem24;
+          
         })
       }
+      element.fn04 = element.fn02 - element.fn01;
     })
     this.dataSource.data[0].fn01 = tem2 + tem16 + tem24;
+    this.dataSource.data[0].fn02 = _tem2 + _tem16 + _tem24;
+    // Thuc hien thang nay
+
   }
 
   CT2(){
