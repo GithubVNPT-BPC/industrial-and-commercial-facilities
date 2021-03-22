@@ -12,6 +12,7 @@
 
         <div class="row button-control">
             <div class="col-lg-12" *ngIf="!is_sent">
+                <button mat-raised-button (click)="summaryReportObjectId()" title="Lưu">Tổng hợp số liệu</button>
                 <button mat-raised-button (click)="SaveReport()" title="Lưu">Lưu</button>
                 <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo">Trình lãnh đạo</button>
             </div>
