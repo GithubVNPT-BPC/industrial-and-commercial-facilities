@@ -8,6 +8,7 @@ import { MarketModel } from 'src/app/_models/APIModel/commecial-management.model
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+import { LoginService } from "src/app/_services/APIService/login.service";
 
 @Component({
   selector: "app-market-commecial",
@@ -27,46 +28,46 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   }
 
   marketLevelList = [
-    { id_hang_cho: 1, loai_hang_cho: "Hạng I"},
-    { id_hang_cho: 2, loai_hang_cho: "Hạng II"},
-    { id_hang_cho: 3, loai_hang_cho: "Hạng III"},
-    { id_hang_cho: 4, loai_hang_cho: "Làm tạm"},
-    { id_hang_cho: 5, loai_hang_cho: "Chưa có"}, 
+    { id_hang_cho: 1, loai_hang_cho: "Hạng I" },
+    { id_hang_cho: 2, loai_hang_cho: "Hạng II" },
+    { id_hang_cho: 3, loai_hang_cho: "Hạng III" },
+    { id_hang_cho: 4, loai_hang_cho: "Làm tạm" },
+    { id_hang_cho: 5, loai_hang_cho: "Chưa có" },
   ];
 
   landUseTypeList = [
-    { id_hinh_thuc_su_dung_dat: 1, hinh_thuc_su_dung_dat: "Phường/Xã quản lý"},
-    { id_hinh_thuc_su_dung_dat: 2, hinh_thuc_su_dung_dat: "Huyện/Thị xã/Thành phố quản lý"},
-    { id_hinh_thuc_su_dung_dat: 3, hinh_thuc_su_dung_dat: "Dự án chợ đầu mối"},
-    { id_hinh_thuc_su_dung_dat: 4, hinh_thuc_su_dung_dat: "Giao đất"},
+    { id_hinh_thuc_su_dung_dat: 1, hinh_thuc_su_dung_dat: "Phường/Xã quản lý" },
+    { id_hinh_thuc_su_dung_dat: 2, hinh_thuc_su_dung_dat: "Huyện/Thị xã/Thành phố quản lý" },
+    { id_hinh_thuc_su_dung_dat: 3, hinh_thuc_su_dung_dat: "Dự án chợ đầu mối" },
+    { id_hinh_thuc_su_dung_dat: 4, hinh_thuc_su_dung_dat: "Giao đất" },
   ]
 
   marketTypeList = [
-    { id_loai_cho: 1, ten_loai_cho: "Thành thị"},
-    { id_loai_cho: 2, ten_loai_cho: "Nông thôn"},
-    { id_loai_cho: 3, ten_loai_cho: "Chợ đầu mối"},
-    { id_loai_cho: 4, ten_loai_cho: "Chợ trong quy hoạch"},
-    { id_loai_cho: 5, ten_loai_cho: "Chợ tự phát (lán tạm)"},
-    { id_loai_cho: 6, ten_loai_cho: "Chợ khác"},
-    { id_loai_cho: 7, ten_loai_cho: "Chưa có chợ"},
+    { id_loai_cho: 1, ten_loai_cho: "Thành thị" },
+    { id_loai_cho: 2, ten_loai_cho: "Nông thôn" },
+    { id_loai_cho: 3, ten_loai_cho: "Chợ đầu mối" },
+    { id_loai_cho: 4, ten_loai_cho: "Chợ trong quy hoạch" },
+    { id_loai_cho: 5, ten_loai_cho: "Chợ tự phát (lán tạm)" },
+    { id_loai_cho: 6, ten_loai_cho: "Chợ khác" },
+    { id_loai_cho: 7, ten_loai_cho: "Chưa có chợ" },
   ];
 
   marketPropTypeList = [
-    {id_tinh_chat_cho: 1, tinh_chat_cho: "Kiên cố"},
-    {id_tinh_chat_cho: 2, tinh_chat_cho: "Bán kiên cố"},
-    {id_tinh_chat_cho: 3, tinh_chat_cho: "Chưa có nhu cầu xây dựng"},
-    {id_tinh_chat_cho: 4, tinh_chat_cho: "Đề xuất xây dựng"},
-    {id_tinh_chat_cho: 5, tinh_chat_cho: "Đã có kế hoạch xây dựng"},
-    {id_tinh_chat_cho: 6, tinh_chat_cho: "Khác"},
-    {id_tinh_chat_cho: 7, tinh_chat_cho: "Chợ tạm"},
+    { id_tinh_chat_cho: 1, tinh_chat_cho: "Kiên cố" },
+    { id_tinh_chat_cho: 2, tinh_chat_cho: "Bán kiên cố" },
+    { id_tinh_chat_cho: 3, tinh_chat_cho: "Chưa có nhu cầu xây dựng" },
+    { id_tinh_chat_cho: 4, tinh_chat_cho: "Đề xuất xây dựng" },
+    { id_tinh_chat_cho: 5, tinh_chat_cho: "Đã có kế hoạch xây dựng" },
+    { id_tinh_chat_cho: 6, tinh_chat_cho: "Khác" },
+    { id_tinh_chat_cho: 7, tinh_chat_cho: "Chợ tạm" },
   ]
 
   marketPropCommerceList = [
-    {id_tinh_chat_kinh_doanh: 1, ten_tinh_chat_kinh_doanh: "Chuyên doanh"},
-    {id_tinh_chat_kinh_doanh: 2, ten_tinh_chat_kinh_doanh: "Tổng hợp"}, 
-    {id_tinh_chat_kinh_doanh: 3, ten_tinh_chat_kinh_doanh: "Bán lẻ"}
+    { id_tinh_chat_kinh_doanh: 1, ten_tinh_chat_kinh_doanh: "Chuyên doanh" },
+    { id_tinh_chat_kinh_doanh: 2, ten_tinh_chat_kinh_doanh: "Tổng hợp" },
+    { id_tinh_chat_kinh_doanh: 3, ten_tinh_chat_kinh_doanh: "Bán lẻ" }
   ]
-  
+
   displayedFields = {
     ten_cho: "Tên chợ",
     ten_quan_huyen: "Địa bàn",
@@ -84,13 +85,13 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     so_ho_duoi_30: "Số hộ KD dưới 30%",
     so_chuyen_doi_chuc_nang: "Số chợ chuyển đổi CNHĐ",
     so_chuyen_doi_hinh_thuc_quan_ly: "Số chợ chuyển đổi MHQL",
-    
+
     tong_von: "Tổng vốn",
     von_nstw: "Vốn NSTW",
     von_nsdp: "Vốn NSĐP",
     von_dn_htx_hkd: "Vốn DN/HTX/HKD",
     von_khac: "Vốn khác",
-    
+
     so_nguoi: "Số người",
     ban_quan_ly: "Ban quản lý",
     to_quan_ly: "Tổ quản lý",
@@ -117,12 +118,12 @@ export class MarketCommecialManagementComponent extends BaseComponent {
       so_ho_duoi_30: new FormControl(),
       so_chuyen_doi_chuc_nang: new FormControl(),
       so_chuyen_doi_hinh_thuc_quan_ly: new FormControl(),
-      
+
       von_nstw: new FormControl(),
       von_nsdp: new FormControl(),
       von_dn_htx_hkd: new FormControl(),
       von_khac: new FormControl(),
-      
+
       ban_quan_ly: new FormControl(),
       to_quan_ly: new FormControl(),
       doanh_nghiep: new FormControl(),
@@ -154,52 +155,60 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   public congtrinh_KienCo: number = 0;
   public congtrinh_BanKienCo: number = 0;
   public congtrinh_Tam: number = 0;
-  
+
   //--
   public xaydung_Moi: number = 0;
-  public xaydung_CaiTao:number = 0;
+  public xaydung_CaiTao: number = 0;
   public xaydung_CD_MoHinh: number = 0;
-  public xaydung_CD_CongNang:number = 0;
+  public xaydung_CD_CongNang: number = 0;
   public xaydung_CD_ChucNang: number = 0;
   public xaydung_HD_Duoi30: number = 0;
   //--
-  public quanly_BanTo:number = 0;
-  public quanly_DoanhNghiep:number = 0;
-  public quanly_HopTacXa:number = 0;
-  public quanly_HoKinhDoanh:number = 0;
+  public quanly_BanTo: number = 0;
+  public quanly_DoanhNghiep: number = 0;
+  public quanly_HopTacXa: number = 0;
+  public quanly_HoKinhDoanh: number = 0;
   //--
   public kinhdoanh_choBanLe: number = 0;
-  public kinhdoanh_choDauMoiChuyenDoanh: number =0;
-  public kinhdoanh_choDauMoiTongHop:number =0;
+  public kinhdoanh_choDauMoiChuyenDoanh: number = 0;
+  public kinhdoanh_choDauMoiTongHop: number = 0;
   //--
-  public tongvon_DNHTXHL:number =0;
-  public tongvon_Khac:number = 0;
+  public tongvon_DNHTXHL: number = 0;
+  public tongvon_Khac: number = 0;
   public tongvon_VonNganSachTW: number = 0;
   public tongvon_VonNganSachDiaPhuong: number = 0;
   //--
-  public chokhac_NgoaiQuyHoach:number = 0;
-  public chokhac_ChoDem:number = 0;
-  public chokhac_BienGioi:number = 0;
-  
+  public chokhac_NgoaiQuyHoach: number = 0;
+  public chokhac_ChoDem: number = 0;
+  public chokhac_BienGioi: number = 0;
+
+
   //Angular FUnction --------------------------------------------------------------------
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
+    public _login: LoginService
   ) {
-      super(injector);
+    super(injector);
   }
+
+  authorize: boolean = true
 
   ngOnInit(): void {
     super.ngOnInit();
     this.initDistrictWard();
     this.getMarketData();
+
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
   ngAfterViewInit() {
     this.paginatorAgain();
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
@@ -268,17 +277,17 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     this.xaydung_CD_CongNang = data.filter(x => x.so_chuyen_doi_chuc_nang).length;
     this.xaydung_HD_Duoi30 = data.filter(x => x.so_ho_duoi_30).length;
   }
-  
+
   prepareData(data) {
-    return data;        
+    return data;
   }
 
   callService(data) {
     this.commerceManagementService.postMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(data) { 
-    let datas = data.map(element => new Object({id: element.id}));
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
     return datas;
   }
 
@@ -292,7 +301,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
       this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     } else {
       let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-      
+
       if (!filteredData.length) {
         if (this.filterModel)
           this.filteredDataSource.data = [];

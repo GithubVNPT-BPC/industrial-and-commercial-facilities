@@ -11,6 +11,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ModalComponent } from '../../export-import-management/dialog-import-export/modal.component';
 import { Task } from 'src/app/_models/APIModel/export-import.model';
 import { ImportDataBorderComponent } from '../import-data-border/import-data-border.component';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class Group {
     level = 0;
@@ -112,7 +113,8 @@ export class BorderTradeImportComponent implements OnInit {
         public excelService: ExcelService,
         public matDialog: MatDialog,
         public marketService: MarketService,
-        private _breadCrumService: BreadCrumService
+        private _breadCrumService: BreadCrumService,
+        public _login: LoginService
     ) {
         this.groupByColumns = ['ten_cua_khau']
     }
@@ -143,11 +145,17 @@ export class BorderTradeImportComponent implements OnInit {
         return false;
     }
 
+    authorize: boolean = true;
+
     ngOnInit() {
         this.getDanhSachNhapKhau();
         this.autoOpen();
         this.sendLinkToNext(true);
         this.handleGTXK();
+
+        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+            this.authorize = false
+        }
     }
     public sendLinkToNext(type: boolean) {
         this._linkOutput.link = this.LINK_DEFAULT;

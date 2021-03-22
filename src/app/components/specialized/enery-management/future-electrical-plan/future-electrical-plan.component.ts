@@ -4,6 +4,7 @@ import { MatAccordion, MatTableDataSource } from '@angular/material';
 import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 import { BaseComponent } from '../../base.component';
 
 @Component({
@@ -12,7 +13,7 @@ import { BaseComponent } from '../../base.component';
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class FutureElectricalPlanComponent  extends BaseComponent  {
+export class FutureElectricalPlanComponent extends BaseComponent {
     //
     @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
     //
@@ -38,7 +39,8 @@ export class FutureElectricalPlanComponent  extends BaseComponent  {
     displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
     constructor(
         private injector: Injector,
-        private energyService: EnergyService
+        private energyService: EnergyService,
+        public _login: LoginService
     ) {
         super(injector);
         // console.log(this.formData)
@@ -56,8 +58,15 @@ export class FutureElectricalPlanComponent  extends BaseComponent  {
         { id_loai_quy_hoach: 5, ten_loai_quy_hoach: 'Đường dây 220KV' },
         { id_loai_quy_hoach: 6, ten_loai_quy_hoach: 'Đường dây 500KV' }
     ]
+
+    authorize: boolean = true
+
     ngOnInit() {
         this.getDataElectric110KV();
+
+        if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
+            this.authorize = false
+        }
     }
 
     getDataElectric110KV() {

@@ -112,11 +112,12 @@
                             (click)="ExportTOExcel('Đăng ký khuyến mại','Đăng ký khuyến mại')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()">
+                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()"
+                            [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
                         <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
-                            (click)="openRemoveDialog()">
+                            (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
@@ -189,8 +190,9 @@
 
                                 <ng-template #listAddress>
                                     <td mat-cell *matCellDef="let element">
-                                        <ul *ngFor="let item of element[field.key]; let i = index" style="list-style-type:none;">
-                                            Địa điểm {{i}} : <li >{{item.dia_diem}}, {{item.ten_quan_huyen}}</li>
+                                        <ul *ngFor="let item of element[field.key]; let i = index"
+                                            style="list-style-type:none;">
+                                            Địa điểm {{i}} : <li>{{item.dia_diem}}, {{item.ten_quan_huyen}}</li>
                                         </ul>
                                     </td>
                                 </ng-template>
@@ -356,7 +358,7 @@
                             </ng-container>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-12 mt-3">
                         <button class="btn btn-success float-right ml-2" (click)='onCreate()'>Tạo mới</button>
                         <button class="btn btn-danger float-right" (click)="clearTable($event)">Xóa</button>

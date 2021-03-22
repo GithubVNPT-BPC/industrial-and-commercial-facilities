@@ -8,6 +8,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FormControl } from '@angular/forms';
 import { BaseComponent } from '../../../base.component';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-manufacturing-electronic',
@@ -16,7 +17,7 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
 })
 export class ManufacturingElectronicComponent extends BaseComponent {
   // Input
-  @Input('manufacturingData')  input_data: ManageAproveElectronic[];
+  @Input('manufacturingData') input_data: ManageAproveElectronic[];
   exportExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
@@ -27,10 +28,10 @@ export class ManufacturingElectronicComponent extends BaseComponent {
   }
 
   //Constant variable
-  public readonly displayedColumns: string[] = 
-  ['index', 'ten_doanh_nghiep', 'dia_diem', 
-  'so_dien_thoai', 'so_giay_phep', 'ngay_cap', 
-  'ngay_het_han'];
+  public readonly displayedColumns: string[] =
+    ['index', 'ten_doanh_nghiep', 'dia_diem',
+      'so_dien_thoai', 'so_giay_phep', 'ngay_cap',
+      'ngay_het_han'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
   public filteredDataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
@@ -48,16 +49,24 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     private injector: Injector,
     public excelService: ExcelService,
     private energyService: EnergyService,
+    public _login: LoginService
   ) {
     super(injector);
   }
+
+  authorize: boolean = true
+
   ngOnInit() {
     super.ngOnInit();
     this.years = this.getYears();
     this.getDataManufacturing();
+
+    if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
-  getDataManufacturing(){
+  getDataManufacturing() {
     this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
       if (res['success']) {
         this.handdleData(res['data'], 2);
@@ -143,11 +152,11 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     let today = new Date();
 
     if (event.checked) {
-      
+
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
         return Date.parse(today.toString()) > Date.parse(this.formatMMddyyy(e.ngay_het_han))
       });
-      
+
     } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
@@ -155,18 +164,18 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     this.paginatorAgain();
   }
 
-  formatMMddyyy(date: string){
-    let d,m,y;
+  formatMMddyyy(date: string) {
+    let d, m, y;
     y = date.slice(-4);
-    m = date.slice(3,5);
-    d = date.slice(0,2);
+    m = date.slice(3, 5);
+    d = date.slice(0, 2);
     return m + '/' + d + '/' + y;
   }
 
-  LocDulieuTheoNgayCap(year){
+  LocDulieuTheoNgayCap(year) {
     let data_temp = [...this.dataSource.data];
     this.filteredDataSource.data = data_temp;
-    if(year){
+    if (year) {
       this.filteredDataSource.data = this.filteredDataSource.data.filter(item => {
         return item.ngay_cap.includes(year);
       })
@@ -196,7 +205,7 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     })
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "specialized/enery-management/manage_aprove_hddl";
     this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Cấp phép hoạt động điện";
     this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Cấp phép hoạt động điện";

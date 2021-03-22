@@ -2,7 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { District } from 'src/app/_models/district.model';
-import { dia_diem_km, SDModel} from 'src/app/_models/APIModel/trade-development.model';
+import { dia_diem_km, SDModel } from 'src/app/_models/APIModel/trade-development.model';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
@@ -10,6 +10,7 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
 import moment from 'moment';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-subscribe-discount',
@@ -21,7 +22,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
   filteredDataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
   displayedColumns: string[] = ['select', 'index'];
 
-  displayedFields = { 
+  displayedFields = {
     ten_doanh_nghiep: "Tên doanh nghiệp",
     dia_chi_doanh_nghiep: "Địa chỉ",
     mst: "Mã số thuế",
@@ -58,24 +59,30 @@ export class SubscribeDiscountComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
+    public _login: LoginService
   ) {
-      super(injector);
-      this._breadCrumService.sendLink(this._linkOutput);
-      this.initDisplayColumns();
+    super(injector);
+    this._breadCrumService.sendLink(this._linkOutput);
+    this.initDisplayColumns();
   }
+
+  authorize: boolean = true
 
   ngOnInit() {
     super.ngOnInit();
     this.getPromotionTypes();
     this.getSDList();
-    console.log(this.displayedColumns)
+
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
-  initDisplayColumns(){
+  initDisplayColumns() {
     this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/trade-development/SD";
     this.TITLE_DEFAULT = "Khuyến mãi";
     this.TEXT_DEFAULT = "Khuyến mãi";
@@ -101,39 +108,39 @@ export class SubscribeDiscountComponent extends BaseComponent {
     }
   }
 
-  get danh_sach_dia_diem(): FormArray{
+  get danh_sach_dia_diem(): FormArray {
     return this.formData.get('danh_sach_dia_diem') as FormArray
   }
 
-  newAddress(): FormGroup{
+  newAddress(): FormGroup {
     return this.formBuilder.group(
       {
-          dia_diem: new FormControl(),
-          id_quan_huyen: new FormControl(),
-          id_xttm_km: new FormControl(1)
+        dia_diem: new FormControl(),
+        id_quan_huyen: new FormControl(),
+        id_xttm_km: new FormControl(1)
       }
     )
   }
 
-  addAddress(){
+  addAddress() {
     this.danh_sach_dia_diem.push(this.newAddress())
   }
 
-  removeAddress(i:number) {
+  removeAddress(i: number) {
     this.danh_sach_dia_diem.removeAt(i);
   }
 
   applyFilter(event) {
-    let filterValues = event.target ? event.target.value: event.value;
+    let filterValues = event.target ? event.target.value : event.value;
     if (filterValues instanceof Array) {
       let filteredData = this.filterArray(this.dataSource.data, this.filterComponents);
       if (!filteredData.length) {
-        this.filteredDataSource.data = this.filterComponents ? []: this.dataSource.data;
+        this.filteredDataSource.data = this.filterComponents ? [] : this.dataSource.data;
       }
       else {
         this.filteredDataSource.data = filteredData;
       }
-    } 
+    }
     else {
       this.filteredDataSource.filter = filterValues.trim().toLowerCase();
     }
@@ -153,7 +160,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
             temp = [...temp2];
           }
           break;
-        default: 
+        default:
           if (filters[key].length) {
             filters[key].forEach(criteria => {
               temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
@@ -195,7 +202,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     );
   }
 
-  handleData(data:SDModel){
+  handleData(data: SDModel) {
     let ds_km: SDModel[] = data[0];
     let ds_dd_km: dia_diem_km[] = data[1];
     let dd_km_temp: dia_diem_km[] = [];
@@ -203,7 +210,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
       k.dia_diem_km = [];
       dd_km_temp = [];
       ds_dd_km.filter(d => {
-        if(k.id == d.id_xttm_km){
+        if (k.id == d.id_xttm_km) {
           dd_km_temp.push(d);
         }
       });
@@ -214,8 +221,8 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   countBusiness(): number {
-    return this.dataSource.data.map(x => x.ngay_thang_nam_van_ban.slice(0,4) == this.currentYear.toString()).length;
-  } 
+    return this.dataSource.data.map(x => x.ngay_thang_nam_van_ban.slice(0, 4) == this.currentYear.toString()).length;
+  }
 
   // onCreate(){
   //   // this.addAddress();
@@ -241,16 +248,16 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  removeSkill(i:number) {
+  removeSkill(i: number) {
     this.danh_sach_dia_diem.removeAt(i);
   }
 
-  prepareRemoveData(){
-    let datas = this.selection.selected.map(element => new Object({id: element.id}));
+  prepareRemoveData() {
+    let datas = this.selection.selected.map(element => new Object({ id: element.id }));
     return datas;
   }
 
-  callRemoveService(data){
+  callRemoveService(data) {
     this.commerceManagementService.deletePromo(data).subscribe(res => {
       this.successNotify(res);
     });

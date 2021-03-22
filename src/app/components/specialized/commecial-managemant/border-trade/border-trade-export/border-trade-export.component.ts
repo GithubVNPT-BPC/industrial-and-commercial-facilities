@@ -3,6 +3,7 @@ import { MatTableDataSource, MatAccordion, MatPaginator, MatSort, MatDialog, Mat
 import { BorderTrade } from 'src/app/_models/APIModel/border-trade.model';
 import { Task } from 'src/app/_models/APIModel/export-import.model';
 import { LinkModel } from 'src/app/_models/link.model';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 // Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
@@ -47,7 +48,7 @@ export class BorderTradeExportComponent implements OnInit {
     ];
     displayRow1Header = [
         // 'delete_checkbox',
-        
+
         'ten_loai_hang_hoa',
         'thuc_hien_bao_cao_thang',
         'cong_don_den_ky_bao_cao',
@@ -111,7 +112,8 @@ export class BorderTradeExportComponent implements OnInit {
         public excelService: ExcelService,
         public matDialog: MatDialog,
         public marketService: MarketService,
-        private _breadCrumService: BreadCrumService
+        private _breadCrumService: BreadCrumService,
+        public _login: LoginService
     ) {
         this.groupByColumns = ['ten_cua_khau']
     }
@@ -141,11 +143,17 @@ export class BorderTradeExportComponent implements OnInit {
         return false;
     }
 
+    authorize: boolean = true
+
     ngOnInit() {
         this.getDanhSachXuatKhau();
         this.autoOpen();
         this.sendLinkToNext(true);
         this.handleGTXK();
+
+        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+            this.authorize = false
+        }
     }
     public sendLinkToNext(type: boolean) {
         this._linkOutput.link = this.LINK_DEFAULT;

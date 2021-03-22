@@ -92,7 +92,8 @@
                     <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="getPostExplosiveMatData($event.value)" [(value)]="currentYear">
+                            <mat-select (selectionChange)="getPostExplosiveMatData($event.value)"
+                                [(value)]="currentYear">
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -101,7 +102,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen" multiple>
+                            <mat-select #dSelect (selectionChange)="applyFilter($event)"
+                                [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
@@ -113,7 +115,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng hoạt động</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_tinh_trang_hoat_dong" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)"
+                                [(ngModel)]="filterModel.id_tinh_trang_hoat_dong" multiple>
                                 <mat-option *ngFor='let tinhTrang of tinhTrangHoatDong' [value]='tinhTrang.id'>
                                     {{tinhTrang.tinh_trang}}
                                 </mat-option>
@@ -124,7 +127,7 @@
                     <div class="col-2 col-lg-2 checkbox">
                         <mat-checkbox (change)="applyFilter($event)" [(ngModel)]="filterModel.is_expired">DN hết hạn
                         </mat-checkbox>
-                    </div>                  
+                    </div>
                 </div>
 
                 <div class="row">
@@ -135,13 +138,18 @@
                         </mat-form-field>
                     </div>
                     <div class="col-4 col-lg-4 button-control">
-                        <button mat-raised-button
-                            matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - VLNCN', currentYear.toString())"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                        color="primary" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" 
-                        mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+                        <button mat-raised-button matTooltip="Xuất Excel"
+                            (click)="ExportTOExcel('QLCN - VLNCN', currentYear.toString())">
+                            <mat-icon>file_download</mat-icon>
+                        </button>
+                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()"
+                            [hidden]=authorize>
+                            <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()" [hidden]=authorize>
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </div>
                 </div>
 
@@ -153,13 +161,13 @@
                                 <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                    [aria-label]="checkboxLabel()"> 
+                                    [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 <mat-checkbox (click)="$event.stopPropagation()"
-                                    (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)"
-                                    [aria-label]="checkboxLabel(element)">
+                                    (change)="$event ? selection.toggle(element) : null"
+                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
                                 </mat-checkbox>
                             </td>
                         </ng-container>
@@ -168,8 +176,9 @@
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
                                 {{this.filteredDataSource.paginator.pageIndex == 0 ? i
-                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex * this.filteredDataSource.paginator.pageSize}} 
-                            </td>                        
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                this.filteredDataSource.paginator.pageSize}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_doanh_nghiep" sticky>
@@ -206,7 +215,8 @@
                         <ng-container matColumnDef="cong_suat">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Công suất thiết kế/năm<br>(m³/năm)
                             </th>
-                            <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | number:
+                                '1.0-0':'vi'}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="san_luong">
@@ -246,22 +256,26 @@
 
                         <ng-container matColumnDef="thuoc_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Thuốc nổ (kg) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | number: '1.0-0':'vi'}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="kip_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Kíp nổ (cái) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.kip_no_6thang | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.kip_no_6thang | number: '1.0-0':'vi'}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="moi_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Mồi nổ (cái) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.moi_no_6thang | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.moi_no_6thang | number: '1.0-0':'vi'}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="day_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Dây nổ (mét) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.day_no_6thang | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.day_no_6thang | number: '1.0-0':'vi'}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="thuoc_no">
@@ -285,7 +299,8 @@
                         </ng-container>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true"></tr>
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="['thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang','day_no_6thang','thuoc_no', 'kip_no', 'moi_no','day_no']; sticky : true;">
+                        <tr mat-header-row class="table-header"
+                            *matHeaderRowDef="['thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang','day_no_6thang','thuoc_no', 'kip_no', 'moi_no','day_no']; sticky : true;">
                         </tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">
                     </table>
@@ -309,7 +324,7 @@
                 <mat-card-title>
                     <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
                     <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
-                    class="float-right set-bg-color-primary" (click)="switchView()">
+                        class="float-right set-bg-color-primary" (click)="switchView()">
                         <mat-icon>menu</mat-icon> &nbsp;Danh sách
                     </button>
                 </mat-card-title>
@@ -317,7 +332,7 @@
             <hr>
             <form [formGroup]="formData" (ngSubmit)="onCreate()">
                 <div class="form-group row">
-                    
+
                     <div class="col-md-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
@@ -326,8 +341,8 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-6" >
-                                    <mat-form-field appearance="outline"> 
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
@@ -336,7 +351,7 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
-                                        <mat-select formControlName="id_phuong_xa" >
+                                        <mat-select formControlName="id_phuong_xa">
                                             <mat-option *ngFor='let district of districts' [value]='district.id'>
                                                 {{district.ten_quan_huyen}}
                                             </mat-option>
@@ -344,8 +359,8 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6" >
-                                    <mat-form-field appearance="outline"> 
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
                                         <mat-label>Địa chỉ</mat-label>
                                         <input matInput formControlName="dia_chi">
                                     </mat-form-field>
@@ -365,25 +380,25 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Thuốc nổ (kg)</mat-label>
-                                        <input matInput  type="number" formControlName="thuoc_no_6thang">
+                                        <input matInput type="number" formControlName="thuoc_no_6thang">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Kíp nổ (cái)</mat-label>
-                                        <input matInput  type="number" formControlName="kip_no_6thang">
+                                        <input matInput type="number" formControlName="kip_no_6thang">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Mồi nổ (cái)</mat-label>
-                                        <input matInput  type="number" formControlName="moi_no_6thang">
+                                        <input matInput type="number" formControlName="moi_no_6thang">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Dây nổ (mét)</mat-label>
-                                        <input matInput  type="number" formControlName="day_no_6thang">
+                                        <input matInput type="number" formControlName="day_no_6thang">
                                     </mat-form-field>
                                 </div>
 
@@ -402,25 +417,25 @@
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Thuốc nổ (kg)</mat-label>
-                                        <input matInput  type="number" formControlName="thuoc_no">
+                                        <input matInput type="number" formControlName="thuoc_no">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Kíp nổ (cái)</mat-label>
-                                        <input matInput  type="number" formControlName="kip_no">
+                                        <input matInput type="number" formControlName="kip_no">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Mồi nổ (cái)</mat-label>
-                                        <input matInput  type="number" formControlName="moi_no">
+                                        <input matInput type="number" formControlName="moi_no">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Dây nổ (mét)</mat-label>
-                                        <input matInput  type="number" formControlName="day_no">
+                                        <input matInput type="number" formControlName="day_no">
                                     </mat-form-field>
                                 </div>
 
@@ -429,8 +444,9 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
-                        <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
+                        <button type="submit" class="btn btn-success float-right" [hidden]=authorize>Tạo mới</button>
+                        <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)"
+                            [hidden]=authorize>Xóa</button>
                     </div>
                 </div>
             </form>

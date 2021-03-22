@@ -24,6 +24,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
     parse: {
@@ -85,7 +86,8 @@ export class LiquorBusinessComponent implements OnInit {
         public _Service: ConditionBusinessService,
         public router: Router,
         public _info: InformationService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public _login: LoginService
     ) {
     }
 
@@ -96,11 +98,17 @@ export class LiquorBusinessComponent implements OnInit {
         });
     }
 
+    authorize: boolean = true
+
     ngOnInit() {
         this.autoOpen();
         this.getLiquorListbyYear(this.getCurrentYear())
         this.getQuan_Huyen();
         this.theYear = parseInt(this.getCurrentYear());
+
+        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+            this.authorize = false
+        }
     }
 
     autoOpen() {
@@ -322,7 +330,9 @@ export class LiquorBusinessComponent implements OnInit {
     }
 
     Addliquorbusiness(id: string, time: string) {
-        this.router.navigate(['specialized/commecial-management/domestic/add-liquor/' + id + '/' + time]);
+        if (this.authorize == false) {
+            this.router.navigate(['specialized/commecial-management/domestic/add-liquor/' + id + '/' + time]);
+        }
     }
 
     Addliquorsupply(id: string, time: string) {

@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.loginService.validateLoginUser(this.userModel, this.isBusiness).subscribe({
       next: (response) => {
-        if (response.data.user_role_id == 1) {
+        if (response.data.user_role_id != 2) {
           this.info.msgSuccess("Đăng nhập thành công");
           this.returnUrl = '/specialized/home'
           this.router.navigateByUrl(this.returnUrl);

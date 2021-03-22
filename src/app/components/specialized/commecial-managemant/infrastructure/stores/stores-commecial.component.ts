@@ -10,13 +10,14 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 
 import moment from 'moment';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-stores-commecial',
   templateUrl: './stores-commecial.component.html',
   styleUrls: ['../../../special_layout.scss'],
 })
-export class StoreManagementComponent extends BaseComponent {  
+export class StoreManagementComponent extends BaseComponent {
 
   years: any[] = [];
   message: string;
@@ -49,9 +50,9 @@ export class StoreManagementComponent extends BaseComponent {
     ngay_cap_giay_phep: "Ngày cấp",
     ngay_het_han_giay_phep: "Ngày hết hạn",
   }
-  
+
   businessProducts = [
-    {id_spkd: 1, ten_san_pham: "Thực phẩm tiêu dùng"}
+    { id_spkd: 1, ten_san_pham: "Thực phẩm tiêu dùng" }
   ];
 
   giayCndkkdList = [];
@@ -61,14 +62,21 @@ export class StoreManagementComponent extends BaseComponent {
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
     public enterpriseService: EnterpriseService,
+    public _login: LoginService
   ) {
     super(injector);
   }
+
+  authorize: boolean = true
 
   ngOnInit(): void {
     super.ngOnInit();
     this.initDistrictWard();
     this.getConvenienceStoreData();
+
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
   ngAfterViewInit() {
@@ -76,13 +84,13 @@ export class StoreManagementComponent extends BaseComponent {
     this.paginatorAgain();
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
   }
 
-  getConvenienceStoreData () {
+  getConvenienceStoreData() {
     this.commerceManagementService.getConvenienceStoreData().subscribe(
       allrecords => {
         this.filteredDataSource.data = [];
@@ -97,12 +105,12 @@ export class StoreManagementComponent extends BaseComponent {
 
           let currentDate = moment();
           data.map(x => {
-              let expiredDate = moment(x.ngay_het_han_giay_phep, "DD/MM/YYYY");
-              x.is_expired = currentDate.isAfter(expiredDate, 'day');
-          });          
+            let expiredDate = moment(x.ngay_het_han_giay_phep, "DD/MM/YYYY");
+            x.is_expired = currentDate.isAfter(expiredDate, 'day');
+          });
           this.dataSource = new MatTableDataSource<ConvenienceStoreModel>(data);
-          
-          
+
+
           this.filteredDataSource.data = [...this.dataSource.data];
         }
         this._prepareData();
@@ -129,15 +137,15 @@ export class StoreManagementComponent extends BaseComponent {
     this.commerceManagementService.postConvenienceStore(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(data) { 
-    let datas = data.map(element => new Object({id: element.id}));
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
     return datas;
   }
 
   callRemoveService(data) {
     this.commerceManagementService.deleteConvenienceStore(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
-  
+
   resetAll() {
     this.isFound = false;
     super.resetAll();
@@ -202,11 +210,11 @@ export class StoreManagementComponent extends BaseComponent {
     this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
       if (response.success) {
         if (response.data.length > 0) {
-          
+
           let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 1);
           let giayAtvstpList = response.data.filter(x => x.id_loai_giay_phep == 4);
-          
-          if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0 )
+
+          if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0)
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
           else {
             this.isFound = true;
@@ -222,8 +230,8 @@ export class StoreManagementComponent extends BaseComponent {
         this.logger.msgSuccess("Không tìm thấy dữ liệu");
       }
     }, error => {
-        this.isFound = false;
-        this.logger.msgError("Lỗi khi xử lý \n" + error);
+      this.isFound = false;
+      this.logger.msgError("Lỗi khi xử lý \n" + error);
     });
   }
 }

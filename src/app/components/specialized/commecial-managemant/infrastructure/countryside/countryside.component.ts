@@ -9,7 +9,7 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { FilterService } from 'src/app/_services/filter.service';
-
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-countryside',
@@ -74,23 +74,30 @@ export class CountrysideComponent extends BaseComponent {
     public commerceManagementService: CommerceManagementService,
     public filterService: FilterService,
     public enterpriseService: EnterpriseService,
+    public _login: LoginService
   ) {
     super(injector);
   }
+
+  authorize: boolean = true;
 
   ngOnInit(): void {
     super.ngOnInit();
     this.initDistrictWard();
     this.getCountrySideData();
+
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
   }
 
-  getCountrySideData () {
+  getCountrySideData() {
     this.commerceManagementService.getCountrySideData().subscribe(
       allrecords => {
         this.filteredDataSource.data = [];
@@ -139,7 +146,7 @@ export class CountrysideComponent extends BaseComponent {
       this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     } else {
       let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-      
+
       if (!filteredData.length) {
         if (this.filterModel)
           this.filteredDataSource.data = [];
@@ -149,7 +156,7 @@ export class CountrysideComponent extends BaseComponent {
       else {
         this.filteredDataSource.data = filteredData;
       }
-      
+
     }
     this._prepareData();
     this.paginatorAgain();

@@ -1,4 +1,4 @@
-<mat-card class="material" >
+<mat-card class="material">
     <mat-card-content>
         <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
@@ -131,9 +131,10 @@
 
                     <div class="col-lg-3 button-control">
 
-                        <button mat-raised-button (click)="ImportTOExcel()">Import</button>
+                        <button mat-raised-button (click)="ImportTOExcel()" [hidden]=authorize>Import</button>
                         <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')">Xuất Excel</button>
-                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete">Xóa</button>
+                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete"
+                            [hidden]=authorize>Xóa</button>
                     </div>
                 </div>
 

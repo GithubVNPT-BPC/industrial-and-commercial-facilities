@@ -78,10 +78,16 @@
                             (click)="ExportTOExcel('HTTM - Thực phẩm','HTTM - Thực phẩm')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                            class="green" (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
-                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" 
-                            mat-raised-button (click)="openRemoveDialog()"><mat-icon>delete</mat-icon></button>
+
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                            [hidden]=authorize>
+                            <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()" [hidden]=authorize>
+                            <mat-icon>delete</mat-icon>
+                        </button>
                         <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
                             mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
@@ -260,6 +266,7 @@
 
                     <div class="col-md-12" *ngIf="isFound">
                         <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+
                         <button class="btn btn-danger set-bg-color-danger float-left"
                             (click)="clearTable($event)">Xóa</button>
                     </div>

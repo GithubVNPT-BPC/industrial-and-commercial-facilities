@@ -1,20 +1,22 @@
 <mat-card class="material">
-    <mat-card-header>
-        <mat-card-title><strong>CỬA HÀNG BÁN LẺ XĂNG DẦU</strong></mat-card-title>
-        <mat-card-subtitle hidden>
-            type={{type}}
-            id_linh_vuc={{id_linh_vuc}}
-        </mat-card-subtitle>
-    </mat-card-header>
     <mat-card-content>
-        <!-- <div class="button-control">
-            <button mat-raised-button (click)="accordion.openAll()">
-                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
-            </button>
-            <button mat-raised-button (click)="accordion.closeAll()">
-                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
-            </button>
-        </div> -->
+        <mat-card-header>
+            <mat-card-title><strong>CỬA HÀNG BÁN LẺ XĂNG DẦU</strong>
+                <div class="button-control">
+                    <button mat-raised-button class="green"
+                        (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
+                        Excel</button>
+                    <button mat-raised-button (click)="Back()">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
+                </div>
+            </mat-card-title>
+            <mat-card-subtitle hidden>
+                type={{type}}
+                id_linh_vuc={{id_linh_vuc}}
+            </mat-card-subtitle>
+        </mat-card-header>
+
         <mat-accordion class="accord" multi>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -119,22 +121,15 @@
                         </mat-checkbox>
                     </div>
 
-                    <div class="col-7 button-control -align-right my-auto">
+                    <div class="col-7 button-control my-auto" [hidden]=authorize>
                         <button mat-raised-button (click)="OpenDetailPetrol()">Thêm sản lượng</button>
 
-                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">QL thương nhân</button>
+                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">QL thương
+                            nhân</button>
 
                         <button mat-raised-button (click)="ManageStore()">QL cửa hàng</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa DN</button>
-
-                        <button mat-raised-button class="green"
-                            (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
-                            Excel</button>
-
-                        <button mat-raised-button (click)="Back()">
-                            <mat-icon>keyboard_backspace</mat-icon>
-                        </button>
                     </div>
                 </div>
 

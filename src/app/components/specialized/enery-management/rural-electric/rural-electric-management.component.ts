@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { New_RuralElectricModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BaseComponent } from '../../base.component';
 
@@ -42,14 +43,21 @@ export class RuralElectricManagementComponent extends BaseComponent {
     private injector: Injector,
     public excelService: ExcelService,
     private energyService: EnergyService,
+    public _login: LoginService
   ) {
     super(injector);
   }
+
+  authorize: boolean = true;
 
   ngOnInit() {
     super.ngOnInit();
     // this.years = this.getYears();
     this.getDataRuralElectric();
+
+    if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
   getDataRuralElectric() {
@@ -129,8 +137,8 @@ export class RuralElectricManagementComponent extends BaseComponent {
   }
 
   tieu_chi: any[] = [
-    {id: 1, value: 'Đạt'},
-    {id: 2, value: 'Không đạt'}
+    { id: 1, value: 'Đạt' },
+    { id: 2, value: 'Không đạt' }
   ]
   public prepareData(data) {
     data['tong_so_ho'] = Number(data['tong_so_ho']);
@@ -151,7 +159,7 @@ export class RuralElectricManagementComponent extends BaseComponent {
     })
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/rural_electricity";
     this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
     this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";

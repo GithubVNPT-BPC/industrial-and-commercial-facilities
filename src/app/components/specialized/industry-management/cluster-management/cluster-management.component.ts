@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { BaseComponent } from '../../base.component';
 import { FormControl } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
-
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'cluster-management',
@@ -43,10 +43,13 @@ export class ClusterManagementComponent extends BaseComponent {
     constructor(
         public indService: IndustryManagementService,
         public router: Router,
-        private injector: Injector
+        private injector: Injector,
+        public _login: LoginService
     ) {
         super(injector)
     }
+
+    authorize: boolean = true
 
     ngOnInit() {
         super.ngOnInit();
@@ -54,6 +57,10 @@ export class ClusterManagementComponent extends BaseComponent {
         this.showSubColumns = [];
         this.getDanhSachQuanLyCumCongNghiep();
         this.initWards();
+
+        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+            this.authorize = false
+        }
     }
 
     getLinkDefault() {

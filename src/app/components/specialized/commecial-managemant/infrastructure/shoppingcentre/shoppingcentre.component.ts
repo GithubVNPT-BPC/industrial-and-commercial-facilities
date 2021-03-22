@@ -13,6 +13,7 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
 import { FilterService } from 'src/app/_services/filter.service';
 
 import { marketTypeList } from '../common/common-commecial.component';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-shoppingcentre',
@@ -38,22 +39,22 @@ export class ShoppingcentreComponent extends BaseComponent {
   //
   public filterModel = {
     id_dia_ban: [],
-    id_phan_hang :  [],
+    id_phan_hang: [],
     business_area_id: [],
     nam_xay_dung: [],
     nam_ngung_hoat_dong: [],
   }
 
   public businessAreaList = [
-    { id: 1, name: "Nhà nước"},
-    { id: 2, name: "Ngoài nhà nước"},
-    { id: 3, name: "Có vốn đầu tư nước ngoài"},
-    { id: 4, name: "Vốn khác"},
+    { id: 1, name: "Nhà nước" },
+    { id: 2, name: "Ngoài nhà nước" },
+    { id: 3, name: "Có vốn đầu tư nước ngoài" },
+    { id: 4, name: "Vốn khác" },
   ]
 
   private builtYears = [];
   private holdYears = [];
-  
+
   public marketTypeList = marketTypeList;
 
   headerArray = ['select', 'index', 'ten_sieu_thi_TTTM', 'dia_diem', 'nha_nuoc', 'ngoai_nha_nuoc', 'co_von_dau_tu_nuoc_ngoai', 'von_khac', 'tong_hop',
@@ -78,20 +79,27 @@ export class ShoppingcentreComponent extends BaseComponent {
     public reportSevice: ReportService,
     public filterService: FilterService,
     public commerceManagementService: CommerceManagementService,
+    public _login: LoginService
   ) {
     super(injector);
   }
 
+  authorize: boolean = true
+
   ngOnInit(): void {
     super.ngOnInit();
     this.getShoppingCenterData();
+
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+      this.authorize = false
+    }
   }
 
   ngAfterViewInit() {
     this.paginatorAgain();
   }
 
-  getLinkDefault(){
+  getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
@@ -124,13 +132,13 @@ export class ShoppingcentreComponent extends BaseComponent {
       ngoai_nha_nuoc: new FormControl(),
       co_von_dau_tu_nuoc_ngoai: new FormControl(),
       von_khac: new FormControl(),
-      
+
       tong_hop: new FormControl(),
       chuyen_doanh: new FormControl(),
 
       nam_xay_dung: new FormControl(),
       nam_ngung_hoat_dong: new FormControl(),
-      
+
       dien_tich_dat: new FormControl(),
       so_lao_dong: new FormControl(),
 
@@ -146,18 +154,20 @@ export class ShoppingcentreComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data = {...data, ...{
+    data = {
+      ...data, ...{
         is_tttm: "true",
-    }}
-    return data;        
+      }
+    }
+    return data;
   }
 
   callService(data) {
     this.commerceManagementService.postMarketPlace([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  prepareRemoveData(data) { 
-    let datas = data.map(element => new Object({id: element.id}));
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
     return datas;
   }
 
@@ -196,7 +206,7 @@ export class ShoppingcentreComponent extends BaseComponent {
 
   applyFilter() {
     let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    
+
     if (!filteredData.length) {
       if (this.filterModel)
         this.filteredDataSource.data = [];
