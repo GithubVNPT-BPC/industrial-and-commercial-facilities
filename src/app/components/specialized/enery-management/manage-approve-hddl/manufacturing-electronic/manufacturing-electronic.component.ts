@@ -61,7 +61,7 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     this.years = this.getYears();
     this.getDataManufacturing();
 
-    if (this._login.userValue.user_role_id == 4) {
+    if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }

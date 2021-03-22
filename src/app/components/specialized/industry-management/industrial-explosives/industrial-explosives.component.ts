@@ -56,7 +56,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         super.ngOnInit();
         this.getPostExplosiveMatData(this.currentYear);
 
-        if (this._login.userValue.user_role_id == 5) {
+        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }

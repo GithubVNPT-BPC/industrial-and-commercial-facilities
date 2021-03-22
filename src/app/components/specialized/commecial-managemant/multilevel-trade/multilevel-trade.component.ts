@@ -67,7 +67,7 @@ export class MultilevelTradeComponent extends BaseComponent {
     //     return String(data.is_het_han).includes(filter);
     // };
 
-    if (this._login.userValue.user_role_id == 3) {
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }

@@ -64,7 +64,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     ngOnInit() {
         this.getDataElectric110KV();
 
-        if (this._login.userValue.user_role_id == 4) {
+        if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }

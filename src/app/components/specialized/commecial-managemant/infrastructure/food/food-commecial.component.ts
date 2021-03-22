@@ -70,7 +70,7 @@ export class FoodManagementComponent extends BaseComponent {
     super.ngOnInit();
     this.getFoodCommerceData();
 
-    if (this._login.userValue.user_role_id == 3) {
+    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }

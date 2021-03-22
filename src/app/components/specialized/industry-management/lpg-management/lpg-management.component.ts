@@ -64,7 +64,7 @@ export class LPGManagementComponent extends BaseComponent {
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
 
-        if (this._login.userValue.user_role_id == 5) {
+        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
