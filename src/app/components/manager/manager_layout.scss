@@ -167,6 +167,31 @@
           cursor: zoom-in;
           color: blue !important;
         }
+
+        .change-type {
+          font-weight: 700;
+          line-height: 1;
+          color: #fff;
+          white-space: nowrap;
+          vertical-align: center;
+          .red {
+            background-color: red !important;
+          }
+    
+          .green {
+            background-color: green !important;
+          }
+    
+          .yellowgreen {
+            background-color: yellowgreen !important;
+          }
+
+          .type-value {
+            min-width: 60px;
+            border-radius: .25em;
+            margin: 1px 5px;
+          }
+        }
       }
     }
   }
