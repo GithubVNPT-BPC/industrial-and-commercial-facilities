@@ -17,7 +17,7 @@ export class SystemLogComponent extends BaseComponent {
   dataSource: MatTableDataSource<LoggerModel> = new MatTableDataSource<LoggerModel>();
   filteredDataSource: MatTableDataSource<LoggerModel> = new MatTableDataSource<LoggerModel>();
 
-  public displayedColumns = ['index', 'time', 'ten_bang', 'full_name', 'log_type', 'noi_dung_doi'];
+  public displayedColumns = ['index', 'time', 'full_name', 'ten_bang',  'log_type', 'noi_dung_doi'];
 
   displayedFields = {
     ten_bang: "Bảng thay đổi",
@@ -43,11 +43,6 @@ export class SystemLogComponent extends BaseComponent {
   ngOnInit() {
     super.ngOnInit();
     this.getLog();
-    this.autoOpen();
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
   }
 
   getLog() {
@@ -61,6 +56,7 @@ export class SystemLogComponent extends BaseComponent {
         });
 
         this.dataSource = new MatTableDataSource<LoggerModel>(result.data);
+        this._prepareData();
         this.filteredDataSource.data = [...this.dataSource.data];
       }
       this.paginatorAgain();
@@ -68,6 +64,12 @@ export class SystemLogComponent extends BaseComponent {
       error => this.errorMessage = <any>error;
   }
 
+  _prepareData() {
+    this.dataSource.data.map(x => {
+      x.noi_dung_doi = JSON.parse(x.noi_dung_doi);
+    });
+  }
+ 
   private Back() {
     this.router.navigate(['/']);
   }
