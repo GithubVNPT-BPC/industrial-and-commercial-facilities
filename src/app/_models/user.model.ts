@@ -2,6 +2,11 @@ export class DeleteModel {
     id: string;
 }
 
+export class Status {
+    status: boolean;
+    name: string;
+}
+
 export class user_model {
     user_id: number;
     full_name: String;
@@ -84,6 +89,7 @@ export class InfoUserList {
     user_email: string;
     user_position: string;
     role_id: number;
+    role_name: string;
     org_id: number;
     org_code: string;
     org_name: string;

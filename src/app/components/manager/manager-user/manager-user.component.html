@@ -18,10 +18,11 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-8 button-control -align-left my-auto">
+                    <div class="col-6 button-control -align-left my-auto">
                         <button mat-raised-button (click)="AddUser()">Thêm tài khoản</button>
 
-                        <button mat-raised-button class="red" (click)="removeRows()">Vô hiệu hóa tài khoản</button>
+                        <button mat-raised-button (click)="removeRows()">Kích hoạt/Vô hiệu hóa tài
+                            khoản</button>
 
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Danh sách tài khoản','Danh sách tài khoản')">Xuất
@@ -32,11 +33,11 @@
                         </button> -->
                     </div>
 
-                    <!-- <div class="col-4 button-control -align-right my-auto">
-                        <button mat-raised-button (click)="Back()">
-                            <mat-icon>keyboard_backspace</mat-icon>
-                        </button>
-                    </div> -->
+                    <div class="col-2 checkbox">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">TK ngừng hoạt
+                            động
+                        </mat-checkbox>
+                    </div>
                 </div>
 
                 <div class="layout" #table>
@@ -45,7 +46,7 @@
                         <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                     </mat-form-field>
 
-                    <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+                    <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>
                                 <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -95,6 +96,18 @@
                             <td mat-cell *matCellDef="let element"> {{element.user_position}}</td>
                         </ng-container>
 
+                        <ng-container matColumnDef="role_id">
+                            <th mat-header-cell *matHeaderCellDef> Loại tài khoản </th>
+                            <td mat-cell *matCellDef="let element">
+                                <select [(ngModel)]="element.role_id" style="border: none; color: black; width: auto;"
+                                    disabled>
+                                    <option *ngFor="let item of userrole" [value]="item.id">
+                                        {{item.name}}
+                                    </option>
+                                </select>
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="org_name">
                             <th mat-header-cell *matHeaderCellDef> Phòng ban </th>
                             <td mat-cell *matCellDef="let element"> {{element.org_name}}</td>
@@ -102,7 +115,8 @@
 
                         <ng-container matColumnDef="status">
                             <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-                            <td mat-cell *matCellDef="let element"> {{element.status && 'Hoạt động' || 'Ngừng hoạt
+                            <td mat-cell *matCellDef="let element" style="width: 120px;"> {{element.status && 'Hoạt
+                                động' || 'Ngừng hoạt
                                 động'}}</td>
                         </ng-container>
 

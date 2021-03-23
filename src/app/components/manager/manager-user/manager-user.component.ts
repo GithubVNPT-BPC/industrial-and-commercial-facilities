@@ -10,7 +10,7 @@ import { CommonFuntions } from 'src/app/components/specialized/commecial-managem
 
 import { MatDialog } from '@angular/material';
 
-import { InfoUserList, DeleteModel } from "src/app/_models/user.model";
+import { InfoUserList, DeleteModel, UserRole } from "src/app/_models/user.model";
 import { LoginService } from "src/app/_services/APIService/login.service";
 
 import { MatAccordion } from '@angular/material/expansion';
@@ -60,6 +60,7 @@ export class ManagerUserComponent implements OnInit {
     'full_name',
     'user_email',
     'user_position',
+    'role_id',
     'org_name',
     'status',
 
@@ -86,14 +87,14 @@ export class ManagerUserComponent implements OnInit {
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     // const numRows = this.dataSource.data.length;
-    const numRows = this.dataSource.connect().value.length;
+    const numRows = this.dataSource1.connect().value.length;
     return numSelected === numRows;
   }
 
   masterToggle() {
     this.isAllSelected() ?
       this.selection.clear() :
-      this.dataSource.connect().value.forEach(row => this.selection.select(row));
+      this.dataSource1.connect().value.forEach(row => this.selection.select(row));
   }
 
   checkboxLabel(row?: InfoUserList): string {
@@ -103,33 +104,34 @@ export class ManagerUserComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.user_id + 1}`;
   }
 
-  // deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
-  // selectionarray: string[];
-  // removeRows() {
-  //   if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-  //     this.selection.selected.forEach(x => {
-  //       this.selectionarray = this.selection.selected.map(item => item.user_id.toString())
-  //       this.deletemodel1.push({
-  //         id: ''
-  //       })
-  //     })
-  //     for (let index = 0; index < this.selectionarray.length; index++) {
-  //       const element = this.deletemodel1[index];
-  //       element.id = this.selectionarray[index]
-  //     }
-  //     this._Service.DeleteCertificate(this.deletemodel1).subscribe(res => {
-  //       this._info.msgSuccess('Xóa thành công')
-  //       this.ngOnInit();
-  //       this.deletemodel1 = []
-  //       this.selection.clear();
-  //       this.paginator.pageIndex = 0;
-  //     })
-  //   }
-  // }
+  deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
+  selectionarray: string[];
+  removeRows() {
+    if (confirm('Bạn Có Chắc Muốn Thao Tác?')) {
+      this.selection.selected.forEach(x => {
+        this.selectionarray = this.selection.selected.map(item => item.user_id.toString())
+        this.deletemodel1.push({
+          id: ''
+        })
+      })
+      for (let index = 0; index < this.selectionarray.length; index++) {
+        const element = this.deletemodel1[index];
+        element.id = this.selectionarray[index]
+      }
+      this._Service.DeactiveUser(this.deletemodel1).subscribe(res => {
+        this._info.msgSuccess('Thành công')
+        this.deletemodel1 = []
+        this.selection.clear();
+        this.paginator.pageIndex = 0;
+        window.location.reload();
+      })
+    }
+  }
 
   ngOnInit() {
     this.getBusinessList();
     this.autoOpen();
+    this.GetUserRole();
   }
 
   autoOpen() {
@@ -144,16 +146,26 @@ export class ManagerUserComponent implements OnInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource1.filter = filterValue.trim().toLowerCase();
+  }
+
+  userrole: Array<UserRole> = new Array<UserRole>();
+
+  GetUserRole() {
+    this._Service.GetUserRole().subscribe((all) => {
+      this.userrole = all as UserRole[];
+    });
   }
 
   dataSource: MatTableDataSource<InfoUserList> = new MatTableDataSource<InfoUserList>();
+  dataSource1: MatTableDataSource<InfoUserList> = new MatTableDataSource<InfoUserList>();
 
   getBusinessList() {
-    this._Service.GetUserInfo().subscribe(all => {
+    this._Service.GetUserInfo('user_id', 'desc').subscribe(all => {
       this.dataSource.data = all
 
-      this.dataSource.paginator = this.paginator;
+      this.dataSource1.data = this.dataSource.data.filter(x => x.status == true)
+      this.dataSource1.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
       this.paginator._intl.firstPageLabel = "Trang Đầu";
       this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -191,6 +203,10 @@ export class ManagerUserComponent implements OnInit {
 
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+
+  applyExpireCheck(event) {
+    this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked)
   }
 
   // Back() {

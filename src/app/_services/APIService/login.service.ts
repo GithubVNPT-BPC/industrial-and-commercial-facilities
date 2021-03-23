@@ -3,7 +3,7 @@ import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs'
 import { catchError, tap, map } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { UserModel } from '../../_models/APIModel/user.model';
-import { ChangeInfoUser, ChangePassword, InfoUser, PostInfoUser } from "src/app/_models/user.model";
+import { ChangeInfoUser, ChangePassword, InfoUser, PostInfoUser, DeleteModel } from "src/app/_models/user.model";
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';
@@ -28,8 +28,9 @@ export class LoginService {
     public apiRefreshToken = environment.apiEndpoint + "api/cap-lai-token";
     public apiUpdateUser = environment.apiEndpoint + "api/dang-nhap/admin-dat-lai-mat-khau";
     public apiUserInfo = environment.apiEndpoint + "api/user"
-    public apiUserRole = environment.apiEndpoint + "api/user-role"
-    public apiUserOrg = environment.apiEndpoint + "api/org"
+    public apiUserRole = environment.apiEndpoint + "api/user/role"
+    public apiUserOrg = environment.apiEndpoint + "api/user/org"
+    public apiDeactiveUser = environment.apiEndpoint + "api/user/toggle-archive"
 
     /**
      * @param _http 
@@ -67,9 +68,19 @@ export class LoginService {
         );
     }
 
-    public GetUserInfo() {
+    public DeactiveUser(deactive: Array<DeleteModel>) {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this._http.get<any>(this.apiUserInfo, { headers: headers }).pipe(tap(data => data),
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this._http.put<any>(this.apiDeactiveUser, deactive, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetUserInfo(sort: string, direction: string) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('sort', sort)
+        params = params.append('direction', direction)
+        return this._http.get<any>(this.apiUserInfo, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

@@ -5,6 +5,7 @@ import { NgForm, NumberValueAccessor } from '@angular/forms';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
+import { Location } from '@angular/common';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -33,7 +34,7 @@ export const DDMMYY_FORMAT = {
 };
 
 import { LoginService } from "src/app/_services/APIService/login.service";
-import { InfoUser, UserRole, UserOrg, ChangeInfoUser, ChangePassword, } from "src/app/_models/user.model";
+import { InfoUser, UserRole, UserOrg, ChangeInfoUser, ChangePassword, Status } from "src/app/_models/user.model";
 
 @Component({
   selector: 'app-update-user',
@@ -85,7 +86,8 @@ export class UpdateUserComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public datepipe: DatePipe,
-    public _Service: LoginService
+    public _Service: LoginService,
+    public location: Location,
   ) {
     this.show = true
 
@@ -96,6 +98,7 @@ export class UpdateUserComponent implements OnInit {
 
   UserRole: Array<UserRole> = Array<UserRole>();
   UserOrg: Array<UserOrg> = Array<UserOrg>();
+  Status: Array<Status> = [{ status: true, name: 'Hoạt động' }, { status: false, name: 'Ngừng hoạt động' }]
 
   GetUserRole() {
     this._Service.GetUserRole().subscribe((all) => {
@@ -132,6 +135,7 @@ export class UpdateUserComponent implements OnInit {
       user_position: '',
       role_id: null,
       org_id: null,
+      status: true,
       password: '',
       nPassword: ''
     })
@@ -156,7 +160,7 @@ export class UpdateUserComponent implements OnInit {
         user_position: this.infouser.user_position,
         role_id: this.infouser.role_id,
         org_id: this.infouser.org_id,
-        status: true
+        status: this.infouser.status
       }
     })
   }
@@ -217,7 +221,7 @@ export class UpdateUserComponent implements OnInit {
       this.changeinfoarray[0].position = this.userupdate.value.user_position
       this.changeinfoarray[0].role_id = this.userupdate.value.role_id
       this.changeinfoarray[0].org_id = this.userupdate.value.org_id
-      this.changeinfoarray[0].status = true
+      this.changeinfoarray[0].status = this.userupdate.value.status
     }
     else {
       this.changeinfoarray[0].user_id = parseInt(this.id)
@@ -228,7 +232,7 @@ export class UpdateUserComponent implements OnInit {
       this.changeinfoarray[0].position = this.userupdate.value.user_position
       this.changeinfoarray[0].role_id = this.userupdate.value.role_id
       this.changeinfoarray[0].org_id = this.userupdate.value.org_id
-      this.changeinfoarray[0].status = true
+      this.changeinfoarray[0].status = this.userupdate.value.status
     }
 
     this.changepassword.push({
@@ -256,6 +260,10 @@ export class UpdateUserComponent implements OnInit {
     }
 
     this.SaveData(this.changeinfoarray[0], null);
+  }
+
+  Back() {
+    this.location.back();
   }
 
 }
