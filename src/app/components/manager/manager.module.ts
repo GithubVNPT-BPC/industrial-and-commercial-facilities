@@ -17,6 +17,8 @@ import { AddCertificateComponent } from './business/add-certificate/add-certific
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { SystemLogComponent } from './system-log/system-log.component';
+import { ManagerUserComponent } from './manager-user/manager-user.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -57,6 +59,8 @@ export const customCurrencyMaskConfig = {
     CertificateListComponent,
     UpdateUserComponent,
     SystemLogComponent,
+    ManagerUserComponent,
+    AddUserComponent,
   ],
   entryComponents: [ExportTopCompanyManager]
 })

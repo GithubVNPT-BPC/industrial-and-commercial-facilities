@@ -15,6 +15,8 @@ import { CertificateListComponent } from './business/certificate-list/certificat
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { SystemLogComponent } from './system-log/system-log.component';
+import { ManagerUserComponent } from './manager-user/manager-user.component';
+import { AddUserComponent } from './add-user/add-user.component';
 
 const routes: Routes = [
   {
@@ -78,6 +80,24 @@ const routes: Routes = [
         component: UpdateUserComponent,
         data: {
           title: 'Cập nhật thông tin tài khoản'
+        },
+      },
+
+      {
+        canActivate: [Manager],
+        path: 'add-user/:id',
+        component: AddUserComponent,
+        data: {
+          title: 'Thêm tài khoản'
+        },
+      },
+
+      {
+        canActivate: [Manager],
+        path: 'manage-user',
+        component: ManagerUserComponent,
+        data: {
+          title: 'Quản lý tài khoản'
         },
       },
 

@@ -8,7 +8,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="userupdate" autocomplete="off" (ngSubmit)="onSubmit(userupdate.getRawValue())">
+        <form [formGroup]="postuser" autocomplete="off" (ngSubmit)="onSubmit(postuser.getRawValue())">
             <div class="row">
                 <div class="col-12 button-control my-auto">
                     <button type="submit" mat-raised-button>Lưu</button>
@@ -17,77 +17,57 @@
             </div>
 
             <div class="row">
-                <ng-container *ngIf="show; else elseTemplate">
-                    <div class="col-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Xác nhận mật khẩu cũ
-                            </mat-label>
-                            <input formControlName="password" type="password" matInput placeholder="">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Mật khẩu mới</mat-label>
-                            <input formControlName="nPassword" type="password" matInput placeholder="">
-                        </mat-form-field>
-                    </div>
-                </ng-container>
-                <ng-template #elseTemplate>
-                    <div class="col-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Xác nhận mật khẩu cũ
-                            </mat-label>
-                            <input formControlName="password" type="text" matInput placeholder="">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Mật khẩu mới</mat-label>
-                            <input formControlName="nPassword" type="text" matInput placeholder="">
-                        </mat-form-field>
-                    </div>
-                </ng-template>
-            </div>
-            <hr>
-            <div class="row">
                 <div class="col-6">
                     <mat-form-field appearance="outline">
                         <mat-label>Tên Đăng nhập</mat-label>
                         <input formControlName="user_name" matInput placeholder=""
-                            [(ngModel)]="_Service.userupdate.user_name" readonly style="color: red;">
+                            [(ngModel)]="_Service.postuser.user_name" readonly style="color: red;">
                     </mat-form-field>
+
+                    <ng-container *ngIf="show; else elseTemplate">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mật khẩu
+                            </mat-label>
+                            <input formControlName="password" type="password" matInput placeholder="">
+                        </mat-form-field>
+                    </ng-container>
+                    <ng-template #elseTemplate>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Mật khẩu
+                            </mat-label>
+                            <input formControlName="password" type="text" matInput placeholder="">
+                        </mat-form-field>
+                    </ng-template>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Tên tài khoản</mat-label>
                         <input formControlName="full_name" matInput placeholder=""
-                            [(ngModel)]="_Service.userupdate.full_name" readonly style="color: red;">
+                            [(ngModel)]="_Service.postuser.full_name" readonly style="color: red;">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Email</mat-label>
                         <input formControlName="user_email" matInput placeholder=""
-                            [(ngModel)]="_Service.userupdate.user_email">
+                            [(ngModel)]="_Service.postuser.user_email">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Số Điện thoại</mat-label>
                         <input formControlName="user_phone" matInput placeholder=""
-                            [(ngModel)]="_Service.userupdate.user_phone">
+                            [(ngModel)]="_Service.postuser.user_phone">
                     </mat-form-field>
                 </div>
 
                 <div class="col-6">
                     <mat-form-field appearance="outline">
                         <mat-label>Chức vụ</mat-label>
-                        <input formControlName="user_position" matInput placeholder=""
-                            [(ngModel)]="_Service.userupdate.user_position">
+                        <input formControlName="position" matInput placeholder=""
+                            [(ngModel)]="_Service.postuser.position">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Phòng ban</mat-label>
-                        <mat-select formControlName="org_id" [(ngModel)]="_Service.userupdate.org_id">
+                        <mat-select formControlName="org_id" [(ngModel)]="_Service.postuser.org_id">
                             <mat-option *ngFor="let item of UserOrg" [value]="item.org_id">
                                 {{item.org_name}}
                             </mat-option>
@@ -96,7 +76,7 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Loại tài khoản</mat-label>
-                        <mat-select formControlName="role_id" [(ngModel)]="_Service.userupdate.role_id">
+                        <mat-select formControlName="user_role_id" [(ngModel)]="_Service.postuser.user_role_id">
                             <mat-option *ngFor="let item of UserRole" [value]="item.id">
                                 {{item.name}}
                             </mat-option>

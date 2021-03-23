@@ -3,7 +3,7 @@ import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs'
 import { catchError, tap, map } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { UserModel } from '../../_models/APIModel/user.model';
-import { ChangePassword } from "src/app/_models/user.model";
+import { ChangePassword, ChangeInfoUser, InfoUser, PostInfoUser } from "src/app/_models/user.model";
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';
@@ -27,6 +27,9 @@ export class LoginService {
     public apiLogout = environment.apiEndpoint + "api/dang-xuat";
     public apiRefreshToken = environment.apiEndpoint + "api/cap-lai-token";
     public apiUpdateUser = environment.apiEndpoint + "api/dang-nhap/admin-dat-lai-mat-khau";
+    public apiUserInfo = environment.apiEndpoint + "api/user"
+    public apiUserRole = environment.apiEndpoint + "api/user-role"
+    public apiUserOrg = environment.apiEndpoint + "api/org"
 
     /**
      * @param _http 
@@ -37,12 +40,58 @@ export class LoginService {
         this.user = this.userSubject.asObservable();
     }
 
-    userupdate: ChangePassword
+    userupdate: InfoUser
     public ChangePassword(user: Array<ChangePassword>) {
         var apiUrl = this.apiUpdateUser;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this._http.post<any>(apiUrl, user, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PutUserInfo(userinfo: Array<ChangeInfoUser>) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this._http.put<any>(this.apiUserInfo, userinfo, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    postuser: PostInfoUser
+    public PostUserInfo(userinfo: Array<PostInfoUser>) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this._http.post<any>(this.apiUserInfo, userinfo, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetUserInfo() {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this._http.get<any>(this.apiUserInfo, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetUserInfoByID(role_id: string) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('id', role_id);
+        return this._http.get<any>(this.apiUserInfo, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetUserRole() {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this._http.get<any>(this.apiUserRole, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetUserOrg() {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this._http.get<any>(this.apiUserOrg, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

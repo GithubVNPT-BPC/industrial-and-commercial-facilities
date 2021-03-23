@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { InformationService } from './shared/information/information.service';
 import { InformationComponent } from './shared/information/information.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -47,7 +47,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     {
       provide: LocationStrategy,
-      useClass: PathLocationStrategy,
+      useClass: HashLocationStrategy,
     },
     InformationService,
     ConfirmationDialogService,

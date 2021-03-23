@@ -103,6 +103,12 @@ export class TopbarComponent implements OnInit {
     this.open = this._eventService.getValue();
   }
 
+  public ManageUser() {
+    this._router.navigate(['/manager/manage-user']);
+    this._eventService.setvalue(false);
+    this.open = this._eventService.getValue();
+  }
+
   public openHome() {
   }
 
