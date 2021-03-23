@@ -197,7 +197,11 @@ export class ManagerUserComponent implements OnInit {
   //   this._location.back();
   // }
 
-  AddUser(id: number) {
-    this.router.navigate(['manager/add-user/' + id]);
+  AddUser() {
+    this.router.navigate(['manager/add-user/']);
+  }
+
+  UpdateUser(id: string) {
+    this.router.navigate(['manager/user/' + id]);
   }
 }

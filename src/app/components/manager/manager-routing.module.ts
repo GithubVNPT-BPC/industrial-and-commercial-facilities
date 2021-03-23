@@ -5,9 +5,6 @@ import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
-import { Manager } from '../../_authGuard/Manager';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { PageNotFoundComponent, LoaderInterceptor } from '../../shared';
 import { DomesticManagerComponent } from './domestic-manager/domestic-manager.component';
 import { ForeignManagerComponent } from './foreign-manager/foreign-manager.component';
 import { ProductManagerComponent } from './product-manager/product-manager.component';
@@ -17,6 +14,10 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { SystemLogComponent } from './system-log/system-log.component';
 import { ManagerUserComponent } from './manager-user/manager-user.component';
 import { AddUserComponent } from './add-user/add-user.component';
+import { Admin } from 'src/app/_authGuard/Admin';
+import { Manager } from '../../_authGuard/Manager';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { PageNotFoundComponent, LoaderInterceptor } from '../../shared';
 
 const routes: Routes = [
   {
@@ -75,8 +76,7 @@ const routes: Routes = [
       },
 
       {
-        canActivate: [Manager],
-        path: 'user',
+        path: 'user/:id',
         component: UpdateUserComponent,
         data: {
           title: 'Cập nhật thông tin tài khoản'
@@ -84,8 +84,8 @@ const routes: Routes = [
       },
 
       {
-        canActivate: [Manager],
-        path: 'add-user/:id',
+        canActivate: [Admin],
+        path: 'add-user',
         component: AddUserComponent,
         data: {
           title: 'Thêm tài khoản'
@@ -93,7 +93,7 @@ const routes: Routes = [
       },
 
       {
-        canActivate: [Manager],
+        canActivate: [Admin],
         path: 'manage-user',
         component: ManagerUserComponent,
         data: {

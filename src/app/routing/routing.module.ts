@@ -23,6 +23,7 @@ import { EnergyLayoutComponent } from './energy-layout/energy-layout.component';
 import { ReportLayoutComponent } from './report-layout/report-layout.component';
 import { HomeSpecializedComponent } from '../components/specialized/home-specialized/home-specialized.component';
 
+import { Admin } from '../_authGuard/Admin';
 import { Specialize } from '../_authGuard/Specialize';
 import { Manager } from '../_authGuard/Manager';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -165,6 +166,7 @@ const routes: Routes = [
   ],
   exports: [RoutingComponent],
   providers: [
+    Admin,
     Manager,
     Specialize,
     MessageService,

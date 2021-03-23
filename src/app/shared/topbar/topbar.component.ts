@@ -66,8 +66,8 @@ export class TopbarComponent implements OnInit {
     this._eventService.setvalue(!this.open);
     this.open = this._eventService.getValue();
   }
-  public openForm() {
-    this._router.navigate(['/manager/user']);
+  public openForm(id: string) {
+    this._router.navigate(['/manager/user/' + id]);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }

@@ -13,6 +13,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { LinkModel } from 'src/app/_models/link.model';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-search-business',
@@ -87,7 +88,10 @@ export class SearchBusinessComponent implements OnInit {
     public excelService: ExcelService,
     public info: InformationService,
     private _breadCrumService: BreadCrumService,
+    public _login: LoginService
   ) { }
+
+  authorize: boolean = true;
 
   ngOnInit(): void {
     this.GetAllCompany();
@@ -95,6 +99,11 @@ export class SearchBusinessComponent implements OnInit {
     this.tempFilter = new CompanyDetailModel();
     this.filterType = MatTableFilter.ANYWHERE;
     this.sendLinkToNext(true);
+
+    if (this._login.userValue.user_role_id == 1 || this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 4
+      || this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 7) {
+      this.authorize = false
+    }
   }
   selection = new SelectionModel<CompanyDetailModel>(true, []);
 

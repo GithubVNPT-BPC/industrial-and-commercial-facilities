@@ -67,11 +67,49 @@
                             </div>
                             <div class="dropdown-item">
                                 <mat-icon>wysiwyg</mat-icon>
-                                <span (click)="openReportModule()" class="display-item">Quản lý báo cáo</span>
+                                <span (click)="openReportModule()" class="display-item">Báo cáo SCT</span>
                             </div>
                             <div class="dropdown-item">
                                 <mat-icon>note_alt</mat-icon>
                                 <span (click)="openLogger()" class="display-item">Lịch sử hệ thống</span>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="userrole == 7">
+                            <div class="dropdown-item">
+                                <mat-icon>account_box</mat-icon>
+                                <span (click)="openForm()" class="display-item">Thông tin tài khoản</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>public</mat-icon>
+                                <span (click)="openPublicModule()" class="display-item">Thông tin thị trường</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>storefront</mat-icon>
+                                <span (click)="openManagerModule()" class="display-item">Quản lý thị trường</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>note_alt</mat-icon>
+                                <span (click)="openLogger()" class="display-item">Lịch sử hệ thống</span>
+                            </div>
+                        </ng-container>
+
+                        <ng-container *ngIf="userrole == 6">
+                            <div class="dropdown-item">
+                                <mat-icon>account_box</mat-icon>
+                                <span (click)="openForm()" class="display-item">Thông tin tài khoản</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>public</mat-icon>
+                                <span (click)="openPublicModule()" class="display-item">Thông tin thị trường</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>list</mat-icon>
+                                <span (click)="openSpecializedModule()" class="display-item">Dữ liệu chuyên ngành</span>
+                            </div>
+                            <div class="dropdown-item">
+                                <mat-icon>wysiwyg</mat-icon>
+                                <span (click)="openReportModule()" class="display-item">Báo cáo SCT</span>
                             </div>
                         </ng-container>
 
@@ -86,18 +124,10 @@
                             </div>
                         </ng-container>
 
-                        <ng-container *ngIf="userrole != (1 || 2)">
+                        <ng-container *ngIf="userrole == 3 || userrole == 4 || userrole == 5">
                             <div class="dropdown-item">
                                 <mat-icon>account_box</mat-icon>
                                 <span (click)="openForm()" class="display-item">Thông tin tài khoản</span>
-                            </div>
-                            <div class="dropdown-item">
-                                <mat-icon>public</mat-icon>
-                                <span (click)="openPublicModule()" class="display-item">Thông tin thị trường</span>
-                            </div>
-                            <div class="dropdown-item">
-                                <mat-icon>storefront</mat-icon>
-                                <span (click)="openManagerModule()" class="display-item">Quản lý thị trường</span>
                             </div>
                             <div class="dropdown-item">
                                 <mat-icon>list</mat-icon>
@@ -105,7 +135,7 @@
                             </div>
                             <div class="dropdown-item">
                                 <mat-icon>wysiwyg</mat-icon>
-                                <span (click)="openReportModule()" class="display-item">Quản lý báo cáo</span>
+                                <span (click)="openReportModule()" class="display-item">Báo cáo SCT</span>
                             </div>
                             <div class="dropdown-item">
                                 <mat-icon>note_alt</mat-icon>

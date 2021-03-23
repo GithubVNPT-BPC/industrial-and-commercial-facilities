@@ -76,6 +76,8 @@ export class UpdateUserComponent implements OnInit {
     this.show = !this.show
   }
 
+  id: string;
+
   constructor(
     public excelService: ExcelService,
     public formbuilder: FormBuilder,
@@ -86,6 +88,10 @@ export class UpdateUserComponent implements OnInit {
     public _Service: LoginService
   ) {
     this.show = true
+
+    this.route.params.subscribe((params) => {
+      this.id = params["id"];
+    });
   }
 
   UserRole: Array<UserRole> = Array<UserRole>();
@@ -105,7 +111,14 @@ export class UpdateUserComponent implements OnInit {
 
   ngOnInit() {
     this.resetForm();
-    this.GetInfo(this._Service.userValue.user_id.toString());
+
+    if (this.id == 'undefined') {
+      this.GetInfo(this._Service.userValue.user_id.toString());
+    }
+    else {
+      this.GetInfo(this.id);
+    }
+
     this.GetUserRole();
     this.GetUserOrg();
 
@@ -153,8 +166,13 @@ export class UpdateUserComponent implements OnInit {
       this._Service.ChangePassword(input1).subscribe(
         res => {
           this._info.msgSuccess('Thay đổi thông tin thành công')
-          this._Service.LogoutUser();
-          this.router.navigate(['login']);
+          if (this.id == 'undefined') {
+            this._Service.LogoutUser();
+            this.router.navigate(['login']);
+          }
+          else {
+            this.ngOnInit
+          }
         },
         err => {
           this._info.msgError('Thay đổi thông tin không thành công')
@@ -190,15 +208,28 @@ export class UpdateUserComponent implements OnInit {
       avatar_link: ''
     })
 
-    this.changeinfoarray[0].user_id = this._Service.userValue.user_id
-    this.changeinfoarray[0].user_name = this._Service.userValue.username
-    this.changeinfoarray[0].full_name = this.userupdate.value.full_name
-    this.changeinfoarray[0].user_email = this.userupdate.value.user_email
-    this.changeinfoarray[0].user_phone = this.userupdate.value.user_phone
-    this.changeinfoarray[0].position = this.userupdate.value.user_position
-    this.changeinfoarray[0].role_id = this.userupdate.value.role_id
-    this.changeinfoarray[0].org_id = this.userupdate.value.org_id
-    this.changeinfoarray[0].status = true
+    if (this.id == 'undefined') {
+      this.changeinfoarray[0].user_id = this._Service.userValue.user_id
+      this.changeinfoarray[0].user_name = this._Service.userValue.username
+      this.changeinfoarray[0].full_name = this.userupdate.value.full_name
+      this.changeinfoarray[0].user_email = this.userupdate.value.user_email
+      this.changeinfoarray[0].user_phone = this.userupdate.value.user_phone
+      this.changeinfoarray[0].position = this.userupdate.value.user_position
+      this.changeinfoarray[0].role_id = this.userupdate.value.role_id
+      this.changeinfoarray[0].org_id = this.userupdate.value.org_id
+      this.changeinfoarray[0].status = true
+    }
+    else {
+      this.changeinfoarray[0].user_id = parseInt(this.id)
+      this.changeinfoarray[0].user_name = this.userupdate.value.user_name
+      this.changeinfoarray[0].full_name = this.userupdate.value.full_name
+      this.changeinfoarray[0].user_email = this.userupdate.value.user_email
+      this.changeinfoarray[0].user_phone = this.userupdate.value.user_phone
+      this.changeinfoarray[0].position = this.userupdate.value.user_position
+      this.changeinfoarray[0].role_id = this.userupdate.value.role_id
+      this.changeinfoarray[0].org_id = this.userupdate.value.org_id
+      this.changeinfoarray[0].status = true
+    }
 
     this.changepassword.push({
       username: '',
@@ -208,10 +239,18 @@ export class UpdateUserComponent implements OnInit {
     })
 
     if (this.userupdate.value.password != '' && this.userupdate.value.nPassword != '') {
-      this.changepassword[0].username = this._Service.userValue.username
-      this.changepassword[0].full_name = this.userupdate.value.full_name
-      this.changepassword[0].password = this.userupdate.value.password
-      this.changepassword[0].nPassword = this.userupdate.value.nPassword
+      if (this.id == 'undefined') {
+        this.changepassword[0].username = this._Service.userValue.username
+        this.changepassword[0].full_name = this.userupdate.value.full_name
+        this.changepassword[0].password = this.userupdate.value.password
+        this.changepassword[0].nPassword = this.userupdate.value.nPassword
+      }
+      else {
+        this.changepassword[0].username = this.userupdate.value.user_name
+        this.changepassword[0].full_name = this.userupdate.value.full_name
+        this.changepassword[0].password = this.userupdate.value.password
+        this.changepassword[0].nPassword = this.userupdate.value.nPassword
+      }
 
       this.SaveData(this.changeinfoarray[0], this.changepassword[0])
     }

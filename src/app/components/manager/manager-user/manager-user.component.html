@@ -76,7 +76,7 @@
 
                         <ng-container matColumnDef="user_name">
                             <th mat-header-cell *matHeaderCellDef> Tên tài khoản </th>
-                            <td mat-cell *matCellDef="let element" (click)="AddUser(element.user_id)" class="jump">
+                            <td mat-cell *matCellDef="let element" (click)="UpdateUser(element.user_id)" class="jump">
                                 {{element.user_name}} </td>
                         </ng-container>
 
