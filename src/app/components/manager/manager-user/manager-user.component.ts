@@ -60,7 +60,6 @@ export class ManagerUserComponent implements OnInit {
     'full_name',
     'user_email',
     'user_position',
-    'role_name',
     'org_name',
     'status',
 

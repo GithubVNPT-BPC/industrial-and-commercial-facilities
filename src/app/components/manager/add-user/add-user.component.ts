@@ -33,7 +33,7 @@ export const DDMMYY_FORMAT = {
 };
 
 import { LoginService } from "src/app/_services/APIService/login.service";
-import { InfoUser, UserRole, UserOrg, ChangeInfoUser, ChangePassword, PostInfoUser } from "src/app/_models/user.model";
+import { InfoUser, UserRole, UserOrg, PostInfoUser } from "src/app/_models/user.model";
 
 @Component({
   selector: 'app-add-user',
@@ -115,17 +115,16 @@ export class AddUserComponent implements OnInit {
     this.GetUserOrg();
 
     this.postuser = this.formbuilder.group({
-      user_id: null,
       user_name: '',
       full_name: '',
       avatar_link: '',
       user_email: '',
       user_phone: '',
-      user_position: '',
-      role_id: null,
+      position: '',
+      user_role_id: null,
       org_id: null,
-      password: '',
-      nPassword: ''
+      status: true,
+      password: ''
     })
   }
 
@@ -157,7 +156,7 @@ export class AddUserComponent implements OnInit {
     this._Service.PostUserInfo(input).subscribe(
       res => {
         this._info.msgSuccess('Thay đổi thông tin thành công')
-        this.ngOnInit();
+        this.Back();
       },
       err => {
         this._info.msgError('Thay đổi thông tin không thành công')
@@ -185,12 +184,16 @@ export class AddUserComponent implements OnInit {
     this.changeinfoarray[0].full_name = this.postuser.value.full_name
     this.changeinfoarray[0].user_email = this.postuser.value.user_email
     this.changeinfoarray[0].user_phone = this.postuser.value.user_phone
-    this.changeinfoarray[0].position = this.postuser.value.user_position
-    this.changeinfoarray[0].user_role_id = this.postuser.value.role_id
+    this.changeinfoarray[0].position = this.postuser.value.position
+    this.changeinfoarray[0].user_role_id = this.postuser.value.user_role_id
     this.changeinfoarray[0].org_id = this.postuser.value.org_id
     this.changeinfoarray[0].status = true
     this.changeinfoarray[0].password = this.postuser.value.password
 
     this.SaveData(this.changeinfoarray[0]);
+  }
+
+  Back() {
+    this.router.navigate(['manager/manage-user']);
   }
 }

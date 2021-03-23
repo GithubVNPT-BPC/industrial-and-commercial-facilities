@@ -127,8 +127,8 @@ export class UpdateUserComponent implements OnInit {
   infouserarray: Array<InfoUser> = Array<InfoUser>();
   infouser: InfoUser
 
-  GetInfo(role_id: string) {
-    this._Service.GetUserInfoByID(role_id).subscribe(all => {
+  GetInfo(user_id: string) {
+    this._Service.GetUserInfoByID(user_id).subscribe(all => {
 
       this.infouserarray = all
       this.infouser = this.infouserarray[0]
@@ -162,8 +162,6 @@ export class UpdateUserComponent implements OnInit {
       )
     }
 
-    console.log(input)
-
     this._Service.PutUserInfo(input).subscribe(
       res => {
         this._info.msgSuccess('Thay đổi thông tin thành công')
@@ -194,7 +192,7 @@ export class UpdateUserComponent implements OnInit {
 
     this.changeinfoarray[0].user_id = this._Service.userValue.user_id
     this.changeinfoarray[0].user_name = this._Service.userValue.username
-    this.changeinfoarray[0].full_name = this._Service.userValue.full_name
+    this.changeinfoarray[0].full_name = this.userupdate.value.full_name
     this.changeinfoarray[0].user_email = this.userupdate.value.user_email
     this.changeinfoarray[0].user_phone = this.userupdate.value.user_phone
     this.changeinfoarray[0].position = this.userupdate.value.user_position
@@ -211,7 +209,7 @@ export class UpdateUserComponent implements OnInit {
 
     if (this.userupdate.value.password != '' && this.userupdate.value.nPassword != '') {
       this.changepassword[0].username = this._Service.userValue.username
-      this.changepassword[0].full_name = this._Service.userValue.full_name
+      this.changepassword[0].full_name = this.userupdate.value.full_name
       this.changepassword[0].password = this.userupdate.value.password
       this.changepassword[0].nPassword = this.userupdate.value.nPassword
 

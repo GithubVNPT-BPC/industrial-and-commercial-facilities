@@ -3,7 +3,7 @@ import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs'
 import { catchError, tap, map } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { UserModel } from '../../_models/APIModel/user.model';
-import { ChangePassword, ChangeInfoUser, InfoUser, PostInfoUser } from "src/app/_models/user.model";
+import { ChangeInfoUser, ChangePassword, InfoUser, PostInfoUser } from "src/app/_models/user.model";
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';

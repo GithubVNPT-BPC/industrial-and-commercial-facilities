@@ -27,19 +27,6 @@ export class ChangePassword {
     nPassword: string;
 }
 
-export class ChangeInfoUser {
-    user_id: number;
-    user_name: string;
-    full_name: string;
-    user_email: string;
-    user_phone: string;
-    position: string;
-    role_id: number;
-    org_id: number;
-    status: boolean;
-    avatar_link: string;
-}
-
 export class PostInfoUser {
     user_name: string;
     full_name: string;
@@ -66,6 +53,19 @@ export class InfoUser {
     status: boolean;
 }
 
+export class ChangeInfoUser {
+    user_id: number;
+    user_name: string;
+    full_name: string;
+    avatar_link: string;
+    user_email: string;
+    user_phone: string;
+    position: string;
+    role_id: number;
+    org_id: number;
+    status: boolean;
+}
+
 export class UserRole {
     id: number;
     name: string;
@@ -84,7 +84,6 @@ export class InfoUserList {
     user_email: string;
     user_position: string;
     role_id: number;
-    role_name: string;
     org_id: number;
     org_code: string;
     org_name: string;
