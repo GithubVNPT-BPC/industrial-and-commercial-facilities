@@ -1,4 +1,4 @@
-<mat-card class="material">
+<mat-card class="material" id="logger">
     <mat-card-header>
         <!-- <mat-card-title><strong></strong></mat-card-title> -->
         <mat-card-subtitle hidden>
@@ -29,14 +29,82 @@
                         <div *ngFor="let field of displayedFields | keyvalue">
                             <ng-container matColumnDef="{{field.key}}">
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
-                                <ng-container *ngIf="!['time'].includes(field.key) ;else dateFieldCond">
-                                    <td mat-cell *matCellDef="let element" style="word-break: break-all;">
-                                        {{element[field.key]}}</td>
+                                <ng-container *ngIf="!['full_name'].includes(field.key) ;else nameFieldCond">
+                                    <ng-container *ngIf="!['time'].includes(field.key) ;else dateFieldCond">
+                                        <ng-container *ngIf="!['log_type'].includes(field.key) ;else typeFieldCond">
+                                            <ng-container *ngIf="!['noi_dung_doi'].includes(field.key) ;else contentFieldCond">
+                                                <td mat-cell *matCellDef="let element" style="word-break: break-all;">
+                                                    {{element[field.key]}}</td>
+                                            </ng-container>
+                                        </ng-container>
+                                    </ng-container>
                                 </ng-container>
+                                
+                                <ng-template #nameFieldCond>
+                                    <td mat-cell *matCellDef="let element" class="text-center">
+                                        <strong> {{element[field.key] }} </strong>
+                                    </td>
+                                </ng-template>
 
                                 <ng-template #dateFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy
                                         HH:mm:ss'}}</td>
+                                </ng-template>
+
+                                <ng-template #typeFieldCond>
+                                    <td mat-cell *matCellDef="let element" class="text-center change-type my-auto">
+                                        <div *ngIf="element.loai_thay_doi == 1;else forEdit" class="mb-2 mt-2">
+                                            <span class="type-value green p-1">{{element[field.key]}}</span>
+                                        </div>
+
+                                        <ng-template #forEdit>
+                                            <div *ngIf="element.loai_thay_doi == 2;else forRemove" class="mb-2 mt-2">
+                                                <span class="type-value yellowgreen p-1">{{element[field.key]}}</span>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template #forRemove>
+                                            <div class="mb-2 mt-2">
+                                                <span class="type-value red p-1">{{element[field.key]}}</span>
+                                            </div>
+                                        </ng-template>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template #contentFieldCond>
+                                    <td mat-cell *matCellDef="let element">
+                                        <!-- Case log_type = 1 -> Creation -->
+                                        <ul *ngIf="element.loai_thay_doi == 1;else forEdit" class="my-auto">
+                                            <li>
+                                                <span class="text-success">Doanh nghiệp: </span><strong>{{ element.noi_dung_doi.ten_doanh_nghiep }}</strong> với
+                                                <span class="text-success">MST</span> là <span class="text-info">{{ element.noi_dung_doi.mst }}</span> và 
+                                                <span class="text-success">Địa chỉ</span> là <span class="text-info">{{ element.noi_dung_doi.dia_chi }}</span>
+                                            </li>
+                                        </ul>
+
+                                        <ng-template #forEdit>
+                                            <div *ngIf="element.loai_thay_doi == 2;else forRemove">
+                                                <ul *ngFor="let item of element.noi_dung_doi" class="my-auto">
+                                                    <li>
+                                                        <span class="text-success">Trường: </span><strong>{{ item.field }} </strong> từ
+                                                        <span class="text-danger">{{ item.origin_value }}</span> sang
+                                                        <span class="text-info">{{ item.alter_value ? item.alter_value : '(Rỗng)'}}</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </ng-template>
+
+                                        <ng-template #forRemove>
+                                            <ul *ngFor="let item of element.noi_dung_doi" class="my-auto">
+                                                <li>
+                                                    <span class="text-success">Doanh nghiệp: </span><strong>{{ item.doanh_nghiep }} </strong> với
+                                                    <span class="text-success">MST </span> là <span class="text-info">{{ item.mst }}</span>
+                                                </li>
+                                            </ul>
+                                        </ng-template>
+                                    </td>
+
+                                    
                                 </ng-template>
 
                             </ng-container>
