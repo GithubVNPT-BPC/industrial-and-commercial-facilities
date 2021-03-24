@@ -94,7 +94,7 @@ const routes: Routes = [
 
       {
         canActivate: [Admin],
-        path: 'manage-user',
+        path: 'manage-user/:id',
         component: ManagerUserComponent,
         data: {
           title: 'Quản lý tài khoản'

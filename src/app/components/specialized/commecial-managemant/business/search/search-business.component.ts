@@ -179,6 +179,12 @@ export class SearchBusinessComponent implements OnInit {
     this.router.navigate(['specialized/commecial-management/domestic/certificate/']);
   }
 
+  id: string = '2'
+
+  ManageUser(id: string) {
+    this.router.navigate(['/manager/manage-user/' + id]);
+  }
+
   selected_field: string = 'ten_doanh_nghiep';
   countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
   count: number = 1;

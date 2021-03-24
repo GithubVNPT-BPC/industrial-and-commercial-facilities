@@ -71,6 +71,8 @@ export class ManagerUserComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
+  id: string
+
   constructor(
     public excelService: ExcelService,
     public _Service: LoginService,
@@ -80,6 +82,9 @@ export class ManagerUserComponent implements OnInit {
     private _location: Location,
     public route: ActivatedRoute
   ) {
+    this.route.params.subscribe((params) => {
+      this.id = params["id"];
+    });
   }
 
   selection = new SelectionModel<InfoUserList>(true, []);
@@ -164,7 +169,13 @@ export class ManagerUserComponent implements OnInit {
     this._Service.GetUserInfo('user_id', 'desc').subscribe(all => {
       this.dataSource.data = all
 
-      this.dataSource1.data = this.dataSource.data.filter(x => x.status == true)
+      if (this.id == '0') {
+        this.dataSource1.data = this.dataSource.data.filter(x => x.status == true && x.role_id != 2)
+      }
+      else if (this.id == '2') {
+        this.dataSource1.data = this.dataSource.data.filter(x => x.status == true && x.role_id == 2)
+      }
+
       this.dataSource1.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
       this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -206,7 +217,12 @@ export class ManagerUserComponent implements OnInit {
   }
 
   applyExpireCheck(event) {
-    this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked)
+    if (this.id == '0') {
+      this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked && x.role_id != 2)
+    }
+    else if (this.id == '2') {
+      this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked && x.role_id == 2)
+    }
   }
 
   // Back() {
