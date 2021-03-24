@@ -23,7 +23,8 @@ export class ReportService {
     public urlSend = "/gui-lanh-dao";
     public urlLinhvucBaoCao = "/bao-cao-theo-linh-vuc";
     public urlReport12Months = "/du-lieu-tong-hop-12-thang";
-    public urlReportPowerProduction = "/dien-thuong-pham"
+    public urlReportPowerProduction = "/dien-thuong-pham";
+    public urlOldData = "/du-lieu-qua-khu";
 
     token: any;
     username: any;
@@ -187,6 +188,19 @@ export class ReportService {
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('year', year.toString());
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetOldData(obj_id: number, time_id: number, org_id : number, attribute_code: string, n_attribute_code: string) {
+        var apiUrl = this.apiReport + this.urlOldData;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('obj_id', obj_id.toString());
+        params = params.append('time_id', time_id.toString());
+        params = params.append('org_id', org_id.toString());
+        params = params.append('attribute_code', attribute_code);
+        params = params.append('n_attribute_code', n_attribute_code);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
