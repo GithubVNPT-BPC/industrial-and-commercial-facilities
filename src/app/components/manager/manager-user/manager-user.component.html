@@ -18,11 +18,13 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-6 button-control -align-left my-auto">
+                    <div class="col-8 button-control -align-left my-auto">
                         <button mat-raised-button (click)="AddUser()">Thêm tài khoản</button>
 
                         <button mat-raised-button (click)="removeRows()">Kích hoạt/Vô hiệu hóa tài
                             khoản</button>
+
+                        <button mat-raised-button (click)="ResetPassword()">Reset mật khẩu</button>
 
                         <button mat-raised-button class="green"
                             (click)="ExportTOExcel('Danh sách tài khoản','Danh sách tài khoản')">Xuất

@@ -10,7 +10,7 @@ import { CommonFuntions } from 'src/app/components/specialized/commecial-managem
 
 import { MatDialog } from '@angular/material';
 
-import { InfoUserList, DeleteModel, UserRole } from "src/app/_models/user.model";
+import { InfoUserList, DeleteModel, UserRole, ResetDefaultPassword } from "src/app/_models/user.model";
 import { LoginService } from "src/app/_services/APIService/login.service";
 
 import { MatAccordion } from '@angular/material/expansion';
@@ -129,7 +129,38 @@ export class ManagerUserComponent implements OnInit {
         this.selection.clear();
         this.paginator.pageIndex = 0;
         window.location.reload();
+      },
+        err => {
+          this._info.msgError('Không thành công')
+        }
+      )
+    }
+  }
+
+  resetpassword: string[];
+  defaultpassword: Array<ResetDefaultPassword> = new Array<ResetDefaultPassword>();
+
+  ResetPassword() {
+    if (confirm('Bạn Có Chắc Muốn Thao Tác?')) {
+      this.resetpassword = this.selection.selected.map(x => x.user_name)
+
+      this.defaultpassword.push({
+        username: ''
       })
+
+      for (let index = 0; index < this.resetpassword.length; index++) {
+        this.defaultpassword[0].username = this.resetpassword[index]
+        this._Service.ChangeDefaultPassword(this.defaultpassword[0]).subscribe(res => {
+          this._info.msgSuccess('Thành công')
+          this.selection.clear();
+          this.paginator.pageIndex = 0;
+          window.location.reload();
+        },
+          err => {
+            this._info.msgError('Không thành công')
+          }
+        )
+      }
     }
   }
 

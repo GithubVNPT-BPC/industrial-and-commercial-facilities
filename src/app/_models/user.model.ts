@@ -32,6 +32,10 @@ export class ChangePassword {
     nPassword: string;
 }
 
+export class ResetDefaultPassword {
+    username: string;
+}
+
 export class PostInfoUser {
     user_name: string;
     full_name: string;
