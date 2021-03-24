@@ -708,27 +708,42 @@ export class FillReportComponent implements OnInit {
   }
 
   colCalculate() {
-    let reg = new RegExp('/^\{\{\d\}\}\{\{\w+\}\}$/');
-    this.attributes.filter( x => x.formula).forEach(attribute => {
-      console.log (reg.test(attribute.formula))
+    let reg = /^\{\{\d\}\}\{\{\w+\}\}$/;
+    this.attributes.filter(x => x.formula).forEach(attribute => {
+      // console.log ('Formula: +', attribute.formula, '+ Test: ', reg.test(attribute.formula))
+      if (reg.test(attribute.formula)) {
+        let previousYearRegEx = /\{\{2\}\}/;
+        let is_previous_year = attribute.formula.match(previousYearRegEx)? true : false;
+        let attribute_code = attribute.formula.substr(7, attribute.formula.length - 9);
+        this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
+          attribute_code, attribute.attr_code).subscribe(res => {
+            let fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
+            console.log(res.data)
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter( x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = element[fnProp];
+              console.log(tempRow)
+            });
+          })
+      }
     });
   }
 
   calculateTimeId(time_id: number, is_previous_year: boolean): number {
     switch (this.object[0].submit_type) {
-      case 1: 
+      case 1:
         if (!is_previous_year)
-          return (time_id % 10 == 1) ? (time_id / 100 - 1) + 12 : time_id - 1;
+          return (time_id % 100 == 1) ? (time_id / 100 - 1) * 100 + 12 : time_id - 1;
         else
-          return (time_id / 100 - 1) + (time_id % 100);
+          return (time_id / 100 - 1) * 100;
 
-      case 2: 
+      case 2:
         if (!is_previous_year)
-          return (time_id % 10 == 1) ? (time_id / 10 - 1) + 4 : time_id - 1;
+          return (time_id % 10 == 1) ? (time_id / 10 - 1) * 10 + 4 : time_id - 1;
         else
-          return (time_id / 10 - 1) + (time_id % 10);
+          return (time_id / 10 - 1) * 10;
 
-      default: 
+      default:
         return time_id - 1;
     }
   }
