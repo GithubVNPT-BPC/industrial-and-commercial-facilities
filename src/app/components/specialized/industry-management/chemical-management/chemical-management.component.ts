@@ -18,7 +18,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'computed_cong_suat', 'computed_san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'congSuatList', 'sanLuongList', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
 
     displayedFields = {
         mst: "Mã số thuế",
@@ -28,8 +28,8 @@ export class ChemicalManagementComponent extends BaseComponent {
         email: "Email",
         so_lao_dong: "Số lao động",
         ten_loai_hinh: "Loại hình",
-        computed_cong_suat: "Công suất thiết kế Tấn/năm",
-        computed_san_luong: "Sản lượng Tấn/năm",
+        congSuatList: "Công suất thiết kế Tấn/năm",
+        sanLuongList: "Sản lượng Tấn/năm",
         so_giay_phep: "Số giấy phép/ Giấy chứng nhận",
         ngay_cap: "Ngày cấp",
         ngay_het_han: "Ngày hết hạn",
@@ -54,8 +54,8 @@ export class ChemicalManagementComponent extends BaseComponent {
     public chemistryNameList = [];
 
     private typeList = [
-        { name: "Sản xuất" },
-        { name: "Kinh doanh" },
+        {id_loai_hinh_hoat_dong: 1, name: "Sản xuất" },
+        {id_loai_hinh_hoat_dong: 2, name: "Kinh doanh" },
     ]
 
     constructor(
@@ -105,6 +105,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                 id_hoa_chat: [],
                 san_luong: [],
                 cong_suat: [],
+                id_loai_hinh_hoat_dong: [],
             });
         }
 
@@ -126,6 +127,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                     id_hoa_chat: [],
                     san_luong: [],
                     cong_suat: [],
+                    id_loai_hinh_hoat_dong: [],
                 })
             ])
         }
@@ -136,8 +138,6 @@ export class ChemicalManagementComponent extends BaseComponent {
         details.map(e => {
             e['mst'] = data['mst'];
             e['time_id'] = data['time_id'];
-            // FIX: Hard code 'id_loai_hinh', must fix later
-            e['id_loai_hinh'] = data['id_loai_hinh'];
         });
 
         data = {
@@ -172,14 +172,13 @@ export class ChemicalManagementComponent extends BaseComponent {
                 chemicalManagementData.map((c) => {
                     let matchingList = capacityData.filter(x => x.mst == c.mst);
 
-                    c.computed_san_luong = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.san_luong : x.san_luong).join(', ');
-
-                    c.computed_cong_suat = matchingList.map(x => x.ten_hoa_chat ? x.ten_hoa_chat + ': ' + x.cong_suat : x.cong_suat).join(', ');
+                    c.sanLuongList = matchingList;
+                    c.congSuatList = matchingList;
+                    
                     c.san_luong = matchingList.length ? matchingList.map(x => x.san_luong ? parseInt(x.san_luong) : 0).reduce((a, b) => a + b) : 0;
                     c.cong_suat = matchingList.length ? matchingList.map(x => x.cong_suat ? parseInt(x.cong_suat) : 0).reduce((a, b) => a + b) : 0;
                     c.chemistryQtyIds = matchingList.map(element => new Object({ id: element.id }));
                 });
-
 
                 chemicalManagementData.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
