@@ -1,28 +1,9 @@
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  Attribute,
-  QueryList,
-  ViewChildren,
-  Input,
-} from "@angular/core";
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from "@angular/core";
 import * as XLSX from "xlsx";
 
 import { ReportService } from "../../../../_services/APIService/report.service";
 
-import {
-  ReportAttribute,
-  ReportDatarow,
-  ReportIndicator,
-  ReportOject,
-  ReportTable,
-  HeaderMerge,
-  ToltalHeaderMerge,
-} from "../../../../_models/APIModel/report.model";
+import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from "../../../../_models/APIModel/report.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ExcelService } from "src/app/_services/excelUtil.service";
@@ -54,6 +35,10 @@ export class FillReportComponent implements OnInit {
 
   public readonly numberFieldProperty: string[] = ['fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09',
     'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20'];
+
+  public readonly oldDataReg = /^\{\{\d\}\}\{\{\w+\}\}$/;
+  public readonly operatorReg = /\+|\-|\*|\//;
+  public readonly previousYearRegEx = /\{\{2\}\}/;
 
   public tableMergeHader: Array<ToltalHeaderMerge> = [];
   public mergeHeadersColumn: Array<string> = [];
@@ -708,25 +693,34 @@ export class FillReportComponent implements OnInit {
   }
 
   colCalculate() {
-    let reg = /^\{\{\d\}\}\{\{\w+\}\}$/;
     this.attributes.filter(x => x.formula).forEach(attribute => {
-      // console.log ('Formula: +', attribute.formula, '+ Test: ', reg.test(attribute.formula))
-      if (reg.test(attribute.formula)) {
-        let previousYearRegEx = /\{\{2\}\}/;
-        let is_previous_year = attribute.formula.match(previousYearRegEx)? true : false;
-        let attribute_code = attribute.formula.substr(7, attribute.formula.length - 9);
-        this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
-          attribute_code, attribute.attr_code).subscribe(res => {
-            let fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
-            console.log(res.data)
-            res.data.forEach(element => {
-              let tempRow = this.dataSource.data.filter( x => x.ind_id == element.ind_id)[0];
-              tempRow[fnProp] = element[fnProp];
-              console.log(tempRow)
-            });
-          })
-      }
+      let operands = attribute.formula.split(this.operatorReg);
+      let firstFieldCode = '';
+      let secondFieldCode = '';
+      if (operands[0].match(this.oldDataReg))
+        firstFieldCode = this.getOldData(operands[0], attribute.attr_code);
+      else
+        firstFieldCode = this.getFieldCode(operands[0]);
     });
+  }
+
+  getFieldCode(formula: string): string {
+    return formula.substr(2, formula.length - 4);
+  }
+
+  getOldData(formula: string, attr_code: string): string {
+    let is_previous_year = formula.match(this.previousYearRegEx) ? true : false;
+    let attribute_code = formula.substr(7, formula.length - 9);
+    let fnProp = '';
+    this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
+      attribute_code, attr_code).subscribe(res => {
+        fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
+        res.data.forEach(element => {
+          let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
+          tempRow[fnProp] = element[fnProp];
+        });
+      })
+    return fnProp;
   }
 
   calculateTimeId(time_id: number, is_previous_year: boolean): number {
