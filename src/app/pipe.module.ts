@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ZeroAsSubPipe } from './shared/pipes/filterZeroAsSub.pipe';
+import { FormatNumberReportPipe } from 'src/app/shared/pipes/formatNumber.pipe';
 
 
 @NgModule({
@@ -8,9 +9,11 @@ import { ZeroAsSubPipe } from './shared/pipes/filterZeroAsSub.pipe';
   ],
   declarations: [ 
     ZeroAsSubPipe,
+    FormatNumberReportPipe
   ],
   exports: [
     ZeroAsSubPipe,
+    FormatNumberReportPipe
   ]
 })
 export class PipeModule { }
