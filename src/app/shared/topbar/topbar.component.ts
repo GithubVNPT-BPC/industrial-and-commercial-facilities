@@ -45,9 +45,13 @@ export class TopbarComponent implements OnInit {
     this.expression = this.typeOfUser == TYPE_OF_NAV.SPECICALIZED ? true : false;
     this.userrole = this._loginService.userValue.user_role_id
     this.mst = this._loginService.userValue.username
+
+    this.id = '0'
   }
   ngAfterViewChecked(): void {
   }
+
+  id: string
 
   public loginClick() {
     this._router.navigate(['login'], { queryParams: { returnUrl: this._router.url } });
@@ -103,8 +107,8 @@ export class TopbarComponent implements OnInit {
     this.open = this._eventService.getValue();
   }
 
-  public ManageUser() {
-    this._router.navigate(['/manager/manage-user']);
+  public ManageUser(id: string) {
+    this._router.navigate(['/manager/manage-user/' + id]);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }

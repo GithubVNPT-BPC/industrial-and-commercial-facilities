@@ -152,6 +152,12 @@ export class SearchBusinessComponent implements OnInit {
     this.router.navigate(['manager/business/edit/']);
   }
 
+  id: string = '2'
+
+  ManageUser(id: string) {
+    this.router.navigate(['/manager/manage-user/' + id]);
+  }
+
   AddCertificate() {
     this.router.navigate(['manager/business/certificate/']);
   }

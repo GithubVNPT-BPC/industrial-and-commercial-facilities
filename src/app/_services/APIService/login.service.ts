@@ -3,7 +3,7 @@ import { Observable, throwError, Subject, BehaviorSubject } from 'rxjs'
 import { catchError, tap, map } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { UserModel } from '../../_models/APIModel/user.model';
-import { ChangeInfoUser, ChangePassword, InfoUser, PostInfoUser, DeleteModel } from "src/app/_models/user.model";
+import { ChangeInfoUser, ChangePassword, InfoUser, PostInfoUser, DeleteModel, ResetDefaultPassword } from "src/app/_models/user.model";
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { RegisterModel } from '../../_models/APIModel/register.model';
@@ -27,6 +27,7 @@ export class LoginService {
     public apiLogout = environment.apiEndpoint + "api/dang-xuat";
     public apiRefreshToken = environment.apiEndpoint + "api/cap-lai-token";
     public apiUpdateUser = environment.apiEndpoint + "api/dang-nhap/admin-dat-lai-mat-khau";
+    public apiChangeDefaultPassword = environment.apiEndpoint + "api/dang-nhap/mat-khau-mac-dinh";
     public apiUserInfo = environment.apiEndpoint + "api/user"
     public apiUserRole = environment.apiEndpoint + "api/user/role"
     public apiUserOrg = environment.apiEndpoint + "api/user/org"
@@ -44,6 +45,15 @@ export class LoginService {
     userupdate: InfoUser
     public ChangePassword(user: Array<ChangePassword>) {
         var apiUrl = this.apiUpdateUser;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this._http.post<any>(apiUrl, user, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public ChangeDefaultPassword(user: ResetDefaultPassword) {
+        var apiUrl = this.apiChangeDefaultPassword;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this._http.post<any>(apiUrl, user, { headers: headers }).pipe(tap(data => data),
