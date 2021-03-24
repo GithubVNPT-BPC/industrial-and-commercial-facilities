@@ -184,18 +184,18 @@
                                 <ul>
                                     <li>
                                         Vốn ngân sách Trung Ương: <span>{{tongvon_VonNganSachTW |
-                                            number:'1.0-4'}}</span>
+                                            formatNumber}}</span>
                                     </li>
                                     <li>
                                         Vốn ngân sách địa phương: <span>{{tongvon_VonNganSachDiaPhuong |
-                                            number:'1.0-4'}}</span>
+                                            formatNumber}}</span>
                                     </li>
                                     <li>
                                         Vốn doanh nghiệp, hợp tác xã, hộ kinh doanh: <span>{{tongvon_DNHTXHL |
-                                            number:'1.0-4'}}</span>
+                                            formatNumber}}</span>
                                     </li>
                                     <li>
-                                        Vốn khác: <span>{{tongvon_Khac | number:'1.0-4'}}</span>
+                                        Vốn khác: <span>{{tongvon_Khac | formatNumber}}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -364,7 +364,7 @@
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container
                                         *ngIf="!['dau_tu', 'so_ho_duoi_30', 'so_chuyen_doi_chuc_nang', 'so_chuyen_doi_hinh_thuc_quan_ly',
-                                        'von_nstw', 'von_nsdp', 'von_dn_htx_hkd', 'von_khac', 'so_nguoi', 
+                                        'von_nstw', 'von_nsdp', 'von_dn_htx_hkd', 'von_khac', 'tong_von',
                                         'ban_quan_ly', 'to_quan_ly', 'doanh_nghiep', 'hop_tac_xa', 'ho_kinh_doanh'].includes(field.key);else qtyFieldCond">
                                         <ng-container
                                             *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
@@ -383,8 +383,7 @@
                                 </ng-template>
 
                                 <ng-template #qtyFieldCond>
-                                    <td mat-cell *matCellDef="let element" style="width: 75px;"> {{element[field.key] |
-                                        number:'1.0-4'}}</td>
+                                    <td mat-cell *matCellDef="let element" style="width: 75px;"> {{element[field.key] | formatNumber}}</td>
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
