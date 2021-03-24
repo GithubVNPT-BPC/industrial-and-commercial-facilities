@@ -13,6 +13,9 @@
                 <div class="col-12 button-control my-auto">
                     <button type="submit" mat-raised-button>Lưu</button>
                     <button mat-raised-button type="button" (click)="toggle()">Hiển thị mật khẩu</button>
+                    <button type="button" mat-raised-button (click)="Back()">
+                        <mat-icon>keyboard_backspace</mat-icon>
+                    </button>
                 </div>
             </div>
 
@@ -98,6 +101,15 @@
                         <mat-label>Loại tài khoản</mat-label>
                         <mat-select formControlName="role_id" [(ngModel)]="_Service.userupdate.role_id">
                             <mat-option *ngFor="let item of UserRole" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Trạng thái</mat-label>
+                        <mat-select formControlName="status" [(ngModel)]="_Service.userupdate.status">
+                            <mat-option *ngFor="let item of Status" [value]="item.status">
                                 {{item.name}}
                             </mat-option>
                         </mat-select>

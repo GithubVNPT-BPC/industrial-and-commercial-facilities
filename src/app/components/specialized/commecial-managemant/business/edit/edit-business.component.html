@@ -299,7 +299,7 @@
                             <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ma_nganh_nghe'"
                                 [array]="career" (filteredReturn)="filtercareer =$event"></mat-select-filter>
                             <mat-option *ngFor="let item of filtercareer" [value]="item.id_nganh_nghe_kinh_doanh">
-                                {{item.ma_nganh_nghe}}
+                                {{item.combine}}
                             </mat-option>
                         </mat-select>
                     </td>
