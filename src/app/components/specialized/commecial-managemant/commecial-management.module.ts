@@ -28,7 +28,7 @@ import { RegisteredSaleWebsiteComponent } from './e-commerce-managemant/register
 import { MultilevelTradeComponent } from './multilevel-trade/multilevel-trade.component';
 import { RetailMonthComponent } from './retail/retail-month/retail-month.component';
 import { RetailComponent } from './retail/retail.component';
-import { FormatNumberReportPipe } from "src/app/shared/pipes/formatNumber.pipe";
+// import { FormatNumberReportPipe } from "src/app/shared/pipes/formatNumber.pipe";
 import { MatSortModule } from '@angular/material';
 import { PipeModule } from 'src/app/pipe.module';
 import { TradeFairsExhibitionsComponent } from './trade-development/trade-fairs-exhibitions/trade-fairs-exhibitions.component';
@@ -104,7 +104,6 @@ export const customCurrencyMaskConfig = {
   exports: [
     MatPaginatorModule,
     MatSortModule,
-    FormatNumberReportPipe,
     TranslateIdToNamePipe
   ],
   declarations: [
@@ -131,7 +130,6 @@ export const customCurrencyMaskConfig = {
     RetailMonthComponent,
     RetailComponent,
     MultilevelTradeComponent,
-    FormatNumberReportPipe,
     TradeFairsExhibitionsComponent,
     SubscribeDiscountComponent,
     BorderTradeExportComponent,

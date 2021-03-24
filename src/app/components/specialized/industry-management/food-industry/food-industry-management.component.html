@@ -105,14 +105,14 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-2 col-lg-2 ">
+                    <div class="col-2 col-md-2 col-lg-2 ">
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">DN hết hạn
                         </mat-checkbox>
                     </div>
 
-                    <div class="col-2 col-lg-2 ">
-                        <mat-checkbox (change)="showMoreDetail($event)">Chi tiết
-                        </mat-checkbox>
+                    <div class="col-2 col-md-2 col-lg-2 ">
+                        <!-- <mat-checkbox (change)="showMoreDetail($event)">Chi tiết
+                        </mat-checkbox> -->
                     </div>
 
                     <div class="col-md-8 col-lg-8 button-control">
@@ -154,7 +154,9 @@
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
-                                {{i + 1 + (paginator.pageIndex * paginator.pageSize)}}
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                this.filteredDataSource.paginator.pageSize}}
                             </td>
                         </ng-container>
 
@@ -164,7 +166,7 @@
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container
-                                        *ngIf="!['san_luong', 'cong_suat', 'so_lao_dong'].includes(field.key);else qtyFieldCond">
+                                        *ngIf="!['san_luong', 'cong_suat', 'von_dieu_le'].includes(field.key);else qtyFieldCond">
                                         <ng-container
                                             *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
                                             <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
@@ -174,11 +176,11 @@
 
                                 <ng-template #activeFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' :
-                                        'Hết hạn'}}</td>
+                                        'Ngừng hoạt động'}}</td>
                                 </ng-template>
 
                                 <ng-template #qtyFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | number:'1.0-4'}}</td>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | formatNumber}}</td>
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
@@ -230,10 +232,20 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-9">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
                                         <input matInput formControlName="mst">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Trạng thái</mat-label>
+                                        <mat-select formControlName="tinh_trang_hoat_dong">
+                                            <mat-option value="true">Hoạt động</mat-option>
+                                            <mat-option value="false">Ngừng hoạt động</mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -250,14 +262,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Sản lượng</mat-label>
-                                        <input matInput type="number" formControlName="san_luong">
+                                        <mat-label>Công suất</mat-label>
+                                        <input matInput type="number" formControlName="cong_suat">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Công suất</mat-label>
-                                        <input matInput type="number" formControlName="cong_suat">
+                                        <mat-label>Sản lượng</mat-label>
+                                        <input matInput type="number" formControlName="san_luong">
                                     </mat-form-field>
                                 </div>
                             </div>

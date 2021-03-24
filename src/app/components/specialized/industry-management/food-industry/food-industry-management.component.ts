@@ -16,25 +16,23 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class FoodIndustryManagementComponent extends BaseComponent {
-    //Constant
-
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'cong_suat', 'san_luong', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
 
     displayedFields = {
         mst: "Mã số thuế",
         ten_doanh_nghiep: "Tên doanh nghiệp",
         nganh_nghe_kd_chinh: "Ngành nghề KD chính",
-        dia_chi_day_du: "Địa chỉ",
+        dia_chi_day_du: "Địa bàn",
         // email: "Email",
         // ten_thuc_pham: "Tên thực phẩm",
-        san_luong: "Sản lượng/năm",
         cong_suat: "Công suất thiết kế/năm",
+        san_luong: "Sản lượng/năm",
         von_dieu_le: "Vốn đầu tư",
-        // so_lao_dong_sct: "Sổ lao động SCT",
+        so_lao_dong_sct: "Sổ lao động",
         // email_sct: "Email SCT",
-        so_giay_phep: "Số giấy phép",
+        so_giay_phep: "Số giấy phép/Giấy chứng nhận",
         ngay_cap: "Ngày cấp",
         ngay_het_han: "Ngày hết hạn",
         tinh_trang_hoat_dong: "Trạng thái hoạt động",
@@ -58,11 +56,15 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     authorize: boolean = true
 
+    ngAfterViewInit(): void {
+        this.paginatorAgain();
+    }
+
     ngOnInit() {
         super.ngOnInit();
         this.GetFoodIndustryData(this.currentYear);
         this.displayedColumns = this.reducedFieldList;
-        this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
+        this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
 
         if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
@@ -79,9 +81,11 @@ export class FoodIndustryManagementComponent extends BaseComponent {
                 });
 
                 this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
+
                 this.dataSource.data.forEach(element => {
-                    element.is_expired = !element.tinh_trang_hoat_dong;
+                    element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                 });
+
                 this.filteredDataSource.data = [...this.dataSource.data];
             }
             this._prepareData();
@@ -89,9 +93,10 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         })
     }
 
-    private _prepareData() {
-        this.sanLuongBotMy = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.id_thuc_pham == 1).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
-        this.sanLuongRuou = this.filteredDataSource.data.length ? this.filteredDataSource.data.filter(x => x.id_thuc_pham == 2).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
+    public _prepareData() {
+        let data = this.filteredDataSource.data;
+        this.sanLuongBotMy = data.filter(x => x.id_thuc_pham == 1).length ? data.filter(x => x.id_thuc_pham == 1).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
+        this.sanLuongRuou = data.filter(x => x.id_thuc_pham == 2).length ? data.filter(x => x.id_thuc_pham == 2).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
     }
 
     getLinkDefault() {
@@ -110,13 +115,13 @@ export class FoodIndustryManagementComponent extends BaseComponent {
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
+            tinh_trang_hoat_dong: new FormControl(),
         }
     }
 
     prepareData(data) {
         data = {
             ...data, ...{
-                tinh_trang_hoat_dong: "true",
                 time_id: this.currentYear,
             }
         }
