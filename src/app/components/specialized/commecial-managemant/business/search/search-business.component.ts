@@ -182,7 +182,7 @@ export class SearchBusinessComponent implements OnInit {
   id: string = '2'
 
   ManageUser(id: string) {
-    this.router.navigate(['/manager/manage-user/' + id]);
+    this.router.navigate(['/manager/manage-user/' + id])
   }
 
   selected_field: string = 'ten_doanh_nghiep';

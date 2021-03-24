@@ -71,7 +71,9 @@ export class TopbarComponent implements OnInit {
     this.open = this._eventService.getValue();
   }
   public openForm(id: string) {
-    this._router.navigate(['/manager/user/' + id]);
+    this._router.navigate(['/manager/user/' + id]).then(() => {
+      window.location.reload()
+    });
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }
@@ -108,7 +110,9 @@ export class TopbarComponent implements OnInit {
   }
 
   public ManageUser(id: string) {
-    this._router.navigate(['/manager/manage-user/' + id]);
+    this._router.navigate(['/manager/manage-user/' + id]).then(() => {
+      window.location.reload();
+    })
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }
