@@ -6,15 +6,19 @@
             </mat-card-title>
             <mat-card-subtitle>
                 <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến ngày
-                    <strong>{{ngayketthucbaocao}}</strong></p>
+                    <strong>{{ngayketthucbaocao}}</strong>
+                </p>
             </mat-card-subtitle>
         </mat-card-header>
 
         <div class="row button-control">
             <div class="col-lg-12" *ngIf="!is_sent">
-                <button mat-raised-button (click)="summaryReportObjectId()" title="Lưu">Tổng hợp số liệu</button>
+                <button mat-raised-button (click)="dataSynthesis()" title="Lưu">Tổng hợp số liệu</button>
                 <button mat-raised-button (click)="SaveReport()" title="Lưu">Lưu</button>
                 <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo">Trình lãnh đạo</button>
+                <button type="button" mat-raised-button (click)="Back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                </button>
             </div>
         </div>
 

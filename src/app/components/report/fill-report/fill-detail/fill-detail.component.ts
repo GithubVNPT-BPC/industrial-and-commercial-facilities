@@ -35,6 +35,7 @@ import { element } from "protractor";
 import { merge } from "rxjs";
 import moment from "moment";
 import { ThrowStmt } from "@angular/compiler";
+import { AttachSession } from "protractor/built/driverProviders";
 
 interface HashTableNumber<T> {
   [key: string]: T;
@@ -50,6 +51,9 @@ export class FillReportComponent implements OnInit {
   public readonly ATTRIBUTE_CODE: string = "IND_NAME";
   public readonly UNIT_CODE: string = "IND_UNIT";
   public readonly ATTRIBUTE_DEFAULT: number = 1;
+
+  public readonly numberFieldProperty: string[] = ['fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09',
+    'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20'];
 
   public tableMergeHader: Array<ToltalHeaderMerge> = [];
   public mergeHeadersColumn: Array<string> = [];
@@ -308,7 +312,8 @@ export class FillReportComponent implements OnInit {
       .GetReportByKey(obj_id, time_id, org_id)
       .subscribe((allRecord) => {
         this.attributes = allRecord.data[1] as ReportAttribute[];
-        this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+        this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+        // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
@@ -319,13 +324,11 @@ export class FillReportComponent implements OnInit {
         if (this.object[0]) {
           this.formatFrameReport(this.object[0]);
         }
-        this.indicators.forEach((e) => {
-          console.log(e.ind_unit);
-        });
         this.indicators.sort((a, b) => a.ind_id - b.ind_id);
         this.CreateMergeHeaderTable(this.attributes);
 
         this.CreateReportTable();
+        this.dataSynthesis();
       });
   }
   formatFrameReport(report: ReportOject) {
@@ -410,7 +413,7 @@ export class FillReportComponent implements OnInit {
         mergeHeader.colName = (layer.attr_code + "_TEST").toLowerCase();
         mergeHeader.colText =
           hashTableParentLength[layer.attr_id] > 1 &&
-          hashTableParentLength[layer.attr_id]
+            hashTableParentLength[layer.attr_id]
             ? layer.attr_name
             : "";
         mergeHeader.colDefault = layer.is_default;
@@ -544,99 +547,99 @@ export class FillReportComponent implements OnInit {
       }
       this.dataSource.data.push(tableRow);
     }
-    this.summaryReportObjectId();
+    // this.summaryReportObjectId();
   }
 
-  summaryReportObjectId() {
-    switch (this.obj_id) {
-      // BÁO CÁO THÁNG - TỔNG MỨC BÁN LẺ HÀNG HÓA VÀ DOANH THU DỊCH VỤ
-      case 1:
-        this.CT1();
-        break;
-      // BÁO CÁO - CHỈ SỐ SẢN XUẤT CÔNG NGHIỆP THÁNG
-      case 2:
-        this.CT2();
-        break;
-      default:
-        break;
-    }
-  }
+  // summaryReportObjectId() {
+  //   switch (this.obj_id) {
+  //     // BÁO CÁO THÁNG - TỔNG MỨC BÁN LẺ HÀNG HÓA VÀ DOANH THU DỊCH VỤ
+  //     case 1:
+  //       this.CT1();
+  //       break;
+  //     // BÁO CÁO - CHỈ SỐ SẢN XUẤT CÔNG NGHIỆP THÁNG
+  //     case 2:
+  //       this.CT2();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
-  CT1(){
-    // Thuc hien thang truoc
-    let tem2 = 0;
-    let tem16 = 0;
-    let tem24 = 0;
-    // Thuc hien thang nay
-    let _tem2 = 0;
-    let _tem16 = 0;
-    let _tem24 = 0;
-    
-    // parent_id = 2;16;24
-    // Thuc hien thang truoc
-    let sum_parentid2 : any[] = [];
-    let sum_parentid16 : any[] = [];
-    let sum_parentid24 : any[] = [];
-    // Thuc hien thang nay
-    // Thuc hien thang truoc
-    let _sum_parentid2 : any[] = [];
-    let _sum_parentid16 : any[] = [];
-    let _sum_parentid24 : any[] = [];
-    this.dataSource.data.forEach(element => {
-      switch (element.ind_parent_id) {
-        case 2:
-          sum_parentid2.push(element);
-          break;
-        case 16:
-          sum_parentid16.push(element);
-          break;
-        case 24:
-          sum_parentid24.push(element);
-          break;
-        default:
-          break;
-      }
-    });
+  // CT1(){
+  //   // Thuc hien thang truoc
+  //   let tem2 = 0;
+  //   let tem16 = 0;
+  //   let tem24 = 0;
+  //   // Thuc hien thang nay
+  //   let _tem2 = 0;
+  //   let _tem16 = 0;
+  //   let _tem24 = 0;
 
-    this.dataSource.data.forEach(element => {
-      if(element.ind_parent_id == 1 && element.ind_id == 2){
-        sum_parentid2.forEach(ele => {
-          tem2 += ele['fn01'];
-          _tem2 += ele['fn02'];
-          element.fn01 = tem2;
-          element.fn02 = _tem2;
-          
-        })
-      }
-      if(element.ind_parent_id == 1 && element.ind_id == 16){
-        sum_parentid16.forEach(ele => {
-          tem16 += ele['fn01'];
-          _tem16 += ele['fn02'];
-          element.fn01 = tem16;
-          element.fn02 = _tem16;
-          
-        })
-      }
-      if(element.ind_parent_id == 1 && element.ind_id == 24){
-        sum_parentid24.forEach(ele => {
-          tem24 += ele['fn01'];
-          _tem24 += ele['fn02'];
-          element.fn01 = tem24;
-          element.fn02 = _tem24;
-          
-        })
-      }
-      element.fn04 = element.fn02 - element.fn01;
-    })
-    this.dataSource.data[0].fn01 = tem2 + tem16 + tem24;
-    this.dataSource.data[0].fn02 = _tem2 + _tem16 + _tem24;
-    // Thuc hien thang nay
+  //   // parent_id = 2;16;24
+  //   // Thuc hien thang truoc
+  //   let sum_parentid2 : any[] = [];
+  //   let sum_parentid16 : any[] = [];
+  //   let sum_parentid24 : any[] = [];
+  //   // Thuc hien thang nay
+  //   // Thuc hien thang truoc
+  //   let _sum_parentid2 : any[] = [];
+  //   let _sum_parentid16 : any[] = [];
+  //   let _sum_parentid24 : any[] = [];
+  //   this.dataSource.data.forEach(element => {
+  //     switch (element.ind_parent_id) {
+  //       case 2:
+  //         sum_parentid2.push(element);
+  //         break;
+  //       case 16:
+  //         sum_parentid16.push(element);
+  //         break;
+  //       case 24:
+  //         sum_parentid24.push(element);
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   });
 
-  }
+  //   this.dataSource.data.forEach(element => {
+  //     if(element.ind_parent_id == 1 && element.ind_id == 2){
+  //       sum_parentid2.forEach(ele => {
+  //         tem2 += ele['fn01'];
+  //         _tem2 += ele['fn02'];
+  //         element.fn01 = tem2;
+  //         element.fn02 = _tem2;
 
-  CT2(){
+  //       })
+  //     }
+  //     if(element.ind_parent_id == 1 && element.ind_id == 16){
+  //       sum_parentid16.forEach(ele => {
+  //         tem16 += ele['fn01'];
+  //         _tem16 += ele['fn02'];
+  //         element.fn01 = tem16;
+  //         element.fn02 = _tem16;
 
-  }
+  //       })
+  //     }
+  //     if(element.ind_parent_id == 1 && element.ind_id == 24){
+  //       sum_parentid24.forEach(ele => {
+  //         tem24 += ele['fn01'];
+  //         _tem24 += ele['fn02'];
+  //         element.fn01 = tem24;
+  //         element.fn02 = _tem24;
+
+  //       })
+  //     }
+  //     element.fn04 = element.fn02 - element.fn01;
+  //   })
+  //   this.dataSource.data[0].fn01 = tem2 + tem16 + tem24;
+  //   this.dataSource.data[0].fn02 = _tem2 + _tem16 + _tem24;
+  //   // Thuc hien thang nay
+
+  // }
+
+  // CT2(){
+
+  // }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -677,5 +680,71 @@ export class FillReportComponent implements OnInit {
 
   Back() {
     this.location.back();
+  }
+
+  dataSynthesis() {
+    this.rowCalculate();
+    this.colCalculate();
+  }
+
+  rowCalculate() {
+    this.dataSource.data.reverse().forEach(rowData => {
+      switch (rowData.ind_type) {
+        case 1:
+          this.numberFieldProperty.forEach(fn => rowData[fn] = rowData[fn] ? rowData[fn] : null)
+          break;
+
+        case 3:
+          let filteredDataRow = this.dataSource.data.filter(x => x.ind_parent_id == rowData.ind_id);
+          this.numberFieldProperty.forEach(fn => rowData[fn] = filteredDataRow.reduce((a, b) => a + (b[fn] || 0), 0))
+          break;
+
+        default: {
+
+        }
+      }
+    });
+    this.dataSource.data.reverse();
+  }
+
+  colCalculate() {
+    let reg = /^\{\{\d\}\}\{\{\w+\}\}$/;
+    this.attributes.filter(x => x.formula).forEach(attribute => {
+      // console.log ('Formula: +', attribute.formula, '+ Test: ', reg.test(attribute.formula))
+      if (reg.test(attribute.formula)) {
+        let previousYearRegEx = /\{\{2\}\}/;
+        let is_previous_year = attribute.formula.match(previousYearRegEx)? true : false;
+        let attribute_code = attribute.formula.substr(7, attribute.formula.length - 9);
+        this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
+          attribute_code, attribute.attr_code).subscribe(res => {
+            let fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
+            console.log(res.data)
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter( x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = element[fnProp];
+              console.log(tempRow)
+            });
+          })
+      }
+    });
+  }
+
+  calculateTimeId(time_id: number, is_previous_year: boolean): number {
+    switch (this.object[0].submit_type) {
+      case 1:
+        if (!is_previous_year)
+          return (time_id % 100 == 1) ? (time_id / 100 - 1) * 100 + 12 : time_id - 1;
+        else
+          return (time_id / 100 - 1) * 100;
+
+      case 2:
+        if (!is_previous_year)
+          return (time_id % 10 == 1) ? (time_id / 10 - 1) * 10 + 4 : time_id - 1;
+        else
+          return (time_id / 10 - 1) * 10;
+
+      default:
+        return time_id - 1;
+    }
   }
 }

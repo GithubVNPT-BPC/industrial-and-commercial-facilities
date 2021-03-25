@@ -9,12 +9,13 @@
     <mat-card-content>
         <div class="row">
             <div class="col-12 button-control -align-right my-auto">
-                <button mat-raised-button (click)="AddCertificate()">DS giấy phép</button>
-                <button mat-raised-button (click)="AddCompany()">Thêm doanh nghiệp</button>
+                <button mat-raised-button (click)="AddCertificate()" [hidden]=authorize>DS giấy phép</button>
+                <button mat-raised-button (click)="AddCompany()" [hidden]=authorize>Thêm doanh nghiệp</button>
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
                     Excel</button>
-                <button mat-raised-button class="red" (click)="removeRows()">Xóa doanh nghiệp</button>
+                <button mat-raised-button class="red" (click)="removeRows()" [hidden]=authorize>Xóa doanh
+                    nghiệp</button>
             </div>
         </div>
         <div class="row" *ngIf="isSearch_Advanced">

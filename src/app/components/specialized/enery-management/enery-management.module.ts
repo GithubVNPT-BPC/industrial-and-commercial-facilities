@@ -23,6 +23,7 @@ import { ManufacturingElectronicComponent } from "./manage-approve-hddl/manufact
 import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
+import {KeyEnegyComponent} from './key-enegy/key-enegy.component';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ registerLocaleData(localevi, 'vi');
     BlockElectricComponent,
     ManageApproveHddlComponent,
     ConsultantElectricComponent,
-    ManufacturingElectronicComponent
+    ManufacturingElectronicComponent,
+    KeyEnegyComponent
 ],
   entryComponents: []
 })

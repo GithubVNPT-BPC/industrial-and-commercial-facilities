@@ -1,10 +1,7 @@
 import { Component, Injector } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { MatAccordion } from '@angular/material/expansion';
-import { MatPaginator } from '@angular/material/paginator';
-import { District } from 'src/app/_models/district.model';
-import { IndustrialExplosivesFilterModel, IndustrialExplosivesModel } from 'src/app/_models/APIModel/industrial-explosives.model';
+import { FormControl } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material';
+import { IndustrialExplosivesModel } from 'src/app/_models/APIModel/industrial-explosives.model';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 // Services

@@ -43,6 +43,7 @@ registerLocaleData(localevi, 'vi');
         IIPMonthComponent,
         CertificateRegulationComponent,
         ReportExplosivesComponent,
+        
       ],
       entryComponents: []
 })

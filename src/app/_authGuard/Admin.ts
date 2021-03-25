@@ -4,7 +4,7 @@ import { LoginService } from '../_services/APIService/login.service';
 import { InformationService } from '../shared/information/information.service';
 
 @Injectable()
-export class Manager implements CanActivate {
+export class Admin implements CanActivate {
     public readonly MESSAGE_REJECT: string = "Tài khoản không được phép vào khu vực này";
     public readonly REDIRECT_PAGE: string = "/public/dashboard";
     constructor(public router: Router,
@@ -14,7 +14,7 @@ export class Manager implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const user = this.authenticationService.userValue;
         if (user) {
-            if (user.user_role_id == 1 || user.user_role_id == 3 || user.user_role_id == 4 || user.user_role_id == 5 || user.user_role_id == 7) {
+            if (user.user_role_id == 1) {
                 return true;
             }
             else {

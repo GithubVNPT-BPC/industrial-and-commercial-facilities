@@ -10,6 +10,7 @@ export class CareerModel {
     ma_nganh_nghe: string;
     ten_nganh_nghe: string;
     ten_kem_ma: string;
+    combine: string;
 }
 
 export class DistrictModel {

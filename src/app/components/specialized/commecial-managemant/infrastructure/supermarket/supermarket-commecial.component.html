@@ -72,16 +72,16 @@
                             <mat-card-content>
                                 <ul>
                                     <li>
-                                        Vốn nhà nước: <span>{{VonNhaNuoc | number: '1.0-0':'vi'}}</span>
+                                        Vốn nhà nước: <span>{{VonNhaNuoc | formatNumber}}</span>
                                     </li>
                                     <li>
-                                        Vốn ngoài nhà nước: <span>{{VonNgoaiNhaNuoc | number: '1.0-0':'vi'}}</span>
+                                        Vốn ngoài nhà nước: <span>{{VonNgoaiNhaNuoc | formatNumber}}</span>
                                     </li>
                                     <li>
-                                        Có vốn đầu tư nước ngoài: <span>{{VonNuocNgoai | number: '1.0-0':'vi'}}</span>
+                                        Có vốn đầu tư nước ngoài: <span>{{VonNuocNgoai | formatNumber}}</span>
                                     </li>
                                     <li>
-                                        Vốn khác: <span>{{VonKhac | number: '1.0-0':'vi'}}</span>
+                                        Vốn khác: <span>{{VonKhac | formatNumber}}</span>
                                     </li>
                                 </ul>
                             </mat-card-content>
@@ -270,26 +270,24 @@
 
                         <ng-container matColumnDef="nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Nhà nước </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc | number:
-                                '1.0-0':'vi'}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ngoai_nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Ngoài nhà nước </th>
                             <td mat-cell *matCellDef="let element" class="right-cell"> {{element.ngoai_nha_nuoc |
-                                number: '1.0-0':'vi'}} </td>
+                                formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="co_von_dau_tu_nuoc_ngoai">
                             <th mat-header-cell *matHeaderCellDef> Có vốn đầu tư nước ngoài </th>
                             <td mat-cell *matCellDef="let element" class="right-cell">
-                                {{element.co_von_dau_tu_nuoc_ngoai | number: '1.0-0':'vi'}} </td>
+                                {{element.co_von_dau_tu_nuoc_ngoai | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="von_khac">
                             <th mat-header-cell *matHeaderCellDef> Vốn khác </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.von_khac | number:
-                                '1.0-0':'vi'}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.von_khac | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tong_hop">
@@ -314,8 +312,7 @@
 
                         <ng-container matColumnDef="dien_tich_dat">
                             <th mat-header-cell *matHeaderCellDef> Diện tích đất </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat | number:
-                                '1.0-0':'vi'}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="phan_hang">
@@ -325,8 +322,7 @@
 
                         <ng-container matColumnDef="so_lao_dong">
                             <th mat-header-cell *matHeaderCellDef> Số lao động </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.so_lao_dong | number:
-                                '1.0-0':'vi'}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.so_lao_dong | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_chu_dau_tu">

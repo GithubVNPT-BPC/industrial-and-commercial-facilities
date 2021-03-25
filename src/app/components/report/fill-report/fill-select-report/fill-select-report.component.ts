@@ -183,10 +183,8 @@ export class FillSelectReportComponent implements OnInit {
     //   this.router.createUrlTree(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
     // );
     // window.open(url, "_blank");
-    const url = this.router.serializeUrl(
-      this.router.createUrlTree(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } })
-    );
-    window.open(url, "_blank");
+
+    this.router.navigate(['/report/edit'], { queryParams: { obj_id: obj_id, org_id: this.org_id, time_id: time_id } });
   }
 
   GetCurrentMonth() {

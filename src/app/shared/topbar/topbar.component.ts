@@ -66,8 +66,8 @@ export class TopbarComponent implements OnInit {
     this._eventService.setvalue(!this.open);
     this.open = this._eventService.getValue();
   }
-  public openForm() {
-    this._router.navigate(['/manager/user']);
+  public openForm(id: string) {
+    this._router.navigate(['/manager/user/' + id]);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }
@@ -99,6 +99,12 @@ export class TopbarComponent implements OnInit {
 
   public OpenDetailCompany(mst: string) {
     this._router.navigate(['manager/business/edit/' + mst]);
+    this._eventService.setvalue(false);
+    this.open = this._eventService.getValue();
+  }
+
+  public ManageUser() {
+    this._router.navigate(['/manager/manage-user']);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }
