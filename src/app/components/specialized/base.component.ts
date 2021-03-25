@@ -81,10 +81,6 @@ export abstract class BaseComponent implements OnInit {
         this.sendLinkToNext(true);
     }
 
-    ngAfterViewInit(): void {
-      this.paginatorAgain();
-    }
-
     protected initListView() {
         // In case we have already declared all field in displayed Columns
         if (this.displayedColumns.length == 2 && Object.keys(this.displayedFields).length > 0) {
