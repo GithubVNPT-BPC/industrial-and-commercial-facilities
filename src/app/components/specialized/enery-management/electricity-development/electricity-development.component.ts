@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatPaginator, MatTable, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material';
 import { ElectricityDevelopment35KVModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { BaseComponent } from '../../base.component';
 
 @Component({
@@ -13,34 +12,15 @@ import { BaseComponent } from '../../base.component';
   styleUrls: ['/../../special_layout.scss'],
 })
 export class ElectricDevelopmentManagementComponent extends BaseComponent {
-  //ViewChild 
-  // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
 
   //Constant variable
-  public readonly displayedColumns: string[] = ['index', 'ten_huyen_thi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
+  public readonly displayedColumns: string[] = ['select', 'index', 'ten_huyen_thi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
   public readonly dsplayMergeColumns: string[] = ['indexM', 'ten_huyen_thiM', 'trung_apM', 'ha_apM', 'bien_apM'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
   public filteredDataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
-  // public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  // { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  // { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  // { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  // { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  // { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  // { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  // { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  // { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  // { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  // { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+
   //Only TS Variable
-  years: number[] = [];
   trung_ap_3p: number;
   tongSoXa: number;
   trung_ap_1p: number;
@@ -49,11 +29,9 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   so_tram_bien_ap: number;
   cong_xuat_bien_ap: number;
   isChecked: boolean;
-  currentYear: number = new Date().getFullYear();
 
   constructor(
     private injector: Injector,
-    public excelService: ExcelService,
     private energyService: EnergyService,
     public _login: LoginService
   ) {
@@ -63,11 +41,8 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   authorize: boolean = true
 
   ngOnInit() {
-    // this.initDistricts();
     super.ngOnInit();
-    this.years = this.getYears();
     this.getDataQuyHoachDienDuoi35KV();
-    this.autoOpen();
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -75,22 +50,15 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   }
 
   getDataQuyHoachDienDuoi35KV() {
-    this.energyService.LayDuLieuQuyHoachDien35KV(this.currentYear).subscribe(res => {
-      this.filteredDataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(res['data']);
+    this.energyService.LayDuLieuQuyHoachDien35KV(this.currentYear).subscribe(result => {
+      this.filteredDataSource.data = [];
+      if (result.data && result.data.length > 0) {
+        this.dataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(result['data']);
+        this.filteredDataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(result['data']);
+      }
       this.caculatorValue();
-      this.dataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(res['data']);
+      this.paginatorAgain();
     })
-  }
-
-  // initDistricts(){
-  //   this.sctService.LayDanhSachQuanHuyen().subscribe(res => {
-  //     if(res['success'])
-  //       this.districts = res['data']
-  //   })
-  // }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
   }
 
   applyFilter(event: Event) {
@@ -98,19 +66,6 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  get(time_id: number) {
-
-  }
-
-  log(any) {
-  }
-
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-  getValueOfHydroElectric(value: any) {
-
-  }
   applyDistrictFilter(event) {
     let filteredData = [];
 
@@ -130,16 +85,7 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     this.caculatorValue();
     this.paginatorAgain();
   }
-  paginatorAgain() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
+
   caculatorValue() {
     this.trung_ap_3p = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.trung_ap_3_pha).reduce((a, b) => a + b) : 0;
     this.tongSoXa = this.filteredDataSource.data.length;
@@ -149,9 +95,6 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     this.so_tram_bien_ap = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_tram).reduce((a, b) => a + b) : 0;
     this.cong_xuat_bien_ap = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat).reduce((a, b) => a + b) : 0;
   }
-  // isHidden(row : any){
-  //     return (this.isChecked)? (row.is_het_han) : false;
-  // }
 
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
@@ -168,7 +111,7 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
       ha_ap_1_pha: new FormControl(''),
       so_tram: new FormControl(''),
       cong_suat: new FormControl(''),
-      time_id: new FormControl(''),
+      time_id: new FormControl(this.currentYear),
       id_trang_thai_hoat_dong: new FormControl(1),
       id_quan_huyen: new FormControl()
     }
@@ -181,17 +124,22 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     data['ha_ap_1_pha'] = Number(data['ha_ap_1_pha']);
     data['so_tram'] = Number(data['so_tram']);
     data['cong_suat'] = Number(data['cong_suat']);
-    data['time_id'] = Number(data['time_id']);
+    data['time_id'] = data['time_id'];
     data['id_trang_thai_hoat_dong'] = 1;
     return data;
   }
 
   public callService(data) {
-    let list_data = [data];
-    // console.log(list_data)
-    this.energyService.CapNhatDuLieuQuyHoachDien35KV(list_data).subscribe(res => {
-      this.successNotify(res);
-    })
+    this.energyService.CapNhatDuLieuQuyHoachDien35KV([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.energyService.Delete35KV_ElectricalNet(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   getLinkDefault() {
