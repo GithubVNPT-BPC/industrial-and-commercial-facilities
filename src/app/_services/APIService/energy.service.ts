@@ -83,7 +83,7 @@ export class EnergyService {
         );
     }
 
-    LayDuLieuQuyHoachDien110KV(id_loai = 0){
+    LayDuLieuQuyHoachDien110KV(id_loai){
         var apiUrl = this.apiNangLuong + this.urlDien110KV;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('id_loai', id_loai.toString())
@@ -92,10 +92,10 @@ export class EnergyService {
         );
     }
 
-    LayDuLieuQuyHoachDien110KVDuKien(time_id: number){
+    LayDuLieuQuyHoachDien110KVDuKien(id_loai){
         var apiUrl = this.apiNangLuong + this.urlDien110KVDuKien;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        let params = new HttpParams().set('time_id', time_id.toString())
+        let params = new HttpParams().set('id_loai', id_loai.toString())
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
