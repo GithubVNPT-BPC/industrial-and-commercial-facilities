@@ -30,7 +30,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{soLuongDoanhNghiep| number: '1.0-0':'vi'}}
+                                {{soLuongDoanhNghiep| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -43,7 +43,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{doanhThu| number: '1.0-0':'vi'}}
+                                {{doanhThu| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -56,7 +56,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{congXuat| number: '1.0-0':'vi'}}
+                                {{congXuat| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -69,7 +69,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{sanluongnam| number: '1.0-0':'vi'}}
+                                {{sanluongnam| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -92,7 +92,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="getSolarEnergyData($event.value)" [(value)]="currentYear">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -119,14 +119,18 @@
                             (click)="ExportTOExcel('Điện mặt trời', 'Điện mặt trời')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()"
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()" [hidden]=authorize>
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
                     </div>
 
                     <div class="col-12 col-lg-12">
@@ -142,7 +146,7 @@
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table1">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null" 
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
@@ -182,25 +186,25 @@
                         <ng-container matColumnDef="cong_suat_thiet_ke">
                             <th mat-header-cell *matHeaderCellDef> Công suất thiết kế/năm <br> (MW) </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.cong_suat_thiet_ke| number: '1.0-0':'vi'}}</td>
+                                {{element.cong_suat_thiet_ke | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="san_luong_6_thang">
                             <th mat-header-cell *matHeaderCellDef>Sản lượng 6 tháng/cùng kỳ<br>(triệu kW/giờ) </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.san_luong_6_thang| number: '1.0-0':'vi'}}</td>
+                                {{element.san_luong_6_thang| formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="san_luong_nam">
                             <th mat-header-cell *matHeaderCellDef> Sản lượng năm/cùng kỳ<br>(triệu kW/giờ) </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.san_luong_nam| number: '1.0-0':'vi' }}
+                                {{element.san_luong_nam| formatNumber }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="doanh_thu">
                             <th mat-header-cell *matHeaderCellDef> Doanh thu/năm <br>(Tỷ đồng)</th>
-                            <td mat-cell *matCellDef="let element"> {{element.doanh_thu| number: '1.0-0':'vi' }}
+                            <td mat-cell *matCellDef="let element"> {{element.doanh_thu| formatNumber }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="trang_thai">

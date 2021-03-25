@@ -5,6 +5,7 @@ import { NgForm, NumberValueAccessor } from '@angular/forms';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
+import { Location } from '@angular/common';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -85,7 +86,8 @@ export class AddUserComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public datepipe: DatePipe,
-    public _Service: LoginService
+    public _Service: LoginService,
+    public location: Location,
   ) {
     this.show = true
     this.route.params.subscribe((params) => {
@@ -194,6 +196,6 @@ export class AddUserComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['manager/manage-user']);
+    this.location.back();
   }
 }

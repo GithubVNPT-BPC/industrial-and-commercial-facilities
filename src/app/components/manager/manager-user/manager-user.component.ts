@@ -10,7 +10,7 @@ import { CommonFuntions } from 'src/app/components/specialized/commecial-managem
 
 import { MatDialog } from '@angular/material';
 
-import { InfoUserList, DeleteModel, UserRole } from "src/app/_models/user.model";
+import { InfoUserList, DeleteModel, UserRole, ResetDefaultPassword } from "src/app/_models/user.model";
 import { LoginService } from "src/app/_services/APIService/login.service";
 
 import { MatAccordion } from '@angular/material/expansion';
@@ -71,6 +71,8 @@ export class ManagerUserComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
+  id: string
+
   constructor(
     public excelService: ExcelService,
     public _Service: LoginService,
@@ -80,6 +82,9 @@ export class ManagerUserComponent implements OnInit {
     private _location: Location,
     public route: ActivatedRoute
   ) {
+    this.route.params.subscribe((params) => {
+      this.id = params["id"];
+    });
   }
 
   selection = new SelectionModel<InfoUserList>(true, []);
@@ -124,7 +129,38 @@ export class ManagerUserComponent implements OnInit {
         this.selection.clear();
         this.paginator.pageIndex = 0;
         window.location.reload();
+      },
+        err => {
+          this._info.msgError('Không thành công')
+        }
+      )
+    }
+  }
+
+  resetpassword: string[];
+  defaultpassword: Array<ResetDefaultPassword> = new Array<ResetDefaultPassword>();
+
+  ResetPassword() {
+    if (confirm('Bạn Có Chắc Muốn Thao Tác?')) {
+      this.resetpassword = this.selection.selected.map(x => x.user_name)
+
+      this.defaultpassword.push({
+        username: ''
       })
+
+      for (let index = 0; index < this.resetpassword.length; index++) {
+        this.defaultpassword[0].username = this.resetpassword[index]
+        this._Service.ChangeDefaultPassword(this.defaultpassword[0]).subscribe(res => {
+          this._info.msgSuccess('Thành công')
+          this.selection.clear();
+          this.paginator.pageIndex = 0;
+          window.location.reload();
+        },
+          err => {
+            this._info.msgError('Không thành công')
+          }
+        )
+      }
     }
   }
 
@@ -164,7 +200,13 @@ export class ManagerUserComponent implements OnInit {
     this._Service.GetUserInfo('user_id', 'desc').subscribe(all => {
       this.dataSource.data = all
 
-      this.dataSource1.data = this.dataSource.data.filter(x => x.status == true)
+      if (this.id == '0') {
+        this.dataSource1.data = this.dataSource.data.filter(x => x.status == true && x.role_id != 2)
+      }
+      else if (this.id == '2') {
+        this.dataSource1.data = this.dataSource.data.filter(x => x.status == true && x.role_id == 2)
+      }
+
       this.dataSource1.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
       this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -206,7 +248,12 @@ export class ManagerUserComponent implements OnInit {
   }
 
   applyExpireCheck(event) {
-    this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked)
+    if (this.id == '0') {
+      this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked && x.role_id != 2)
+    }
+    else if (this.id == '2') {
+      this.dataSource1.data = this.dataSource.data.filter(x => x.status == !event.checked && x.role_id == 2)
+    }
   }
 
   // Back() {

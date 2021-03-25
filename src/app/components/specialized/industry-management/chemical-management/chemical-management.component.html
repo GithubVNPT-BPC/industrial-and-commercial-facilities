@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-12 col-lg-12">
+                    <div class="col-4 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -35,7 +35,7 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <!-- <div class="col-4 col-lg-4">
+                    <div class="col-4 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -44,7 +44,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <strong>{{sanLuongSanXuat | number: '1.0-0':'vi'}}</strong>
+                                <strong>{{sanLuongSanXuat | formatNumber}}</strong>
                                 tấn/năm
                             </mat-card-content>
                         </mat-card>
@@ -58,11 +58,11 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <strong>{{sanLuongKinhDoanh | number: '1.0-0':'vi'}}</strong>
+                                <strong>{{sanLuongKinhDoanh | formatNumber}}</strong>
                                 tấn/năm
                             </mat-card-content>
                         </mat-card>
-                    </div> -->
+                    </div>
                 </div>
             </mat-expansion-panel>
 
@@ -102,7 +102,7 @@
                     </div>
 
                     <div class="col-sm-12 col-md-3 col-lg-3">
-                        <mat-form-field appearance="outline">
+                        <!-- <mat-form-field appearance="outline">
                             <mat-label>Loại hình</mat-label>
                             <mat-select #dSelect (selectionChange)="applyFilter($event)"
                                 [(ngModel)]="filterModel.nganh_nghe_kd_chinh" multiple>
@@ -110,7 +110,7 @@
                                     {{type.name}}
                                 </mat-option>
                             </mat-select>
-                        </mat-form-field>
+                        </mat-form-field> -->
                     </div>
                 </div>
                 <div class="row">
@@ -151,13 +151,13 @@
 
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null" 
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -180,9 +180,12 @@
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
-                                        <ng-container
-                                            *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
-                                            <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                        <ng-container *ngIf="!['sanLuongList'].includes(field.key);else sanLuongFieldCond">
+                                            <ng-container *ngIf="!['congSuatList'].includes(field.key);else congSuatFieldCond">
+                                                <ng-container *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
+                                                    <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                                </ng-container>
+                                            </ng-container>
                                         </ng-container>
                                     </ng-container>
                                 </ng-container>
@@ -194,6 +197,28 @@
 
                                 <ng-template #qtyFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] | formatNumber}}</td>
+                                </ng-template>
+
+                                <ng-template #sanLuongFieldCond>
+                                    <td mat-cell *matCellDef="let element">
+                                        <div *ngFor="let item of element[field.key]" >
+                                            <div class="d-block">
+                                                <strong>{{ item.id_loai_hinh_hoat_dong == 1 ? "Sản xuất": "Kinh doanh" }}</strong> - 
+                                                {{ item.ten_hoa_chat ? item.ten_hoa_chat + " : " : ""}} {{ item.san_luong | formatNumber}}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </ng-template>
+
+                                <ng-template #congSuatFieldCond>
+                                    <td mat-cell *matCellDef="let element"> 
+                                        <div *ngFor="let item of element[field.key]" >
+                                            <div class="d-block">
+                                                <strong>{{ item.id_loai_hinh_hoat_dong == 1 ? "Sản xuất": "Kinh doanh" }}</strong> - 
+                                                {{ item.ten_hoa_chat ? item.ten_hoa_chat + " : " : ""}} {{ item.cong_suat | formatNumber}}
+                                            </div>
+                                        </div>
+                                    </td>
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
@@ -302,16 +327,27 @@
                                                 </mat-select>
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <mat-form-field appearance="outline">
                                                 <mat-label>Sản lượng</mat-label>
                                                 <input matInput type="number" formControlName="san_luong">
                                             </mat-form-field>
                                         </div>
-                                        <div class="col-md-3">
+                                        <div class="col-md-2">
                                             <mat-form-field appearance="outline">
                                                 <mat-label>Công suất</mat-label>
                                                 <input matInput type="number" formControlName="cong_suat">
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <mat-form-field appearance="outline">
+                                                <mat-label>Loại hình</mat-label>
+                                                <mat-select formControlName="id_loai_hinh_hoat_dong">
+                                                    <mat-option *ngFor="let item of typeList"
+                                                        [value]="item.id_loai_hinh_hoat_dong">
+                                                        {{item.name}}
+                                                    </mat-option>
+                                                </mat-select>
                                             </mat-form-field>
                                         </div>
                                         <div class="col-md-1">

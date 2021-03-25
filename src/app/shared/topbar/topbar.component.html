@@ -29,6 +29,7 @@
                     <div hidden>
                         userrole={{userrole}}
                         mst={{mst}}
+                        id={{id}}
                     </div>
 
                     <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
@@ -47,7 +48,7 @@
                         <ng-container *ngIf="userrole == 1">
                             <div class="dropdown-item">
                                 <mat-icon>account_box</mat-icon>
-                                <span (click)="ManageUser()" class="display-item">Quản lý tài khoản</span>
+                                <span (click)="ManageUser(id)" class="display-item">Quản lý tài khoản</span>
                             </div>
                             <div class="dropdown-item">
                                 <mat-icon>account_box</mat-icon>
