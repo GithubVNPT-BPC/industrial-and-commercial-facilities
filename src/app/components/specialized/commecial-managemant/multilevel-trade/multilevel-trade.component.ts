@@ -82,8 +82,8 @@ export class MultilevelTradeComponent extends BaseComponent {
   public getMultiLevelTradeList() {
     this.commerceManagementService.getMultiLevelTradeData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
-          this.filteredDataSource.data = [];
           allrecords.data.forEach(element => {
             element.ngay_dang_ky_giay_tchtbhdc = this.formatDate(element.ngay_dang_ky_giay_tchtbhdc);
             element.thoi_gian_bat_dau = this.formatDate(element.thoi_gian_bat_dau);

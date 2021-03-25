@@ -193,9 +193,9 @@ export class ClusterManagementComponent extends BaseComponent {
         return datas;
       }
     
-      callRemoveService(data) {
-        this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-      }
+    callRemoveService(data) {
+    this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
 
     handleFileInput(file: FileList) {
         this.fileToUpload = file.item(0);

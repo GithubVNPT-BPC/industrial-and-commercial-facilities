@@ -42,7 +42,7 @@ export class EnergyService {
 
     // DELETE
     private urlDeteleHydro ='/xoa-thuy-dien';
-    private urlDeleteBlockElectric = '/';
+    private urlDeleteBlockElectric = '/xoa-dsk';
     private urlDeleteRuralElectric ='/xoa-dnt';
     private urlDeleteSolarEnergy = '/xoa-dmt';
 
