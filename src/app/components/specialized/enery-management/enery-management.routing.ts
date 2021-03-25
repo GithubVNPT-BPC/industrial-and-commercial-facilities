@@ -12,6 +12,7 @@ import { SolarEneryManagementComponent } from './solar-enery-management/solor-en
 import { ElectricDevelopmentManagementComponent } from './electricity-development/electricity-development.component';
 import { PowerProductionManagementComponent } from './power-production/power-production.component';
 import { RuralElectricManagementComponent } from './rural-electric/rural-electric-management.component';
+import { KeyEnegyComponent } from './key-enegy/key-enegy.component';
 const routes: Routes = [
   
   {
@@ -97,6 +98,13 @@ const routes: Routes = [
         },
         component: RuralElectricManagementComponent
       },
+      {
+        path: 'key_enegy',
+        data: {
+          title: 'Năng lượng trọng điểm'
+        },
+        component: KeyEnegyComponent
+      }
     ],
   },
   
