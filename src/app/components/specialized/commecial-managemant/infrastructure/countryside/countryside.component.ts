@@ -162,4 +162,13 @@ export class CountrysideComponent extends BaseComponent {
     this.paginatorAgain();
   }
 
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.commerceManagementService.deleteCountrySide(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
 }

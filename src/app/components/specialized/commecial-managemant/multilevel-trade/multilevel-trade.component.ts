@@ -83,10 +83,17 @@ export class MultilevelTradeComponent extends BaseComponent {
     this.commerceManagementService.getMultiLevelTradeData().subscribe(
       allrecords => {
         if (allrecords.data && allrecords.data.length > 0) {
+          this.filteredDataSource.data = [];
+          allrecords.data.forEach(element => {
+            element.ngay_dang_ky_giay_tchtbhdc = this.formatDate(element.ngay_dang_ky_giay_tchtbhdc);
+            element.thoi_gian_bat_dau = this.formatDate(element.thoi_gian_bat_dau);
+            element.thoi_gian_ket_thuc = this.formatDate(element.thoi_gian_ket_thuc);
+            element.ngay_dang_ky_giay_dkbhdc = this.formatDate(element.ngay_dang_ky_giay_dkbhdc);
+          });
           this.dataSource = new MatTableDataSource<MultiLevelTradeModel>(allrecords.data);
           this.filteredDataSource = new MatTableDataSource<MultiLevelTradeModel>(allrecords.data);
-          this.filteredDataSource.paginator = this.paginator;
         }
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
@@ -103,10 +110,10 @@ export class MultilevelTradeComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
-    data['ngay_dang_ky_giay_dkbhdc'] = moment(data['ngay_dang_ky_giay_dkbhdc']).format('DD/MM/yyyy');
-    data['ngay_dang_ky_giay_tchtbhdc'] = moment(data['ngay_dang_ky_giay_tchtbhdc']).format('DD/MM/yyyy');
+    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
+    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
+    data['ngay_dang_ky_giay_dkbhdc'] = moment(data['ngay_dang_ky_giay_dkbhdc']).format('yyyyMMDD');
+    data['ngay_dang_ky_giay_tchtbhdc'] = moment(data['ngay_dang_ky_giay_tchtbhdc']).format('yyyyMMDD');
 
     data = {
       ...data, ...{
