@@ -260,6 +260,7 @@ export class EnergyService {
         );
     }
 
+
     DeleteFocusedEnergy(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlDeleteFocusedEnergy;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
