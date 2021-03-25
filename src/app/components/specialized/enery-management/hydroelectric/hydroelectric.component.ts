@@ -96,10 +96,6 @@ export class HydroelectricComponent extends BaseComponent {
     }
   }
 
-  callService(data) {
-    this.energyService.PostHydroEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-  }
-
   // applyDistrictFilter(event) {
   //   let filteredData = [];
 
@@ -145,5 +141,18 @@ export class HydroelectricComponent extends BaseComponent {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
     this.initPaginator();
+  }
+
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.energyService.DeleteHydro(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  callService(data) {
+    this.energyService.PostHydroEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 }

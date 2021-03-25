@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
 import { BlockElectricModel } from 'src/app/_models/APIModel/electric-management.module';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
@@ -24,7 +23,6 @@ export class BlockElectricComponent extends BaseComponent {
   public filteredDataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
 
   //Only TS Variable
-  years: number[] = [];
   doanhThu: number;
   congXuat: number;
   sanluongnam: number;
@@ -43,7 +41,6 @@ export class BlockElectricComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.years = this.getYears();
     this.getDataBlockElectric(this.currentYear);
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
@@ -62,10 +59,6 @@ export class BlockElectricComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-
   getFormParams() {
     return {
       ten_du_an: new FormControl(),
@@ -75,6 +68,7 @@ export class BlockElectricComponent extends BaseComponent {
       san_luong_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu: new FormControl(),
+      time_id: new FormControl(),
     }
   }
 
@@ -82,7 +76,6 @@ export class BlockElectricComponent extends BaseComponent {
     data = {
       ...data, ...{
         id_trang_thai_hoat_dong: 1,
-        time_id: this.currentYear,
       }
     }
     return data;
@@ -94,12 +87,13 @@ export class BlockElectricComponent extends BaseComponent {
 
   getDataBlockElectric(time_id: any) {
     this.energyService.LayDuLieuDienSinhKhoi(time_id).subscribe(res => {
+      this.filteredDataSource.data = [];
       if (res.data && res.data.length > 0) {
         this.filteredDataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
         this.dataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
-        this.caculatorValue();
-        this.initPaginator();
       }
+      this.caculatorValue();
+      this.initPaginator();
     })
   }
 

@@ -30,7 +30,7 @@ export class CommerceManagementService {
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
     private urlPostSubcribeDiscount = "api/qltm/cap-nhat-khuyen-mai";
     private urlPostMultiLevelTrade = "api/qltm/cap-nhat-du-lieu-da-cap";
-    private urlPostMarketPlace = "api/qlnl/addsttttm";
+    private urlPostMarketPlace = "api/qltm/addsttttm";
     private urlPostMarket = 'api/qltm/httm/cho';
     private urlPostFoodCommerce = 'api/qltm/httm/kdtp';
     private urlPostConvenienceStore = 'api/qltm/httm/chtl';
@@ -48,6 +48,7 @@ export class CommerceManagementService {
     private urlDeleteShoppingCenter = "api/qltm/httm/xoa-tttm";
     private urlDeleteConvenienceStore = "api/qltm/httm/xoa-chtl";
     private urlDeleteFoodCommerce = "api/qltm/httm/xoa-kdtp";
+    private urlDeleteCountrySide = "api/qltm/httm/xoa-ntm";
     
     constructor(public http: HttpClient) { }
 
@@ -290,6 +291,15 @@ export class CommerceManagementService {
 
     deleteFoodCommerce(datas) {
         let apiUrl = this.apiHome + this.urlDeleteFoodCommerce;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteCountrySide(datas) {
+        let apiUrl = this.apiHome + this.urlDeleteCountrySide;
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),

@@ -18,8 +18,8 @@ export class ClusterManagementComponent extends BaseComponent {
     showColumns: string[] = [];
     showSubColumns: string[] = [];
     subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
-    topColumns: string[] = ['index', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct'];
-    totalColumns: string[] = ['index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
+    topColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct'];
+    totalColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     imageUrl: string = "";
@@ -40,6 +40,12 @@ export class ClusterManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
     filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
+    trang_thai_hd: any[] = [
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
+    ];
+
     constructor(
         public indService: IndustryManagementService,
         public router: Router,
@@ -53,7 +59,7 @@ export class ClusterManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.showColumns = this.topColumns;
+        this.showColumns = this.totalColumns;
         this.showSubColumns = [];
         this.getDanhSachQuanLyCumCongNghiep();
         this.initWards();
@@ -169,12 +175,6 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    trang_thai_hd: any[] = [
-        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
-    ];
-
     public prepareData(data) {
         data['duong_dan'] = this.fileToUpload;
         return data
@@ -187,6 +187,15 @@ export class ClusterManagementComponent extends BaseComponent {
             this.autopaging();
         })
     }
+
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
+        return datas;
+      }
+    
+      callRemoveService(data) {
+        this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+      }
 
     handleFileInput(file: FileList) {
         this.fileToUpload = file.item(0);

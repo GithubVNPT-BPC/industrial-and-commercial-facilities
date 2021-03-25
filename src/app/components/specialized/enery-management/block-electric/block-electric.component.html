@@ -93,7 +93,7 @@
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="getDataBlockElectric($event.value)"
                                 [(ngModel)]="currentYear">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -122,14 +122,18 @@
                             (click)="ExportTOExcel('Điện sinh khối', 'Điện sinh khối')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()"
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                        <!-- <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
-                        </button>
+                        </button> -->
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()" [hidden]=authorize>
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
                     </div>
 
                     <div class="col-12 col-lg-12">
@@ -245,6 +249,16 @@
                                     </mat-form-field>
                                 </div>
 
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kỳ dữ liệu</mat-label>
+                                        <mat-select formControlName="time_id">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
                                 <div class="col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên dự án</mat-label>
@@ -285,7 +299,7 @@
                                         <mat-label>Doanh thu</mat-label>
                                         <input matInput type="number" formControlName="doanh_thu">
                                     </mat-form-field>
-                                </div>
+                                </div>       
                             </div>
                         </mat-card-content>
                     </div>

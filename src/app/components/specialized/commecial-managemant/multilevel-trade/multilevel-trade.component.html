@@ -74,10 +74,11 @@
                             (click)="ExportTOExcel('KD đa cấp','KD đa cấp')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" (click)="switchView()" [hidden]=authorize>
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                            [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
@@ -127,7 +128,10 @@
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Stt </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
-                                {{i+1}}</td>
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                    + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                    this.filteredDataSource.paginator.pageSize}}
+                                </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_doanh_nghiep" sticky>
@@ -352,7 +356,7 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Ngày đăng ký</mat-label>
                                         <input matInput [matDatepicker]="ngay_dang_ky_giay_tchtbhdc"
-                                            formControlName="ngay_dang_ky_giay_dkbhdc">
+                                            formControlName="ngay_dang_ky_giay_tchtbhdc">
                                         <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_tchtbhdc">
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #ngay_dang_ky_giay_tchtbhdc></mat-datepicker>

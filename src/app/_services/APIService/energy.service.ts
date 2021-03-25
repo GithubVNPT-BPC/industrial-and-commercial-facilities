@@ -25,6 +25,8 @@ export class EnergyService {
     private urlDien35KV = "/35KV";
     private urlDienNongThon = "/dnt";
     private urlTuVanDien = "/cphd";
+    private urlNLTD = "/nltd";
+    private urlXoaNLTD = "/nltd/xoa-nltd"
 
     // POST api
     private urlPostSolarEnergyData = '/dmt';
@@ -37,6 +39,12 @@ export class EnergyService {
     private urlCapNhatDienNongThon = "/dnt";
     private urlCapNhatCapPhepDien = "/cphd";
     private urlCapNhatTietKiemNL = "/tknl";
+
+    // DELETE
+    private urlDeteleHydro ='/xoa-thuy-dien';
+    private urlDeleteBlockElectric = '/';
+    private urlDeleteRuralElectric ='/xoa-dnt';
+    private urlDeleteSolarEnergy = '/xoa-dmt';
 
     token: any;
     username: any;
@@ -210,6 +218,65 @@ export class EnergyService {
         var apiUrl = this.apiNangLuong + this.urlCapNhatTietKiemNL;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // DELETE Apis
+
+    DeleteHydro(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeteleHydro;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteBlockElectric(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteBlockElectric;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteRuralElectric(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteRuralElectric;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteSolarEnergy(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteSolarEnergy;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    LayDuLieuNangLuongTrongDiem(time_id: number){
+        var apiUrl = this.apiNangLuong + this.urlNLTD;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    ThemDuLieuNangLuongTrongDiem(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlNLTD;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    XoaDuLieuNangLuongTrongDiem(IDs: any[]){
+        var apiUrl = this.apiNangLuong + this.urlXoaNLTD;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, IDs, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

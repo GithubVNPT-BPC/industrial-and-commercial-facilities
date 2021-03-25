@@ -46,6 +46,7 @@ export class IndustryManagementService {
     private urlDeleteFoodIndustry = '/cntp-xoa';
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
     private urlDeleteChemistry = '/hoa-chat-xoa';
+    private urlDeleteClusterManagement = '/xoa-ccn';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
     private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
@@ -244,6 +245,14 @@ export class IndustryManagementService {
         );
     }
 
+    public DeleteClusterManagement(body: any){
+        var apiUrl = this.endpoint + this.urlDeleteClusterManagement;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     // ATTACHMENTS
     public PostAttachment(datas) {
         var apiUrl = this.urlPostAttachment;
@@ -264,6 +273,6 @@ export class IndustryManagementService {
         return this.http.post<any>(apiUrl, id, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)
         );
-    }
+    } 
 
 }

@@ -138,7 +138,7 @@ export class FoodManagementComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.commerceManagementService.deleteMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.commerceManagementService.deleteFoodCommerce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 

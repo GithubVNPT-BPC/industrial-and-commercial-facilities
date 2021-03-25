@@ -23,7 +23,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
   public filteredDataSource: MatTableDataSource<SolarEneryManagementModel> = new MatTableDataSource<SolarEneryManagementModel>();
 
   //Only TS Variable
-  years: number[] = [];
   doanhThu: number;
   congXuat: number;
   sanluongnam: number;
@@ -42,7 +41,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.years = this.getYears();
     this.getSolarEnergyData(this.currentYear);
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
@@ -68,10 +66,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
   }
 
   getFormParams() {
@@ -133,8 +127,8 @@ export class SolarEneryManagementComponent extends BaseComponent {
   }
 
   caculatorValue() {
-    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
+    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
     this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
   }
@@ -146,5 +140,14 @@ export class SolarEneryManagementComponent extends BaseComponent {
     // this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
     this.initPaginator();
+  }
+
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.energyService.DeleteSolarEnergy(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 }
