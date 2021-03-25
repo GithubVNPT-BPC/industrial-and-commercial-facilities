@@ -58,7 +58,7 @@ export class ClusterManagementComponent extends BaseComponent {
         this.getDanhSachQuanLyCumCongNghiep();
         this.initWards();
 
-        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -106,9 +106,7 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     public openDetailCluster(id: string) {
-        let url = this.router.serializeUrl(
-            this.router.createUrlTree(['/specialized/industry-management/cluster/' + id]));
-        window.open(url, "_blank");
+        this.router.navigate(['/specialized/industry-management/cluster/' + id]);
     }
 
     // applyDistrictFilter(event) {
