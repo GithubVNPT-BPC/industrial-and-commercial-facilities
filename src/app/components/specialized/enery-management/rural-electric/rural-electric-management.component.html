@@ -43,7 +43,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongSoHo| number: '1.0-0':'vi'}}
+                                {{tongSoHo | formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -56,7 +56,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongHoCoDien| number: '1.0-0':'vi'}}
+                                {{tongHoCoDien | formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -69,7 +69,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongHoKhongCoDien| number: '1.0-0':'vi'}}
+                                {{tongHoKhongCoDien ? tongHoKhongCoDien : 0 | formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -114,13 +114,18 @@
                             (click)="ExportTOExcel('Điện nông thôn','Điện nông thôn')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button color="primary" matTooltip="Thêm mới" (click)="switchView()"
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button color="warn" mat-raised-button (click)="openRemoveDialog()" [hidden]=authorize>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()" [hidden]=authorize>
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
                     </div>
                 </div>
 
@@ -131,6 +136,22 @@
                     </mat-form-field>
 
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table">
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef disableClear>
+                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(element) : null"
+                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
@@ -146,45 +167,42 @@
                         </ng-container>
                         <ng-container matColumnDef="t1">
                             <th mat-header-cell *matHeaderCellDef> Tổng </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tong_so_ho | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.tong_so_ho | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="cd1">
                             <th mat-header-cell *matHeaderCellDef> Có điện </th>
-                            <td mat-cell *matCellDef="let element"> {{element.tong_so_ho_co_dien | number:
-                                '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.tong_so_ho_co_dien | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="tl1">
                             <th mat-header-cell *matHeaderCellDef> Tỷ lệ (%) </th>
                             <td mat-cell *matCellDef="let element"> {{(element.tong_so_ho_co_dien*100 /
-                                element.tong_so_ho )| number: '1.0-4':'vi'}}</td>
+                                element.tong_so_ho )| formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="t2">
                             <th mat-header-cell *matHeaderCellDef> Tổng </th>
-                            <td mat-cell *matCellDef="let element"> {{element.nong_thon_tong_so_ho | number:
-                                '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.nong_thon_tong_so_ho | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="cd2">
                             <th mat-header-cell *matHeaderCellDef> Có điện </th>
-                            <td mat-cell *matCellDef="let element"> {{element.nong_thon_tong_so_ho_co_dien | number:
-                                '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.nong_thon_tong_so_ho_co_dien | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ccd2">
                             <th mat-header-cell *matHeaderCellDef> Chưa có điện </th>
                             <td mat-cell *matCellDef="let element"> {{(element.nong_thon_tong_so_ho_co_dien -
-                                element.nong_thon_tong_so_ho_co_dien) | number: '1.0-4':'vi'}}
+                                element.nong_thon_tong_so_ho_co_dien) | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tl2">
                             <th mat-header-cell *matHeaderCellDef> Tỷ lệ (%) </th>
                             <td mat-cell *matCellDef="let element"> {{(element.nong_thon_tong_so_ho_co_dien*100 /
-                                element.nong_thon_tong_so_ho ) | number: '1.0-4':'vi'}}
+                                element.nong_thon_tong_so_ho ) | formatNumber}}
                             </td>
                         </ng-container>
 
@@ -206,7 +224,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="merge1">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"></th>
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"></th>
                         </ng-container>
                         <ng-container matColumnDef="merge2">
                             <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Tổng số hộ sử dụng điện trên toàn

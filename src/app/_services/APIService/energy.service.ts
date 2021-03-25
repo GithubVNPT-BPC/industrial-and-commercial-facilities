@@ -38,6 +38,12 @@ export class EnergyService {
     private urlCapNhatCapPhepDien = "/cphd";
     private urlCapNhatTietKiemNL = "/tknl";
 
+    // DELETE
+    private urlDeteleHydro ='/xoa-thuy-dien';
+    private urlDeleteBlockElectric = '/';
+    private urlDeleteRuralElectric ='/xoa-dnt';
+    private urlDeleteSolarEnergy = '/xoa-dmt';
+
     token: any;
     username: any;
     constructor(public http: HttpClient, public logOutService: LoginService) {
@@ -208,6 +214,40 @@ export class EnergyService {
 
     CapNhatDuLieutietKiemNL(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlCapNhatTietKiemNL;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // DELETE Apis
+
+    DeleteHydro(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeteleHydro;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteBlockElectric(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteBlockElectric;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteRuralElectric(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteRuralElectric;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteSolarEnergy(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteSolarEnergy;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
