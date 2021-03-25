@@ -39,6 +39,7 @@ export class FillReportComponent implements OnInit {
   public readonly oldDataReg = /^\{\{\d\}\}\{\{\w+\}\}$/;
   public readonly operatorReg = /\+|\-|\*|\//;
   public readonly previousYearRegEx = /\{\{2\}\}/;
+  public readonly attributeReg = /\w\w+/;
 
   public tableMergeHader: Array<ToltalHeaderMerge> = [];
   public mergeHeadersColumn: Array<string> = [];
@@ -695,30 +696,101 @@ export class FillReportComponent implements OnInit {
   colCalculate() {
     this.attributes.filter(x => x.formula).forEach(attribute => {
       let operands = attribute.formula.split(this.operatorReg);
-      let firstFieldCode = '';
-      let secondFieldCode = '';
       if (operands[0].match(this.oldDataReg))
-        firstFieldCode = this.getOldData(operands[0], attribute.attr_code);
+        this.calculateData(operands[0], attribute.attr_code, null);
       else
-        firstFieldCode = this.getFieldCode(operands[0]);
+        this.replaceData(operands[0], attribute.fld_code, null);
+      let operator = attribute.formula.match(this.operatorReg);
+      console.log(operator)
+      if (operator)
+        if (operands[1].match(this.oldDataReg))
+          this.calculateData(operands[1], attribute.attr_code, operator[0]);
+        else
+          this.replaceData(operands[1], attribute.fld_code, operator[0]);
     });
   }
 
-  getFieldCode(formula: string): string {
-    return formula.substr(2, formula.length - 4);
+  replaceData(formula: string, fld_code: string, operator: any): string {
+    let fnProp = this.attributes.filter(x => x.attr_code == formula.substr(2, formula.length - 4))[0].fld_code;
+    // this.dataSource.data.forEach(x => x[fld_code] = x[fnProp]);
+    switch (operator) {
+      case '+':
+        this.dataSource.data.forEach(element => {
+          console.log(element);
+          element[fld_code] = element[fld_code] + element[fnProp];
+        });
+        break;
+
+      case '-':
+        this.dataSource.data.forEach(element => {
+          element[fld_code] = element[fld_code] - element[fnProp];
+        });
+        break;
+
+      case '*':
+        this.dataSource.data.forEach(element => {
+          element[fld_code] = element[fld_code] * element[fnProp];
+        });
+        break;
+
+      case '/':
+        this.dataSource.data.forEach(element => {
+          element[fld_code] = (element[fnProp] == null || element[fnProp] == 0) ? -9999999999 : element[fld_code] / element[fnProp];
+        });
+        break;
+
+      default:
+        this.dataSource.data.forEach(element => {
+          element[fld_code] = element[fnProp];
+        });
+        break;
+    }
+    return fnProp;
   }
 
-  getOldData(formula: string, attr_code: string): string {
+  calculateData(formula: string, attr_code: string, operator: any): string {
     let is_previous_year = formula.match(this.previousYearRegEx) ? true : false;
-    let attribute_code = formula.substr(7, formula.length - 9);
+    let attribute_code = formula.match(this.attributeReg)[0];
     let fnProp = '';
     this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
       attribute_code, attr_code).subscribe(res => {
         fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
-        res.data.forEach(element => {
-          let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
-          tempRow[fnProp] = element[fnProp];
-        });
+        switch (operator) {
+          case '+':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = tempRow[fnProp] + element[fnProp];
+            });
+            break;
+
+          case '-':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = tempRow[fnProp] - element[fnProp];
+            });
+            break;
+
+          case '*':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = tempRow[fnProp] * element[fnProp];
+            });
+            break;
+
+          case '/':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = (element[fnProp] == null || element[fnProp] == 0) ? -9999999999 : tempRow[fnProp] / element[fnProp];
+            });
+            break;
+
+          default:
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id)[0];
+              tempRow[fnProp] = element[fnProp];
+            });
+            break;
+        }
       })
     return fnProp;
   }
