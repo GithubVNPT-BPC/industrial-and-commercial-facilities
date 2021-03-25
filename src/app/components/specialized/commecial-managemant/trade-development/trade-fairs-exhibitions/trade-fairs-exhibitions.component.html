@@ -128,8 +128,6 @@
                     </div>
                 </div>
 
-                <hr>
-
                 <div *ngIf="filteredDataSource.data.length; else ShowEmpty" class="layout" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
                         <ng-container matColumnDef="select">

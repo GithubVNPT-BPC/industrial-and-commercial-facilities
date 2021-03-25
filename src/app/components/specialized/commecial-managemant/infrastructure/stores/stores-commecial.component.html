@@ -163,13 +163,13 @@
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" 
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -241,7 +241,6 @@
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
-                <br>
             </mat-expansion-panel>
         </mat-accordion>
 
