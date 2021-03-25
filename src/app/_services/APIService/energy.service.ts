@@ -45,6 +45,8 @@ export class EnergyService {
     private urlDeleteBlockElectric = '/xoa-dsk';
     private urlDeleteRuralElectric ='/xoa-dnt';
     private urlDeleteSolarEnergy = '/xoa-dmt';
+    private urlDeleteFocusedEnergy = '/xoa-tknl';
+    private urlDelete35KV_ElectricalNet = '/xoa-35KV';
 
     token: any;
     username: any;
@@ -250,6 +252,23 @@ export class EnergyService {
 
     DeleteSolarEnergy(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlDeleteSolarEnergy;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+
+    DeleteFocusedEnergy(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteFocusedEnergy;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    Delete35KV_ElectricalNet(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDelete35KV_ElectricalNet;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)

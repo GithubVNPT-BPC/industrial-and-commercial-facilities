@@ -551,14 +551,14 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tổng hợp</mat-label>
-                                        <input matInput type="number" formControlName="tong_hop">
+                                        <input matInput type="text" formControlName="tong_hop">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Chuyên doanh</mat-label>
-                                        <input matInput type="number" formControlName="chuyen_doanh">
+                                        <input matInput type="text" formControlName="chuyen_doanh">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -576,14 +576,20 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm xây dựng</mat-label>
-                                        <input matInput type="number" formControlName="nam_xay_dung">
+                                        <mat-select formControlName="nam_xay_dung">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm ngừng hoạt động</mat-label>
-                                        <input matInput type="number" formControlName="nam_ngung_hoat_dong">
+                                        <mat-select formControlName="nam_ngung_hoat_dong">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>

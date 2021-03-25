@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Injector } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ClusterFilterModel, ClusterModel } from 'src/app/_models/APIModel/cluster.model';
 import { Router } from '@angular/router';
@@ -86,13 +86,16 @@ export class ClusterManagementComponent extends BaseComponent {
         else {
             this.filteredDataSource.data = filteredData;
         }
+        this.paginatorAgain();
     }
 
     getDanhSachQuanLyCumCongNghiep() {
         this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
-            // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
-            this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
-            this.filteredDataSource.data = [...this.dataSource.data];
+            this.filteredDataSource.data = [];
+            if (result.data && result.data.length > 0) {
+                this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
+                this.filteredDataSource.data = [...this.dataSource.data];
+            }
             // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
             this.paginatorAgain();
@@ -114,26 +117,6 @@ export class ClusterManagementComponent extends BaseComponent {
     public openDetailCluster(id: string) {
         this.router.navigate(['/specialized/industry-management/cluster/' + id]);
     }
-
-    // applyDistrictFilter(event) {
-    //     let filteredData = [];
-
-    //     event.value.forEach(element => {
-    //         this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
-    //     });
-
-    //     if (!filteredData.length) {
-    //         if (event.value.length)
-    //             this.filteredDataSource.data = [];
-    //         else
-    //             this.filteredDataSource.data = this.dataSource.data;
-    //     }
-    //     else {
-    //         this.filteredDataSource.data = filteredData;
-    //     }
-    //     // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-    //     // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
-    // }
 
     filterArray(array, filters) {
         const filterKeys = Object.keys(filters);
@@ -181,11 +164,7 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     public callService(data) {
-        this.indService.PostDataGroupCompany(data).subscribe(res => {
-            // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
-            this.successNotify(res);
-            this.autopaging();
-        })
+        this.indService.PostDataGroupCompany(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     prepareRemoveData(data) {
@@ -194,7 +173,7 @@ export class ClusterManagementComponent extends BaseComponent {
       }
     
     callRemoveService(data) {
-    this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     handleFileInput(file: FileList) {
