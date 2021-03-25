@@ -97,25 +97,22 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="col-6 col-lg-6">
+                    <div class="col-4 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Lọc dữ liệu</mat-label>
                             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                         </mat-form-field>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-2 col-lg-2 checkbox">
+                    <div class="col-2 col-lg-2 my-auto">
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">DN hết hạn
                         </mat-checkbox>
-                    </div>
 
-                    <div class="col-2 col-lg-2 checkbox">
                         <!-- <mat-checkbox (change)="showMoreDetail($event)">Chi tiết
                         </mat-checkbox> -->
                     </div>
-
-                    <div class="col-8 col-lg-8 button-control">
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-12 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('QLCN - LPG', currentYear.toString())">
                             <mat-icon>file_download</mat-icon>
@@ -141,13 +138,13 @@
                         id="{{displayedColumns.length == 7 ? 'small-table1': 'small-table2'}}">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -201,10 +198,10 @@
                     </table>
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
-                <br>
             </mat-expansion-panel>
         </mat-accordion>
 
