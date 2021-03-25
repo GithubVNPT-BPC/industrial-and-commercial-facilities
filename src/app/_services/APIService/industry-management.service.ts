@@ -47,6 +47,7 @@ export class IndustryManagementService {
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
     private urlDeleteChemistry = '/hoa-chat-xoa';
     private urlDeleteClusterManagement = '/xoa-ccn';
+    private urlDeleteExplosiveMat = '/vlncn/xoa';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
     private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
@@ -239,6 +240,14 @@ export class IndustryManagementService {
 
     public DeleteChemistryQty(body: any){
         var apiUrl = this.endpoint + this.urlDeleteChemistryQty;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteExplosiveMat(body: any){
+        var apiUrl = this.endpoint + this.urlDeleteExplosiveMat;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)

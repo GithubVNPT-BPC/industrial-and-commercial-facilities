@@ -176,10 +176,6 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
         }
     }
 
-    // switchView() {
-    //     console.log(this.formData)
-    // }
-
     public prepareData(data) {
         data['tba'] = Number(data['tba']);
         data['p_max'] = Number(data['p_max']);
@@ -190,9 +186,7 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
     }
 
     public callService(data) {
-        let list_data = [data];
-        // console.log(list_data)
-        this.energyService.CapNhatDuLieuQuyHoachDien110KV(list_data).subscribe(res => {
+        this.energyService.CapNhatDuLieuQuyHoachDien110KV([data]).subscribe(res => {
             this.successNotify(res);
         })
     }

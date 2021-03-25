@@ -69,7 +69,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             mst: new FormControl(),
             dia_chi: new FormControl(),
             id_phuong_xa: new FormControl(),
-
+            time_id: new FormControl(),
             thuoc_no: new FormControl(),
             kip_no: new FormControl(),
             moi_no: new FormControl(),
@@ -84,12 +84,20 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     prepareData(data) {
         data['id_so_giay_phep'] = 1;
         data['id_tinh_trang_hoat_dong'] = 1;
-        data['time_id'] = this.currentYear;
         return data;
     }
 
     callService(data) {
-        this.industryManagementService.PostExplosiveMat([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostExplosiveMat([data], data.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
+        return datas;
+      }
+    
+    callRemoveService(data) {
+        this.industryManagementService.DeleteExplosiveMat(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     applyFilter(event) {
