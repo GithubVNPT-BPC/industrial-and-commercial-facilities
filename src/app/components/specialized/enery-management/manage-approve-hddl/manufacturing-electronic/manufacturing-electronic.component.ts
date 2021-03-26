@@ -1,14 +1,12 @@
-import { Component, ViewChild, ElementRef, Input, Injector } from '@angular/core';
-import { consualtantData } from '../dataMGN';
+import { Component, Input, Injector } from "@angular/core";
 import { MatTableDataSource } from '@angular/material';
 import { ManageAproveElectronic } from 'src/app/_models/APIModel/electric-management.module';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
-import * as XLSX from 'xlsx';
-import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FormControl } from '@angular/forms';
 import { BaseComponent } from '../../../base.component';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+
+import moment from "moment";
 
 @Component({
   selector: 'app-manufacturing-electronic',
@@ -16,38 +14,26 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss']
 })
 export class ManufacturingElectronicComponent extends BaseComponent {
-  // Input
   @Input('manufacturingData') input_data: ManageAproveElectronic[];
-  exportExcel() {
-    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Quản lý cấp phép HĐĐL');
-
-    XLSX.writeFile(wb, 'Quản lý cấp phép HĐĐL.xlsx');
-
-  }
 
   //Constant variable
   public readonly displayedColumns: string[] =
-    ['index', 'ten_doanh_nghiep', 'dia_diem',
+    ['select','index', 'ten_doanh_nghiep', 'dia_diem',
       'so_dien_thoai', 'so_giay_phep', 'ngay_cap',
       'ngay_het_han'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
   public filteredDataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
-  public districts: DistrictModel[] = [];
-  public data: Array<ManageAproveElectronic> = consualtantData.filter(item => item.id_group === 2)
   //Only TS Variable
-  years: number[] = [];
   doanhThu: number;
   congXuat: number;
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   soLuongDoanhNghiepExpired: number = 0;
   isChecked: boolean;
+
   constructor(
     private injector: Injector,
-    public excelService: ExcelService,
     private energyService: EnergyService,
     public _login: LoginService
   ) {
@@ -58,7 +44,6 @@ export class ManufacturingElectronicComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.years = this.getYears();
     this.getDataManufacturing();
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
@@ -67,28 +52,20 @@ export class ManufacturingElectronicComponent extends BaseComponent {
   }
 
   getDataManufacturing() {
-    this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
-      if (res['success']) {
-        this.handdleData(res['data'], 2);
+    this.energyService.LayDuLieuTuVanDien().subscribe((result) => {
+      this.filteredDataSource.data = [];
+      if (result.data && result.data.length > 0) {
+        let data = result.data.filter(item => item.id_group == 2);
+        data.forEach(element => {
+          element.ngay_cap = this.formatDate(element.ngay_cap);
+          element.ngay_het_han = this.formatDate(element.ngay_het_han);
+        });
+        this.dataSource = new MatTableDataSource<ManageAproveElectronic>(data);
+        this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(data);
       }
-    });
-  }
-
-  handdleData(data: ManageAproveElectronic[], id_group: number) {
-    this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(data.filter(item => {
-      return item['id_group'] === id_group;
-    }));
-    this.dataSource.data = this.filteredDataSource.data;
-    this.caculatorValue();
-    this.paginatorAgain();
-  }
-
-  autoOpen() {
-    setTimeout(() => {
-      this.accordion.openAll()
-      this.paginatorAgain();
       this.caculatorValue();
-    }, 1000);
+      this.paginatorAgain();
+    });
   }
 
   applyFilter(event: Event) {
@@ -96,41 +73,6 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getYears() {
-    return Array(30).fill(1).map((element, index) => new Date().getFullYear() - 21 + index);
-  }
-  getValueOfHydroElectric(value: any) {
-
-  }
-  // applyDistrictFilter(event) {
-  //   let filteredData = [];
-
-  //   event.value.forEach(element => {
-  //     this.dataSource.data.filter(x => x.ma_huyen_thi == element).forEach(x => filteredData.push(x));
-  //   });
-
-  //   if (!filteredData.length) {
-  //     if (event.value.length)
-  //       this.filteredDataSource.data = [];
-  //     else
-  //       this.filteredDataSource.data = this.dataSource.data;
-  //   }
-  //   else {
-  //     this.filteredDataSource.data = filteredData;
-  //   }
-  //   this.caculatorValue();
-  //   this.paginatorAgain();
-  // }
-  paginatorAgain() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
   caculatorValue() {
     // this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
@@ -173,11 +115,10 @@ export class ManufacturingElectronicComponent extends BaseComponent {
   }
 
   LocDulieuTheoNgayCap(year) {
-    let data_temp = [...this.dataSource.data];
-    this.filteredDataSource.data = data_temp;
+    this.filteredDataSource.data = [...this.dataSource.data];
     if (year) {
       this.filteredDataSource.data = this.filteredDataSource.data.filter(item => {
-        return item.ngay_cap.includes(year);
+        return item.ngay_cap.toString().includes(year);
       })
     }
   }
@@ -190,19 +131,27 @@ export class ManufacturingElectronicComponent extends BaseComponent {
       so_giay_phep: new FormControl(''),
       ngay_cap: new FormControl(''),
       ngay_het_han: new FormControl(''),
-      id_group: new FormControl(1)
+      id_group: new FormControl(2)
     }
   }
 
   public prepareData(data) {
+    data['ngay_cap'] = moment(data['ngay_cap']).format('yyyyMMDD');
+    data['ngay_het_han'] = moment(data['ngay_het_han']).format('yyyyMMDD');
+    return data;
   }
 
   public callService(data) {
-    let list_data = [data];
-    // console.log(list_data)
-    this.energyService.CapNhatDuLieuQuyHoachDienNongThon(list_data).subscribe(res => {
-      this.successNotify(res);
-    })
+    this.energyService.CapNhatDuLieuCapPhepHoatDong([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.energyService.DeleteCapPhepDien(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   getLinkDefault() {
