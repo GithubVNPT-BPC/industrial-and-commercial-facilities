@@ -49,6 +49,7 @@ export class EnergyService {
     private urlDelete35KV_ElectricalNet = '/xoa-35KV';
     private urlDeleteDuLieuQuyHoachDien110KV = '/110kv/xoa-nhieu-htncc';
     private urlDeleteDuLieuQuyHoachDien110KVDuKien = '/110kv/xoa-du-kien';
+    private urlDeleteCapPhepDien = '/xoa-cphd';
 
     token: any;
     username: any;
@@ -287,6 +288,14 @@ export class EnergyService {
 
     DeleteDuLieuQuyHoachDien110KVDuKien(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlDeleteDuLieuQuyHoachDien110KVDuKien;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteCapPhepDien(body: any[]){
+        var apiUrl = this.apiNangLuong + this.urlDeleteCapPhepDien;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
