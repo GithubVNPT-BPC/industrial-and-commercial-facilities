@@ -58,6 +58,7 @@ export class ExportTopCompanyManager implements OnInit {
                 break;
             case SAVE.ADD:
                 this.GetAllCompany();
+                this.GetTopProductFilter();
                 break;
             default:
                 break;
@@ -101,10 +102,29 @@ export class ExportTopCompanyManager implements OnInit {
             });
     }
 
+    public GetTopProductFilter() {
+        this.marketService.GetProductValue(this.Convertdatetostring(this.product_data.time_id.toString())).subscribe(
+            allrecords => {
+                this.filtercompany = allrecords.data[1]
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+            });
+    }
+
+    filtercompany2: Array<TopCompanyModel> = new Array<TopCompanyModel>();
+
     GetAllCompany() {
         this.marketService.GetAllCompany().subscribe(
             allrecords => {
+                console.log(this.filtercompany1)
+
                 this.dataSource = new MatTableDataSource<TopCompanyModel>(allrecords.data[0]);
+
+                for (let index = 0; index < this.filtercompany1.length; index++) {
+                    this.filtercompany2 = this.dataSource.data.filter(x => x.mst != this.filtercompany1[index].mst)
+                }
+
+                console.log(this.filtercompany2)
+
                 this.dataSource.data.forEach(x => {
                     x.time_id = this.product_data.time_id
                     x.id_san_pham = this.product_data.id_san_pham

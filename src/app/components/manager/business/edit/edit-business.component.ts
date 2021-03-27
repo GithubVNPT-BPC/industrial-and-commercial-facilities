@@ -19,7 +19,8 @@ import {
   SubDistrictModel,
   BusinessTypeModel,
   Career,
-  DeleteModel1
+  DeleteModel1,
+  FieldModel
 } from "../../../../_models/APIModel/domestic-market.model";
 
 import { FormControl } from '@angular/forms';
@@ -135,6 +136,8 @@ export class EditBusinessComponent implements OnInit {
   public filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
+  public Field: Array<FieldModel> = new Array<FieldModel>();
+  public FilterField: Array<FieldModel> = new Array<FieldModel>();
 
   GetAllNganhNghe() {
     this._Service.GetAllCareer().subscribe((allrecords) => {
@@ -163,6 +166,13 @@ export class EditBusinessComponent implements OnInit {
     });
   }
 
+  GetLinhVuc() {
+    this._Service.GetAllField().subscribe((allrecords) => {
+      this.Field = allrecords.data as FieldModel[];
+      this.FilterField = this.Field.slice();
+    });
+  }
+
   ngOnInit() {
     if (this.mst != undefined) {
       this.GetCompanyInfoById();
@@ -172,6 +182,7 @@ export class EditBusinessComponent implements OnInit {
     this.GetAllPhuongXa();
     this.getQuan_Huyen();
     this.GetAllLoaiHinh();
+    this.GetLinhVuc();
     this.resetForm();
 
     this.doanh_nghiep = this.formbuilder.group({
@@ -315,7 +326,7 @@ export class EditBusinessComponent implements OnInit {
     }
   }
   dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
-  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh', 'id_nganh_nghe'];
+  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'id_linh_vuc', 'nganh_nghe_kd_chinh', 'id_nganh_nghe'];
 
   public _currentRow: number = 0;
 
@@ -323,7 +334,7 @@ export class EditBusinessComponent implements OnInit {
     let newRow: Career = new Career();
     newRow.id_nganh_nghe_kinh_doanh;
     newRow.nganh_nghe_kd_chinh = "";
-    newRow.id_linh_vuc = null
+    newRow.id_linh_vuc;
 
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -344,7 +355,7 @@ export class EditBusinessComponent implements OnInit {
     let newRow: Career = new Career();
     newRow.id_nganh_nghe_kinh_doanh;
     newRow.nganh_nghe_kd_chinh = "";
-    newRow.id_linh_vuc = null
+    newRow.id_linh_vuc;
 
     this.dataSource.data.push(newRow);
     data.forEach(element => {
