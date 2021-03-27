@@ -115,16 +115,12 @@ export class FoodIndustryManagementComponent extends BaseComponent {
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
-            tinh_trang_hoat_dong: new FormControl(),
+            tinh_trang_hoat_dong: new FormControl("true"),
+            time_id: new FormControl(this.currentYear)
         }
     }
 
     prepareData(data) {
-        data = {
-            ...data, ...{
-                time_id: this.currentYear,
-            }
-        }
         return data;
     }
 
