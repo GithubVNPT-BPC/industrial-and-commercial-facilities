@@ -1,7 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
-import { HydroEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
+import { KeyEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { BaseComponent } from '../../base.component';
@@ -23,18 +23,16 @@ export class KeyEnegyComponent extends BaseComponent {
 
   //Constant variable
   public readonly displayedColumns: string[] = ['select', 'index', 'ten_khach_hang', 'dia_chi', 'nganh_nghe', 'dien', 'than',
-    'DO', 'FO', 'xang', 'LPG', 'go', 'nang_luong_quy_doi'
-  ];
+    'DO', 'FO', 'xang', 'LPG', 'go', 'nang_luong_quy_doi'];
 
   //TS & HTML Variable
-  public dataSource: MatTableDataSource<HydroEnergyModel>;
-  public filteredDataSource: MatTableDataSource<HydroEnergyModel> = new MatTableDataSource<HydroEnergyModel>();;
+  public dataSource: MatTableDataSource<KeyEnergyModel>;
+  public filteredDataSource: MatTableDataSource<KeyEnergyModel> = new MatTableDataSource<KeyEnergyModel>();;
 
   //Only TS Variable
-  doanhThu: number;
-  congXuat: number;
-  sanluongnam: number;
-  soLuongDoanhNghiep: number;
+  TongNangLuongQuyDoi: number = 0;
+  TongDienTieuThu: number = 0;
+  soLuongDoanhNghiep: number = 0;
   isChecked: boolean;
 
   authorize: boolean = true
@@ -56,11 +54,22 @@ export class KeyEnegyComponent extends BaseComponent {
 
   laydulieuNLTD() {
     this.energyService.LayDuLieuNangLuongTrongDiem(this.currentYear).subscribe(res => {
-      this.dataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
-      this.filteredDataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
-      // this.caculatorValue();
-      this.initPaginator();
+      this.filteredDataSource.data = [];
+      if (res.data && res.data.length) {
+        this.dataSource = new MatTableDataSource<KeyEnergyModel>(res.data);
+        this.filteredDataSource = new MatTableDataSource<KeyEnergyModel>(res.data);
+      }
+      
+      this._prepareData();
+      this.paginatorAgain();
     })
+  }
+
+  _prepareData(){
+    let data = this.filteredDataSource.data;
+    this.soLuongDoanhNghiep = data.length;
+    this.TongDienTieuThu = data.length ? data.map(item => item.dien).reduce((a, b) => a + b) : 0;
+    this.TongNangLuongQuyDoi = data.length ? data.map(item => item.nang_luong_quy_doi).reduce((a, b) => a + b) : 0;
   }
 
   getFormParams() {
@@ -80,19 +89,13 @@ export class KeyEnegyComponent extends BaseComponent {
     }
   }
 
-  callService(data) {
-    this.energyService.ThemDuLieuNangLuongTrongDiem([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  initPaginator() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
+  callService(data) {
+    this.energyService.ThemDuLieuNangLuongTrongDiem([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   prepareRemoveData(data) {
@@ -101,8 +104,6 @@ export class KeyEnegyComponent extends BaseComponent {
   }
 
   callRemoveService(IDs: any){
-    this.energyService.XoaDuLieuNangLuongTrongDiem(IDs).subscribe(res => {
-      this.successNotify(res);
-    })
+    this.energyService.XoaDuLieuNangLuongTrongDiem(IDs).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 }
