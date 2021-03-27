@@ -17,10 +17,10 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class IndustrialExplosivesComponent extends BaseComponent {
 
-    displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep',  'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
 
-    totalColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    totalColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no',
         'moi_no', 'day_no'];
 
@@ -69,15 +69,15 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             mst: new FormControl(),
             dia_chi: new FormControl(),
             id_phuong_xa: new FormControl(),
-            time_id: new FormControl(),
-            thuoc_no: new FormControl(),
-            kip_no: new FormControl(),
-            moi_no: new FormControl(),
-            day_no: new FormControl(),
-            thuoc_no_6thang: new FormControl(),
-            kip_no_6thang: new FormControl(),
-            moi_no_6thang: new FormControl(),
-            day_no_6thang: new FormControl(),
+            time_id: new FormControl(2021),
+            thuoc_no: new FormControl(0),
+            kip_no: new FormControl(0),
+            moi_no: new FormControl(0),
+            day_no: new FormControl(0),
+            thuoc_no_6thang: new FormControl(0),
+            kip_no_6thang: new FormControl(0),
+            moi_no_6thang: new FormControl(0),
+            day_no_6thang: new FormControl(0),
         }
     }
 

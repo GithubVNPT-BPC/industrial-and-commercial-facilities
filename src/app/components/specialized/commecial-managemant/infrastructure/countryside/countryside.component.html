@@ -117,7 +117,7 @@
                             <mat-label>Năm đạt TC số 7</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_dat_TC_7"
                                 multiple>
-                                <mat-option *ngFor='let year of yearOfTC7' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -127,7 +127,7 @@
                             <mat-label>Năm thực hiện đạt chuẩn</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_dat_NTM"
                                 multiple>
-                                <mat-option *ngFor='let year of yearOfStd' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
