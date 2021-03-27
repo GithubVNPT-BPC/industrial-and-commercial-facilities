@@ -538,6 +538,7 @@ export class EditBusinessComponent implements OnInit {
             this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
             this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
             this.careerarray[index].id_nganh_nghe = this.companyList2[index].id_nganh_nghe
+            this.careerarray[index].id_linh_vuc = this.companyList2[index].id_linh_vuc
           }
           this.dataSource.data = this.careerarray
 
