@@ -214,14 +214,16 @@ export class StoreManagementComponent extends BaseComponent {
           let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 1);
           let giayAtvstpList = response.data.filter(x => x.id_loai_giay_phep == 4);
 
-          if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0)
+          if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0) {
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
+          }
           else {
-            this.isFound = true;
-            this.giayCndkkdList = giayCndkkdList;
-            this.giayAtvstpList = giayAtvstpList;
             this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
           }
+
+          this.isFound = true;
+          this.giayCndkkdList = giayCndkkdList;
+          this.giayAtvstpList = giayAtvstpList;
         } else {
           this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
         }

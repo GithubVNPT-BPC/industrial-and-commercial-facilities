@@ -219,7 +219,7 @@
                             <mat-label>Năm xây dựng</mat-label>
                             <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.nam_xay_dung"
                                 multiple>
-                                <mat-option *ngFor='let year of builtYears' [value]='year'>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
                             </mat-select>
@@ -231,7 +231,7 @@
                             <mat-label>Năm ngừng hoạt động</mat-label>
                             <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
                                 multiple>
-                                <mat-option *ngFor='let year of holdYears' [value]='year'>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
                             </mat-select>

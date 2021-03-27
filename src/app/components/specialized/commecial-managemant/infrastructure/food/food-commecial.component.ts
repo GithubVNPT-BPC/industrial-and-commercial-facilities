@@ -24,7 +24,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   isChecked: boolean;
   isFound: boolean = false;
-  public tongDoanhNghiep: number;
+  tongDoanhNghiep: number;
   //
   filterModel = {
     id_spkd: [],
@@ -85,33 +85,19 @@ export class FoodManagementComponent extends BaseComponent {
       allrecords => {
         this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
+          allrecords.data.forEach(element => {
+            element.ngay_cap = this.formatDate(element.ngay_cap);
+            element.ngay_het_han = this.formatDate(element.ngay_het_han);
+            element.is_het_han = element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate());
+          });
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
-          this.dataSource.data.forEach(element => {
-            if (element.ngay_het_han) {
-              let temp = this.Convertdate(element.ngay_het_han)
-              element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
-            }
-            else {
-              element.is_het_han = false
-            }
-            element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
-            element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
-          })
-
-          this.filteredDataSource.data = [...this.dataSource.data].filter(x => x.is_het_han == false)
-
+          this.filteredDataSource.data = [...this.dataSource.data].filter(x => !x.is_het_han)
         }
         this._prepareData();
         this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
-  }
-
-  Convertdate(text: string): string {
-    let date: string
-    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
-    return date
   }
 
   public getCurrentDate() {
@@ -139,7 +125,6 @@ export class FoodManagementComponent extends BaseComponent {
   callRemoveService(data) {
     this.commerceManagementService.deleteFoodCommerce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
-
 
   resetAll() {
     this.isFound = false;
@@ -186,10 +171,10 @@ export class FoodManagementComponent extends BaseComponent {
           if (giayCndkkdList.length == 0)
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
           else {
-            this.isFound = true;
-            this.giayCndkkdList = giayCndkkdList;
             this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
           }
+          this.isFound = true;
+          this.giayCndkkdList = giayCndkkdList;
         } else {
           this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
         }
