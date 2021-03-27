@@ -105,7 +105,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCNATTP</mat-label>
                             <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.ngaycapgcn">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -274,7 +274,7 @@
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Mã số thuế</mat-label>
+                                        <mat-label>Mã số thuế (*)</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
@@ -379,6 +379,12 @@
                                 </div>
                             </div>
                         </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <p>
+                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span> của doanh nghiệp đã có <span class="text-primary">Giấy chứng nhận </span>hoặc<span class="text-primary"> Giấy chứng nhận vệ sinh an toàn thực phẩm </span></span>
+                        </p>
                     </div>
 
                     <div class="col-md-12" *ngIf="isFound">
