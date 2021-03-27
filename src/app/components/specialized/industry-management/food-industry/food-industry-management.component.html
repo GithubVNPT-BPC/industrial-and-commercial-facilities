@@ -44,7 +44,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{sanLuongBotMy | number: '1.0-0':'vi'}} tấn/năm
+                                {{sanLuongBotMy | formatNumber}} tấn/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -57,7 +57,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{sanLuongRuou | number: '1.0-0':'vi'}} lít/năm
+                                {{sanLuongRuou | formatNumber}} lít/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -230,13 +230,22 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
 
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kỳ dữ liệu</mat-label>
+                                        <mat-select formControlName="time_id">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Trạng thái</mat-label>
@@ -261,13 +270,13 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Công suất</mat-label>
-                                        <input matInput type="number" formControlName="cong_suat">
+                                        <input currencyMask matInput type="number" formControlName="cong_suat">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Sản lượng</mat-label>
-                                        <input matInput type="number" formControlName="san_luong">
+                                        <input currencyMask matInput type="number" formControlName="san_luong">
                                     </mat-form-field>
                                 </div>
                             </div>
