@@ -252,6 +252,7 @@ export class EditBusinessComponent implements OnInit {
           this.Back()
         },
         err => {
+          this.info.msgError('Cập nhật doanh nghiệp không thành công')
         }
       )
     }
@@ -337,6 +338,9 @@ export class EditBusinessComponent implements OnInit {
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
+    this.filtercareer = this.career.slice();
+    this.FilterField = this.Field.slice();
+
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
     this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -360,6 +364,9 @@ export class EditBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.filtercareer = this.career.slice();
+    this.FilterField = this.Field.slice();
 
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';

@@ -296,15 +296,10 @@ export class UpdatePetrolComponent implements OnInit {
     if (this.id.toString() != 'undefined') {
       this._Service.PostPetrolValue(input1).subscribe(
         next => {
-          if (next.id == -1) {
-            this._info.msgError("Lưu lỗi! Lý do: " + next.message);
-          }
-          else {
-            this._info.msgSuccess("Dữ liệu được lưu thành công!");
-          }
+          this._info.msgSuccess("Lưu thông tin thành công");
         },
         error => {
-          this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+          this._info.msgError("Lưu thông tin không thành công");
         }
       );
 
@@ -321,16 +316,11 @@ export class UpdatePetrolComponent implements OnInit {
       if (this.dataSource.data) {
         this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
           next => {
-            if (next.id == -1) {
-              this._info.msgError("Lưu lỗi! Lý do: " + next.message);
-            }
-            else {
-              this._info.msgSuccess("Dữ liệu được lưu thành công!");
-              this.Back()
-            }
+            this._info.msgSuccess("Lưu thông tin thành công");
+            this.Back()
           },
           error => {
-            this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+            this._info.msgError("Lưu thông tin không thành công");
           }
         );
       }
@@ -338,16 +328,11 @@ export class UpdatePetrolComponent implements OnInit {
     else {
       this._Service.PostPetrolValueNEW(input3).subscribe(
         next => {
-          if (next.id == -1) {
-            this._info.msgError("Lưu lỗi! Lý do: " + next.message);
-          }
-          else {
-            this._info.msgSuccess("Dữ liệu được lưu thành công!");
-            this.Back();
-          }
+          this._info.msgSuccess("Lưu thông tin thành công");
+          this.Back();
         },
         error => {
-          this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+          this._info.msgError("Lưu thông tin không thành công");
         }
       );
     }
@@ -365,14 +350,13 @@ export class UpdatePetrolComponent implements OnInit {
     this.petrolvaluepost.push({
       ghi_chu: '',
       san_luong: null,
-      time_id: '',
+      time_id: this.getCurrentYear(),
       id: null,
       id_cua_hang_xang_dau: null,
     })
 
     this.petrolvaluepost[0].ghi_chu = this.input.ghi_chu
     this.petrolvaluepost[0].san_luong = this.input.san_luong
-    this.petrolvaluepost[0].time_id = this.input.time_id
     this.petrolvaluepost[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
     if (this.id_san_luong != 'undefined') {
       this.petrolvaluepost[0].id = this.id_san_luong
@@ -381,7 +365,7 @@ export class UpdatePetrolComponent implements OnInit {
     this.petrolvaluepost1.push({
       ghi_chu: '',
       san_luong: null,
-      time_id: '',
+      time_id: this.getCurrentYear(),
       id: null,
       id_cua_hang_xang_dau: null,
       danh_sach_thuong_nhan: []
@@ -389,7 +373,6 @@ export class UpdatePetrolComponent implements OnInit {
 
     this.petrolvaluepost1[0].ghi_chu = this.input.ghi_chu
     this.petrolvaluepost1[0].san_luong = this.input.san_luong
-    this.petrolvaluepost1[0].time_id = this.input.time_id
     this.petrolvaluepost1[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
     if (this.id_san_luong != 'undefined') {
       this.petrolvaluepost1[0].id = this.id_san_luong
@@ -463,7 +446,7 @@ export class UpdatePetrolComponent implements OnInit {
         ten_quan_ly: this.petrolobject.ten_quan_ly,
         ten_nhan_vien: this.petrolobject.ten_nhan_vien,
         id_giay_phep: this.petrolobject.id_giay_phep,
-        time_id: this.petrolobject.time_id,
+        time_id: this.getCurrentYear(),
         ghi_chu: this.petrolobject.ghi_chu,
         san_luong: this.petrolobject.san_luong
       }

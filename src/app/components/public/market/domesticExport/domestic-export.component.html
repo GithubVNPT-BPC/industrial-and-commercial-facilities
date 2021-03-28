@@ -56,7 +56,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia_thang">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <th mat-header-cell *matHeaderCellDef> Trị giá (VNĐ) </th>
                     <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia_thang | number:
                         '1.0-4':'vi'}}
                     </td>
@@ -72,7 +72,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia_thang_tc">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <th mat-header-cell *matHeaderCellDef> Trị giá (VNĐ) </th>
                     <td mat-cell *matCellDef="let element" class="right-cell">
                         {{element.tri_gia_thang_tc | number: '1.0-4':'vi'}}
                     </td>

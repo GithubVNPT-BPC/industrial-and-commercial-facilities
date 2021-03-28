@@ -90,7 +90,9 @@
                     <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
                     <td mat-cell *matCellDef="let element">
                         <mat-select [(ngModel)]="element.id_san_pham">
-                            <mat-option *ngFor="let item of products" [value]="item.id_san_pham">
+                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
+                                [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
+                            <mat-option *ngFor="let item of filterproducts" [value]="item.id_san_pham">
                                 {{item.ten_san_pham}}
                             </mat-option>
                         </mat-select>
@@ -110,7 +112,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <th mat-header-cell *matHeaderCellDef> Trị giá (VNĐ) </th>
                     <td mat-cell *matCellDef="let element">
                         <input appReport currencyMask class="text-right" [(ngModel)]="element.tri_gia">
                     </td>

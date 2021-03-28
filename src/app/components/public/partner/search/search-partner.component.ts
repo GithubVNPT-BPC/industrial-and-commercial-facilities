@@ -192,7 +192,7 @@ export class SearchPartnerComponent implements OnInit {
             d.so_giay_phep = temp1.join('; ')
           }
 
-          let temp2 = temp.map(f => this.Convertdate(f.ngay_cap))
+          let temp2 = temp.map(f => f.ngay_cap ? this.Convertdate(f.ngay_cap) : null)
           if (temp2[0] == undefined || temp2[0] == null) {
             d.ngay_cap = null
           }
@@ -200,7 +200,7 @@ export class SearchPartnerComponent implements OnInit {
             d.ngay_cap = temp2.join('; ')
           }
 
-          let temp3 = temp.map(f => this.Convertdate(f.ngay_het_han))
+          let temp3 = temp.map(f => f.ngay_het_han ? this.Convertdate(f.ngay_het_han) : null)
           if (temp3[0] == undefined || temp3[0] == null) {
             d.ngay_het_han = null
           }
