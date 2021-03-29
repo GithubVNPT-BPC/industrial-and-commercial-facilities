@@ -47,14 +47,15 @@
                             <mat-icon>keyboard_backspace</mat-icon>
                         </button>
                     </div> -->
+                    <div class="col-12 col-lg-12 mt-2">
+                        <mat-form-field outline="appearance">
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
+                    </div>
                 </div>
 
                 <div class="layout" #table>
-                    <mat-form-field id="filter">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
-
                     <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>

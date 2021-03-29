@@ -63,11 +63,12 @@ export class ConsultantElectricComponent extends BaseComponent {
         data.forEach(element => {
           element.ngay_cap = this.formatDate(element.ngay_cap);
           element.ngay_het_han = this.formatDate(element.ngay_het_han);
+          element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
         });
         this.dataSource = new MatTableDataSource<ManageAproveElectronic>(data);
         this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(data);
       }
-      this.caculatorValue();
+      this._prepareData();
       this.paginatorAgain();
     });
   }
@@ -86,45 +87,25 @@ export class ConsultantElectricComponent extends BaseComponent {
     }
   }
 
-  caculatorValue() {
+  _prepareData() {
     // this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
-    this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
-    this.handeldateExpired();
+    this.soLuongDoanhNghiep = this.dataSource.data.length;
+    this.soLuongDoanhNghiepExpired = this.filteredDataSource.data.filter(x => x.is_expired).length;
+
     // this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_xuat_thiet_ke).reduce((a, b) => a + b) : 0;
     // this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
   }
 
-  handeldateExpired() {
-    this.filteredDataSource.data.filter((item) => {
-      let today = new Date();
-      Date.parse(item.ngay_het_han) < Date.parse(today.toString())
-        ? this.soLuongDoanhNghiepExpired++
-        : 0;
-    });
-  }
-
   applyActionCheck(event) {
-    let today = new Date();
-
     if (event.checked) {
-
       this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
-        return Date.parse(today.toString()) > Date.parse(this.formatMMddyyy(e.ngay_het_han))
+        return new Date(e.ngay_het_han) < new Date();
       });
-
     } else {
       this.filteredDataSource.data = [...this.dataSource.data];
     }
-    // this.caculatorValue();
+    this._prepareData();
     this.paginatorAgain();
-  }
-
-  formatMMddyyy(date: string) {
-    let d, m, y;
-    y = date.slice(-4);
-    m = date.slice(3, 5);
-    d = date.slice(0, 2);
-    return m + '/' + d + '/' + y;
   }
 
   getFormParams() {
