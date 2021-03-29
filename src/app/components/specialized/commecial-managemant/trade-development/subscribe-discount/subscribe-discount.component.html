@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4 col-lg-4">
+                    <div class="col-6 col-lg-6">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -29,11 +29,11 @@
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                {{countBusiness()}}
+                                {{totalEnterprises}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-4 col-lg-4">
+                    <div class="col-6 col-lg-6">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -41,11 +41,11 @@
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                {{this.filteredDataSource.data.length | number: '1.0-0':'vi'}}
+                                {{this.filteredDataSource.data.length | number: '1.0-0':'vi'}} chương trình
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-4 col-lg-4">
+                    <!-- <div class="col-4 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -56,7 +56,7 @@
                                 {{sumvalues | formatNumber}}
                             </mat-card-content>
                         </mat-card>
-                    </div>
+                    </div> -->
                 </div>
             </mat-expansion-panel>
 
@@ -81,17 +81,17 @@
                         </mat-form-field>
                     </div> -->
 
-                    <!-- <div class="col-3 col-lg-3">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyFilter()" [(ngModel)]="filterModel.Id_quan_huyen" multiple>
+                            <mat-select #dSelect (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div> -->
+                    </div>
 
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
@@ -105,27 +105,27 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-6 col-lg-6"></div>
+                    <div class="col-3 col-lg-3"></div>
 
                     <div class="col-3 col-lg-3 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Đăng ký khuyến mại','Đăng ký khuyến mại')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()"
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
 
-                    <div class="col-md-12">
-                        <mat-form-field>
-                            <mat-label>Lọc dữ liệu</mat-label>
-                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                    <div class="col-md-12 col-lg-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Lọc dữ liệu (VD: Tên doanh nghiệp)</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Nhập dữ liệu cần lọc" #input>
                         </mat-form-field>
                     </div>
 

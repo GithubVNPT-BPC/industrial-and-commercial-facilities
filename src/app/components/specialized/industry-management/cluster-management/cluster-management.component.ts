@@ -75,17 +75,25 @@ export class ClusterManagementComponent extends BaseComponent {
         this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
     }
 
-    applyFilter() {
-        let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-        if (!filteredData.length) {
+    applyFilter(event) {
+        if (event.target) {
+          const filterValue = (event.target as HTMLInputElement).value;
+          this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+          let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+    
+          if (!filteredData.length) {
             if (this.filterModel)
-                this.filteredDataSource.data = [];
+              this.filteredDataSource.data = [];
             else
-                this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
+              this.filteredDataSource.data = this.dataSource.data;
+          }
+          else {
             this.filteredDataSource.data = filteredData;
+          }
+    
         }
+        this._prepareData();
         this.paginatorAgain();
     }
 
@@ -100,6 +108,10 @@ export class ClusterManagementComponent extends BaseComponent {
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
             this.paginatorAgain();
         })
+    }
+
+    _prepareData() {
+
     }
 
     changeTable(event) {

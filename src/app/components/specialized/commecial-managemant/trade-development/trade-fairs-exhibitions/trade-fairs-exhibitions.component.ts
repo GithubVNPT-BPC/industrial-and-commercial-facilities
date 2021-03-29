@@ -169,13 +169,13 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   countBusiness(): number {
-    return [...new Set(this.filteredDataSource.data.map(x => x.mst))].length;
+    return new Set(this.filteredDataSource.data.map(x => x.mst)).size;
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
-    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('DD/MM/yyyy');
+    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
+    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
+    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD');
 
     return data;
   }
@@ -190,9 +190,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.commerceManagementService.deleteTradeFairs(data).subscribe(res => {
-      this.successNotify(res);
-    });
+    this.commerceManagementService.deleteTradeFairs(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 }

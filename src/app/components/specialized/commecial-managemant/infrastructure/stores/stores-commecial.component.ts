@@ -24,8 +24,8 @@ export class StoreManagementComponent extends BaseComponent {
   isChecked: boolean = false;
   isFound: boolean = false;
   filterModel = {
-    is_expired: false,
     id_quan_huyen: [],
+    ngay_cap_giay_chung_nhan: [],
   };
   dataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
   filteredDataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
@@ -109,8 +109,6 @@ export class StoreManagementComponent extends BaseComponent {
             x.is_expired = currentDate.isAfter(expiredDate, 'day');
           });
           this.dataSource = new MatTableDataSource<ConvenienceStoreModel>(data);
-
-
           this.filteredDataSource.data = [...this.dataSource.data];
         }
         this._prepareData();
@@ -158,50 +156,54 @@ export class StoreManagementComponent extends BaseComponent {
     this.tongCuaHang = this.dataSource.data.length;
   }
 
-  applyFilter1(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
 
-  applyFilter() {
-    this.filterModel.is_expired = this.isChecked ? true : null;
-
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
-    }
-    this.paginatorAgain();
-    this._prepareData();
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (key == 'is_expired') {
-        if (filters[key]) {
-          temp2 = temp2.concat(temp.filter(x => x[key] == filters[key]));
-          temp = [...temp2];
-        }
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
       }
       else {
-        if (filters[key])
-          if (filters[key].length) {
-            filters[key].forEach(criteria => {
-              temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-            });
-            temp = [...temp2];
-          }
+        this.filteredDataSource.data = filteredData;
       }
+
+    }
+    this._prepareData();
+    this.paginatorAgain();
+  }
+
+  filterArray(dataSource, filters) {
+    const filterKeys = Object.keys(filters);
+    let filteredData = [...dataSource];
+    filterKeys.forEach(key => {
+        let filterCrits = [];
+        if (filters[key].length) {
+          if (key == 'ngay_cap_giay_chung_nhan') {
+            filters[key].forEach(criteria => {
+              if (criteria && criteria !=0) filterCrits = filterCrits.concat(filteredData.filter(x => x[key].toString().includes(criteria)));
+              else filterCrits = filterCrits.concat(filteredData);
+            });
+          } else {
+            filters[key].forEach(criteria => {
+              filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+            });
+          }
+          filteredData = [...filterCrits];
+        }
     })
-    return temp;
+    return filteredData;
+  }
+
+  applyExpireCheck(event) {
+    this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+    this._prepareData();
+    this.paginatorAgain();
   }
 
   findLicenseInfo(event) {

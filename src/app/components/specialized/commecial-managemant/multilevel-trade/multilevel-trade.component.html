@@ -67,7 +67,15 @@
                 </mat-expansion-panel-header>
                 <hr>
                 <div class="row">
-                    <div class="col-3 col-lg-3"></div>
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" multiple [(ngModel)]="filterModel.thoi_gian_bat_dau">
+                                <mat-option [value]='0'>-- Tất cả --</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
                     <div class="col-3 col-lg-3"></div>
                     <div class="col-6 col-lg-6 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
@@ -83,32 +91,17 @@
                             <mat-icon>delete</mat-icon>
                         </button>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <mat-form-field>
-                            <mat-label>Lọc dữ liệu</mat-label>
-                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                    <div class="col-md-12 col-lg-12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Lọc dữ liệu (VD: Tên doanh nghiệp)</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Nhập dữ liệu cần lọc" #input>
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="layout" #table>
+
+                <div class="layout" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
-                        <!-- <ng-container matColumnDef="thong_tin_dn">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]='3'> Thông tin doanh nghiệp</th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="xac_nhan_dk">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]='3'>Xác nhận đăng ký bán hàng đa cấp
-                                tại địa phương</th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="to_chuc_hoi_thao">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]='6'>Tổ chức hội thảo về bán hàng đa cấp
-                            </th>
-                        </ng-container> -->
-
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -126,12 +119,17 @@
                         </ng-container>
 
                         <ng-container matColumnDef="index">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Stt </th>
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
                                 {{this.filteredDataSource.paginator.pageIndex == 0 ? i
                                     + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
                                     this.filteredDataSource.paginator.pageSize}}
                                 </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mst">
+                            <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"> {{element.mst}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_doanh_nghiep" sticky>
@@ -142,12 +140,6 @@
                         <ng-container matColumnDef="dia_chi_doanh_nghiep">
                             <th mat-header-cell *matHeaderCellDef> Địa chỉ</th>
                             <td mat-cell *matCellDef="let element" class="luong"> {{element.dia_chi }}</td>
-
-                        </ng-container>
-
-                        <ng-container matColumnDef="mst">
-                            <th mat-header-cell *matHeaderCellDef> Mã số thuế </th>
-                            <td mat-cell *matCellDef="let element" class="gia-tri"> {{element.mst}}</td>
 
                         </ng-container>
 
@@ -205,17 +197,30 @@
                         <ng-container matColumnDef="dia_diem_to_chuc">
                             <th mat-header-cell *matHeaderCellDef> Địa điểm tổ chức hội thảo</th>
                             <td mat-cell *matCellDef="let element" class="gia-tri">{{element.dia_diem_to_chuc}}</td>
-
+                        </ng-container>
+                        
+                        <ng-container matColumnDef="thong_tin_dn">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]='8'></th>
                         </ng-container>
 
-                        <!-- <tr mat-header-row class="table-header"
-                            *matHeaderRowDef="['index', 'thong_tin_dn', 'xac_nhan_dk', 'to_chuc_hoi_thao']; sticky: true">
-                        </tr> -->
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <ng-container matColumnDef="xac_nhan_dk">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]='3'>Xác nhận đăng ký bán hàng đa cấp
+                                tại địa phương</th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="to_chuc_hoi_thao">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]='3'>Tổ chức hội thảo về bán hàng đa cấp
+                            </th>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header"
+                            *matHeaderRowDef="['thong_tin_dn', 'xac_nhan_dk', 'to_chuc_hoi_thao']">
+                        </tr>
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index; ">
                     </table>
                 </div>
-                <mat-paginator [pageSizeOptions]="[20, 50, 100, 500]" showFirstLastButtons></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100, 200, 500]" showFirstLastButtons></mat-paginator>
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
