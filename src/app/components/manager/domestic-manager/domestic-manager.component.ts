@@ -53,7 +53,6 @@ export const DDMMYY_FORMAT = {
 })
 
 export class DomesticManagerComponent implements OnInit {
-  public products: Array<ProductModel> = new Array<ProductModel>();
   public dataSource: MatTableDataSource<DomesticPriceModel> = new MatTableDataSource<DomesticPriceModel>();
   public displayedColumns: string[] = ['select', 'index', 'ten_san_pham', 'id_san_pham', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
 
@@ -135,10 +134,14 @@ export class DomesticManagerComponent implements OnInit {
     this.pickedDate.date = null
   }
 
+  public products: Array<ProductModel> = new Array<ProductModel>();
+  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
+
   public getListProduct(): void {
     this.marketService.GetProductList().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductModel[];
+        this.filterproducts = this.products.slice();
       },
     );
   }
@@ -222,6 +225,8 @@ export class DomesticManagerComponent implements OnInit {
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
+    this.filterproducts = this.products.slice();
+
     this._rows = this.dataSource.filteredData.length;
   }
 
@@ -238,6 +243,8 @@ export class DomesticManagerComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.filterproducts = this.products.slice();
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -276,16 +283,11 @@ export class DomesticManagerComponent implements OnInit {
     });
     this.marketService.PostDomesticMarket(this.dataSource.data).subscribe(
       next => {
-        if (next.id == -1) {
-          this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-        }
-        else {
-          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-          this.getALLDomesticMarketPrice();
-        }
+        this._infor.msgSuccess("Lưu thông tin thành công");
+        this.getALLDomesticMarketPrice();
       },
       error => {
-        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+        this._infor.msgError("Lưu thông tin không thành công");
       }
     );
   }

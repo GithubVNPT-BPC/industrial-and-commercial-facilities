@@ -59,7 +59,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá </th>
+                    <th mat-header-cell *matHeaderCellDef> Trị giá (VNĐ) </th>
                     <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia | number:
                         '1.0-4':'vi'}} </td>
                     <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTG() | number:'1.0-4':'vi'}} </td>

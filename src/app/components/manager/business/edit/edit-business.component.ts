@@ -254,6 +254,7 @@ export class EditBusinessComponent implements OnInit {
           this.Back()
         },
         err => {
+          this.info.msgError('Cập nhật doanh nghiệp không thành công')
         }
       )
     }
@@ -339,6 +340,9 @@ export class EditBusinessComponent implements OnInit {
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
+    this.filtercareer = this.career.slice();
+    this.FilterField = this.Field.slice();
+
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
     this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -362,6 +366,9 @@ export class EditBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.filtercareer = this.career.slice();
+    this.FilterField = this.Field.slice();
 
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -481,7 +488,7 @@ export class EditBusinessComponent implements OnInit {
             d.so_giay_phep = temp1.join('; ')
           }
 
-          let temp2 = temp.map(f => this.Convertdate(f.ngay_cap))
+          let temp2 = temp.map(f => f.ngay_cap ? this.Convertdate(f.ngay_cap) : null)
           if (temp2[0] == undefined || temp2[0] == null) {
             d.ngay_cap = null
           }
@@ -489,7 +496,7 @@ export class EditBusinessComponent implements OnInit {
             d.ngay_cap = temp2.join('; ')
           }
 
-          let temp3 = temp.map(f => this.Convertdate(f.ngay_het_han))
+          let temp3 = temp.map(f => f.ngay_het_han ? this.Convertdate(f.ngay_het_han) : null)
           if (temp3[0] == undefined || temp3[0] == null) {
             d.ngay_het_han = null
           }

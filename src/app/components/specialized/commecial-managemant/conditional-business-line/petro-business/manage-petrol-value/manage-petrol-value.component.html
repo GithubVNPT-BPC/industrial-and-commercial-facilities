@@ -1,7 +1,7 @@
 <mat-card class="material">
     <mat-card-content>
         <mat-card-header>
-            <mat-card-title><strong>CỬA HÀNG BÁN LẺ XĂNG DẦU</strong>
+            <mat-card-title><strong>KINH DOANH XĂNG DẦU</strong>
                 <div class="button-control">
                     <button mat-raised-button class="green"
                         (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
@@ -122,14 +122,16 @@
                     </div>
 
                     <div class="col-7 button-control my-auto" [hidden]=authorize>
+                        <button mat-raised-button (click)="Reset()"> Lấy tất cả dữ liệu
+                        </button>
+
                         <button mat-raised-button (click)="OpenDetailPetrol()">Thêm sản lượng</button>
 
-                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">QL thương
-                            nhân</button>
+                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">QL thương nhân</button>
 
                         <button mat-raised-button (click)="ManageStore()">QL cửa hàng</button>
 
-                        <button mat-raised-button class="red" (click)="removeRows()">Xóa DN</button>
+                        <button mat-raised-button class="red" (click)="removeRows()">Xóa SL</button>
                     </div>
                 </div>
 

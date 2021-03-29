@@ -137,13 +137,12 @@ export class AddCertificateComponent implements OnInit {
   SaveData(input) {
     this._Service.PostCertificate(input).subscribe(
       res => {
-        // debugger;
-        this._info.msgSuccess('Thêm thành công')
+        this._info.msgSuccess('Cập nhật thông tin thành công')
         // this.dialogRef.close()
         this.Back()
       },
       err => {
-        // debugger;
+        this._info.msgError('Cập nhật thông tin không thành công')
       }
     )
   }
