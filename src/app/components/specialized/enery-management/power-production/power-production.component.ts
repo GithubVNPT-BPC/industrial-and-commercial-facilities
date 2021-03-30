@@ -23,10 +23,11 @@ export class PowerProductionManagementComponent implements OnInit {
 
     protected _linkOutput: LinkModel = new LinkModel();
     //Constant
-    protected LINK_DEFAULT: string = "";
-    protected TITLE_DEFAULT: string = "";
-    protected TEXT_DEFAULT: string = "";
-    displayedColumns: string[] = ['index', "obj_name", "time_id", "edit"];
+    protected REDIRECT_PAGE: string = "/specialized/enery-management/power-production-month-detail";
+    protected LINK_DEFAULT: string = "/specialized/enery-management/power_production";
+    protected TITLE_DEFAULT: string = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
+    protected TEXT_DEFAULT: string = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
+    displayedColumns: string[] = ['index', /**"obj_name",**/ "time_id", "edit"];
     dataSource: MatTableDataSource<any>;
     tempObject: ReportOject;
     filterObject: ReportOject;
@@ -65,7 +66,8 @@ export class PowerProductionManagementComponent implements OnInit {
         this.sendLinkToNext(true);
 
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
-        this.org_id = parseInt(data.org_id);
+        // this.org_id = parseInt(data.org_id);
+        this.org_id = 5;
         this.GetList_ReportPowerProduction(this.selectedYear);
         this.periods = this.months;
         this.tempObject.submit_type_name = 'Báo cáo tháng';
@@ -73,7 +75,6 @@ export class PowerProductionManagementComponent implements OnInit {
 
     GetList_ReportPowerProduction(year: number) {
         this.reportSevice.GetList_ReportPowerProduction(year).subscribe(response => {
-            console.log(response.data)
             response.data.forEach(element => {
                 element.time_id_text = this.TimeIDToText(element.time_id.toString());
             })
@@ -122,19 +123,10 @@ export class PowerProductionManagementComponent implements OnInit {
         this.GetList_ReportPowerProduction(this.selectedYear);
     }
 
-    OpenDetailObject(obj: ReportOject) {
-        this.router.navigate(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
-    }
-
-    getLinkDefault() {
-        //Constant
-        this.LINK_DEFAULT = "/specialized/enery-management/power_production";
-        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
-        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
-    }
+    OpenDetailObject(time_id: number) {
+        this.router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id : time_id} });
 
     public sendLinkToNext(type: boolean) {
-        this.getLinkDefault();
         this._linkOutput.link = this.LINK_DEFAULT;
         this._linkOutput.title = this.TITLE_DEFAULT;
         this._linkOutput.text = this.TEXT_DEFAULT;

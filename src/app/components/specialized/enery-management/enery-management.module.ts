@@ -25,6 +25,7 @@ import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 import {KeyEnegyComponent} from './key-enegy/key-enegy.component';
+import { MonthDetailComponent } from './power-production/month-detail/month-detail.component';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import {KeyEnegyComponent} from './key-enegy/key-enegy.component';
     ManageApproveHddlComponent,
     ConsultantElectricComponent,
     ManufacturingElectronicComponent,
-    KeyEnegyComponent
+    KeyEnegyComponent,
+    MonthDetailComponent
 ],
   entryComponents: []
 })

@@ -72,6 +72,8 @@ import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
+import { DetailBorderTradeComponent } from './border-trade/detail-border-trade/detail-border-trade.component';
+import { BorderTradeOverviewComponent } from './border-trade/border-trade-overview/border-trade-overview.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -161,7 +163,9 @@ export const customCurrencyMaskConfig = {
     EditBusinessComponent,
     AddLpgComponent,
     CertificateListComponent,
-    AddCertificateComponent
+    AddCertificateComponent,
+    DetailBorderTradeComponent,
+    BorderTradeOverviewComponent
   ],
   entryComponents: [
     ModalComponent,
