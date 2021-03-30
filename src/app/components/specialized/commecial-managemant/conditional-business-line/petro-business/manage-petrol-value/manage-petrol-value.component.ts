@@ -452,15 +452,6 @@ export class ManagePetrolValueComponent implements OnInit {
     return date
   }
 
-  convertstringtodate(time: string): Date {
-    let year = parseInt(time.substring(0, 4));
-    let month = parseInt(time.substring(4, 6));
-    let day = parseInt(time.substring(6, 8));
-
-    let date = new Date(year, month - 1, day);
-    return date
-  }
-
   public date = new FormControl(_moment());
   public date1 = new FormControl(_moment());
   public date2 = new FormControl(_moment());
