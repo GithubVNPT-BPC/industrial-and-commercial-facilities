@@ -194,7 +194,7 @@ export class ViewReportComponent implements OnInit {
     this.reportSevice.GetReportByKey(obj_id, time_id, org_id).subscribe(
       allRecord => {
         this.attributes = allRecord.data[1] as ReportAttribute[];
-        this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+        this.attributes.sort((a, b) => a.attr_id - b.attr_id);
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];

@@ -16,32 +16,31 @@ import { Location } from '@angular/common';
 import { element } from 'protractor';
 import { merge } from 'rxjs';
 import moment from 'moment';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { MatAccordion } from '@angular/material';
 import { LinkModel } from 'src/app/_models/link.model';
-
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 interface HashTableNumber<T> {
     [key: string]: T;
 }
 
 @Component({
-    selector: 'retail-month',
-    templateUrl: './retail-month.component.html',
-    styleUrls: ['../../../../report/report_layout.scss'],
+    selector: 'app-detail-border-trade',
+    templateUrl: './detail-border-trade.component.html',
+    styleUrls: ['../../../special_layout.scss']
 })
-
-
-export class RetailMonthComponent implements OnInit {
+export class DetailBorderTradeComponent implements OnInit {
     @ViewChild('TABLE', { static: false }) table: ElementRef;
+    @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
 
     public readonly TYPE_INDICATOR_INPUT: number = 1;
     public readonly ATTRIBUTE_CODE: string = 'IND_NAME';
     public readonly UNIT_CODE: string = 'IND_UNIT';
     public readonly ATTRIBUTE_DEFAULT: number = 1;
 
-    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/retail-detail";
-    private readonly TITLE_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
-    private readonly TEXT_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
+    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/border_trade/detail";
+    private readonly TITLE_DEFAULT: string = "Chi tiết xuất nhập khẩu biên giới";
+    private readonly TEXT_DEFAULT: string = "Chi tiết xuất nhập khẩu biên giới";
 
     public tableMergeHader: Array<ToltalHeaderMerge> = [];
     public mergeHeadersColumn: Array<string> = [];
@@ -58,23 +57,27 @@ export class RetailMonthComponent implements OnInit {
         'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP',
         'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ'];
 
-    obj_id: number = 1;
+    obj_id: number;
     time_id: number;
     org_id: number = 0;
     rows: number = 0;
-    state_id: number = 0;
+    state_id: number = 101;
 
-    thoigianbaocao: string = "";
-    tenbaocao: string = "";
-    ngaybatdaubaocao: string = "";
-    ngayketthucbaocao: string = "";
-    
+    list_object: Array<Object> = [
+        { ten_cua_khau: 'Tất cả cửa khẩu', obj_id: 8 },
+        { ten_cua_khau: 'Cửa khẩu Hoa Lư', obj_id: 5 },
+        { ten_cua_khau: 'Cửa khẩu Hoàng Diệu', obj_id: 6 },
+        { ten_cua_khau: 'Cửa khẩu Lộc Thịnh', obj_id: 7 }
+    ]
     years: Array<number> = [];
     months: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     selectedYear: number;
     selectedMonth: number;
 
-    private _linkOutput: LinkModel = new LinkModel();
+    thoigianbaocao: string = "";
+    tenbaocao: string = "";
+    ngaybatdaubaocao: string = "";
+    ngayketthucbaocao: string = "";
 
     attributes: Array<ReportAttribute> = [];
     attributeHeaders: Array<any>;
@@ -84,20 +87,19 @@ export class RetailMonthComponent implements OnInit {
 
     object: ReportOject[] = [];
     dataSource: MatTableDataSource<ReportTable> = new MatTableDataSource<ReportTable>();
+    
+    private _linkOutput: LinkModel = new LinkModel();
 
     constructor(
         public reportSevice: ReportService,
         public route: ActivatedRoute,
-        public _router : Router,
+        private _router: Router,
         public keyboardservice: KeyboardService,
         public info: InformationService,
         public location: Location,
         public excelService: ExcelService,
-        private _breadCrumService: BreadCrumService
+        private _breadCrumService: BreadCrumService,
     ) {
-        this.route.queryParams.subscribe(params => {
-            this.time_id = params['time_id'];
-        });
     }
 
     move(object) {
@@ -126,18 +128,28 @@ export class RetailMonthComponent implements OnInit {
 
     ngOnInit(): void {
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
-        //this.org_id = parseInt(data.org_id);
+        // this.org_id = parseInt(data.org_id);
         this.org_id = 4;
         this.years = this.InitialYears();
+        this.obj_id = 8;
         this.selectedYear = new Date().getFullYear();
         this.selectedMonth = new Date().getMonth();
         this.calculateTimeId();
-
+        this.autoOpen();
         this.sendLinkToNext(true);
+
         this.GetReportById(this.time_id);
         this.keyboardservice.keyBoard.subscribe(res => {
             this.move(res)
         })
+    }
+
+    public sendLinkToNext(type: boolean) {
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this._breadCrumService.sendLink(this._linkOutput);
     }
 
     checkAccessObj() {
@@ -205,7 +217,7 @@ export class RetailMonthComponent implements OnInit {
             allRecord => {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
-                    this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+                    this.attributes.sort((a, b) => a.attr_id - b.attr_id);
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];
                     this.object = allRecord.data[0];
@@ -220,6 +232,7 @@ export class RetailMonthComponent implements OnInit {
             }
         )
     }
+
     formatFrameReport(report: ReportOject) {
         this.tenbaocao = report.obj_name;
         this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));
@@ -312,6 +325,7 @@ export class RetailMonthComponent implements OnInit {
     }
 
     CreateReportTable() {
+        this.dataSource = new MatTableDataSource<ReportTable>();
         this.attributes = this.attributes.filter(a => a.fld_code && a.fld_code.toLowerCase() != 'null'
             && a.attr_code.toLowerCase() != 'ind_code'
             && a.attr_code.toLowerCase() != 'rn');
@@ -320,7 +334,6 @@ export class RetailMonthComponent implements OnInit {
             .map(c => c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase());
         this.attributeHeaders = this.attributeHeaders.filter(a => a.toLowerCase() != 'ind_code' && a.toLowerCase() != 'rn')
         this.attributeHeaders.unshift('index');
-        this.dataSource = new MatTableDataSource<ReportTable>();
         for (let index = 0; index < this.indicators.length; index++) {
             const elementDatarow = this.datarows[index];
             const elementIndicator = this.indicators[index];
@@ -427,16 +440,9 @@ export class RetailMonthComponent implements OnInit {
                 this.info.msgError("Xảy ra lỗi: " + error.message);
             })
     }
+
     Back() {
         this.location.back();
-    }
-
-    private sendLinkToNext(type: boolean): void {
-        this._linkOutput.link = this.LINK_DEFAULT;
-        this._linkOutput.title = this.TITLE_DEFAULT + ' tháng ' + this.time_id.toString().substr(4, 2) + "/" + this.time_id.toString().slice(0, 4);
-        this._linkOutput.text = this.TEXT_DEFAULT + ' tháng ' + this.time_id.toString().substr(4, 2) + "/" + this.time_id.toString().slice(0, 4);
-        this._linkOutput.type = type;
-        this._breadCrumService.sendLink(this._linkOutput);
     }
 
     InitialYears() {
@@ -447,6 +453,10 @@ export class RetailMonthComponent implements OnInit {
             returnYear.push(nextYear + index);
         }
         return returnYear;
+    }
+
+    autoOpen() {
+        setTimeout(() => this.accordion.openAll(), 1000);
     }
 
     calculateTimeId() {

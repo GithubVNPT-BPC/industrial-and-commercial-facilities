@@ -25,13 +25,13 @@ interface HashTableNumber<T> {
 }
 
 @Component({
-    selector: 'retail-month',
-    templateUrl: './retail-month.component.html',
+    selector: 'app-month-detail',
+    templateUrl: './month-detail.component.html',
     styleUrls: ['../../../../report/report_layout.scss'],
 })
 
 
-export class RetailMonthComponent implements OnInit {
+export class MonthDetailComponent implements OnInit {
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
     public readonly TYPE_INDICATOR_INPUT: number = 1;
@@ -39,9 +39,9 @@ export class RetailMonthComponent implements OnInit {
     public readonly UNIT_CODE: string = 'IND_UNIT';
     public readonly ATTRIBUTE_DEFAULT: number = 1;
 
-    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/retail-detail";
-    private readonly TITLE_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
-    private readonly TEXT_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
+    private readonly LINK_DEFAULT: string = "/specialized/enery-management/power-production-month-detail";
+    private readonly TITLE_DEFAULT: string = "Chi tiết Điện sản xuất và thương phẩm";
+    private readonly TEXT_DEFAULT: string = "Chi tiết Điện sản xuất và thương phẩm";
 
     public tableMergeHader: Array<ToltalHeaderMerge> = [];
     public mergeHeadersColumn: Array<string> = [];
@@ -98,6 +98,7 @@ export class RetailMonthComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.time_id = params['time_id'];
         });
+        console.log(this.time_id)
     }
 
     move(object) {

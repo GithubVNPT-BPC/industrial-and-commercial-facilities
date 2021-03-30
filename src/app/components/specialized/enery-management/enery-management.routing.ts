@@ -12,14 +12,16 @@ import { SolarEneryManagementComponent } from './solar-enery-management/solor-en
 import { ElectricDevelopmentManagementComponent } from './electricity-development/electricity-development.component';
 import { PowerProductionManagementComponent } from './power-production/power-production.component';
 import { RuralElectricManagementComponent } from './rural-electric/rural-electric-management.component';
+import { KeyEnegyComponent } from './key-enegy/key-enegy.component';
+import { MonthDetailComponent } from './power-production/month-detail/month-detail.component';
 const routes: Routes = [
-  
+
   {
     path: '',
-    data:{
+    data: {
       title: 'Quản lý năng lượng'
     },
-    children:[
+    children: [
       {
         path: 'common',
         data: {
@@ -84,11 +86,18 @@ const routes: Routes = [
         component: ElectricDevelopmentManagementComponent
       },
       {
+        path: 'power-production-month-detail',
+        data: {
+          title: 'Công tác phát triển lưới điện 35KV trở xuống',
+        },
+        component: MonthDetailComponent,
+      },
+      {
         path: 'power_production',
         data: {
           title: 'Điện sản xuất và điện thương phẩm',
         },
-        component: PowerProductionManagementComponent
+        component: PowerProductionManagementComponent,
       },
       {
         path: 'rural_electricity',
@@ -99,7 +108,7 @@ const routes: Routes = [
       },
     ],
   },
-  
+
 
 ];
 
