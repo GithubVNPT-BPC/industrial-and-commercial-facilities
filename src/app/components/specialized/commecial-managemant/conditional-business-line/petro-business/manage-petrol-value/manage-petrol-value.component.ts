@@ -8,6 +8,9 @@ import { MatDialog } from '@angular/material';
 import { AddSupplyBusinessComponent } from '../add-supply-business/add-supply-business.component';
 import { SelectionModel } from '@angular/cdk/collections';
 
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import {
   PetrolList,
   DistrictModel,
@@ -67,8 +70,22 @@ export class ManagePetrolValueComponent implements OnInit {
     public router: Router,
     public _info: InformationService,
     public dialog: MatDialog,
-    public _login: LoginService
+    public _login: LoginService,
+    private _breadCrumService: BreadCrumService,
   ) {
+  }
+
+  protected LINK_DEFAULT: string = "";
+  protected TITLE_DEFAULT: string = "KINH DOANH XĂNG DẦU";
+  protected TEXT_DEFAULT: string = "KINH DOANH XĂNG DẦU";
+  private _linkOutput: LinkModel = new LinkModel();
+
+  private sendLinkToNext(type: boolean): void {
+    this._linkOutput.link = this.LINK_DEFAULT;
+    this._linkOutput.title = this.TITLE_DEFAULT;
+    this._linkOutput.text = this.TEXT_DEFAULT;
+    this._linkOutput.type = type;
+    this._breadCrumService.sendLink(this._linkOutput);
   }
 
   // public AddSupplyBusiness(data: any) {
@@ -83,7 +100,6 @@ export class ManagePetrolValueComponent implements OnInit {
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    // const numRows = this.dataSource.data.length;
     const numRows = this.dataSource1.connect().value.length;
     return numSelected === numRows;
   }
@@ -117,8 +133,7 @@ export class ManagePetrolValueComponent implements OnInit {
       }
       this._Service.DeletePetrolValue(this.deletemodel1).subscribe(res => {
         this._info.msgSuccess('Xóa thành công')
-        this.date = this.newdate
-        this.ngOnInit();
+        window.location.reload();
         this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
@@ -139,10 +154,12 @@ export class ManagePetrolValueComponent implements OnInit {
 
   ngOnInit() {
     this.autoOpen();
-    this.getPetrolListbyYear('');
+    this.getPetrolListbyYear('', '');
     this.getQuan_Huyen();
     this.getBusinessList();
     this.date = null
+    this.UpdatedDate = null
+    this.sendLinkToNext(true);
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -192,15 +209,14 @@ export class ManagePetrolValueComponent implements OnInit {
     'id_san_luong',
     'time_id'
   ];
+
   dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
   petrollist: Array<PetrolList> = new Array<PetrolList>();
   petrollist1: Array<PetrolList> = new Array<PetrolList>();
   petrollist2: Array<PetrolList> = new Array<PetrolList>();
-
   petrollist3: Array<PetrolList> = new Array<PetrolList>();
-  petrollist4: Array<PetrolList> = new Array<PetrolList>();
 
-  getPetrolListbyYear(year: string) {
+  getPetrolListbyYear(year: string, year1: string) {
     if (year == '') {
       this._Service.GetAllPetrolValue().subscribe(all => {
         this.petrollist = all.data[0];
@@ -248,7 +264,12 @@ export class ManagePetrolValueComponent implements OnInit {
           element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
         });
 
-        this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false)
+        if (year1 == '') {
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false)
+        }
+        else {
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false && x.time_id == year1)
+        }
 
         this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
 
@@ -310,7 +331,12 @@ export class ManagePetrolValueComponent implements OnInit {
           element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
         });
 
-        this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false)
+        if (year1 == '') {
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false)
+        }
+        else {
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false && x.time_id == year1)
+        }
 
         this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
 
@@ -365,15 +391,28 @@ export class ManagePetrolValueComponent implements OnInit {
   applyDistrictFilter(event) {
     let filteredData = [];
 
-    event.value.forEach(element => {
-      this.petrollist4.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-    });
+    if (this.theYear1 != undefined) {
+      event.value.forEach(element => {
+        this.petrollist3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase()) && x.time_id == this.theYear1.toString()).forEach(x => filteredData.push(x));
+      });
+    }
+    else {
+      event.value.forEach(element => {
+        this.petrollist3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+      });
+    }
 
     if (!filteredData.length) {
       if (event.value.length)
         this.dataSource1.data = [];
       else
-        this.dataSource1.data = this.petrollist4;
+        if (this.theYear1 != undefined) {
+          this.dataSource1.data = this.petrollist3.filter(x => x.time_id == this.theYear1.toString());
+        }
+        else {
+          this.dataSource1.data = this.petrollist3
+        }
+
     }
     else {
       this.dataSource1.data = filteredData;
@@ -385,14 +424,13 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   applyExpireCheck(event) {
-    this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == event.checked)
-    this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
-    let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
-    this.SLDoanhNghiep = unique.length;
-  }
+    if (this.theYear1 != undefined) {
+      this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == event.checked && x.time_id == this.theYear1.toString())
+    }
+    else {
+      this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == event.checked)
+    }
 
-  applyAllValue(event) {
-    this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == event.checked)
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
     let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
     this.SLDoanhNghiep = unique.length;
@@ -417,6 +455,7 @@ export class ManagePetrolValueComponent implements OnInit {
   public date = new FormControl(_moment());
   public date1 = new FormControl(_moment());
   public theYear: number;
+  public theYear1: number;
 
   public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
     this.date = this.date1
@@ -426,7 +465,20 @@ export class ManagePetrolValueComponent implements OnInit {
     this.theYear = normalizedYear.year();
     datepicker.close();
     this.selection.clear();
-    this.getPetrolListbyYear(this.theYear.toString())
+    this.getPetrolListbyYear(this.theYear.toString(), this.theYear1 ? this.theYear1.toString() : '')
+  }
+
+  public UpdatedDate = new FormControl(_moment());
+
+  public chosenYearHandler1(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+    this.UpdatedDate = this.date1
+    const ctrlValue = this.UpdatedDate.value;
+    ctrlValue.year(normalizedYear.year());
+    this.UpdatedDate.setValue(ctrlValue);
+    this.theYear1 = normalizedYear.year();
+    datepicker.close();
+    this.selection.clear();
+    this.getPetrolListbyYear(this.theYear ? this.theYear.toString() : '', this.theYear1.toString())
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
@@ -453,8 +505,7 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   Reset() {
-    this.ngOnInit();
-    this.date = null;
+    window.location.reload();
   }
 
   OpenDetailPetrol(id: number, mst: string, time: string, id_san_luong: string) {

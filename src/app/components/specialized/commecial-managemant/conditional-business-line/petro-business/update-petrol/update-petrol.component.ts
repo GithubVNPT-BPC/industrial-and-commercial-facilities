@@ -350,11 +350,12 @@ export class UpdatePetrolComponent implements OnInit {
     this.petrolvaluepost.push({
       ghi_chu: '',
       san_luong: null,
-      time_id: this.getCurrentYear(),
+      time_id: '',
       id: null,
       id_cua_hang_xang_dau: null,
     })
 
+    this.petrolvaluepost[0].time_id = this.input.time_id
     this.petrolvaluepost[0].ghi_chu = this.input.ghi_chu
     this.petrolvaluepost[0].san_luong = this.input.san_luong
     this.petrolvaluepost[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
@@ -365,12 +366,13 @@ export class UpdatePetrolComponent implements OnInit {
     this.petrolvaluepost1.push({
       ghi_chu: '',
       san_luong: null,
-      time_id: this.getCurrentYear(),
+      time_id: '',
       id: null,
       id_cua_hang_xang_dau: null,
       danh_sach_thuong_nhan: []
     })
 
+    this.petrolvaluepost1[0].time_id = this.input.time_id
     this.petrolvaluepost1[0].ghi_chu = this.input.ghi_chu
     this.petrolvaluepost1[0].san_luong = this.input.san_luong
     this.petrolvaluepost1[0].id_cua_hang_xang_dau = this.input.id_cua_hang_xang_dau
@@ -446,7 +448,7 @@ export class UpdatePetrolComponent implements OnInit {
         ten_quan_ly: this.petrolobject.ten_quan_ly,
         ten_nhan_vien: this.petrolobject.ten_nhan_vien,
         id_giay_phep: this.petrolobject.id_giay_phep,
-        time_id: this.getCurrentYear(),
+        time_id: this.petrolobject.time_id,
         ghi_chu: this.petrolobject.ghi_chu,
         san_luong: this.petrolobject.san_luong
       }

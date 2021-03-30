@@ -1,7 +1,7 @@
 <mat-card class="material">
     <mat-card-content>
         <mat-card-header>
-            <mat-card-title><strong>THƯƠNG NHÂN MUA BÁN LPG</strong>
+            <mat-card-title>
                 <div class="button-control">
                     <button mat-raised-button class="green"
                         (click)="ExportTOExcel('Thống kê sản lượng','Thống kê sản lượng')">Xuất
@@ -81,16 +81,16 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <!-- <div class="col-2">
+                    <div class="col-2">
                         <mat-form-field appearance="outline">
-                            <mat-label>Thời gian</mat-label>
+                            <mat-label>Năm cấp GP</mat-label>
                             <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
                             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                             <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)"
                                 panelClass="example-month-picker">
                             </mat-datepicker>
                         </mat-form-field>
-                    </div> -->
+                    </div>
 
                     <div class="col-3">
                         <mat-form-field appearance="outline">
@@ -109,13 +109,17 @@
                         </mat-checkbox>
                     </div>
 
-                    <div class="col-8 button-control my-auto" [hidden]=authorize>
-                        <button mat-raised-button (click)="AddLPG()">Thêm DN</button>
+                    <div class="col-6 button-control my-auto">
+                        <button mat-raised-button (click)="Reset()"> Lấy tất cả dữ liệu
+                        </button>
 
-                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)">Quản lý thương
+                        <button mat-raised-button (click)="AddLPG()" [hidden]=authorize>Thêm DN</button>
+
+                        <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)" [hidden]=authorize>Quản lý
+                            thương
                             nhân</button>
 
-                        <button mat-raised-button class="red" (click)="removeRows()">Xóa DN</button>
+                        <button mat-raised-button class="red" (click)="removeRows()" [hidden]=authorize>Xóa DN</button>
                     </div>
                 </div>
 

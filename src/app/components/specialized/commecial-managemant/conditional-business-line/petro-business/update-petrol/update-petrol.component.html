@@ -31,10 +31,10 @@
                         </mat-select>
                     </mat-form-field> -->
 
-                    <!-- <mat-form-field appearance="outline">
+                    <mat-form-field appearance="outline">
                         <mat-label>Năm</mat-label>
                         <input formControlName="time_id" matInput placeholder="" [(ngModel)]="_Service.petrol.time_id">
-                    </mat-form-field> -->
+                    </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Cửa hàng xăng dầu</mat-label>
@@ -46,12 +46,6 @@
                                 {{item.storeselect}}
                             </mat-option>
                         </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Ghi chú</mat-label>
-                        <textarea formControlName="ghi_chu" matInput placeholder=""
-                            [(ngModel)]="_Service.petrol.ghi_chu"></textarea>
                     </mat-form-field>
 
                     <!-- <mat-form-field appearance="outline">
@@ -72,6 +66,13 @@
                         <input matInput currencyMask class="text-right" formControlName="san_luong"
                             [(ngModel)]="_Service.petrol.san_luong">
                     </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ghi chú</mat-label>
+                        <textarea formControlName="ghi_chu" matInput placeholder=""
+                            [(ngModel)]="_Service.petrol.ghi_chu"></textarea>
+                    </mat-form-field>
+
                     <!-- <mat-form-field appearance="outline">
                         <mat-label>Địa chỉ</mat-label>
                         <input formControlName="dia_chi" matInput placeholder="" [(ngModel)]="_Service.petrol.dia_chi">

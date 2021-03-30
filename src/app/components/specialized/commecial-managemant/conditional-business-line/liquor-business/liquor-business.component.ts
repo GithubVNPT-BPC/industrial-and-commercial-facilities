@@ -7,6 +7,9 @@ import { InformationService } from 'src/app/shared/information/information.servi
 import { MatDialog } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import {
     DistrictModel,
     LiquorList,
@@ -87,8 +90,22 @@ export class LiquorBusinessComponent implements OnInit {
         public router: Router,
         public _info: InformationService,
         public dialog: MatDialog,
-        public _login: LoginService
+        public _login: LoginService,
+        private _breadCrumService: BreadCrumService,
     ) {
+    }
+
+    protected LINK_DEFAULT: string = "";
+    protected TITLE_DEFAULT: string = "KINH DOANH RƯỢU";
+    protected TEXT_DEFAULT: string = "KINH DOANH RƯỢU";
+    private _linkOutput: LinkModel = new LinkModel();
+
+    private sendLinkToNext(type: boolean): void {
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this._breadCrumService.sendLink(this._linkOutput);
     }
 
     public district: Array<DistrictModel> = new Array<DistrictModel>();
@@ -102,11 +119,13 @@ export class LiquorBusinessComponent implements OnInit {
 
     ngOnInit() {
         this.autoOpen();
-        this.getLiquorListbyYear(this.getCurrentYear())
+        this.getLiquorListbyYear('', '');
         this.getQuan_Huyen();
-        this.theYear = parseInt(this.getCurrentYear());
+        this.date = null
+        this.UpdatedDate = null
+        this.sendLinkToNext(true)
 
-        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -119,7 +138,6 @@ export class LiquorBusinessComponent implements OnInit {
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
-        // const numRows = this.dataSource.data.length;
         const numRows = this.dataSource1.connect().value.length;
         return numSelected === numRows;
     }
@@ -153,8 +171,7 @@ export class LiquorBusinessComponent implements OnInit {
             }
             this._Service.DeleteLiquorValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
-                this.date = this.newdate
-                this.ngOnInit()
+                window.location.reload();
                 this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
@@ -177,73 +194,144 @@ export class LiquorBusinessComponent implements OnInit {
 
     SanLuongBanRa: number;
     TriGiaBanRa: number;
-    SLThuongNhan: number;
 
-    dataSource: MatTableDataSource<LiquorList> = new MatTableDataSource<LiquorList>();
     dataSource1: MatTableDataSource<LiquorList> = new MatTableDataSource<LiquorList>();
     LiquorList: Array<LiquorList> = new Array<LiquorList>();
     LiquorList1: Array<LiquorList> = new Array<LiquorList>();
     LiquorList2: Array<LiquorList> = new Array<LiquorList>();
+    LiquorList3: Array<LiquorList> = new Array<LiquorList>();
 
-    getLiquorListbyYear(year: string) {
-        this._Service.GetLiquorValue(year).subscribe(all => {
-            this.LiquorList = all.data[0];
-            this.LiquorList1 = all.data[1];
-            this.LiquorList2 = this.LiquorList.map(x => {
-                let temp = this.LiquorList1.filter(y => y.id_san_luong == x.id_ruou)
+    getLiquorListbyYear(year: string, year1: string) {
+        if (year == '') {
+            this._Service.GetAllLiquorValue().subscribe(all => {
+                this.LiquorList = all.data[0];
+                this.LiquorList1 = all.data[1];
+                this.LiquorList2 = this.LiquorList.map(x => {
+                    let temp = this.LiquorList1.filter(y => y.id_san_luong == x.id_ruou)
 
-                let temp1 = temp.map(z => z.ten_thuong_nhan)
-                if (temp1 == undefined || temp1 == null) {
-                    x.ten_thuong_nhan = null
+                    let temp1 = temp.map(z => z.ten_thuong_nhan)
+                    if (temp1 == undefined || temp1 == null) {
+                        x.ten_thuong_nhan = null
+                    }
+                    else {
+                        x.ten_thuong_nhan = temp1.join('; ')
+                    }
+
+                    let temp2 = temp.map(z => z.dia_chi_tn)
+                    if (temp2 == undefined || temp2 == null) {
+                        x.dia_chi_tn = null
+                    }
+                    else {
+                        x.dia_chi_tn = temp2.join('; ')
+                    }
+
+                    let temp3 = temp.map(z => z.so_dien_thoai_tn)
+                    if (temp3 == undefined || temp3 == null) {
+                        x.so_dien_thoai_tn = null
+                    }
+                    else {
+                        x.so_dien_thoai_tn = temp3.join('; ')
+                    }
+
+                    return x
+                })
+
+                this.LiquorList3 = this.LiquorList2
+                this.LiquorList3.forEach(element => {
+                    if (element.ngay_het_han) {
+                        let temp = this.Convertdate(element.ngay_het_han)
+                        element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    }
+                    else {
+                        element.is_het_han = false
+                    }
+                    element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+                    element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
+                });
+
+                if (year1 == '') {
+                    this.dataSource1.data = this.LiquorList3.filter(x => x.is_het_han == false)
                 }
                 else {
-                    x.ten_thuong_nhan = temp1.join('; ')
+                    this.dataSource1.data = this.LiquorList3.filter(x => x.is_het_han == false && x.time_id == year1)
                 }
 
-                let temp2 = temp.map(z => z.dia_chi_tn)
-                if (temp2 == undefined || temp2 == null) {
-                    x.dia_chi_tn = null
-                }
-                else {
-                    x.dia_chi_tn = temp2.join('; ')
-                }
+                this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+                this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
 
-                let temp3 = temp.map(z => z.so_dien_thoai_tn)
-                if (temp3 == undefined || temp3 == null) {
-                    x.so_dien_thoai_tn = null
-                }
-                else {
-                    x.so_dien_thoai_tn = temp3.join('; ')
-                }
-
-                return x
+                this.dataSource1.paginator = this.paginator;
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
             })
+        }
+        else {
+            this._Service.GetLiquorValue(year).subscribe(all => {
+                this.LiquorList = all.data[0];
+                this.LiquorList1 = all.data[1];
+                this.LiquorList2 = this.LiquorList.map(x => {
+                    let temp = this.LiquorList1.filter(y => y.id_san_luong == x.id_ruou)
 
-            this.dataSource.data = this.LiquorList2
-            this.dataSource.data.forEach(element => {
-                if (element.ngay_het_han) {
-                    let temp = this.Convertdate(element.ngay_het_han)
-                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    let temp1 = temp.map(z => z.ten_thuong_nhan)
+                    if (temp1 == undefined || temp1 == null) {
+                        x.ten_thuong_nhan = null
+                    }
+                    else {
+                        x.ten_thuong_nhan = temp1.join('; ')
+                    }
+
+                    let temp2 = temp.map(z => z.dia_chi_tn)
+                    if (temp2 == undefined || temp2 == null) {
+                        x.dia_chi_tn = null
+                    }
+                    else {
+                        x.dia_chi_tn = temp2.join('; ')
+                    }
+
+                    let temp3 = temp.map(z => z.so_dien_thoai_tn)
+                    if (temp3 == undefined || temp3 == null) {
+                        x.so_dien_thoai_tn = null
+                    }
+                    else {
+                        x.so_dien_thoai_tn = temp3.join('; ')
+                    }
+
+                    return x
+                })
+
+                this.LiquorList3 = this.LiquorList2
+                this.LiquorList3.forEach(element => {
+                    if (element.ngay_het_han) {
+                        let temp = this.Convertdate(element.ngay_het_han)
+                        element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    }
+                    else {
+                        element.is_het_han = false
+                    }
+                    element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+                    element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
+                });
+
+                if (year1 == '') {
+                    this.dataSource1.data = this.LiquorList3.filter(x => x.is_het_han == false)
                 }
                 else {
-                    element.is_het_han = false
+                    this.dataSource1.data = this.LiquorList3.filter(x => x.is_het_han == false && x.time_id == year1)
                 }
-                element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
-                element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
-            });
-            this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
 
-            this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-            this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
-            this.SLThuongNhan = this.LiquorList1.length;
+                this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+                this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
 
-            this.dataSource1.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        })
+                this.dataSource1.paginator = this.paginator;
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            })
+        }
     }
 
     // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
@@ -268,15 +356,27 @@ export class LiquorBusinessComponent implements OnInit {
     applyDistrictFilter(event) {
         let filteredData = [];
 
-        event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-        });
+        if (this.theYear1 != undefined) {
+            event.value.forEach(element => {
+                this.LiquorList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase()) && x.time_id == this.theYear1.toString()).forEach(x => filteredData.push(x));
+            });
+        }
+        else {
+            event.value.forEach(element => {
+                this.LiquorList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            });
+        }
 
         if (!filteredData.length) {
             if (event.value.length)
                 this.dataSource1.data = [];
             else
-                this.dataSource1.data = this.dataSource.data;
+                if (this.theYear1 != undefined) {
+                    this.dataSource1.data = this.LiquorList3.filter(x => x.time_id == this.theYear1.toString());
+                }
+                else {
+                    this.dataSource1.data = this.LiquorList3;
+                }
         }
         else {
             this.dataSource1.data = filteredData;
@@ -287,7 +387,15 @@ export class LiquorBusinessComponent implements OnInit {
     }
 
     applyExpireCheck(event) {
-        this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+        if (this.theYear1 != undefined) {
+            this.dataSource1.data = this.LiquorList3.filter(x => x.is_het_han == event.checked && x.time_id == this.theYear1.toString())
+        }
+        else {
+            this.dataSource1.data = this.LiquorList3.filter(x => x.is_het_han == event.checked)
+        }
+
+        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
     }
 
     public getCurrentDate() {
@@ -307,16 +415,31 @@ export class LiquorBusinessComponent implements OnInit {
     }
 
     public date = new FormControl(_moment());
+    public date1 = new FormControl(_moment());
+    public UpdatedDate = new FormControl(_moment());
     public theYear: number;
+    public theYear1: number;
 
     public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+        this.date = this.date1
         const ctrlValue = this.date.value;
         ctrlValue.year(normalizedYear.year());
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
         this.selection.clear();
-        this.getLiquorListbyYear(this.theYear.toString())
+        this.getLiquorListbyYear(this.theYear.toString(), this.theYear1 ? this.theYear1.toString() : '')
+    }
+
+    public chosenYearHandler1(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+        this.UpdatedDate = this.date1
+        const ctrlValue = this.UpdatedDate.value;
+        ctrlValue.year(normalizedYear.year());
+        this.UpdatedDate.setValue(ctrlValue);
+        this.theYear1 = normalizedYear.year();
+        datepicker.close();
+        this.selection.clear();
+        this.getLiquorListbyYear(this.theYear ? this.theYear.toString() : '', this.theYear1.toString())
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
@@ -341,5 +464,9 @@ export class LiquorBusinessComponent implements OnInit {
 
     Back() {
         this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+    }
+
+    Reset() {
+        window.location.reload();
     }
 }

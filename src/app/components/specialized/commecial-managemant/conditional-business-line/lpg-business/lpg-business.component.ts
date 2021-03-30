@@ -7,6 +7,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatDialog } from '@angular/material';
 
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import {
     DistrictModel,
     LPGList,
@@ -87,8 +90,22 @@ export class LPGBusinessComponent implements OnInit {
         public router: Router,
         public _info: InformationService,
         public dialog: MatDialog,
-        public _login: LoginService
+        public _login: LoginService,
+        private _breadCrumService: BreadCrumService,
     ) {
+    }
+
+    protected LINK_DEFAULT: string = "";
+    protected TITLE_DEFAULT: string = "THƯƠNG NHÂN MUA BÁN LPG";
+    protected TEXT_DEFAULT: string = "THƯƠNG NHÂN MUA BÁN LPG";
+    private _linkOutput: LinkModel = new LinkModel();
+
+    private sendLinkToNext(type: boolean): void {
+        this._linkOutput.link = this.LINK_DEFAULT;
+        this._linkOutput.title = this.TITLE_DEFAULT;
+        this._linkOutput.text = this.TEXT_DEFAULT;
+        this._linkOutput.type = type;
+        this._breadCrumService.sendLink(this._linkOutput);
     }
 
     public district: Array<DistrictModel> = new Array<DistrictModel>();
@@ -101,12 +118,13 @@ export class LPGBusinessComponent implements OnInit {
     authorize: boolean = true
 
     ngOnInit() {
+        this.date = null
         this.autoOpen();
-        this.getLPGListbyYear();
+        this.getLPGListbyYear('');
         this.getQuan_Huyen();
-        this.theYear = parseInt(this.getCurrentYear());
+        this.sendLinkToNext(true)
 
-        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -130,7 +148,6 @@ export class LPGBusinessComponent implements OnInit {
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
-        // const numRows = this.dataSource.data.length;
         const numRows = this.dataSource1.connect().value.length;
         return numSelected === numRows;
     }
@@ -164,8 +181,7 @@ export class LPGBusinessComponent implements OnInit {
             }
             this._Service.DeleteLPGValue(this.deletemodel1).subscribe(res => {
                 this._info.msgSuccess('Xóa thành công')
-                this.date = this.newdate
-                this.ngOnInit()
+                window.location.reload();
                 this.deletemodel1 = []
                 this.selection.clear();
                 this.paginator.pageIndex = 0;
@@ -176,16 +192,15 @@ export class LPGBusinessComponent implements OnInit {
     public newdate = new FormControl(_moment());
 
     SoLuongCoSo: number;
-    SLThuongNhan: number;
     type: string = 'LPG'
 
-    dataSource: MatTableDataSource<LPGList> = new MatTableDataSource<LPGList>();
     dataSource1: MatTableDataSource<LPGList> = new MatTableDataSource<LPGList>();
     LPGList: Array<LPGList> = new Array<LPGList>();
     LPGList1: Array<LPGList> = new Array<LPGList>();
     LPGList2: Array<LPGList> = new Array<LPGList>();
+    LPGList3: Array<LPGList> = new Array<LPGList>();
 
-    getLPGListbyYear() {
+    getLPGListbyYear(year: string) {
         this._Service.GetAllLPGValue().subscribe(all => {
             this.LPGList = all.data[0];
             this.LPGList1 = all.data[1];
@@ -219,8 +234,8 @@ export class LPGBusinessComponent implements OnInit {
                 return x
             })
 
-            this.dataSource.data = this.LPGList2
-            this.dataSource.data.forEach(element => {
+            this.LPGList3 = this.LPGList2
+            this.LPGList3.forEach(element => {
                 if (element.ngay_het_han) {
                     let temp = this.Convertdate(element.ngay_het_han)
                     element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
@@ -231,10 +246,15 @@ export class LPGBusinessComponent implements OnInit {
                 element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
-            this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+
+            if (year == '') {
+                this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == false)
+            }
+            else {
+                this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == false && x.ngay_cap.substring(6, 10) == year)
+            }
 
             this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-            this.SLThuongNhan = this.LPGList1.length;
 
             this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -267,26 +287,44 @@ export class LPGBusinessComponent implements OnInit {
     applyDistrictFilter(event) {
         let filteredData = [];
 
-        event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-        });
+        if (this.theYear != undefined) {
+            event.value.forEach(element => {
+                this.LPGList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase()) && x.ngay_cap.substring(6, 10) == this.theYear.toString()).forEach(x => filteredData.push(x));
+            });
+        }
+        else {
+            event.value.forEach(element => {
+                this.LPGList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            });
+        }
 
         if (!filteredData.length) {
             if (event.value.length)
                 this.dataSource1.data = [];
             else
-                this.dataSource1.data = this.dataSource.data;
+                if (this.theYear != undefined) {
+                    this.dataSource1.data = this.LPGList3.filter(x => x.ngay_cap.substring(6, 10) == this.theYear.toString());
+                }
+                else {
+                    this.dataSource1.data = this.LPGList3
+                }
         }
         else {
             this.dataSource1.data = filteredData;
         }
 
         this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-
     }
 
     applyExpireCheck(event) {
-        this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+        if (this.theYear != undefined) {
+            this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == event.checked && x.ngay_cap.substring(6, 10) == this.theYear.toString())
+        }
+        else {
+            this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == event.checked)
+        }
+
+        this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
     }
 
     public getCurrentDate() {
@@ -306,16 +344,18 @@ export class LPGBusinessComponent implements OnInit {
     }
 
     public date = new FormControl(_moment());
+    public date1 = new FormControl(_moment());
     public theYear: number;
 
     public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+        this.date = this.date1
         const ctrlValue = this.date.value;
         ctrlValue.year(normalizedYear.year());
         this.date.setValue(ctrlValue);
         this.theYear = normalizedYear.year();
         datepicker.close();
         this.selection.clear();
-        // this.getLPGListbyYear(this.theYear.toString()
+        this.getLPGListbyYear(this.theYear.toString())
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
@@ -336,5 +376,9 @@ export class LPGBusinessComponent implements OnInit {
 
     Back() {
         this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+    }
+
+    Reset() {
+        window.location.reload();
     }
 }
