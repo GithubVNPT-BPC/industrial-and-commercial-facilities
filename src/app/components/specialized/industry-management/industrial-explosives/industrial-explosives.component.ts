@@ -36,7 +36,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
     tongMucSanLuong: number = 0;
-    filterModel = { id_quan_huyen: [], id_tinh_trang_hoat_dong: [], is_expired: false };
+    filterModel = { 
+        id_quan_huyen: [], 
+        id_tinh_trang_hoat_dong: [],
+        ngay_cap: [],
+        is_expired: false 
+    };
 
     constructor(
         private injector: Injector,
@@ -100,26 +105,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.industryManagementService.DeleteExplosiveMat(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    applyFilter(event) {
-        if (!event.target) {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        } else {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        }
-        this.paginatorAgain();
-        this._prepareData();
-    }
-
     getPostExplosiveMatData(time_id) {
         this.industryManagementService.GetExplosiveMat(time_id).subscribe(result => {
             this.filteredDataSource.data = [];
@@ -146,23 +131,52 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
     }
 
-    filterArray(array, filters) {
-        const filterKeys = Object.keys(filters);
-        let temp = [...array];
-        filterKeys.forEach(key => {
-            let temp2 = [];
-            if (key == 'is_expired') {
-                temp2 = (filters[key]) ? temp2.concat(temp.filter(x => x[key] == true)) : temp;
-                temp = [...temp2];
+    applyExpireCheck(event) {
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+        this._prepareData();
+        this.paginatorAgain();
+    }
+
+    applyFilter(event) {
+        if (event.target) {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
             }
-            else
-                if (filters[key].length) {
-                    filters[key].forEach(criteria => {
-                        temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
+        }
+        this._prepareData();
+        this.paginatorAgain();
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(filterName => {
+            let filterCrits = [];
+            if (filters[filterName].length) {
+                if (filterName == 'ngay_cap') {
+                    filters[filterName].forEach(criteria => {
+                        if (criteria && criteria != 0) filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].toString().includes(criteria)));
+                        else filterCrits = filterCrits.concat(filteredData);
                     });
-                    temp = [...temp2];
+                } else {
+                    filters[filterName].forEach(criteria => {
+                        filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName] == criteria));
+                    });
                 }
-        })
-        return temp;
+                filteredData = [...filterCrits];
+            }
+        });
+        return filteredData;
     }
 }

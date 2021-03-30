@@ -165,7 +165,9 @@ export class ManageAproveElectronic {
     ngay_het_han: string;
     id_group?: number;
     dien_thoai?: string;
+    is_expired: boolean;
 }
+
 export class ElectricalPlan {
     ten_tram: string;
     duong_day_so_mach: string;

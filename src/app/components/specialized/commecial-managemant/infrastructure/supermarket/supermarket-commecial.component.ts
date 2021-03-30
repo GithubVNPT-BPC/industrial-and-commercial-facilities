@@ -212,33 +212,25 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
     this.commerceManagementService.deleteSuperMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+
     }
     this._prepareData();
+    this.paginatorAgain();
   }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
-      }
-    })
-    return temp;
-  }
-
 }
