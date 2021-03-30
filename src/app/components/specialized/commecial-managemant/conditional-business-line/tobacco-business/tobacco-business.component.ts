@@ -417,6 +417,7 @@ export class TobaccoBusinessComponent implements OnInit {
 
     public date = new FormControl(_moment());
     public date1 = new FormControl(_moment());
+    public date2 = new FormControl(_moment());
     public UpdatedDate = new FormControl(_moment());
     public theYear: number;
     public theYear1: number;
@@ -433,7 +434,7 @@ export class TobaccoBusinessComponent implements OnInit {
     }
 
     public chosenYearHandler1(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-        this.UpdatedDate = this.date1;
+        this.UpdatedDate = this.date2;
         const ctrlValue = this.UpdatedDate.value;
         ctrlValue.year(normalizedYear.year());
         this.UpdatedDate.setValue(ctrlValue);

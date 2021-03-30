@@ -157,9 +157,9 @@ export class ManagePetrolValueComponent implements OnInit {
     this.getPetrolListbyYear('', '');
     this.getQuan_Huyen();
     this.getBusinessList();
+    this.sendLinkToNext(true);
     this.date = null
     this.UpdatedDate = null
-    this.sendLinkToNext(true);
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -452,8 +452,18 @@ export class ManagePetrolValueComponent implements OnInit {
     return date
   }
 
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = parseInt(time.substring(6, 8));
+
+    let date = new Date(year, month - 1, day);
+    return date
+  }
+
   public date = new FormControl(_moment());
   public date1 = new FormControl(_moment());
+  public date2 = new FormControl(_moment());
   public theYear: number;
   public theYear1: number;
 
@@ -471,7 +481,7 @@ export class ManagePetrolValueComponent implements OnInit {
   public UpdatedDate = new FormControl(_moment());
 
   public chosenYearHandler1(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-    this.UpdatedDate = this.date1
+    this.UpdatedDate = this.date2
     const ctrlValue = this.UpdatedDate.value;
     ctrlValue.year(normalizedYear.year());
     this.UpdatedDate.setValue(ctrlValue);
