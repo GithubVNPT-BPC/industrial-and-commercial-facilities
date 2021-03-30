@@ -305,11 +305,10 @@ export class UpdatePetrolComponent implements OnInit {
 
       // this._Service.PostPetrol(input2).subscribe(
       //   res => {
-      //     // debugger;
-      //     this._info.msgSuccess('Thêm thành công')
+      //     this._info.msgSuccess("Lưu thông tin thành công");
       //   },
       //   err => {
-      //     // debugger;
+      //     this._info.msgError("Lưu thông tin không thành công");
       //   }
       // )
 
