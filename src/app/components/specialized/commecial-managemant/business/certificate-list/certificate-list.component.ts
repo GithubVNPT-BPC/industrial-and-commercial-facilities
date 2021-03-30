@@ -1,18 +1,16 @@
-import { Component, ElementRef, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { formatDate, Location } from '@angular/common';
-import { NgForm, NumberValueAccessor } from '@angular/forms';
-import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectionModel } from '@angular/cdk/collections';
-import { CommonFuntions } from 'src/app/components/specialized/commecial-managemant/conditional-business-line/common-functions.service';
 
 import { MatDialog } from '@angular/material';
 
 import {
   DeleteModel,
-  CertificateModel
+  CertificateModel,
+  FieldList
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,7 +19,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 
 import { FormControl } from '@angular/forms';
-import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDatepicker } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
@@ -60,6 +58,7 @@ export class CertificateListComponent implements OnInit {
     'index',
     'mst',
     'so_giay_phep',
+    'id_linh_vuc',
     'ngay_cap',
     'ngay_het_han',
     'noi_cap',
@@ -146,9 +145,18 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
+  public Field: Array<FieldList> = new Array<FieldList>();
+
+  GetLinhVuc() {
+    this._Service.GetField().subscribe((allrecords) => {
+      this.Field = allrecords.data as FieldList[];
+    });
+  }
+
   ngOnInit() {
     this.getBusinessList();
     this.autoOpen();
+    this.GetLinhVuc();
   }
 
   autoOpen() {

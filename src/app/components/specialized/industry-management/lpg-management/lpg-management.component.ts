@@ -19,7 +19,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 export class LPGManagementComponent extends BaseComponent {
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index']
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
 
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     filteredDataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
@@ -29,6 +29,11 @@ export class LPGManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
     selectedFile: File = null;
     avatarElement = null;
+
+    filterModel = {
+        id_quan_huyen: [],
+        ngay_cap: [],
+    }
 
     displayedFields = {
         mst: "Mã số thuế",
@@ -73,11 +78,6 @@ export class LPGManagementComponent extends BaseComponent {
         this.LINK_DEFAULT = "/specialized/industry-management/lpg";
         this.TITLE_DEFAULT = "Công nghiệp - Chiết nạp khí hoá lỏng";
         this.TEXT_DEFAULT = "Công nghiệp - Chiết nạp khí hoá lỏng";
-    }
-
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     }
 
     resetAll() {
@@ -162,53 +162,58 @@ export class LPGManagementComponent extends BaseComponent {
         this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat || 0).reduce((a, b) => a + b) : 0;
     }
 
-    applyDistrictFilter(event) {
-        let filteredData = [];
+    applyFilter(event) {
+        if (event.target) {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
 
-        event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length)
-                this.filteredDataSource.data = [];
-            else
-                this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
-            this.filteredDataSource.data = filteredData;
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
         }
         this._prepareData();
+        this.paginatorAgain();
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(filterName => {
+            let filterCrits = [];
+            if (filters[filterName].length) {
+                if (filterName == 'ngay_cap') {
+                    filters[filterName].forEach(criteria => {
+                        if (criteria && criteria != 0) filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].toString().includes(criteria)));
+                        else filterCrits = filterCrits.concat(filteredData);
+                    });
+                } else {
+                    filters[filterName].forEach(criteria => {
+                        filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName] == criteria));
+                    });
+                }
+                filteredData = [...filterCrits];
+            }
+        });
+        return filteredData;
     }
 
     applyExpireCheck(event) {
         this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
         this._prepareData();
+        this.paginatorAgain();
     }
 
     showMoreDetail(event) {
         this.displayedColumns = (event.checked) ? this.fullFieldList : this.reducedFieldList;
     }
-
-    // async onSubmit(buttonType) {
-    //     if (buttonType === "Submit") {
-    //         if (this.selectedFile !== null) {
-    //             const fd = new FormData();
-    //             fd.append(this.selectedFile.name, this.selectedFile);
-    //             this.EmployeesForms.AvaLink = await this._SchemeService.UploadAvatar(fd).toPromise();
-    //         }
-    //         await this._SchemeService.UpdateScheme(this.EmployeesForms)
-    //             .subscribe(response => {
-    //                 if (response.status == "200") {
-    //                     this.logger.msgSuccess('Cập nhật nhân viên thành công');
-    //                     this._Route.navigate(['/Employees/All']);
-    //                 }
-    //                 else {
-    //                     this.logger.msgSuccess('Lỗi xảy ra, vui lòng thử lại');
-    //                 }
-    //             });
-    //     }
-    // }
 
     onFileSelected(event) {
         var temp: number = event.target.files.length;

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { PipeModule } from 'src/app/pipe.module';
 import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './../../../material.module';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,6 +32,7 @@ import { MonthDetailComponent } from './power-production/month-detail/month-deta
     CommonModule,
     FormsModule,
     MaterialModule,
+    PipeModule,
     ReactiveFormsModule,    
     EneryManagementRoutingModule,
   ],

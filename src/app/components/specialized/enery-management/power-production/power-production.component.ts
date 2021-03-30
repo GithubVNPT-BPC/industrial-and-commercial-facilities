@@ -125,7 +125,6 @@ export class PowerProductionManagementComponent implements OnInit {
 
     OpenDetailObject(time_id: number) {
         this.router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id : time_id} });
-    }
 
     public sendLinkToNext(type: boolean) {
         this._linkOutput.link = this.LINK_DEFAULT;

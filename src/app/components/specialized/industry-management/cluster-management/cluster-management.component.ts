@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Injector } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ClusterFilterModel, ClusterModel } from 'src/app/_models/APIModel/cluster.model';
 import { Router } from '@angular/router';
@@ -18,8 +18,8 @@ export class ClusterManagementComponent extends BaseComponent {
     showColumns: string[] = [];
     showSubColumns: string[] = [];
     subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
-    topColumns: string[] = ['index', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct'];
-    totalColumns: string[] = ['index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
+    topColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct'];
+    totalColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     imageUrl: string = "";
@@ -40,6 +40,12 @@ export class ClusterManagementComponent extends BaseComponent {
     sanLuongKinhDoanh: number = 0;
     filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
+    trang_thai_hd: any[] = [
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
+    ];
+
     constructor(
         public indService: IndustryManagementService,
         public router: Router,
@@ -53,12 +59,12 @@ export class ClusterManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.showColumns = this.topColumns;
+        this.showColumns = this.totalColumns;
         this.showSubColumns = [];
         this.getDanhSachQuanLyCumCongNghiep();
         this.initWards();
 
-        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -69,28 +75,43 @@ export class ClusterManagementComponent extends BaseComponent {
         this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
     }
 
-    applyFilter() {
-        let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-        if (!filteredData.length) {
+    applyFilter(event) {
+        if (event.target) {
+          const filterValue = (event.target as HTMLInputElement).value;
+          this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+          let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+    
+          if (!filteredData.length) {
             if (this.filterModel)
-                this.filteredDataSource.data = [];
+              this.filteredDataSource.data = [];
             else
-                this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
+              this.filteredDataSource.data = this.dataSource.data;
+          }
+          else {
             this.filteredDataSource.data = filteredData;
+          }
+    
         }
+        this._prepareData();
+        this.paginatorAgain();
     }
 
     getDanhSachQuanLyCumCongNghiep() {
         this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
-            // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
-            this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
-            this.filteredDataSource.data = [...this.dataSource.data];
+            this.filteredDataSource.data = [];
+            if (result.data && result.data.length > 0) {
+                this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
+                this.filteredDataSource.data = [...this.dataSource.data];
+            }
             // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
             this.paginatorAgain();
         })
+    }
+
+    _prepareData() {
+
     }
 
     changeTable(event) {
@@ -106,30 +127,8 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     public openDetailCluster(id: string) {
-        let url = this.router.serializeUrl(
-            this.router.createUrlTree(['/specialized/industry-management/cluster/' + id]));
-        window.open(url, "_blank");
+        this.router.navigate(['/specialized/industry-management/cluster/' + id]);
     }
-
-    // applyDistrictFilter(event) {
-    //     let filteredData = [];
-
-    //     event.value.forEach(element => {
-    //         this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
-    //     });
-
-    //     if (!filteredData.length) {
-    //         if (event.value.length)
-    //             this.filteredDataSource.data = [];
-    //         else
-    //             this.filteredDataSource.data = this.dataSource.data;
-    //     }
-    //     else {
-    //         this.filteredDataSource.data = filteredData;
-    //     }
-    //     // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
-    //     // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
-    // }
 
     filterArray(array, filters) {
         const filterKeys = Object.keys(filters);
@@ -171,23 +170,22 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    trang_thai_hd: any[] = [
-        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
-    ];
-
     public prepareData(data) {
         data['duong_dan'] = this.fileToUpload;
         return data
     }
 
     public callService(data) {
-        this.indService.PostDataGroupCompany(data).subscribe(res => {
-            // result.data.sort((a, b) => b.chu_dau_tu.localeCompare(a.chu_dau_tu));
-            this.successNotify(res);
-            this.autopaging();
-        })
+        this.indService.PostDataGroupCompany(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
+        return datas;
+      }
+    
+    callRemoveService(data) {
+        this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     handleFileInput(file: FileList) {

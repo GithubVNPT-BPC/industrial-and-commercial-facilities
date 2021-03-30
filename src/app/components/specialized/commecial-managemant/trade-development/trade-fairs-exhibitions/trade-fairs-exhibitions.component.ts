@@ -53,6 +53,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   @ViewChild(MatDatepicker, { static: true }) filteredDatePicker;
+
   displayedFields = {
     mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -120,26 +121,17 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
       so_van_ban: new FormControl(),
       co_quan_ban_hanh: new FormControl(),
       ngay_thang_nam_van_ban: new FormControl(),
+      id_trang_thai: new FormControl(),
+      time_id: new FormControl(),
     }
   }
 
   private chosenYearHandler(normalizedYear, datepicker) {
-    // let ctrlValue = this.filteredDate.value;
-    // ctrlValue.year(normalizedYear.year());
     this.filteredDate.setValue(normalizedYear);
-    console.log(this.filteredDate.value.getFullYear())
     datepicker.close();
   }
 
-  // private chosenMonthHandler(normalizedMonth, datepicker) {
-  //   let ctrlValue = this.filteredDate.value;
-  //   ctrlValue.month(normalizedMonth.month());
-  //   this.filteredDate.setValue(ctrlValue);
-  //   datepicker.close();
-  // }
-
   public onFiltededDateChange(event): void {
-    // let filteredDateInput = event.format('yyyy');
     this.getTFEList(event.getFullYear()
     );
   }
@@ -177,29 +169,14 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   countBusiness(): number {
-    return [...new Set(this.filteredDataSource.data.map(x => x.mst))].length;
+    return new Set(this.filteredDataSource.data.map(x => x.mst)).size;
   }
 
-  // countHappenedFair(): number {
-  //   return this.filteredDataSource.data.filter(x => new Date(this.formatMMDDYYYY(x.thoi_gian_bat_dau.split(' ')[x.thoi_gian_bat_dau.split(' ').length - 1])) < new Date()).length;
-  // }
-
-  // formatMMDDYYYY(date: string): string {
-  //   var datearray = date.split("/");
-  //   return datearray[1] + '/' + datearray[0] + '/' + datearray[2];
-  // }
-
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
-    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('DD/MM/yyyy');
+    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
+    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
+    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD');
 
-    data = {
-      ...data, ...{
-        id_trang_thai: 1,
-        time_id: 2020,
-      }
-    };
     return data;
   }
 
@@ -213,9 +190,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.commerceManagementService.deleteTradeFairs(data).subscribe(res => {
-      this.successNotify(res);
-    });
+    this.commerceManagementService.deleteTradeFairs(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 }

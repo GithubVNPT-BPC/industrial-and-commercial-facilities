@@ -165,7 +165,9 @@ export class ManageAproveElectronic {
     ngay_het_han: string;
     id_group?: number;
     dien_thoai?: string;
+    is_expired: boolean;
 }
+
 export class ElectricalPlan {
     ten_tram: string;
     duong_day_so_mach: string;
@@ -201,7 +203,22 @@ export class HydroEnergyModel {
     bao_cao_danh_gia_an_toan: string;
     bao_cao_hien_trang_an_toan_dap_ho: string;
     to_khai_dang_ky_an_toan_dap_ho: string;
+    luong_nuoc_xa_binh_quan: string;
     dia_diem: string;
+}
+
+export class KeyEnergyModel {
+    ten_khach_hang: string;
+    dia_chi: string;
+    nganh_nghe: string;
+    dien: number;
+    than: number;
+    DO: number;
+    FO: number;
+    xang: number;
+    LPG: number;
+    go: number;
+    nang_luong_quy_doi: number;
 }
 
 export class ElectricalPlan110KV {

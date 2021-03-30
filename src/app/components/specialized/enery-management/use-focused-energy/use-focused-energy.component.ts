@@ -21,35 +21,19 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('district', { static: false }) district: ElementRef
 
-  public readonly displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_tieu_thu', 'nang_luong_quy_doi', 'suat_tieu_hao'];
+  public readonly displayedColumns: string[] = ['select','index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_tieu_thu', 'nang_luong_quy_doi', 'suat_tieu_hao'];
   public readonly displayMergeColumns: string[] = ['indexM', 'ten_doanh_nghiepM', 'nganh_ngheM', 'nang_luong_trong_diemM'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<UserForcusEnergy> = new MatTableDataSource<UserForcusEnergy>();
   public filteredDataSource: MatTableDataSource<UserForcusEnergy> = new MatTableDataSource<UserForcusEnergy>();
-  public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
-  public data: Array<UserForcusEnergy> = [
-    { mst: '122211', ten_doanh_nghiep: 'CÔNG TY CỔ PHẦN GỖ MDF VRG DONGWHA', dia_diem: 'KCN Minh Hưng III, Xã. Minh Hưng, H. Chơn Thành, T. Bình Phước', ma_huyen_thi: 10, nganh_nghe_san_xuat: 'Chế biến gỗ và các sản phẩm từ gỗ, tre', nang_luong_tieu_thu: null, nang_luong_quy_doi: 324617, suat_tieu_hao_1_dv_sp: 36765700 },
-    { mst: '3333', ten_doanh_nghiep: 'CÔNG TY TNHH SẢN XUẤT GIÀY DÉP GRAND GIAN', dia_diem: 'KCN Đồng Xoài II, P. Tiến Thành, Tp. Đồng Xoài, T. Bình Phước', ma_huyen_thi: 2, nganh_nghe_san_xuat: 'Thuộc da, sơ chế da, giày dép', nang_luong_tieu_thu: null, nang_luong_quy_doi: 342367, suat_tieu_hao_1_dv_sp: 5535400 },
-    { mst: '144411', ten_doanh_nghiep: 'CÔNG TY TNHH MỘT THÀNH VIÊN C&T VINA ', dia_diem: 'KCN Minh Hưng - Hàn Quốc, Xã Minh Hưng, H.Chơn Thành, T.Bình Phước', ma_huyen_thi: 10, nganh_nghe_san_xuat: 'Sản xuất trang phục, nhuộm', nang_luong_tieu_thu: null, nang_luong_quy_doi: 256856, suat_tieu_hao_1_dv_sp: 23653000 },
-    { mst: '5555', ten_doanh_nghiep: 'CÔNG TY TNHH BEESCO VINA ', dia_diem: 'KCN Chơn Thành II , Xã Thành Tâm, H. Chơn Thành, T. Bình Phước', ma_huyen_thi: 10, nganh_nghe_san_xuat: 'Thuộc da, sơ chế da, giày dép', nang_luong_tieu_thu: null, nang_luong_quy_doi: 798675, suat_tieu_hao_1_dv_sp: 16312000 }]
+
   //Only TS Variable
-  years: number[] = [];
   nangLuongTieuThu: number;
   nangLuongQuyDoi: number;
   congXuat: number;
   doanhNghiep: number;
   isChecked: boolean;
-  currentYear: number = new Date().getFullYear();
+  
   constructor(
     private injector: Injector,
     public excelService: ExcelService,
@@ -63,11 +47,7 @@ export class UseFocusedEnergyComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.years = this.getYears();
-    // this.dataSource.data = this.data;
-    // this.filteredDataSource.data = [...this.dataSource.data];
     this.getDataSaveElectric();
-
     this.initWards();
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
@@ -76,10 +56,14 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   }
 
   getDataSaveElectric() {
-    this.energyService.LayDuLieuTietKiemNangLuong(this.currentYear).subscribe(res => {
-      this.filteredDataSource.data = [...res['data']];
-      this.dataSource.data = [...res['data']];
+    this.energyService.LayDuLieuTietKiemNangLuong(this.currentYear).subscribe(result => {
+      this.filteredDataSource.data = [];
+      if (result.data && result.data.length > 0) {
+        this.dataSource = new MatTableDataSource<UserForcusEnergy>(result.data);
+        this.filteredDataSource.data = [...this.dataSource.data];
+      }
       this.caculatorValue();
+      this.paginatorAgain();
     })
   }
 
@@ -90,28 +74,11 @@ export class UseFocusedEnergyComponent extends BaseComponent {
     this.TEXT_DEFAULT = "Tiết kiệm năng lượng";
   }
 
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  get(time_id: number) {
-
-  }
-
-  log(any) {
-  }
-
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-  getValueOfHydroElectric(value: any) {
-
-  }
   applyDistrictFilter(event) {
     let filteredData = [];
 
@@ -131,15 +98,13 @@ export class UseFocusedEnergyComponent extends BaseComponent {
     this.caculatorValue();
     this.paginatorAgain();
   }
+
   caculatorValue() {
     this.nangLuongQuyDoi = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nang_luong_quy_doi).reduce((a, b) => a + b) : 0;
     this.nangLuongTieuThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nang_luong_tieu_thu).reduce((a, b) => a + b) : 0;
     this.doanhNghiep = this.filteredDataSource.data.length;
     this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.suat_tieu_hao_1_dv_sp).reduce((a, b) => a + b) : 0;
   }
-  // isHidden(row : any){
-  //     return (this.isChecked)? (row.is_het_han) : false;
-  // }
 
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
@@ -161,7 +126,7 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   }
 
   public prepareData(data) {
-    data['dia_diem'] = data['dia_diem'] ? data['id_quan_huyen'].concat(' , ', this.address) : data['dia_diem'].concat(this.address);
+    data['dia_diem'] = data['dia_diem'];
     data['nang_luong_tieu_thu'] = Number(data['nang_luong_tieu_thu']);
     data['suat_tieu_hao_1_dv_sp'] = Number(data['suat_tieu_hao_1_dv_sp']);
     data['nang_luong_quy_doi'] = Number(data['nang_luong_quy_doi']);
@@ -169,26 +134,31 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   }
 
   public callService(data) {
-    let list_data = [data];
-    // console.log(list_data)
-    this.energyService.CapNhatDuLieutietKiemNL(list_data).subscribe(res => {
-      this.successNotify(res);
-    })
+    this.energyService.CapNhatDuLieutietKiemNL([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
+
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+      this.energyService.DeleteFocusedEnergy(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
   id_quan_huyen: number;
+
   autoDistric(event) {
-    // console.log(event)
     this.id_quan_huyen = event.value['id_quan_huyen'];
     this.concatAddress(event.value['ten_phuong_xa'], this.id_quan_huyen);
   }
+
   name_ward: string = '';
   address: string = '';
   concatAddress(ten_phuong_xa: string, id_quan_huyen: number) {
-
     let item = this.districts.find(district =>
       district.id == id_quan_huyen
     )
     this.address = ten_phuong_xa + " , " + item['ten_quan_huyen'];
-    console.log(this.address)
   }
 }

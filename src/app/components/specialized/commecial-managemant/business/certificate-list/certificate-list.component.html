@@ -47,14 +47,15 @@
                             <mat-icon>keyboard_backspace</mat-icon>
                         </button>
                     </div> -->
+                    <div class="col-12 col-lg-12 mt-2">
+                        <mat-form-field outline="appearance">
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
+                    </div>
                 </div>
 
                 <div class="layout" #table>
-                    <mat-form-field id="filter">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
-
                     <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>
@@ -93,6 +94,17 @@
                             <th mat-header-cell *matHeaderCellDef> Số giấy phép </th>
                             <td mat-cell *matCellDef="let element" (click)="AddCertificate(element.id_giay_phep)"
                                 class="jump"> {{element.so_giay_phep}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="id_linh_vuc">
+                            <th mat-header-cell *matHeaderCellDef> Lĩnh vực quản lý </th>
+                            <td mat-cell *matCellDef="let element">
+                                <select [(ngModel)]="element.id_linh_vuc" disabled>
+                                    <option *ngFor="let item of Field" [value]="item.id_linh_vuc">
+                                        {{item.ten_linh_vuc}}
+                                    </option>
+                                </select>
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ngay_cap">

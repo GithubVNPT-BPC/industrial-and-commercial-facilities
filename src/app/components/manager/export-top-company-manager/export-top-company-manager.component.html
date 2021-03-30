@@ -20,7 +20,7 @@
                     <mat-label>Lọc dữ liệu</mat-label>
                     <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                 </mat-form-field>
-                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+                <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table">
 
                     <ng-container matColumnDef="select">
                         <th mat-header-cell *matHeaderCellDef>

@@ -20,15 +20,10 @@
                     nghiệp</button>
             </div>
         </div>
+        <hr/>
+        
         <div class="row" *ngIf="isSearch_Advanced">
-            <div class="col-4 button-control -align-left my-auto">
-                <button mat-raised-button (click)="filter()">Tìm kiếm</button>
-                <button mat-raised-button (click)="cancel()">Hủy Tìm kiếm</button>
-                <button mat-raised-button (click)="add_condition()">
-                    <mat-icon>expand_more</mat-icon>Mở rộng
-                </button>
-            </div>
-            <div class="col-8">
+            <div class="col-8 col-lg-8">
                 <ng-container *ngFor="let item of countNumberCondition">
                     <div class="row my-auto" id={{item.id}} #new_element>
                         <div class="col-lg-5">
@@ -48,15 +43,23 @@
                             </mat-form-field>
                         </div>
                         <div class="col-lg-2 button-control my-auto">
-                            <button mat-raised-button (click)="Xoa_dong()">
-                                <mat-icon>expand_less</mat-icon>Thu hẹp
+                            <button mat-raised-button (click)="Xoa_dong()" class="red" matTooltip="Xóa bộ lọc">
+                                <mat-icon>remove_circle_outline</mat-icon>
                             </button>
                         </div>
                     </div>
                 </ng-container>
+                
+            </div>
+            <div class="col-4 col-lg-4 button-control -align-left my-auto">
+                <button mat-raised-button (click)="add_condition()" class="green" matTooltip="Thêm bộ lọc">
+                    <mat-icon>add_circle_outline</mat-icon>
+                </button>
+                <button mat-raised-button (click)="cancel()"> <mat-icon>search_off</mat-icon>Hủy Tìm kiếm</button>
+                <button mat-raised-button (click)="filter()" ><mat-icon>search</mat-icon>Tìm kiếm</button>
             </div>
         </div>
-
+        <hr>
         <!-- <div class="row" *ngIf="isSearch_Advanced">
             <div class="col-lg-7">
                 <ng-container *ngFor="let item of filterConditions">

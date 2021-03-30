@@ -267,7 +267,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     // Tổng vốn đầu tư chợ
     this.tongvon_VonNganSachTW = data.map(x => x.von_nstw).reduce((a, b) => a + b, 0);
     this.tongvon_VonNganSachDiaPhuong = data.map(x => x.von_nsdp).reduce((a, b) => a + b, 0);
-    this.tongvon_DNHTXHL = data.map(x => x.von_nsdp).reduce((a, b) => a + b, 0);
+    this.tongvon_DNHTXHL = data.map(x => x.von_dn_htx_hkd).reduce((a, b) => a + b, 0);
     this.tongvon_Khac = data.map(x => x.von_khac).reduce((a, b) => a + b, 0);
 
     // Hoạt động đầu tư phát triển chợ

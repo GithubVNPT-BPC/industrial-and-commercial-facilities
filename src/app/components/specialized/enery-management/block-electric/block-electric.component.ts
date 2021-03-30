@@ -3,7 +3,6 @@ import { MatTableDataSource } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
 import { BlockElectricModel } from 'src/app/_models/APIModel/electric-management.module';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
 
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
@@ -18,13 +17,12 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 export class BlockElectricComponent extends BaseComponent {
 
   //Constant variable
-  public readonly displayedColumns: string[] = ['index', 'ten_du_an', 'ten_doanh_nghiep', 'dia_diem', 'cong_xuat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'id_trang_thai_hoat_dong'];
+  public readonly displayedColumns: string[] = ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep', 'dia_diem', 'cong_xuat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'id_trang_thai_hoat_dong'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
   public filteredDataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
 
   //Only TS Variable
-  years: number[] = [];
   doanhThu: number;
   congXuat: number;
   sanluongnam: number;
@@ -43,7 +41,6 @@ export class BlockElectricComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.years = this.getYears();
     this.getDataBlockElectric(this.currentYear);
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
@@ -62,10 +59,6 @@ export class BlockElectricComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getYears() {
-    return Array(5).fill(1).map((element, index) => new Date().getFullYear() - index);
-  }
-
   getFormParams() {
     return {
       ten_du_an: new FormControl(),
@@ -75,6 +68,7 @@ export class BlockElectricComponent extends BaseComponent {
       san_luong_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu: new FormControl(),
+      time_id: new FormControl(),
     }
   }
 
@@ -82,7 +76,6 @@ export class BlockElectricComponent extends BaseComponent {
     data = {
       ...data, ...{
         id_trang_thai_hoat_dong: 1,
-        time_id: this.currentYear,
       }
     }
     return data;
@@ -92,28 +85,27 @@ export class BlockElectricComponent extends BaseComponent {
     this.energyService.PostBlockElectricData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.energyService.DeleteBlockElectric(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
   getDataBlockElectric(time_id: any) {
     this.energyService.LayDuLieuDienSinhKhoi(time_id).subscribe(res => {
+      this.filteredDataSource.data = [];
       if (res.data && res.data.length > 0) {
         this.filteredDataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
         this.dataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
-        this.caculatorValue();
-        this.initPaginator();
       }
+      this.caculatorValue();
+      this.paginatorAgain();
     })
   }
-
-  initPaginator() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
-
+  
   caculatorValue() {
     this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
@@ -124,7 +116,7 @@ export class BlockElectricComponent extends BaseComponent {
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
-    this.initPaginator();
+    this.paginatorAgain();
   }
 
 }

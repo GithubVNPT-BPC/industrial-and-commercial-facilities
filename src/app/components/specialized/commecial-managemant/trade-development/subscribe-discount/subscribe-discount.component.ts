@@ -1,15 +1,13 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { District } from 'src/app/_models/district.model';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { dia_diem_km, SDModel } from 'src/app/_models/APIModel/trade-development.model';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
 import moment from 'moment';
-import { LinkModel } from 'src/app/_models/link.model';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
@@ -23,9 +21,9 @@ export class SubscribeDiscountComponent extends BaseComponent {
   displayedColumns: string[] = ['select', 'index'];
 
   displayedFields = {
+    mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
     dia_chi_doanh_nghiep: "Địa chỉ",
-    mst: "Mã số thuế",
     ten_chuong_trinh_km: "Tên chương trình KM",
     thoi_gian_bat_dau: "Thời gian bắt đầu",
     thoi_gian_ket_thuc: "Thời gian kết thúc",
@@ -34,28 +32,19 @@ export class SubscribeDiscountComponent extends BaseComponent {
     ten_hinh_thuc: "Hình thức KM",
     so_van_ban: "Số văn bản",
     co_quan_ban_hanh: "Cơ quan ban hành",
-    ngay_thang_nam_van_ban: "Ngày tháng năm",
+    ngay_thang_nam_van_ban: "Ngày/tháng/năm",
   }
 
   filterComponents = {
-    id_phuong_xa: [],
+    id_quan_huyen: [],
     ten_hinh_thuc: [],
   }
   sumvalues: number = 0;
-  // districts: District[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-  // { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-  // { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-  // { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-  // { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-  // { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-  // { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-  // { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-  // { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-  // { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-  // { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
+  totalEnterprises = 0;
 
   public promotionTypes: string[] = [];
   form: FormGroup;
+  
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
@@ -63,7 +52,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
   ) {
     super(injector);
     this._breadCrumService.sendLink(this._linkOutput);
-    this.initDisplayColumns();
   }
 
   authorize: boolean = true
@@ -76,10 +64,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
     if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
-  }
-
-  initDisplayColumns() {
-    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
   }
 
   getLinkDefault() {
@@ -178,10 +162,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
       result => {
         if (result.data && result.data.length > 0) {
           this.promotionTypes = result.data
-          // result.data.map((element, index) => { 
-          //   this.promotionTypes.push(element.ten_hinh_thuc);
-          // })
-          this.autopaging();
         }
       },
       error => this.errorMessage = <any>error
@@ -191,12 +171,13 @@ export class SubscribeDiscountComponent extends BaseComponent {
   getSDList(): void {
     this.commerceManagementService.getSubcribeDiscountData().subscribe(
       result => {
+        this.filteredDataSource.data = [];
         if (result.data && result.data.length > 0) {
           this.dataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
           this.filteredDataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
-          // this.filteredDataSource.paginator = this.paginator;
-          console.log(this.dataSource.data)
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
@@ -216,35 +197,22 @@ export class SubscribeDiscountComponent extends BaseComponent {
       });
       k.dia_diem_km = [...k.dia_diem_km, ...dd_km_temp];
     });
-    // console.log(ds_km);
     return ds_km;
   }
 
-  countBusiness(): number {
-    return this.dataSource.data.map(x => x.ngay_thang_nam_van_ban.slice(0, 4) == this.currentYear.toString()).length;
+  _prepareData() {
+    let data = this.filteredDataSource.data;
+    this.totalEnterprises = new Set(data.map(x => x.mst)).size;
   }
-
-  // onCreate(){
-  //   // this.addAddress();
-  //   // console.log(this.formData)
-
-  // }
 
   prepareData(data) {
     data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
     data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
     data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD');
     return data;
-    // data = {...data, ...{
-    //   id_trang_thai: 1,
-    // }};
-
-    return data;
   }
 
   callService(data) {
-
-    // console.log(data)
     this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
@@ -258,8 +226,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.commerceManagementService.deletePromo(data).subscribe(res => {
-      this.successNotify(res);
-    });
+    this.commerceManagementService.deletePromo(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 }

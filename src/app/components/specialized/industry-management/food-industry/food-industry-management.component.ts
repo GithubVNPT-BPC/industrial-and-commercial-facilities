@@ -20,6 +20,11 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
 
+    filterModel = {
+        id_quan_huyen: [],
+        ngay_cap: [],
+    }
+
     displayedFields = {
         mst: "Mã số thuế",
         ten_doanh_nghiep: "Tên doanh nghiệp",
@@ -105,26 +110,17 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.TEXT_DEFAULT = "Công nghiệp - Công nghiệp thực phẩm";
     }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    }
-
     getFormParams() {
         return {
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
-            tinh_trang_hoat_dong: new FormControl(),
+            tinh_trang_hoat_dong: new FormControl("true"),
+            time_id: new FormControl(this.currentYear)
         }
     }
 
     prepareData(data) {
-        data = {
-            ...data, ...{
-                time_id: this.currentYear,
-            }
-        }
         return data;
     }
 
@@ -141,28 +137,53 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.industryManagementService.DeleteFoodIndustry(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    applyDistrictFilter(event) {
-        let filteredData = [];
+    applyFilter(event) {
+        if (event.target) {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
 
-        event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.id_quan_huyen == element).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length)
-                this.filteredDataSource.data = [];
-            else
-                this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
-            this.filteredDataSource.data = filteredData;
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
         }
         this._prepareData();
+        this.paginatorAgain();
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(filterName => {
+            let filterCrits = [];
+            if (filters[filterName].length) {
+                if (filterName == 'ngay_cap') {
+                    filters[filterName].forEach(criteria => {
+                        if (criteria && criteria != 0) filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].toString().includes(criteria)));
+                        else filterCrits = filterCrits.concat(filteredData);
+                    });
+                } else {
+                    filters[filterName].forEach(criteria => {
+                        filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName] == criteria));
+                    });
+                }
+                filteredData = [...filterCrits];
+            }
+        });
+        return filteredData;
     }
 
     applyExpireCheck(event) {
         this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
         this._prepareData();
+        this.paginatorAgain();
     }
 
     showMoreDetail(event) {

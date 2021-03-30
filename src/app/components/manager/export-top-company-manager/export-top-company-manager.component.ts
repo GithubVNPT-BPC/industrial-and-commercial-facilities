@@ -23,6 +23,7 @@ export class ExportTopCompanyManager implements OnInit {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     dataSource: MatTableDataSource<TopCompanyModel> = new MatTableDataSource();
+    dataSource1: MatTableDataSource<TopCompanyModel> = new MatTableDataSource();
     public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'chi_tiet_doanh_nghiep', 'id_san_pham', 'time_id'];
 
     field: string;
@@ -58,6 +59,7 @@ export class ExportTopCompanyManager implements OnInit {
                 break;
             case SAVE.ADD:
                 this.GetAllCompany();
+                this.GetTopProductFilter();
                 break;
             default:
                 break;
@@ -65,9 +67,7 @@ export class ExportTopCompanyManager implements OnInit {
     }
 
     OpenDetailCompany(mst: string) {
-        let url = this.router.serializeUrl(
-            this.router.createUrlTree(['public/partner/search/' + mst]));
-        window.open(url, "_blank");
+        window.open('/#/public/partner/search/' + mst, "_blank");
     }
 
     public exportTOExcel(filename: string, sheetname: string) {
@@ -91,8 +91,8 @@ export class ExportTopCompanyManager implements OnInit {
                 this.filtercompany = allrecords.data[1]
                 this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
 
-                this.dataSource = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
-                this.dataSource.paginator = this.paginator;
+                this.dataSource1 = new MatTableDataSource<TopCompanyModel>(this.filtercompany1);
+                this.dataSource1.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
                 this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -101,17 +101,31 @@ export class ExportTopCompanyManager implements OnInit {
             });
     }
 
+    public GetTopProductFilter() {
+        this.marketService.GetProductValue(this.Convertdatetostring(this.product_data.time_id.toString())).subscribe(
+            allrecords => {
+                this.filtercompany = allrecords.data[1]
+                this.filtercompany1 = this.filtercompany.filter(x => x.id_san_pham == this.product_data.id_san_pham)
+            });
+    }
+
+    initial: Array<TopCompanyModel> = new Array<TopCompanyModel>();
+    filtercompany2: Array<TopCompanyModel> = new Array<TopCompanyModel>();
+
     GetAllCompany() {
         this.marketService.GetAllCompany().subscribe(
             allrecords => {
-                this.dataSource = new MatTableDataSource<TopCompanyModel>(allrecords.data[0]);
-                this.dataSource.data.forEach(x => {
+                this.initial = allrecords.data[0]
+                this.filtercompany2 = this.initial.filter(x => this.filtercompany1.map(y => y.mst).indexOf(x.mst) < 0)
+                this.dataSource1 = new MatTableDataSource<TopCompanyModel>(this.filtercompany2);
+
+                this.dataSource1.data.forEach(x => {
                     x.time_id = this.product_data.time_id
                     x.id_san_pham = this.product_data.id_san_pham
                     x.time_id = x.time_id ? this.Convertdatetostring(x.time_id) : null
                 })
 
-                this.dataSource.paginator = this.paginator;
+                this.dataSource1.paginator = this.paginator;
                 this.paginator._intl.itemsPerPageLabel = 'Số hàng';
                 this.paginator._intl.firstPageLabel = "Trang Đầu";
                 this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -125,7 +139,7 @@ export class ExportTopCompanyManager implements OnInit {
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource.filter = filterValue.trim().toLowerCase();
+        this.dataSource1.filter = filterValue.trim().toLowerCase();
     }
 
     selection = new SelectionModel<TopCompanyModel>(true, []);
@@ -133,14 +147,14 @@ export class ExportTopCompanyManager implements OnInit {
     isAllSelected() {
         const numSelected = this.selection.selected.length;
         // const numRows = this.dataSource.data.length;
-        const numRows = this.dataSource.connect().value.length;
+        const numRows = this.dataSource1.connect().value.length;
         return numSelected === numRows;
     }
 
     masterToggle() {
         this.isAllSelected() ?
             this.selection.clear() :
-            this.dataSource.connect().value.forEach(row => this.selection.select(row));
+            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
     }
 
     checkboxLabel(row?: TopCompanyModel): string {
@@ -196,8 +210,8 @@ export class ExportTopCompanyManager implements OnInit {
                 })
 
                 for (let index = 0; index < this.posttopcompany.length; index++) {
-                    this.posttopcompany[index].cong_suat = this.dataSource.data[index].cong_suat
-                    this.posttopcompany[index].mst = this.dataSource.data[index].mst
+                    this.posttopcompany[index].cong_suat = this.dataSource1.data[index].cong_suat
+                    this.posttopcompany[index].mst = this.dataSource1.data[index].mst
                 }
 
                 this.marketService.PostProductValueTop(this.posttopcompany).subscribe(
@@ -216,7 +230,7 @@ export class ExportTopCompanyManager implements OnInit {
                 )
                 break;
             case SAVE.PRODUCT:
-                this.dataSource.data.forEach(x => {
+                this.dataSource1.data.forEach(x => {
                     this.posttopcompany.push({
                         id: null,
                         id_san_pham: this.product_data.id_san_pham,
@@ -227,9 +241,9 @@ export class ExportTopCompanyManager implements OnInit {
                 })
 
                 for (let index = 0; index < this.posttopcompany.length; index++) {
-                    this.posttopcompany[index].cong_suat = this.dataSource.data[index].cong_suat
-                    this.posttopcompany[index].mst = this.dataSource.data[index].mst
-                    this.posttopcompany[index].id = this.dataSource.data[index].id
+                    this.posttopcompany[index].cong_suat = this.dataSource1.data[index].cong_suat
+                    this.posttopcompany[index].mst = this.dataSource1.data[index].mst
+                    this.posttopcompany[index].id = this.dataSource1.data[index].id
                 }
 
                 this.marketService.PostProductValueTop(this.posttopcompany).subscribe(

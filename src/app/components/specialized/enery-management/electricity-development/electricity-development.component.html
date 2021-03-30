@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -30,12 +30,12 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongSoXa| number: '1.0-0':'vi'}}
+                                {{tongSoXa | formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
 
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -44,11 +44,11 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{trung_ap_3p| number: '1.0-2':'vi'}}
+                                {{trung_ap_3p| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -57,7 +57,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{trung_ap_1p| number: '1.0-0':'vi'}}
+                                {{trung_ap_1p| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -73,7 +73,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{ha_ap_3p| number: '1.0-2':'vi'}}
+                                {{ha_ap_3p| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -87,7 +87,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{ha_ap_1p| number: '1.0-2':'vi'}}
+                                {{ha_ap_1p| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -101,7 +101,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{so_tram_bien_ap| number: '1.0-0':'vi'}}
+                                {{so_tram_bien_ap| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -115,7 +115,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{cong_xuat_bien_ap| number: '1.0-0':'vi'}}
+                                {{cong_xuat_bien_ap| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -138,7 +138,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="getDataQuyHoachDienDuoi35KV()" [(ngModel)]="currentYear">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -164,69 +164,96 @@
                             (click)="ExportTOExcel('Phát triển điện','Phát triển điện')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button color="primary" matTooltip="Thêm mới" (click)="switchView()"
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button color="warn" mat-raised-button (click)="openRemoveDialog()" [hidden]=authorize>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()" [hidden]=authorize>
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
+                    </div>
+                    
+                    <div class="col-lg-12">
+                        <mat-form-field id="filter">
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
                     </div>
                 </div>
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
-                    <mat-form-field id="filter">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
-
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table">
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef disableClear [attr.rowspan]="2">
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="center-cell">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(element) : null"
+                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="index">
-                            <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
-                                {{i+1}}</td>
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                this.filteredDataSource.paginator.pageSize}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_huyen_thi">
                             <th mat-header-cell *matHeaderCellDef> Địa bàn (xã, phường, thị trấn) </th>
                             <td mat-cell *matCellDef="let element"> {{element.dia_ban}}</td>
                         </ng-container>
+
                         <ng-container matColumnDef="trung_ap_3p">
                             <th mat-header-cell *matHeaderCellDef> 3 pha <br>(Km) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.trung_ap_3_pha | number: '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.trung_ap_3_pha | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="trung_ap_1p">
                             <th mat-header-cell *matHeaderCellDef> 1 pha <br>(Km) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.trung_ap_1_pha | number: '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.trung_ap_1_pha | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ha_ap_3p">
                             <th mat-header-cell *matHeaderCellDef> 3 pha <br>(Km) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ha_ap_3_pha | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.ha_ap_3_pha | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ha_ap_1p">
                             <th mat-header-cell *matHeaderCellDef> 1 pha <br>(Km) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.ha_ap_1_pha | number: '1.0-4':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.ha_ap_1_pha | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="so_tram_bien_ap">
                             <th mat-header-cell *matHeaderCellDef> Số trạm </th>
-                            <td mat-cell *matCellDef="let element"> {{element.so_tram | number: '1.0-4':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.so_tram | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="cong_xuat_bien_ap">
                             <th mat-header-cell *matHeaderCellDef> Công suất <br>(KVA)</th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.cong_suat | number: '1.0-4':'vi'}}</td>
+                                {{element.cong_suat | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="indexM">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"></th>
                         </ng-container>
                         <ng-container matColumnDef="ten_huyen_thiM">
                             <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
@@ -250,7 +277,7 @@
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
                 <ng-template #ShowEmpty>
-                    <h1>Không có dữ liệu</h1>
+                    <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
 
             </mat-expansion-panel>
@@ -296,42 +323,42 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label for="trung_ap_3_pha">Trung cấp 3 pha</mat-label>
-                            <input matInput formControlName="trung_ap_3_pha" id="trung_ap_3_pha" type="text">
+                            <input matInput formControlName="trung_ap_3_pha" id="trung_ap_3_pha" type="number">
                         </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label for="trung_ap_1_pha">Trung cấp 1 pha</mat-label>
-                            <input matInput formControlName="trung_ap_1_pha" id="trung_ap_1_pha" type="text">
+                            <input matInput formControlName="trung_ap_1_pha" id="trung_ap_1_pha" type="number">
                         </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label for="ha_ap_1_pha">Hạ áp 1 pha</mat-label>
-                            <input matInput formControlName="ha_ap_1_pha" id="ha_ap_1_pha" type="text">
+                            <input matInput formControlName="ha_ap_1_pha" id="ha_ap_1_pha" type="number">
                         </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label for="ha_ap_3_pha">Hạ áp 3 pha</mat-label>
-                            <input matInput formControlName="ha_ap_3_pha" id="ha_ap_3_pha" type="text">
+                            <input matInput formControlName="ha_ap_3_pha" id="ha_ap_3_pha" type="number">
                         </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label for="so_tram">Số trạm</mat-label>
-                            <input matInput formControlName="so_tram" id="so_tram" type="text">
+                            <input matInput formControlName="so_tram" id="so_tram" type="number">
                         </mat-form-field>
                     </div>
 
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label for="cong_suat">Công suất</mat-label>
-                            <input matInput formControlName="cong_suat" id="cong_suat" type="text">
+                            <input matInput formControlName="cong_suat" id="cong_suat" type="number">
                         </mat-form-field>
                     </div>
 
@@ -339,7 +366,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select formControlName="time_id">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>

@@ -1,15 +1,13 @@
-import { Component, Injector, ViewChild } from '@angular/core';
-import { MatTableDataSource, MatAccordion, MatPaginator, MatSort } from '@angular/material';
+import { Component, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { MultiLevelTradeModel } from 'src/app/_models/APIModel/mutillevel-trade.model';
 import { FormControl } from '@angular/forms';
 
 // Services
 import { MarketService } from 'src/app/_services/APIService/market.service';
-import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
-import { LinkModel } from 'src/app/_models/link.model';
 import moment from 'moment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
@@ -20,17 +18,15 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class MultilevelTradeComponent extends BaseComponent {
 
-  displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'mst', 'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
+  displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep',  'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
     'so_giay_dkbhdc', 'co_quan_ban_hanh_giay_dkbhdc', 'ngay_dang_ky_giay_dkbhdc',
     'so_giay_tchtbhdc', 'co_quan_ban_hanh_giay_tchtbhdc', 'ngay_dang_ky_giay_tchtbhdc']
+  filterModel = {
+    thoi_gian_bat_dau: []
+  }
 
   dataSource: MatTableDataSource<MultiLevelTradeModel> = new MatTableDataSource<MultiLevelTradeModel>();
   filteredDataSource: MatTableDataSource<MultiLevelTradeModel> = new MatTableDataSource<MultiLevelTradeModel>();
-  dataDialog: any[] = [];
-  nhap_khau_chu_yeu = [1, 13, 34, 33, 22, 19, 31, 18, 28, 4, 27, 17, 30, 37, 25, 7, 23];
-  isChecked: boolean;
-
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private injector: Injector,
@@ -63,9 +59,6 @@ export class MultilevelTradeComponent extends BaseComponent {
   ngOnInit() {
     super.ngOnInit();
     this.getMultiLevelTradeList();
-    // this.filteredDataSource.filterPredicate = function (data: multilevel, filter): boolean {
-    //     return String(data.is_het_han).includes(filter);
-    // };
 
     if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -82,32 +75,75 @@ export class MultilevelTradeComponent extends BaseComponent {
   public getMultiLevelTradeList() {
     this.commerceManagementService.getMultiLevelTradeData().subscribe(
       allrecords => {
+        this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
+          allrecords.data.forEach(element => {
+            element.ngay_dang_ky_giay_tchtbhdc = this.formatDate(element.ngay_dang_ky_giay_tchtbhdc);
+            element.thoi_gian_bat_dau = this.formatDate(element.thoi_gian_bat_dau);
+            element.thoi_gian_ket_thuc = this.formatDate(element.thoi_gian_ket_thuc);
+            element.ngay_dang_ky_giay_dkbhdc = this.formatDate(element.ngay_dang_ky_giay_dkbhdc);
+          });
           this.dataSource = new MatTableDataSource<MultiLevelTradeModel>(allrecords.data);
           this.filteredDataSource = new MatTableDataSource<MultiLevelTradeModel>(allrecords.data);
-          this.filteredDataSource.paginator = this.paginator;
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
   }
 
-  applyFilter(event: Event) {
-    let filterValue = (event.target as HTMLInputElement).value;
-    this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+  _prepareData() {}
+
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+
+    }
+    this._prepareData();
+    this.paginatorAgain();
   }
 
-  handelDataDialog(id_mat_hang) {
-    let data = this.dataDialog.filter(item => item.id_mat_hang === id_mat_hang);
-    return data;
+  filterArray(dataSource, filters) {
+    const filterKeys = Object.keys(filters);
+    let filteredData = [...dataSource];
+    filterKeys.forEach(key => {
+        let filterCrits = [];
+        if (filters[key].length) {
+          if (key == 'thoi_gian_bat_dau') {
+            filters[key].forEach(criteria => {
+              if (criteria) filterCrits = filterCrits.concat(filteredData.filter(x => x[key].toString().includes(criteria)));
+            });
+          } else {
+            filters[key].forEach(criteria => {
+              filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+            });
+          }
+          filteredData = [...filterCrits];
+        }
+    })
+    return filteredData;
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('DD/MM/yyyy');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('DD/MM/yyyy');
-    data['ngay_dang_ky_giay_dkbhdc'] = moment(data['ngay_dang_ky_giay_dkbhdc']).format('DD/MM/yyyy');
-    data['ngay_dang_ky_giay_tchtbhdc'] = moment(data['ngay_dang_ky_giay_tchtbhdc']).format('DD/MM/yyyy');
-
+    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
+    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
+    data['ngay_dang_ky_giay_dkbhdc'] = moment(data['ngay_dang_ky_giay_dkbhdc']).format('yyyyMMDD');
+    data['ngay_dang_ky_giay_tchtbhdc'] = moment(data['ngay_dang_ky_giay_tchtbhdc']).format('yyyyMMDD');
+    
     data = {
       ...data, ...{
         id_trang_thai: 1,
@@ -126,9 +162,7 @@ export class MultilevelTradeComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.commerceManagementService.deleteMultiLevel(data).subscribe(res => {
-      this.successNotify(res);
-    });
+    this.commerceManagementService.deleteMultiLevel(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 }

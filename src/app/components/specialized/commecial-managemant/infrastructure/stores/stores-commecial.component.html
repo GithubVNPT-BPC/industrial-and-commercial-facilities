@@ -104,8 +104,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCNATTP</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.ngaycapgcn">
-                                <mat-option *ngFor='let year of years' [value]='year'>{{year}}</mat-option>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap_giay_chung_nhan" multiple>
+                                <mat-option value='0'>-- Tất cả --</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -113,7 +114,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen"
                                 multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
@@ -131,7 +132,7 @@
                     <!-- </div> -->
 
                     <div class="col-3 col-lg-3 checkbox">
-                        <mat-checkbox (change)="applyFilter()" [(ngModel)]="isChecked">Hết hạn CNATTP</mat-checkbox>
+                        <mat-checkbox (change)="applyExpireCheck($event)" >Hết hạn CNATTP</mat-checkbox>
                     </div>
 
                     <div class="col-3 col-lg-3 button-control">
@@ -152,24 +153,29 @@
                         <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
                             mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
+
+                    <div class="col-12 col-lg-12">
+                        <mat-form-field>
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Nhập dữ liệu cần lọc" #input>
+                        </mat-form-field>
+                    </div>
+                    
                 </div>
                 <hr>
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
-                    <!-- <mat-form-field class="filter2">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
-                    </mat-form-field> -->
+                    
 
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -241,7 +247,6 @@
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
-                <br>
             </mat-expansion-panel>
         </mat-accordion>
 
@@ -275,7 +280,7 @@
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Mã số thuế</mat-label>
+                                        <mat-label>Mã số thuế (*)</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
@@ -380,6 +385,12 @@
                                 </div>
                             </div>
                         </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12">
+                        <p>
+                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span> của doanh nghiệp đã có <span class="text-primary">Giấy chứng nhận </span>hoặc<span class="text-primary"> Giấy chứng nhận vệ sinh an toàn thực phẩm </span></span>
+                        </p>
                     </div>
 
                     <div class="col-md-12" *ngIf="isFound">

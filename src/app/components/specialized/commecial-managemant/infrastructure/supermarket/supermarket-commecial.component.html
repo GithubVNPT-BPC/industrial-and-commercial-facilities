@@ -149,7 +149,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_dia_ban" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_dia_ban" multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -160,7 +160,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Khu vực kinh tế</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.business_area_id"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.business_area_id"
                                 multiple>
                                 <mat-option *ngFor='let type of businessAreaList' [value]='type.id'>
                                     {{type.name}}
@@ -172,7 +172,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Phân loại</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_phan_hang"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_phan_hang"
                                 multiple>
                                 <mat-option *ngFor='let type of marketTypeList' [value]='type.id'>
                                     {{type.name}}
@@ -203,9 +203,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm xây dựng</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.nam_xay_dung"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_xay_dung"
                                 multiple>
-                                <mat-option *ngFor='let year of builtYears' [value]='year'>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
                             </mat-select>
@@ -215,9 +215,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm ngừng hoạt động</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
                                 multiple>
-                                <mat-option *ngFor='let year of holdYears' [value]='year'>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
                             </mat-select>
@@ -230,13 +230,13 @@
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -270,7 +270,8 @@
 
                         <ng-container matColumnDef="nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Nhà nước </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc | formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc |
+                                formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ngoai_nha_nuoc">
@@ -287,7 +288,8 @@
 
                         <ng-container matColumnDef="von_khac">
                             <th mat-header-cell *matHeaderCellDef> Vốn khác </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.von_khac | formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.von_khac |
+                                formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tong_hop">
@@ -312,7 +314,8 @@
 
                         <ng-container matColumnDef="dien_tich_dat">
                             <th mat-header-cell *matHeaderCellDef> Diện tích đất </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat | formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat |
+                                formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="phan_hang">
@@ -322,7 +325,8 @@
 
                         <ng-container matColumnDef="so_lao_dong">
                             <th mat-header-cell *matHeaderCellDef> Số lao động </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.so_lao_dong | formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.so_lao_dong |
+                                formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_chu_dau_tu">
@@ -400,8 +404,6 @@
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
-                <br>
-
             </mat-expansion-panel>
         </mat-accordion>
 

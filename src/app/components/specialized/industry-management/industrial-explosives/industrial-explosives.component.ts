@@ -17,10 +17,10 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class IndustrialExplosivesComponent extends BaseComponent {
 
-    displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep',  'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
 
-    totalColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    totalColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no',
         'moi_no', 'day_no'];
 
@@ -36,7 +36,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
     tongMucSanLuong: number = 0;
-    filterModel = { id_quan_huyen: [], id_tinh_trang_hoat_dong: [], is_expired: false };
+    filterModel = { 
+        id_quan_huyen: [], 
+        id_tinh_trang_hoat_dong: [],
+        ngay_cap: [],
+        is_expired: false 
+    };
 
     constructor(
         private injector: Injector,
@@ -69,47 +74,35 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             mst: new FormControl(),
             dia_chi: new FormControl(),
             id_phuong_xa: new FormControl(),
-
-            thuoc_no: new FormControl(),
-            kip_no: new FormControl(),
-            moi_no: new FormControl(),
-            day_no: new FormControl(),
-            thuoc_no_6thang: new FormControl(),
-            kip_no_6thang: new FormControl(),
-            moi_no_6thang: new FormControl(),
-            day_no_6thang: new FormControl(),
+            time_id: new FormControl(2021),
+            thuoc_no: new FormControl(0),
+            kip_no: new FormControl(0),
+            moi_no: new FormControl(0),
+            day_no: new FormControl(0),
+            thuoc_no_6thang: new FormControl(0),
+            kip_no_6thang: new FormControl(0),
+            moi_no_6thang: new FormControl(0),
+            day_no_6thang: new FormControl(0),
         }
     }
 
     prepareData(data) {
         data['id_so_giay_phep'] = 1;
         data['id_tinh_trang_hoat_dong'] = 1;
-        data['time_id'] = this.currentYear;
         return data;
     }
 
     callService(data) {
-        this.industryManagementService.PostExplosiveMat([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostExplosiveMat([data], data.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    applyFilter(event) {
-        if (!event.target) {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        } else {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        }
-        this.paginatorAgain();
-        this._prepareData();
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
+        return datas;
+      }
+    
+    callRemoveService(data) {
+        this.industryManagementService.DeleteExplosiveMat(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     getPostExplosiveMatData(time_id) {
@@ -138,23 +131,52 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
     }
 
-    filterArray(array, filters) {
-        const filterKeys = Object.keys(filters);
-        let temp = [...array];
-        filterKeys.forEach(key => {
-            let temp2 = [];
-            if (key == 'is_expired') {
-                temp2 = (filters[key]) ? temp2.concat(temp.filter(x => x[key] == true)) : temp;
-                temp = [...temp2];
+    applyExpireCheck(event) {
+        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+        this._prepareData();
+        this.paginatorAgain();
+    }
+
+    applyFilter(event) {
+        if (event.target) {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
             }
-            else
-                if (filters[key].length) {
-                    filters[key].forEach(criteria => {
-                        temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
+        }
+        this._prepareData();
+        this.paginatorAgain();
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(filterName => {
+            let filterCrits = [];
+            if (filters[filterName].length) {
+                if (filterName == 'ngay_cap') {
+                    filters[filterName].forEach(criteria => {
+                        if (criteria && criteria != 0) filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].toString().includes(criteria)));
+                        else filterCrits = filterCrits.concat(filteredData);
                     });
-                    temp = [...temp2];
+                } else {
+                    filters[filterName].forEach(criteria => {
+                        filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName] == criteria));
+                    });
                 }
-        })
-        return temp;
+                filteredData = [...filterCrits];
+            }
+        });
+        return filteredData;
     }
 }

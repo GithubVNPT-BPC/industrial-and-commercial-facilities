@@ -52,7 +52,6 @@ export const DDMMYY_FORMAT = {
 })
 
 export class ForeignManagerComponent implements OnInit {
-  public products: Array<ProductModel> = new Array<ProductModel>();
   public dataSource: MatTableDataSource<ForeignMarketModel> = new MatTableDataSource<ForeignMarketModel>();
   public displayedColumns: string[] = ['select', 'index', 'ten_san_pham', 'id_san_pham', 'thi_truong', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
 
@@ -134,10 +133,14 @@ export class ForeignManagerComponent implements OnInit {
     this.pickedDate.date = null
   }
 
+  public products: Array<ProductModel> = new Array<ProductModel>();
+  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
+
   public getListProduct(): void {
     this.marketService.GetProductList().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductModel[];
+        this.filterproducts = this.products.slice();
       },
     );
   }
@@ -221,6 +224,8 @@ export class ForeignManagerComponent implements OnInit {
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
+    this.filterproducts = this.products.slice();
+
     this._rows = this.dataSource.filteredData.length;
   }
 
@@ -237,6 +242,8 @@ export class ForeignManagerComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.filterproducts = this.products.slice();
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -275,16 +282,11 @@ export class ForeignManagerComponent implements OnInit {
     });
     this.marketService.PostForeignMarket(this.dataSource.data).subscribe(
       next => {
-        if (next.id == -1) {
-          this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
-        }
-        else {
-          this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-          this.GetAllForeignMarketPrice();
-        }
+        this._infor.msgSuccess("Lưu thông tin thành công");
+        this.GetAllForeignMarketPrice();
       },
       error => {
-        this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+        this._infor.msgError("Lưu thông tin không thành công");
       }
     );
   }

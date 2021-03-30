@@ -10,9 +10,9 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 
 export class ConditionalBusinessLineComponent implements OnInit {
     //Constant
-    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/domestic/cbl";
-    private readonly TITLE_DEFAULT: string = "Kinh doanh có điều kiện";
-    private readonly TEXT_DEFAULT: string = "Kinh doanh có điều kiện";
+    private readonly LINK_DEFAULT: string = "";
+    private readonly TITLE_DEFAULT: string = "KINH DOANH CÓ ĐIỀU KIỆN";
+    private readonly TEXT_DEFAULT: string = "KINH DOANH CÓ ĐIỀU KIỆN";
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
     navLinks: any[];

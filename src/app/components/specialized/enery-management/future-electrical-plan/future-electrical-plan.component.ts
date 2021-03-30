@@ -1,7 +1,6 @@
-import { Component, Injector, ViewChild } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatAccordion, MatTableDataSource } from '@angular/material';
-import { DistrictModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { MatTableDataSource } from '@angular/material';
 import { ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
@@ -14,127 +13,75 @@ import { BaseComponent } from '../../base.component';
 })
 
 export class FutureElectricalPlanComponent extends BaseComponent {
-    //
-    @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
-    //
-    public districts: DistrictModel[] = [{ id: 1, ten_quan_huyen: 'Thị xã Phước Long' },
-    { id: 2, ten_quan_huyen: 'Thành phố Đồng Xoài' },
-    { id: 3, ten_quan_huyen: 'Thị xã Bình Long' },
-    { id: 4, ten_quan_huyen: 'Huyện Bù Gia Mập' },
-    { id: 5, ten_quan_huyen: 'Huyện Lộc Ninh' },
-    { id: 6, ten_quan_huyen: 'Huyện Bù Đốp' },
-    { id: 7, ten_quan_huyen: 'Huyện Hớn Quản' },
-    { id: 8, ten_quan_huyen: 'Huyện Đồng Phú' },
-    { id: 9, ten_quan_huyen: 'Huyện Bù Đăng' },
-    { id: 10, ten_quan_huyen: 'Huyện Chơn Thành' },
-    { id: 11, ten_quan_huyen: 'Huyện Phú Riềng' }];
 
-    tba110KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
-    tba220KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
-    tba500KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
-    dd110KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
-    dd220KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
-    dd500KVDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    dataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
+    filteredDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
 
-    displayedColumns: string[] = ['index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
+    displayedColumns: string[] = ['select', 'index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
     constructor(
         private injector: Injector,
         private energyService: EnergyService,
         public _login: LoginService
     ) {
         super(injector);
-        // console.log(this.formData)
     }
     trang_thai_hd: any[] = [
-        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG' }
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Hoạt động' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Ngừng hoạt động' }
     ];
 
-    loai_quy_hoach: any[] = [
-        { id_loai_quy_hoach: 1, ten_loai_quy_hoach: 'Trạm biến áp 110KV' },
-        { id_loai_quy_hoach: 2, ten_loai_quy_hoach: 'Trạm biến áp 220KV' },
-        { id_loai_quy_hoach: 3, ten_loai_quy_hoach: 'Trạm biến áp 500KV' },
-        { id_loai_quy_hoach: 4, ten_loai_quy_hoach: 'Đường dây 110KV' },
-        { id_loai_quy_hoach: 5, ten_loai_quy_hoach: 'Đường dây 220KV' },
-        { id_loai_quy_hoach: 6, ten_loai_quy_hoach: 'Đường dây 500KV' }
-    ]
-
+    loai_quy_hoach = {
+        1: 'Trạm biến áp 110KV',
+        2: 'Trạm biến áp 220KV',
+        3: 'Trạm biến áp 500KV',
+        4: 'Đường dây 110KV',
+        5: 'Đường dây 220KV',
+        6: 'Đường dây 500KV',
+    }
+    selectedType = "1";
     authorize: boolean = true
 
     ngOnInit() {
-        this.getDataElectric110KV();
+        super.ngOnInit();
+        this.getDataElectric110KV(this.selectedType);
 
         if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
 
-    getDataElectric110KV() {
-        this.energyService.LayDuLieuQuyHoachDien110KVDuKien(2020).subscribe(res => {
-            this.mappingDataSource(res['data'])
-        })
-    }
-
-    mappingDataSource(dataSource: ElectricalPlan110KV[]) {
-        dataSource.filter(item => {
-            switch (item.id_loai_quy_hoach) {
-                case 1:
-                    this.tba110KVDataSource.data.push(item);
-                    break;
-                case 2:
-                    this.tba220KVDataSource.data.push(item);
-                    break;
-                case 3:
-                    this.dd110KVDataSource.data.push(item);
-                    break;
-
-                case 4:
-                    this.dd220KVDataSource.data.push(item);
-                    break;
-                case 5:
-                    this.dd500KVDataSource.data.push(item);
-                    break;
-                case 6:
-                    this.tba500KVDataSource.data.push(item);
-                    break;
-                default:
-                    break;
+    getDataElectric110KV(id_loai) {
+        this.selectedType = id_loai;
+        this.energyService.LayDuLieuQuyHoachDien110KVDuKien(id_loai).subscribe(result => {
+            this.filteredDataSource.data = [];
+            if (result.data && result.data.length > 0) {
+                this.dataSource = new MatTableDataSource<ElectricalPlan110KV>(result.data);
+                this.filteredDataSource.data = [...this.dataSource.data];
+                
             }
+            // this._prepareData();
+            this.paginatorAgain();
         })
     }
 
-    autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
-    }
-
-    applyDistrictFilter(event) {
-
-    }
-
-    applyFilter(event: Event, table_id: number) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        switch (table_id) {
-            case 1:
-                this.tba110KVDataSource.filter = filterValue.trim().toLowerCase();
-                break;
-            case 2:
-                this.tba220KVDataSource.filter = filterValue.trim().toLowerCase();
-                break;
-            case 3:
-                this.tba500KVDataSource.filter = filterValue.trim().toLowerCase();
-                break;
-            case 4:
-                this.dd110KVDataSource.filter = filterValue.trim().toLowerCase();
-                break;
-            case 5:
-                this.dd220KVDataSource.filter = filterValue.trim().toLowerCase();
-                break;
-            case 6:
-                this.dd500KVDataSource.filter = filterValue.trim().toLowerCase();
-                break;
-            default:
-                break;
+    applyFilter(event) {
+        if (!event.target) {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
+        } else {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
         }
+        this.paginatorAgain();
+        // this._prepareData();
     }
 
     public prepareData(data) {
@@ -143,14 +90,20 @@ export class FutureElectricalPlanComponent extends BaseComponent {
         data['p_min'] = Number(data['p_min']);
         data['p_tb'] = Number(data['p_tb']);
         data['mang_tai'] = Number(data['mang_tai']);
+        return data;
     }
 
     public callService(data) {
-        let list_data = [data];
-        // console.log(list_data)
-        this.energyService.CapNhatDuLieuQuyHoachDien110KVDuKien(list_data).subscribe(res => {
-            this.successNotify(res);
-        })
+        this.energyService.CapNhatDuLieuQuyHoachDien110KVDuKien([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    prepareRemoveData(data) {
+        let datas = data.map(element => new Object({ id: element.id }));
+        return datas;
+      }
+    
+    callRemoveService(data) {
+        this.energyService.DeleteDuLieuQuyHoachDien110KVDuKien(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     getFormParams() {

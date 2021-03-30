@@ -44,7 +44,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{sanLuongBotMy | number: '1.0-0':'vi'}} tấn/năm
+                                {{sanLuongBotMy | formatNumber}} tấn/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -57,7 +57,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{sanLuongRuou | number: '1.0-0':'vi'}} lít/năm
+                                {{sanLuongRuou | formatNumber}} lít/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -88,11 +88,19 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple>
-                                <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
+                            <mat-select #dSelect (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Thời gian đăng ký GCN</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap" multiple>
+                                <mat-option value='0'>-- Tất cả --</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -103,19 +111,17 @@
                             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                         </mat-form-field>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-2 col-md-2 col-lg-2 ">
+
+                    <div class="col-2 col-lg-2 my-auto">
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">DN hết hạn
                         </mat-checkbox>
-                    </div>
 
-                    <div class="col-2 col-md-2 col-lg-2 ">
                         <!-- <mat-checkbox (change)="showMoreDetail($event)">Chi tiết
                         </mat-checkbox> -->
                     </div>
-
-                    <div class="col-md-8 col-lg-8 button-control">
+                </div>
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('QLCN - CNTP',currentYear.toString())">
                             <mat-icon>file_download</mat-icon>
@@ -137,13 +143,13 @@
 
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -232,13 +238,22 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
 
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kỳ dữ liệu</mat-label>
+                                        <mat-select formControlName="time_id">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                
                                 <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Trạng thái</mat-label>
@@ -263,13 +278,13 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Công suất</mat-label>
-                                        <input matInput type="number" formControlName="cong_suat">
+                                        <input currencyMask matInput type="number" formControlName="cong_suat">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Sản lượng</mat-label>
-                                        <input matInput type="number" formControlName="san_luong">
+                                        <input currencyMask matInput type="number" formControlName="san_luong">
                                     </mat-form-field>
                                 </div>
                             </div>
