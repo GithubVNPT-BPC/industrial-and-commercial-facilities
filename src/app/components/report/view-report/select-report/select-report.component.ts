@@ -41,7 +41,7 @@ export class ViewSelectReportComponent implements OnInit {
   quarters: number[] = [null, 1, 2, 3, 4];
   halfs: number[] = [1];
   org_id: number = 0;
-  orgarnizations: string[] = ['', 'Sở Công thương', 'Văn Phòng Sở Công Thương', 'Thanh Tra Sở Công Thương', 'Phòng Quản Lý Công Nghiệp', 'Phòng Quản Lý Thương Mại', 'Phòng Quản Lý Năng Lượng'];
+  orgarnizations: string[] = ['', 'Sở Công thương', /**'Văn Phòng Sở Công Thương', 'Thanh Tra Sở Công Thương',**/ 'Phòng Quản Lý Công Nghiệp', 'Phòng Quản Lý Thương Mại', 'Phòng Quản Lý Năng Lượng'];
   periods: Object[];
   selectedPeriod: number = 0;
 
@@ -58,6 +58,7 @@ export class ViewSelectReportComponent implements OnInit {
 
     let data: any = JSON.parse(localStorage.getItem('currentUser'));
     this.org_id = parseInt(data.org_id);
+    console.log(this.org_id)
     this.GetViewAllReport();
   }
   GetViewAllReport() {
@@ -66,7 +67,7 @@ export class ViewSelectReportComponent implements OnInit {
         element.time_id_text = this.TimeIDToText(element.time_id.toString());
       })
       this.dataSource = null;
-      this.dataSource = new MatTableDataSource<ReportOject>(response.data);
+      this.dataSource = new MatTableDataSource<ReportOject>(response.data.filter( x => this.org_id != 1? x.org_id == this.org_id : x));
       this.dataSource.paginator = this.paginator;
       if (this.paginator) {
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';

@@ -53,7 +53,7 @@
                 </mat-form-field>
             </div>
             <div class="col-2">
-                <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline" *ngIf="this.org_id == 1">
                     <mat-label>Đơn vị báo cáo</mat-label>
                     <mat-select [(ngModel)]="tempObject.org_name">
                         <mat-option *ngFor="let item of orgarnizations" [value]="item">

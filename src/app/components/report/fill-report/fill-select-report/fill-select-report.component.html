@@ -8,13 +8,8 @@
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="row">
-            <div class="col-lg-2">
-                <div class="button-control -align-left">
-                    <button mat-raised-button (click)="filter()">Tìm kiếm</button>
-                </div>
-            </div>
-        </div>
+        <!-- <div class="row">
+        </div> -->
 
         <div class="row">
             <div class="col-lg-3">
@@ -56,6 +51,11 @@
                     <select class="form-control" name="" id="year_select" [(ngModel)]="selectedYear">
                         <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
                     </select>
+                </div>
+            </div>
+            <div class="col-lg-2">
+                <div class="button-control -align-left">
+                    <button mat-raised-button (click)="filter()">Tìm kiếm</button>
                 </div>
             </div>
         </div>
