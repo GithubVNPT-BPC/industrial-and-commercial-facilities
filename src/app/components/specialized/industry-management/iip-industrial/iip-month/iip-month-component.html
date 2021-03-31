@@ -20,7 +20,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-4" style="text-align: right;">
+            <div class="col-4 my-auto text-center">
                 <button mat-raised-button (click)="GetReportById(this.time_id)">Xem dữ liệu</button>
                 <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
                     (click)="exportToExcel('Chỉ số sản xuất công nghiệp - ' + this.thoigianbaocao, this.thoigianbaocao)">Xuất

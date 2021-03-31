@@ -8,47 +8,53 @@
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+        <!-- <div class="row">
+        </div> -->
+
         <div class="row">
-            <div class="col-lg-3">
-                <div class="form-group">
-                    <label for="period_select">Kỳ báo cáo</label>
-                    <select class="form-control" name="" id="period_select" (change)="changePeriod()"
-                        [(ngModel)]="selectedPeriod">
-                        <option *ngFor="let period of periods" [ngValue]="period">{{period}}</option>
-                    </select>
-                </div>
+            <div class="col-lg-2">
+                <mat-form-field appearance="outline">
+                    <mat-label>Kỳ báo cáo</mat-label>
+                    <mat-select (selectionChange)="changePeriod()" [(ngModel)]="selectedPeriod">
+                        <mat-option *ngFor="let period of periods" [value]="period">{{period}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="col-lg-3" *ngIf="selectedMonth > 0">
-                <div class="form-group">
-                    <label for="month_select">Tháng báo cáo</label>
-                    <select class="form-control" name="" id="month_select" [(ngModel)]="selectedMonth">
-                        <option *ngFor="let month of months" [ngValue]="month">{{month}}</option>
-                    </select>
-                </div>
+            <div class="col-lg-2" *ngIf="selectedMonth > 0">
+                <mat-form-field appearance="outline">
+                    <mat-label>Tháng báo cáo</mat-label>
+                    <mat-select [(ngModel)]="selectedMonth">
+                        <mat-option *ngFor="let month of months" [value]="month">{{month}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="col-lg-3" *ngIf="selectedQuarter >0">
-                <div class="form-group">
-                    <label for="quarter_select">Quý báo cáo</label>
-                    <select class="form-control" name="" id="quarter_select" [(ngModel)]="selectedQuarter">
-                        <option *ngFor="let quarter of quarters" [ngValue]="quarter.ma_so">{{quarter.ma_chu}}</option>
-                    </select>
-                </div>
+            <div class="col-lg-2" *ngIf="selectedQuarter >0">
+                <mat-form-field appearance="outline">
+                    <mat-label>Quý báo cáo</mat-label>
+                    <mat-select [(ngModel)]="selectedQuarter">
+                        <mat-option *ngFor="let quarter of quarters" [value]="quarter.ma_so">{{quarter.ma_chu}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="col-lg-3" *ngIf="selectedHalf >0">
-                <div class="form-group">
-                    <label for="half_select">Báo cáo 6 Tháng</label>
-                    <select class="form-control" name="" id="half_select" [(ngModel)]="selectedHalf">
-                        <option *ngFor="let half of halfs" [ngValue]="half">{{half}}</option>
-                    </select>
-                </div>
+            <!-- <div class="col-lg-2" *ngIf="selectedHalf >0">
+                <mat-form-field appearance="outline">
+                    <mat-label>Báo cáo 6 Tháng</mat-label>
+                    <mat-select [(ngModel)]="selectedHalf">
+                        <mat-option *ngFor="let half of halfs" [value]="half">{{half}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> -->
+            <div class="col-lg-2" *ngIf="selectedYear >0">
+                <mat-form-field appearance="outline">
+                    <mat-label>Năm báo cáo</mat-label>
+                    <mat-select [(ngModel)]="selectedYear">
+                        <mat-option *ngFor="let year of years" [value]="year">{{year}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="col-lg-3" *ngIf="selectedYear >0">
-                <div class="form-group">
-                    <label for="year_select">Năm báo cáo</label>
-                    <select class="form-control" name="" id="year_select" [(ngModel)]="selectedYear">
-                        <option *ngFor="let year of years" [ngValue]="year">{{year}}</option>
-                    </select>
-                </div>
+            <div class="col-lg-2 my-auto text-left button-control">
+                <button mat-raised-button (click)="filter()">Tìm kiếm</button>
             </div>
             <div class="col-lg-3">
                 <button mat-raised-button (click)="filter()" style="margin-top: 30px;">Tìm kiếm</button>

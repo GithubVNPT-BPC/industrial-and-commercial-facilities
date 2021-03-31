@@ -1,13 +1,13 @@
 <mat-card class="material">
     <mat-card-content>
-        <div class="button-control">
+        <!-- <div class="button-control">
             <button mat-raised-button (click)="accordion.openAll()">
                 <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
             </button>
             <button mat-raised-button (click)="accordion.closeAll()">
                 <mat-icon>flip_to_back</mat-icon> Đóng tất cả
             </button>
-        </div>
+        </div> -->
         <mat-accordion class="accord" multi>
             <!-- <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -124,7 +124,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-lg-6 button-control">
+                    <div class="col-lg-6 button-control my-auto text-left">
                         <!-- <button mat-raised-button (click)="DowloadFile('file mẫu','sheet 1')">File mẫu</button> -->
                         <button mat-raised-button (click)="GetReportById(this.time_id)">Xem dữ liệu</button>
                         <button mat-raised-button (click)="exportToExcel('Xuất nhập khẩu biên giới','Xuất nhập khẩu biên giới')">Xuất Excel</button>
