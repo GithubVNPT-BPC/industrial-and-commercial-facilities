@@ -126,7 +126,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCN</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap"
+                                multiple>
                                 <mat-option value='0'>-- Tất cả --</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
@@ -142,7 +143,8 @@
                         </mat-form-field>
                     </div>
                     <div class="col-2 col-lg-2 checkbox">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">DN hết hạn
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">DN hết
+                            hạn
                         </mat-checkbox>
                     </div>
                     <div class="col-4 col-lg-4 button-control">
@@ -362,7 +364,7 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
-                                        <mat-select formControlName="id_phuong_xa">
+                                        <mat-select formControlName="id_quan_huyen">
                                             <mat-option *ngFor='let district of districts' [value]='district.id'>
                                                 {{district.ten_quan_huyen}}
                                             </mat-option>
