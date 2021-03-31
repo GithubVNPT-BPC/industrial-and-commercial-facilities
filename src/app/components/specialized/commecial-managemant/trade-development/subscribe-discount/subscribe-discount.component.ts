@@ -21,9 +21,9 @@ export class SubscribeDiscountComponent extends BaseComponent {
   displayedColumns: string[] = ['select', 'index'];
 
   displayedFields = {
+    mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
     dia_chi_doanh_nghiep: "Địa chỉ",
-    mst: "Mã số thuế",
     ten_chuong_trinh_km: "Tên chương trình KM",
     thoi_gian_bat_dau: "Thời gian bắt đầu",
     thoi_gian_ket_thuc: "Thời gian kết thúc",
@@ -32,14 +32,15 @@ export class SubscribeDiscountComponent extends BaseComponent {
     ten_hinh_thuc: "Hình thức KM",
     so_van_ban: "Số văn bản",
     co_quan_ban_hanh: "Cơ quan ban hành",
-    ngay_thang_nam_van_ban: "Ngày tháng năm",
+    ngay_thang_nam_van_ban: "Ngày/tháng/năm",
   }
 
   filterComponents = {
-    id_phuong_xa: [],
+    id_quan_huyen: [],
     ten_hinh_thuc: [],
   }
   sumvalues: number = 0;
+  totalEnterprises = 0;
 
   public promotionTypes: string[] = [];
   form: FormGroup;
@@ -51,7 +52,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
   ) {
     super(injector);
     this._breadCrumService.sendLink(this._linkOutput);
-    this.initDisplayColumns();
   }
 
   authorize: boolean = true
@@ -64,10 +64,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
     if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
-  }
-
-  initDisplayColumns() {
-    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
   }
 
   getLinkDefault() {
@@ -166,7 +162,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
       result => {
         if (result.data && result.data.length > 0) {
           this.promotionTypes = result.data
-          this.autopaging();
         }
       },
       error => this.errorMessage = <any>error
@@ -176,10 +171,13 @@ export class SubscribeDiscountComponent extends BaseComponent {
   getSDList(): void {
     this.commerceManagementService.getSubcribeDiscountData().subscribe(
       result => {
+        this.filteredDataSource.data = [];
         if (result.data && result.data.length > 0) {
           this.dataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
           this.filteredDataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
         }
+        this._prepareData();
+        this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
@@ -202,8 +200,9 @@ export class SubscribeDiscountComponent extends BaseComponent {
     return ds_km;
   }
 
-  countBusiness(): number {
-    return this.dataSource.data.map(x => x.ngay_thang_nam_van_ban.slice(0, 4) == this.currentYear.toString()).length;
+  _prepareData() {
+    let data = this.filteredDataSource.data;
+    this.totalEnterprises = new Set(data.map(x => x.mst)).size;
   }
 
   prepareData(data) {
@@ -227,8 +226,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.commerceManagementService.deletePromo(data).subscribe(res => {
-      this.successNotify(res);
-    });
+    this.commerceManagementService.deletePromo(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 }

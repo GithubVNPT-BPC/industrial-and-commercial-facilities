@@ -64,7 +64,7 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Tổng sản lượng năm(triệu KW):
+                                    <mat-icon>filter</mat-icon> Tổng sản lượng năm (triệu KW):
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
@@ -144,13 +144,13 @@
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" 
+                                <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="center-cell">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -183,8 +183,14 @@
                             <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | formatNumber}}</td>
                         </ng-container>
 
+                        <ng-container matColumnDef="Lnxbq">
+                            <th mat-header-cell *matHeaderCellDef> Lượng nước xả bình quân m<sup>3</sup>/s
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.luong_nuoc_xa_binh_quan}}</td>
+                        </ng-container>
+
                         <ng-container matColumnDef="Dthc">
-                            <th mat-header-cell *matHeaderCellDef> Dung tích hồ chứa 106 m3
+                            <th mat-header-cell *matHeaderCellDef> Dung tích hồ chứa 10<sup>6</sup> m3
                             <td mat-cell *matCellDef="let element"> {{element.dung_tich_ho_chua | formatNumber}}
                             </td>
                         </ng-container>
@@ -203,7 +209,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="Dt">
-                            <th mat-header-cell *matHeaderCellDef> Doanh thu </th>
+                            <th mat-header-cell *matHeaderCellDef> Doanh thu (Tỷ đồng)</th>
                             <td mat-cell *matCellDef="let element"> {{element.doanh_thu | formatNumber}}
                             </td>
                         </ng-container>
@@ -221,7 +227,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="Pdpauptt">
-                            <th mat-header-cell *matHeaderCellDef> Phê duyệt pương án ứng phó thiên tai (năm/lần) </th>
+                            <th mat-header-cell *matHeaderCellDef> Phê duyệt phương án ứng phó thiên tai (năm/lần) </th>
                             <td mat-cell *matCellDef="let element"> {{element.phe_duyet_phuong_an_ung_pho_thien_tai}}
                             </td>
                         </ng-container>

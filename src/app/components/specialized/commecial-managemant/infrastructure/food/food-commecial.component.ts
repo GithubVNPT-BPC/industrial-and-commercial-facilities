@@ -10,7 +10,6 @@ import { FoodCommerceModel } from 'src/app/_models/APIModel/commecial-management
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
-import { element } from 'protractor';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
@@ -25,7 +24,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   isChecked: boolean;
   isFound: boolean = false;
-  public tongDoanhNghiep: number;
+  tongDoanhNghiep: number;
   //
   filterModel = {
     id_spkd: [],
@@ -86,33 +85,19 @@ export class FoodManagementComponent extends BaseComponent {
       allrecords => {
         this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
+          allrecords.data.forEach(element => {
+            element.ngay_cap = this.formatDate(element.ngay_cap);
+            element.ngay_het_han = this.formatDate(element.ngay_het_han);
+            element.is_het_han = element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate());
+          });
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
-          this.dataSource.data.forEach(element => {
-            if (element.ngay_het_han) {
-              let temp = this.Convertdate(element.ngay_het_han)
-              element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
-            }
-            else {
-              element.is_het_han = false
-            }
-            element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
-            element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
-          })
-
-          this.filteredDataSource.data = [...this.dataSource.data].filter(x => x.is_het_han == false)
-
+          this.filteredDataSource.data = [...this.dataSource.data].filter(x => !x.is_het_han)
         }
         this._prepareData();
         this.paginatorAgain();
       },
       error => this.errorMessage = <any>error
     );
-  }
-
-  Convertdate(text: string): string {
-    let date: string
-    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
-    return date
   }
 
   public getCurrentDate() {
@@ -141,32 +126,32 @@ export class FoodManagementComponent extends BaseComponent {
     this.commerceManagementService.deleteFoodCommerce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-
   resetAll() {
     this.isFound = false;
     super.resetAll();
   }
 
   private _prepareData() {
-    this.tongDoanhNghiep = this.filteredDataSource.data.length;
+    this.tongDoanhNghiep = this.dataSource.data.length;
   }
 
-  applyFilter1(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
 
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
 
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
     }
     this._prepareData();
     this.paginatorAgain();
@@ -187,10 +172,10 @@ export class FoodManagementComponent extends BaseComponent {
           if (giayCndkkdList.length == 0)
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
           else {
-            this.isFound = true;
-            this.giayCndkkdList = giayCndkkdList;
             this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
           }
+          this.isFound = true;
+          this.giayCndkkdList = giayCndkkdList;
         } else {
           this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
         }

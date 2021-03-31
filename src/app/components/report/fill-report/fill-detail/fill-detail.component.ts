@@ -1,28 +1,9 @@
-import {
-  Component,
-  ViewChild,
-  ElementRef,
-  OnInit,
-  AfterViewInit,
-  OnDestroy,
-  Attribute,
-  QueryList,
-  ViewChildren,
-  Input,
-} from "@angular/core";
+import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from "@angular/core";
 import * as XLSX from "xlsx";
 
 import { ReportService } from "../../../../_services/APIService/report.service";
 
-import {
-  ReportAttribute,
-  ReportDatarow,
-  ReportIndicator,
-  ReportOject,
-  ReportTable,
-  HeaderMerge,
-  ToltalHeaderMerge,
-} from "../../../../_models/APIModel/report.model";
+import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from "../../../../_models/APIModel/report.model";
 import { MatTableDataSource } from "@angular/material/table";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ExcelService } from "src/app/_services/excelUtil.service";
@@ -36,6 +17,7 @@ import { merge } from "rxjs";
 import moment from "moment";
 import { ThrowStmt } from "@angular/compiler";
 import { AttachSession } from "protractor/built/driverProviders";
+import { time } from "highcharts";
 
 interface HashTableNumber<T> {
   [key: string]: T;
@@ -54,6 +36,11 @@ export class FillReportComponent implements OnInit {
 
   public readonly numberFieldProperty: string[] = ['fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09',
     'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20'];
+
+  public readonly oldDataReg = /^\{\{\d\}\}\{\{\w+\}\}$/;
+  public readonly operatorReg = /\+|\-|\*|\//;
+  public readonly previousYearRegEx = /\{\{2\}\}/;
+  public readonly attributeReg = /\w\w+/;
 
   public tableMergeHader: Array<ToltalHeaderMerge> = [];
   public mergeHeadersColumn: Array<string> = [];
@@ -239,7 +226,8 @@ export class FillReportComponent implements OnInit {
 
   ngOnInit(): void {
     let data: any = JSON.parse(localStorage.getItem("currentUser"));
-    this.org_id = parseInt(data.org_id);
+    if (this.org_id == 0)
+      this.org_id = parseInt(data.org_id);
 
     this.GetReportById(this.obj_id, this.time_id, this.org_id);
     this.keyboardservice.keyBoard.subscribe((res) => {
@@ -317,18 +305,18 @@ export class FillReportComponent implements OnInit {
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
-        this.is_sent = !(
-          allRecord.data[0][0].state_id == 101 ||
-          allRecord.data[0][0].state_id == 401
-        );
         if (this.object[0]) {
+          this.is_sent = !(
+            this.object[0].state_id == 101 ||
+            this.object[0].state_id == 401
+          );
           this.formatFrameReport(this.object[0]);
         }
         this.indicators.sort((a, b) => a.ind_id - b.ind_id);
         this.CreateMergeHeaderTable(this.attributes);
 
         this.CreateReportTable();
-        this.dataSynthesis();
+        //this.dataSynthesis();
       });
   }
   formatFrameReport(report: ReportOject) {
@@ -691,12 +679,16 @@ export class FillReportComponent implements OnInit {
     this.dataSource.data.reverse().forEach(rowData => {
       switch (rowData.ind_type) {
         case 1:
-          this.numberFieldProperty.forEach(fn => rowData[fn] = rowData[fn] ? rowData[fn] : null)
+          this.numberFieldProperty.forEach(fn => rowData[fn] = rowData[fn] ? rowData[fn] : null);
+          break;
+
+        case 2:
+          this.numberFieldProperty.forEach(fn => rowData[fn] = null);
           break;
 
         case 3:
           let filteredDataRow = this.dataSource.data.filter(x => x.ind_parent_id == rowData.ind_id);
-          this.numberFieldProperty.forEach(fn => rowData[fn] = filteredDataRow.reduce((a, b) => a + (b[fn] || 0), 0))
+          this.numberFieldProperty.forEach(fn => rowData[fn] = filteredDataRow.reduce((a, b) => a + (b[fn] || 0), 0));
           break;
 
         default: {
@@ -708,25 +700,108 @@ export class FillReportComponent implements OnInit {
   }
 
   colCalculate() {
-    let reg = /^\{\{\d\}\}\{\{\w+\}\}$/;
     this.attributes.filter(x => x.formula).forEach(attribute => {
-      // console.log ('Formula: +', attribute.formula, '+ Test: ', reg.test(attribute.formula))
-      if (reg.test(attribute.formula)) {
-        let previousYearRegEx = /\{\{2\}\}/;
-        let is_previous_year = attribute.formula.match(previousYearRegEx)? true : false;
-        let attribute_code = attribute.formula.substr(7, attribute.formula.length - 9);
-        this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
-          attribute_code, attribute.attr_code).subscribe(res => {
-            let fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
-            console.log(res.data)
-            res.data.forEach(element => {
-              let tempRow = this.dataSource.data.filter( x => x.ind_id == element.ind_id)[0];
-              tempRow[fnProp] = element[fnProp];
-              console.log(tempRow)
-            });
-          })
-      }
+      let operands = attribute.formula.split(this.operatorReg);
+      if (operands[0].match(this.oldDataReg))
+        this.calculateData(operands[0], attribute.attr_code, null);
+      else
+        this.replaceData(operands[0], attribute.fld_code, null);
+      let operator = attribute.formula.match(this.operatorReg);
+      if (operator)
+        if (operands[1].match(this.oldDataReg))
+          this.calculateData(operands[1], attribute.attr_code, operator[0]);
+        else
+          this.replaceData(operands[1], attribute.fld_code, operator[0]);
     });
+  }
+
+  replaceData(formula: string, fld_code: string, operator: any): string {
+    let fnProp = this.attributes.filter(x => x.attr_code == formula.substr(2, formula.length - 4))[0].fld_code;
+    // this.dataSource.data.forEach(x => x[fld_code] = x[fnProp]);
+    switch (operator) {
+      case '+':
+        this.dataSource.data.forEach(element => {
+          if (element.ind_type != 2)
+            element[fld_code] = element[fld_code] + element[fnProp];
+        });
+        break;
+
+      case '-':
+        this.dataSource.data.forEach(element => {
+          if (element.ind_type != 2)
+            element[fld_code] = element[fld_code] - element[fnProp];
+        });
+        break;
+
+      case '*':
+        this.dataSource.data.forEach(element => {
+          if (element.ind_type != 2)
+            element[fld_code] = element[fld_code] * element[fnProp];
+        });
+        break;
+
+      case '/':
+        this.dataSource.data.forEach(element => {
+          if (element.ind_type != 2)
+            element[fld_code] = (element[fnProp] == null || element[fnProp] == 0) ? -1 : element[fld_code] / element[fnProp];
+        });
+        break;
+
+      default:
+        this.dataSource.data.forEach(element => {
+          if (element.ind_type != 2)
+            element[fld_code] = element[fnProp];
+        });
+        break;
+    }
+    return fnProp;
+  }
+
+  calculateData(formula: string, attr_code: string, operator: any): string {
+    let is_previous_year = formula.match(this.previousYearRegEx) ? true : false;
+    let attribute_code = formula.match(this.attributeReg)[0];
+    let fnProp = '';
+    this.reportSevice.GetOldData(this.obj_id, this.calculateTimeId(this.time_id, is_previous_year), this.org_id,
+      attribute_code, attr_code).subscribe(res => {
+        fnProp = Object.getOwnPropertyNames(res.data[0])[1].toString();
+        switch (operator) {
+          case '+':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id && x.ind_type != 2)[0];
+              tempRow[fnProp] = tempRow[fnProp] + element[fnProp];
+            });
+            break;
+
+          case '-':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id && x.ind_type != 2)[0];
+              tempRow[fnProp] = tempRow[fnProp] - element[fnProp];
+            });
+            break;
+
+          case '*':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id && x.ind_type != 2)[0];
+              tempRow[fnProp] = tempRow[fnProp] * element[fnProp];
+            });
+            break;
+
+          case '/':
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id && x.ind_type != 2)[0];
+              tempRow[fnProp] = (element[fnProp] == null || element[fnProp] == 0) ? -1 : tempRow[fnProp] / element[fnProp];
+            });
+            break;
+
+          default:
+            res.data.forEach(element => {
+              let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id && x.ind_type != 2)[0];
+              tempRow[fnProp] = element[fnProp];
+            });
+            break;
+        }
+      })
+    return fnProp;
   }
 
   calculateTimeId(time_id: number, is_previous_year: boolean): number {

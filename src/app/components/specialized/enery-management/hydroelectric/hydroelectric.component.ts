@@ -24,7 +24,7 @@ export class HydroelectricComponent extends BaseComponent {
   }
 
   //Constant variable
-  public readonly displayedColumns: string[] = ['select', 'index', 'Tdn', 'Dd', 'Cx', 'Dthc', 'Sl6tck',
+  public readonly displayedColumns: string[] = ['select', 'index', 'Tdn', 'Dd', 'Cx', 'Lnxbq', 'Dthc', 'Sl6tck',
     'Slnck', 'Dt', 'Paupttcctvhd', 'Pdpauptt', 'Paupvthkcdhctd', 'Qtvhhctd', 'Qtdhctd', 'Kdd', 'Ldhtcbvhd',
     'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd'
   ];
@@ -59,10 +59,13 @@ export class HydroelectricComponent extends BaseComponent {
 
   laydulieuThuyDien() {
     this.energyService.LayDuLieuThuyDien().subscribe(res => {
-      this.dataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
-      this.filteredDataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
+      this.filteredDataSource.data = [];
+      if (res.data && res.data.length) {
+        this.dataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
+        this.filteredDataSource = new MatTableDataSource<HydroEnergyModel>(res.data);
+      }
       this.caculatorValue();
-      this.initPaginator();
+      this.paginatorAgain();
     })
   }
 
@@ -116,17 +119,6 @@ export class HydroelectricComponent extends BaseComponent {
   //   this.paginatorAgain();
   // }
 
-  initPaginator() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
-
   caculatorValue() {
     this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
@@ -140,7 +132,7 @@ export class HydroelectricComponent extends BaseComponent {
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
-    this.initPaginator();
+    this.paginatorAgain();
   }
 
   prepareRemoveData(data) {

@@ -204,17 +204,23 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.VonKhac = data.map(x => x.von_khac).reduce((a, b) => a + b, 0);
   }
 
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
 
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+
     }
     this._prepareData();
     this.paginatorAgain();

@@ -89,7 +89,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-2 col-lg-2">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="getPostExplosiveMatData($event.value)"
@@ -104,7 +104,6 @@
                             <mat-label>Địa bàn</mat-label>
                             <mat-select #dSelect (selectionChange)="applyFilter($event)"
                                 [(ngModel)]="filterModel.id_quan_huyen" multiple>
-                                <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -124,32 +123,45 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2 col-lg-2 checkbox">
-                        <mat-checkbox (change)="applyFilter($event)" [(ngModel)]="filterModel.is_expired">DN hết hạn
-                        </mat-checkbox>
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Thời gian đăng ký GCN</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap" multiple>
+                                <mat-option value='0'>-- Tất cả --</mat-option>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-8 col-lg-8">
+                    <div class="col-6 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Lọc dữ liệu</mat-label>
                             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                         </mat-form-field>
+                    </div>
+                    <div class="col-2 col-lg-2 checkbox">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">DN hết hạn
+                        </mat-checkbox>
                     </div>
                     <div class="col-4 col-lg-4 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('QLCN - VLNCN', currentYear.toString())">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" color="primary" (click)="switchView()"
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length != 0" color="warn" matTooltip="Xóa" mat-raised-button
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()" [hidden]=authorize>
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
                     </div>
                 </div>
 
@@ -307,7 +319,7 @@
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
                 <ng-template #ShowEmpty>
-                    <h1 class="text-center">Không có dữ liệu</h1>
+                    <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
             </mat-expansion-panel>
         </mat-accordion>
@@ -362,6 +374,16 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa chỉ</mat-label>
                                         <input matInput formControlName="dia_chi">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kỳ dữ liệu</mat-label>
+                                        <mat-select formControlName="time_id">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>

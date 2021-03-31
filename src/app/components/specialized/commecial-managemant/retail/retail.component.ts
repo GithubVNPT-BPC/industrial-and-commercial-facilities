@@ -88,6 +88,7 @@ export class RetailComponent implements OnInit {
     public dataSource: MatTableDataSource<RetailModel> = new MatTableDataSource<RetailModel>();
     public year: number = 2020;
     public years: number[];
+    public obj_id : number = 1;
     //Only TS Variable ------------------------------------------------------------
     private _linkOutput: LinkModel = new LinkModel();
     //ViewChild & Input & Output -------------------------------------------------
@@ -163,7 +164,7 @@ export class RetailComponent implements OnInit {
     }
 
     private getData(time_id: number) {
-        this._reportService.Get12MonthReports(1, time_id, 'SCT_CUS_ATTR_THT').subscribe(res => {
+        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_ATTR_THT').subscribe(res => {
             // console.log(res);
             this.dataSource = new MatTableDataSource<RetailModel>(res.data);
             this.dataSource.paginator = this.paginator;

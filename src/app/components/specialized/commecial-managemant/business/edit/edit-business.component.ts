@@ -19,7 +19,8 @@ import {
   SubDistrictModel,
   BusinessTypeModel,
   Career,
-  DeleteModel1
+  DeleteModel1,
+  FieldModel
 } from "src/app/_models/APIModel/domestic-market.model";
 
 import { FormControl } from '@angular/forms';
@@ -133,6 +134,8 @@ export class EditBusinessComponent implements OnInit {
   public filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   public district: Array<DistrictModel> = new Array<DistrictModel>();
   public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
+  public Field: Array<FieldModel> = new Array<FieldModel>();
+  public FilterField: Array<FieldModel> = new Array<FieldModel>();
 
   GetAllNganhNghe() {
     this._Service.GetAllCareer().subscribe((allrecords) => {
@@ -160,6 +163,13 @@ export class EditBusinessComponent implements OnInit {
     });
   }
 
+  GetLinhVuc() {
+    this._Service.GetAllField().subscribe((allrecords) => {
+      this.Field = allrecords.data as FieldModel[];
+      this.FilterField = this.Field.slice();
+    });
+  }
+
   ngOnInit() {
     if (this.mst != undefined) {
       this.GetCompanyInfoById();
@@ -169,6 +179,7 @@ export class EditBusinessComponent implements OnInit {
     this.GetAllPhuongXa();
     this.getQuan_Huyen();
     this.GetAllLoaiHinh();
+    this.GetLinhVuc();
     this.resetForm();
 
     this.doanh_nghiep = this.formbuilder.group({
@@ -241,6 +252,7 @@ export class EditBusinessComponent implements OnInit {
           this.Back()
         },
         err => {
+          this.info.msgError('Cập nhật doanh nghiệp không thành công')
         }
       )
     }
@@ -313,7 +325,7 @@ export class EditBusinessComponent implements OnInit {
     }
   }
   dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
-  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh', 'id_nganh_nghe'];
+  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'id_linh_vuc', 'nganh_nghe_kd_chinh', 'id_nganh_nghe'];
 
   public _currentRow: number = 0;
 
@@ -321,10 +333,13 @@ export class EditBusinessComponent implements OnInit {
     let newRow: Career = new Career();
     newRow.id_nganh_nghe_kinh_doanh;
     newRow.nganh_nghe_kd_chinh = "";
-    newRow.id_linh_vuc = null
+    newRow.id_linh_vuc;
 
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.filtercareer = this.career.slice();
+    this.FilterField = this.Field.slice();
 
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -342,13 +357,16 @@ export class EditBusinessComponent implements OnInit {
     let newRow: Career = new Career();
     newRow.id_nganh_nghe_kinh_doanh;
     newRow.nganh_nghe_kd_chinh = "";
-    newRow.id_linh_vuc = null
+    newRow.id_linh_vuc;
 
     this.dataSource.data.push(newRow);
     data.forEach(element => {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
+
+    this.filtercareer = this.career.slice();
+    this.FilterField = this.Field.slice();
 
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -468,7 +486,7 @@ export class EditBusinessComponent implements OnInit {
             d.so_giay_phep = temp1.join('; ')
           }
 
-          let temp2 = temp.map(f => this.Convertdate(f.ngay_cap))
+          let temp2 = temp.map(f => f.ngay_cap ? this.Convertdate(f.ngay_cap) : null)
           if (temp2[0] == undefined || temp2[0] == null) {
             d.ngay_cap = null
           }
@@ -476,7 +494,7 @@ export class EditBusinessComponent implements OnInit {
             d.ngay_cap = temp2.join('; ')
           }
 
-          let temp3 = temp.map(f => this.Convertdate(f.ngay_het_han))
+          let temp3 = temp.map(f => f.ngay_het_han ? this.Convertdate(f.ngay_het_han) : null)
           if (temp3[0] == undefined || temp3[0] == null) {
             d.ngay_het_han = null
           }
@@ -527,6 +545,7 @@ export class EditBusinessComponent implements OnInit {
             this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
             this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
             this.careerarray[index].id_nganh_nghe = this.companyList2[index].id_nganh_nghe
+            this.careerarray[index].id_linh_vuc = this.companyList2[index].id_linh_vuc
           }
           this.dataSource.data = this.careerarray
 

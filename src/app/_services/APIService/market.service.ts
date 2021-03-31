@@ -20,6 +20,7 @@ export class MarketService {
     public urlDistrict = "api/danh-sach/quan-huyen";
     public urlSubDistrict = "api/danh-sach/phuong-xa";
     public urlLHHD = "api/danh-sach/loai-hinh-hoat-dong";
+    public urlField = "api/danh-sach/linh-vuc-quan-ly";
 
     public urlDomesticMarket = "api/qltm/gia-ca";
     public urlDomesticMarketAll = "api/qltm/tat-ca-gia-ca";
@@ -264,6 +265,13 @@ export class MarketService {
     }
     public GetAllBusinessType() {
         var apiUrl = this.apiHome + this.urlLHHD;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public GetAllField() {
+        var apiUrl = this.apiHome + this.urlField;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

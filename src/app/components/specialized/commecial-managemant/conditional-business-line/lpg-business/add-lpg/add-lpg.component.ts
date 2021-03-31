@@ -330,27 +330,21 @@ export class AddLpgComponent implements OnInit {
     if (this.id != 'undefined') {
       this._Service.PostLPG(input).subscribe(
         res => {
-          // debugger;
-          this._info.msgSuccess('Thêm thành công')
+          this._info.msgSuccess("Lưu thông tin thành công")
         },
         err => {
-          // debugger;
+          this._info.msgError("Lưu thông tin không thành công")
         }
       )
 
       if (this.dataSource.data) {
         this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
           next => {
-            if (next.id == -1) {
-              this._info.msgError("Lưu lỗi! Lý do: " + next.message);
-            }
-            else {
-              this._info.msgSuccess("Dữ liệu được lưu thành công!");
-              this.Back()
-            }
+            this._info.msgSuccess("Lưu thông tin thành công");
+            this.Back()
           },
           error => {
-            this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+            this._info.msgError("Lưu thông tin không thành công");
           }
         );
       }
@@ -358,16 +352,11 @@ export class AddLpgComponent implements OnInit {
     else {
       this._Service.PostLPGNEW(input1).subscribe(
         next => {
-          if (next.id == -1) {
-            this._info.msgError("Lưu lỗi! Lý do: " + next.message);
-          }
-          else {
-            this._info.msgSuccess("Dữ liệu được lưu thành công!");
-            this.Back()
-          }
+          this._info.msgSuccess("Lưu thông tin thành công");
+          this.Back()
         },
         error => {
-          this._info.msgError("Không thể thực thi! Lý do: " + error.message);
+          this._info.msgError("Lưu thông tin không thành công");
         }
       );
     }

@@ -17,7 +17,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 export class BlockElectricComponent extends BaseComponent {
 
   //Constant variable
-  public readonly displayedColumns: string[] = ['index', 'ten_du_an', 'ten_doanh_nghiep', 'dia_diem', 'cong_xuat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'id_trang_thai_hoat_dong'];
+  public readonly displayedColumns: string[] = ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep', 'dia_diem', 'cong_xuat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'id_trang_thai_hoat_dong'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
   public filteredDataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
@@ -85,6 +85,15 @@ export class BlockElectricComponent extends BaseComponent {
     this.energyService.PostBlockElectricData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  prepareRemoveData(data) {
+    let datas = data.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data) {
+    this.energyService.DeleteBlockElectric(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
   getDataBlockElectric(time_id: any) {
     this.energyService.LayDuLieuDienSinhKhoi(time_id).subscribe(res => {
       this.filteredDataSource.data = [];
@@ -93,21 +102,10 @@ export class BlockElectricComponent extends BaseComponent {
         this.dataSource = new MatTableDataSource<BlockElectricModel>(res['data']);
       }
       this.caculatorValue();
-      this.initPaginator();
+      this.paginatorAgain();
     })
   }
-
-  initPaginator() {
-    if (this.filteredDataSource.data.length) {
-      this.filteredDataSource.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    }
-  }
-
+  
   caculatorValue() {
     this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
@@ -118,7 +116,7 @@ export class BlockElectricComponent extends BaseComponent {
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
-    this.initPaginator();
+    this.paginatorAgain();
   }
 
 }

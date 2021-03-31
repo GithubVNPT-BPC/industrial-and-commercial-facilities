@@ -32,8 +32,8 @@ export class SearchBusinessComponent implements OnInit {
   ];
 
   public filter1: filter[] = [
-    { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
     { filed_name: 'mst', detail_name: 'Mã số thuế' },
+    { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
     { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
     { filed_name: 'nguoi_dai_dien', detail_name: 'Người đại diện' },
     { filed_name: 'dia_chi_day_du', detail_name: 'Địa chỉ đầy đủ' },
@@ -162,8 +162,8 @@ export class SearchBusinessComponent implements OnInit {
     this.router.navigate(['manager/business/certificate/']);
   }
 
-  selected_field: string = 'ten_doanh_nghiep';
-  countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
+  selected_field: string = 'mst';
+  countNumberCondition: any[] = [{ id: 1, filed_name: 'mst', filed_value: '' }];
   count: number = 1;
 
   isSearch_Advanced: boolean = true;
@@ -189,7 +189,7 @@ export class SearchBusinessComponent implements OnInit {
 
   add_condition() {
     this.count++;
-    let new_ob = { id: this.count, filed_name: 'ten_doanh_nghiep', filed_value: '' }
+    let new_ob = { id: this.count, filed_name: 'mst', filed_value: '' }
     this.countNumberCondition.push(new_ob);
   }
 

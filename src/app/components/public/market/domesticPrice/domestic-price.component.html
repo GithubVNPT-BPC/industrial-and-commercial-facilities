@@ -37,18 +37,19 @@
                     <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
                         {{i + 1 + (paginator.pageIndex * paginator.pageSize)}}</td>
                 </ng-container>
+
                 <ng-container matColumnDef="ten_san_pham">
                     <th mat-header-cell *matHeaderCellDef> Tên sản phẩm </th>
                     <td mat-cell *matCellDef="let element"> {{element.ten_san_pham}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="don_vi_tinh">
-                    <th mat-header-cell hidden *matHeaderCellDef> Đơn vị tính </th>
-                    <td mat-cell hidden *matCellDef="let element"> {{element.don_vi_tinh}}</td>
+                    <th mat-header-cell *matHeaderCellDef> Đơn vị tính </th>
+                    <td mat-cell *matCellDef="let element"> {{element.don_vi_tinh}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="gia_ca">
-                    <th mat-header-cell *matHeaderCellDef> Giá </th>
+                    <th mat-header-cell *matHeaderCellDef> Giá (VNĐ) </th>
                     <td mat-cell *matCellDef="let element" class="right-cell"> {{element.gia_ca | number: '1.0-4':'vi'}}
                     </td>
                 </ng-container>

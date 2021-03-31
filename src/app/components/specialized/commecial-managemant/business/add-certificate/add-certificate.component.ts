@@ -137,13 +137,12 @@ export class AddCertificateComponent implements OnInit {
   SaveData(input) {
     this._Service.PostCertificate(input).subscribe(
       res => {
-        // debugger;
-        this._info.msgSuccess('Thêm thành công')
+        this._info.msgSuccess('Cập nhật thông tin thành công')
         // this.dialogRef.close()
         this.Back()
       },
       err => {
-        // debugger;
+        this._info.msgError('Cập nhật thông tin không thành công')
       }
     )
   }
@@ -206,8 +205,8 @@ export class AddCertificateComponent implements OnInit {
         id_giay_phep: this.CertificateModelobject.id_giay_phep,
         mst: this.CertificateModelobject.mst,
         so_giay_phep: this.CertificateModelobject.so_giay_phep,
-        ngay_cap: '',
-        ngay_het_han: '',
+        ngay_cap: this.CertificateModelobject.ngay_cap,
+        ngay_het_han: this.CertificateModelobject.ngay_het_han,
         id_loai_giay_phep: this.CertificateModelobject.id_loai_giay_phep,
         noi_cap: this.CertificateModelobject.noi_cap,
         co_quan_cap: this.CertificateModelobject.co_quan_cap,

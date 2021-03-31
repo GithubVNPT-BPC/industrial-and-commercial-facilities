@@ -165,7 +165,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_dia_ban" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_dia_ban" multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -176,7 +176,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Khu vực kinh tế</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.business_area_id"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.business_area_id"
                                 multiple>
                                 <mat-option *ngFor='let type of businessAreaList' [value]='type.id'>
                                     {{type.name}}
@@ -188,7 +188,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Phân loại</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_phan_hang"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_phan_hang"
                                 multiple>
                                 <mat-option *ngFor='let type of marketTypeList' [value]='type.id'>
                                     {{type.name}}
@@ -217,9 +217,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm xây dựng</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.nam_xay_dung"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_xay_dung"
                                 multiple>
-                                <mat-option *ngFor='let year of builtYears' [value]='year'>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
                             </mat-select>
@@ -229,9 +229,9 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm ngừng hoạt động</mat-label>
-                            <mat-select (selectionChange)="applyFilter()" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
                                 multiple>
-                                <mat-option *ngFor='let year of holdYears' [value]='year'>
+                                <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
                             </mat-select>
@@ -551,14 +551,14 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tổng hợp</mat-label>
-                                        <input matInput type="number" formControlName="tong_hop">
+                                        <input matInput type="text" formControlName="tong_hop">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Chuyên doanh</mat-label>
-                                        <input matInput type="number" formControlName="chuyen_doanh">
+                                        <input matInput type="text" formControlName="chuyen_doanh">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -576,14 +576,20 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm xây dựng</mat-label>
-                                        <input matInput type="number" formControlName="nam_xay_dung">
+                                        <mat-select formControlName="nam_xay_dung">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm ngừng hoạt động</mat-label>
-                                        <input matInput type="number" formControlName="nam_ngung_hoat_dong">
+                                        <mat-select formControlName="nam_ngung_hoat_dong">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>

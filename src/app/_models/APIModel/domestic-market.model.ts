@@ -36,6 +36,11 @@ export class BusinessTypeModel {
     ten_loai_hinh: string;
 }
 
+export class FieldModel {
+    id_linh_vuc: number;
+    ten_linh_vuc: string;
+}
+
 export class filter {
     public filed_name: string;
     public detail_name: string;

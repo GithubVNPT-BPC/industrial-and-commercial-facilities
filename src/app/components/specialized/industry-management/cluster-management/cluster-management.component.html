@@ -59,7 +59,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
 
-                            <mat-select [(ngModel)]="filterModel.id_quan_huyen" (selectionChange)="applyFilter()"
+                            <mat-select [(ngModel)]="filterModel.id_quan_huyen" (selectionChange)="applyFilter($event)"
                                 multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
@@ -71,7 +71,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht" (selectionChange)="applyFilter()"
+                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht" (selectionChange)="applyFilter($event)"
                                 multiple>
                                 <mat-option *ngFor='let hienTrang of hienTrangHaTang' [value]='hienTrang.id'>
                                     {{hienTrang.ten_hien_trang_ha_tang}}
@@ -83,7 +83,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt" (selectionChange)="applyFilter()"
+                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt" (selectionChange)="applyFilter($event)"
                                 multiple>
                                 <mat-option *ngFor='let hienTrang of hienTrangXLNT' [value]='hienTrang.id'>
                                     {{hienTrang.ten_hien_trang_xlnt}}
@@ -105,10 +105,10 @@
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <!-- <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
-                        </button> -->
+                        </button>
                         <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
                             (click)="switchEditMode()" [hidden]=authorize>
                             <mat-icon>edit</mat-icon>

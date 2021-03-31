@@ -29,12 +29,12 @@ export class ManageApproveHddlComponent implements OnInit {
   getDataConsultantElectric() {
     this.energyService.LayDuLieuTuVanDien().subscribe((res) => {
       if (res["success"]) {
-        this.handdleData(res["data"]);
+        this.handleData(res["data"]);
       }
     });
   }
 
-  handdleData(data: any[]) {
+  handleData(data: any[]) {
     data.filter((item) => {
       if (item["id_group"] === 1) this.consualtantData.push(item);
       if (item["id_group"] === 2) this.manufacturingData.push(item);

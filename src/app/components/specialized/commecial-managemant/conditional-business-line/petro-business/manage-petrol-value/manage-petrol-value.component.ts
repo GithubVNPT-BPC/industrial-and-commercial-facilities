@@ -8,10 +8,14 @@ import { MatDialog } from '@angular/material';
 import { AddSupplyBusinessComponent } from '../add-supply-business/add-supply-business.component';
 import { SelectionModel } from '@angular/cdk/collections';
 
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import {
   PetrolList,
   DistrictModel,
-  DeleteModel
+  DeleteModel,
+  Businessman
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -66,8 +70,22 @@ export class ManagePetrolValueComponent implements OnInit {
     public router: Router,
     public _info: InformationService,
     public dialog: MatDialog,
-    public _login: LoginService
+    public _login: LoginService,
+    private _breadCrumService: BreadCrumService,
   ) {
+  }
+
+  protected LINK_DEFAULT: string = "";
+  protected TITLE_DEFAULT: string = "KINH DOANH XĂNG DẦU";
+  protected TEXT_DEFAULT: string = "KINH DOANH XĂNG DẦU";
+  private _linkOutput: LinkModel = new LinkModel();
+
+  private sendLinkToNext(type: boolean): void {
+    this._linkOutput.link = this.LINK_DEFAULT;
+    this._linkOutput.title = this.TITLE_DEFAULT;
+    this._linkOutput.text = this.TEXT_DEFAULT;
+    this._linkOutput.type = type;
+    this._breadCrumService.sendLink(this._linkOutput);
   }
 
   // public AddSupplyBusiness(data: any) {
@@ -82,7 +100,6 @@ export class ManagePetrolValueComponent implements OnInit {
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    // const numRows = this.dataSource.data.length;
     const numRows = this.dataSource1.connect().value.length;
     return numSelected === numRows;
   }
@@ -116,8 +133,7 @@ export class ManagePetrolValueComponent implements OnInit {
       }
       this._Service.DeletePetrolValue(this.deletemodel1).subscribe(res => {
         this._info.msgSuccess('Xóa thành công')
-        this.date = this.newdate
-        this.ngOnInit();
+        window.location.reload();
         this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
@@ -138,10 +154,14 @@ export class ManagePetrolValueComponent implements OnInit {
 
   ngOnInit() {
     this.autoOpen();
-    this.getPetrolListbyYear(this.getCurrentYear())
+    this.getPetrolListbyYear('', '');
     this.getQuan_Huyen();
+    this.getBusinessList();
+    this.sendLinkToNext(true);
+    this.date = null
+    this.UpdatedDate = null
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -189,72 +209,159 @@ export class ManagePetrolValueComponent implements OnInit {
     'id_san_luong',
     'time_id'
   ];
-  dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+
   dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-  dataSource3: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
   petrollist: Array<PetrolList> = new Array<PetrolList>();
   petrollist1: Array<PetrolList> = new Array<PetrolList>();
   petrollist2: Array<PetrolList> = new Array<PetrolList>();
+  petrollist3: Array<PetrolList> = new Array<PetrolList>();
 
-  getPetrolListbyYear(year: string) {
-    this._Service.GetPetrolValue(year).subscribe(all => {
-      this.petrollist = all.data[0];
-      this.petrollist1 = all.data[1];
-      this.petrollist2 = this.petrollist.map(x => {
-        let temp = this.petrollist1.filter(y => y.id_san_luong == x.id_san_luong)
+  getPetrolListbyYear(year: string, year1: string) {
+    if (year == '') {
+      this._Service.GetAllPetrolValue().subscribe(all => {
+        this.petrollist = all.data[0];
+        this.petrollist1 = all.data[1];
+        this.petrollist2 = this.petrollist.map(x => {
+          let temp = this.petrollist1.filter(y => y.id_san_luong == x.id_san_luong)
 
-        let temp1 = temp.map(z => z.ten_thuong_nhan)
-        if (temp1 == undefined || temp1 == null) {
-          x.ten_thuong_nhan = null
+          let temp1 = temp.map(z => z.ten_thuong_nhan)
+          if (temp1 == undefined || temp1 == null) {
+            x.ten_thuong_nhan = null
+          }
+          else {
+            x.ten_thuong_nhan = temp1.join('; ')
+          }
+
+          let temp2 = temp.map(z => z.dia_chi_tn)
+          if (temp2 == undefined || temp2 == null) {
+            x.dia_chi_tn = null
+          }
+          else {
+            x.dia_chi_tn = temp2.join('; ')
+          }
+
+          let temp3 = temp.map(z => z.so_dien_thoai_tn)
+          if (temp3 == undefined || temp3 == null) {
+            x.so_dien_thoai_tn = null
+          }
+          else {
+            x.so_dien_thoai_tn = temp3.join('; ')
+          }
+
+          return x
+        })
+
+        this.petrollist3 = this.petrollist2
+        this.petrollist3.forEach(element => {
+          if (element.ngay_het_han) {
+            let temp = this.Convertdate(element.ngay_het_han)
+            element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+          }
+          else {
+            element.is_het_han = false
+          }
+          element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+          element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
+        });
+
+        if (year1 == '') {
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false)
         }
         else {
-          x.ten_thuong_nhan = temp1.join('; ')
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false && x.time_id == year1)
         }
 
-        let temp2 = temp.map(z => z.dia_chi_tn)
-        if (temp2 == undefined || temp2 == null) {
-          x.dia_chi_tn = null
-        }
-        else {
-          x.dia_chi_tn = temp2.join('; ')
-        }
+        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
 
-        let temp3 = temp.map(z => z.so_dien_thoai_tn)
-        if (temp3 == undefined || temp3 == null) {
-          x.so_dien_thoai_tn = null
-        }
-        else {
-          x.so_dien_thoai_tn = temp3.join('; ')
-        }
+        let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
+        this.SLDoanhNghiep = unique.length;
 
-        return x
+        this.dataSource1.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
       })
+    }
+    else {
+      this._Service.GetPetrolValue(year).subscribe(all => {
+        this.petrollist = all.data[0];
+        this.petrollist1 = all.data[1];
+        this.petrollist2 = this.petrollist.map(x => {
+          let temp = this.petrollist1.filter(y => y.id_san_luong == x.id_san_luong)
 
-      this.dataSource.data = this.petrollist2
-      this.dataSource.data.forEach(element => {
-        if (element.ngay_het_han) {
-          let temp = this.Convertdate(element.ngay_het_han)
-          element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+          let temp1 = temp.map(z => z.ten_thuong_nhan)
+          if (temp1 == undefined || temp1 == null) {
+            x.ten_thuong_nhan = null
+          }
+          else {
+            x.ten_thuong_nhan = temp1.join('; ')
+          }
+
+          let temp2 = temp.map(z => z.dia_chi_tn)
+          if (temp2 == undefined || temp2 == null) {
+            x.dia_chi_tn = null
+          }
+          else {
+            x.dia_chi_tn = temp2.join('; ')
+          }
+
+          let temp3 = temp.map(z => z.so_dien_thoai_tn)
+          if (temp3 == undefined || temp3 == null) {
+            x.so_dien_thoai_tn = null
+          }
+          else {
+            x.so_dien_thoai_tn = temp3.join('; ')
+          }
+
+          return x
+        })
+
+        this.petrollist3 = this.petrollist2
+        this.petrollist3.forEach(element => {
+          if (element.ngay_het_han) {
+            let temp = this.Convertdate(element.ngay_het_han)
+            element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+          }
+          else {
+            element.is_het_han = false
+          }
+          element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
+          element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
+        });
+
+        if (year1 == '') {
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false)
         }
         else {
-          element.is_het_han = false
+          this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == false && x.time_id == year1)
         }
-        element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
-        element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
-      });
-      this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
 
-      this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
-      this.SLThuongNhan = this.petrollist1.length;
-      let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
-      this.SLDoanhNghiep = unique.length;
+        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
 
-      this.dataSource1.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
+        this.SLDoanhNghiep = unique.length;
+
+        this.dataSource1.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
+      })
+    }
+  }
+
+  filterdatasource: Array<Businessman> = new Array<Businessman>();
+  filterdatasource1: Array<Businessman> = new Array<Businessman>();
+
+  getBusinessList() {
+    this._Service.GetBusinessman().subscribe(all => {
+      this.filterdatasource = all.data
+      this.filterdatasource1 = this.filterdatasource.filter(x => x.id_linh_vuc == this.id_linh_vuc)
+
+      this.SLThuongNhan = this.filterdatasource1.length
     })
   }
 
@@ -284,15 +391,28 @@ export class ManagePetrolValueComponent implements OnInit {
   applyDistrictFilter(event) {
     let filteredData = [];
 
-    event.value.forEach(element => {
-      this.dataSource.data.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-    });
+    if (this.theYear1 != undefined) {
+      event.value.forEach(element => {
+        this.petrollist3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase()) && x.time_id == this.theYear1.toString()).forEach(x => filteredData.push(x));
+      });
+    }
+    else {
+      event.value.forEach(element => {
+        this.petrollist3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+      });
+    }
 
     if (!filteredData.length) {
       if (event.value.length)
         this.dataSource1.data = [];
       else
-        this.dataSource1.data = this.dataSource.data;
+        if (this.theYear1 != undefined) {
+          this.dataSource1.data = this.petrollist3.filter(x => x.time_id == this.theYear1.toString());
+        }
+        else {
+          this.dataSource1.data = this.petrollist3
+        }
+
     }
     else {
       this.dataSource1.data = filteredData;
@@ -304,7 +424,13 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   applyExpireCheck(event) {
-    this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+    if (this.theYear1 != undefined) {
+      this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == event.checked && x.time_id == this.theYear1.toString())
+    }
+    else {
+      this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == event.checked)
+    }
+
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
     let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
     this.SLDoanhNghiep = unique.length;
@@ -327,16 +453,33 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   public date = new FormControl(_moment());
+  public date1 = new FormControl(_moment());
+  public date2 = new FormControl(_moment());
   public theYear: number;
+  public theYear1: number;
 
   public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+    this.date = this.date1
     const ctrlValue = this.date.value;
     ctrlValue.year(normalizedYear.year());
     this.date.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
     datepicker.close();
     this.selection.clear();
-    this.getPetrolListbyYear(this.theYear.toString())
+    this.getPetrolListbyYear(this.theYear.toString(), this.theYear1 ? this.theYear1.toString() : '')
+  }
+
+  public UpdatedDate = new FormControl(_moment());
+
+  public chosenYearHandler1(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
+    this.UpdatedDate = this.date2
+    const ctrlValue = this.UpdatedDate.value;
+    ctrlValue.year(normalizedYear.year());
+    this.UpdatedDate.setValue(ctrlValue);
+    this.theYear1 = normalizedYear.year();
+    datepicker.close();
+    this.selection.clear();
+    this.getPetrolListbyYear(this.theYear ? this.theYear.toString() : '', this.theYear1.toString())
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
@@ -360,6 +503,10 @@ export class ManagePetrolValueComponent implements OnInit {
 
   Back() {
     this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+  }
+
+  Reset() {
+    window.location.reload();
   }
 
   OpenDetailPetrol(id: number, mst: string, time: string, id_san_luong: string) {

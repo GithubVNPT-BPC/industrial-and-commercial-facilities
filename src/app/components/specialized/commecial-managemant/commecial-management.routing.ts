@@ -36,6 +36,8 @@ import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
+import { DetailBorderTradeComponent } from './border-trade/detail-border-trade/detail-border-trade.component';
+import { BorderTradeOverviewComponent } from './border-trade/border-trade-overview/border-trade-overview.component';
 
 const routes: Routes = [
   {
@@ -295,13 +297,21 @@ const routes: Routes = [
     path: 'border_trade',
     // component: BorderTradeComponent
     children: [
+      // {
+      //   path: 'import',
+      //   component: BorderTradeImportComponent
+      // },
+      // {
+      //   path: 'export',
+      //   component: BorderTradeExportComponent
+      // }
       {
-        path: 'import',
-        component: BorderTradeImportComponent
+        path: 'detail',
+        component: DetailBorderTradeComponent
       },
       {
-        path: 'export',
-        component: BorderTradeExportComponent
+        path: 'overview',
+        component: BorderTradeOverviewComponent
       }
     ]
   },

@@ -42,6 +42,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     filterModel = {
         id_quan_huyen: [],
         nganh_nghe_kd_chinh: [],
+        ngay_cap: [],
     }
 
     dataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
@@ -266,6 +267,11 @@ export class ChemicalManagementComponent extends BaseComponent {
                 if (filterName == 'nganh_nghe_kd_chinh') {
                     filters[filterName].forEach(criteria => {
                         filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].trim().toLowerCase().includes(criteria.trim().toLowerCase())));
+                    });
+                } else if (filterName == 'ngay_cap') {
+                    filters[filterName].forEach(criteria => {
+                        if (criteria && criteria !=0) filterCrits = filterCrits.concat(filteredData.filter(x => x[filterName].toString().includes(criteria)));
+                        else filterCrits = filterCrits.concat(filteredData);
                     });
                 } else {
                     filters[filterName].forEach(criteria => {
