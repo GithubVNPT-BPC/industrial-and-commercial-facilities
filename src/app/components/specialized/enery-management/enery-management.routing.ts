@@ -106,6 +106,13 @@ const routes: Routes = [
         },
         component: RuralElectricManagementComponent
       },
+      {
+        path: 'key_enegy',
+        data: {
+          title: 'Năng lượng trọng điểm'
+        },
+        component: KeyEnegyComponent
+      }
     ],
   },
 
