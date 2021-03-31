@@ -29,7 +29,7 @@ export class FillSelectReportComponent implements OnInit {
   selectedobject: any;
   selectedMonth: number = 1;
   months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  selectedYear: number = 2020;
+  selectedYear: number = 0;
   years: Array<number> = [];
   selectedQuarter: number = 0;
   quarters: Object[] = [{ ma_so: 1, ma_chu: "I" }, { ma_so: 2, ma_chu: "II" }, { ma_so: 3, ma_chu: "III" }, { ma_so: 4, ma_chu: "IV" }];
@@ -203,9 +203,9 @@ export class FillSelectReportComponent implements OnInit {
   InitialYears() {
     let returnYear: Array<any> = [];
     let currentDate = new Date();
-    let nextYear = currentDate.getFullYear() + 1;
-    for (let index = 0; index < 11; index++) {
-      returnYear.push(nextYear - index);
+    let nextYear = currentDate.getFullYear() - 1;
+    for (let index = 0; index < 6; index++) {
+      returnYear.push(nextYear + index);
     }
     return returnYear;
   }

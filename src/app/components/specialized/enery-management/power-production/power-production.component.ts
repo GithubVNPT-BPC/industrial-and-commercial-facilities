@@ -27,7 +27,7 @@ export class PowerProductionManagementComponent implements OnInit {
     protected LINK_DEFAULT: string = "/specialized/enery-management/power_production";
     protected TITLE_DEFAULT: string = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
     protected TEXT_DEFAULT: string = "Quy hoạch phát triển lưới điện - Điện sản xuất và thương phẩm";
-    displayedColumns: string[] = ['index', /**"obj_name",**/ "time_id", "edit"];
+    displayedColumns: string[] = ['index', /**"obj_name",**/ "time_id"/**, "edit"**/];
     dataSource: MatTableDataSource<any>;
     tempObject: ReportOject;
     filterObject: ReportOject;

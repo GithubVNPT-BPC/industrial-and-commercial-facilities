@@ -36,10 +36,9 @@ export class ViewSelectReportComponent implements OnInit {
   public readonly locale = 'en-US';
   reportTypes = [{ ma_so: null, noi_dung: '' }, { ma_so: 1, noi_dung: 'Tháng' }, { ma_so: 2, noi_dung: 'Quý' }, { ma_so: 3, noi_dung: '6 Tháng' }, { ma_so: 4, noi_dung: 'Năm' }];
   months: number[] = [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  selectedYear: number = 2020;
-  years: number[] = [2020, 2019, 2018];
+  selectedYear: number ;
+  years: number[] = [];
   quarters: number[] = [null, 1, 2, 3, 4];
-  halfs: number[] = [1];
   org_id: number = 0;
   orgarnizations: string[] = ['', 'Sở Công thương', /**'Văn Phòng Sở Công Thương', 'Thanh Tra Sở Công Thương',**/ 'Phòng Quản Lý Công Nghiệp', 'Phòng Quản Lý Thương Mại', 'Phòng Quản Lý Năng Lượng'];
   periods: Object[];
@@ -56,9 +55,10 @@ export class ViewSelectReportComponent implements OnInit {
     this.tempObject = new ReportOject();
     this.filterType = MatTableFilter.ANYWHERE;
 
+    this.years = this.InitialYears();
+    this.selectedYear = this.GetCurrentYear();
     let data: any = JSON.parse(localStorage.getItem('currentUser'));
     this.org_id = parseInt(data.org_id);
-    console.log(this.org_id)
     this.GetViewAllReport();
   }
   GetViewAllReport() {
@@ -125,9 +125,9 @@ export class ViewSelectReportComponent implements OnInit {
   InitialYears() {
     let returnYear: Array<any> = [];
     let currentDate = new Date();
-    let nextYear = currentDate.getFullYear() + 1;
-    for (let index = 0; index < 11; index++) {
-      returnYear.push(nextYear - index);
+    let nextYear = currentDate.getFullYear() - 1;
+    for (let index = 0; index < 5; index++) {
+      returnYear.push(nextYear + index);
     }
     return returnYear;
   }
@@ -144,10 +144,10 @@ export class ViewSelectReportComponent implements OnInit {
       case 2: this.periods = this.quarters;
         this.tempObject.submit_type_name = 'Báo cáo quý';
         break;
-      case 3: this.periods = this.halfs;
+      case 3: this.periods = null;
         this.tempObject.submit_type_name = 'Báo cáo 6 tháng';
         break;
-      case 4: this.periods = this.halfs;
+      case 4: this.periods = null;
         this.tempObject.submit_type_name = 'Báo cáo năm';
         break;
       default: this.periods = [];

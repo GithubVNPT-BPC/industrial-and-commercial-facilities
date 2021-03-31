@@ -43,15 +43,15 @@
 
                 <ng-container matColumnDef="time_id">
                     <th mat-header-cell *matHeaderCellDef> Kỳ báo cáo</th>
-                    <td mat-cell *matCellDef="let element;" (click)="OpenDetailObject(element.time_id)" class="jump"> {{element.time_id_text}} </td>
+                    <td mat-cell *matCellDef="let element;" (click)="OpenDetailObject(element.time_id)" class="jump center-cell"> {{element.time_id_text}} </td>
                 </ng-container>
-
+<!-- 
                 <ng-container matColumnDef="edit">
                     <th mat-header-cell *matHeaderCellDef> Xem chi tiết </th>
-                    <td mat-cell *matCellDef="let element" (click)="OpenDetailObject(element.time_id)" class="jump">
+                    <td mat-cell *matCellDef="let element" (click)="OpenDetailObject(element.time_id)" class="jump center-cell">
                         <mat-icon>visibility</mat-icon>
                     </td>
-                </ng-container>
+                </ng-container> -->
 
                 <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>

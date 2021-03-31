@@ -23,6 +23,7 @@ interface HashTableNumber<T> {
 
 export class ReportExplosivesComponent extends BaseComponent {
   //Constant
+  public readonly LINK_REPORT: string = '/report/edit';
   public readonly OBJ_ID_6TH: number = 9;
   public readonly OBJ_ID_12TH: number =  10;
   public TIME_ID: number = new Date().getFullYear();
@@ -89,7 +90,7 @@ export class ReportExplosivesComponent extends BaseComponent {
   ngOnInit(): void {
     super.ngOnInit();
     let data: any = JSON.parse(localStorage.getItem("currentUser"));
-    this._org_id = 1;
+    this._org_id = 3;
     this._obj_id = this.getMaBC(this.term);
     this._time_id = this.TIME_ID;
     this.GetReportById(this._time_id, this._obj_id);
@@ -108,7 +109,6 @@ export class ReportExplosivesComponent extends BaseComponent {
   }
 
   GetReport(){
-    console.log(this.term, this._time_id);
     let mabc = this.getMaBC(this.term);
     this.GetReportById(this._time_id, mabc);
   }
@@ -535,7 +535,8 @@ export class ReportExplosivesComponent extends BaseComponent {
     // console.log(e)
   }
 
-  TypeReport(){
-    this.router.navigate(['../../report/all']);
+  OpenDetail(){
+    this._obj_id = this.getMaBC(this.term);
+    this.router.navigate([this.LINK_REPORT], { queryParams: { time_id : this._time_id, org_id : this._org_id, obj_id : this._obj_id} });
   }
 }
