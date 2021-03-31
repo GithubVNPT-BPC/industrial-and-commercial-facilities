@@ -17,6 +17,7 @@ import { merge } from "rxjs";
 import moment from "moment";
 import { ThrowStmt } from "@angular/compiler";
 import { AttachSession } from "protractor/built/driverProviders";
+import { time } from "highcharts";
 
 interface HashTableNumber<T> {
   [key: string]: T;
@@ -225,7 +226,8 @@ export class FillReportComponent implements OnInit {
 
   ngOnInit(): void {
     let data: any = JSON.parse(localStorage.getItem("currentUser"));
-    this.org_id = parseInt(data.org_id);
+    if (this.org_id == 0)
+      this.org_id = parseInt(data.org_id);
 
     this.GetReportById(this.obj_id, this.time_id, this.org_id);
     this.keyboardservice.keyBoard.subscribe((res) => {
@@ -303,11 +305,11 @@ export class FillReportComponent implements OnInit {
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
-        this.is_sent = !(
-          allRecord.data[0][0].state_id == 101 ||
-          allRecord.data[0][0].state_id == 401
-        );
         if (this.object[0]) {
+          this.is_sent = !(
+            this.object[0].state_id == 101 ||
+            this.object[0].state_id == 401
+          );
           this.formatFrameReport(this.object[0]);
         }
         this.indicators.sort((a, b) => a.ind_id - b.ind_id);

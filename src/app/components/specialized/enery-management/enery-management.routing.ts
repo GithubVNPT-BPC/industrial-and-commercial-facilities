@@ -14,7 +14,6 @@ import { PowerProductionManagementComponent } from './power-production/power-pro
 import { RuralElectricManagementComponent } from './rural-electric/rural-electric-management.component';
 import { KeyEnegyComponent } from './key-enegy/key-enegy.component';
 import { MonthDetailComponent } from './power-production/month-detail/month-detail.component';
-
 const routes: Routes = [
 
   {
@@ -89,7 +88,7 @@ const routes: Routes = [
       {
         path: 'power-production-month-detail',
         data: {
-          title: 'Công tác phát triển lưới điện 35KV trở xuống',
+          title: 'Chi tiết điện sản xuất và điện thương phẩm',
         },
         component: MonthDetailComponent,
       },
@@ -107,13 +106,6 @@ const routes: Routes = [
         },
         component: RuralElectricManagementComponent
       },
-      {
-        path: 'key_enegy',
-        data: {
-          title: 'Năng lượng trọng điểm'
-        },
-        component: KeyEnegyComponent
-      }
     ],
   },
 

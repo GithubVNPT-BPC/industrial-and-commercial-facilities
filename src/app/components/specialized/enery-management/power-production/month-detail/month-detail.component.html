@@ -33,7 +33,7 @@
             <div class="col-4" style="text-align: right;">
                 <button mat-raised-button (click)="GetReportById(this.time_id)">Xem dữ liệu</button>
                 <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
-                    (click)="exportToExcel('BaoCao','DuLieuBaoCao')">Xuất Excel</button>
+                    (click)="exportToExcel('Điện sản xuất và điện thương phẩm - ' + this.thoigianbaocao, this.thoigianbaocao)">Xuất Excel</button>
                 <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401"
                     (click)="OpenDetail()">Sửa dữ liệu</button>
             </div>

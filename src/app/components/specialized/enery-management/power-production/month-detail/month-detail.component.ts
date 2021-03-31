@@ -58,9 +58,9 @@ export class MonthDetailComponent implements OnInit {
         'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP',
         'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ'];
 
-    obj_id: number = 1;
+    obj_id: number = 3;
     time_id: number;
-    org_id: number = 0;
+    org_id: number = 5;
     rows: number = 0;
     state_id: number = 0;
 
@@ -98,7 +98,6 @@ export class MonthDetailComponent implements OnInit {
         this.route.queryParams.subscribe(params => {
             this.time_id = params['time_id'];
         });
-        console.log(this.time_id)
     }
 
     move(object) {
@@ -128,7 +127,7 @@ export class MonthDetailComponent implements OnInit {
     ngOnInit(): void {
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
         //this.org_id = parseInt(data.org_id);
-        this.org_id = 4;
+        this.org_id = 5;
         this.years = this.InitialYears();
         this.selectedYear = new Date().getFullYear();
         this.selectedMonth = new Date().getMonth();
