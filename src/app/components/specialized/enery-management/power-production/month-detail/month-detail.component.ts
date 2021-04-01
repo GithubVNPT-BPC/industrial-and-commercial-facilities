@@ -25,13 +25,13 @@ interface HashTableNumber<T> {
 }
 
 @Component({
-    selector: 'retail-month',
-    templateUrl: './retail-month.component.html',
+    selector: 'app-month-detail',
+    templateUrl: './month-detail.component.html',
     styleUrls: ['../../../../report/report_layout.scss'],
 })
 
 
-export class RetailMonthComponent implements OnInit {
+export class MonthDetailComponent implements OnInit {
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
     public readonly TYPE_INDICATOR_INPUT: number = 1;
@@ -39,9 +39,9 @@ export class RetailMonthComponent implements OnInit {
     public readonly UNIT_CODE: string = 'IND_UNIT';
     public readonly ATTRIBUTE_DEFAULT: number = 1;
 
-    private readonly LINK_DEFAULT: string = "/specialized/commecial-management/retail-detail";
-    private readonly TITLE_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
-    private readonly TEXT_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
+    private readonly LINK_DEFAULT: string = "/specialized/enery-management/power-production-month-detail";
+    private readonly TITLE_DEFAULT: string = "Điện sản xuất và thương phẩm";
+    private readonly TEXT_DEFAULT: string = "Điện sản xuất và thương phẩm";
 
     public tableMergeHader: Array<ToltalHeaderMerge> = [];
     public mergeHeadersColumn: Array<string> = [];
@@ -58,9 +58,9 @@ export class RetailMonthComponent implements OnInit {
         'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP',
         'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ'];
 
-    obj_id: number = 1;
+    obj_id: number = 3;
     time_id: number;
-    org_id: number = 0;
+    org_id: number = 5;
     rows: number = 0;
     state_id: number = 0;
 
@@ -127,7 +127,7 @@ export class RetailMonthComponent implements OnInit {
     ngOnInit(): void {
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
         //this.org_id = parseInt(data.org_id);
-        this.org_id = 4;
+        this.org_id = 5;
         this.years = this.InitialYears();
         this.selectedYear = new Date().getFullYear();
         this.selectedMonth = new Date().getMonth();
@@ -205,7 +205,9 @@ export class RetailMonthComponent implements OnInit {
             allRecord => {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
-                    this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+                    this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+                    console.log(this.attributes)
+                    // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];
                     this.object = allRecord.data[0];

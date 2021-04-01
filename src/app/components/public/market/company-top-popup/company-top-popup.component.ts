@@ -64,9 +64,7 @@ export class CompanyTopPopup implements OnInit {
     }
 
     OpenDetailCompany(mst: string) {
-        let url = this.router.serializeUrl(
-            this.router.createUrlTree(['public/partner/search/' + mst]));
-        window.open(url, "_blank");
+        window.open('/#/public/partner/search/' + mst, "_blank");
     }
 
     public exportTOExcel(filename: string, sheetname: string) {

@@ -73,7 +73,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         return {
             mst: new FormControl(),
             dia_chi: new FormControl(),
-            id_phuong_xa: new FormControl(),
+            id_quan_huyen: new FormControl(),
             time_id: new FormControl(2021),
             thuoc_no: new FormControl(0),
             kip_no: new FormControl(0),

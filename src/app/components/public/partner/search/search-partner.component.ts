@@ -93,8 +93,8 @@ export class SearchPartnerComponent implements OnInit {
   }
 
   temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
-  selected_field: string = 'ten_doanh_nghiep';
-  countNumberCondition: any[] = [{ id: 1, filed_name: 'ten_doanh_nghiep', filed_value: '' }];
+  selected_field: string = 'mst';
+  countNumberCondition: any[] = [{ id: 1, filed_name: 'mst', filed_value: '' }];
   count: number = 1;
 
   isSearch_Advanced: boolean = true;
@@ -120,7 +120,7 @@ export class SearchPartnerComponent implements OnInit {
 
   add_condition() {
     this.count++;
-    let new_ob = { id: this.count, filed_name: 'ten_doanh_nghiep', filed_value: '' }
+    let new_ob = { id: this.count, filed_name: 'mst', filed_value: '' }
     this.countNumberCondition.push(new_ob);
   }
 

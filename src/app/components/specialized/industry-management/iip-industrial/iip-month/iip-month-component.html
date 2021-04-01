@@ -1,8 +1,37 @@
 <mat-card class="material">
     <mat-card-content>
         <div class="row">
-            <div class="col-9 col-lg-9">
-                <mat-card-header *ngIf="object[0]">
+            <div class="col-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Năm thực hiện</mat-label>
+                    <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedYear">
+                        <mat-option *ngFor="let year of years" [value]="year">{{ year }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="col-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Tháng thực hiện</mat-label>
+                    <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedMonth">
+                        <mat-option *ngFor="let month of months" [value]="month">{{ month }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-4 my-auto text-center">
+                <button mat-raised-button (click)="GetReportById(this.time_id)">Xem dữ liệu</button>
+                <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
+                    (click)="exportToExcel('Chỉ số sản xuất công nghiệp - ' + this.thoigianbaocao, this.thoigianbaocao)">Xuất
+                    Excel</button>
+                <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401"
+                    (click)="OpenDetail()">Sửa dữ liệu</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <mat-card-header *ngIf="this.object[0]">
                     <mat-card-title>
                         <h2 style="padding-left: 20px;">{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
                         </h2>
@@ -13,33 +42,13 @@
                     </mat-card-subtitle>
                 </mat-card-header>
             </div>
-
-            <div class="col-3 col-lg-3 button-control">
-                <button mat-raised-button (click)="exportToExcel('Chỉ số IIP chi tiết','Chỉ số IIP chi tiết')">Xuất
-                    Excel</button>
-
-                <button mat-raised-button (click)="Back()">
-                    <mat-icon>keyboard_backspace</mat-icon>
-                </button>
-            </div>
         </div>
-
-        <mat-card-header *ngIf="object[0]">
-            <mat-card-title>
-                <h5 style="padding-left: 20px;">{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
-                </h5>
-            </mat-card-title>
-            <mat-card-subtitle>
-                <p style="padding-left: 40px;">Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
-                    ngày <strong>{{ngayketthucbaocao}}</strong></p>
-            </mat-card-subtitle>
-        </mat-card-header>
 
         <div class="layout" *ngIf="dataSource.data.length; else ShowList" #TABLE>
             <!-- <mat-form-field>
-            <mat-label>Lọc dữ liệu</mat-label>
-            <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
-        </mat-form-field> -->
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field> -->
 
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
 
@@ -49,15 +58,15 @@
                 </ng-container>
 
                 <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
-                column.attr_code.toLowerCase() : 
-                column.fld_code.toLowerCase()">
+                        column.attr_code.toLowerCase() : 
+                        column.fld_code.toLowerCase()">
                     <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
-                    ngược lại thì lấy cột fld_code (cột dữ liệu) -->
+                            ngược lại thì lấy cột fld_code (cột dữ liệu) -->
                     <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
                     <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
-                'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
+                        'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
                         <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
-                    nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
+                            nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
                         <div
                             [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
                             {{row[column.is_default === 1? column.attr_code.toLowerCase():
@@ -65,8 +74,8 @@
                         </div>
                         <!-- && indicators[rowIndex].ind_type_id != '1' -->
                         <!-- <ng-template #other_content>
-                        <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
-                    </ng-template> -->
+                                <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                            </ng-template> -->
                     </td>
                 </ng-container>
 
@@ -83,6 +92,7 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index"></tr>
             </table>
         </div>
+
         <ng-template #ShowList>
             <h1>Không có dữ liệu</h1>
         </ng-template>

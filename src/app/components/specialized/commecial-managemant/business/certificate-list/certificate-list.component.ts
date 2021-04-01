@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { formatDate, Location } from '@angular/common';
 import { InformationService } from 'src/app/shared/information/information.service';
@@ -9,7 +9,8 @@ import { MatDialog } from '@angular/material';
 
 import {
   DeleteModel,
-  CertificateModel
+  CertificateModel,
+  FieldList
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -57,6 +58,7 @@ export class CertificateListComponent implements OnInit {
     'index',
     'mst',
     'so_giay_phep',
+    'id_linh_vuc',
     'ngay_cap',
     'ngay_het_han',
     'noi_cap',
@@ -143,9 +145,18 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
+  public Field: Array<FieldList> = new Array<FieldList>();
+
+  GetLinhVuc() {
+    this._Service.GetField().subscribe((allrecords) => {
+      this.Field = allrecords.data as FieldList[];
+    });
+  }
+
   ngOnInit() {
     this.getBusinessList();
     this.autoOpen();
+    this.GetLinhVuc();
   }
 
   autoOpen() {

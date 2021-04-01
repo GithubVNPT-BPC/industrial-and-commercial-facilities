@@ -95,6 +95,17 @@
                                 class="jump"> {{element.so_giay_phep}} </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="id_linh_vuc">
+                            <th mat-header-cell *matHeaderCellDef> Lĩnh vực quản lý </th>
+                            <td mat-cell *matCellDef="let element">
+                                <select [(ngModel)]="element.id_linh_vuc" disabled>
+                                    <option *ngFor="let item of Field" [value]="item.id_linh_vuc">
+                                        {{item.ten_linh_vuc}}
+                                    </option>
+                                </select>
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="ngay_cap">
                             <th mat-header-cell *matHeaderCellDef> Ngày cấp </th>
                             <td mat-cell *matCellDef="let element"> {{element.ngay_cap}}</td>
