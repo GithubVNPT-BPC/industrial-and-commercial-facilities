@@ -122,7 +122,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     getFormParams() {
         return {
             mst: new FormControl(),
-            time_id: new FormControl({ value: this.currentYear }),
+            time_id: new FormControl(this.currentYear),
             details: this.formBuilder.array([
                 this.formBuilder.group({
                     id_hoa_chat: [],
