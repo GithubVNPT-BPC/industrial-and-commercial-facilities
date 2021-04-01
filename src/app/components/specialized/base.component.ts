@@ -20,7 +20,7 @@ import moment from 'moment';
 export abstract class BaseComponent implements OnInit {
 
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator, undefined) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
 
     protected _linkOutput: LinkModel = new LinkModel();
@@ -105,6 +105,8 @@ export abstract class BaseComponent implements OnInit {
         if (this.view == 'list') {
             this.view = 'form';
         } else {
+            // Temporary this.ngOnInit()
+            this.ngOnInit();
             this.view = 'list';
             this.mode = 'create';
             this.formData.reset();
