@@ -144,6 +144,7 @@ export class ClusterManagementComponent extends BaseComponent {
         })
         return temp;
     }
+    
     getFormParams() {
         return {
             ten_cum: new FormControl(''),
