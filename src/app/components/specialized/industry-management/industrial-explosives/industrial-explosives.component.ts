@@ -17,10 +17,10 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class IndustrialExplosivesComponent extends BaseComponent {
 
-    displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep',  'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep',  'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
 
-    totalColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd', 'dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    totalColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no',
         'moi_no', 'day_no'];
 
@@ -36,6 +36,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
     tongMucSanLuong: number = 0;
+    
     filterModel = { 
         id_quan_huyen: [], 
         id_tinh_trang_hoat_dong: [],
@@ -57,10 +58,14 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     ngOnInit() {
         super.ngOnInit();
         this.getPostExplosiveMatData(this.currentYear);
-
+        this.initDistrictWard();
         if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
+    }
+
+    ngAfterViewInit() {
+        this.paginator = this.filteredDataSource.paginator;
     }
 
     getLinkDefault() {
@@ -73,8 +78,8 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         return {
             mst: new FormControl(),
             dia_chi: new FormControl(),
-            id_quan_huyen: new FormControl(),
-            time_id: new FormControl(2021),
+            id_phuong_xa: new FormControl(),
+            time_id: new FormControl(this.currentYear),
             thuoc_no: new FormControl(0),
             kip_no: new FormControl(0),
             moi_no: new FormControl(0),
@@ -126,7 +131,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     }
 
     private _prepareData() {
-        this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong).reduce((a, b) => a + b) : 0;
+        this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong || 0).reduce((a, b) => a + b) : 0;
         this.tongCongSuatThietKe = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
         this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong).reduce((a, b) => a + b) : 0;
     }

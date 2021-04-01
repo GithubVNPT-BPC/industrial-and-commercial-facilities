@@ -35,7 +35,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     ngay_thang_nam_van_ban: "Ngày/tháng/năm",
   }
 
-  filterComponents = {
+  filterModel = {
     id_quan_huyen: [],
     ten_hinh_thuc: [],
   }
@@ -106,55 +106,13 @@ export class SubscribeDiscountComponent extends BaseComponent {
     )
   }
 
-  addAddress() {
+  addAddress(event) {
+    event.preventDefault();
     this.danh_sach_dia_diem.push(this.newAddress())
   }
 
   removeAddress(i: number) {
     this.danh_sach_dia_diem.removeAt(i);
-  }
-
-  applyFilter(event) {
-    let filterValues = event.target ? event.target.value : event.value;
-    if (filterValues instanceof Array) {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterComponents);
-      if (!filteredData.length) {
-        this.filteredDataSource.data = this.filterComponents ? [] : this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-    }
-    else {
-      this.filteredDataSource.filter = filterValues.trim().toLowerCase();
-    }
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      switch (key) {
-        case 'Id_quan_huyen':
-          if (filters[key].length) {
-            filters[key].forEach(criteria => {
-              temp2 = temp2.concat(temp.filter(x => x[key] == criteria || x[key] == 99));
-            });
-            temp = [...temp2];
-          }
-          break;
-        default:
-          if (filters[key].length) {
-            filters[key].forEach(criteria => {
-              temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-            });
-            temp = [...temp2];
-          }
-          break;
-      }
-    })
-    return temp;
   }
 
   getPromotionTypes(): void {
@@ -173,8 +131,9 @@ export class SubscribeDiscountComponent extends BaseComponent {
       result => {
         this.filteredDataSource.data = [];
         if (result.data && result.data.length > 0) {
-          this.dataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
-          this.filteredDataSource = new MatTableDataSource<SDModel>(this.handleData(result.data));
+          let data = this.handleData(result.data);
+          this.dataSource = new MatTableDataSource<SDModel>(data);
+          this.filteredDataSource = new MatTableDataSource<SDModel>(data);
         }
         this._prepareData();
         this.paginatorAgain();
@@ -183,7 +142,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     );
   }
 
-  handleData(data: SDModel) {
+  private handleData(data) {
     let ds_km: SDModel[] = data[0];
     let ds_dd_km: dia_diem_km[] = data[1];
     let dd_km_temp: dia_diem_km[] = [];
@@ -216,10 +175,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  removeSkill(i: number) {
-    this.danh_sach_dia_diem.removeAt(i);
-  }
-
   prepareRemoveData() {
     let datas = this.selection.selected.map(element => new Object({ id: element.id }));
     return datas;
@@ -227,5 +182,47 @@ export class SubscribeDiscountComponent extends BaseComponent {
 
   callRemoveService(data) {
     this.commerceManagementService.deletePromo(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  applyFilter(event) {
+    if (event.target) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    } else {
+        let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+        if (!filteredData.length) {
+            if (this.filterModel)
+                this.filteredDataSource.data = [];
+            else
+                this.filteredDataSource.data = this.dataSource.data;
+        }
+        else {
+            this.filteredDataSource.data = filteredData;
+        }
+    }
+    this._prepareData();
+    this.paginatorAgain();
+}
+
+  filterArray(dataSource, filters) {
+    const filterKeys = Object.keys(filters);
+    let filteredData = [...dataSource];
+    filterKeys.forEach(key => {
+        let filterCrits = [];
+        if (filters[key].length) {
+          if (key == 'id_quan_huyen') {
+            filters[key].forEach(criteria => {
+              filterCrits = filterCrits.concat(filteredData.filter(x => x.dia_diem_km.map(y => y.id_quan_huyen).includes(criteria)));
+            });
+          } else {
+            filters[key].forEach(criteria => {
+              filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+            });
+          }
+          filteredData = [...filterCrits];
+        }
+    })
+    return filteredData;
   }
 }
