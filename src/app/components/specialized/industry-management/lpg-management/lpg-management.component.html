@@ -248,6 +248,24 @@
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kỳ dữ liệu</mat-label>
+                                        <mat-select formControlName="time_id">
+                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Trạng thái</mat-label>
+                                        <mat-select formControlName="tinh_trang_hoat_dong">
+                                            <mat-option value="true">Hoạt động</mat-option>
+                                            <mat-option value="false">Ngừng hoạt động</mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </mat-card-content>
                     </div>

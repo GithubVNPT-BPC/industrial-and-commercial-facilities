@@ -85,19 +85,19 @@ const routes: Routes = [
         },
         component: ElectricDevelopmentManagementComponent
       },
-      {
-        path: 'power-production-month-detail',
-        data: {
-          title: 'Chi tiết điện sản xuất và điện thương phẩm',
-        },
-        component: MonthDetailComponent,
-      },
+      // {
+      //   path: 'power-production-month-detail',
+      //   data: {
+      //     title: 'Chi tiết điện sản xuất và điện thương phẩm',
+      //   },
+      //   component: MonthDetailComponent,
+      // },
       {
         path: 'power_production',
         data: {
           title: 'Điện sản xuất và điện thương phẩm',
         },
-        component: PowerProductionManagementComponent,
+        component: MonthDetailComponent,
       },
       {
         path: 'rural_electricity',

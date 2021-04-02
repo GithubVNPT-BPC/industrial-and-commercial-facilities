@@ -44,7 +44,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongSoLaoDong | number: '1.0-0':'vi'}} lao động
+                                {{tongSoLaoDong | formatNumber}} lao động
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -57,7 +57,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongCongSuatThietKe | number: '1.0-0':'vi'}} m³/năm
+                                {{tongCongSuatThietKe | formatNumber}} m³/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -70,7 +70,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongMucSanLuong | number: '1.0-0':'vi'}} m³/năm
+                                {{tongMucSanLuong | formatNumber}} m³/năm
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -126,7 +126,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCN</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap"
+                                multiple>
                                 <mat-option value='0'>-- Tất cả --</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
@@ -142,7 +143,8 @@
                         </mat-form-field>
                     </div>
                     <div class="col-2 col-lg-2 checkbox">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">DN hết hạn
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">DN hết
+                            hạn
                         </mat-checkbox>
                     </div>
                     <div class="col-4 col-lg-4 button-control">
@@ -204,36 +206,35 @@
                             <td mat-cell *matCellDef="let element"> {{element.mst}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="nganh_nghe_kd">
+                        <ng-container matColumnDef="nganh_nghe_kd_chinh">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Ngành nghề KD </th>
                             <td mat-cell *matCellDef="let element"> {{element.nganh_nghe_kd_chinh}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dien_thoai">
+                        <ng-container matColumnDef="so_dien_thoai">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> SĐT </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_thoai}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.so_dien_thoai}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="dia_chi">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Địa chỉ </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.dia_chi}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="so_lao_dong">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Số lao động </th>
-                            <td mat-cell *matCellDef="let element"> {{element.so_lao_dong | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.so_lao_dong | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="cong_suat">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Công suất thiết kế/năm<br>(m³/năm)
                             </th>
-                            <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | number:
-                                '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="san_luong">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Sản lượng/năm </th>
-                            <td mat-cell *matCellDef="let element"> {{element.san_luong | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.san_luong | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="so_gp_gcn">
@@ -268,46 +269,46 @@
 
                         <ng-container matColumnDef="thuoc_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Thuốc nổ (kg) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | number: '1.0-0':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="kip_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Kíp nổ (cái) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.kip_no_6thang | number: '1.0-0':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.kip_no_6thang | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="moi_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Mồi nổ (cái) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.moi_no_6thang | number: '1.0-0':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.moi_no_6thang | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="day_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Dây nổ (mét) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.day_no_6thang | number: '1.0-0':'vi'}}
+                            <td mat-cell *matCellDef="let element"> {{element.day_no_6thang | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="thuoc_no">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Thuốc nổ (kg) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.thuoc_no | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="kip_no">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Kíp nổ (cái) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.kip_no | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.kip_no | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="moi_no">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Mồi nổ (cái) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.moi_no | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.moi_no | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="day_no">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Dây nổ (mét) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.day_no | number: '1.0-0':'vi'}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.day_no | formatNumber}}</td>
                         </ng-container>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true"></tr>
@@ -317,7 +318,7 @@
                         <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">
                     </table>
                 </div>
-                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
@@ -363,9 +364,12 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
-                                            <mat-option *ngFor='let district of districts' [value]='district.id'>
-                                                {{district.ten_quan_huyen}}
-                                            </mat-option>
+                                            <mat-optgroup *ngFor="let dt of districtWardSorted | keyvalue"
+                                                [label]="dt.key">
+                                                <mat-option *ngFor='let dw of dt.value' [value]='dw.id_phuong_xa'>
+                                                    {{dw.ten_phuong_xa}}
+                                                </mat-option>
+                                            </mat-optgroup>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>

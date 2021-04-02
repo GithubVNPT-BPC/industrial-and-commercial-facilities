@@ -37,7 +37,8 @@ export class ExcelService {
     public exportDomTableAsExcelFile(filename: string, sheetname: string, DOMtable: any) {
         // Get data from DOM and ignore data from source
         if (!DOMtable || DOMtable === undefined ) throw new Error("Không có dữ liệu trên bảng");
-        let datas = XLSX.utils.table_to_sheet(DOMtable);
+        let table = this.formatNumberInDOM(DOMtable);
+        let datas = XLSX.utils.table_to_sheet(table);
         this.setDOMtable(DOMtable);
 
         if (!datas || datas.length == 0 ) throw new Error("Lỗi khi truy xuất thông tin trên bảng");
@@ -55,6 +56,23 @@ export class ExcelService {
         this.formatWorksheetLength(worksheet);
 
         this.saveAsExcelFile(workbook, filename);
+    }
+
+    public formatNumberInDOM(table) {
+        var rows = table.getElementsByTagName('tr');
+        var R = 0, _C = 0, C = 0;
+        for(; R < rows.length; ++R) {
+            var row = rows[R];
+            var elts = row.children;
+            for(_C = C = 0; _C < elts.length; ++_C) {
+                var elt = elts[_C], 
+                v = elt.innerText;
+                if (v != null && v.length && !isNaN(Number(v))) {
+                    elt.innerHTML = String(v).replace('.', ',');
+                }
+            }
+        }
+        return table;
     }
 
     private formatSheetname(sheetname: string): string{

@@ -743,7 +743,7 @@ export class FillReportComponent implements OnInit {
       case '/':
         this.dataSource.data.forEach(element => {
           if (element.ind_type != 2)
-            element[fld_code] = (element[fnProp] == null || element[fnProp] == 0) ? -1 : element[fld_code] / element[fnProp];
+            element[fld_code] = (element[fnProp] == null || element[fnProp] == 0) ? null : element[fld_code] / element[fnProp];
         });
         break;
 
@@ -789,7 +789,7 @@ export class FillReportComponent implements OnInit {
           case '/':
             res.data.forEach(element => {
               let tempRow = this.dataSource.data.filter(x => x.ind_id == element.ind_id && x.ind_type != 2)[0];
-              tempRow[fnProp] = (element[fnProp] == null || element[fnProp] == 0) ? -1 : tempRow[fnProp] / element[fnProp];
+              tempRow[fnProp] = (element[fnProp] == null || element[fnProp] == 0) ? null : tempRow[fnProp] / element[fnProp];
             });
             break;
 

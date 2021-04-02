@@ -40,8 +40,8 @@ export class MonthDetailComponent implements OnInit {
     public readonly ATTRIBUTE_DEFAULT: number = 1;
 
     private readonly LINK_DEFAULT: string = "/specialized/enery-management/power-production-month-detail";
-    private readonly TITLE_DEFAULT: string = "Chi tiết Điện sản xuất và thương phẩm";
-    private readonly TEXT_DEFAULT: string = "Chi tiết Điện sản xuất và thương phẩm";
+    private readonly TITLE_DEFAULT: string = "Điện sản xuất và thương phẩm";
+    private readonly TEXT_DEFAULT: string = "Điện sản xuất và thương phẩm";
 
     public tableMergeHader: Array<ToltalHeaderMerge> = [];
     public mergeHeadersColumn: Array<string> = [];
@@ -205,7 +205,9 @@ export class MonthDetailComponent implements OnInit {
             allRecord => {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
-                    this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+                    this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+                    console.log(this.attributes)
+                    // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];
                     this.object = allRecord.data[0];

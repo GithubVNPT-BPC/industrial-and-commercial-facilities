@@ -96,6 +96,8 @@ export class LPGManagementComponent extends BaseComponent {
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
+            time_id: new FormControl(this.currentYear),
+            tinh_trang_hoat_dong: new FormControl("true"),
         }
     }
 
@@ -106,16 +108,12 @@ export class LPGManagementComponent extends BaseComponent {
             this.formData.controls['mst'].setValue(selectedRecord.mst);
             this.formData.controls['san_luong'].setValue(selectedRecord.san_luong);
             this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
+            this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+            this.formData.controls['tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong ? "true" : "false");
         }
     }
 
     prepareData(data) {
-        data = {
-            ...data, ...{
-                tinh_trang_hoat_dong: "true",
-                time_id: this.currentYear,
-            }
-        }
         return data;
     }
 
