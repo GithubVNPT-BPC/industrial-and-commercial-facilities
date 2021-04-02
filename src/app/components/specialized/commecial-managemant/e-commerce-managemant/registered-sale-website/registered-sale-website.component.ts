@@ -14,7 +14,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class RegisteredSaleWebsiteComponent extends BaseComponent {
   displayedColumns: string[] =
-    ['index', 'ten_tc_cn', 'mst', 'dia_chi', 'nguoi_dai_dien',
+    ['select', 'index', 'ten_tc_cn', 'mst', 'dia_chi', 'nguoi_dai_dien',
       'dien_thoai', 'ten_mien', 'loai_hang_hoa', 'email', 'so_gian_hang', 'ghi_chu'];
   dataSource: MatTableDataSource<regisWebsiteModel>;
   filteredDataSource: MatTableDataSource<regisWebsiteModel> = new MatTableDataSource<regisWebsiteModel>();
@@ -128,5 +128,20 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
     this.commerceService.CapNhatDanhSachDangKiWeb(data).subscribe(res => {
       this.successNotify(res);
     })
+  }
+
+  prepareRemoveData(){
+    let datas = this.selection.selected.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data){
+    this.commerceService.XoaDanhSachDangKiWeb(data).subscribe(res => {
+      this.successNotify(res);
+    })
+  }
+
+  ngAfterViewInit(){
+    this.autopaging();
   }
 }

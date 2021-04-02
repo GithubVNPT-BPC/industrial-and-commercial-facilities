@@ -19,6 +19,7 @@ import { BaseComponent } from "../../../base.component";
 import { FormControl } from "@angular/forms";
 import { CommerceManagementService } from "src/app/_services/APIService/commerce-management.service";
 import { LoginService } from "src/app/_services/APIService/login.service";
+import { subscribeOn } from "rxjs/operators";
 
 @Component({
   selector: "app-informed-ecommerce-website",
@@ -38,6 +39,7 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
   }
 
   displayedColumns: string[] = [
+    "select",
     "index",
     "mst",
     "ten_doanh_nghiep",
@@ -67,9 +69,9 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
   ngOnInit() {
     super.ngOnInit()
     this.GetDanhSachWebsiteTMDT();
-    this.autoOpen();
-    this.sendLinkToNext(true);
-
+    // this.autoOpen();
+    // this.sendLinkToNext(true);
+    this.autopaging();
     if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
@@ -161,6 +163,17 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
 
   callService(data) {
     this.commerceService.CapNhatDanhSachThongBaoWeb(data).subscribe(res => {
+      this.successNotify(res);
+    })
+  }
+
+  prepareRemoveData(){
+    let datas = this.selection.selected.map(element => new Object({ id: element.id }));
+    return datas;
+  }
+
+  callRemoveService(data){
+    this.commerceService.XoaDanhSachWeb(data).subscribe(res => {
       this.successNotify(res);
     })
   }
