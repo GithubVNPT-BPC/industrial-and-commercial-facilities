@@ -24,6 +24,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   isChecked: boolean;
   isFound: boolean = false;
+  isAddLicense: boolean = false;
   tongDoanhNghiep: number;
   //
   filterModel = {
@@ -128,6 +129,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   resetAll() {
     this.isFound = false;
+    this.isAddLicense = false;
     super.resetAll();
   }
 
@@ -169,23 +171,36 @@ export class FoodManagementComponent extends BaseComponent {
         if (response.data.length > 0) {
           let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 2);
 
-          if (giayCndkkdList.length == 0)
+          if (giayCndkkdList.length == 0) {
+            this.isAddLicense = true;
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+          }
           else {
+            this.isFound = true;
+            this.giayCndkkdList = giayCndkkdList;
             this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
           }
-          this.isFound = true;
-          this.giayCndkkdList = giayCndkkdList;
+          
         } else {
+          this.isAddLicense = true;
           this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
         }
       } else {
         this.isFound = false;
+        this.isAddLicense = false;
         this.logger.msgSuccess("Không tìm thấy dữ liệu");
       }
     }, error => {
       this.isFound = false;
+      this.isAddLicense = false;
       this.logger.msgError("Lỗi khi xử lý \n" + error);
     });
+  }
+
+  addLicenseInfo(event) {
+    event.preventDefault();
+    let mst = this.formData.controls.mst.value;
+    let redirectPage = '/#/specialized/commecial-management/domestic/add-certificate/undefined?mst=' + mst;
+    window.open(redirectPage, "_blank");
   }
 }

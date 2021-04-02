@@ -1,4 +1,5 @@
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector} from '@angular/core';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 @Component({
   selector: 'electrical-plan',
@@ -6,9 +7,24 @@ import { Component, Injector, OnInit } from '@angular/core';
   styleUrls: ['/../../special_layout.scss'],
 })
 
-export class ElectricalPlanComponent {
+export class ElectricalPlanComponent extends BaseComponent {
   
-  constructor() {
+  constructor(
+    private injector: Injector,
+  ){
+    super(injector);
   }
-  ngOnInit() {}
+
+  ngOnInit() {
+    super.ngOnInit();
+  }
+
+  autoOpen() {}
+
+  getLinkDefault() {
+    this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
+    this.TITLE_DEFAULT = "Năng lượng - Quy hoạch điện 110KV trở lên";
+    this.TEXT_DEFAULT = "Năng lượng - Quy hoạch điện 110KV trở lên";
+  }
+
 }

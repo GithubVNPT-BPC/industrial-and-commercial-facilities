@@ -1,12 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild, QueryList, ViewChildren, Inject } from '@angular/core';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { formatDate } from '@angular/common';
-import { NgForm, NumberValueAccessor } from '@angular/forms';
-import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
+import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup} from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
-
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import {
   CertificateModel,
@@ -18,14 +16,17 @@ import { MatPaginator } from '@angular/material/paginator';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
-import { SpecialDirective } from 'src/app/shared/special.directive';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
+
+import { LinkModel } from 'src/app/_models/link.model';
+
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
   parse: {
@@ -62,12 +63,25 @@ export class AddCertificateComponent implements OnInit {
 
   certificate: FormGroup
 
+  protected _linkOutput: LinkModel = new LinkModel();
+  //Constant
+  protected LINK_DEFAULT: string = "/specialized/commecial-management/domestic/certificate";
+  protected TITLE_DEFAULT: string = "Quản lý doanh nghiệp - Danh sách giấy phép";
+  protected TEXT_DEFAULT: string = "Quản lý doanh nghiệp - Danh sách giấy phép";
+
+  public sendLinkToNext(type: boolean) {
+    this._linkOutput.link = this.LINK_DEFAULT;
+    this._linkOutput.title = this.TITLE_DEFAULT;
+    this._linkOutput.text = this.TEXT_DEFAULT;
+    this._linkOutput.type = type;
+    this._breadCrumService.sendLink(this._linkOutput);
+  }
+
   resetForm(form?: NgForm) {
-    if (form != null)
-      form.form.reset();
+    if (form != null) form.form.reset();
     this._Service.certificate = {
       id_giay_phep: null,
-      mst: '',
+      mst: this.mst,
       so_giay_phep: '',
       ngay_cap: '',
       ngay_het_han: '',
@@ -80,10 +94,9 @@ export class AddCertificateComponent implements OnInit {
   }
 
   id: number;
+  mst: string = '';
 
   constructor(
-    // @Inject(MAT_DIALOG_DATA) public data: any,
-    // public dialogRef: MatDialogRef<UpdateCertificateModelComponent>,
     public excelService: ExcelService,
     public _Service: ConditionBusinessService,
     public formbuilder: FormBuilder,
@@ -91,9 +104,15 @@ export class AddCertificateComponent implements OnInit {
     public router: Router,
     public route: ActivatedRoute,
     public datepipe: DatePipe,
+    public _breadCrumService: BreadCrumService,
+    public activatedRoute: ActivatedRoute
   ) {
     this.route.params.subscribe((params) => {
       this.id = params["id"];
+    });
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['mst'])
+        this.mst = params['mst'];
     });
   }
 
@@ -105,7 +124,7 @@ export class AddCertificateComponent implements OnInit {
 
     this.certificate = this.formbuilder.group({
       id_giay_phep: null,
-      mst: '',
+      mst: this.mst,
       so_giay_phep: '',
       ngay_cap: '',
       ngay_het_han: '',
@@ -138,7 +157,6 @@ export class AddCertificateComponent implements OnInit {
     this._Service.PostCertificate(input).subscribe(
       res => {
         this._info.msgSuccess('Cập nhật thông tin thành công')
-        // this.dialogRef.close()
         this.Back()
       },
       err => {
@@ -148,8 +166,10 @@ export class AddCertificateComponent implements OnInit {
   }
 
   public getChange(param: any): string {
-    let datepipe = this.datepipe.transform(param._d, 'yyyyMMdd')
-    return datepipe
+    if (param) {
+      let datepipe = this.datepipe.transform(param._d, 'yyyyMMdd')
+      return datepipe
+    }
   }
 
   input: Array<CertificateModel> = new Array<CertificateModel>();
