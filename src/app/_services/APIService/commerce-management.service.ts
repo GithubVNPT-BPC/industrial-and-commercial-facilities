@@ -49,7 +49,9 @@ export class CommerceManagementService {
     private urlDeleteConvenienceStore = "api/qltm/httm/xoa-chtl";
     private urlDeleteFoodCommerce = "api/qltm/httm/xoa-kdtp";
     private urlDeleteCountrySide = "api/qltm/httm/xoa-ntm";
-    
+    private urlDeleteECommerceWebsite = "api/qltm/danh-sach-website/xoa-danh-sach-website";
+    private urlDeleteRegistedWebsite = "api/qltm/danh-sach-dang-ki-website/xoa-danh-sach-dang-ki-website";
+
     constructor(public http: HttpClient) { }
 
     // Expo
@@ -333,6 +335,22 @@ export class CommerceManagementService {
 
     CapNhatDanhSachDangKiWeb(body: any[]){
         var apiUrl = this.apiHome + this.urlPostRegisWebsite;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    XoaDanhSachWeb(body: any[]){
+        var apiUrl = this.apiHome + this.urlDeleteECommerceWebsite;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    XoaDanhSachDangKiWeb(body: any[]){
+        var apiUrl = this.apiHome + this.urlDeleteRegistedWebsite;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
