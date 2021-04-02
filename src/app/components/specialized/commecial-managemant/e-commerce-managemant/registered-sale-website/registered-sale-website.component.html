@@ -21,7 +21,7 @@
                                 <!-- <div mat-card-avatar>
                                 </div> -->
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Tổng số lượng website đã đăng ký:
+                                    <mat-icon>filter</mat-icon> Tổng số website đã đăng ký Bộ Công Thương:
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
@@ -94,9 +94,29 @@
                             <button mat-raised-button matTooltip="Thêm mới" (click)="switchView()" [hidden]=authorize>
                                 <mat-icon>add_circle_outline</mat-icon>
                             </button>
+                            <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa"
+                                mat-raised-button (click)="openRemoveDialog()" [hidden]=authorize>
+                                <mat-icon>delete</mat-icon>
+                            </button>
                         </div>
                     </div>
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table2">
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef disableClear style="text-align: left;">
+                                <mat-checkbox (change)="$event ? masterToggle() : null" 
+                                    [checked]="selection.hasValue() && isAllSelected()"
+                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                    [aria-label]="checkboxLabel()">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? selection.toggle(element) : null"
+                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
