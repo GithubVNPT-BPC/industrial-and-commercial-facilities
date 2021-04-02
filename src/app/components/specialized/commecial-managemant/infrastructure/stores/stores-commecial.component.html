@@ -26,7 +26,7 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-6 col-lg-6" *ngIf="filterModel.ngaycapgcn != 0">
+                    <div class="col-6 col-lg-6" >
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -36,8 +36,8 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                <span>{{filterModel.ngaycapgcn}}</span>/
-                                <span>{{filteredDataSource.data.length}}</span> Cửa hàng
+                                <span>{{tongCuaHangDangKyGCN}}</span> /
+                                <span>{{tongCuaHang}}</span> Cửa hàng
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -289,6 +289,9 @@
                                         class="mt-2">
                                         <mat-icon>search</mat-icon>Tìm kiếm
                                     </button>
+                                    <button *ngIf="isAddLicense" mat-raised-button color="primary" (click)="addLicenseInfo($event)" class="mt-2 green">
+                                        <mat-icon>add</mat-icon>Thêm giấy phép cho doanh nghiệp
+                                    </button>
                                 </div>
                             </div>
 
@@ -389,7 +392,7 @@
 
                     <div class="col-md-12">
                         <p>
-                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span> của doanh nghiệp đã có <span class="text-primary">Giấy chứng nhận </span>hoặc<span class="text-primary"> Giấy chứng nhận vệ sinh an toàn thực phẩm </span></span>
+                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span> của doanh nghiệp đã có <span class="text-primary">Giấy chứng nhận </span>và<span class="text-primary"> Giấy chứng nhận vệ sinh an toàn thực phẩm </span></span>
                         </p>
                     </div>
 

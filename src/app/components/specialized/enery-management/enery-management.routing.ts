@@ -60,7 +60,7 @@ const routes: Routes = [
       {
         path: 'electrical_plan',
         data: {
-          title: 'QH lưới điện 110 trở lên',
+          title: 'QH lưới điện 110KV trở lên',
         },
         component: ElectricalPlanComponent
       },

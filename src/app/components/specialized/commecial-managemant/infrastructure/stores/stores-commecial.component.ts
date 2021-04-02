@@ -19,24 +19,24 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class StoreManagementComponent extends BaseComponent {
 
-  years: any[] = [];
   message: string;
   isChecked: boolean = false;
   isFound: boolean = false;
+  isAddLicense: boolean = false;
+  dataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
+  filteredDataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
   filterModel = {
     id_quan_huyen: [],
     ngay_cap_giay_chung_nhan: [],
   };
-  dataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
-  filteredDataSource: MatTableDataSource<ConvenienceStoreModel> = new MatTableDataSource<ConvenienceStoreModel>();
-
   //
   public tongCuaHang: number;
+  public tongCuaHangDangKyGCN: number = 0;
   public soCuaHangTL: number;
   public soCuaHangKhac: number;
   public soCuaHangDauTuTrongNam: number = 0;
   public soCuaHangDauTuNamTruoc: number = 0;
-
+  
   displayedFields = {
     ten_cua_hang: "Tên cửa hàng",
     dia_chi_day_du: "Địa chỉ",
@@ -146,12 +146,14 @@ export class StoreManagementComponent extends BaseComponent {
 
   resetAll() {
     this.isFound = false;
+    this.isAddLicense = false;
     super.resetAll();
   }
 
   _prepareData() {
     let data = this.filteredDataSource.data;
     this.soCuaHangTL = data.length;
+    this.tongCuaHangDangKyGCN = data.length ? data.map(x => x.id_giay_cndkkd).length : 0;
     this.soCuaHangKhac = data.length - this.soCuaHangTL;
     this.tongCuaHang = this.dataSource.data.length;
   }
@@ -217,25 +219,36 @@ export class StoreManagementComponent extends BaseComponent {
           let giayAtvstpList = response.data.filter(x => x.id_loai_giay_phep == 4);
 
           if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0) {
+            this.isAddLicense = true;
             this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
           }
           else {
+            this.isFound = true;
+            this.giayCndkkdList = giayCndkkdList;
+            this.giayAtvstpList = giayAtvstpList;
             this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
           }
-
-          this.isFound = true;
-          this.giayCndkkdList = giayCndkkdList;
-          this.giayAtvstpList = giayAtvstpList;
         } else {
+          this.isAddLicense = true;
           this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
         }
       } else {
         this.isFound = false;
+        this.isAddLicense = false;
         this.logger.msgSuccess("Không tìm thấy dữ liệu");
       }
     }, error => {
       this.isFound = false;
+      this.isAddLicense = false;
       this.logger.msgError("Lỗi khi xử lý \n" + error);
     });
   }
+
+  addLicenseInfo(event) {
+    event.preventDefault();
+    let mst = this.formData.controls.mst.value;
+    let redirectPage = '/#/specialized/commecial-management/domestic/add-certificate/undefined?mst=' + mst;
+    window.open(redirectPage, "_blank");
+  }
+
 }

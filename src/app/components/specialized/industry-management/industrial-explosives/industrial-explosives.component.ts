@@ -3,10 +3,12 @@ import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { IndustrialExplosivesModel } from 'src/app/_models/APIModel/industrial-explosives.model';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
+import { Router } from '@angular/router';
 
 // Services
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
@@ -33,9 +35,14 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         { id: 3, tinh_trang: 'Giải thể' }
     ];
     isChecked: boolean;
+    isFound: boolean = false;
+    isAddLicense: boolean = false;
+    tongDoanhNghiep: number = 0;
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
     tongMucSanLuong: number = 0;
+
+    giayCndkkdList = [];
     
     filterModel = { 
         id_quan_huyen: [], 
@@ -46,8 +53,10 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     constructor(
         private injector: Injector,
+        public router: Router,
         public sctService: SCTService,
         public industryManagementService: IndustryManagementService,
+        public enterpriseService: EnterpriseService,
         public _login: LoginService
     ) {
         super(injector);
@@ -68,6 +77,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.paginator = this.filteredDataSource.paginator;
     }
 
+    resetAll() {
+        this.isFound = false;
+        this.isAddLicense = false;
+        super.resetAll();
+    }
+
     getLinkDefault() {
         this.LINK_DEFAULT = "/specialized/industry-management/explosives";
         this.TITLE_DEFAULT = "Công nghiệp - Vật liệu nổ công nghiệp";
@@ -80,6 +95,9 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             dia_chi: new FormControl(),
             id_phuong_xa: new FormControl(),
             time_id: new FormControl(this.currentYear),
+            id_so_giay_phep: new FormControl(),
+            id_tinh_trang_hoat_dong: new FormControl(1),
+            
             thuoc_no: new FormControl(0),
             kip_no: new FormControl(0),
             moi_no: new FormControl(0),
@@ -92,8 +110,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     }
 
     prepareData(data) {
-        data['id_so_giay_phep'] = 1;
-        data['id_tinh_trang_hoat_dong'] = 1;
         return data;
     }
 
@@ -131,9 +147,50 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     }
 
     private _prepareData() {
+        this.tongDoanhNghiep = this.filteredDataSource.data.length ? new Set(this.filteredDataSource.data.map(x => x.mst)).size : 0 ;
         this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong || 0).reduce((a, b) => a + b) : 0;
         this.tongCongSuatThietKe = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke || 0).reduce((a, b) => a + b) : 0;
         this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
+    }
+
+    findLicenseInfo(event) {
+        event.preventDefault();
+        let mst = this.formData.controls.mst.value;
+        this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
+          if (response.success) {
+            if (response.data.length > 0) {
+              let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 1);
+    
+              if (giayCndkkdList.length == 0) {
+                this.isAddLicense = true;
+                this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+              }
+              else {
+                this.isFound = true;
+                this.giayCndkkdList = giayCndkkdList;
+                this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
+              }
+            } else {
+                this.isAddLicense = true;
+                this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+            }
+          } else {
+            this.isFound = false;
+            this.isAddLicense = false;
+            this.logger.msgSuccess("Không tìm thấy dữ liệu");
+          }
+        }, error => {
+          this.isFound = false;
+          this.isAddLicense = false;
+          this.logger.msgError("Lỗi khi xử lý \n" + error);
+        });
+    }
+
+    addLicenseInfo(event) {
+        event.preventDefault();
+        let mst = this.formData.controls.mst.value;
+        let redirectPage = '/#/specialized/commecial-management/domestic/add-certificate/undefined?mst=' + mst;
+        window.open(redirectPage, "_blank");
     }
 
     applyExpireCheck(event) {
@@ -184,4 +241,5 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         });
         return filteredData;
     }
+    
 }

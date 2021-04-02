@@ -224,6 +224,9 @@
                                         class="mt-2">
                                         <mat-icon>search</mat-icon>Tìm kiếm
                                     </button>
+                                    <button *ngIf="isAddLicense" mat-raised-button color="primary" (click)="addLicenseInfo($event)" class="mt-2 green">
+                                        <mat-icon>add</mat-icon>Thêm giấy phép cho doanh nghiệp
+                                    </button>
                                 </div>
                             </div>
 

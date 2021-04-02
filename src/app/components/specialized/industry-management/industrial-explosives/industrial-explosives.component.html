@@ -31,7 +31,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{filteredDataSource.data.length}} doanh nghiệp
+                                {{tongDoanhNghiep}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -259,14 +259,6 @@
                             <td mat-cell *matCellDef="let element">{{element.ten_tinh_trang_hoat_dong}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="tinh_hinh_6thang">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4"> Báo cáo 6 tháng </th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="tinh_hinh_ca_nam">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4"> Báo cáo cả năm </th>
-                        </ng-container>
-
                         <ng-container matColumnDef="thuoc_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Thuốc nổ (kg) </th>
                             <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | formatNumber}}
@@ -311,6 +303,14 @@
                             <td mat-cell *matCellDef="let element"> {{element.day_no | formatNumber}}</td>
                         </ng-container>
 
+                        <ng-container matColumnDef="tinh_hinh_6thang">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="no-space-top"> Báo cáo 6 tháng </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tinh_hinh_ca_nam">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="no-space-top"> Báo cáo cả năm </th>
+                        </ng-container>
+
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true"></tr>
                         <tr mat-header-row class="table-header"
                             *matHeaderRowDef="['thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang','day_no_6thang','thuoc_no', 'kip_no', 'moi_no','day_no']; sticky : true;">
@@ -353,14 +353,33 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-6 col-md-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Mã số thuế doanh nghiệp</mat-label>
+                                        <mat-label>Mã số thuế (*)</mat-label>
                                         <input matInput formControlName="mst">
                                     </mat-form-field>
                                 </div>
+                                <div class="col-6 col-md-6">
+                                    <button mat-raised-button color="primary" (click)="findLicenseInfo($event)"
+                                        class="mt-2">
+                                        <mat-icon>search</mat-icon>Tìm kiếm
+                                    </button>
+                                    <button *ngIf="isAddLicense" mat-raised-button color="primary" (click)="addLicenseInfo($event)" class="mt-2 green">
+                                        <mat-icon>add</mat-icon>Thêm giấy phép cho doanh nghiệp
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row" *ngIf="isFound">
 
                                 <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Địa chỉ</mat-label>
+                                        <input matInput formControlName="dia_chi">
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
@@ -374,14 +393,7 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Địa chỉ</mat-label>
-                                        <input matInput formControlName="dia_chi">
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="col-md-6">
+                                <div class="col-md-3>">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Kỳ dữ liệu</mat-label>
                                         <mat-select formControlName="time_id">
@@ -390,11 +402,45 @@
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Tình trạng hoạt động</mat-label>
+                                        <mat-select formControlName="id_tinh_trang_hoat_dong">
+                                            <mat-option *ngFor='let tinhTrang of tinhTrangHoatDong' [value]='tinhTrang.id'>
+                                                {{tinhTrang.tinh_trang}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Giấy phép/ Giấy chứng nhận </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Số giấy phép</mat-label>
+                                        <mat-select formControlName="id_so_giay_phep">
+                                            <mat-option *ngFor="let item of giayCndkkdList" [value]="item.id_giay_phep">
+                                                {{item.so_giay_phep}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </mat-card-content>
+                    </div>
+
+                    <div class="col-md-12" *ngIf="isFound">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Báo cáo 6 tháng </span>
@@ -431,7 +477,7 @@
                         </mat-card-content>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="col-md-12" *ngIf="isFound">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Báo cáo cả năm</span>
@@ -469,6 +515,12 @@
                     </div>
 
                     <div class="col-md-12">
+                        <p>
+                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span> của doanh nghiệp đã có <span class="text-primary">Giấy phép</span></span>
+                        </p>
+                    </div>
+
+                    <div class="col-md-12" *ngIf="isFound" >
                         <button type="submit" class="btn btn-success float-right" [hidden]=authorize>Tạo mới</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)"
                             [hidden]=authorize>Xóa</button>
