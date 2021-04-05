@@ -19,7 +19,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class IndustrialExplosivesComponent extends BaseComponent {
 
-    displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep',  'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
+    displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
 
     totalColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
@@ -43,12 +43,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     tongMucSanLuong: number = 0;
 
     giayCndkkdList = [];
-    
-    filterModel = { 
-        id_quan_huyen: [], 
+
+    filterModel = {
+        id_quan_huyen: [],
         id_tinh_trang_hoat_dong: [],
         ngay_cap: [],
-        is_expired: false 
+        is_expired: false
     };
 
     constructor(
@@ -68,7 +68,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         super.ngOnInit();
         this.getPostExplosiveMatData(this.currentYear);
         this.initDistrictWard();
-        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -97,7 +97,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             time_id: new FormControl(this.currentYear),
             id_so_giay_phep: new FormControl(),
             id_tinh_trang_hoat_dong: new FormControl(1),
-            
+
             thuoc_no: new FormControl(0),
             kip_no: new FormControl(0),
             moi_no: new FormControl(0),
@@ -120,8 +120,8 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     prepareRemoveData(data) {
         let datas = data.map(element => new Object({ id: element.id }));
         return datas;
-      }
-    
+    }
+
     callRemoveService(data) {
         this.industryManagementService.DeleteExplosiveMat(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
@@ -147,7 +147,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     }
 
     private _prepareData() {
-        this.tongDoanhNghiep = this.filteredDataSource.data.length ? new Set(this.filteredDataSource.data.map(x => x.mst)).size : 0 ;
+        this.tongDoanhNghiep = this.filteredDataSource.data.length ? new Set(this.filteredDataSource.data.map(x => x.mst)).size : 0;
         this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong || 0).reduce((a, b) => a + b) : 0;
         this.tongCongSuatThietKe = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke || 0).reduce((a, b) => a + b) : 0;
         this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
@@ -157,32 +157,32 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         event.preventDefault();
         let mst = this.formData.controls.mst.value;
         this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
-          if (response.success) {
-            if (response.data.length) {
-              let giayCndkkdList = response.data.filter(x => x.id_linh_vuc == 33);
-    
-              if (giayCndkkdList.length == 0) {
-                this.isAddLicense = true;
-                this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
-              }
-              else {
-                this.isFound = true;
-                this.giayCndkkdList = giayCndkkdList;
-                this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
-              }
+            if (response.success) {
+                if (response.data.length) {
+                    let giayCndkkdList = response.data.filter(x => x.id_linh_vuc == 33);
+
+                    if (giayCndkkdList.length == 0) {
+                        this.isAddLicense = true;
+                        this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+                    }
+                    else {
+                        this.isFound = true;
+                        this.giayCndkkdList = giayCndkkdList;
+                        this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
+                    }
+                } else {
+                    this.isAddLicense = true;
+                    this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+                }
             } else {
-                this.isAddLicense = true;
-                this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+                this.isFound = false;
+                this.isAddLicense = false;
+                this.logger.msgSuccess("Không tìm thấy dữ liệu");
             }
-          } else {
+        }, error => {
             this.isFound = false;
             this.isAddLicense = false;
-            this.logger.msgSuccess("Không tìm thấy dữ liệu");
-          }
-        }, error => {
-          this.isFound = false;
-          this.isAddLicense = false;
-          this.logger.msgError("Lỗi khi xử lý \n" + error);
+            this.logger.msgError("Lỗi khi xử lý \n" + error);
         });
     }
 
@@ -241,5 +241,5 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         });
         return filteredData;
     }
-    
+
 }
