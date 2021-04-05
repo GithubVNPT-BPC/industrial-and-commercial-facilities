@@ -1,20 +1,16 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from '@angular/core';
-import * as XLSX from 'xlsx';
-
-import { ReportService } from '../../../../../_services/APIService/report.service';
+import { Component, ViewChild, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { ReportService } from 'src/app/_services/APIService/report.service';
 
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from '../../../../../_models/APIModel/report.model';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { ReportDirective } from '../../../../../shared/report.directive';
-import { KeyboardService } from '../../../../../shared/services/keyboard.service';
+import { ReportDirective } from 'src/app/shared/report.directive';
+import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { Location } from '@angular/common';
-import { element } from 'protractor';
-import { merge } from 'rxjs';
 import moment from 'moment';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
@@ -71,8 +67,8 @@ export class RetailMonthComponent implements OnInit {
     
     years: Array<number> = [];
     months: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    selectedYear: number;
-    selectedMonth: number;
+    selectedYear = new Date().getFullYear();
+    selectedMonth = new Date().getMonth();
 
     private _linkOutput: LinkModel = new LinkModel();
 
@@ -97,6 +93,10 @@ export class RetailMonthComponent implements OnInit {
     ) {
         this.route.queryParams.subscribe(params => {
             this.time_id = params['time_id'];
+            if (this.time_id) {
+                this.selectedYear = Number(this.time_id.toString().slice(0, 4));
+                this.selectedMonth = Number(this.time_id.toString().slice(4, 6));
+            }
         });
     }
 
@@ -129,8 +129,6 @@ export class RetailMonthComponent implements OnInit {
         //this.org_id = parseInt(data.org_id);
         this.org_id = 4;
         this.years = this.InitialYears();
-        this.selectedYear = new Date().getFullYear();
-        this.selectedMonth = new Date().getMonth();
         this.calculateTimeId();
 
         this.sendLinkToNext(true);
@@ -142,9 +140,8 @@ export class RetailMonthComponent implements OnInit {
 
     checkAccessObj() {
         var ret = 0;
-        if (ret > 0) {
-            return true;
-        }
+        if (ret > 0) return true;
+ 
         switch (ret) {
             case -2:
                 //alertify.error('Đã trình lãnh đạo!');
@@ -214,8 +211,8 @@ export class RetailMonthComponent implements OnInit {
                         this.formatFrameReport(this.object[0]);
                     }
                     this.CreateMergeHeaderTable(this.attributes);
-
                     this.CreateReportTable();
+                    this.sendLinkToNext(true);
                 }
             }
         )

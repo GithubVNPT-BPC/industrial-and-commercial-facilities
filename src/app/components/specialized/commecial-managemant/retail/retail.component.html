@@ -11,10 +11,10 @@
             </div>
 
             <div class="col-9 col-lg-9 button-control my-auto">
-                <button mat-raised-button (click)="ExportTOExcel('Tổng mức bán lẻ hàng hóa và dịch vụ ' + this.year,'Năm ' + this.year)">Xuất Excel</button>
+                <button mat-raised-button class="green" (click)="ExportTOExcel('Tổng mức bán lẻ hàng hóa và dịch vụ ' + this.year,'Năm ' + this.year)"><mat-icon>file_download</mat-icon>Xuất Excel</button>
             </div>
         </div>
-
+        <hr/>
         <div class="layout" *ngIf="dataSource.data.length; else ShowEmpty" #TABLE>
             <table mat-table [dataSource]="dataSource" #table class="table-layout" id="small-table">
                 <ng-container matColumnDef="index">
@@ -140,7 +140,7 @@
         </div>
         <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
         <ng-template #ShowEmpty>
-            <h1>Không có dữ liệu</h1>
+            <h3 class="text-center">Không có dữ liệu</h3>
         </ng-template>
 
     </mat-card-content>

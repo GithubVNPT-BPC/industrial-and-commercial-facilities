@@ -158,8 +158,8 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         let mst = this.formData.controls.mst.value;
         this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
           if (response.success) {
-            if (response.data.length > 0) {
-              let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 1);
+            if (response.data.length) {
+              let giayCndkkdList = response.data.filter(x => x.id_linh_vuc == 33);
     
               if (giayCndkkdList.length == 0) {
                 this.isAddLicense = true;

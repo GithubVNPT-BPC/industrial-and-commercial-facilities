@@ -1,7 +1,7 @@
 <mat-card class="material">
     <mat-card-content>
         <div class="row">
-            <div class="col-2 col-lg-2">
+            <div class="col-3 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Kỳ dữ liệu</mat-label>
                     <mat-select (selectionChange)="GetReportById(_time_id, getMaBC(term))" [(value)]="term">
@@ -10,7 +10,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-2 col-lg-2">
+            <div class="col-3 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Năm</mat-label>
                     <mat-select (selectionChange)="GetReportById(_time_id, getMaBC(term))" [(value)]="_time_id">
@@ -19,9 +19,9 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-4 col-lg-4 checkbox my-auto text-left">
-                <button mat-raised-button (click)="OpenDetail()">Cập nhật dữ liệu</button>
-                <button mat-raised-button (click)="ExportTOExcel('Tổng quan CCN',year.toString())">Xuất Excel</button>
+            <div class="col-6 col-lg-6 button-control my-auto text-right">
+                <button mat-raised-button (click)="OpenDetail()"><mat-icon>edit</mat-icon>Cập nhật dữ liệu</button>
+                <button mat-raised-button (click)="ExportTOExcel('Tổng quan CCN',year.toString())" class="green"><mat-icon>file_download</mat-icon>Xuất Excel</button>
             </div>
         </div>
         <hr>

@@ -10,13 +10,13 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-9 col-lg-9 button-control my-auto text-left">
-                <button mat-raised-button
-                    (click)="ExportTOExcel('Chỉ số sản xuất công nghiệp - ' + this.year, 'Năm ' + this.year)">Xuất
+            <div class="col-9 col-lg-9 button-control my-auto text-right">
+                <button mat-raised-button class="green"
+                    (click)="ExportTOExcel('Chỉ số sản xuất công nghiệp - ' + this.year, 'Năm ' + this.year)"><mat-icon>file_download</mat-icon>Xuất
                     Excel</button>
             </div>
         </div>
-
+        <hr />
         <div class="layout" *ngIf="dataSource.data.length; else ShowEmpty" #TABLE>
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table2">
                 <ng-container matColumnDef="index">

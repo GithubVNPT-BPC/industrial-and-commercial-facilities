@@ -1,12 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
-import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
 import { formatDate, Location } from '@angular/common';
-import { NgForm, NumberValueAccessor } from '@angular/forms';
-import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectionModel } from '@angular/cdk/collections';
-import { CommonFuntions } from 'src/app/components/specialized/commecial-managemant/conditional-business-line/common-functions.service';
 
 import { MatDialog } from '@angular/material';
 
@@ -72,7 +69,7 @@ export class CertificateListComponent implements OnInit {
     'id_giay_phep',
   ];
 
-  @ViewChild('table', { static: false }) table: ElementRef;
+  @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 

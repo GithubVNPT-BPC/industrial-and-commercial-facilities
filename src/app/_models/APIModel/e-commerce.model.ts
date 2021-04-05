@@ -11,10 +11,6 @@ export class ECommerceWebsite {
     ten_mien: string;
 }
 
-export class ECommerceWebsiteFilterModel {
-    id_quan_huyen: number[];
-}
-
 export class SaleWebsite {
     dia_chi: string;
     so_dien_thoai: string;
@@ -24,10 +20,6 @@ export class SaleWebsite {
     ten_mien: string;
     ten_doanh_nghiep: string;
     id_quan_huyen: string;
-}
-
-export class SaleWebsiteFilterModel {
-    id_quan_huyen: number[];
 }
 
 export class InformWebsiteModel {

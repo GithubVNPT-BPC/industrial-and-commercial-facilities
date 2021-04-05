@@ -125,10 +125,10 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
         }
     }
 
-    // getLinkDefault() {
-    //     //Constant
-    //     this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
-    //     this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
-    //     this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
-    // }
+    getLinkDefault() {
+        //Constant
+        this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
+        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
+        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
+    }
 }

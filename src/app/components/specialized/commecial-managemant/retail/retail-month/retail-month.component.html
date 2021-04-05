@@ -11,7 +11,7 @@
 <mat-card class="material">
     <mat-card-content>
         <div class="row">
-            <div class="col-4">
+            <div class="col-4 col-lg-4">
                 <mat-form-field appearance="outline">
                     <mat-label>Năm thực hiện</mat-label>
                     <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedYear">
@@ -21,7 +21,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-4">
+            <div class="col-2 col-lg-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Tháng thực hiện</mat-label>
                     <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedMonth">
@@ -30,23 +30,25 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-4 my-auto text-left">
-                <button mat-raised-button (click)="GetReportById(this.time_id)">Xem dữ liệu</button>
-                <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}"
-                    (click)="exportToExcel('Chi tiết Tổng mức bán lẻ hàng hóa và dịch vụ - ' + this.thoigianbaocao, this.thoigianbaocao)">Xuất Excel</button>
+
+            <div class="col-6 col-lg-6 my-auto text-right button-control">
+                <button mat-raised-button (click)="GetReportById(this.time_id)"><mat-icon>search</mat-icon>Tra dữ liệu</button>
                 <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401"
-                    (click)="OpenDetail()">Sửa dữ liệu</button>
+                    (click)="OpenDetail()"><mat-icon>edit</mat-icon>Sửa dữ liệu</button>
+                <button mat-raised-button class="green" 
+                    (click)="exportToExcel('Chi tiết Tổng mức bán lẻ hàng hóa và dịch vụ - ' + this.thoigianbaocao, this.thoigianbaocao)"><mat-icon>file_download</mat-icon>Xuất Excel</button>
             </div>
         </div>
+        <hr />
         <div class="row">
-            <div class="col-12">
+            <div class="col-12 col-lg-12">
                 <mat-card-header *ngIf="this.object[0]">
                     <mat-card-title>
-                        <h2 style="padding-left: 20px;">{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
+                        <h2>{{tenbaocao}} <br /> Kỳ báo cáo : <strong>{{thoigianbaocao}}</strong>
                         </h2>
                     </mat-card-title>
                     <mat-card-subtitle>
-                        <p style="padding-left: 40px;">Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
+                        <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
                             ngày <strong>{{ngayketthucbaocao}}</strong></p>
                     </mat-card-subtitle>
                 </mat-card-header>
@@ -54,11 +56,6 @@
         </div>
 
         <div class="layout" *ngIf="dataSource.data.length; else ShowList" #TABLE>
-            <!-- <mat-form-field>
-                    <mat-label>Lọc dữ liệu</mat-label>
-                    <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                </mat-form-field> -->
-
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index" sticky>
@@ -103,7 +100,7 @@
         </div>
 
         <ng-template #ShowList>
-            <h1>Không có dữ liệu</h1>
+            <h3 class="text-center">Không có dữ liệu</h3>
         </ng-template>
     </mat-card-content>
 </mat-card>

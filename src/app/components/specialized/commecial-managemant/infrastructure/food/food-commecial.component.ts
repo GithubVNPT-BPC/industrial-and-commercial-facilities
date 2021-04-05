@@ -169,7 +169,7 @@ export class FoodManagementComponent extends BaseComponent {
     this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
       if (response.success) {
         if (response.data.length > 0) {
-          let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 2);
+          let giayCndkkdList = response.data.filter(x => x.id_linh_vuc == 5);
 
           if (giayCndkkdList.length == 0) {
             this.isAddLicense = true;
@@ -180,7 +180,6 @@ export class FoodManagementComponent extends BaseComponent {
             this.giayCndkkdList = giayCndkkdList;
             this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
           }
-          
         } else {
           this.isAddLicense = true;
           this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");

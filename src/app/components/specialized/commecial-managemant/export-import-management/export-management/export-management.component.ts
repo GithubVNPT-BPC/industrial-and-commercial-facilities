@@ -92,7 +92,7 @@ export class ExportManagementComponent implements OnInit {
     pagesize: number = 0;
     curentmonth: number = new Date().getMonth() + 1;
     curentYear: number = new Date().getFullYear();
-    @ViewChild("table", { static: false }) table: ElementRef;
+    @ViewChild("TABLE", { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
     @ViewChild("paginator", { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
