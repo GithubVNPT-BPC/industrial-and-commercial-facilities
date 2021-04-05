@@ -60,11 +60,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     ]
     //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
-    // displayedColumns: string[] = [];
-    // displayRow1Header: string[] = []
-    // displaRow2Header: string[] = []
-    // displayRow3Header: string[] = [];
-    // dataSource: MatTableDataSource<ex_im_model> = new MatTableDataSource<ex_im_model>();
     dataSource: MatTableDataSource<new_import_export_model>;
     dataDialog: any[] = [];
     filteredDataSource: MatTableDataSource<new_import_export_model> = new MatTableDataSource<new_import_export_model>();
@@ -81,7 +76,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     pagesize: number = 0;
     curentmonth: number = new Date().getMonth() + 1;
     curentYear: number = new Date().getFullYear();
-    @ViewChild("table", { static: false }) table: ElementRef;
+    @ViewChild("TABLE", { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
     @ViewChild("paginator", { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;

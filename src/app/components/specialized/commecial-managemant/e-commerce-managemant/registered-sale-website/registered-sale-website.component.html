@@ -26,7 +26,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{filteredDataSource.data.length | number: '1.0-0':'vi'}}
+                                {{filteredDataSource.data.length | number: '1.0-0':'vi'}} website(s)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -46,11 +46,12 @@
                     </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <!-- <div class="row">
+                <div class="row">
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyFilter()" [(ngModel)]="filterModel.id_quan_huyen" multiple>
+                            <mat-select #dSelect (selectionChange)="applyFilter($event)"
+                                [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
@@ -58,48 +59,35 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="col-9 col-lg-9 button-control">
+                    <div class="col-5 col-lg-5">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Loại hàng hóa</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-4 col-lg-4 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"
-                        (click)="ExportTOExcel('website TMĐT','website TMĐT')"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button matTooltip="Thêm mới" 
-                        (click)="switchView()"><mat-icon>add_circle_outline</mat-icon></button>
+                            (click)="ExportTOExcel('website TMĐT','website TMĐT')">
+                            <mat-icon>file_download</mat-icon>
+                        </button>
+
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                            [hidden]=authorize>
+                            <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()" [hidden]=authorize>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+
+                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
                     </div>
-                </div> -->
-                <!-- *ngIf="filteredDataSource.data.length; else ShowEmpty" -->
+                </div>
+                <hr/>
+
                 <div class="layout" #TABLE>
-                    <div class="row" style="position: sticky; left: -1em;">
-                        <div class="col-3 col-lg-3">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Địa bàn</mat-label>
-                                <mat-select #dSelect (selectionChange)="applyFilter()"
-                                    [(ngModel)]="filterModel.id_quan_huyen" multiple>
-                                    <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option>
-                                    <mat-option *ngFor='let district of districts' [value]='district.id'>
-                                        {{district.ten_quan_huyen}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-3 col-lg-3">
-                            <mat-form-field id="filter2" appearance="outline">
-                                <mat-label>Loại hàng hóa</mat-label>
-                                <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-6 col-lg-6 button-control">
-                            <button mat-raised-button matTooltip="Xuất Excel"
-                                (click)="ExportTOExcel('website TMĐT','website TMĐT')">
-                                <mat-icon>file_download</mat-icon>
-                            </button>
-                            <button mat-raised-button matTooltip="Thêm mới" (click)="switchView()" [hidden]=authorize>
-                                <mat-icon>add_circle_outline</mat-icon>
-                            </button>
-                            <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa"
-                                mat-raised-button (click)="openRemoveDialog()" [hidden]=authorize>
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
-                    </div>
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear style="text-align: left;">
@@ -120,7 +108,9 @@
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
-                                {{i+1}}</td>
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                this.filteredDataSource.paginator.pageSize}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_tc_cn" sticky>
@@ -184,7 +174,7 @@
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
 
                 <ng-template #ShowEmpty>
-                    <h1>Không có dữ liệu</h1>
+                    <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
 
             </mat-expansion-panel>

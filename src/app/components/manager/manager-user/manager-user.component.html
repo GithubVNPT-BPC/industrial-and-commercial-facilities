@@ -18,7 +18,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-8 button-control -align-left my-auto">
+                    <div class="col-8 col-lg-8 button-control -align-left my-auto">
                         <button mat-raised-button (click)="AddUser()">Thêm tài khoản</button>
 
                         <button mat-raised-button (click)="removeRows()">Kích hoạt/Vô hiệu hóa tài
@@ -35,19 +35,21 @@
                         </button> -->
                     </div>
 
-                    <div class="col-2 checkbox">
+                    <div class="col-4 col-lg-4 checkbox my-auto text-right">
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">TK ngừng hoạt
                             động
                         </mat-checkbox>
                     </div>
+
+                    <div class="col-lg-12 mt-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Lọc dữ liệu</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                        </mat-form-field>
+                    </div>
                 </div>
-
+                <hr/>
                 <div class="layout" #table>
-                    <mat-form-field id="filter">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
-
                     <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>

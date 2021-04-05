@@ -1,25 +1,16 @@
 import {
   Component,
-  ViewChild,
-  ElementRef,
   Injector,
 } from "@angular/core";
 import {
-  MatOption,
-  MatSelect,
   MatTableDataSource,
 } from "@angular/material";
-import {
-  ECommerceWebsiteFilterModel,
-  InformWebsiteModel,
-} from "src/app/_models/APIModel/e-commerce.model";
-import { District } from "src/app/_models/district.model";
+import { InformWebsiteModel } from "src/app/_models/APIModel/e-commerce.model";
 import { ExcelService } from "src/app/_services/excelUtil.service";
 import { BaseComponent } from "../../../base.component";
 import { FormControl } from "@angular/forms";
 import { CommerceManagementService } from "src/app/_services/APIService/commerce-management.service";
 import { LoginService } from "src/app/_services/APIService/login.service";
-import { subscribeOn } from "rxjs/operators";
 
 @Component({
   selector: "app-informed-ecommerce-website",
@@ -27,16 +18,6 @@ import { subscribeOn } from "rxjs/operators";
   styleUrls: ["../../../special_layout.scss"],
 })
 export class InformedEcommerceWebsiteComponent extends BaseComponent {
-
-  @ViewChild("TABLE", { static: false }) table: ElementRef;
-
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(
-      filename,
-      sheetname,
-      this.table.nativeElement
-    );
-  }
 
   displayedColumns: string[] = [
     "select",
@@ -52,9 +33,10 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
     "san_pham_tren_website",
     "ghi_chu"
   ];
+
   dataSource: MatTableDataSource<InformWebsiteModel>;
   filteredDataSource: MatTableDataSource<InformWebsiteModel> = new MatTableDataSource<InformWebsiteModel>();
-  filterModel: ECommerceWebsiteFilterModel = { id_quan_huyen: [] };
+  filterModel = { id_quan_huyen: [] };
   constructor(
     public excelService: ExcelService,
     public commerceService: CommerceManagementService,
@@ -69,70 +51,45 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
   ngOnInit() {
     super.ngOnInit()
     this.GetDanhSachWebsiteTMDT();
-    // this.autoOpen();
-    // this.sendLinkToNext(true);
-    this.autopaging();
+
     if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
 
-  applyFilter1(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  districts: District[] = [
-
-  ];
-
   GetDanhSachWebsiteTMDT() {
     this.commerceService.LayDanhSachThongBaoWeb().subscribe((response) => {
-      this.dataSource = new MatTableDataSource<InformWebsiteModel>(response.data);
-      this.filteredDataSource.data = [...this.dataSource.data];
-    });
-  }
-
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel) this.filteredDataSource.data = [];
-      else this.filteredDataSource.data = this.dataSource.data;
-    } else {
-      this.filteredDataSource.data = filteredData;
-    }
-  }
-
-  autoOpen() {
-    setTimeout(() => this.accordion.openAll(), 1000);
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach((key) => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach((criteria) => {
-          temp2 = temp2.concat(temp.filter((x) => x[key] == criteria));
-        });
-        temp = [...temp2];
+      this.filteredDataSource.data = [];
+      if (response.data && response.data.length > 0) {
+        this.dataSource = new MatTableDataSource<InformWebsiteModel>(response.data);
+        this.filteredDataSource.data = [...this.dataSource.data];
       }
+      this.paginatorAgain();
     });
-    return temp;
   }
 
-  @ViewChild("dSelect", { static: false }) dSelect: MatSelect;
-  allSelected = false;
-  toggleAllSelection() {
-    this.allSelected = !this.allSelected; // to control select-unselect
+  _prepareData( ) {}
 
-    if (this.allSelected) {
-      this.dSelect.options.forEach((item: MatOption) => item.select());
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     } else {
-      this.dSelect.options.forEach((item: MatOption) => item.deselect());
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+
     }
-    this.dSelect.close();
+    this._prepareData();
+    this.paginatorAgain();
   }
 
   getLinkDefault() {

@@ -31,12 +31,11 @@ interface HashTableNumber<T> {
 })
 
 export class IIPMonthComponent implements OnInit {
-    @ViewChild('TABLE', { static: false }) table: ElementRef;
-
     public readonly TYPE_INDICATOR_INPUT: number = 1;
     public readonly ATTRIBUTE_CODE: string = 'IND_NAME';
     public readonly UNIT_CODE: string = 'IND_UNIT';
     public readonly ATTRIBUTE_DEFAULT: number = 1;
+    private _linkOutput: LinkModel = new LinkModel();
 
     private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip/iip-detail";
     private readonly TITLE_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp - Báo cáo chi tiết";
@@ -47,6 +46,7 @@ export class IIPMonthComponent implements OnInit {
     public indexOftableMergeHader: number = 0;
 
     columns: number = 1;
+    @ViewChild('TABLE', { static: false }) table: ElementRef;
     @ViewChildren(ReportDirective) inputs: QueryList<ReportDirective>
 
     arrayTextHeader = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
@@ -70,10 +70,8 @@ export class IIPMonthComponent implements OnInit {
 
     years: Array<number> = [];
     months: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-    selectedYear: number;
-    selectedMonth: number;
-
-    private _linkOutput: LinkModel = new LinkModel();
+    selectedYear = new Date().getFullYear();
+    selectedMonth = new Date().getMonth();
 
     attributes: Array<ReportAttribute> = [];
     attributeHeaders: Array<any>;
@@ -96,6 +94,10 @@ export class IIPMonthComponent implements OnInit {
     ) {
         this.route.queryParams.subscribe(params => {
             this.time_id = params['time_id'];
+            if (this.time_id) {
+                this.selectedYear = Number(this.time_id.toString().slice(0, 4));
+                this.selectedMonth = Number(this.time_id.toString().slice(4, 6));
+            }
         });
     }
 
@@ -127,8 +129,6 @@ export class IIPMonthComponent implements OnInit {
         let data: any = JSON.parse(localStorage.getItem('currentUser'));
         //this.org_id = parseInt(data.org_id);
         this.years = this.InitialYears();
-        this.selectedYear = new Date().getFullYear();
-        this.selectedMonth = new Date().getMonth();
         this.calculateTimeId();
 
         this.sendLinkToNext(true);
@@ -140,9 +140,7 @@ export class IIPMonthComponent implements OnInit {
 
     checkAccessObj() {
         var ret = 0;
-        if (ret > 0) {
-            return true;
-        }
+        if (ret > 0) return true;
         switch (ret) {
             case -2:
                 //alertify.error('Đã trình lãnh đạo!');
@@ -201,7 +199,7 @@ export class IIPMonthComponent implements OnInit {
     GetReportById(time_id: number) {
         this.reportSevice.GetReportByKey(this.obj_id, time_id, this.org_id).subscribe(
             allRecord => {
-                if (allRecord.data.length) {
+                if (allRecord.data && allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
                     this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
@@ -212,12 +210,13 @@ export class IIPMonthComponent implements OnInit {
                         this.formatFrameReport(this.object[0]);
                     }
                     this.CreateMergeHeaderTable(this.attributes);
-
                     this.CreateReportTable();
+                    this.sendLinkToNext(true);
                 }
             }
         )
     }
+    
     formatFrameReport(report: ReportOject) {
         this.tenbaocao = report.obj_name;
         this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));

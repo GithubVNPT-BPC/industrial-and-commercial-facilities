@@ -24,14 +24,14 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> business</mat-icon> Giá trị xuất khẩu tháng {{ curentmonth }} (triệu USD)
+                                    <mat-icon> business</mat-icon> Giá trị xuất khẩu tháng {{ curentmonth }} 
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                     <!-- Số liệu Cục hải quan -->
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{TongGiaTriThangThucHien | formatNumber}}
+                                {{TongGiaTriThangThucHien | formatNumber}} (triệu USD)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -40,14 +40,14 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> equalizer</mat-icon> ƯTH so với cùng kỳ (%)
+                                    <mat-icon> equalizer</mat-icon> ƯTH so với cùng kỳ 
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                     <!-- Số liệu Cục hải quan -->
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{uth_so_cungky | formatNumber}}
+                                {{uth_so_cungky | formatNumber}} (%)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -56,14 +56,14 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> business</mat-icon> Tổng giá trị {{ curentmonth }} tháng (Triệu USD)
+                                    <mat-icon> business</mat-icon> Tổng giá trị {{ curentmonth }} tháng
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                     <!-- Số liệu Cục hải quan -->
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{ TongGiaTriCongDon | formatNumber }}
+                                {{ TongGiaTriCongDon | formatNumber }} (Triệu USD)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -129,16 +129,16 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-lg-3 button-control">
-
-                        <button mat-raised-button (click)="ImportTOExcel()" [hidden]=authorize>Import</button>
-                        <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')">Xuất Excel</button>
-                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete"
+                    <div class="col-lg-3 button-control my-auto">
+                        <button mat-raised-button (click)="ImportTOExcel()" class="green" [hidden]=authorize><mat-icon>file_upload</mat-icon>Import</button>
+                        <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')" matTooltip="Xuất Excel"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete" class="red"
                             [hidden]=authorize>Xóa</button>
                     </div>
                 </div>
 
-                <div class="layout" #table *ngIf="dataSource.data.length; else ShowEmpty">
+                <hr />
+                <div class="layout" #TABLE *ngIf="dataSource.data.length; else ShowEmpty">
                     <ng-container>
                         <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
                             <!-- <ng-container matColumnDef="delete_checkbox">
@@ -304,13 +304,9 @@
                 </div>
                 <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50]"></mat-paginator>
                 <ng-template #ShowEmpty>
-                    <h1>Không có dữ liệu</h1>
+                    <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>
 </mat-card>
-<!-- *ngIf="view == 'all'; else detail" -->
-<!-- <ng-template #detail>
-    <jw-modal></jw-modal>
-</ng-template> -->

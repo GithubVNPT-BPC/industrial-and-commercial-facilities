@@ -139,7 +139,7 @@
                         </mat-form-field> -->
                     </div>
 
-                    <div class="col-6 col-lg-6 button-control">
+                    <div class="col-6 col-lg-6 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Trạm biến áp 110KV','Trạm biến áp 110KV')">
                             <mat-icon>file_download</mat-icon>
@@ -159,7 +159,7 @@
                     </div>
 
                     <div class="col-lg-12">
-                        <mat-form-field id="filter2">
+                        <mat-form-field appearance="outline">
                             <mat-label>Lọc dữ liệu</mat-label>
                             <input matInput (keyup)="applyFilter($event, 1)" placeholder="" #input>
                         </mat-form-field>

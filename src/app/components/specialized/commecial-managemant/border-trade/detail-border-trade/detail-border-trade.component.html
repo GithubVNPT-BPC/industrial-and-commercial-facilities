@@ -93,7 +93,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Cửa khẩu</mat-label>
                             <mat-select [(ngModel)]="obj_id">
@@ -104,7 +104,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm thực hiện</mat-label>
                             <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedYear">
@@ -114,7 +114,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Tháng thực hiện</mat-label>
                             <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedMonth">
@@ -124,24 +124,24 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-lg-6 button-control my-auto text-left">
+                    <div class="col-5 col-lg-5 button-control my-auto text-right">
                         <!-- <button mat-raised-button (click)="DowloadFile('file mẫu','sheet 1')">File mẫu</button> -->
-                        <button mat-raised-button (click)="GetReportById(this.time_id)">Xem dữ liệu</button>
-                        <button mat-raised-button (click)="exportToExcel('Xuất nhập khẩu biên giới','Xuất nhập khẩu biên giới')">Xuất Excel</button>
-                        <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401" (click)="OpenDetail()">Sửa dữ liệu</button>
+                        <button mat-raised-button (click)="GetReportById(this.time_id)"><mat-icon>search</mat-icon>Tra dữ liệu</button>
+                        <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401" (click)="OpenDetail()"><mat-icon>edit</mat-icon>Sửa dữ liệu</button>
+                        <button mat-raised-button class="green" (click)="exportToExcel('Xuất nhập khẩu biên giới','Xuất nhập khẩu biên giới')"><mat-icon>file_download</mat-icon>Xuất Excel</button>
                     </div>
                 </div>
-
+                <hr/>
                 <div class="row">
                     <div class="col-12">
                         <mat-card-header *ngIf="object[0]">
                             <mat-card-title>
-                                <h2 style="padding-left: 20px;">{{tenbaocao}} | Kỳ báo cáo:
+                                <h2>{{tenbaocao}} <br /> Kỳ báo cáo :
                                     <strong>{{thoigianbaocao}}</strong>
                                 </h2>
                             </mat-card-title>
                             <mat-card-subtitle>
-                                <p style="padding-left: 40px;">Thời hạn thực hiện từ :
+                                <p>Thời hạn thực hiện từ :
                                     <strong>{{ngaybatdaubaocao}}</strong>
                                     đến
                                     ngày <strong>{{ngayketthucbaocao}}</strong></p>
@@ -201,7 +201,7 @@
                     </table>
                 </div>
                 <ng-template #ShowList>
-                    <h1>Không có dữ liệu</h1>
+                    <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
             </mat-expansion-panel>
         </mat-accordion>

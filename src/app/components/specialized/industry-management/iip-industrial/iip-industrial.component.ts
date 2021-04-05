@@ -64,20 +64,9 @@ export class IIPIndustrialComponent implements OnInit {
 
     public OpenDetail(month: number, year: number) {
         this._router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id : year * 100 + month } });
-        //     const url = this._router.serializeUrl(this._router.createUrlTree([this.REDIRECT_PAGE], { queryParams: { month: month, year: year} })
-        //   );
-        //   window.open(url.replace('%23','#'));
+
     }
     // //TS Function -----------------------------------------------------------------
-    // private initData(): void {
-    //     this.dataSource = new MatTableDataSource(this.DATA_DEFAULT);
-    //     this.dataSource.paginator = this.paginator;
-    //     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    //     this.paginator._intl.firstPageLabel = "Trang Đầu";
-    //     this.paginator._intl.lastPageLabel = "Trang Cuối";
-    //     this.paginator._intl.previousPageLabel = "Trang Trước";
-    //     this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    // }
 
     private initYears(): any {
         let returnYear: Array<any> = [];

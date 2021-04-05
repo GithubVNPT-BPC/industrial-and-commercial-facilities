@@ -130,16 +130,16 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-lg-3 button-control">
+                    <div class="col-lg-3 button-control my-auto">
                         <!-- <button mat-raised-button (click)="DowloadFile('file mẫu','sheet 1')">File mẫu</button> -->
-                        <button mat-raised-button (click)="ImportTOExcel()" [hidden]=authorize>Import</button>
-                        <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')">Xuất Excel</button>
-                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete"
+                        <button mat-raised-button (click)="ImportTOExcel()" class="green" [hidden]=authorize><mat-icon>file_upload</mat-icon>Import</button>
+                        <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')" matTooltip="Xuất Excel"><mat-icon>file_download</mat-icon></button>
+                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete" class="red"
                             [hidden]=authorize>Xóa</button>
                     </div>
                 </div>
-
-                <div class="layout" #table *ngIf="dataSource?.data.length; else ShowEmpty">
+                <hr/>
+                <div class="layout" #TABLE *ngIf="dataSource?.data.length; else ShowEmpty">
                     <ng-container>
                         <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
                             <!-- <ng-container matColumnDef="delete_checkbox">
@@ -305,7 +305,7 @@
                 </div>
 
                 <ng-template #ShowEmpty>
-                    <h1>Không có dữ liệu</h1>
+                    <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
             </mat-expansion-panel>
         </mat-accordion>

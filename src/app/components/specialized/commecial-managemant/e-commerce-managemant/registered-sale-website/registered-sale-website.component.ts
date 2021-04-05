@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, Injector } from '@angular/core';
-import { MatOption, MatSelect, MatTableDataSource } from '@angular/material';
-import { SaleWebsiteFilterModel, regisWebsiteModel } from 'src/app/_models/APIModel/e-commerce.model';
+import { Component, Injector } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { regisWebsiteModel } from 'src/app/_models/APIModel/e-commerce.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { FormControl } from '@angular/forms';
 import { BaseComponent } from '../../../base.component';
@@ -18,7 +18,7 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
       'dien_thoai', 'ten_mien', 'loai_hang_hoa', 'email', 'so_gian_hang', 'ghi_chu'];
   dataSource: MatTableDataSource<regisWebsiteModel>;
   filteredDataSource: MatTableDataSource<regisWebsiteModel> = new MatTableDataSource<regisWebsiteModel>();
-  filterModel: SaleWebsiteFilterModel = { id_quan_huyen: [] };
+  filterModel = { id_quan_huyen: [] };
   constructor(
     private inject: Injector,
     public excelService: ExcelService,
@@ -38,63 +38,39 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
     }
   }
 
-  @ViewChild('TABLE', { static: false }) table: ElementRef;
-
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
   GetDanhSachWebsiteTMDT() {
     this.commerceService.LayDanhSachDangKiWeb().subscribe(response => {
-      this.filteredDataSource = new MatTableDataSource<regisWebsiteModel>(response.data);
-      this.dataSource = new MatTableDataSource<regisWebsiteModel>(response.data);
-    })
-  }
-
-  applyFilter() {
-    let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    if (!filteredData.length) {
-      if (this.filterModel)
-        this.filteredDataSource.data = [];
-      else
-        this.filteredDataSource.data = this.dataSource.data;
-    }
-    else {
-      this.filteredDataSource.data = filteredData;
-    }
-  }
-
-  applyFilter1(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  filterArray(array, filters) {
-    const filterKeys = Object.keys(filters);
-    let temp = [...array];
-    filterKeys.forEach(key => {
-      let temp2 = [];
-      if (filters[key].length) {
-        filters[key].forEach(criteria => {
-          temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-        });
-        temp = [...temp2];
+      this.filteredDataSource.data = [];
+      if (response.data && response.data.length > 0) {
+        this.dataSource = new MatTableDataSource<regisWebsiteModel>(response.data);
+        this.filteredDataSource.data = [...this.dataSource.data];
       }
+      this.paginatorAgain();
     })
-    return temp;
   }
 
-  @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-  allSelected = false;
-  toggleAllSelection() {
-    this.allSelected = !this.allSelected;  // to control select-unselect
+  _prepareData( ) {}
 
-    if (this.allSelected) {
-      this.dSelect.options.forEach((item: MatOption) => item.select());
+  applyFilter(event) {
+    if (event.target) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     } else {
-      this.dSelect.options.forEach((item: MatOption) => item.deselect());
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
+
     }
-    this.dSelect.close();
+    this._prepareData();
+    this.paginatorAgain();
   }
 
   getFormParams() {
@@ -125,9 +101,7 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.commerceService.CapNhatDanhSachDangKiWeb(data).subscribe(res => {
-      this.successNotify(res);
-    })
+    this.commerceService.CapNhatDanhSachDangKiWeb(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   prepareRemoveData(){
@@ -136,12 +110,7 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
   }
 
   callRemoveService(data){
-    this.commerceService.XoaDanhSachDangKiWeb(data).subscribe(res => {
-      this.successNotify(res);
-    })
+    this.commerceService.XoaDanhSachDangKiWeb(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  ngAfterViewInit(){
-    this.autopaging();
-  }
 }
