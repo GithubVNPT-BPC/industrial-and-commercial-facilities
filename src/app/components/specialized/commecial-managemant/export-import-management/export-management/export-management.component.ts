@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import {
     MatTableDataSource,
-    MatTable,
     MatAccordion,
     MatPaginator,
     MatDialog,
@@ -18,7 +17,6 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { ImportDataComponent } from "../import-data/import-data.component";
 import { ExcelServicesService } from "src/app/shared/services/excel-services.service";
-import json_report_01 from "../test/report_export_01.json";
 import { LoginService } from "src/app/_services/APIService/login.service";
 
 @Component({
@@ -205,9 +203,6 @@ export class ExportManagementComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    log(any) {
-    }
-
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -223,12 +218,6 @@ export class ExportManagementComponent implements OnInit {
             .map((element, index) => new Date().getFullYear() - index);
     }
 
-    applyDistrictFilter(event) { }
-
-    // isHidden(row : any){
-    //     return (this.isChecked)? (row.is_het_han) : false;
-    // }
-
     applyExpireCheck(data) {
         let tem_data = [...data];
         this.dataSource = new MatTableDataSource<new_import_export_model>(
@@ -241,18 +230,10 @@ export class ExportManagementComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
-    // view: string = 'list';
-    // showView(){
-    //     // this.view == 'list' ? this.view = 
-    // }
-
-    openDialog(id_san_pham) {
-        // this.view = 'detail';
-        // this
-
+    openDialog(id_mat_hang) {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
-            data: this.handelDataDialog(id_san_pham),
+            data: this.handleDataDialog(id_mat_hang),
             id: 1, // xuat khau
         };
         dialogConfig.minHeight = window.innerHeight - 100;
@@ -260,9 +241,9 @@ export class ExportManagementComponent implements OnInit {
         this.matDialog.open(ModalComponent, dialogConfig);
     }
 
-    handelDataDialog(id_san_pham) {
+    handleDataDialog(id_mat_hang) {
         let data = this.dataDialog.filter(
-            (item) => item.id_san_pham === id_san_pham
+            (item) => item.id_mat_hang === id_mat_hang
         );
         return data;
     }
@@ -337,14 +318,8 @@ export class ExportManagementComponent implements OnInit {
         }
     }
 
-
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    public DowloadFile(filename: string, sheetname: string) {
-        let report: any = json_report_01;
-        this.excelServices.exportAsExcelFile(report, "mau_bao_cao_xuat_khau");
     }
 
     // declare variable isExport
@@ -378,13 +353,11 @@ export class ExportManagementComponent implements OnInit {
 
     setAll() {
         this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
-        console.log(this.dataSource.data)
     }
 
     setSomeIten(element) {
         let temp_item: Task = Object.assign({}, element);
         this.task.push(temp_item);
-        console.log(this.task);
         // element.isChecked = !element.isChecked;
     }
 

@@ -62,14 +62,13 @@ export class ModalComponent implements OnInit {
     so_quoc_gia: number = 0;
     handleData() {
         this.id = this.data['id'];
-        console.log(this.data)
         // id = 1 => Export
         if (this.id === 1) {
             this.dataSource = new MatTableDataSource<dialog_detail_model>(this.data['data']);
             this.TongGiaTriThangThucHien = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_thang).reduce((a,b) => a + b) : 0
             this.TongGiaTriCongDon = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_cong_don).reduce((a,b) => a + b) : 0
             this.so_quoc_gia = this.data['data'].length;
-            this.ten_san_pham = this.data['data'][0]['ten_san_pham']
+            this.ten_san_pham = this.data.data.length ? this.data['data'][0]['ten_san_pham'] : '';
             // for (let item of this.data['data']) {
             //     this.ten_san_pham = item['ten_san_pham']
             //     this.TongGiaTriThangThucHien += item['tri_gia_thang'];
@@ -100,16 +99,8 @@ export class ModalComponent implements OnInit {
             this.router.createUrlTree(['/public/partner/search/' + mst]));
         window.open(url, "_blank");
     }
-
-    closeDialog() {
-
-    }
-
+    
     public ExportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    public ExportTOExcel1(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 }
