@@ -99,7 +99,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm thực hiện</mat-label>
                             <mat-select (selectionChange)="applyDataTarget()" [(ngModel)]="curentYear">
@@ -109,7 +109,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Tháng thực hiện</mat-label>
                             <mat-select (selectionChange)="applyDataTarget()" [(ngModel)]="curentmonth">
@@ -119,7 +119,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Nguồn dữ liệu: </mat-label>
                             <mat-select (selectionChange)="applyDataTarget($event.value)" [(ngModel)]="dataTargetId">
@@ -130,12 +130,12 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-lg-3 button-control my-auto">
+                    <div class="col-lg-4 button-control my-auto">
                         <!-- <button mat-raised-button (click)="DowloadFile('file mẫu','sheet 1')">File mẫu</button> -->
                         <button mat-raised-button (click)="ImportTOExcel()" class="green" [hidden]=authorize><mat-icon>file_upload</mat-icon>Import</button>
                         <button mat-raised-button (click)="ExportTOExcel('Xuất khẩu','Xuất khẩu')" matTooltip="Xuất Excel"><mat-icon>file_download</mat-icon></button>
-                        <button mat-raised-button (click)="Delete()" [disabled]="allComplete" class="red"
-                            [hidden]=authorize>Xóa</button>
+                        <!-- <button mat-raised-button (click)="Delete()" [disabled]="allComplete" class="red"
+                            [hidden]=authorize>Xóa</button> -->
                     </div>
                 </div>
                 <hr/>
@@ -274,7 +274,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="jump">
                                     <mat-icon
-                                        (click)="openDanh_sach_doanh_nghiep(element.id_mat_hang,element.ten_san_pham)">
+                                        (click)="openDanh_sach_doanh_nghiep(element.id_san_pham,element.ten_san_pham)">
                                         equalizer</mat-icon>
                                 </td>
                                 <!-- <td mat-footer-cell *matFooterCellDef></td> -->

@@ -161,10 +161,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.accordion.openAll(), 1000);
     }
 
-    // getTotalCost() {
-    //   return this.dataSource.data.map(t => t.cost).reduce((acc, value) => acc + value, 0);
-    // }
-
     getDanhSachNhapKhau() {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
@@ -223,10 +219,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         // this.dataSource.sort = this.sort;
     }
 
-    log(any) {
-        console.log(any);
-    }
-
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
         this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -243,7 +235,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     }
 
     applyExpireCheck(data) {
-        // console.log(data);
         let tem_data = [...data]
         this.dataSource = new MatTableDataSource<new_import_export_model>(tem_data.filter(item => this.nhap_khau_chu_yeu.includes(item.id_mat_hang)));
         this.tinh_tong(this.dataSource.data)
@@ -273,7 +264,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         return data;
     }
 
-    // openDanh_sach_doanh_nghiep(id_mat_hang, ten_san_pham) {
+    openDanh_sach_doanh_nghiep(id_mat_hang, ten_san_pham) {
     //     this.marketService
     //         .GetTopExport(this.curentmonth, new Date().getFullYear(), id_mat_hang)
     //         .subscribe((data) => {
@@ -287,7 +278,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     //             dialogConfig.minWidth = '80%'
     //             this.matDialog.open(ModalComponent, dialogConfig);
     //         });
-    // }
+    }
 
     applyDataTarget() {
         // this.dataTargetId[0] = 2
@@ -346,13 +337,11 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
 
     setAll() {
         this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
-        console.log(this.dataSource.data)
     }
 
     setSomeIten(element) {
         let temp_item: Task = Object.assign({}, element);
         this.task.push(temp_item);
-        console.log(this.task);
         // element.isChecked = !element.isChecked;
     }
 
