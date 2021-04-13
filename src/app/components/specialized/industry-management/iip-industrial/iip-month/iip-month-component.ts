@@ -201,7 +201,8 @@ export class IIPMonthComponent implements OnInit {
             allRecord => {
                 if (allRecord.data && allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
-                    this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+                    this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+                    // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];
                     this.object = allRecord.data[0];
@@ -216,7 +217,7 @@ export class IIPMonthComponent implements OnInit {
             }
         )
     }
-    
+
     formatFrameReport(report: ReportOject) {
         this.tenbaocao = report.obj_name;
         this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));

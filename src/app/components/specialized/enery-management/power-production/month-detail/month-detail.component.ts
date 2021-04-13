@@ -68,7 +68,7 @@ export class MonthDetailComponent implements OnInit {
     tenbaocao: string = "";
     ngaybatdaubaocao: string = "";
     ngayketthucbaocao: string = "";
-    
+
     years: Array<number> = [];
     months: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     selectedYear: number;
@@ -206,7 +206,6 @@ export class MonthDetailComponent implements OnInit {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
                     this.attributes.sort((a, b) => a.attr_id - b.attr_id);
-                    console.log(this.attributes)
                     // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];

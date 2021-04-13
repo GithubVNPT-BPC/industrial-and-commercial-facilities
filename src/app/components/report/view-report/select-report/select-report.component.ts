@@ -175,7 +175,7 @@ export class ViewSelectReportComponent implements OnInit {
   // }
 
   OpenDetailObject(obj: ReportOject) {
-    this.router.navigate(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } });
+    this.router.navigate(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: obj.org_id, time_id: obj.time_id } });
   }
 
   OpenDialog(obj: ReportOject) {

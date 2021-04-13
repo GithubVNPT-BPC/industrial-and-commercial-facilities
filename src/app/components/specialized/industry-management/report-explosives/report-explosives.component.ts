@@ -84,7 +84,7 @@ export class ReportExplosivesComponent extends BaseComponent {
     private router: Router
   ) {
     super(injector);
-    
+
   }
 
   ngOnInit(): void {
@@ -143,13 +143,14 @@ export class ReportExplosivesComponent extends BaseComponent {
         // this.attributes = allRecord.data[1] as ReportAttribute[];
         this.attributes = this.init2Col(allRecord.data[1] as ReportAttribute[]);
         // console.log(this.attributes);
-        this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+        this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+        // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
         this._indicators = allRecord.data[2] as ReportIndicator[];
         this._indicators.sort((a, b) =>
           a.ind_code.toLocaleString().localeCompare(b.ind_code.toLocaleString())
         );
         // console.log('indiccator :    ',this._indicators);
-        
+
         this._datarows = allRecord.data[3] as ReportDatarow[];
         this.setValueLastyear2Now();
         // this._object = allRecord.data[0];
@@ -307,7 +308,7 @@ export class ReportExplosivesComponent extends BaseComponent {
     .map((c) =>
     c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
     );
-    
+
     // console.log(this.attributes);
     this.attributeHeaders = this.attributeHeaders.filter(
       (a) => a.toLowerCase() != "ind_code" && a.toLowerCase() != "rn"
@@ -418,7 +419,7 @@ export class ReportExplosivesComponent extends BaseComponent {
     });
     this.dataSource.data = [...this._tableData.data];
     this._caculator(this.dataSource.data);
-    
+
   }
 
   getNestedChildren(indicators: Array<ReportIndicator>, parent: number) {
@@ -531,7 +532,7 @@ export class ReportExplosivesComponent extends BaseComponent {
     this.paginator._intl.getRangeLabel = this.RANK_LABLE;
   }
 
-  compareToLastYear(e){ 
+  compareToLastYear(e){
     // console.log(e)
   }
 

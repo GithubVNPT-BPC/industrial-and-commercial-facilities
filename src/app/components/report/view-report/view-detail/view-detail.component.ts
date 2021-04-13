@@ -56,7 +56,7 @@ export class ViewReportComponent implements OnInit {
   time_id: number;
   org_id: number = 0;
   rows: number = 0;
-  
+
   thoigianbaocao:string = "";
   tenbaocao:string ="";
   ngaybatdaubaocao:string ="";
@@ -122,7 +122,8 @@ export class ViewReportComponent implements OnInit {
 
   ngOnInit(): void {
     let data: any = JSON.parse(localStorage.getItem('currentUser'));
-    this.org_id = parseInt(data.org_id);
+    if (!this.org_id)
+      this.org_id = parseInt(data.org_id);
 
     this.GetReportById(this.obj_id, this.time_id, this.org_id);
     this.keyboardservice.keyBoard.subscribe(res => {
@@ -201,7 +202,6 @@ export class ViewReportComponent implements OnInit {
         if( this.object[0]){
           this.formatFrameReport(this.object[0]);
         }
-        this.indicators.forEach(e => { console.log(e.ind_unit) });
         this.CreateMergeHeaderTable(this.attributes);
 
         this.CreateReportTable();
