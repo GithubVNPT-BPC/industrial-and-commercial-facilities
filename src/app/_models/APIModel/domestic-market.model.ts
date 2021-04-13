@@ -54,7 +54,7 @@ export class DomesticPriceModel {
     public nguon_so_lieu: string;
     public ngay_cap_nhat: string;
     public ten_san_pham: string;
-    public don_vi_tinh: string;
+    public don_vi_tinh1: string;
 };
 
 export class ForeignMarketModel {
@@ -76,7 +76,7 @@ export class ExportMarketModel {
     public tri_gia_thang_tc: number;
     public id_san_pham: number;
     public ten_san_pham: string;
-    public don_vi_tinh: string;
+    public don_vi_tinh2: string;
     public time_id: string;
 }
 
@@ -88,7 +88,7 @@ export class ImportMarketModel {
     public tri_gia_thang_tc: number;
     public id_san_pham: number;
     public ten_san_pham: string;
-    public don_vi_tinh: string;
+    public don_vi_tinh2: string;
     public time_id: string;
 }
 
@@ -99,7 +99,7 @@ export class ProductValueModel {
     public tri_gia: number;
     public time_id: string;
     public ten_san_pham: string;
-    public don_vi_tinh: string;
+    public don_vi_tinh2: string;
 }
 
 export class TopCompanyModel {

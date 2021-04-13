@@ -47,7 +47,7 @@ export class DomesticPriceComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
 
-  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
+  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh1', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
   dataSource: MatTableDataSource<DomesticPriceModel>;
 
   constructor(

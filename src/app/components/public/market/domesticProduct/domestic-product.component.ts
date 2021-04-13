@@ -50,7 +50,7 @@ export class DomesticProductComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh', 'san_luong', 'tri_gia', 'top_san_xuat'];
+  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh2', 'san_luong', 'tri_gia', 'top_san_xuat'];
   public dataSource: MatTableDataSource<ProductValueModel>;
 
   constructor(

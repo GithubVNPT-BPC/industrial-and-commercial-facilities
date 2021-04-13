@@ -48,7 +48,7 @@ export const MY_FORMATS = {
 })
 
 export class DomesticExportComponent implements OnInit {
-  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh', 'san_luong_thang', 'tri_gia_thang', 'san_luong_thang_tc', 'tri_gia_thang_tc', 'top_xuat_khau'];
+  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh2', 'san_luong_thang', 'tri_gia_thang', 'san_luong_thang_tc', 'tri_gia_thang_tc', 'top_xuat_khau'];
   public dataSource: MatTableDataSource<ExportMarketModel>;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;

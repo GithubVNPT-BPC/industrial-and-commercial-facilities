@@ -1,6 +1,6 @@
 <mat-card class="material">
     <mat-card-header>
-        <mat-card-title><strong>Cập nhật giá cả sản xuất</strong></mat-card-title>
+        <mat-card-title><strong>Cập nhật giá cả sản xuất (Đơn vị tính: Nghìn tấn)</strong></mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -112,7 +112,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia">
-                    <th mat-header-cell *matHeaderCellDef> Trị giá (VNĐ) </th>
+                    <th mat-header-cell *matHeaderCellDef> Trị giá (Nghìn USD) </th>
                     <td mat-cell *matCellDef="let element">
                         <input appReport currencyMask class="text-right" [(ngModel)]="element.tri_gia">
                     </td>

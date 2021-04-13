@@ -1,6 +1,6 @@
 <mat-card class="material">
     <mat-card-header>
-        <mat-card-title><strong>Cập nhật giá cả nông sản nước ngoài</strong></mat-card-title>
+        <mat-card-title><strong>Cập nhật giá cả nông sản nước ngoài (Đơn vị tính: Tấn)</strong></mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -112,7 +112,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="gia_ca">
-                    <th mat-header-cell *matHeaderCellDef> Giá (VNĐ) </th>
+                    <th mat-header-cell *matHeaderCellDef> Giá (USD) </th>
                     <td mat-cell *matCellDef="let element">
                         <input appReport currencyMask class="text-right" [(ngModel)]="element.gia_ca">
                     </td>
