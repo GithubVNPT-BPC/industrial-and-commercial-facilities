@@ -15,7 +15,7 @@ import { ReportService } from 'src/app/_services/APIService/report.service';
 @Component({
     selector: 'retail',
     templateUrl: './retail.component.html',
-    styleUrls: ['/../../special_layout.scss'],
+    styleUrls: ['/../../special_layout.scss']
 })
 
 export class RetailComponent implements OnInit {
@@ -85,7 +85,7 @@ export class RetailComponent implements OnInit {
     }
 
     private getData(time_id: number) {
-        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_ATTR_THT').subscribe(res => {
+        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(res => {
             this.dataSource = new MatTableDataSource<RetailModel>(res.data);
             this.dataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';

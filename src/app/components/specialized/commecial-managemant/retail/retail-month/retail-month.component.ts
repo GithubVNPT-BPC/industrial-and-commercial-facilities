@@ -64,7 +64,7 @@ export class RetailMonthComponent implements OnInit {
     tenbaocao: string = "";
     ngaybatdaubaocao: string = "";
     ngayketthucbaocao: string = "";
-    
+
     years: Array<number> = [];
     months: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     selectedYear = new Date().getFullYear();
@@ -141,7 +141,7 @@ export class RetailMonthComponent implements OnInit {
     checkAccessObj() {
         var ret = 0;
         if (ret > 0) return true;
- 
+
         switch (ret) {
             case -2:
                 //alertify.error('Đã trình lãnh đạo!');
@@ -202,7 +202,8 @@ export class RetailMonthComponent implements OnInit {
             allRecord => {
                 if (allRecord.data.length) {
                     this.attributes = allRecord.data[1] as ReportAttribute[];
-                    this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+                    this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+                    // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
                     this.indicators = allRecord.data[2] as ReportIndicator[];
                     this.datarows = allRecord.data[3] as ReportDatarow[];
                     this.object = allRecord.data[0];

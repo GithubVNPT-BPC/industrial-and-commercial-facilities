@@ -29,4 +29,7 @@ export class HomeSpecializedComponent implements OnInit {
         this._router.navigate(['/specialized/industry-management/chemical']);
     }
 
+    public OpenDN() {
+      this._router.navigate(['/specialized/commecial-management/domestic/search']);
+  }
 }
