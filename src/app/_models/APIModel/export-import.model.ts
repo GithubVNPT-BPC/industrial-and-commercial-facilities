@@ -19,6 +19,7 @@ export class ex_im_model {
 
 
 export class new_import_export_model {
+    mst: number;
     ten_san_pham: string;
     id_san_pham: string;
     san_luong_thang: number;

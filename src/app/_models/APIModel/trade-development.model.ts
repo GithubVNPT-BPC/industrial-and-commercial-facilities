@@ -38,4 +38,5 @@ export class dia_diem_km{
     dia_diem: string;
     id_quan_huyen: number;
     id_xttm_km: number;
+    id: number;
 }

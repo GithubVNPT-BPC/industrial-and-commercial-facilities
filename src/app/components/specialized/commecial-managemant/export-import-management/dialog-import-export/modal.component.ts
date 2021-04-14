@@ -18,7 +18,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
     encapsulation: ViewEncapsulation.None
 })
 export class ModalComponent implements OnInit {
-    public displayedColumns_business: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'mst', 'dia_chi', 'dien_thoai', 'chi_tiet_doanh_nghiep'];
+    public displayedColumns_business: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'dia_chi', 'chi_tiet_doanh_nghiep'];
     ten_san_pham: string = '';
     so_doanh_nghiep: number = 0;
     displayedColumns: string[] = ['index', 'ten_san_pham', 'thi_truong', 'luong_thang', 'gia_tri_thang', 'luong_cong_don', 'gia_tri_cong_don'];
@@ -49,6 +49,8 @@ export class ModalComponent implements OnInit {
 
     ngOnInit(): void {
         this.handleData();
+        // console.log(this.data);
+        
     }
 
     ngAfterViewInit(): void {
@@ -69,12 +71,6 @@ export class ModalComponent implements OnInit {
             this.TongGiaTriCongDon = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_cong_don).reduce((a,b) => a + b) : 0
             this.so_quoc_gia = this.data['data'].length;
             this.ten_san_pham = this.data.data.length ? this.data['data'][0]['ten_san_pham'] : '';
-            // for (let item of this.data['data']) {
-            //     this.ten_san_pham = item['ten_san_pham']
-            //     this.TongGiaTriThangThucHien += item['tri_gia_thang'];
-            //     this.TongGiaTriCongDon += item['tri_gia_cong_don'];
-            //     this.so_quoc_gia += 1;
-            // }
         } else {
             this.ten_san_pham = this.data['ten_san_pham'];
             this.so_doanh_nghiep = this.data['data'].length;

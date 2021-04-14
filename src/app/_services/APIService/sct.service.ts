@@ -23,9 +23,6 @@ export class SCTService {
     private urlDanhSachQuanLyCongNghiepThucPham = "/danh-sach-quan-ly-cong-nghiep-thuc-pham";
     private urlDanhSachQuanLyVatLieuNoCongNghiep = "/vlncn";
     
-
-    private urlDanhSachWebTMDT = "/danh-sach-dang-ki-tmdt";
-    private urlDanhSachWebBH = "/danh-sach-website";
     private urlDanhSachDaCap = "/danh-sach-ban-hang-da-cap";
 
     private apiSpecialized = environment.apiEndpoint + "api/qltm";
@@ -33,18 +30,22 @@ export class SCTService {
     private urlDanhSachNhapKhauTC = "/xnk/nhap-khau-tc";
     private urlDanhSachXuatKhau = "/xnk/xuat-khau";
     private urlDanhSachXuatKhauTC = "/xnk/xuat-khau-tc";
+
     private urlChiTietNhapKhau = "/xnk/chi-tiet-nhap-khau";
     private urlChiTietNhapKhauTC = "/xnk/chi-tiet-nhap-khau-tc";
     private urlChiTietXuatKhau = "/xnk/chi-tiet-xuat-khau";
     private urlChiTietXuatKhauTC = "/xnk/chi-tiet-xuat-khau-tc";
+
+    private urlDNNhapKhau = "/xnk/doanh-nghiep-nhap-khau";
+    private urlDNNhapKhauTC = "/xnk/doanh-nghiep-nhap-khau-tc";
+    private urlDNXuatKhau = "/xnk/doanh-nghiep-xuat-khau";
+    private urlDNXuatKhauTC = "/xnk/doanh-nghiep-xuat-khau-tc";
 
     private urlDuLieuBienGioiNK = "/tmbg/nhap-khau";
     private urlDuLieuBienGioiXK = "/tmbg/xuat-khau";
     private urlThuongMaiBienGioiNK = "/tmbg/nhap-khau";
     private urlThuongMaiBienGioiXK = "/tmbg/xuat-khau";
 
-    private urlSaleWebsite = "/cap-nhat-danh-sach-website"
-    private urlCapNhatDanhSachWebTMDT = "/cap-nhat-danh-sach-dang-ki-tmdt";
 
     // start api cong nghiep
     private apiIndustry = environment.apiEndpoint + "api/qlcn";
@@ -262,6 +263,40 @@ export class SCTService {
         let params = new HttpParams().set('time_id', time_id.toString());
         
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public CapNhatDNNKThang(data: any[]) {
+        var apiUrl = this.apiSpecialized + this.urlDNNhapKhau;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public CapNhatDNNKThangTC(data: any[]) {
+        var apiUrl = this.apiSpecialized + this.urlDNNhapKhauTC;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        
+        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public CapNhatDNXKThang(data: any[]) {
+        var apiUrl = this.apiSpecialized + this.urlDNXuatKhau;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public CapNhatDNXKThangTC(data: any[]) {
+        var apiUrl = this.apiSpecialized + this.urlDNXuatKhauTC;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        
+        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

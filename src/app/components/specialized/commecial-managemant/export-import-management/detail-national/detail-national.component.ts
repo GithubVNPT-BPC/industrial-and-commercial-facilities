@@ -13,40 +13,14 @@ import json_report_01 from "../test/report_export_01.json";
 })
 export class DetailNationalComponent implements OnInit {
 
+  hrefReport = "assets\\Báo cáo xuất nhập khẩu\\File_mau_top_doanh_nghiep.xlsx";
   displayedColumns = [
     "index",
+    "ma_so_thue",
     "ten_san_pham",
-    "luong_thang",
-    "gia_tri_thang",
-    "uoc_th_so_cungky_tht",
-    "uoc_th_so_thg_truoc_tht",
-
-    "luong_cong_don",
-    "gia_tri_cong_don",
-    "uoc_th_so_cungky_cong_don",
-    "uoc_th_so_thg_truoc_cong_don",
-    "danh_sach_doanh_nghiep",
-    "chi_tiet_doanh_nghiep",
+    "tri_gia"
   ];
-  displayRow1Header = [
-    "index",
-    "ten_san_pham",
-    "thuc_hien_bao_cao_thang",
-    "cong_don_den_ky_bao_cao",
-
-    "danh_sach_doanh_nghiep",
-    "chi_tiet_doanh_nghiep",
-  ];
-  displaRow2Header = [
-    "luong_thang",
-    "gia_tri_thang",
-    "uoc_th_so_cungky_tht",
-    "uoc_th_so_thg_truoc_tht",
-    "luong_cong_don",
-    "gia_tri_cong_don",
-    "uoc_th_so_cungky_cong_don",
-    "uoc_th_so_thg_truoc_cong_don",
-  ];
+  
   years: number[] = this.getYears();
   months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   dataTargets: any[] = [
@@ -64,6 +38,7 @@ export class DetailNationalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public dataDialog
   ) {}
   dataSource: MatTableDataSource<new_import_export_model>;
+  body: any[]=[];
   ngOnInit() {
     this.autoOpen();
   }
@@ -108,62 +83,52 @@ export class DetailNationalComponent implements OnInit {
 
         /* save data */
         const data = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
-        if(this.dataDialog.data['isExport']) this.mapData(data);
-        if(this.dataDialog.data['isImport']) this.mapDataToObject(data);
+        
+        this.mapDataToObject(data);
       };
     }
 
-    // Xuat khau
-    mapData(data){
+    mapDataToObject(data){
+      // console.log(data);
       this.dataSource = new MatTableDataSource<new_import_export_model>(data.map(item => {
         let tem = new new_import_export_model();
         // tem.ten_san_pham = item['Sản phẩm'];
-        tem.id_san_pham = item['ID'].toString() ? item['ID'].toString() : 0;
-        tem.san_luong_thang = item['Sản lượng (Nghìn tấn)'];
-        tem.tri_gia_thang = item['Trị giá (Triệu USD)'] ? item['Trị giá (Triệu USD)'] : 0;
-        tem.uoc_thang_so_voi_ki_truoc = item['ƯTH so với 1 tháng cùng kỳ'] ? item['ƯTH so với 1 tháng cùng kỳ'] : 0;
-        tem.uoc_thang_so_voi_thang_truoc = item['ƯTH so với tháng trước'] ? item['ƯTH so với tháng trước'] : 0;
-        tem.san_luong_cong_don= item['Sản lượng (Nghìn tấn)_1'] ? item['Sản lượng (Nghìn tấn)_1'] : 0;
-        tem.tri_gia_cong_don = item['Trị giá (Triệu USD)_1'] ? item['Trị giá (Triệu USD)_1'] : 0;
-        tem.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so với 1 tháng cùng kỳ'] ? item['ƯTH so với 1 tháng cùng kỳ'] : 0;
-        tem.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so với kế hoạch năm'] ? item['ƯTH so với kế hoạch năm'] : 0;
+        tem.id_san_pham = item['ID'] ? item['ID'] : 0;
+        tem.mst = item['Mã số thuế'] ? item['Mã số thuế'] : 0;
+        tem.ten_san_pham = item['Sản phẩm'] ? item['Sản phẩm'] : 0;
+        tem.tri_gia_thang = item['Trị giá'] ? item['Trị giá'] : 0;
         return tem;
       }));
+      this.mapDataTobody();
     }
 
-    // Nhap khau
-    mapDataToObject(data){
-      this.dataSource = new MatTableDataSource<new_import_export_model>(data.map(item => {
-        let tem = new new_import_export_model();
-        // tem.ten_san_pham = item['Sản phẩm'];
-        tem.id_san_pham = item['ID'].toString() ? item['ID'].toString() : 0;
-        tem.san_luong_thang = item['Sản lượng (Nghìn tấn)'] ? item['Sản lượng (Nghìn tấn)'] : 0;
-        tem.tri_gia_thang = item['Trị giá (Triệu USD)'] ? item['Trị giá (Triệu USD)'] : 0;
-        tem.uoc_thang_so_voi_ki_truoc = item['ƯTH so cùng kỳ'] ? item['ƯTH so cùng kỳ'] : 0;
-        tem.uoc_thang_so_voi_thang_truoc = item['ƯTH so tháng trước'] ? item['ƯTH so tháng trước'] : 0;
-        tem.san_luong_cong_don= item['Sản lượng (Nghìn tấn)_1'] ? item['Sản lượng (Nghìn tấn)_1'] : 0;
-        tem.tri_gia_cong_don = item['Trị giá (Triệu USD)_1'] ? item['Trị giá (Triệu USD)_1'] : 0;
-        tem.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so cùng kỳ_1'] ? item['ƯTH so cùng kỳ_1'] : 0;
-        tem.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so KH năm'] ? item['ƯTH so KH năm'] : 0;
-        return tem;
-      }));
+    mapDataTobody(){
+      let date_time = this.currentYear*100 + this.currentmonth;
+      this.body = this.dataSource.data.map(e =>{
+        let ob = {};
+        ob['id_san_pham'] = e.id_san_pham;
+        ob['mst'] = e.mst;
+        ob['cong_suat'] = e.tri_gia_thang;
+        ob['time_id'] = date_time
+        return ob;
+      })
     }
 
     Save(){
-      let date_time = this.currentYear*100 + this.currentmonth;
+      console.log(this.body);
       if(this.dataDialog.data['isImport']){
-        if(this.dataSource.data.length){
+        if(this.body.length){
           switch (this.dataTargetId) {
             case 1:
               if(this.getConfirm()){
-                this.sctService.CapNhatDuLieuNKThang(date_time, this.dataSource.data).subscribe(res => {
+                this.sctService.CapNhatDNNKThang(this.body).subscribe(res => {
                   alert(res['message']);
                 });
               }
               break;
             case 2:
               if(this.getConfirm()){
-                this.sctService.CapNhatDuLieuNKThangTC(date_time, this.dataSource.data).subscribe(res => {
+                this.sctService.CapNhatDNNKThangTC(this.dataSource.data).subscribe(res => {
                   alert(res['message']);
                 });
               }
@@ -178,18 +143,18 @@ export class DetailNationalComponent implements OnInit {
       }
 
       if(this.dataDialog.data['isExport']){
-        if(this.dataSource.data.length){
+        if(this.body.length){
           switch (this.dataTargetId) {
             case 1:
               if(this.getConfirm()){
-                this.sctService.CapNhatDuLieuXKThang(date_time, this.dataSource.data).subscribe(res => {
+                this.sctService.CapNhatDNXKThang(this.body).subscribe(res => {
                   alert(res['message']);
                 });
               }
               break;
             case 2:
               if(this.getConfirm()){
-                this.sctService.CapNhatDuLieuXKThangTC(date_time, this.dataSource.data).subscribe(res => {
+                this.sctService.CapNhatDNXKThangTC(this.body).subscribe(res => {
                   alert(res['message']);
                 });
               }
