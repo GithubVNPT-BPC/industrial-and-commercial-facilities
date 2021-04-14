@@ -1,8 +1,11 @@
 <mat-dialog-content class="content-dialog">
     <ng-container>
         <div class="button-control" style="display: flex; justify-content: center;">
-            <button mat-raised-button (click)="DowloadFile('file mẫu','sheet 1')" class="button-close">
-                <mat-icon>flip_to_front</mat-icon>File mẫu
+            <button mat-raised-button class="button-close">
+                <mat-icon>flip_to_front</mat-icon>
+                <a [href]="hrefReport" download="Bao_cao_mau_top_dn.xlsx" style="color: white; text-decoration: underline;">
+                    File mẫu
+                </a>
             </button>
             <button mat-raised-button (click)="Save()" class="button-close">
                 <mat-icon>flip_to_front</mat-icon>Lưu
@@ -66,144 +69,35 @@
                             <ng-container>
                                 <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table" >
                                     <ng-container matColumnDef="index">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
+                                        <th mat-header-cell *matHeaderCellDef class="fillColor">STT</th>
                                         <td mat-cell *matCellDef="let element; let i = index" >
                                             {{ i + 1 }}
                                         </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef></td> -->
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="ma_so_thue">
+                                        <th mat-header-cell *matHeaderCellDef class="fillColor">Mã số thuế</th>
+                                        <td mat-cell *matCellDef="let element; let i = index" >
+                                            {{element.mst}}
+                                        </td>
                                     </ng-container>
         
                                     <ng-container matColumnDef="ten_san_pham">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
+                                        <th mat-header-cell *matHeaderCellDef class="fillColor">
                                             Tên sản phẩm
                                         </th>
                                         <td mat-cell *matCellDef="let element" class="fillColor">
-                                            {{ element.id_san_pham }}
+                                            {{ element.ten_san_pham }}
                                         </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef class="fillColor">TỔNG</td> -->
                                     </ng-container>
         
-                                    <ng-container matColumnDef="thuc_hien_bao_cao_thang">
-                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="fillColor">
-                                            Tháng {{currentmonth}}
-                                        </th>
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="cong_don_den_ky_bao_cao">
-                                        <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="fillColor">
-                                            {{currentmonth}} Tháng
-                                        </th>
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="luong_thang">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sản lượng (Nghìn tấn)</th>
-                                        <td mat-cell *matCellDef="let element" class="luong">
-                                            {{ element.san_luong_thang | formatNumber }}
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongLuongThangThucHien | formatNumber }}
-                                        </td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="gia_tri_thang">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Trị giá (Triệu USD)</th>
+                                    <ng-container matColumnDef="tri_gia">
+                                        <th mat-header-cell *matHeaderCellDef>Trị giá (Triệu USD)</th>
                                         <td mat-cell *matCellDef="let element" class="gia-tri">
                                             {{ element.tri_gia_thang | formatNumber }}
                                         </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongGiaTriThangThucHien | formatNumber }}
-                                        </td> -->
                                     </ng-container>
-        
-                                    <ng-container matColumnDef="uoc_th_so_cungky_tht">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                            so với tháng {{curentmonth}} cùng kỳ</th>
-                                        <td mat-cell *matCellDef="let element" class="gia-tri">
-                                            {{ element.uoc_thang_so_voi_ki_truoc | formatNumber }}
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongGiaTriThangThucHien | formatNumber }}
-                                        </td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="uoc_th_so_thg_truoc_tht">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                            so với tháng trước</th>
-                                        <td mat-cell *matCellDef="let element" class="gia-tri">
-                                            {{ element.uoc_thang_so_voi_thang_truoc | formatNumber }}
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongGiaTriThangThucHien | formatNumber }}
-                                        </td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="luong_cong_don">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sản lượng (Nghìn tấn)</th>
-                                        <td mat-cell *matCellDef="let element" class="luong">
-                                            {{ element.san_luong_cong_don | formatNumber }}
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongLuongCongDon | formatNumber }}
-                                        </td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="gia_tri_cong_don">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Trị giá (Triệu USD)</th>
-                                        <td mat-cell *matCellDef="let element" class="gia-tri">
-                                            {{ element.tri_gia_cong_don | formatNumber }}
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongGiaTriCongDon | formatNumber }}
-                                        </td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="uoc_th_so_cungky_cong_don">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                            so với {{currentmonth}} tháng cùng kỳ</th>
-                                        <td mat-cell *matCellDef="let element" class="gia-tri">
-                                            {{ element.uoc_cong_don_so_voi_ki_truoc | formatNumber }}
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef>
-                                            {{ TongGiaTriCongDon | formatNumber }}
-                                        </td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="uoc_th_so_thg_truoc_cong_don">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                            so với kế hoạch năm</th>
-                                        <td mat-cell *matCellDef="let element" class="gia-tri">
-                                            {{ element.uoc_cong_don_so_voi_cong_don_truoc | formatNumber }}
-                                        </td>
-                                        <td mat-footer-cell *matFooterCellDef>
-                                            <!-- {{ TongGiaTriCongDon | formatNumber }} -->
-                                        </td>
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="danh_sach_doanh_nghiep">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                            Danh sách doanh nghiệp
-                                        </th>
-                                        <td mat-cell *matCellDef="let element" class="jump">
-                                            <mat-icon (click)="openDanh_sach_doanh_nghiep(element.id_mat_hang,element.ten_san_pham)">
-                                                equalizer</mat-icon>
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-                                    </ng-container>
-        
-                                    <ng-container matColumnDef="chi_tiet_doanh_nghiep">
-                                        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                            Chi tiết xuất khẩu
-                                        </th>
-                                        <td mat-cell *matCellDef="let element" class="jump">
-                                            <mat-icon (click)="openDialog(element.id_mat_hang)">
-                                                business</mat-icon>
-                                        </td>
-                                        <!-- <td mat-footer-cell *matFooterCellDef></td> -->
-                                    </ng-container>
-        
-                                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow1Header; sticky: true"></tr>
-                                    <tr mat-header-row class="table-header" *matHeaderRowDef="displaRow2Header; sticky: true"></tr>
-                                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow3Header; sticky: true"></tr>
+                                    <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                                     <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
                                 </table>
                             </ng-container>

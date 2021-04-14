@@ -188,13 +188,7 @@ export class DetailDataComponent implements OnInit {
   }
 
   initReport(): void {
-    // this.downloads
-    //   .download('/Book1.xlsx')
-    //   .subscribe(blob => saveAs(blob, 'Book1.xlsx'))
-    // if(this.dataDialog.data['isImport']) this.hrefReport = "assets\\Báo cáo xuất nhập khẩu\\Chi tiết nhập khẩu\\Chi tiết nhập khẩu.xlsx";
-    // if(this.dataDialog.data['isExport'])
     this.hrefReport = "assets\\Báo cáo xuất nhập khẩu\\Chi tiết xuất khẩu\\Chi tiết xuất khẩu.xlsx";
-    console.log(this.hrefReport)
   }
 
   checkIsImportOrExport(){
