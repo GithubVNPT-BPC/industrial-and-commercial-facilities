@@ -96,7 +96,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Hình thức KM</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)"
-                                [(ngModel)]="filterModel.ten_hinh_thuc" multiple>
+                                [(ngModel)]="filterModel.id_hinh_thuc" multiple>
                                 <mat-option *ngFor='let type of promotionTypes' [value]='type.id_hinh_thuc'>
                                     {{type.ten_hinh_thuc}}
                                 </mat-option>

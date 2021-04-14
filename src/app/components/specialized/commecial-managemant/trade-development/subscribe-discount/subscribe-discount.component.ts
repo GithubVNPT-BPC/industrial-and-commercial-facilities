@@ -120,6 +120,8 @@ export class SubscribeDiscountComponent extends BaseComponent {
       result => {
         if (result.data && result.data.length > 0) {
           this.promotionTypes = result.data
+          console.log(this.promotionTypes);
+          
         }
       },
       error => this.errorMessage = <any>error
@@ -134,6 +136,8 @@ export class SubscribeDiscountComponent extends BaseComponent {
           let data = this.handleData(result.data);
           this.dataSource = new MatTableDataSource<SDModel>(data);
           this.filteredDataSource = new MatTableDataSource<SDModel>(data);
+          console.log(data);
+          
         }
         this._prepareData();
         this.paginatorAgain();
@@ -150,7 +154,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
       k.dia_diem_km = [];
       dd_km_temp = [];
       ds_dd_km.filter(d => {
-        if (k.id == d.id_xttm_km) {
+        if (k.id == d.id) {
           dd_km_temp.push(d);
         }
       });

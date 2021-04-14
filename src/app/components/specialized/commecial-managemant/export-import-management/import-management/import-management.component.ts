@@ -62,6 +62,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     private _linkOutput: LinkModel = new LinkModel();
     dataSource: MatTableDataSource<new_import_export_model>;
     dataDialog: any[] = [];
+    dataBusiness: any[] = [];
     filteredDataSource: MatTableDataSource<new_import_export_model> = new MatTableDataSource<new_import_export_model>();
     years: number[] = this.getYears();
     months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -165,6 +166,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
             this.setDataImport(result.data[0]);
+            this.setDatabusiness(result.data[1]);
             this.setDataDetail(result.data[2]);
         });
     }
@@ -173,9 +175,15 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         let time_id = this.curentYear * 100 + this.curentmonth;
         this.sctService.GetDanhSachNhapKhauTC(time_id).subscribe((result) => {
             this.setDataImport(result.data[0]);
+            this.setDatabusiness(result.data[1]);
             this.setDataDetail(result.data[2]);
         });
     }
+
+    setDatabusiness(lsBusiness){
+        this.dataBusiness = lsBusiness;
+    }
+
 
     setSumaryData(data: any[]) {
         this.TongGiaTriThangThucHien = data.length ? data.map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0
@@ -264,20 +272,22 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         return data;
     }
 
-    openDanh_sach_doanh_nghiep(id_mat_hang, ten_san_pham) {
-    //     this.marketService
-    //         .GetTopExport(this.curentmonth, new Date().getFullYear(), id_mat_hang)
-    //         .subscribe((data) => {
-    //             const dialogConfig = new MatDialogConfig();
-    //             dialogConfig.data = {
-    //                 data: data["data"],
-    //                 id: 2,
-    //                 ten_san_pham: ten_san_pham,
-    //                 thang: this.curentmonth,
-    //             };
-    //             dialogConfig.minWidth = '80%'
-    //             this.matDialog.open(ModalComponent, dialogConfig);
-    //         });
+    openDanh_sach_doanh_nghiep(id_san_pham) {
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.data = {
+            data: this.handleDataBusiness(id_san_pham),
+            id: 2, 
+        };
+        dialogConfig.minHeight = window.innerHeight - 100;
+        dialogConfig.minWidth = "90%";
+        this.matDialog.open(ModalComponent, dialogConfig);
+    }
+
+    handleDataBusiness(id_san_pham){
+        let data = this.dataBusiness.filter(
+            (item) => item.id_san_pham === id_san_pham
+        );
+        return data;
     }
 
     applyDataTarget() {
