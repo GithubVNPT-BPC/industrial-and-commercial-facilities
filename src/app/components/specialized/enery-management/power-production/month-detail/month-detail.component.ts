@@ -1,5 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from '@angular/core';
-import * as XLSX from 'xlsx';
+import { Component, ViewChild, ElementRef, OnInit, QueryList, ViewChildren, Input } from '@angular/core';
 
 import { ReportService } from '../../../../../_services/APIService/report.service';
 
@@ -13,8 +12,6 @@ import { InformationService } from 'src/app/shared/information/information.servi
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { Location } from '@angular/common';
-import { element } from 'protractor';
-import { merge } from 'rxjs';
 import moment from 'moment';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';

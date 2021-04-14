@@ -43,7 +43,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongSoHo | formatNumber}}
+                                {{tongSoHo | formatNumber}} hộ
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -56,7 +56,7 @@
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongHoCoDien | formatNumber}}
+                                {{tongHoCoDien | formatNumber}} hộ
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -64,12 +64,12 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Hộ chưa có điện:
+                                    <mat-icon>filter</mat-icon> Tỷ lệ:
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{tongHoKhongCoDien ? tongHoKhongCoDien : 0 | formatNumber}}
+                                {{rate | formatNumber}} %
                             </mat-card-content>
                         </mat-card>
                     </div>

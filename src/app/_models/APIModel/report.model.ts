@@ -1,5 +1,3 @@
-import { element } from 'protractor';
-
 export class ReportOject {
     //To declare
     obj_id: number;
@@ -212,4 +210,22 @@ export class HeaderMerge {
 export class ToltalHeaderMerge {
     headerMerge: HeaderMerge[] = [];
     headerColName: Array<string> = [];
+}
+
+export class SummaryReportModel {
+    ma_chi_tieu: string;
+    ten_chi_tieu: string;
+    don_vi_tinh: string;
+    thuc_hien_cung_ki_nam_truoc: number;
+    luy_ke_cung_ki_nam_truoc: number;
+    thuc_hien_thang_12_nam_truoc: number;
+    ke_hoach_nam: number;
+    thuc_hien_ki_truoc: number;
+    thuc_hien_thang: number;
+    luy_ke_thang: number;
+    ke_hoach_nam_sau: number;
+    so_sanh_thuc_hien_voi_ki_truoc: number;
+    so_sanh_thuc_hien_voi_cung_ki: number;
+    so_sanh_luy_ke_voi_cung_ki: number;
+    so_sanh_luy_ke_voi_ke_hoach_nam: number;
 }

@@ -43,6 +43,8 @@ export abstract class BaseComponent implements OnInit {
     public mode = 'create';
     public errorMessage: any;
     public currentYear = new Date().getFullYear();
+    public currentMonth = new Date().getMonth();
+    public monthSelection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
     public terms = [
         {id: 6, value: '6 Tháng'}, 

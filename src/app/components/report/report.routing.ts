@@ -5,6 +5,8 @@ import {FillReportComponent} from '../report/fill-report/fill-detail/fill-detail
 import {FillSelectReportComponent} from '../report/fill-report/fill-select-report/fill-select-report.component';
 import {ViewReportComponent} from '../report/view-report/view-detail/view-detail.component';
 import {ViewSelectReportComponent} from '../report/view-report/select-report/select-report.component';
+import {SummaryReportComponent} from '../report/summary-report/summary-report.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -42,6 +44,13 @@ const routes: Routes = [
         component: ViewReportComponent,
         data: {
           title: 'Xem báo cáo'
+        }
+      },
+      {
+        path: 'summary',
+        component: SummaryReportComponent,
+        data: {
+          title: 'Tổng hợp báo cáo'
         }
       },
     ]

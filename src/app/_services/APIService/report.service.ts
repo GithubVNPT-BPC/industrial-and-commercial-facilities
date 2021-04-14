@@ -26,6 +26,8 @@ export class ReportService {
     public urlReportPowerProduction = "/dien-thuong-pham";
     public urlOldData = "/du-lieu-qua-khu";
 
+    public urlGetSummaryReport = '/tong-hop';
+
     token: any;
     username: any;
 
@@ -201,6 +203,16 @@ export class ReportService {
         params = params.append('org_id', org_id.toString());
         params = params.append('attribute_code', attribute_code);
         params = params.append('n_attribute_code', n_attribute_code);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetSummaryReport(year, month) {
+        var apiUrl = this.apiReport + this.urlGetSummaryReport;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('year', year);
+        params = params.append('month', month);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
