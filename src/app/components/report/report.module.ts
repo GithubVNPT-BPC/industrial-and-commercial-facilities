@@ -13,6 +13,7 @@ import { ReportDirective } from './../../shared/report.directive';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+import { SummaryReportComponent } from './summary-report/summary-report.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -42,7 +43,8 @@ export const customCurrencyMaskConfig = {
     FillSelectReportComponent,
     ViewReportComponent,
     ViewSelectReportComponent,
-    ReportDirective
+    ReportDirective,
+    SummaryReportComponent
   ],
   providers: [  ],
   entryComponents: [  ],
