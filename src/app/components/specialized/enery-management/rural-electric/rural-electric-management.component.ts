@@ -26,6 +26,7 @@ export class RuralElectricManagementComponent extends BaseComponent {
   tongSoXa: number = 0 ;
   tongHoKhongCoDien: number = 0 ;
   tongHoCoDien: number = 0 ;
+  rate: number = 0;
   isChecked: boolean;
   tieu_chi: any[] = [
     { id: 1, value: 'Đạt' },
@@ -55,7 +56,7 @@ export class RuralElectricManagementComponent extends BaseComponent {
     this.energyService.LayDuLieuQuyHoachDienNongThon().subscribe(res => {
       this.dataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
       this.filteredDataSource = new MatTableDataSource<New_RuralElectricModel>(res['data']);
-      this.caculatorValue();
+      this._prepareData();
       this.paginatorAgain();
     })
   }
@@ -65,16 +66,23 @@ export class RuralElectricManagementComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
   
-  caculatorValue() {
-    this.tongSoHo = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nong_thon_tong_so_ho).reduce((a, b) => a + b) : 0;
+  _prepareData() {
+    // FIX: Hardcode to get the total value
+    let data = this.dataSource.data.filter(x => x.dia_ban == 'Tổng cộng');
+    this.tongSoHo = data.length ? data[0].tong_so_ho: 0;
+    this.tongHoCoDien = data.length ? data[0].tong_so_ho_co_dien: 0;
+    this.rate = this.tongSoHo ? (this.tongHoCoDien * 100 / this.tongSoHo) : 0;
     this.tongSoXa = this.filteredDataSource.data.filter(x => x.nong_thon_tong_so_ho != null).length;
-    this.tongHoKhongCoDien = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.ccd2).reduce((a, b) => a + b) : 0;
-    this.tongHoCoDien = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nong_thon_tong_so_ho_co_dien).reduce((a, b) => a + b) : 0;
+
+    // this.tongSoHo = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nong_thon_tong_so_ho).reduce((a, b) => a + b) : 0;
+    
+    // this.tongHoKhongCoDien = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.ccd2).reduce((a, b) => a + b) : 0;
+    // this.tongHoCoDien = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nong_thon_tong_so_ho_co_dien).reduce((a, b) => a + b) : 0;
   }
 
   applyActionCheck(event) {
     this.filteredDataSource.filter = (event.checked) ? "true" : "";
-    this.caculatorValue();
+    this._prepareData();
     this.paginatorAgain();
   }
 

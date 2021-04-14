@@ -3,13 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from 'src/app/_models/APIModel/report.model';
 import { ReportService } from 'src/app/_services/APIService/report.service';
 import { Data, TreeDataType } from './data-sct-type';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-// import { FormControl } from '@angular/forms';
-import * as moment from 'moment';
 import { MatTableDataSource } from '@angular/material';
-import { typeSourceSpan } from '@angular/compiler';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
