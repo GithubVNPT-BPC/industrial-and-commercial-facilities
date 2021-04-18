@@ -99,7 +99,7 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Loại tài khoản</mat-label>
-                        <mat-select formControlName="role_id" [(ngModel)]="_Service.userupdate.role_id">
+                        <mat-select formControlName="role_id" [(ngModel)]="_Service.userupdate.role_id" disabled>
                             <mat-option *ngFor="let item of UserRole" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
