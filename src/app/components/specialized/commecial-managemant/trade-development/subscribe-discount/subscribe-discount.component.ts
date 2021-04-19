@@ -159,6 +159,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
         }
       });
       k.dia_diem_km = [...k.dia_diem_km, ...dd_km_temp];
+      k['time_id'] = 2020;
     });
     return ds_km;
   }
@@ -204,6 +205,11 @@ export class SubscribeDiscountComponent extends BaseComponent {
         else {
             this.filteredDataSource.data = filteredData;
         }
+    }
+
+    if(event.value){
+        // const filterValue = (event as HTMLInputElement).value;
+        this.filteredDataSource.filter = event.value.toString().trim().toLowerCase();
     }
     this._prepareData();
     this.paginatorAgain();
