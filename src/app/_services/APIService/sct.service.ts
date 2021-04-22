@@ -61,6 +61,8 @@ export class SCTService {
     private urlPhuongXaQuanHuyen = "/phuong-xa-kem-quan-huyen"
     // end api quan huyen
 
+    private urlUpdateRecord = environment.apiEndpoint + '/api/update-record';
+
     token: any;
     username: any;
 
@@ -375,6 +377,14 @@ export class SCTService {
         var apiUrl = this.apiDanhSach + this.urlPhuongXaQuanHuyen;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public UpdateRecord(datas) {
+        var apiUrl = this.urlUpdateRecord;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.put<any>(apiUrl, datas, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

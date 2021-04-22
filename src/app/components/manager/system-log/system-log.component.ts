@@ -67,7 +67,9 @@ export class SystemLogComponent extends BaseComponent {
   _prepareData() {
     this.dataSource.data.map(x => {
       x.noi_dung_doi = JSON.parse(x.noi_dung_doi);
+      x.time = new Date(x.time + "+00:00");
     });
+
   }
  
   private Back() {
