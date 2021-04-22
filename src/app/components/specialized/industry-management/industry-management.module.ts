@@ -20,6 +20,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 
+import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.component";
+
 @NgModule({
     imports: [
         CommonModule,
@@ -43,7 +45,7 @@ registerLocaleData(localevi, 'vi');
         IIPMonthComponent,
         CertificateRegulationComponent,
         ReportExplosivesComponent,
-        
+        CrudButtonsComponent
       ],
       entryComponents: []
 })

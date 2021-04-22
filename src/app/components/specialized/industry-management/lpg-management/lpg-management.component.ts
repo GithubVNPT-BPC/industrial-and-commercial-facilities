@@ -1,4 +1,4 @@
-import { Component, Injector } from '@angular/core';
+import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { LPGManagementModel } from 'src/app/_models/APIModel/industry-management.module';
 import { FormControl } from '@angular/forms';
@@ -62,7 +62,7 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     authorize: boolean = true
-
+    name_report: string = 'QLCN - LPG'
     ngOnInit() {
         super.ngOnInit();
         this.GetLGPManagementData(this.currentYear);
@@ -72,6 +72,15 @@ export class LPGManagementComponent extends BaseComponent {
         if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
+        console.log(this.table.nativeElement);
+        
+    }
+
+    @ViewChild('TABLE', { static: false }) table1: ElementRef;
+    ngAfterViewInit(): void{
+        // this.table1 = this.table
+        console.log(this.table);
+        
     }
 
     getLinkDefault() {

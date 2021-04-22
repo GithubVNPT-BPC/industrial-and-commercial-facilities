@@ -1,0 +1,30 @@
+.crud-buttons{
+    .button-control {
+        text-align: right;
+        margin-bottom: 5px;
+        button.mat-raised-button {
+            background-color: #1f7ed0 !important;
+            color: white !important;
+            margin: auto 3px;
+            margin-bottom: 5px;
+            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        }
+        button.mat-raised-button.white {
+            background-color: white !important;
+            color: #1f7ed0 !important;
+        }
+        button.mat-raised-button.red {
+            background-color: red !important;
+        }
+        button.mat-raised-button.green {
+            background-color: green !important;
+        }
+        button.mat-raised-button.yellow {
+            background-color: yellow !important;
+        }
+    }
+    .button-control.-align-left {
+        text-align: left;
+    }
+}

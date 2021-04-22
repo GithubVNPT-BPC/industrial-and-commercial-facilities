@@ -120,26 +120,7 @@
                     </div>
                 </div>
                 <hr />
-                <div class="row">
-                    <div class="col-12 col-lg-12 button-control my-auto">
-                        <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - LPG', currentYear.toString())">
-                            <mat-icon>file_download</mat-icon>
-                        </button>
-                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
-                            [hidden]=authorize>
-                            <mat-icon>add_circle_outline</mat-icon>
-                        </button>
-                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
-                            (click)="openRemoveDialog()" [hidden]=authorize>
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
-                            (click)="switchEditMode()" [hidden]=authorize>
-                            <mat-icon>edit</mat-icon>
-                        </button>
-                    </div>
-                </div>
+                <app-crud-buttons [authorize]="authorize" [name_report]="name_report" [selection]="selection" [table]="table"></app-crud-buttons>
                 <hr>
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
