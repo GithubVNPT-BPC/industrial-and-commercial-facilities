@@ -282,6 +282,6 @@ export class IndustryManagementService {
         return this.http.post<any>(apiUrl, id, { headers: HEADERS}).pipe(tap(data => data),
             catchError(this.handleError)
         );
-    } 
+    }
 
 }

@@ -37,6 +37,7 @@ export abstract class BaseComponent implements OnInit {
     protected confirmationDialogService: ConfirmationDialogService;
     protected _breadCrumService: BreadCrumService;
 
+    public DB_TABLE = '';
     public formData: any;
     public formParams: any;
     public view = 'list';
@@ -58,7 +59,8 @@ export abstract class BaseComponent implements OnInit {
 
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
-    public filterModel = {}
+    public filterModel = {};
+    public formPrevData = {};
     
     public districts: DistrictModel[] = [];
     public wards: SubDistrictModel[] = [];
@@ -107,7 +109,7 @@ export abstract class BaseComponent implements OnInit {
         if (this.view == 'list') {
             this.view = 'form';
         } else {
-            // Temporary this.ngOnInit()
+            // Temporary put the this.ngOnInit()
             this.ngOnInit();
             this.view = 'list';
             this.mode = 'create';
@@ -121,27 +123,59 @@ export abstract class BaseComponent implements OnInit {
         this.mode = 'edit';
         this.switchView();
         this.setFormParams();
+        this.formPrevData = this.formData.value;
     }
 
     public setFormParams() {}
 
+    // ======================================
+    // =========== CRUD FUNCTIONS ===========
+    // ======================================
     public prepareData(data) { return data }
+
+    public prepareRemoveData(data) { return data }
+
+    public prepareEditData(data) {
+        function _compareChangedData(prevData, curData) {
+            return Object.keys(curData).reduce((diff, key) => {
+                if (prevData[key] === curData[key]) return diff
+                return {
+                  ...diff,
+                  [key]: curData[key]
+                }
+            }, {});        
+        }
+        let pKey = {id : data.id};
+        let modDatas = _compareChangedData(this.formPrevData, data);
+        
+        let datas = {
+            pKey : pKey,
+            modDatas : modDatas,
+            table: this.DB_TABLE,
+        }
+        return datas;
+    }
 
     public callService(data) { }
 
-    public callEditService(data) {}
+    public callRemoveService(data) {}
+
+    public callEditService(data) {
+        this.sctService.UpdateRecord(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
 
     public onCreate() {
         // Must change to async function
         let data = this.formData.value;
-        data = this.prepareData(data);
-        if (this.mode == 'edit') this.callEditService(data);
-        else this.callService(data);
+        if (this.mode == 'edit') {
+            data = this.prepareEditData(data);
+            this.callEditService(data);
+        }
+        else {
+            data = this.prepareData(data);
+            this.callService(data);
+        }
     }
-
-    prepareRemoveData(data) { return data }
-
-    callRemoveService(data) {}
 
     public onRemove() {
         // Must change to async function

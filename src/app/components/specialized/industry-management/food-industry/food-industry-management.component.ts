@@ -16,6 +16,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class FoodIndustryManagementComponent extends BaseComponent {
+    DB_TABLE = 'QLCN_CNTP';
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
@@ -112,11 +113,24 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     getFormParams() {
         return {
+            id: new FormControl(),
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
             tinh_trang_hoat_dong: new FormControl("true"),
             time_id: new FormControl(this.currentYear)
+        }
+    }
+
+    setFormParams() {
+        if (this.selection.selected.length) {
+            let selectedRecord = this.selection.selected[0];
+            this.formData.controls['id'].setValue(selectedRecord.id);
+            this.formData.controls['mst'].setValue(selectedRecord.mst);
+            this.formData.controls['san_luong'].setValue(selectedRecord.san_luong);
+            this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
+            this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+            this.formData.controls['tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong ? "true" : "false");
         }
     }
 
