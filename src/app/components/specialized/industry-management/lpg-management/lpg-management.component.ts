@@ -7,7 +7,6 @@ import { FormControl } from '@angular/forms';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 
-import moment from 'moment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
@@ -71,16 +70,7 @@ export class LPGManagementComponent extends BaseComponent {
 
         if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
-        }
-        console.log(this.table.nativeElement);
-        
-    }
-
-    @ViewChild('TABLE', { static: false }) table1: ElementRef;
-    ngAfterViewInit(): void{
-        // this.table1 = this.table
-        console.log(this.table);
-        
+        }        
     }
 
     getLinkDefault() {
@@ -164,30 +154,9 @@ export class LPGManagementComponent extends BaseComponent {
         })
     }
 
-    private _prepareData() {
+    _prepareData() {
         this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
         this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat || 0).reduce((a, b) => a + b) : 0;
-    }
-
-    applyFilter(event) {
-        if (event.target) {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        } else {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        }
-        this._prepareData();
-        this.paginatorAgain();
     }
 
     filterArray(dataSource, filters) {

@@ -18,7 +18,8 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class StoreManagementComponent extends BaseComponent {
-
+  DB_TABLE = '';
+  
   message: string;
   isChecked: boolean = false;
   isFound: boolean = false;
@@ -120,6 +121,7 @@ export class StoreManagementComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_cua_hang: new FormControl(),
       mst: new FormControl(),
       dia_chi: new FormControl(),
@@ -128,6 +130,21 @@ export class StoreManagementComponent extends BaseComponent {
       id_giay_cndkkd: new FormControl(),
       id_giay_atvstp: new FormControl(),
       id_phuong_xa: new FormControl(),
+    }
+  }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['ten_cua_hang'].setValue(selectedRecord.ten_cua_hang);
+        this.formData.controls['mst'].setValue(selectedRecord.mst);
+        this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+        this.formData.controls['so_dien_thoai'].setValue(selectedRecord.so_dien_thoai);
+        this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
+        this.formData.controls['id_giay_cndkkd'].setValue(selectedRecord.id_giay_cndkkd);
+        this.formData.controls['id_giay_atvstp'].setValue(selectedRecord.id_giay_atvstp);
+        this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
     }
   }
 
@@ -156,28 +173,6 @@ export class StoreManagementComponent extends BaseComponent {
     this.tongCuaHangDangKyGCN = data.length ? data.map(x => x.id_giay_cndkkd).length : 0;
     this.soCuaHangKhac = data.length - this.soCuaHangTL;
     this.tongCuaHang = this.dataSource.data.length;
-  }
-
-  applyFilter(event) {
-    if (event.target) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    } else {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-      if (!filteredData.length) {
-        if (this.filterModel)
-          this.filteredDataSource.data = [];
-        else
-          this.filteredDataSource.data = this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-
-    }
-    this._prepareData();
-    this.paginatorAgain();
   }
 
   filterArray(dataSource, filters) {

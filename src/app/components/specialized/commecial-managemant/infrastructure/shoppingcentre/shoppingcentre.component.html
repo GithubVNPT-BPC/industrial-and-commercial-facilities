@@ -202,16 +202,16 @@
                             (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-
                         <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-
                         <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" [hidden]=authorize
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
 
                     <div class="col-3 col-lg-3">
@@ -437,7 +437,7 @@
             <hr>
             <form [formGroup]="formData" (ngSubmit)="onCreate()">
                 <div class="form-group row">
-
+                    <input matInput formControlName="id" type="text" class="o_invisible">
                     <div class="col-md-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
@@ -446,6 +446,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
+                                <input matInput formControlName="id" type="text" class="o_invisible">
                                 <div class="col-md-12">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên TTTM</mat-label>

@@ -195,7 +195,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         })
     }
 
-    private _prepareData() {
+    _prepareData() {
         let data = this.filteredDataSource.data;
         this.sanLuongKinhDoanh = data.length ? data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
         this.sanLuongSanXuat = data.length ? data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
@@ -235,27 +235,6 @@ export class ChemicalManagementComponent extends BaseComponent {
                 self.industryManagementService.DeleteChemistry(chemistryIds).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
             }
         }, error => this.errorNotify(error));
-    }
-
-    applyFilter(event) {
-        if (event.target) {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        } else {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        }
-        this._prepareData();
-        this.paginatorAgain();
     }
 
     filterArray(dataSource, filters) {
