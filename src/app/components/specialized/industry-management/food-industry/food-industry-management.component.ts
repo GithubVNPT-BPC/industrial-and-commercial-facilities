@@ -1,6 +1,5 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { District } from 'src/app/_models/district.model';
 import { FoodIndustryModel } from 'src/app/_models/APIModel/industry-management.module';
 import { FormControl } from '@angular/forms';
 
@@ -44,12 +43,19 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         tinh_trang_hoat_dong: "Trạng thái hoạt động",
     }
 
+    foodTypeList = [
+        { id_thuc_pham: 1, ten_thuc_pham: 'Bột mỳ'},
+        { id_thuc_pham: 2, ten_thuc_pham: 'Rượu'},
+        { id_thuc_pham: 3, ten_thuc_pham: 'Bánh ngọt'},
+    ]
+
     dataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
 
     isChecked: boolean;
     sanLuongBotMy: number = 0;
     sanLuongRuou: number = 0;
+    sanLuongBanhNgot: number = 0;
 
     constructor(
         private injector: Injector,
@@ -103,6 +109,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         let data = this.filteredDataSource.data;
         this.sanLuongBotMy = data.filter(x => x.id_thuc_pham == 1).length ? data.filter(x => x.id_thuc_pham == 1).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
         this.sanLuongRuou = data.filter(x => x.id_thuc_pham == 2).length ? data.filter(x => x.id_thuc_pham == 2).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
+        this.sanLuongBanhNgot = data.filter(x => x.id_thuc_pham == 3).length ? data.filter(x => x.id_thuc_pham == 3).map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
     }
 
     getLinkDefault() {
@@ -117,6 +124,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
             mst: new FormControl(),
             san_luong: new FormControl(),
             cong_suat: new FormControl(),
+            id_thuc_pham: new FormControl(),
             tinh_trang_hoat_dong: new FormControl("true"),
             time_id: new FormControl(this.currentYear)
         }
@@ -129,6 +137,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
             this.formData.controls['mst'].setValue(selectedRecord.mst);
             this.formData.controls['san_luong'].setValue(selectedRecord.san_luong);
             this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
+            this.formData.controls['id_thuc_pham'].setValue(selectedRecord.id_thuc_pham);
             this.formData.controls['time_id'].setValue(selectedRecord.time_id);
             this.formData.controls['tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong ? "true" : "false");
         }
@@ -149,27 +158,6 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     callRemoveService(data) {
         this.industryManagementService.DeleteFoodIndustry(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-    }
-
-    applyFilter(event) {
-        if (event.target) {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        } else {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        }
-        this._prepareData();
-        this.paginatorAgain();
     }
 
     filterArray(dataSource, filters) {

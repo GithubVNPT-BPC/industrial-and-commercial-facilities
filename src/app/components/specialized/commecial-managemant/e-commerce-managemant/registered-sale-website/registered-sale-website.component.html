@@ -141,8 +141,8 @@
                         <ng-container matColumnDef="ten_mien">
                             <th mat-header-cell *matHeaderCellDef> Tên miền </th>
                             <td mat-cell *matCellDef="let element"><a
-                                    href="{{element.ten_mien.includes('http')? element.ten_mien : 'http://' + element.ten_mien}}"
-                                    target="_blank">{{element.ten_mien}}</a></td>
+                                href="{{element.ten_mien}}"
+                                target="_blank">{{element.ten_mien}}</a></td>
                         </ng-container>
 
                         <ng-container matColumnDef="loai_hang_hoa">

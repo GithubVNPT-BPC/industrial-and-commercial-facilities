@@ -80,28 +80,4 @@ export class SummaryReportComponent extends BaseComponent {
     );
   }
 
-  applyFilter(event) {
-    if (event.target) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    } else {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-      if (!filteredData.length) {
-        if (this.filterModel)
-          this.filteredDataSource.data = [];
-        else
-          this.filteredDataSource.data = this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-
-    }
-    this._prepareData();
-    this.paginatorAgain();
-  }
-
-  public _prepareData() {};
-
 }

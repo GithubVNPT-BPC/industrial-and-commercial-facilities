@@ -21,6 +21,8 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class ShoppingcentreComponent extends BaseComponent {
+  DB_TABLE = 'QLTM_ST_TTTM';
+
   public tongSieuThi: number = 0;
   public loaihinh_TongHop: number = 0;
   public loaihinh_ChuyenDoanh: number = 0;
@@ -124,6 +126,7 @@ export class ShoppingcentreComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       id_phan_hang: new FormControl(),
       ten_sieu_thi_TTTM: new FormControl(),
       dia_diem: new FormControl(),
@@ -153,6 +156,34 @@ export class ShoppingcentreComponent extends BaseComponent {
     }
   }
 
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['id_phan_hang'].setValue(selectedRecord.id_phan_hang);
+        this.formData.controls['ten_sieu_thi_TTTM'].setValue(selectedRecord.ten_sieu_thi_TTTM);
+        this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
+        this.formData.controls['id_dia_ban'].setValue(selectedRecord.id_dia_ban);
+        this.formData.controls['nha_nuoc'].setValue(selectedRecord.nha_nuoc);
+        this.formData.controls['ngoai_nha_nuoc'].setValue(selectedRecord.ngoai_nha_nuoc);
+        this.formData.controls['co_von_dau_tu_nuoc_ngoai'].setValue(selectedRecord.co_von_dau_tu_nuoc_ngoai);
+        this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
+        this.formData.controls['tong_hop'].setValue(selectedRecord.tong_hop);
+        this.formData.controls['chuyen_doanh'].setValue(selectedRecord.chuyen_doanh);
+        this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
+        this.formData.controls['nam_ngung_hoat_dong'].setValue(selectedRecord.nam_ngung_hoat_dong);
+        this.formData.controls['dien_tich_dat'].setValue(selectedRecord.dien_tich_dat);
+        this.formData.controls['so_lao_dong'].setValue(selectedRecord.so_lao_dong);
+        this.formData.controls['ten_chu_dau_tu'].setValue(selectedRecord.ten_chu_dau_tu);
+        this.formData.controls['giay_dang_ky_kinh_doanh'].setValue(selectedRecord.giay_dang_ky_kinh_doanh);
+        this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+        this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+        this.formData.controls['ho_va_ten'].setValue(selectedRecord.ho_va_ten);
+        this.formData.controls['dia_chi1'].setValue(selectedRecord.dia_chi1);
+        this.formData.controls['dien_thoai1'].setValue(selectedRecord.dien_thoai1);
+    }
+  }
+
   prepareData(data) {
     data = {
       ...data, ...{
@@ -175,7 +206,7 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.commerceManagementService.deleteShoppingCenter(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
-  private _prepareData() {
+  _prepareData() {
     let data = this.filteredDataSource.data;
 
     this.tongSieuThi = data.length;
@@ -202,27 +233,5 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.VonNgoaiNhaNuoc = data.map(x => x.ngoai_nha_nuoc).reduce((a, b) => a + b, 0);
     this.VonNuocNgoai = data.map(x => x.co_von_dau_tu_nuoc_ngoai).reduce((a, b) => a + b, 0);
     this.VonKhac = data.map(x => x.von_khac).reduce((a, b) => a + b, 0);
-  }
-
-  applyFilter(event) {
-    if (event.target) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    } else {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-      if (!filteredData.length) {
-        if (this.filterModel)
-          this.filteredDataSource.data = [];
-        else
-          this.filteredDataSource.data = this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-
-    }
-    this._prepareData();
-    this.paginatorAgain();
   }
 }

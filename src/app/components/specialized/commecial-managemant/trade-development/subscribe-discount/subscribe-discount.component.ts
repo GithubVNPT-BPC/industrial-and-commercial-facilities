@@ -119,9 +119,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.commerceManagementService.getSubcribeDiscountTypeData().subscribe(
       result => {
         if (result.data && result.data.length > 0) {
-          this.promotionTypes = result.data
-          console.log(this.promotionTypes);
-          
+          this.promotionTypes = result.data          
         }
       },
       error => this.errorMessage = <any>error
@@ -136,8 +134,6 @@ export class SubscribeDiscountComponent extends BaseComponent {
           let data = this.handleData(result.data);
           this.dataSource = new MatTableDataSource<SDModel>(data);
           this.filteredDataSource = new MatTableDataSource<SDModel>(data);
-          console.log(data);
-          
         }
         this._prepareData();
         this.paginatorAgain();
@@ -159,7 +155,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
         }
       });
       k.dia_diem_km = [...k.dia_diem_km, ...dd_km_temp];
-      k['time_id'] = 2020;
+      k['time_id'] = this.currentYear;
     });
     return ds_km;
   }

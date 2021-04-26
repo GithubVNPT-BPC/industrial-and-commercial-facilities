@@ -66,26 +66,6 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
         })
     }
 
-    applyFilter(event) {
-        if (!event.target) {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        } else {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        }
-        this.paginatorAgain();
-        // this._prepareData();
-    }
-
     public prepareData(data) {
         data['tba'] = Number(data['tba']);
         data['p_max'] = Number(data['p_max']);
