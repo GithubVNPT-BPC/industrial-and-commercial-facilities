@@ -107,6 +107,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                 san_luong: [],
                 cong_suat: [],
                 id_loai_hinh_hoat_dong: [],
+                ten_hoa_chat: []
             });
         }
 
@@ -129,6 +130,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                     san_luong: [],
                     cong_suat: [],
                     id_loai_hinh_hoat_dong: [],
+                    ten_hoa_chat: []
                 })
             ])
         }
@@ -139,6 +141,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         details.map(e => {
             e['mst'] = data['mst'];
             e['time_id'] = data['time_id'];
+            e['id_hoa_chat'] = 1; // hard value 
         });
 
         data = {
@@ -161,7 +164,9 @@ export class ChemicalManagementComponent extends BaseComponent {
             if (response.id != -1) {
                 self.industryManagementService.PostChemicalManagementQty(chemistryQtyData, data.time_id).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
             }
-        }, error => this.errorNotify(error));
+        }, error => this.errorNotify(error));    
+        // console.log(chemistryData,chemistryQtyData);
+            
     }
 
     getChemicalManagementData(time_id: number) {
