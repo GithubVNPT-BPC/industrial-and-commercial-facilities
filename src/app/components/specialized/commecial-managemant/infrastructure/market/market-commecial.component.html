@@ -310,8 +310,11 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
+                </div>
+                <hr>
 
-                    <div class="col-3 col-lg-3 button-control my-auto">
+                <div class="row">
+                    <div class="col-lg-12 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Chợ','HTTM - Chợ')">
                             <mat-icon>file_download</mat-icon>
@@ -325,12 +328,11 @@
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" [hidden]=authorize
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
                 </div>
-                <hr>
-
+                <hr />
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
@@ -469,6 +471,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
+                                <input matInput formControlName="id" type="text" class="o_invisible">
                                 <div class="col-md-9">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên chợ</mat-label>

@@ -62,34 +62,16 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
       this.filteredDataSource.data = [];
       if (response.data && response.data.length > 0) {
         this.dataSource = new MatTableDataSource<InformWebsiteModel>(response.data);
+        this.dataSource.data.map(x => {
+          if (x.ten_mien) {
+            x.ten_mien = x.ten_mien.includes('http')? x.ten_mien : 'http://' + x.ten_mien;
+          } 
+        });
         this.filteredDataSource.data = [...this.dataSource.data];
       }
+      this._prepareData();
       this.paginatorAgain();
     });
-  }
-
-  _prepareData( ) {}
-
-  applyFilter(event) {
-    if (event.target) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    } else {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-      if (!filteredData.length) {
-        if (this.filterModel)
-          this.filteredDataSource.data = [];
-        else
-          this.filteredDataSource.data = this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-
-    }
-    this._prepareData();
-    this.paginatorAgain();
   }
 
   getLinkDefault() {

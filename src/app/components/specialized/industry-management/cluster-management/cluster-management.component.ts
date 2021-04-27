@@ -43,7 +43,7 @@ export class ClusterManagementComponent extends BaseComponent {
     trang_thai_hd: any[] = [
         { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
         { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
+        { id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
     ];
 
     constructor(
@@ -75,28 +75,6 @@ export class ClusterManagementComponent extends BaseComponent {
         this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
     }
 
-    applyFilter(event) {
-        if (event.target) {
-          const filterValue = (event.target as HTMLInputElement).value;
-          this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        } else {
-          let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    
-          if (!filteredData.length) {
-            if (this.filterModel)
-              this.filteredDataSource.data = [];
-            else
-              this.filteredDataSource.data = this.dataSource.data;
-          }
-          else {
-            this.filteredDataSource.data = filteredData;
-          }
-    
-        }
-        this._prepareData();
-        this.paginatorAgain();
-    }
-
     getDanhSachQuanLyCumCongNghiep() {
         this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
             this.filteredDataSource.data = [];
@@ -108,10 +86,6 @@ export class ClusterManagementComponent extends BaseComponent {
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
             this.paginatorAgain();
         })
-    }
-
-    _prepareData() {
-
     }
 
     changeTable(event) {
@@ -128,21 +102,6 @@ export class ClusterManagementComponent extends BaseComponent {
 
     public openDetailCluster(id: string) {
         this.router.navigate(['/specialized/industry-management/cluster/' + id]);
-    }
-
-    filterArray(array, filters) {
-        const filterKeys = Object.keys(filters);
-        let temp = [...array];
-        filterKeys.forEach(key => {
-            let temp2 = [];
-            if (filters[key].length) {
-                filters[key].forEach(criteria => {
-                    temp2 = temp2.concat(temp.filter(x => x[key] == criteria));
-                });
-                temp = [...temp2];
-            }
-        })
-        return temp;
     }
     
     getFormParams() {

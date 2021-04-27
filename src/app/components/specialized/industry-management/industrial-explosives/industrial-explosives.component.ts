@@ -18,7 +18,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class IndustrialExplosivesComponent extends BaseComponent {
-
+    DB_TABLE = 'QLCN_VLNCN';
     displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
         'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
 
@@ -91,6 +91,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     getFormParams() {
         return {
+            id: new FormControl(),
             mst: new FormControl(),
             dia_chi: new FormControl(),
             id_phuong_xa: new FormControl(),
@@ -106,6 +107,28 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             kip_no_6thang: new FormControl(0),
             moi_no_6thang: new FormControl(0),
             day_no_6thang: new FormControl(0),
+        }
+    }
+
+    setFormParams() {
+        if (this.selection.selected.length) {
+            let selectedRecord = this.selection.selected[0];
+            this.formData.controls['id'].setValue(selectedRecord.id);
+            this.formData.controls['mst'].setValue(selectedRecord.mst);
+            this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+            this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+            this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+            this.formData.controls['id_so_giay_phep'].setValue(selectedRecord.id_so_giay_phep);
+            this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong ? "true" : "false");
+
+            this.formData.controls['thuoc_no'].setValue(selectedRecord.thuoc_no);
+            this.formData.controls['kip_no'].setValue(selectedRecord.kip_no);
+            this.formData.controls['moi_no'].setValue(selectedRecord.moi_no);
+            this.formData.controls['day_no'].setValue(selectedRecord.day_no);
+            this.formData.controls['thuoc_no_6thang'].setValue(selectedRecord.thuoc_no_6thang);
+            this.formData.controls['kip_no_6thang'].setValue(selectedRecord.kip_no_6thang);
+            this.formData.controls['moi_no_6thang'].setValue(selectedRecord.moi_no_6thang);
+            this.formData.controls['day_no_6thang'].setValue(selectedRecord.day_no_6thang);
         }
     }
 
@@ -146,7 +169,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         })
     }
 
-    private _prepareData() {
+    _prepareData() {
         this.tongDoanhNghiep = this.filteredDataSource.data.length ? new Set(this.filteredDataSource.data.map(x => x.mst)).size : 0;
         this.tongSoLaoDong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.so_lao_dong || 0).reduce((a, b) => a + b) : 0;
         this.tongCongSuatThietKe = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke || 0).reduce((a, b) => a + b) : 0;
@@ -195,27 +218,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     applyExpireCheck(event) {
         this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
-        this._prepareData();
-        this.paginatorAgain();
-    }
-
-    applyFilter(event) {
-        if (event.target) {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        } else {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        }
         this._prepareData();
         this.paginatorAgain();
     }

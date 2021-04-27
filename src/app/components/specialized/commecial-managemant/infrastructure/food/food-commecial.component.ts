@@ -19,6 +19,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class FoodManagementComponent extends BaseComponent {
+  DB_TABLE = '';
   dataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
   filteredDataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
 
@@ -108,9 +109,20 @@ export class FoodManagementComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       mst: new FormControl(),
       id_spkd: new FormControl(),
       id_giay_phep: new FormControl(),
+    }
+  }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['mst'].setValue(selectedRecord.mst);
+        this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
+        this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
     }
   }
 
@@ -133,30 +145,8 @@ export class FoodManagementComponent extends BaseComponent {
     super.resetAll();
   }
 
-  private _prepareData() {
+  _prepareData() {
     this.tongDoanhNghiep = this.dataSource.data.length;
-  }
-
-  applyFilter(event) {
-    if (event.target) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    } else {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-      if (!filteredData.length) {
-        if (this.filterModel)
-          this.filteredDataSource.data = [];
-        else
-          this.filteredDataSource.data = this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-
-    }
-    this._prepareData();
-    this.paginatorAgain();
   }
 
   applyExpireCheck(event) {

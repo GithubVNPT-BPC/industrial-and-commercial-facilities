@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild ,Injector, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild ,Injector, Input } from '@angular/core';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 @Component({
@@ -6,19 +6,18 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
   templateUrl: './crud-buttons.component.html',
   styleUrls: ['./crud-buttons.component.scss']
 })
-export class CrudButtonsComponent extends BaseComponent {
+export class CrudButtonsComponent implements OnInit {
 
   @Input('name_report') name_report;
   @Input('authorize') authorize;
   @Input('selection') selection;
   @Input('table') table: ElementRef;
+
   constructor(private injector : Injector) {
-    super(injector);
-    // console.log(this.name_report, this.authorize);
+
   }
+  
   ngOnInit(){
-    super.ngOnInit();
-    // console.log(this.name_report, this.authorize, this.table);
   }
 
 }

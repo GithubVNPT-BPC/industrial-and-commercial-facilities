@@ -17,6 +17,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class CountrysideComponent extends BaseComponent {
+  DB_TABLE = '';
   public dataSource: MatTableDataSource<CountrySideModel> = new MatTableDataSource<CountrySideModel>();
   public filteredDataSource: MatTableDataSource<CountrySideModel> = new MatTableDataSource<CountrySideModel>();
 
@@ -55,6 +56,7 @@ export class CountrysideComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       cho_truyen_thong: new FormControl(),
       id_phuong_xa: new FormControl(),
       id_giay_phep: new FormControl(),
@@ -66,6 +68,24 @@ export class CountrysideComponent extends BaseComponent {
       nam_bc_kh_6_thang_nam_cho_dat_NTM: new FormControl(),
       nam_bc_ut_6_thang_nam_dat_TC_7: new FormControl(),
       nam_bc_ut_6_thang_nam_cho_dat_NTM: new FormControl(),
+    }
+  }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['cho_truyen_thong'].setValue(selectedRecord.cho_truyen_thong);
+        this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+        this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
+        this.formData.controls['nam_dat_TC_7'].setValue(selectedRecord.nam_dat_TC_7);
+        this.formData.controls['nam_dat_NTM'].setValue(selectedRecord.nam_dat_NTM);
+        this.formData.controls['th_6_thang_nam_cung_ky_dat_TC_7'].setValue(selectedRecord.th_6_thang_nam_cung_ky_dat_TC_7);
+        this.formData.controls['th_6_thang_nam_cung_ky_cho_dat_NTM'].setValue(selectedRecord.th_6_thang_nam_cung_ky_cho_dat_NTM);
+        this.formData.controls['nam_bc_kh_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_dat_TC_7);
+        this.formData.controls['nam_bc_kh_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_cho_dat_NTM);
+        this.formData.controls['nam_bc_ut_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_dat_TC_7);
+        this.formData.controls['nam_bc_ut_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_cho_dat_NTM);
     }
   }
 
@@ -138,28 +158,6 @@ export class CountrysideComponent extends BaseComponent {
 
   callService(data) {
     this.commerceManagementService.postCountrySide([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-  }
-
-  applyFilter(event) {
-    if (event.target) {
-      const filterValue = (event.target as HTMLInputElement).value;
-      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-    } else {
-      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-      if (!filteredData.length) {
-        if (this.filterModel)
-          this.filteredDataSource.data = [];
-        else
-          this.filteredDataSource.data = this.dataSource.data;
-      }
-      else {
-        this.filteredDataSource.data = filteredData;
-      }
-
-    }
-    this._prepareData();
-    this.paginatorAgain();
   }
 
   prepareRemoveData(data) {

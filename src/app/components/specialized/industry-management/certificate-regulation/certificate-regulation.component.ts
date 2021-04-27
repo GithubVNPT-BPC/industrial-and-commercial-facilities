@@ -135,7 +135,7 @@ export class CertificateRegulationComponent extends BaseComponent {
     }
   }
 
-  private _prepareData() {
+  _prepareData() {
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
   }
 

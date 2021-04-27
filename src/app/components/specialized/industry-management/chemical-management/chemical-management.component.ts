@@ -107,6 +107,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                 san_luong: [],
                 cong_suat: [],
                 id_loai_hinh_hoat_dong: [],
+                ten_hoa_chat: []
             });
         }
 
@@ -129,6 +130,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                     san_luong: [],
                     cong_suat: [],
                     id_loai_hinh_hoat_dong: [],
+                    ten_hoa_chat: []
                 })
             ])
         }
@@ -139,6 +141,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         details.map(e => {
             e['mst'] = data['mst'];
             e['time_id'] = data['time_id'];
+            e['id_hoa_chat'] = 1; // hard value 
         });
 
         data = {
@@ -161,7 +164,9 @@ export class ChemicalManagementComponent extends BaseComponent {
             if (response.id != -1) {
                 self.industryManagementService.PostChemicalManagementQty(chemistryQtyData, data.time_id).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
             }
-        }, error => this.errorNotify(error));
+        }, error => this.errorNotify(error));    
+        // console.log(chemistryData,chemistryQtyData);
+            
     }
 
     getChemicalManagementData(time_id: number) {
@@ -195,7 +200,7 @@ export class ChemicalManagementComponent extends BaseComponent {
         })
     }
 
-    private _prepareData() {
+    _prepareData() {
         let data = this.filteredDataSource.data;
         this.sanLuongKinhDoanh = data.length ? data.map(x => parseInt(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
         this.sanLuongSanXuat = data.length ? data.map(x => parseInt(x.cong_suat) || 0).reduce((a, b) => a + b) : 0;
@@ -235,27 +240,6 @@ export class ChemicalManagementComponent extends BaseComponent {
                 self.industryManagementService.DeleteChemistry(chemistryIds).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
             }
         }, error => this.errorNotify(error));
-    }
-
-    applyFilter(event) {
-        if (event.target) {
-            const filterValue = (event.target as HTMLInputElement).value;
-            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
-        } else {
-            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-
-            if (!filteredData.length) {
-                if (this.filterModel)
-                    this.filteredDataSource.data = [];
-                else
-                    this.filteredDataSource.data = this.dataSource.data;
-            }
-            else {
-                this.filteredDataSource.data = filteredData;
-            }
-        }
-        this._prepareData();
-        this.paginatorAgain();
     }
 
     filterArray(dataSource, filters) {

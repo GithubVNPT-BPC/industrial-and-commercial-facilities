@@ -25,7 +25,7 @@ export class IIPIndustrialComponent implements OnInit {
     private readonly TITLE_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp";
     private readonly TEXT_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp";
     public readonly DISPLAY_COLS: string[] = ['index', 'chi_tieu', 'don_vi', 'thang_01', 'thang_02', 'thang_03',
-        'thang_04', 'thang_05', 'thang_06', 'thang_07', 'thang_08', 'thang_09', 'thang_10', 'thang_11', 'thang_12'];
+        'thang_04', 'thang_05', 'thang_06', 'thang_07', 'thang_08', 'thang_09', 'thang_10', 'thang_11', 'thang_12', 'thuc_hien_nam'];
     //TS & HTML variable -----------------------------------------------------------
     private readonly DATA_DEFAULT: IIPIndustrialModel[] = [];
     public dataSource: MatTableDataSource<IIPIndustrialModel> = new MatTableDataSource<IIPIndustrialModel>();
