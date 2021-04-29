@@ -1,19 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import { formatDate } from '@angular/common';
-import { ReplaySubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
-import { ManagerDirective } from './../../../shared/manager.directive';
-import { KeyboardService } from './../../../shared/services/keyboard.service';
+import { ManagerDirective } from 'src/app/shared/manager.directive';
+import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { MarketService } from '../../../_services/APIService/market.service';
+import { MarketService } from 'src/app/_services/APIService/market.service';
 
-import { DomesticPriceModel, ProductModel, DeleteModel1 } from '../../../_models/APIModel/domestic-market.model';
+import { DomesticPriceModel, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -21,7 +21,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
-import { element } from 'protractor';
+
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
   parse: {
@@ -70,15 +70,13 @@ export class DomesticManagerComponent implements OnInit {
   }
 
   date = new FormControl(moment);
-  pickedDate = {
-    date: new Date()
-  }
+  public _currentRow: number = 0;
+  pickedDate = new Date();
 
   selection = new SelectionModel<DomesticPriceModel>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    // const numRows = this.dataSource.data.length;
     const numRows = this.dataSource.connect().value.length;
     return numSelected === numRows;
   }
@@ -96,24 +94,15 @@ export class DomesticManagerComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
-  deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
-  selectionarray: string[];
   removeRows() {
-    if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-      this.selection.selected.forEach(x => {
-        this.selectionarray = this.selection.selected.map(item => item.id)
-        this.deletemodel1.push({
-          id: ''
-        })
-      })
-      for (let index = 0; index < this.selectionarray.length; index++) {
-        const element = this.deletemodel1[index];
-        element.id = this.selectionarray[index]
-      }
-      this.marketService.DeleteDomesticMarket(this.deletemodel1).subscribe(res => {
+    if (!this.selection.selected.length) {
+      this._infor.msgError('Hãy chọn sản phẩm cần xóa');
+    }
+    else if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+      let datas = this.selection.selected.map(element => new Object({ id: element.id }));
+      this.marketService.DeleteDomesticMarket(datas).subscribe(res => {
         this._infor.msgSuccess('Xóa thành công')
         this.ngOnInit();
-        this.deletemodel1 = []
         this.selection.clear();
         this.paginator.pageIndex = 0;
       })
@@ -126,12 +115,12 @@ export class DomesticManagerComponent implements OnInit {
       this.move(res)
     })
     this.getALLDomesticMarketPrice();
-    this.pickedDate.date = null
+    this.pickedDate = null
   }
 
   resetAll() {
     this.getALLDomesticMarketPrice()
-    this.pickedDate.date = null
+    this.pickedDate = null
   }
 
   public products: Array<ProductModel> = new Array<ProductModel>();
@@ -151,9 +140,7 @@ export class DomesticManagerComponent implements OnInit {
   }
 
   Convertdate(text: string): string {
-    let date: string
-    date = text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4)
-    return date
+    return text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4);
   }
 
   Convertdatetostring(text: string): string {
@@ -170,23 +157,15 @@ export class DomesticManagerComponent implements OnInit {
   }
 
   public getDomesticMarketPrice(time: Date) {
-    let datepipe = this.datepipe.transform(this.pickedDate.date, 'yyyyMMdd')
+    // TODO: Need to check the value of time
+    let datepipe = this.datepipe.transform(this.pickedDate, 'yyyyMMdd')
     this.marketService.GetDomesticMarket(datepipe).subscribe(
       allrecords => {
         allrecords.data.forEach(element => {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<DomesticPriceModel>(allrecords.data);
-        // if (this.dataSource.data.length == 0) {
-        //   this.createDefault();
-        // }
-        this.dataSource.paginator = this.paginator;
-        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-        this.paginator._intl.firstPageLabel = "Trang Đầu";
-        this.paginator._intl.lastPageLabel = "Trang Cuối";
-        this.paginator._intl.previousPageLabel = "Trang Trước";
-        this.paginator._intl.nextPageLabel = "Trang Tiếp";
-
+        this.paginatorAgain();
         this._rows = this.dataSource.filteredData.length;
       },
     );
@@ -199,22 +178,12 @@ export class DomesticManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<DomesticPriceModel>(allrecords.data);
-        // if (this.dataSource.data.length == 0) {
-        //   this.createDefault();
-        // }
-        this.dataSource.paginator = this.paginator;
-        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-        this.paginator._intl.firstPageLabel = "Trang Đầu";
-        this.paginator._intl.lastPageLabel = "Trang Cuối";
-        this.paginator._intl.previousPageLabel = "Trang Trước";
-        this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        this.paginatorAgain()
 
         this._rows = this.dataSource.filteredData.length;
       },
     );
   }
-
-  public _currentRow: number = 0;
 
   public addRow(): void {
     let newRow: DomesticPriceModel = new DomesticPriceModel();
@@ -256,24 +225,6 @@ export class DomesticManagerComponent implements OnInit {
     this._rows = this.dataSource.filteredData.length;
   }
 
-  // public createDefault() {
-  //   const Product1: number = 1;
-  //   const Product2: number = 2;
-  //   const Product3: number = 3;
-  //   const Product4: number = 4;
-  //   this.dataSource = new MatTableDataSource<DomesticPriceModel>();
-  //   this.addRow();
-  //   this.addRow();
-  //   this.addRow();
-  //   this.addRow();
-  //   this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == Product1)[0].id_san_pham;
-  //   this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == Product2)[0].id_san_pham;
-  //   this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == Product3)[0].id_san_pham;
-  //   this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == Product4)[0].id_san_pham;
-
-  //   this._rows = this.dataSource.filteredData.length;
-  // }
-
   public save() {
     this.dataSource.data.forEach(element => {
       if (element.ngay_cap_nhat) {
@@ -292,94 +243,64 @@ export class DomesticManagerComponent implements OnInit {
     );
   }
 
-  // downloadExcelTemplate(filename: string, sheetname: string) {
-  //   let excelFileName: string;
-  //   let newArray: any[] = [];
-
-  //   sheetname = sheetname.replace('/', '_');
-  //   excelFileName = filename + '.xlsx';
-
-  //   let data = Object.values(this.dataSource.data);
-
-  //   Object.keys(data).forEach((key, index) => {
-  //     newArray.push({
-  //       'STT': index,
-  //       'Tên sản phẩm': data[key].ten_san_pham,
-  //       'ID sản phẩm': data[key].id_san_pham,
-  //       'Giá': '',
-  //       'Nguồn số liệu': '',
-  //     });
-  //   });
-  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
-  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-
-  //   XLSX.utils.book_append_sheet(wb, ws, sheetname);
-  //   XLSX.writeFile(wb, excelFileName);
-  // }
-
-  // public exportTOExcel(filename: string, sheetname: string) {
-  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  // }
-
   public exportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
-  spinnerEnabled = false;
   keys: string[];
   dataSheet = new Subject();
-  @ViewChild('inputFile', { static: true }) inputFile: ElementRef;
-  isExcelFile: boolean;
+  @ViewChild('inputFile', { static: true }) inputFile: ElementRef;  
   uploadExcel(evt: any) {
+    let data;
     let isExcelFile: boolean;
-    let spinnerEnabled = false;
-    let dataSheet = new Subject();
-    let keys: string[];
-    let data, header;
     const target: DataTransfer = <DataTransfer>(evt.target);
     isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
-    if (isExcelFile) {
-      let data, header;
-      const target: DataTransfer = <DataTransfer>(evt.target);
-      this.isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
-      if (target.files.length > 1) {
-        this.inputFile.nativeElement.value = '';
+    if (target.files.length != 1) {
+      this.inputFile.nativeElement.value = '';
+    } 
+    else if (isExcelFile) {
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: any) => {
+        let importedData = [];
+
+        const bstr: string = e.target.result;
+        const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+        const wsname: string = wb.SheetNames[0];
+        const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+        data = XLSX.utils.sheet_to_json(ws);
+        data.forEach(item => {
+          let datarow: DomesticPriceModel = new DomesticPriceModel();
+          datarow.gia_ca = item['Giá (VNĐ)'];
+          datarow.nguon_so_lieu = item['Nguồn số liệu'];
+          datarow.id_san_pham = item['ID sản phẩm'];
+          datarow.ngay_cap_nhat = this.getCurrentDate();
+          importedData.push(datarow);
+        });
+        this.dataSource = new MatTableDataSource(importedData);
+        this.paginatorAgain();
+        this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
+      };
+
+      reader.readAsBinaryString(target.files[0]);
+
+      reader.onloadend = (e) => {
+        this.keys = Object.keys(data[0]);
+        this.dataSheet.next(data)
       }
-      if (this.isExcelFile) {
-        this.spinnerEnabled = true;
-        const reader: FileReader = new FileReader();
-        reader.onload = (e: any) => {
-          const bstr: string = e.target.result;
-          const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
-
-          const wsname: string = wb.SheetNames[0];
-          const ws: XLSX.WorkSheet = wb.Sheets[wsname];
-
-          data = XLSX.utils.sheet_to_json(ws);
-          this.dataSource.data = [];
-          data.forEach(item => {
-            let datarow: DomesticPriceModel = new DomesticPriceModel();
-            datarow.gia_ca = item['Giá'];
-            datarow.nguon_so_lieu = item['Nguồn số liệu'];
-            datarow.id_san_pham = item['ID sản phẩm'];
-            datarow.ngay_cap_nhat = this.getCurrentDate();
-            this.dataSource.data.push(datarow);
-          });
-          this.dataSource = new MatTableDataSource(this.dataSource.data);
-          this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
-        };
-
-        reader.readAsBinaryString(target.files[0]);
-
-        reader.onloadend = (e) => {
-          this.spinnerEnabled = false;
-          this.keys = Object.keys(data[0]);
-          this.dataSheet.next(data)
-        }
-      } else {
-        this.inputFile.nativeElement.value = '';
-      }
+    } else {
+      this.inputFile.nativeElement.value = '';
     }
+  }
+  
+  public paginatorAgain() {
+    this.dataSource.paginator = this.paginator;
+    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+    this.paginator._intl.firstPageLabel = "Trang Đầu";
+    this.paginator._intl.lastPageLabel = "Trang Cuối";
+    this.paginator._intl.previousPageLabel = "Trang Trước";
+    this.paginator._intl.nextPageLabel = "Trang Tiếp";
   }
 
   public applyFilter(event: Event) {

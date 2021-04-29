@@ -89,14 +89,13 @@ export class MarketService {
             catchError(this.handleError)
         );
     }
-    public DeleteCompany(deletemodel: Array<DeleteModel>) {
+    public DeleteCompany(deletemodel) {
         var apiUrl = this.apiHome + this.urlDeleteCompany;
-        // var apiUrl = "http://localhost:5000/api/doanh-nghiep/xoa-nhieu-doanh-nghiep";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, deletemodel, { headers: headers }).pipe(tap(data => data), catchError(this.handleError))
     }
-    public DeleteCareer(deletemodel: Array<DeleteModel1>) {
+    public DeleteCareer(deletemodel) {
         var apiUrl = this.apiHome + this.urlDeleteCareer
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
@@ -120,7 +119,7 @@ export class MarketService {
             catchError(this.handleError)
         );
     }
-    public PostDomesticMarket(domesticArray: Array<DomesticPriceModel>) {
+    public PostDomesticMarket(domesticArray) {
         var apiUrl = this.apiHome + this.urlDomesticMarketPost;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
@@ -128,7 +127,7 @@ export class MarketService {
             catchError(this.handleError)
         );
     }
-    public DeleteDomesticMarket(deletemode1: Array<DeleteModel1>) {
+    public DeleteDomesticMarket(deletemode1) {
         var apiUrl = this.apiHome + this.urlDomesticMarketDelete
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);

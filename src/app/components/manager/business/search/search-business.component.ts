@@ -1,17 +1,16 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 
-import { CompanyDetailModel, filter, DeleteModel } from '../../../../_models/APIModel/domestic-market.model';
+import { CompanyDetailModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { MatTableFilter } from 'mat-table-filter';
 
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { FilterService } from 'src/app/_services/filter.service';
-import { InformationService } from '../../../../shared/information/information.service';
+import { InformationService } from 'src/app/shared/information/information.service';
 
 @Component({
   selector: 'app-search-business',
@@ -31,7 +30,7 @@ export class SearchBusinessComponent implements OnInit {
     'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 'hoat_dong',
   ];
 
-  public filter1: filter[] = [
+  public filterList = [
     { filed_name: 'mst', detail_name: 'Mã số thuế' },
     { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
     { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
@@ -71,7 +70,6 @@ export class SearchBusinessComponent implements OnInit {
     public _marketService: MarketService,
     public router: Router,
     public excelService: ExcelService,
-    public filterService: FilterService,
     public info: InformationService,
   ) { }
 
@@ -102,29 +100,20 @@ export class SearchBusinessComponent implements OnInit {
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
-
-  deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
-  selectionarray: string[];
+  
   removeRows() {
-    if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-      this.selection.selected.forEach(x => {
-        this.selectionarray = this.selection.selected.map(item => item.mst)
-        this.deletemodel1.push({
-          mst: ''
+    if (!this.selection.selected.length) {
+      this.info.msgError('Bạn chưa chọn doanh nghiệp để xóa')
+    } else {
+      if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+        let datas = this.selection.selected.map(element => new Object({ mst: element.mst }));
+        this._marketService.DeleteCompany(datas).subscribe(res => {
+          this.info.msgSuccess('Xóa thành công')
+          this.ngOnInit();
+          this.selection.clear();
+          this.paginator.pageIndex = 0;
         })
-      })
-      for (let index = 0; index < this.selectionarray.length; index++) {
-        const element = this.deletemodel1[index];
-        element.mst = this.selectionarray[index]
       }
-      this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
-        this.GetAllCompany();
-        this.info.msgSuccess('Xóa thành công')
-        this.ngOnInit();
-        this.deletemodel1 = []
-        this.selection.clear();
-        this.paginator.pageIndex = 0;
-      })
     }
   }
 
@@ -132,34 +121,26 @@ export class SearchBusinessComponent implements OnInit {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
 
-  // OpenDetailCompany(mst: string) {
-  //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree(['manager/business/edit/' + mst]));
-  //   window.open(url, "_blank");
-  // }
-
   OpenDetailCompany(mst: string) {
-    this.router.navigate(['manager/business/edit/' + mst]);
+    let url = '/#/manager/business/edit/' + mst;
+    window.open(url, '_blank');
   }
 
-  // AddCompany() {
-  //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree(['manager/business/edit/']));
-  //   window.open(url, "_blank");
-  // }
-
   AddCompany() {
-    this.router.navigate(['manager/business/edit/']);
+    let url = '/#/manager/business/edit/';
+    window.open(url, '_blank');
   }
 
   id: string = '2'
 
   ManageUser(id: string) {
-    this.router.navigate(['/manager/manage-user/' + id]);
+    let url = '/#/manager/manage-user/' + id;
+    window.open(url, '_blank');
   }
 
   AddCertificate() {
-    this.router.navigate(['manager/business/certificate/']);
+    let url = '/#/manager/business/certificate/';
+    window.open(url, '_blank');
   }
 
   selected_field: string = 'mst';
@@ -171,7 +152,7 @@ export class SearchBusinessComponent implements OnInit {
   tempFilter: CompanyDetailModel;
   filterType: MatTableFilter;
 
-  filter() {
+  applyFilter() {
     this.tempFilter = new CompanyDetailModel();
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
@@ -181,19 +162,19 @@ export class SearchBusinessComponent implements OnInit {
     this.filterEntity = Object.assign({}, this.tempFilter);
   }
 
-  cancel() {
+  cancelFilter() {
     this.tempFilter = new CompanyDetailModel();
     this.filterEntity = new CompanyDetailModel();
     this.dataSource.filter = '';
   }
 
-  add_condition() {
+  addCond() {
     this.count++;
     let new_ob = { id: this.count, filed_name: 'mst', filed_value: '' }
     this.countNumberCondition.push(new_ob);
   }
 
-  Xoa_dong() {
+  removeCond() {
     if (this.countNumberCondition.length === 1) {
       return;
     } else {
@@ -210,14 +191,13 @@ export class SearchBusinessComponent implements OnInit {
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
-    let date: string
-    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
-    return date
+    return text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4);
   }
 
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
+        // TODO: Need to optimize, too much ambiguous
         this.companyList1 = allrecords.data[0]
         this.companyList2 = allrecords.data[1]
         this.companyList3 = allrecords.data[2]
@@ -322,54 +302,6 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
 
-        // // Overrride default filter behaviour of Material Datatable
-        // this.dataSource.filterPredicate = this.filterService.createFilter();
       });
   }
-
-  public applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  // private DEFAULT_FIELD: string = 'ten_doanh_nghiep';
-  // private filterConditions: any[] = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
-  // private filterCount: number = 1;
-
-  // private addMoreFilter() {
-  //   this.filterCount++;
-  //   this.filterConditions.push({ id: this.filterCount, field_name: this.DEFAULT_FIELD, field_value: '' });
-  // }
-
-  // private removeFilter() {
-  //   // TODO: Check error when remove the same filter immediately. Need to check!
-  //   if (this.filterConditions.length != 1) {
-  //     let cloneArray = [...this.filterConditions];
-  //     this.filterConditions = cloneArray.filter(item => item.id !== parseInt(this.ele.nativeElement.id));
-  //     this.filterService.removeCondition(this.ele.nativeElement.getAttribute('data-field-name'));
-  //     this.dataSource.filter = this.filterService.getFilters();
-  //   }
-  // }
-
-  // private changeFilter(event) {
-  //   let filterCondition, filterValue;
-  //   if (event.source) {
-  //     // Change Select 
-  //     filterCondition = event.value;
-  //     filterValue = event.source._elementRef.nativeElement.closest(".filter-row").querySelector('.filter-value').value;
-  //   } else {
-  //     // Change input
-  //     filterCondition = event.currentTarget.closest(".filter-row").querySelector('.selected-condition').getAttribute('ng-reflect-model');
-  //     filterValue = event.target.value;
-  //   }
-  //   this.filterService.addFilter(filterCondition, filterValue);
-  //   this.dataSource.filter = this.filterService.getFilters();
-  // }
-
-  // private clearFilter() {
-  //   this.filterConditions = [{ id: 1, field_name: this.DEFAULT_FIELD, field_value: '' }];
-  //   this.filterService.setFilterVals();
-  //   this.dataSource.filter = this.filterService.getFilters();
-  // }
-
 }
