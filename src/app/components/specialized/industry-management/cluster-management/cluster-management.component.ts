@@ -43,7 +43,7 @@ export class ClusterManagementComponent extends BaseComponent {
     trang_thai_hd: any[] = [
         { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
         { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
-        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
+        { id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
     ];
 
     constructor(
@@ -102,6 +102,34 @@ export class ClusterManagementComponent extends BaseComponent {
 
     public openDetailCluster(id: string) {
         this.router.navigate(['/specialized/industry-management/cluster/' + id]);
+    }
+
+    setFormParams() {
+        console.log('xxx', this.selection.selected);
+        if (this.selection.selected.length) {
+            let selectedRecord = this.selection.selected[0];
+            this.formData.controls['ten_cum'].setValue(selectedRecord.ten_cum);
+            this.formData.controls['chu_dau_tu'].setValue(selectedRecord.chu_dau_tu);
+            this.formData.controls['dien_tich_theo_qh'].setValue(selectedRecord.dien_tich_theo_qh);
+            this.formData.controls['dien_tich_da_thanh_lap'].setValue(selectedRecord.dien_tich_da_thanh_lap);
+            this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+            this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+            this.formData.controls['quyet_dinh_thanh_lap'].setValue(selectedRecord.quyet_dinh_thanh_lap);
+            this.formData.controls['quyet_dinh_quy_hoach_chi_tiet'].setValue(selectedRecord.quyet_dinh_quy_hoach_chi_tiet);
+            this.formData.controls['quyet_dinh_danh_gia_dtm'].setValue(selectedRecord.quyet_dinh_danh_gia_dtm);
+            this.formData.controls['dieu_kien_kinh_doanh'].setValue(selectedRecord.dieu_kien_kinh_doanh);
+            this.formData.controls['vi_tri_quy_mo'].setValue(selectedRecord.vi_tri_quy_mo);
+            this.formData.controls['tong_muc_dau_tu'].setValue(selectedRecord.tong_muc_dau_tu);
+            this.formData.controls['quy_mo_dien_tich'].setValue(selectedRecord.quy_mo_dien_tich);
+            this.formData.controls['dien_giai'].setValue(selectedRecord.dien_giai);
+            this.formData.controls['duong_dan'].setValue(selectedRecord.duong_dan);
+            this.formData.controls['dien_tich_qhct'].setValue(selectedRecord.dien_tich_qhct);
+            this.formData.controls['dien_tich_ddtht'].setValue(selectedRecord.dien_tich_ddtht);
+            this.formData.controls['id_htdtht'].setValue(selectedRecord.id_htdtht);
+            this.formData.controls['id_htdthtxlnt'].setValue(selectedRecord.id_htdthtxlnt);
+            this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
+            this.formData.controls['nhu_cau_von'].setValue(selectedRecord.nhu_cau_von);
+        }
     }
     
     getFormParams() {

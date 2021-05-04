@@ -35,9 +35,8 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.loginService.validateLoginUser(this.userModel, this.isBusiness).subscribe({
       next: (response) => {
-        if (response.data.user_role_id == 1 || response.data.user_role_id == 3
-          || response.data.user_role_id == 4 || response.data.user_role_id == 5
-          || response.data.user_role_id == 6) {
+        if (response.data.user_role_id == 1 || response.data.user_role_id == 6 || response.data.user_role_id == 3
+          || response.data.user_role_id == 4 || response.data.user_role_id == 5) {
           this.info.msgSuccess("Đăng nhập thành công");
           this.returnUrl = '/specialized/home'
           this.router.navigateByUrl(this.returnUrl);

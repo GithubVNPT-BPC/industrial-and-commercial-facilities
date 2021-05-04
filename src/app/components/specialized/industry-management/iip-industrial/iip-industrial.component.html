@@ -133,6 +133,14 @@
                         {{element.thang_12 | formatNumber| ZeroAsSub}}</td>
                 </ng-container>
 
+                <ng-container matColumnDef="thuc_hien_nam">
+                    <th mat-header-cell *matHeaderCellDef> Thực hiện năm</th>
+                    <td mat-cell *matCellDef="let element"
+                        [ngClass]="element.thu_tu=='I'||element.thu_tu=='II'?'bold':''" class="detail"
+                        class="jump">
+                        {{element.thuc_hien_nam | formatNumber| ZeroAsSub}}</td>
+                </ng-container>
+
                 <tr mat-header-row class="table-header" *matHeaderRowDef="DISPLAY_COLS; sticky : true"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: DISPLAY_COLS;let i = index; ">
             </table>
