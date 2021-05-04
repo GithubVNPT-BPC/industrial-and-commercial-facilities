@@ -194,6 +194,7 @@ export class ChemicalManagementComponent extends BaseComponent {
 
                 this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
                 this.filteredDataSource.data = [...this.dataSource.data];
+                console.log(this.filteredDataSource.data, this.getFormParams());
             }
             this._prepareData();
             this.paginatorAgain();
@@ -267,5 +268,9 @@ export class ChemicalManagementComponent extends BaseComponent {
         });
         filteredData = filteredData.filter((v, i, a) => a.findIndex(t => (t.id_qlcn_hc === v.id_qlcn_hc)) === i)
         return filteredData;
+    }
+
+    setFormParams(){
+        this.formBuilder
     }
 }

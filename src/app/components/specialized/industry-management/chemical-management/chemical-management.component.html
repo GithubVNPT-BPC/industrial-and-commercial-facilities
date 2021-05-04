@@ -128,24 +128,27 @@
                     
                 </div>
                 <hr />
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg-12 button-control my-auto">
-                        <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('QLCN - Hóa chất', currentYear.toString())">
-                            <mat-icon>file_download</mat-icon>
-                        </button>
-                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
-                            [hidden]=authorize>
-                            <mat-icon>add_circle_outline</mat-icon>
-                        </button>
-                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
-                            (click)="openRemoveDialog()" [hidden]=authorize>
-                            <mat-icon>delete</mat-icon>
-                        </button>
-                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg-12 button-control my-auto">
+                            <button mat-raised-button matTooltip="Xuất Excel"
+                                (click)="ExportTOExcel('QLCN - Hóa chất', currentYear.toString())">
+                                <mat-icon>file_download</mat-icon>
+                            </button>
+                            <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                                [hidden]=authorize>
+                                <mat-icon>add_circle_outline</mat-icon>
+                            </button>
+                            <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                                (click)="openRemoveDialog()" [hidden]=authorize>
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                            <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                                (click)="switchEditMode()" [hidden]=authorize>
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                    <!-- <app-crud-buttons [authorize]="authorize" [name_report]="name_report" [selection]="selection" [table]="table"></app-crud-buttons> -->
+                        </div>
                     </div>
-                </div>
                 <hr>
                 <div class="layout mt-3" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
