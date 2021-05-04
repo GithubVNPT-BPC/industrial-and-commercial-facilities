@@ -7,99 +7,60 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="row">
-            <div class="col-12 button-control my-auto">
-                <button mat-raised-button (click)="ManageUser(id)" [hidden]=authorize>Danh sách tài khoản DN</button>
-                <button mat-raised-button (click)="AddCertificate()">DS giấy phép</button>
-                <button mat-raised-button (click)="AddCompany()">Thêm doanh nghiệp</button>
+        <div class="row pt-2">
+            <div class="col-lg-6 col-md-12 button-control my-auto text-left">
+                <button mat-raised-button (click)="ManageUser(id)" [hidden]=authorize><mat-icon>list</mat-icon>Danh sách tài khoản DN</button>
+                <button mat-raised-button (click)="AddCertificate()"><mat-icon>list</mat-icon>DS giấy phép</button>
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
                     Excel</button>
-                <button mat-raised-button class="red" (click)="removeRows()">Xóa doanh nghiệp</button>
+            </div>
+            <div class="col-lg-6 col-md-12 button-control my-auto text-xs-left text-md-left text-lg-right">
+                <button mat-raised-button (click)="addCond()" class="green" matTooltip="Thêm bộ lọc">
+                    <mat-icon>add_circle_outline</mat-icon> Thêm bộ lọc
+                </button>
+                <button mat-raised-button (click)="cancelFilter()" class="red" matTooltip="Xóa những dữ liệu lọc trước đó"> <mat-icon>search_off</mat-icon>Hủy lọc</button>
+                <button mat-raised-button (click)="applyFilter()" matTooltip="Lọc giá trị trên bảng"><mat-icon>filter_list</mat-icon>Lọc giá trị</button>
             </div>
         </div>
-        <div class="row" *ngIf="isSearch_Advanced">
-            <div class="col-4 button-control -align-left my-auto">
-                <button mat-raised-button (click)="filter()">Tìm kiếm</button>
-                <button mat-raised-button (click)="cancel()">Hủy Tìm kiếm</button>
-                <button mat-raised-button (click)="add_condition()">
-                    <mat-icon>expand_more</mat-icon>Mở rộng
-                </button>
-            </div>
-            <div class="col-8">
+        <hr/>
+        <div class="row my-auto" *ngIf="isSearch_Advanced">
+            <div class="col-lg-12">
                 <ng-container *ngFor="let item of countNumberCondition">
-                    <div class="row my-auto" id={{item.id}} #new_element>
-                        <div class="col-lg-5">
+                    <div class="row" id={{item.id}} #new_element>
+                        <div class="col-lg-4">
                             <mat-form-field appearance="outline">
                                 <mat-label>Dữ liệu cần lọc</mat-label>
                                 <mat-select [(ngModel)]="item.filed_name">
-                                    <mat-option *ngFor="let element of filter1" [value]="element.filed_name">
+                                    <mat-option *ngFor="let element of filterList" [value]="element.filed_name">
                                         {{ element.detail_name }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="col-lg-5">
+                        <div class="col-lg-7">
                             <mat-form-field appearance="outline">
                                 <mat-label>Nhập giá trị</mat-label>
                                 <input matInput placeholder="" [(ngModel)]="item.filed_value">
                             </mat-form-field>
                         </div>
-                        <div class="col-lg-2 button-control my-auto">
-                            <button mat-raised-button (click)="Xoa_dong()">
-                                <mat-icon>expand_less</mat-icon>Thu hẹp
+                        <div class="col-lg-1 button-control my-auto">
+                            <button mat-raised-button (click)="removeCond()" class="red" matTooltip="Xóa bộ lọc">
+                                <mat-icon>remove_circle_outline</mat-icon>
                             </button>
                         </div>
                     </div>
                 </ng-container>
             </div>
         </div>
-
-        <!-- <div class="row" *ngIf="isSearch_Advanced">
-            <div class="col-lg-7">
-                <ng-container *ngFor="let item of filterConditions">
-                    <div class="row my-auto filter-row" id={{item.id}} attr.data-field-name="{{item.field_name}}"
-                        #new_element>
-                        <div class="col-lg-5">
-                            <mat-form-field appearance="outline">
-                                <mat-select [(ngModel)]="item.field_name" class="selected-condition"
-                                    (selectionChange)="changeFilter($event)">
-                                    <mat-option *ngFor="let field of displayFields | keyvalue" [value]='field.key'>
-                                        {{field.value}}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-lg-5">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Nhập giá trị</mat-label>
-                                <input type="text" [(ngModel)]="item.field_value" class="filter-value" mdInput matInput
-                                    (keyup)="changeFilter($event)">
-                            </mat-form-field>
-                        </div>
-                        <div class="col-lg-2 mt-2">
-                            <button class="btn btn-danger" mat-raised-button (click)="removeFilter()">
-                                <mat-icon >remove_circle</mat-icon>
-                            </button>
-                        </div>
-                    </div>
-                </ng-container>
+        <hr>
+        <div class="row">
+            <div class="col-lg-12 button-control my-auto text-left">
+                <button mat-raised-button (click)="AddCompany()" class="green" matTooltip="Tạo mới doanh nghiệp">Tạo mới</button>
+                <button mat-raised-button class="red" (click)="removeRows()" matTooltip="Xóa doanh nghiệp" >Xóa</button>
             </div>
-            <div class="col-lg-5 button-control float-right mt-2">
-                <button mat-raised-button (click)="addMoreFilter()" class="reverse">
-                    <mat-icon>add_circle_outline</mat-icon> &nbsp;Thêm bộ lọc
-                </button>
-                <button mat-raised-button (click)="clearFilter()">Xóa bộ lọc</button>
-                <button mat-raised-button
-                    (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">Xuất
-                    Excel</button>
-            </div>
-        </div> -->
-        <div class="layout" #TABLE>
-            <!-- <mat-form-field id="filter">
-                <mat-label>Lọc dữ liệu</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field> -->
-
+        </div>
+        <div class="layout pt-2" #TABLE>
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 [filterType]="filterType" [dataSource]="dataSource" matSort matSortDisableClear matSortDirection="asc">
 

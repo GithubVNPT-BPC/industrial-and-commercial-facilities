@@ -219,15 +219,7 @@ export class ProductManagerComponent implements OnInit {
                     element.time_id = this.Convertdate(element.time_id.toString())
                 });
                 this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
-                // if (this.dataSource.data.length == 0) {
-                //     this.createDefault();
-                // }
-                this.dataSource.paginator = this.paginator;
-                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                this.paginator._intl.firstPageLabel = "Trang Đầu";
-                this.paginator._intl.lastPageLabel = "Trang Cuối";
-                this.paginator._intl.previousPageLabel = "Trang Trước";
-                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+                this.paginatorAgain();
 
                 this._rows = this.dataSource.filteredData.length;
             },
@@ -241,15 +233,7 @@ export class ProductManagerComponent implements OnInit {
                     element.time_id = this.Convertdate(element.time_id.toString())
                 });
                 this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
-                // if (this.dataSource.data.length == 0) {
-                //     this.createDefault();
-                // }
-                this.dataSource.paginator = this.paginator;
-                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-                this.paginator._intl.firstPageLabel = "Trang Đầu";
-                this.paginator._intl.lastPageLabel = "Trang Cuối";
-                this.paginator._intl.previousPageLabel = "Trang Trước";
-                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+                this.paginatorAgain();
 
                 this._rows = this.dataSource.filteredData.length;
             },
@@ -337,34 +321,9 @@ export class ProductManagerComponent implements OnInit {
         );
     }
 
-    // downloadExcelTemplate(filename: string, sheetname: string) {
-    //   let excelFileName: string;
-    //   let newArray: any[] = [];
-
-    //   sheetname = sheetname.replace('/', '_');
-    //   excelFileName = filename + '.xlsx';
-
-    //   let data = Object.values(this.dataSource.data);
-
-    //   Object.keys(data).forEach((key, index) => {
-    //     newArray.push({
-    //       'STT': index,
-    //       'Tên sản phẩm': data[key].ten_san_pham,
-    //       'ID sản phẩm': data[key].id_san_pham,
-    //       'Giá': '',
-    //       'Nguồn số liệu': '',
-    //     });
-    //   });
-    //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
-    //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-
-    //   XLSX.utils.book_append_sheet(wb, ws, sheetname);
-    //   XLSX.writeFile(wb, excelFileName);
-    // }
-
-    // public exportTOExcel(filename: string, sheetname: string) {
-    //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    // }
+    public exportTOExcel(filename: string, sheetname: string) {
+      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
 
     spinnerEnabled = false;
     keys: string[];
@@ -456,4 +415,13 @@ export class ProductManagerComponent implements OnInit {
             inputToArray[index].element.nativeElement.focus();
         }
     }
+
+    public paginatorAgain() {
+        this.dataSource.paginator = this.paginator;
+        this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+        this.paginator._intl.firstPageLabel = "Trang Đầu";
+        this.paginator._intl.lastPageLabel = "Trang Cuối";
+        this.paginator._intl.previousPageLabel = "Trang Trước";
+        this.paginator._intl.nextPageLabel = "Trang Tiếp";
+      }
 }

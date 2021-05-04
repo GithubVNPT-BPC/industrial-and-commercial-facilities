@@ -61,7 +61,8 @@ export class SCTService {
     private urlPhuongXaQuanHuyen = "/phuong-xa-kem-quan-huyen"
     // end api quan huyen
 
-    private urlUpdateRecord = environment.apiEndpoint + 'api/update-record';
+    // private urlUpdateRecord = environment.apiEndpoint + 'api/update-record';
+    private urlUpdateRecord = 'localhost:5001/api/update-record';
 
     token: any;
     username: any;

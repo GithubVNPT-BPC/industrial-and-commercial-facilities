@@ -59,11 +59,6 @@
         </div>
 
         <div class="layout" #TABLE>
-            <!-- <mat-form-field id="filter">
-                <mat-label>Lọc dữ liệu</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field> -->
-
             <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">
                 <ng-container matColumnDef="select">
                     <th mat-header-cell *matHeaderCellDef>
