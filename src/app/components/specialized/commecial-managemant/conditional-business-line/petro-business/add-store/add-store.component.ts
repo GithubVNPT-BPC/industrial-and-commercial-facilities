@@ -148,7 +148,7 @@ export class AddStoreComponent implements OnInit {
     )
   }
 
-  test: boolean = true;
+  test: boolean = false;
 
   petrolobject = new PetrolList();
   store1: Array<PetrolList> = new Array<PetrolList>();
