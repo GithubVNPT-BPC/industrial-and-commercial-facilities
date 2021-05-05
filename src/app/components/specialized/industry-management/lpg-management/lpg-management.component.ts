@@ -126,7 +126,7 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     callEditService(data) {
-        this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostLPGManagement([this.formData.value], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     callRemoveService(data) {

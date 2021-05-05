@@ -17,7 +17,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['/../../special_layout.scss'],
 })
 export class MultilevelTradeComponent extends BaseComponent {
-
+  DB_TABLE = 'QLTM_BHDC'
   displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep',  'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
     'so_giay_dkbhdc', 'co_quan_ban_hanh_giay_dkbhdc', 'ngay_dang_ky_giay_dkbhdc',
     'so_giay_tchtbhdc', 'co_quan_ban_hanh_giay_tchtbhdc', 'ngay_dang_ky_giay_tchtbhdc']
@@ -39,6 +39,7 @@ export class MultilevelTradeComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_doanh_nghiep: new FormControl(),
       dia_chi_doanh_nghiep: new FormControl(),
       mst: new FormControl(),
@@ -51,6 +52,24 @@ export class MultilevelTradeComponent extends BaseComponent {
       thoi_gian_bat_dau: new FormControl(),
       thoi_gian_ket_thuc: new FormControl(),
       dia_diem_to_chuc: new FormControl(),
+    }
+  }
+
+  setFormParams(){
+    if (this.selection.selected.length) {
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+      this.formData.controls['dia_chi_doanh_nghiep'].setValue(selectedRecord.to_chu_ca_nhan);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
+      this.formData.controls['so_giay_dkbhdc'].setValue(selectedRecord.so_giay_dkbhdc);
+      this.formData.controls['co_quan_ban_hanh_giay_dkbhdc'].setValue(selectedRecord.co_quan_ban_hanh_giay_dkbhdc);
+      this.formData.controls['ngay_dang_ky_giay_dkbhdc'].setValue(selectedRecord.ngay_dang_ky_giay_dkbhdc);
+      this.formData.controls['so_giay_tchtbhdc'].setValue(selectedRecord.so_giay_tchtbhdc);
+      this.formData.controls['co_quan_ban_hanh_giay_tchtbhdc'].setValue(selectedRecord.co_quan_ban_hanh_giay_tchtbhdc);  
+      this.formData.controls['ngay_dang_ky_giay_tchtbhdc'].setValue(selectedRecord.ngay_dang_ky_giay_tchtbhdc);  
+      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_bat_dau);  
+      this.formData.controls['dia_diem_to_chuc'].setValue(selectedRecord.dia_diem_to_chuc);  
     }
   }
 

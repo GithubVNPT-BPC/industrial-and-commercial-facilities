@@ -18,7 +18,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class StoreManagementComponent extends BaseComponent {
-  DB_TABLE = '';
+  DB_TABLE = 'QLTM_CUA_HANG_TIEN_LOI';
   
   message: string;
   isChecked: boolean = false;

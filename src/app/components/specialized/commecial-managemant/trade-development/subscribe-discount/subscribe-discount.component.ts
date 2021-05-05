@@ -16,6 +16,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class SubscribeDiscountComponent extends BaseComponent {
+  DB_TABLE = 'QLTM_XTTM_KM'
   dataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
   filteredDataSource: MatTableDataSource<SDModel> = new MatTableDataSource<SDModel>();
   displayedColumns: string[] = ['select', 'index'];
@@ -74,6 +75,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_doanh_nghiep: new FormControl(''),
       dia_chi_doanh_nghiep: new FormControl(''),
       mst: new FormControl(),
@@ -89,6 +91,24 @@ export class SubscribeDiscountComponent extends BaseComponent {
       // array address discount
       danh_sach_dia_diem: this.formBuilder.array([]),
       id_temp: new FormControl(1)
+    }
+  }
+
+  setFormParams(){
+    if (this.selection.selected.length) {
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+      this.formData.controls['dia_chi_doanh_nghiep'].setValue(selectedRecord.to_chu_ca_nhan);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
+      this.formData.controls['ten_chuong_trinh_km'].setValue(selectedRecord.ten_chuong_trinh_km);
+      this.formData.controls['thoi_gian_bat_dau'].setValue(selectedRecord.thoi_gian_bat_dau);
+      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_ket_thuc);
+      this.formData.controls['hang_hoa_km'].setValue(selectedRecord.hang_hoa_km);
+      this.formData.controls['so_van_ban'].setValue(selectedRecord.so_van_ban);  
+      this.formData.controls['co_quan_ban_hanh'].setValue(selectedRecord.co_quan_ban_hanh);  
+      this.formData.controls['ngay_thang_nam_van_ban'].setValue(selectedRecord.ngay_thang_nam_van_ban);  
+      this.formData.controls['id_hinh_thuc'].setValue(selectedRecord.id_hinh_thuc);  
     }
   }
 

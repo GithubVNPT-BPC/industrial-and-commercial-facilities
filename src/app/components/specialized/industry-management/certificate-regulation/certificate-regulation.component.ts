@@ -180,10 +180,15 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   callEditService(data) {
-    if (data.attachment_id && this.selectedFile) {
-      data['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin, id: data.attachment_id }
+    let body = Object.assign({}, this.formData.value);
+    // if (data.attachment_id && this.selectedFile) {
+    //   data['attachment'] = { file_name: this.selectedFile.name ? this.selectedFile.name : 'old_file', binary: this.fileBin, id: data.attachment_id }
+    // }
+    if (this.selectedFile !== null) {
+      // data['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin }
+      body['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin };
     }
-    this.industryManagementService.UpdateComformityAnnounce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.industryManagementService.UpdateComformityAnnounce(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   callRemoveService(data) {

@@ -19,7 +19,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class FoodManagementComponent extends BaseComponent {
-  DB_TABLE = '';
+  DB_TABLE = 'QLTM_KINH_DOANH_THUC_PHAM_SPKD';
   dataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
   filteredDataSource: MatTableDataSource<FoodCommerceModel> = new MatTableDataSource<FoodCommerceModel>();
 
