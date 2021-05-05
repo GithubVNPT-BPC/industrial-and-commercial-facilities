@@ -124,6 +124,7 @@ export class AddStoreComponent implements OnInit {
       id_cua_hang_xang_dau: null,
       ten_cua_hang: '',
       mst: '',
+      find_mst: '',
       dia_chi: '',
       id_phuong_xa: 25195,
       so_dien_thoai: '',
@@ -147,16 +148,17 @@ export class AddStoreComponent implements OnInit {
     )
   }
 
+  test: boolean = true;
+
   petrolobject = new PetrolList();
   store1: Array<PetrolList> = new Array<PetrolList>();
   store2: Array<PetrolList> = new Array<PetrolList>();
 
   getPetrolInfo() {
-    this._Service.GetAllPetrolValue().subscribe(all => {
-      this.store1 = all.data[0]
+    this._Service.GetAllPetrolStore().subscribe(all => {
+      this.store1 = all.data
       this.store2 = this.store1.filter(x => x.id_cua_hang_xang_dau == this.id)
-      console.log(this.store2)
-      this.petrolobject = this.store2[0]
+      this.petrolobject = this.store2[0];
 
       this._Service.petrol = {
         id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
