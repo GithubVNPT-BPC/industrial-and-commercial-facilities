@@ -125,7 +125,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4 col-lg-6">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Loại trạm</mat-label>
                             <mat-select (selectionChange)="getDataElectric110KV($event.value)" [(value)]="selectedType">
@@ -136,7 +136,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-4 col-lg-6">
+                    <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Loại đường dây</mat-label>
                             <mat-select (selectionChange)="getDataElectric110KV($event.value)" [(value)]="selectedType">
@@ -147,8 +147,8 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2 col-lg-2">
-                        <!-- <mat-form-field appearance="outline">
+                    <!-- <div class="col-2 col-lg-2">
+                        <mat-form-field appearance="outline">
                             <mat-label>Thời gian</mat-label>
                             <input matInput [matDatepicker]="filteredDatePicker" placeholder="Tháng/Năm" (ngModelChange)="onFiltededDateChange($event)"
                                     [formControl]="filteredDate" >
@@ -158,8 +158,8 @@
                                             (yearSelected)="chosenYearHandler($event)"
                                             (monthSelected)="chosenMonthHandler($event, filteredDatePicker)" >
                             </mat-datepicker>
-                        </mat-form-field> -->
-                    </div>
+                        </mat-form-field>
+                    </div> -->
 
                     <div class="col-6 col-lg-6 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"

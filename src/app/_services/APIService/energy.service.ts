@@ -69,7 +69,7 @@ export class EnergyService {
 
     LayDuLieuThuyDien(time_id){
         var apiUrl = this.apiNangLuong + this.urlThuyDien;
-        apiUrl = 'https://localhost:5001/api/qlnl/thuy-dien';
+        // apiUrl = 'https://localhost:5001/api/qlnl/thuy-dien';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString())
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
@@ -79,7 +79,7 @@ export class EnergyService {
 
     LayDuLieuDienSinhKhoi(time_id: number){
         var apiUrl = this.apiNangLuong + this.urlDienSinhKhoi;
-        apiUrl = 'https://localhost:5001/api/qlnl/dsk';
+        // apiUrl = 'https://localhost:5001/api/qlnl/dsk';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString())
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
@@ -142,8 +142,8 @@ export class EnergyService {
     }
 
     PostHydroEnergyData(datas, time_id) {
-        // let apiUrl = this.apiNangLuong + this.urlPostHydroEnergyData;
-        let apiUrl = "https://localhost:5001/api/qlnl/thuy-dien";
+        let apiUrl = this.apiNangLuong + this.urlPostHydroEnergyData;
+        // let apiUrl = "https://localhost:5001/api/qlnl/thuy-dien";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         // let params = new HttpParams().set('time_id', time_id.toString());
@@ -153,8 +153,8 @@ export class EnergyService {
     }
 
     PostBlockElectricData(datas, time_id) {
-        //let apiUrl = this.apiNangLuong + this.urlPostBlockElectricData;
-        let apiUrl ='https://localhost:5001/api/qlnl/dsk';
+        let apiUrl = this.apiNangLuong + this.urlPostBlockElectricData;
+        // let apiUrl ='https://localhost:5001/api/qlnl/dsk';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         // let params = new HttpParams().set('time_id', time_id.toString());
@@ -177,7 +177,7 @@ export class EnergyService {
 
     LayDuLieuTietKiemNangLuong(time_id: number){
         var apiUrl = this.apiNangLuong + this.urlTietKiemnangLuong;
-        apiUrl = 'https://localhost:5001/api/qlnl/tknl';
+        // apiUrl = 'https://localhost:5001/api/qlnl/tknl';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
@@ -227,7 +227,7 @@ export class EnergyService {
 
     CapNhatDuLieutietKiemNL(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlCapNhatTietKiemNL;
-        apiUrl = 'https://localhost:5001/api/qlnl/tknl';
+        // apiUrl = 'https://localhost:5001/api/qlnl/tknl';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers}).pipe(tap(data => data),
             catchError(this.handleError)
