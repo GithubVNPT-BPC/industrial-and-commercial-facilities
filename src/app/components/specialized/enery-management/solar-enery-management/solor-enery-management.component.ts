@@ -15,6 +15,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class SolarEneryManagementComponent extends BaseComponent {
   //Constant variable
+  DB_TABLE = 'QLNL_DMT';
   public readonly displayedColumns: string[] =
     ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep', 'ten_huyen_thi', 'cong_suat_thiet_ke',
       'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'trang_thai'];
@@ -70,6 +71,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_du_an: new FormControl(),
       ten_doanh_nghiep: new FormControl(),
       dia_diem: new FormControl(),
@@ -78,6 +80,21 @@ export class SolarEneryManagementComponent extends BaseComponent {
       san_luong_nam: new FormControl(),
       doanh_thu: new FormControl(),
       id_quan_huyen: new FormControl(),
+    }
+  }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['ten_du_an'].setValue(selectedRecord.ten_du_an);
+        this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+        this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
+        this.formData.controls['cong_suat_thiet_ke'].setValue(selectedRecord.cong_suat_thiet_ke);
+        this.formData.controls['san_luong_6_thang'].setValue(selectedRecord.san_luong_6_thang);
+        this.formData.controls['san_luong_nam'].setValue(selectedRecord.san_luong_nam);
+        this.formData.controls['doanh_thu'].setValue(selectedRecord.doanh_thu);
+        this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
     }
   }
 

@@ -12,7 +12,7 @@ import { BaseComponent } from '../../base.component';
   styleUrls: ['/../../special_layout.scss'],
 })
 export class ElectricDevelopmentManagementComponent extends BaseComponent {
-
+  DB_TABLE  = 'QLNL_35KTROXUONG';
   //Constant variable
   public readonly displayedColumns: string[] = ['select', 'index', 'ten_huyen_thi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
   public readonly dsplayMergeColumns: string[] = ['indexM', 'ten_huyen_thiM', 'trung_apM', 'ha_apM', 'bien_apM'];
@@ -104,6 +104,7 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       dia_ban: new FormControl(''),
       trung_ap_3_pha: new FormControl(''),
       trung_ap_1_pha: new FormControl(''),
@@ -116,7 +117,20 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
       id_quan_huyen: new FormControl()
     }
   }
-
+  setFormParams() {
+    if (this.selection.selected.length) {
+     let selectedRecord = this.selection.selected[0];
+     this.formData.controls['id'].setValue(selectedRecord.id);
+     this.formData.controls['dia_ban'].setValue(selectedRecord.dia_ban);
+     this.formData.controls['trung_ap_3_pha'].setValue(selectedRecord.trung_ap_3_pha);
+     this.formData.controls['trung_ap_1_pha'].setValue(selectedRecord.trung_ap_1_pha);
+     this.formData.controls['ha_ap_3_pha'].setValue(selectedRecord.ha_ap_3_pha);
+     this.formData.controls['ha_ap_1_pha'].setValue(selectedRecord.ha_ap_1_pha);
+     this.formData.controls['so_tram'].setValue(selectedRecord.so_tram);
+     this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
+     this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
+}
+}
   public prepareData(data) {
     data['trung_ap_3_pha'] = Number(data['trung_ap_3_pha']);
     data['trung_ap_1_pha'] = Number(data['trung_ap_1_pha']);
@@ -145,7 +159,7 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   getLinkDefault() {
     //Constant
     this.LINK_DEFAULT = "/specialized/enery-management/35kv_electricity_development";
-    this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Công tác phát triển lưới điện 35KV";
-    this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Công tác phát triển lưới điện 35KV";
+    this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện cấp điện áp từ 22kV trở xuống";
+    this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện cấp điện áp từ 22kV trở xuống";
   }
 }

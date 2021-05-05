@@ -13,6 +13,7 @@ import { BaseComponent } from '../../base.component';
 })
 export class KeyEnegyComponent extends BaseComponent {
 
+  DB_TABLE = 'QLNL_NANG_LUONG_TRONG_DIEM'
   constructor(
     private injector: Injector,
     private energyService: EnergyService,
@@ -74,6 +75,7 @@ export class KeyEnegyComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_khach_hang: new FormControl(),
       dia_chi: new FormControl(),
       nganh_nghe: new FormControl(),
@@ -88,7 +90,24 @@ export class KeyEnegyComponent extends BaseComponent {
       time_id: new FormControl()
     }
   }
-
+  setFormParams() {
+    if (this.selection.selected.length) {
+     let selectedRecord = this.selection.selected[0];
+     this.formData.controls['ten_khach_hang'].setValue(selectedRecord.ten_khach_hang);
+     this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+     this.formData.controls['nganh_nghe'].setValue(selectedRecord.nganh_nghe);
+     this.formData.controls['dien'].setValue(selectedRecord.dien);
+     this.formData.controls['than'].setValue(selectedRecord.than);
+     this.formData.controls['DO'].setValue(selectedRecord.DO);
+     this.formData.controls['FO'].setValue(selectedRecord.FO);
+     this.formData.controls['xang'].setValue(selectedRecord.xang);
+     this.formData.controls['LPG'].setValue(selectedRecord.LPG);
+     this.formData.controls['go'].setValue(selectedRecord.go);
+     this.formData.controls['nang_luong_quy_doi'].setValue(selectedRecord.nang_luong_quy_doi);
+     this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+     this.formData.controls['id'].setValue(selectedRecord.id);
+    }
+}
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();

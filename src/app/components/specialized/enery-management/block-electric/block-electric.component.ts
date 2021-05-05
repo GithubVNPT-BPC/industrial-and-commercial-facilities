@@ -15,9 +15,9 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['/../../special_layout.scss']
 })
 export class BlockElectricComponent extends BaseComponent {
-
+  DB_TABLE  = 'QLNL_DIENSINHKHOI'
   //Constant variable
-  public readonly displayedColumns: string[] = ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep', 'dia_diem', 'cong_xuat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'id_trang_thai_hoat_dong'];
+  public readonly displayedColumns: string[] = ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep','ten_quan_huyen', 'cong_suat_thiet_ke', 'san_luong_6_thang', 'san_luong_nam', 'doanh_thu','id_trang_thai_hoat_dong'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
   public filteredDataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
@@ -61,23 +61,34 @@ export class BlockElectricComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_du_an: new FormControl(),
       ten_doanh_nghiep: new FormControl(),
-      dia_diem: new FormControl(),
+      id_quan_huyen: new FormControl(),
       cong_suat_thiet_ke: new FormControl(),
       san_luong_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu: new FormControl(),
       time_id: new FormControl(),
+      id_trang_thai_hoat_dong: new FormControl(),
     }
   }
-
-  prepareData(data) {
-    data = {
-      ...data, ...{
-        id_trang_thai_hoat_dong: 1,
-      }
+  setFormParams() {
+    if (this.selection.selected.length) {
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_du_an'].setValue(selectedRecord.ten_du_an);
+      this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
+      this.formData.controls['cong_suat_thiet_ke'].setValue(selectedRecord.cong_suat_thiet_ke);
+      this.formData.controls['san_luong_6_thang'].setValue(selectedRecord.san_luong_6_thang);
+      this.formData.controls['san_luong_nam'].setValue(selectedRecord.san_luong_nam);
+      this.formData.controls['doanh_thu'].setValue(selectedRecord.doanh_thu);
+      this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+      this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
+      this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
     }
+  }
+  prepareData(data) {
     return data;
   }
 
