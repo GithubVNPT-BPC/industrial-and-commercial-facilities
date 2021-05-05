@@ -309,6 +309,7 @@ export class FieldList {
 export class BusinessmanSelect {
     id_thuong_nhan: number;
     ten_thuong_nhan: string;
+    id_linh_vuc: number;
 }
 
 export class StoreSelect {

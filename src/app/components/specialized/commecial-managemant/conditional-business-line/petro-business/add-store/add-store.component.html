@@ -2,25 +2,45 @@
     <mat-card-header>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="petrol_data" autocomplete="off" (ngSubmit)="onSubmit(petrol_data.getRawValue())">
-            <div class="row">
-                <div class="col-6 button-control -align-left my-auto">
-                    <button type="submit" mat-raised-button>Lưu</button>
+        <ng-container *ngIf="check_mst; else elseTemplate">
+            <form [formGroup]="find_mst" autocomplete="off" (ngSubmit)="onSubmit(find_mst.getRawValue())">
+                <div class="row">
+                    <div class="col-6 button-control -align-left my-auto">
+                        <button type="button" (click)="ChooseMST()" mat-raised-button>Lưu</button>
+                    </div>
+                    <div class="col-6 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-6 button-control -align-right my-auto">
-                    <button mat-raised-button (click)="Back()">
-                        <mat-icon>keyboard_backspace</mat-icon>
-                    </button>
-                </div>
-            </div>
 
-            <ng-container *ngIf="test; else elseTemplate">
                 <mat-form-field appearance="outline">
-                    <mat-label>Mã số thuế</mat-label>
-                    <input formControlName="find_mst" matInput placeholder="">
+                    <mat-label>Chọn mã số thuế để thêm cửa hàng</mat-label>
+                    <mat-select formControlName="find_mst">
+                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'mst'"
+                            [array]="allcertificate" (filteredReturn)="filterallcertificate =$event">
+                        </mat-select-filter>
+                        <mat-option *ngFor="let item of filterallcertificate" [value]="item.mst">
+                            {{item.mst}}
+                        </mat-option>
+                    </mat-select>
                 </mat-form-field>
-            </ng-container>
-            <ng-template #elseTemplate>
+            </form>
+        </ng-container>
+        <ng-template #elseTemplate>
+            <form [formGroup]="petrol_data" autocomplete="off" (ngSubmit)="onSubmit(petrol_data.getRawValue())">
+                <div class="row">
+                    <div class="col-6 button-control -align-left my-auto">
+                        <button type="submit" mat-raised-button>Lưu</button>
+                    </div>
+                    <div class="col-6 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-6">
                         <mat-form-field appearance="outline">
@@ -45,8 +65,9 @@
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
-                            <mat-label>Mã số thuế</mat-label>
-                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.petrol.mst">
+                            <mat-label style="color: red;">Mã số thuế</mat-label>
+                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.petrol.mst"
+                                readonly>
                         </mat-form-field>
 
                         <mat-form-field appearance="outline">
@@ -98,7 +119,7 @@
                         </mat-form-field>
                     </div>
                 </div>
-            </ng-template>
-        </form>
+            </form>
+        </ng-template>
     </mat-card-content>
 </mat-card>
