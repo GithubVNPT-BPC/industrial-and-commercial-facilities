@@ -13,6 +13,7 @@ import { BaseComponent } from '../../base.component';
 })
 
 export class CurrentElectricalPlanComponent extends BaseComponent {
+    DB_TABLE  = 'QLNL_HTNCC';
     dataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
     filteredDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
 
@@ -27,6 +28,9 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
         1: 'Trạm biến áp 110KV',
         2: 'Trạm biến áp 220KV',
         3: 'Trạm biến áp 500KV',
+    }
+
+    loai_quy_hoach1 = {
         4: 'Đường dây 110KV',
         5: 'Đường dây 220KV',
         6: 'Đường dây 500KV',
@@ -90,6 +94,7 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
 
     getFormParams() {
         return {
+            id: new FormControl(),
             ten_tram: new FormControl(''),
             duong_day: new FormControl(''),
             tba: new FormControl(''),
@@ -104,8 +109,25 @@ export class CurrentElectricalPlanComponent extends BaseComponent {
             id_loai_quy_hoach: new FormControl(''),
         }
     }
-
-    getLinkDefault() {
+    setFormParams() {
+        if (this.selection.selected.length) {
+         let selectedRecord = this.selection.selected[0];
+         this.formData.controls['id'].setValue(selectedRecord.id);
+         this.formData.controls['ten_tram'].setValue(selectedRecord.ten_tram);
+         this.formData.controls['duong_day'].setValue(selectedRecord.duong_day);
+         this.formData.controls['tba'].setValue(selectedRecord.tba);
+         this.formData.controls['tiet_dien_day_dan'].setValue(selectedRecord.tiet_dien_day_dan);
+         this.formData.controls['dien_ap'].setValue(selectedRecord.dien_ap);
+         this.formData.controls['chieu_dai'].setValue(selectedRecord.chieu_dai);
+         this.formData.controls['p_max'].setValue(selectedRecord.p_max);
+         this.formData.controls['p_min'].setValue(selectedRecord.p_max);
+         this.formData.controls['p_tb'].setValue(selectedRecord.p_tb);
+         this.formData.controls['mang_tai'].setValue(selectedRecord.mang_tai);
+         this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
+         this.formData.controls['id_loai_quy_hoach'].setValue(selectedRecord.id_loai_quy_hoach);      
+    }
+}
+getLinkDefault() {
         //Constant
         this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
         this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";

@@ -49,6 +49,7 @@ class CustomDateAdapter extends NativeDateAdapter {
 })
 
 export class TradeFairsExhibitionsComponent extends BaseComponent {
+  DB_TABLE = 'QLTM_XTTM_HCTL'
   displayedColumns: string[] = ['select', 'index'];
   dataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
   filteredDataSource: MatTableDataSource<TFEModel> = new MatTableDataSource<TFEModel>();
@@ -108,6 +109,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_doanh_nghiep: new FormControl(),
       dia_chi_doanh_nghiep: new FormControl(),
       id_phuong_xa: new FormBuilder(),
@@ -123,6 +125,28 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
       ngay_thang_nam_van_ban: new FormControl(),
       id_trang_thai: new FormControl(),
       time_id: new FormControl(),
+    }
+  }
+
+  setFormParams(){
+    if (this.selection.selected.length) {
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+      this.formData.controls['dia_chi_doanh_nghiep'].setValue(selectedRecord.to_chu_ca_nhan);
+      this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
+      this.formData.controls['ten_hoi_cho'].setValue(selectedRecord.ten_hoi_cho);
+      this.formData.controls['thoi_gian_bat_dau'].setValue(selectedRecord.thoi_gian_bat_dau);
+      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_ket_thuc);
+      this.formData.controls['dia_diem_to_chuc'].setValue(selectedRecord.dia_diem_to_chuc);
+      this.formData.controls['so_luong_gian_hang'].setValue(selectedRecord.so_luong_gian_hang);
+      this.formData.controls['san_pham'].setValue(selectedRecord.san_pham);
+      this.formData.controls['so_van_ban'].setValue(selectedRecord.so_van_ban);  
+      this.formData.controls['co_quan_ban_hanh'].setValue(selectedRecord.co_quan_ban_hanh);  
+      this.formData.controls['ngay_thang_nam_van_ban'].setValue(selectedRecord.ngay_thang_nam_van_ban);  
+      this.formData.controls['id_trang_thai'].setValue(selectedRecord.id_trang_thai);  
+      this.formData.controls['time_id'].setValue(selectedRecord.time_id);  
     }
   }
 

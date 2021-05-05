@@ -20,6 +20,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class SuperMarketCommecialManagementComponent extends BaseComponent {
+  DB_TABLE = 'QLTM_ST_TTTM';
   //
   public tongSieuThi: number = 0;
   public sieuThiTongHop: number = 0;

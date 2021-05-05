@@ -7,12 +7,13 @@
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
+    <hr>
     <mat-card-content>
         <div class="row">
             <div class="col-lg-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
-                    <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                    <input matInput [matDatepicker]="dp" [formControl]="pickedDate" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                     <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
                         (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
@@ -21,23 +22,24 @@
             </div>
 
             <div class="col-lg-10 button-control my-auto">
-                <button mat-raised-button (click)="exportTOExcel('Thông tin xuất khẩu','Thông tin xuất khẩu')">Xuất
+                <button mat-raised-button (click)="exportTOExcel()" class="green"><mat-icon>download</mat-icon>Xuất
                     Excel</button>
             </div>
         </div>
-        <div class="layout" #TABLE>
-            <!-- <mat-form-field id="filter">
-                <mat-label>Lọc dữ liệu</mat-label>
-                <input id="inputt" matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field> -->
-
-            <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+        <div class="layout mt-3" #TABLE >
+            <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index">
                     <th mat-header-cell *matHeaderCellDef> STT </th>
                     <td mat-cell *matCellDef="let element; let i = index;" class="center-cell"> {{i + 1 +
                         (paginator.pageIndex * paginator.pageSize)}} </td>
                     <td mat-footer-cell *matFooterCellDef> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="id_san_pham">
+                    <th mat-header-cell *matHeaderCellDef class="d-none"> ID Sản Phẩm </th>
+                    <td mat-cell *matCellDef="let element" class="d-none"> {{element.id_san_pham}} </td>
+                    <td mat-footer-cell *matFooterCellDef class="d-none"></td>
                 </ng-container>
 
                 <ng-container matColumnDef="ten_san_pham">
@@ -55,34 +57,26 @@
 
                 <ng-container matColumnDef="san_luong_thang">
                     <th mat-header-cell *matHeaderCellDef> Sản lượng </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.san_luong_thang | number:
-                        '1.0-4':'vi'}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSL() | number: '1.0-4':'vi'}} </td>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.san_luong_thang | formatNumber}} </td>
+                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSL | number: '1.0-4':'vi' }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia_thang">
                     <th mat-header-cell *matHeaderCellDef> Trị giá (Triệu USD) </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia_thang | number:
-                        '1.0-4':'vi'}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTG() | number: '1.0-4':'vi'}} </td>
+                    <td mat-cell *matCellDef="let element" class="right-cell"> {{element.tri_gia_thang | formatNumber}} </td>
+                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTG | number: '1.0-4':'vi' }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="san_luong_thang_tc">
                     <th mat-header-cell *matHeaderCellDef> Sản lượng</th>
-                    <td mat-cell *matCellDef="let element" class="right-cell">
-                        {{element.san_luong_thang_tc | number: '1.0-4':'vi'}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSLCT() | number: '1.0-4':'vi'}} </td>
+                    <td mat-cell *matCellDef="let element" class="right-cell">{{element.san_luong_thang_tc | formatNumber}} </td>
+                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumSLCT | number: '1.0-4':'vi' }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="tri_gia_thang_tc">
                     <th mat-header-cell *matHeaderCellDef> Trị giá (Triệu USD) </th>
-                    <td mat-cell *matCellDef="let element" class="right-cell">
-                        {{element.tri_gia_thang_tc | number: '1.0-4':'vi'}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="right-cell"> {{sumTGCT() | number: '1.0-4':'vi'}} </td>
+                    <td mat-cell *matCellDef="let element" class="right-cell">{{element.tri_gia_thang_tc | formatNumber}} </td>
+                    <td mat-footer-cell *matFooterCellDef class="right-cell" > {{sumTGCT | number: '1.0-4':'vi' }} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="top_xuat_khau">
@@ -93,29 +87,34 @@
                     <td mat-footer-cell *matFooterCellDef> </td>
                 </ng-container>
 
+                <ng-container matColumnDef="id_sp_merge">
+                    <th mat-header-cell *matHeaderCellDef class="text-center d-none" [attr.colspan]="1">
+                </ng-container>
+
                 <ng-container matColumnDef="ma_va_ten">
-                    <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="3">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="3">
                 </ng-container>
 
                 <ng-container matColumnDef="so_lieu_tam_thoi">
-                    <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="2">
                         Số liệu tạm thời <br> (Nguồn số liệu từ Cục hải quan Bình Phước) </th>
                 </ng-container>
                 <ng-container matColumnDef="so_lieu_chinh_thuc">
-                    <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="2">
                         Số liệu chính thức<br> (Nguồn số liệu từ Tổng cục Hải quan) </th>
                 </ng-container>
                 <ng-container matColumnDef="top_xuat_khau_header">
-                    <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1">
+                    <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="1">
                 </ng-container>
 
                 <tr mat-header-row class="table-header"
-                    *matHeaderRowDef="['ma_va_ten','so_lieu_tam_thoi', 'so_lieu_chinh_thuc','top_xuat_khau_header']; sticky: true;">
+                    *matHeaderRowDef="['ma_va_ten','so_lieu_tam_thoi', 'so_lieu_chinh_thuc','top_xuat_khau_header', 'id_sp_merge']; sticky: true;">
                 </tr>
                 <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
-                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true" ></tr>
             </table>
+            <h3 *ngIf="!filteredDataSource.data.length" class="text-center">Không có dữ liệu</h3>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>

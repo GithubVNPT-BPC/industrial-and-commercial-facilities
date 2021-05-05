@@ -14,6 +14,7 @@ import moment from "moment";
   styleUrls: ['../../../special_layout.scss']
 })
 export class ManufacturingElectronicComponent extends BaseComponent {
+  DB_TABLE = 'QLNL_CAP_PHEP_HOAT_DONG_DIEN_LUC';
   @Input('manufacturingData') input_data: ManageAproveElectronic[];
 
   //Constant variable
@@ -107,15 +108,29 @@ export class ManufacturingElectronicComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_doanh_nghiep: new FormControl(''),
       dia_chi: new FormControl(''),
       dien_thoai: new FormControl(''),
       so_giay_phep: new FormControl(''),
       ngay_cap: new FormControl(''),
       ngay_het_han: new FormControl(''),
-      id_group: new FormControl(2)
+      id_group: new FormControl(1)
     }
   }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+     let selectedRecord = this.selection.selected[0];
+     this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+     this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+     this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+     this.formData.controls['so_giay_phep'].setValue(selectedRecord.so_giay_phep);
+     this.formData.controls['ngay_cap'].setValue(selectedRecord.ngay_cap);
+     this.formData.controls['ngay_het_han'].setValue(selectedRecord.ngay_het_han);
+     this.formData.controls['id'].setValue(selectedRecord.id);
+    }
+}
 
   public prepareData(data) {
     data['ngay_cap'] = moment(data['ngay_cap']).format('yyyyMMDD');

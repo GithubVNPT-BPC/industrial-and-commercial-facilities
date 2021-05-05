@@ -45,16 +45,14 @@ export abstract class AbstractBaseComponent implements OnInit {
     public view = 'list';
     public mode = 'create';
     
-    public currentYear = new Date().getFullYear();
-    public currentMonth = new Date().getMonth();
+    public readonly dateFormat = 'YYYY/MM/DD';
+    public currentTime = moment();
+    public currentYear = parseInt(moment().format('YYYY'));
+    public currentMonth = parseInt(moment().format('MM'));
+    // public currentYearAndMonth = this.currentYear.toString() + (this.currentMonth >= 10 ? this.currentMonth.toString() : '0' + this.currentMonth.toString());
     public monthSelection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
-    public terms = [
-        {id: 6, value: '6 Tháng'}, 
-        {id: 12, value: '1 Năm'}
-    ];
-
-    public readonly dateFormat = 'YYYY/MM/DD';
+    public terms = [{id: 6, value: '6 Tháng'}, {id: 12, value: '1 Năm'}];
 
     public displayedColumns = ['select', 'index'];
     public displayedFields = {};
@@ -104,7 +102,9 @@ export abstract class AbstractBaseComponent implements OnInit {
     }
 
     public autoOpen() {
-        setTimeout(() => this.accordion.openAll(), 1000);
+        setTimeout(() => {
+            if (this.accordion) this.accordion.openAll()}
+        , 1000);
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {

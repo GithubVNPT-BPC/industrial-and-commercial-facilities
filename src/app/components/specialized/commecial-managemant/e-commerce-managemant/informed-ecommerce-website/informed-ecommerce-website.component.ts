@@ -18,7 +18,7 @@ import { LoginService } from "src/app/_services/APIService/login.service";
   styleUrls: ["../../../special_layout.scss"],
 })
 export class InformedEcommerceWebsiteComponent extends BaseComponent {
-
+  DB_TABLE = 'QLTM_TMDT_website'
   displayedColumns: string[] = [
     "select",
     "index",
@@ -83,6 +83,7 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       mst: new FormControl(),
       to_chu_ca_nhan: new FormControl(),
       dia_diem: new FormControl(),
@@ -93,6 +94,22 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
       nganh_nghe: new FormControl(),
       san_pham_ban_website: new FormControl(),
       ghi_chu: new FormControl(),
+    }
+  }
+
+  setFormParams() {
+    if (this.selection.selected.length) {
+        let selectedRecord = this.selection.selected[0];
+        this.formData.controls['id'].setValue(selectedRecord.id);
+        this.formData.controls['mst'].setValue(selectedRecord.mst);
+        this.formData.controls['to_chu_ca_nhan'].setValue(selectedRecord.to_chu_ca_nhan);
+        this.formData.controls['nguoi_dai_dien'].setValue(selectedRecord.nguoi_dai_dien);
+        this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+        this.formData.controls['ten_mien'].setValue(selectedRecord.ten_mien);
+        this.formData.controls['nganh_nghe'].setValue(selectedRecord.nganh_nghe);
+        this.formData.controls['san_pham_ban_website'].setValue(selectedRecord.san_pham_ban_website);
+        this.formData.controls['ghi_chu'].setValue(selectedRecord.ghi_chu);
+        this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
     }
   }
 
