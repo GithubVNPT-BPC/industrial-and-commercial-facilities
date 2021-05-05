@@ -5,6 +5,96 @@ export class BaseComponent extends AbstractBaseComponent {
     public DB_TABLE = '';
 
     public errorMessage: any;
+    public currentYear = new Date().getFullYear();
+    public currentMonth = new Date().getMonth();
+    public monthSelection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    public yearSelection = Array(10).fill(1).map((element, index) => new Date().getFullYear() + 5 - index);
+    public terms = [
+        {id: 6, value: '6 Tháng'}, 
+        {id: 12, value: '1 Năm'}
+    ];
+    public dataSource = new MatTableDataSource();
+    public filteredDataSource = new MatTableDataSource();
+    public selection = new SelectionModel(true, []);
+
+    public readonly dateFormat = 'YYYY/MM/DD';
+
+    public displayedColumns = ['select', 'index'];
+    public displayedFields = {};
+    public filterModel = {};
+    public formPrevData = {};
+    
+    public districts: DistrictModel[] = [];
+    public wards: SubDistrictModel[] = [];
+    public districtWards: DistrictWardModel[] = [];
+    public districtWardSorted = {};
+    public statusList = [
+        {id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG'},
+        {id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG'},
+        {id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'ĐANG XIN GIẤY PHÉP'}
+    ];
+
+    constructor(injector: Injector) {
+        this.excelService = injector.get(ExcelService);
+        this.logger = injector.get(InformationService);
+        this.formBuilder = injector.get(FormBuilder);
+        this.confirmationDialogService = injector.get(ConfirmationDialogService);
+        this.sctService = injector.get(SCTService);
+        this._breadCrumService = injector.get(BreadCrumService);
+    }
+
+    ngOnInit() {
+        this.autoOpen();
+        this.initListView();
+        this.initFormView();
+        this.initDistricts();
+        this.getLinkDefault();
+        this.sendLinkToNext(true);
+    }
+
+    protected initListView() {
+        // In case we have already declared all field in displayed Columns
+        if (this.displayedColumns.length == 2 && Object.keys(this.displayedFields).length > 0) {
+            this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+        }
+    }
+
+    protected initFormView() {
+        let datas = this.getFormParams();
+        this.formData = this.formBuilder.group(datas);
+    }
+
+    public getFormParams() {
+        return {};
+    }
+
+    public autoOpen() {
+        setTimeout(() => this.accordion.openAll(), 1000);
+    }
+
+    public switchView() {
+        if (this.view == 'list') {
+            this.view = 'form';
+        } else {
+            // Temporary put the this.ngOnInit()
+            this.ngOnInit();
+            this.view = 'list';
+            this.mode = 'create';
+            this.formData.reset();
+            this.selection.clear();
+            this.autoOpen();
+        }
+    }
+
+    public switchEditMode() {
+        this.mode = 'edit';
+        this.switchView();
+        this.setFormParams();
+        this.formPrevData = this.formData.value;
+    }
+
+    public setFormParams() {}
+
     // ======================================
     // =========== CRUD FUNCTIONS ===========
     // ======================================

@@ -19,16 +19,17 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   //ViewChild 
   // @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   // @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  DB_TABLE = 'QLNL_TKNL'
   @ViewChild('district', { static: false }) district: ElementRef
 
-  public readonly displayedColumns: string[] = ['select','index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_tieu_thu', 'nang_luong_quy_doi', 'suat_tieu_hao'];
+  public readonly displayedColumns: string[] = ['select','index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_quy_doi', 'suat_tieu_hao'];
   public readonly displayMergeColumns: string[] = ['indexM', 'ten_doanh_nghiepM', 'nganh_ngheM', 'nang_luong_trong_diemM'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<UserForcusEnergy> = new MatTableDataSource<UserForcusEnergy>();
   public filteredDataSource: MatTableDataSource<UserForcusEnergy> = new MatTableDataSource<UserForcusEnergy>();
 
   //Only TS Variable
-  nangLuongTieuThu: number;
+  // nangLuongTieuThu: number;
   nangLuongQuyDoi: number;
   congXuat: number;
   doanhNghiep: number;
@@ -101,7 +102,7 @@ export class UseFocusedEnergyComponent extends BaseComponent {
 
   caculatorValue() {
     this.nangLuongQuyDoi = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nang_luong_quy_doi).reduce((a, b) => a + b) : 0;
-    this.nangLuongTieuThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nang_luong_tieu_thu).reduce((a, b) => a + b) : 0;
+    // this.nangLuongTieuThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.nang_luong_tieu_thu).reduce((a, b) => a + b) : 0;
     this.doanhNghiep = this.filteredDataSource.data.length;
     this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.suat_tieu_hao_1_dv_sp).reduce((a, b) => a + b) : 0;
   }
@@ -114,20 +115,33 @@ export class UseFocusedEnergyComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       ten_doanh_nghiep: new FormControl(''),
       dia_diem: new FormControl(''),
       nganh_nghe_san_xuat: new FormControl(''),
-      nang_luong_tieu_thu: new FormControl(0),
+      // nang_luong_tieu_thu: new FormControl(0),
       nang_luong_quy_doi: new FormControl(0),
       suat_tieu_hao_1_dv_sp: new FormControl(0),
       time_id: new FormControl(this.currentYear),
       id_quan_huyen: new FormControl(''),
     }
   }
-
+  setFormParams() {
+    if (this.selection.selected.length) {
+     let selectedRecord = this.selection.selected[0];
+     this.formData.controls['id'].setValue(selectedRecord.id);
+     this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+     this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
+     this.formData.controls['nganh_nghe_san_xuat'].setValue(selectedRecord.nganh_nghe_san_xuat);
+    //  this.formData.controls['nang_luong_tieu_thu'].setValue(selectedRecord.nang_luong_tieu_thu);
+     this.formData.controls['nang_luong_quy_doi'].setValue(selectedRecord.nang_luong_quy_doi);
+     this.formData.controls['suat_tieu_hao_1_dv_sp'].setValue(selectedRecord.suat_tieu_hao_1_dv_sp);
+     this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
+    }
+}
   public prepareData(data) {
     data['dia_diem'] = data['dia_diem'];
-    data['nang_luong_tieu_thu'] = Number(data['nang_luong_tieu_thu']);
+    // data['nang_luong_tieu_thu'] = Number(data['nang_luong_tieu_thu']);
     data['suat_tieu_hao_1_dv_sp'] = Number(data['suat_tieu_hao_1_dv_sp']);
     data['nang_luong_quy_doi'] = Number(data['nang_luong_quy_doi']);
     return data;
