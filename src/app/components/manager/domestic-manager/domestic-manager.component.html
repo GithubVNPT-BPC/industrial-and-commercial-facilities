@@ -8,13 +8,13 @@
             <div class="col-lg-2">
                 <mat-form-field appearance="outline">
                     <mat-label>Ngày cập nhật giá</mat-label>
-                    <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.date"
+                    <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate"
                         (ngModelChange)="getChange($event)">
                     <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
             </div>
-            <div class="col-lg-10 button-control -align-right my-auto">
+            <div class="col-lg-10 button-control text-right my-auto">
                 <button mat-raised-button (click)="resetAll()">
                     Lấy tất cả dữ liệu
                 </button>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-7 button-control -align-left">
+            <div class="col-lg-7 button-control text-left">
                 <button mat-raised-button class="white" (click)="addRow()">
                     <mat-icon>add_circle_outline</mat-icon> Thêm dòng
                 </button>
@@ -39,11 +39,6 @@
             </div>
 
             <div class="col-lg-5 button-control">
-                <!-- <button mat-raised-button
-                    (click)="downloadExcelTemplate('Mẫu giá cả trong nước','Mẫu giá cả trong nước')">
-                    <mat-icon>move_to_inbox</mat-icon> Tải tệp excel mẫu
-                </button> -->
-
                 <button mat-raised-button
                     (click)="exportTOExcel('Thông tin giá cả trong nước','Thông tin giá cả trong nước')">Xuất file
                     Excel mẫu</button>
@@ -59,11 +54,6 @@
         </div>
 
         <div class="layout" #TABLE>
-            <!-- <mat-form-field id="filter">
-                <mat-label>Lọc dữ liệu</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field> -->
-
             <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">
 
                 <ng-container matColumnDef="select">

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, Inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Inject } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,6 +10,7 @@ import { SAVE } from 'src/app/_enums/save.enum';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
+import { FilterService } from 'src/app/_services/filter.service';
 
 @Component({
     selector: 'company-top-popup',
@@ -38,6 +39,7 @@ export class CompanyTopPopup implements OnInit {
         public router: Router,
         public info: InformationService,
         public excelService: ExcelService,
+        public filterService: FilterService
     ) {
     }
 
@@ -64,7 +66,7 @@ export class CompanyTopPopup implements OnInit {
     }
 
     OpenDetailCompany(mst: string) {
-        window.open('/#/public/partner/search/' + mst, "_blank");
+        window.open('/#/public/partner/search/' + mst.trim(), "_blank");
     }
 
     public exportTOExcel(filename: string, sheetname: string) {
@@ -119,11 +121,22 @@ export class CompanyTopPopup implements OnInit {
                 this.paginator._intl.lastPageLabel = "Trang Cuối";
                 this.paginator._intl.previousPageLabel = "Trang Trước";
                 this.paginator._intl.nextPageLabel = "Trang Tiếp";
+
             });
     }
 
     applyFilter(event: Event) {
         const filterValue = (event.target as HTMLInputElement).value;
+        this.dataSource.filterPredicate = (data, filter): boolean => {
+            const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+              return (currentTerm + (data as { [key: string]: any })[key] + '◬');
+            }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+          
+            const transformedFilter = filterValue.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+          
+            return dataStr.indexOf(transformedFilter) != -1;
+        }
+
         this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
