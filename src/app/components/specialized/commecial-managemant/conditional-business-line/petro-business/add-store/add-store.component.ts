@@ -148,15 +148,15 @@ export class AddStoreComponent implements OnInit {
   }
 
   petrolobject = new PetrolList();
-
-  dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-  dataSource2: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+  store1: Array<PetrolList> = new Array<PetrolList>();
+  store2: Array<PetrolList> = new Array<PetrolList>();
 
   getPetrolInfo() {
     this._Service.GetAllPetrolValue().subscribe(all => {
-      this.dataSource1 = new MatTableDataSource<PetrolList>(all.data[0]);
-      this.dataSource2.data = this.dataSource1.data.filter(x => x.id_cua_hang_xang_dau == this.id)
-      this.petrolobject = this.dataSource2.data[0]
+      this.store1 = all.data[0]
+      this.store2 = this.store1.filter(x => x.id_cua_hang_xang_dau == this.id)
+      console.log(this.store2)
+      this.petrolobject = this.store2[0]
 
       this._Service.petrol = {
         id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
