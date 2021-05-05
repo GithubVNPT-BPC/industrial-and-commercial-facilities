@@ -13,6 +13,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class RegisteredSaleWebsiteComponent extends BaseComponent {
+  DB_TABLE = 'QLTM_TMDT_dang_Ky_website'
   displayedColumns: string[] =
     ['select', 'index', 'ten_tc_cn', 'mst', 'dia_chi', 'nguoi_dai_dien',
       'dien_thoai', 'ten_mien', 'loai_hang_hoa', 'email', 'so_gian_hang', 'ghi_chu'];
@@ -56,6 +57,7 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       mst_quyet_dinh: new FormControl(),
       to_chu_ca_nhan: new FormControl(),
       dia_diem: new FormControl(),
@@ -68,6 +70,23 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
       ghi_chu: new FormControl(),
       id_quan_huyen: new FormControl(),
     }
+  }
+
+  setFormParams(){
+    if (this.selection.selected.length) {
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['mst_quyet_dinh'].setValue(selectedRecord.mst_quyet_dinh);
+      this.formData.controls['to_chu_ca_nhan'].setValue(selectedRecord.to_chu_ca_nhan);
+      this.formData.controls['nguoi_dai_dien'].setValue(selectedRecord.nguoi_dai_dien);
+      this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+      this.formData.controls['ten_mien'].setValue(selectedRecord.ten_mien);
+      this.formData.controls['email'].setValue(selectedRecord.email);
+      this.formData.controls['san_pham_tren_website'].setValue(selectedRecord.san_pham_tren_website);
+      this.formData.controls['ghi_chu'].setValue(selectedRecord.ghi_chu);
+      this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
+      this.formData.controls['so_gian_hang'].setValue(selectedRecord.so_gian_hang);
+      this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);  }
   }
 
   getLinkDefault() {

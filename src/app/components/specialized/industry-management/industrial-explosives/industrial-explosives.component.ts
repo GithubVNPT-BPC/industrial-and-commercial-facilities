@@ -119,7 +119,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
             this.formData.controls['time_id'].setValue(selectedRecord.time_id);
             this.formData.controls['id_so_giay_phep'].setValue(selectedRecord.id_so_giay_phep);
-            this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong ? "true" : "false");
+            this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong);
 
             this.formData.controls['thuoc_no'].setValue(selectedRecord.thuoc_no);
             this.formData.controls['kip_no'].setValue(selectedRecord.kip_no);
@@ -138,6 +138,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     callService(data) {
         this.industryManagementService.PostExplosiveMat([data], data.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    callEditService(data){
+        let body = Object.assign({}, this.formData.value);
+        // console.log(this.formData.value);
+        this.industryManagementService.PostExplosiveMat([body], body.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     prepareRemoveData(data) {

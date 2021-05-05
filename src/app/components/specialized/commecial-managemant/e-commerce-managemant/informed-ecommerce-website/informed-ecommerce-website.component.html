@@ -88,8 +88,8 @@
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
                 </div>
                 <hr />
