@@ -156,6 +156,10 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
+    callEditService(data){
+        this.industryManagementService.PostFoodIndustry([this.formData.value], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
     callRemoveService(data) {
         this.industryManagementService.DeleteFoodIndustry(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }

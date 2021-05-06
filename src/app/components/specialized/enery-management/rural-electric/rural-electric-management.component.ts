@@ -13,6 +13,7 @@ import { BaseComponent } from '../../base.component';
 })
 
 export class RuralElectricManagementComponent extends BaseComponent {
+  DB_TABLE  = 'QLNL_DNT';
   //Constant variable
   public readonly displayedColumns: string[] = ['select', 'index', 'db', 't1', 'cd1', 'tl1', 't2', 'cd2', 'ccd2', 'tl2', 'tc4_1', 'tc4_2', 'tc4_3',
   ];
@@ -94,6 +95,7 @@ export class RuralElectricManagementComponent extends BaseComponent {
 
   getFormParams() {
     return {
+      id: new FormControl(),
       dia_ban: new FormControl(''),
       is_cap_huyen: new FormControl(1),
       tong_so_ho: new FormControl(''),
@@ -105,7 +107,21 @@ export class RuralElectricManagementComponent extends BaseComponent {
       tieu_chi_43: new FormControl('')
     }
   }
-
+  setFormParams() {
+    if (this.selection.selected.length) {
+     let selectedRecord = this.selection.selected[0];
+     this.formData.controls['dia_ban'].setValue(selectedRecord.dia_ban);
+     this.formData.controls['is_cap_huyen'].setValue(selectedRecord.is_cap_huyen);
+     this.formData.controls['tong_so_ho'].setValue(selectedRecord.tong_so_ho);
+     this.formData.controls['tong_so_ho_co_dien'].setValue(selectedRecord.tong_so_ho_co_dien);
+     this.formData.controls['nong_thon_tong_so_ho'].setValue(selectedRecord.nong_thon_tong_so_ho);
+     this.formData.controls['nong_thon_tong_so_ho_co_dien'].setValue(selectedRecord.nong_thon_tong_so_ho_co_dien);
+     this.formData.controls['tieu_chi_41'].setValue(selectedRecord.tieu_chi_41);
+     this.formData.controls['tieu_chi_42'].setValue(selectedRecord.tieu_chi_42);
+     this.formData.controls['tieu_chi_43'].setValue(selectedRecord.tieu_chi_43);     
+     this.formData.controls['id'].setValue(selectedRecord.id);
+}
+}
   public prepareData(data) {
     data['tong_so_ho'] = Number(data['tong_so_ho']);
     data['tong_so_ho_co_dien'] = Number(data['tong_so_ho_co_dien']);

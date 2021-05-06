@@ -17,7 +17,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['../../../special_layout.scss'],
 })
 export class CountrysideComponent extends BaseComponent {
-  DB_TABLE = '';
+  DB_TABLE = 'QLTM_HTM_NTM';
   public dataSource: MatTableDataSource<CountrySideModel> = new MatTableDataSource<CountrySideModel>();
   public filteredDataSource: MatTableDataSource<CountrySideModel> = new MatTableDataSource<CountrySideModel>();
 

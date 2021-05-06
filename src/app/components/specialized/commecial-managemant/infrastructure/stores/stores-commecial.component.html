@@ -131,11 +131,11 @@
                         </mat-form-field> -->
                     <!-- </div> -->
 
-                    <div class="col-3 col-lg-3 checkbox">
+                    <div class="col-2 col-lg-2 checkbox">
                         <mat-checkbox (change)="applyExpireCheck($event)" >Hết hạn CNATTP</mat-checkbox>
                     </div>
 
-                    <div class="col-3 col-lg-3 button-control">
+                    <div class="col-4 col-lg-4 button-control">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('HTTM - Cửa hàng tiện lợi','HTTM - Cửa hàng tiện lợ')">
                             <mat-icon>file_download</mat-icon>
@@ -150,8 +150,8 @@
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <!-- <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button> -->
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
+                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
 
                     <div class="col-12 col-lg-12">

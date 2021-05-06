@@ -105,7 +105,6 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     setFormParams() {
-        console.log('xxx', this.selection.selected);
         if (this.selection.selected.length) {
             let selectedRecord = this.selection.selected[0];
             this.formData.controls['ten_cum'].setValue(selectedRecord.ten_cum);
@@ -122,7 +121,7 @@ export class ClusterManagementComponent extends BaseComponent {
             this.formData.controls['tong_muc_dau_tu'].setValue(selectedRecord.tong_muc_dau_tu);
             this.formData.controls['quy_mo_dien_tich'].setValue(selectedRecord.quy_mo_dien_tich);
             this.formData.controls['dien_giai'].setValue(selectedRecord.dien_giai);
-            this.formData.controls['duong_dan'].setValue(selectedRecord.duong_dan);
+            this.formData.controls['duong_dan'].setValue('');
             this.formData.controls['dien_tich_qhct'].setValue(selectedRecord.dien_tich_qhct);
             this.formData.controls['dien_tich_ddtht'].setValue(selectedRecord.dien_tich_ddtht);
             this.formData.controls['id_htdtht'].setValue(selectedRecord.id_htdtht);
@@ -154,7 +153,7 @@ export class ClusterManagementComponent extends BaseComponent {
             id_htdtht: new FormControl(),
             id_htdthtxlnt: new FormControl(),
             id_trang_thai_hoat_dong: new FormControl(),
-            nhu_cau_von: new FormControl(0),
+            nhu_cau_von: new FormControl(),
         }
     }
 
@@ -167,10 +166,17 @@ export class ClusterManagementComponent extends BaseComponent {
         this.indService.PostDataGroupCompany(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
+    public callEditService(data) {
+        let body = Object.assign({}, this.formData.value);
+        body.id = this.selection.selected[0].id;
+        console.log(body); 
+        this.indService.PostDataGroupCompany(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
     prepareRemoveData(data) {
         let datas = data.map(element => new Object({ id: element.id }));
         return datas;
-      }
+    }
     
     callRemoveService(data) {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
