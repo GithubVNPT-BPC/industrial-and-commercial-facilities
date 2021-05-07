@@ -50,7 +50,7 @@ export class MarketServicePublic {
 
     constructor(public http: HttpClient) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
-        // this.token = this.data.token;
+        this.token = this.data.token;
     }
 
     //company list
