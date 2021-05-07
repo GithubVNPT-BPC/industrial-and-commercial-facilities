@@ -30,7 +30,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
         { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Ngừng hoạt động' }
     ];
 
-    loai_quy_hoach = {
+    listQuyHoach = {
         1: 'Trạm biến áp 110KV',
         2: 'Trạm biến áp 220KV',
         3: 'Trạm biến áp 500KV',
@@ -38,6 +38,18 @@ export class FutureElectricalPlanComponent extends BaseComponent {
         5: 'Đường dây 220KV',
         6: 'Đường dây 500KV',
     }
+    loaiQuyHoach = {
+        1: 'Trạm biến áp 110KV',
+        2: 'Trạm biến áp 220KV',
+        3: 'Trạm biến áp 500KV',
+    }
+
+    loaiDuongDay = {
+        4: 'Đường dây 110KV',
+        5: 'Đường dây 220KV',
+        6: 'Đường dây 500KV',
+    }
+
     selectedType = "1";
     authorize: boolean = true
 

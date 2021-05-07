@@ -73,6 +73,7 @@ export class BlockElectricComponent extends BaseComponent {
       id_trang_thai_hoat_dong: new FormControl(),
     }
   }
+  
   setFormParams() {
     if (this.selection.selected.length) {
       let selectedRecord = this.selection.selected[0];
@@ -88,6 +89,7 @@ export class BlockElectricComponent extends BaseComponent {
       this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
     }
   }
+
   prepareData(data) {
     return data;
   }
@@ -125,9 +127,11 @@ export class BlockElectricComponent extends BaseComponent {
   }
 
   applyActionCheck(event) {
-    this.filteredDataSource.filter = (event.checked) ? "true" : "";
+    event.checked
+      ? this.filteredDataSource.data = this.filteredDataSource.data.filter(item => item.id_trang_thai_hoat_dong = 0)
+      : this.filteredDataSource.data = this.dataSource.data;
+    // this.filteredDataSource.filter = (event.checked) ? "true" : "";
     this.caculatorValue();
-    this.paginatorAgain();
   }
 
 }
