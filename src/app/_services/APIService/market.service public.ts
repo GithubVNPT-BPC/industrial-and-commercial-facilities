@@ -269,6 +269,14 @@ export class MarketServicePublic {
             catchError(this.handleError)
         );
     }
+    
+    public GetAllField() {
+        var apiUrl = this.apiHome + 'api/danh-sach/linh-vuc-quan-ly';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
     //
 
     public handleError(error: HttpErrorResponse) {

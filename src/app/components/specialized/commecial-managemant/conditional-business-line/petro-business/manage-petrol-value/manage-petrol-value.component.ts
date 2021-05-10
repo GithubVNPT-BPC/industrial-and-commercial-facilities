@@ -506,7 +506,7 @@ export class ManagePetrolValueComponent implements OnInit {
   }
 
   Reset() {
-    window.location.reload();
+    this.ngOnInit();
   }
 
   OpenDetailPetrol(id: number, mst: string, time: string, id_san_luong: string) {
