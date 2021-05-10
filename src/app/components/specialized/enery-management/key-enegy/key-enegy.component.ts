@@ -85,7 +85,7 @@ export class KeyEnegyComponent extends BaseComponent {
       FO: new FormControl(),
       xang: new FormControl(),
       LPG: new FormControl(),
-      go: new FormControl(),
+      _go: new FormControl(),
       nang_luong_quy_doi: new FormControl(),
       time_id: new FormControl()
     }
@@ -102,7 +102,7 @@ export class KeyEnegyComponent extends BaseComponent {
      this.formData.controls['FO'].setValue(selectedRecord.FO);
      this.formData.controls['xang'].setValue(selectedRecord.xang);
      this.formData.controls['LPG'].setValue(selectedRecord.LPG);
-     this.formData.controls['go'].setValue(selectedRecord.go);
+     this.formData.controls['_go'].setValue(selectedRecord._go);
      this.formData.controls['nang_luong_quy_doi'].setValue(selectedRecord.nang_luong_quy_doi);
      this.formData.controls['time_id'].setValue(selectedRecord.time_id);
      this.formData.controls['id'].setValue(selectedRecord.id);
