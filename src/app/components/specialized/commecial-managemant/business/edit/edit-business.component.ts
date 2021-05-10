@@ -280,7 +280,7 @@ export class EditBusinessComponent implements OnInit {
     }
 
     this.companyinput = this.doanh_nghiep.value
-    this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
+    this.companyinput.danh_sach_nganh_nghe = this.dataSource.data.filter(x => x.id_nganh_nghe_kinh_doanh != null)
     this.companyinput.ngay_bd_kd = this.doanh_nghiep.value.ngay_bd_kd ? this.getChange(this.companyinput.ngay_bd_kd) : null
 
     this.SaveData(this.companyinput);
@@ -339,7 +339,7 @@ export class EditBusinessComponent implements OnInit {
   addRow(): void {
     let newRow: Career = new Career();
     newRow.id = null;
-    newRow.id_nganh_nghe_kinh_doanh;
+    newRow.id_nganh_nghe_kinh_doanh = null;
     newRow.nganh_nghe_kd_chinh = "";
     newRow.id_linh_vuc;
     newRow.ma_nganh_nghe = '';

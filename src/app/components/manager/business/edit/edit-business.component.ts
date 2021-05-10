@@ -282,7 +282,7 @@ export class EditBusinessComponent implements OnInit {
     }
 
     this.companyinput = this.doanh_nghiep.value
-    this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
+    this.companyinput.danh_sach_nganh_nghe = this.dataSource.data.filter(x => x.id_nganh_nghe_kinh_doanh != null)
     this.companyinput.ngay_bd_kd = this.doanh_nghiep.value.ngay_bd_kd ? this.getChange(this.companyinput.ngay_bd_kd) : null
 
     this.SaveData(this.companyinput);
