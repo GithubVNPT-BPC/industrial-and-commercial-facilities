@@ -79,6 +79,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
       san_luong_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu: new FormControl(),
+      id_trang_thai_hoat_dong: new FormControl(),
       id_quan_huyen: new FormControl(),
     }
   }
@@ -94,6 +95,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
         this.formData.controls['san_luong_6_thang'].setValue(selectedRecord.san_luong_6_thang);
         this.formData.controls['san_luong_nam'].setValue(selectedRecord.san_luong_nam);
         this.formData.controls['doanh_thu'].setValue(selectedRecord.doanh_thu);
+        this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
         this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
     }
   }

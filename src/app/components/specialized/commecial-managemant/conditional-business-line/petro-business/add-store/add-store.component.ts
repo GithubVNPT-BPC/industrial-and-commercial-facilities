@@ -56,6 +56,8 @@ export class AddStoreComponent implements OnInit {
   filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   district: Array<DistrictModel> = new Array<DistrictModel>();
   Certificate: Array<CertificateModel> = new Array<CertificateModel>();
+  allcertificate: Array<CertificateModel> = new Array<CertificateModel>();
+  filterallcertificate: Array<CertificateModel> = new Array<CertificateModel>();
 
   GetAllPhuongXa() {
     this._Service.GetAllSubDistrict().subscribe((allrecords) => {
@@ -70,9 +72,16 @@ export class AddStoreComponent implements OnInit {
     });
   }
 
-  GetAllGiayPhep(mst: string) {
+  GetGiayPhep(mst: string) {
     this._Service.GetCertificate(mst).subscribe((allrecords) => {
       this.Certificate = allrecords.data as CertificateModel[];
+    });
+  }
+
+  GetAllGiayPhep() {
+    this._Service.GetCertificate('').subscribe((allrecords) => {
+      this.allcertificate = allrecords.data as CertificateModel[];
+      this.filterallcertificate = this.allcertificate.slice();
     });
   }
 
@@ -97,7 +106,7 @@ export class AddStoreComponent implements OnInit {
     this._Service.petrol = {
       id_cua_hang_xang_dau: null,
       ten_cua_hang: '',
-      mst: '',
+      mst: this.mstt,
       dia_chi: '',
       id_phuong_xa: 25195,
       so_dien_thoai: '',
@@ -112,18 +121,20 @@ export class AddStoreComponent implements OnInit {
   }
 
   petrol_data: FormGroup;
+  find_mst: FormGroup;
 
   ngOnInit() {
     this.resetForm();
     this.getQuan_Huyen();
     this.GetAllPhuongXa();
     this.getPetrolInfo();
-    this.GetAllGiayPhep(this.mst);
+    this.GetAllGiayPhep();
+    this.GetGiayPhep(this.mst);
 
     this.petrol_data = this.formbuilder.group({
       id_cua_hang_xang_dau: null,
       ten_cua_hang: '',
-      mst: '',
+      mst: this.mstt,
       dia_chi: '',
       id_phuong_xa: 25195,
       so_dien_thoai: '',
@@ -132,6 +143,14 @@ export class AddStoreComponent implements OnInit {
       ten_nhan_vien: '',
       id_giay_phep: 0
     })
+
+    this.find_mst = this.formbuilder.group({
+      find_mst: ''
+    })
+
+    if (this.id.toString() != 'undefined') {
+      this.check_mst = false
+    }
   }
 
   SaveData(input) {
@@ -148,15 +167,14 @@ export class AddStoreComponent implements OnInit {
   }
 
   petrolobject = new PetrolList();
-
-  dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-  dataSource2: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+  store1: Array<PetrolList> = new Array<PetrolList>();
+  store2: Array<PetrolList> = new Array<PetrolList>();
 
   getPetrolInfo() {
-    this._Service.GetAllPetrolValue().subscribe(all => {
-      this.dataSource1 = new MatTableDataSource<PetrolList>(all.data[0]);
-      this.dataSource2.data = this.dataSource1.data.filter(x => x.id_cua_hang_xang_dau == this.id)
-      this.petrolobject = this.dataSource2.data[0]
+    this._Service.GetAllPetrolStore().subscribe(all => {
+      this.store1 = all.data
+      this.store2 = this.store1.filter(x => x.id_cua_hang_xang_dau == this.id)
+      this.petrolobject = this.store2[0];
 
       this._Service.petrol = {
         id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
@@ -176,10 +194,19 @@ export class AddStoreComponent implements OnInit {
     })
   }
 
-  input: PetrolPost
+  check_mst: boolean = true;
+  mstt: string;
+  input: PetrolPost;
   onSubmit() {
     this.input = this.petrol_data.value
     this.SaveData(this.input);
+  }
+
+  ChooseMST() {
+    this.check_mst = false
+    this.mstt = this.find_mst.value.find_mst
+    this._Service.petrol.mst = this.mstt
+    this.GetGiayPhep(this.mstt);
   }
 
   public exportTOExcel(filename: string, sheetname: string) {

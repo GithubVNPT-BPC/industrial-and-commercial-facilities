@@ -2,92 +2,124 @@
     <mat-card-header>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="petrol_data" autocomplete="off" (ngSubmit)="onSubmit(petrol_data.getRawValue())">
-            <div class="row">
-                <div class="col-6 button-control -align-left my-auto">
-                    <button type="submit" mat-raised-button>Lưu</button>
-                </div>
-                <div class="col-6 button-control -align-right my-auto">
-                    <button mat-raised-button (click)="Back()">
-                        <mat-icon>keyboard_backspace</mat-icon>
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Giấy phép</mat-label>
-                        <mat-select formControlName="id_giay_phep" [(ngModel)]="_Service.petrol.id_giay_phep">
-                            <mat-option *ngFor="let item of Certificate" [value]="item.id_giay_phep">
-                                {{item.so_giay_phep}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Tên cửa hàng</mat-label>
-                        <input formControlName="ten_cua_hang" matInput placeholder=""
-                            [(ngModel)]="_Service.petrol.ten_cua_hang">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline" hidden>
-                        <mat-label> ID </mat-label>
-                        <input formControlName="id_cua_hang_xang_dau" matInput placeholder=""
-                            [(ngModel)]="_Service.petrol.id_cua_hang_xang_dau">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Mã số thuế</mat-label>
-                        <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.petrol.mst">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Địa chỉ</mat-label>
-                        <input formControlName="dia_chi" matInput placeholder="" [(ngModel)]="_Service.petrol.dia_chi">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Phường xã</mat-label>
-                        <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.petrol.id_phuong_xa">
-                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
-                                [array]="subdistrict" (filteredReturn)="filtersubdistrict =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of filtersubdistrict" [value]="item.id_phuong_xa">
-                                {{item.ten_phuong_xa}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
+        <ng-container *ngIf="check_mst; else elseTemplate">
+            <form [formGroup]="find_mst" autocomplete="off" (ngSubmit)="onSubmit(find_mst.getRawValue())">
+                <div class="row">
+                    <div class="col-6 button-control -align-left my-auto">
+                        <button type="button" (click)="ChooseMST()" mat-raised-button>Lưu</button>
+                    </div>
+                    <div class="col-6 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
+                    </div>
                 </div>
 
-                <div class="col-6">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Trạng thái hoạt động</mat-label>
-                        <mat-select formControlName="id_tinh_trang_hoat_dong"
-                            [(ngModel)]="_Service.petrol.id_tinh_trang_hoat_dong">
-                            <mat-option *ngFor="let item of trangthai" [value]="item.id_tinh_trang_hoat_dong">
-                                {{item.tinh_trang_hoat_dong}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Số điện thoại</mat-label>
-                        <input formControlName="so_dien_thoai" matInput placeholder=""
-                            [(ngModel)]="_Service.petrol.so_dien_thoai">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Tên quản lý</mat-label>
-                        <input formControlName="ten_quan_ly" matInput placeholder=""
-                            [(ngModel)]="_Service.petrol.ten_quan_ly">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Tên nhân viên</mat-label>
-                        <input formControlName="ten_nhan_vien" matInput placeholder=""
-                            [(ngModel)]="_Service.petrol.ten_nhan_vien">
-                    </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Chọn mã số thuế để thêm cửa hàng</mat-label>
+                    <mat-select formControlName="find_mst">
+                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'mst'"
+                            [array]="allcertificate" (filteredReturn)="filterallcertificate =$event">
+                        </mat-select-filter>
+                        <mat-option *ngFor="let item of filterallcertificate" [value]="item.mst">
+                            {{item.mst}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </ng-container>
+        <ng-template #elseTemplate>
+            <form [formGroup]="petrol_data" autocomplete="off" (ngSubmit)="onSubmit(petrol_data.getRawValue())">
+                <div class="row">
+                    <div class="col-6 button-control -align-left my-auto">
+                        <button type="submit" mat-raised-button>Lưu</button>
+                    </div>
+                    <div class="col-6 button-control -align-right my-auto">
+                        <button mat-raised-button (click)="Back()">
+                            <mat-icon>keyboard_backspace</mat-icon>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
+
+                <div class="row">
+                    <div class="col-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Giấy phép</mat-label>
+                            <mat-select formControlName="id_giay_phep" [(ngModel)]="_Service.petrol.id_giay_phep">
+                                <mat-option *ngFor="let item of Certificate" [value]="item.id_giay_phep">
+                                    {{item.so_giay_phep}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tên cửa hàng</mat-label>
+                            <input formControlName="ten_cua_hang" matInput placeholder=""
+                                [(ngModel)]="_Service.petrol.ten_cua_hang">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" hidden>
+                            <mat-label> ID </mat-label>
+                            <input formControlName="id_cua_hang_xang_dau" matInput placeholder=""
+                                [(ngModel)]="_Service.petrol.id_cua_hang_xang_dau">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label style="color: red;">Mã số thuế</mat-label>
+                            <input formControlName="mst" matInput placeholder="" [(ngModel)]="_Service.petrol.mst"
+                                readonly>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Địa chỉ</mat-label>
+                            <input formControlName="dia_chi" matInput placeholder=""
+                                [(ngModel)]="_Service.petrol.dia_chi">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Phường xã</mat-label>
+                            <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.petrol.id_phuong_xa">
+                                <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
+                                    [array]="subdistrict" (filteredReturn)="filtersubdistrict =$event">
+                                </mat-select-filter>
+                                <mat-option *ngFor="let item of filtersubdistrict" [value]="item.id_phuong_xa">
+                                    {{item.ten_phuong_xa}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trạng thái hoạt động</mat-label>
+                            <mat-select formControlName="id_tinh_trang_hoat_dong"
+                                [(ngModel)]="_Service.petrol.id_tinh_trang_hoat_dong">
+                                <mat-option *ngFor="let item of trangthai" [value]="item.id_tinh_trang_hoat_dong">
+                                    {{item.tinh_trang_hoat_dong}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Số điện thoại</mat-label>
+                            <input formControlName="so_dien_thoai" matInput placeholder=""
+                                [(ngModel)]="_Service.petrol.so_dien_thoai">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tên quản lý</mat-label>
+                            <input formControlName="ten_quan_ly" matInput placeholder=""
+                                [(ngModel)]="_Service.petrol.ten_quan_ly">
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Tên nhân viên</mat-label>
+                            <input formControlName="ten_nhan_vien" matInput placeholder=""
+                                [(ngModel)]="_Service.petrol.ten_nhan_vien">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </ng-template>
     </mat-card-content>
 </mat-card>

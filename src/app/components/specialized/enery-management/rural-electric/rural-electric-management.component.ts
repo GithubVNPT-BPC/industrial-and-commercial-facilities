@@ -15,7 +15,7 @@ import { BaseComponent } from '../../base.component';
 export class RuralElectricManagementComponent extends BaseComponent {
   DB_TABLE  = 'QLNL_DNT';
   //Constant variable
-  public readonly displayedColumns: string[] = ['select', 'index', 'db', 't1', 'cd1', 'tl1', 't2', 'cd2', 'ccd2', 'tl2', 'tc4_1', 'tc4_2', 'tc4_3',
+  public readonly displayedColumns: string[] = ['select', 'index', 'db', 't1', 'cd1', 'tl1', 't2', 'cd2', 'ccd2', 'tl2', 'tieu_chi_41', 'tieu_chi_42', 'tieu_chi_43',
   ];
   public readonly dsplayMergeColumns: string[] = ['merge1', 'merge2', 'merge3', 'merge4', 'merge5', 'merge6'];
   //TS & HTML Variable
@@ -29,10 +29,11 @@ export class RuralElectricManagementComponent extends BaseComponent {
   tongHoCoDien: number = 0 ;
   rate: number = 0;
   isChecked: boolean;
-  tieu_chi: any[] = [
-    { id: 1, value: 'Đạt' },
-    { id: 2, value: 'Không đạt' }
-  ]
+
+  tieu_chi = {
+    0 : 'Không Đạt',
+    1 : 'Đạt'
+  }
 
   constructor(
     private injector: Injector,
@@ -98,30 +99,31 @@ export class RuralElectricManagementComponent extends BaseComponent {
       id: new FormControl(),
       dia_ban: new FormControl(''),
       is_cap_huyen: new FormControl(1),
-      tong_so_ho: new FormControl(''),
-      tong_so_ho_co_dien: new FormControl(''),
-      nong_thon_tong_so_ho: new FormControl(''),
-      nong_thon_tong_so_ho_co_dien: new FormControl(''),
-      tieu_chi_41: new FormControl(''),
-      tieu_chi_42: new FormControl(''),
-      tieu_chi_43: new FormControl('')
+      tong_so_ho: new FormControl(0),
+      tong_so_ho_co_dien: new FormControl(0),
+      nong_thon_tong_so_ho: new FormControl(0),
+      nong_thon_tong_so_ho_co_dien: new FormControl(0),
+      tieu_chi_41: new FormControl(),
+      tieu_chi_42: new FormControl(),
+      tieu_chi_43: new FormControl()
     }
   }
   setFormParams() {
     if (this.selection.selected.length) {
-     let selectedRecord = this.selection.selected[0];
-     this.formData.controls['dia_ban'].setValue(selectedRecord.dia_ban);
-     this.formData.controls['is_cap_huyen'].setValue(selectedRecord.is_cap_huyen);
-     this.formData.controls['tong_so_ho'].setValue(selectedRecord.tong_so_ho);
-     this.formData.controls['tong_so_ho_co_dien'].setValue(selectedRecord.tong_so_ho_co_dien);
-     this.formData.controls['nong_thon_tong_so_ho'].setValue(selectedRecord.nong_thon_tong_so_ho);
-     this.formData.controls['nong_thon_tong_so_ho_co_dien'].setValue(selectedRecord.nong_thon_tong_so_ho_co_dien);
-     this.formData.controls['tieu_chi_41'].setValue(selectedRecord.tieu_chi_41);
-     this.formData.controls['tieu_chi_42'].setValue(selectedRecord.tieu_chi_42);
-     this.formData.controls['tieu_chi_43'].setValue(selectedRecord.tieu_chi_43);     
-     this.formData.controls['id'].setValue(selectedRecord.id);
-}
-}
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['dia_ban'].setValue(selectedRecord.dia_ban);
+      this.formData.controls['is_cap_huyen'].setValue(selectedRecord.is_cap_huyen);
+      this.formData.controls['tong_so_ho'].setValue(selectedRecord.tong_so_ho);
+      this.formData.controls['tong_so_ho_co_dien'].setValue(selectedRecord.tong_so_ho_co_dien);
+      this.formData.controls['nong_thon_tong_so_ho'].setValue(selectedRecord.nong_thon_tong_so_ho);
+      this.formData.controls['nong_thon_tong_so_ho_co_dien'].setValue(selectedRecord.nong_thon_tong_so_ho_co_dien);
+      this.formData.controls['tieu_chi_41'].setValue(Number(selectedRecord.tieu_chi_41).toString());
+      this.formData.controls['tieu_chi_42'].setValue(Number(selectedRecord.tieu_chi_42).toString());
+      this.formData.controls['tieu_chi_43'].setValue(Number(selectedRecord.tieu_chi_43).toString());     
+      this.formData.controls['id'].setValue(selectedRecord.id);
+    }
+  }
+
   public prepareData(data) {
     data['tong_so_ho'] = Number(data['tong_so_ho']);
     data['tong_so_ho_co_dien'] = Number(data['tong_so_ho_co_dien']);

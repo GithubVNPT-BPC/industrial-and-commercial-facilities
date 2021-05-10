@@ -204,7 +204,8 @@ export class CompanyPost {
 }
 
 export class Career {
-    id_nganh_nghe: string;
+    id: string;
+    ma_nganh_nghe: string;
     id_nganh_nghe_kinh_doanh: string;
     nganh_nghe_kd_chinh: string;
     id_linh_vuc: number

@@ -82,7 +82,7 @@ export class EditBusinessComponent implements OnInit {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_nganh_nghe + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
   deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
@@ -90,7 +90,7 @@ export class EditBusinessComponent implements OnInit {
   removeRows() {
     if (confirm('Bạn Có Chắc Muốn Xóa?')) {
       this.selection.selected.forEach(x => {
-        this.selectionarray = this.selection.selected.map(item => item.id_nganh_nghe)
+        this.selectionarray = this.selection.selected.map(item => item.id)
         this.deletemodel1.push({
           id: ''
         })
@@ -99,6 +99,7 @@ export class EditBusinessComponent implements OnInit {
         const element = this.deletemodel1[index];
         element.id = this.selectionarray[index]
       }
+
       this._Service.DeleteCareer(this.deletemodel1).subscribe(res => {
         this.info.msgSuccess('Xóa thành công')
         window.location.reload();
@@ -288,6 +289,15 @@ export class EditBusinessComponent implements OnInit {
   }
 
   onReset() {
+    if (this.mst != 'undefined') {
+      this.submitted = false;
+      this.ngOnInit();
+    }
+    else {
+      this.submitted = false;
+      this.doanh_nghiep.reset();
+    }
+
     this.submitted = false;
     this.doanh_nghiep.reset();
   }
@@ -327,15 +337,17 @@ export class EditBusinessComponent implements OnInit {
     }
   }
   dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
-  public displayedColumns: string[] = ['select', 'index', 'id_nganh_nghe_kinh_doanh', 'id_linh_vuc', 'nganh_nghe_kd_chinh', 'id_nganh_nghe'];
+  public displayedColumns: string[] = ['select', 'index', 'id', 'id_nganh_nghe_kinh_doanh', 'id_linh_vuc', 'nganh_nghe_kd_chinh', 'ma_nganh_nghe'];
 
   public _currentRow: number = 0;
 
   addRow(): void {
     let newRow: Career = new Career();
+    newRow.id = null;
     newRow.id_nganh_nghe_kinh_doanh;
     newRow.nganh_nghe_kd_chinh = "";
     newRow.id_linh_vuc;
+    newRow.ma_nganh_nghe = '';
 
     this.dataSource.data.push(newRow);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
@@ -357,9 +369,11 @@ export class EditBusinessComponent implements OnInit {
     let data = this.dataSource.data.slice(this._currentRow);
     this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
     let newRow: Career = new Career();
+    newRow.id = null;
     newRow.id_nganh_nghe_kinh_doanh;
     newRow.nganh_nghe_kd_chinh = "";
     newRow.id_linh_vuc;
+    newRow.ma_nganh_nghe = '';
 
     this.dataSource.data.push(newRow);
     data.forEach(element => {
@@ -534,9 +548,12 @@ export class EditBusinessComponent implements OnInit {
         this.company = this.companyList5[0]
 
         if (this.companyList2) {
+          this.careerarray = []
+
           this.companyList2.forEach(x => {
             this.careerarray.push({
-              id_nganh_nghe: null,
+              id: null,
+              ma_nganh_nghe: null,
               id_nganh_nghe_kinh_doanh: null,
               nganh_nghe_kd_chinh: '',
               id_linh_vuc: null
@@ -544,9 +561,10 @@ export class EditBusinessComponent implements OnInit {
           })
 
           for (let index = 0; index < this.companyList2.length; index++) {
+            this.careerarray[index].id = this.companyList2[index].id.toString()
             this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
             this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
-            this.careerarray[index].id_nganh_nghe = this.companyList2[index].id_nganh_nghe
+            this.careerarray[index].ma_nganh_nghe = this.companyList2[index].id_nganh_nghe
             this.careerarray[index].id_linh_vuc = this.companyList2[index].id_linh_vuc
           }
           this.dataSource.data = this.careerarray

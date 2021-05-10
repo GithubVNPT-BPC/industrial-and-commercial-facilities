@@ -210,19 +210,19 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="tc4_1">
+                        <ng-container matColumnDef="tieu_chi_41">
                             <th mat-header-cell *matHeaderCellDef> Tiêu chí 4.1 </th>
                             <td mat-cell *matCellDef="let element"> {{element.tieu_chi_41 ? 'Đạt' : 'Không đạt'}}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="tc4_2">
+                        <ng-container matColumnDef="tieu_chi_42">
                             <th mat-header-cell *matHeaderCellDef> Tiêu chí 4.2 </th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.tieu_chi_42 ? 'Đạt' : 'Không đạt'}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="tc4_3">
+                        <ng-container matColumnDef="tieu_chi_43">
                             <th mat-header-cell *matHeaderCellDef>Tiêu chí 4.3 </th>
                             <td mat-cell *matCellDef="let element"> {{element.tieu_chi_43 ? 'Đạt' : 'Không đạt'}}</td>
                         </ng-container>
@@ -326,9 +326,9 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Tiêu chí 41</mat-label>
                             <mat-select formControlName="tieu_chi_41">
-                                <mat-option *ngFor='let tc of tieu_chi' [value]='tc.id'>
-                                    {{tc.value}}
-                                </mat-option>
+                                <mat-option *ngFor="let item of tieu_chi | keyvalue" [value]="item.key">
+                                    {{ item.value }}
+                                </mat-option>      
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -337,8 +337,8 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Tiêu chí 42</mat-label>
                             <mat-select formControlName="tieu_chi_42">
-                                <mat-option *ngFor='let tc of tieu_chi' [value]='tc.id'>
-                                    {{tc.value}}
+                                <mat-option *ngFor="let item of tieu_chi | keyvalue" [value]="item.key">
+                                    {{ item.value }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -348,8 +348,8 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Tiêu chí 43</mat-label>
                             <mat-select formControlName="tieu_chi_43">
-                                <mat-option *ngFor='let tc of tieu_chi' [value]='tc.id'>
-                                    {{tc.value}}
+                                <mat-option *ngFor="let item of tieu_chi | keyvalue" [value]="item.key">
+                                    {{ item.value }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

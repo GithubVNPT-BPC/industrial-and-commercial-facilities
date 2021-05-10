@@ -391,7 +391,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Loại quy hoạch</mat-label>
                             <mat-select formControlName="id_loai_quy_hoach">
-                                <mat-option *ngFor='let qh of loai_quy_hoach | keyvalue' [value]='qh.key'>
+                                <mat-option *ngFor='let qh of loai_quy_hoach_2 | keyvalue' [value]='qh.key'>
                                     {{qh.value}}
                                 </mat-option>
                             </mat-select>

@@ -42,11 +42,17 @@
                         </button>
                     </div>
 
+                    <div class="col-1 checkbox">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Giấy phép hết hạn
+                        </mat-checkbox>
+                    </div>
+
                     <!-- <div class="col-4 button-control -align-right my-auto">
                         <button mat-raised-button (click)="Back()">
                             <mat-icon>keyboard_backspace</mat-icon>
                         </button>
                     </div> -->
+
                     <div class="col-12 col-lg-12 mt-2">
                         <mat-form-field outline="appearance">
                             <mat-label>Lọc dữ liệu</mat-label>
@@ -56,7 +62,7 @@
                 </div>
 
                 <div class="layout" #table>
-                    <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+                    <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table1">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>
                                 <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -90,13 +96,18 @@
                             <td mat-cell *matCellDef="let element">{{element.mst}} </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="ten_doanh_nghiep">
+                            <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
+                            <td mat-cell *matCellDef="let element">{{element.ten_doanh_nghiep}} </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="so_giay_phep">
                             <th mat-header-cell *matHeaderCellDef> Số giấy phép </th>
                             <td mat-cell *matCellDef="let element" (click)="AddCertificate(element.id_giay_phep)"
                                 class="jump"> {{element.so_giay_phep}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="id_linh_vuc">
+                        <!-- <ng-container matColumnDef="id_linh_vuc">
                             <th mat-header-cell *matHeaderCellDef> Lĩnh vực quản lý </th>
                             <td mat-cell *matCellDef="let element">
                                 <select [(ngModel)]="element.id_linh_vuc" disabled>
@@ -105,6 +116,11 @@
                                     </option>
                                 </select>
                             </td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="ten_linh_vuc">
+                            <th mat-header-cell *matHeaderCellDef> Tên lĩnh vực </th>
+                            <td mat-cell *matCellDef="let element">{{element.ten_linh_vuc}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ngay_cap">

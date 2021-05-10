@@ -52,6 +52,10 @@ export class ManufacturingElectronicComponent extends BaseComponent {
     }
   }
 
+
+
+
+
   getDataManufacturing() {
     this.energyService.LayDuLieuTuVanDien().subscribe((result) => {
       this.filteredDataSource.data = [];
@@ -126,12 +130,21 @@ export class ManufacturingElectronicComponent extends BaseComponent {
      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
      this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
      this.formData.controls['so_giay_phep'].setValue(selectedRecord.so_giay_phep);
-     this.formData.controls['ngay_cap'].setValue(selectedRecord.ngay_cap);
-     this.formData.controls['ngay_het_han'].setValue(selectedRecord.ngay_het_han);
+     this.formData.controls['ngay_cap'].setValue(selectedRecord.ngay_cap.toDate());
+     this.formData.controls['ngay_het_han'].setValue(selectedRecord.ngay_het_han.toDate());
      this.formData.controls['id'].setValue(selectedRecord.id);
     }
 }
-
+public prepareModDataForEdit(data) {
+  let modDatas = super.prepareModDataForEdit(data);
+  if (modDatas['ngay_cap']) {
+    modDatas['ngay_cap'] = moment(data['ngay_cap']).format('yyyyMMDD');
+  }
+  if (modDatas['ngay_het_han']) {
+    modDatas['ngay_het_han'] = moment(data['ngay_het_han']).format('yyyyMMDD');
+  }
+  return modDatas;
+}
   public prepareData(data) {
     data['ngay_cap'] = moment(data['ngay_cap']).format('yyyyMMDD');
     data['ngay_het_han'] = moment(data['ngay_het_han']).format('yyyyMMDD');

@@ -18,7 +18,8 @@ import {
 	SubDistrictModel,
 	BusinessTypeModel,
 	Career,
-	DeleteModel1
+	DeleteModel1,
+	FieldModel
 } from "../../../../_models/APIModel/domestic-market.model";
 
 import { FormControl } from '@angular/forms';
@@ -71,53 +72,6 @@ export class CompanyDetailComponent implements OnInit {
 
 	mst: string;
 	doanh_nghiep: FormGroup;
-	// danh_sach_nganh_nghe: FormArray;
-
-	selection = new SelectionModel<Career>(true, []);
-
-	isAllSelected() {
-		const numSelected = this.selection.selected.length;
-		// const numRows = this.dataSource.data.length;
-		const numRows = this.dataSource.connect().value.length;
-		return numSelected === numRows;
-	}
-
-	masterToggle() {
-		this.isAllSelected() ?
-			this.selection.clear() :
-			this.dataSource.connect().value.forEach(row => this.selection.select(row));
-	}
-
-	checkboxLabel(row?: Career): string {
-		if (!row) {
-			return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-		}
-		return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id_nganh_nghe_kinh_doanh + 1}`;
-	}
-
-	deletemodel1: Array<DeleteModel1> = new Array<DeleteModel1>();
-	selectionarray: string[];
-	removeRows() {
-		if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-			this.selection.selected.forEach(x => {
-				this.selectionarray = this.selection.selected.map(item => item.id_nganh_nghe_kinh_doanh)
-				this.deletemodel1.push({
-					id: ''
-				})
-			})
-			for (let index = 0; index < this.selectionarray.length; index++) {
-				const element = this.deletemodel1[index];
-				element.id = this.selectionarray[index]
-			}
-			this._Service.DeleteCareer(this.deletemodel1).subscribe(res => {
-				this.info.msgSuccess('Xóa thành công')
-				this.ngOnInit();
-				this.deletemodel1 = []
-				this.selection.clear();
-				this.paginator.pageIndex = 0;
-			})
-		}
-	}
 
 	constructor(
 		public route: ActivatedRoute,
@@ -159,6 +113,14 @@ export class CompanyDetailComponent implements OnInit {
 		});
 	}
 
+	public Field: Array<FieldModel> = new Array<FieldModel>();
+
+	GetLinhVuc() {
+		this._Service.GetAllField().subscribe((allrecords) => {
+			this.Field = allrecords.data as FieldModel[];
+		});
+	}
+
 	ngOnInit() {
 		if (this.mst != undefined) {
 			this.GetCompanyInfoById();
@@ -167,6 +129,7 @@ export class CompanyDetailComponent implements OnInit {
 		this.GetAllPhuongXa();
 		this.getQuan_Huyen();
 		this.GetAllLoaiHinh();
+		this.GetLinhVuc();
 		this.resetForm();
 
 		this.doanh_nghiep = this.formbuilder.group({
@@ -198,73 +161,12 @@ export class CompanyDetailComponent implements OnInit {
 			nhu_cau_mua: '',
 			nhu_cau_hop_tac: '',
 			danh_sach_nganh_nghe: []
-			// danh_sach_nganh_nghe: this.formbuilder.array([this.newCareer()])
 		})
-	}
-
-	// newCareer(): FormGroup {
-	//   return this.formbuilder.group({
-	//     id_nganh_nghe_kinh_doanh: 0,
-	//     nganh_nghe_kd_chinh: '',
-	//     id_linh_vuc: 0
-	//   })
-	// }
-
-	// addCareer(): void {
-	//   this.danh_sach_nganh_nghe = this.doanh_nghiep.get('danh_sach_nganh_nghe') as FormArray;
-	//   this.danh_sach_nganh_nghe.push(this.newCareer());
-	// }
-
-	// removeCareer(i: number) {
-	//   this.danh_sach_nganh_nghe.removeAt(i);
-	// }
-
-	public SaveData(companyinput) {
-		if (this.mst == undefined) {
-			this._Service.PostCompany(companyinput).subscribe(
-				res => {
-					// debugger;
-					// this.resetForm(companyinput);
-					this.info.msgSuccess('Thêm thành công')
-					this.router.navigate(['manager/business/search/']);
-				},
-				err => {
-					// debugger;
-				}
-			)
-		}
-		else {
-			this._Service.UpdateCompany(companyinput).subscribe(
-				res => {
-					// debugger;
-					// this.resetForm(companyinput);
-					this.info.msgSuccess('Thêm thành công')
-					this.router.navigate(['manager/business/search/']);
-				},
-				err => {
-					// debugger;
-				}
-			)
-		}
 	}
 
 	date = new FormControl(moment);
 	pickedDate = {
 		date: new Date()
-	}
-
-	public getChange(param: any): string {
-		let datepipe = this.datepipe.transform(param._d, 'yyyyMMdd')
-		return datepipe
-	}
-
-	companyinput: CompanyPost
-	onSubmit() {
-		this.companyinput = this.doanh_nghiep.value
-		this.companyinput.danh_sach_nganh_nghe = this.dataSource.data
-		this.companyinput.ngay_bd_kd = this.getChange(this.companyinput.ngay_bd_kd)
-		this.companyinput
-		this.SaveData(this.companyinput);
 	}
 
 	resetForm(form?: NgForm) {
@@ -302,45 +204,7 @@ export class CompanyDetailComponent implements OnInit {
 		}
 	}
 	dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
-	public displayedColumns: string[] = ['index', 'id_nganh_nghe_kinh_doanh', 'nganh_nghe_kd_chinh'];
-
-	public _currentRow: number = 0;
-
-	addRow(): void {
-		let newRow: Career = new Career();
-		newRow.id_nganh_nghe_kinh_doanh;
-		newRow.nganh_nghe_kd_chinh = "";
-		newRow.id_linh_vuc = null
-
-		this.dataSource.data.push(newRow);
-		this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-		this._rows = this.dataSource.filteredData.length;
-	}
-
-	insertRow(): void {
-		let data = this.dataSource.data.slice(this._currentRow);
-		this.dataSource.data.splice(this._currentRow, this.dataSource.data.length - this._currentRow + 1);
-		let newRow: Career = new Career();
-		newRow.id_nganh_nghe_kinh_doanh;
-		newRow.nganh_nghe_kd_chinh = "";
-		newRow.id_linh_vuc = null
-
-		this.dataSource.data.push(newRow);
-		data.forEach(element => {
-			this.dataSource.data.push(element);
-		});
-		this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-		this._rows = this.dataSource.data.length
-	}
-
-	deleteRow(): void {
-		this.dataSource.data.splice(this._currentRow, 1);
-		this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-		this._rows = this.dataSource.data.length
-	}
+	public displayedColumns: string[] = ['index', 'id_nganh_nghe_kinh_doanh', 'id_linh_vuc', 'nganh_nghe_kd_chinh',];
 
 	getCurrentDate() {
 		let date = new Date;
@@ -350,35 +214,6 @@ export class CompanyDetailComponent implements OnInit {
 	getCurrentYear() {
 		let date = new Date;
 		return formatDate(date, 'yyyy', 'en-US');
-	}
-
-	public changeRow(index: number) {
-		this._currentRow = index;
-	}
-
-	public _rows: number = 0;
-	public columns: number = 1;
-
-	public move(object) {
-		const inputToArray = this.inputs.toArray()
-		let index = inputToArray.findIndex(x => x.element == object.element);
-		switch (object.action) {
-			case "UP":
-				index -= this.columns;
-				break;
-			case "DOWN":
-				index += this.columns;
-				break;
-			case "LEFT":
-				index -= this._rows;
-				break;
-			case "RIGHT":
-				index += this._rows;
-				break;
-		}
-		if (index >= 0 && index < this.inputs.length) {
-			inputToArray[index].element.nativeElement.focus();
-		}
 	}
 
 	Convertdate(text: string): string {
@@ -491,7 +326,8 @@ export class CompanyDetailComponent implements OnInit {
 				if (this.companyList2) {
 					this.companyList2.forEach(x => {
 						this.careerarray.push({
-							id_nganh_nghe: null,
+							id: null,
+							ma_nganh_nghe: null,
 							id_nganh_nghe_kinh_doanh: null,
 							nganh_nghe_kd_chinh: '',
 							id_linh_vuc: null
@@ -499,8 +335,11 @@ export class CompanyDetailComponent implements OnInit {
 					})
 
 					for (let index = 0; index < this.companyList2.length; index++) {
+						this.careerarray[index].id = this.companyList2[index].id.toString()
 						this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
 						this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
+						this.careerarray[index].ma_nganh_nghe = ''
+						this.careerarray[index].id_linh_vuc = this.companyList2[index].id_linh_vuc
 					}
 					this.dataSource.data = this.careerarray
 

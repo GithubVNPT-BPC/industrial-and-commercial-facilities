@@ -50,7 +50,7 @@ export class MarketServicePublic {
 
     constructor(public http: HttpClient) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
-        // this.token = this.data.token;
+        this.token = this.data.token;
     }
 
     //company list
@@ -264,6 +264,14 @@ export class MarketServicePublic {
     }
     public GetAllBusinessType() {
         var apiUrl = this.apiHome + this.urlLHHD;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    
+    public GetAllField() {
+        var apiUrl = this.apiHome + 'api/danh-sach/linh-vuc-quan-ly';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

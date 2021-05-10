@@ -134,12 +134,14 @@ export class AddLpgComponent implements OnInit {
     }
   }
 
+  BM: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
   Businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
   filterbusinessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
 
   GetBusinessman() {
     this._Service.GetBusinessman().subscribe((allrecords) => {
-      this.Businessman = allrecords.data as BusinessmanSelect[];
+      this.BM = allrecords.data
+      this.Businessman = this.BM.filter(x => x.id_linh_vuc == 9) as BusinessmanSelect[];
       this.filterbusinessman = this.Businessman.slice();
     });
   }
