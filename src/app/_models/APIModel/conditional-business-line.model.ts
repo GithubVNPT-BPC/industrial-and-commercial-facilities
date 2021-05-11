@@ -296,6 +296,22 @@ export class CertificateModel {
     id_linh_vuc: number;
 }
 
+export class CertificateViewModel {
+    id_giay_phep: number;
+    mst: string;
+    so_giay_phep: string;
+    ngay_cap: string;
+    ngay_het_han: string;
+    id_loai_giay_phep: number;
+    noi_cap: string;
+    co_quan_cap: string;
+    ghi_chu: string;
+    id_linh_vuc: number;
+    ten_linh_vuc: string;
+    ten_doanh_nghiep: string;
+    is_het_han: boolean;
+}
+
 export class CertificateType {
     id_loai_giay_phep: number;
     ten_giay_phep: string;

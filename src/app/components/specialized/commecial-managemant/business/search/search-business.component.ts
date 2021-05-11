@@ -162,18 +162,18 @@ export class SearchBusinessComponent implements OnInit {
   // }
 
   OpenDetailCompany(mst: string) {
-    this.router.navigate(['specialized/commecial-management/domestic/edit/' + mst]);
+    let url = '/#/specialized/commecial-management/domestic/edit/' + mst
+    window.open(url, '_blank');
+  }
+
+  AddCompany() {
+    let url = '/#/specialized/commecial-management/domestic/edit/'
+    window.open(url, '_blank');
   }
 
   // AddCompany() {
-  //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree(['manager/business/edit/']));
-  //   window.open(url, "_blank");
+  //   this.router.navigate(['specialized/commecial-management/domestic/edit/']);
   // }
-
-  AddCompany() {
-    this.router.navigate(['specialized/commecial-management/domestic/edit/']);
-  }
 
   AddCertificate() {
     this.router.navigate(['specialized/commecial-management/domestic/certificate/']);

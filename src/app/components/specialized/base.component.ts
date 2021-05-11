@@ -16,6 +16,8 @@ export class BaseComponent extends AbstractBaseComponent {
 
     public prepareRemoveData(data) { return data }
 
+    public prepareModDataForEdit(data) { return data }
+
     public prepareEditData(data) {
         function _compareChangedData(prevData, curData) {
             return Object.keys(curData).reduce((diff, key) => {
@@ -28,7 +30,7 @@ export class BaseComponent extends AbstractBaseComponent {
         }
         let pKey = {id : data.id};
         let modDatas = _compareChangedData(this.formPrevData, data);
-        
+        modDatas = this.prepareModDataForEdit(modDatas);
         let datas = {
             pKey : pKey,
             modDatas : modDatas,
