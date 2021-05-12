@@ -29,6 +29,7 @@ import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { time } from 'highcharts';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { CommonFuntions } from '../common-functions.service';
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
     parse: {
@@ -84,6 +85,8 @@ export class LPGBusinessComponent implements OnInit {
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
+    years: Array<{ value: number, des: string }>
+
     constructor(
         public excelService: ExcelService,
         public _Service: ConditionBusinessService,
@@ -92,7 +95,9 @@ export class LPGBusinessComponent implements OnInit {
         public dialog: MatDialog,
         public _login: LoginService,
         private _breadCrumService: BreadCrumService,
+        public _years: CommonFuntions
     ) {
+        this.years = _years.getYears();
     }
 
     protected LINK_DEFAULT: string = "";
@@ -199,6 +204,7 @@ export class LPGBusinessComponent implements OnInit {
     LPGList1: Array<LPGList> = new Array<LPGList>();
     LPGList2: Array<LPGList> = new Array<LPGList>();
     LPGList3: Array<LPGList> = new Array<LPGList>();
+    LPGList4: Array<LPGList> = new Array<LPGList>();
 
     getLPGListbyYear(year: string) {
         this._Service.GetAllLPGValue().subscribe(all => {
@@ -247,12 +253,8 @@ export class LPGBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            if (year == '') {
-                this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == false)
-            }
-            else {
-                this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == false && x.ngay_cap.substring(6, 10) == year)
-            }
+            this.LPGList4 = this.LPGList3.filter(x => x.is_het_han == false)
+            this.dataSource1.data = this.LPGList4
 
             this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
 
@@ -284,44 +286,78 @@ export class LPGBusinessComponent implements OnInit {
     //     window.open(url, "_blank");
     // }
 
+    disabled1: boolean = false
+    disabled2: boolean = false
+    disabled3: boolean = false
+
     applyDistrictFilter(event) {
         let filteredData = [];
 
-        if (this.theYear != undefined) {
-            event.value.forEach(element => {
-                this.LPGList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase()) && x.ngay_cap.substring(6, 10) == this.theYear.toString()).forEach(x => filteredData.push(x));
-            });
-        }
-        else {
-            event.value.forEach(element => {
-                this.LPGList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-            });
-        }
+        event.value.forEach(element => {
+            this.LPGList4.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+        });
 
         if (!filteredData.length) {
-            if (event.value.length)
+            if (event.value.length) {
                 this.dataSource1.data = [];
-            else
-                if (this.theYear != undefined) {
-                    this.dataSource1.data = this.LPGList3.filter(x => x.ngay_cap.substring(6, 10) == this.theYear.toString());
-                }
-                else {
-                    this.dataSource1.data = this.LPGList3
-                }
+                this.disabled2 = true
+                this.disabled3 = true
+            }
+            else {
+                this.dataSource1.data = this.LPGList4.filter(x => x.is_het_han == false)
+                this.disabled2 = false
+                this.disabled3 = false
+            }
         }
         else {
             this.dataSource1.data = filteredData;
+            this.disabled2 = true
+            this.disabled3 = true
         }
 
         this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
     }
 
     applyExpireCheck(event) {
-        if (this.theYear != undefined) {
-            this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == event.checked && x.ngay_cap.substring(6, 10) == this.theYear.toString())
+        if (event.checked == false) {
+            this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == event.checked)
+            this.disabled1 = false
+            this.disabled3 = false
         }
         else {
             this.dataSource1.data = this.LPGList3.filter(x => x.is_het_han == event.checked)
+            this.disabled1 = true
+            this.disabled3 = true
+        }
+
+        // this.SumPetrolStore2 = this.SumPetrolStore1.filter(x => x.is_het_han == event.checked)
+
+        this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+    }
+
+    applyCerYear(event) {
+        let filteredData = [];
+
+        event.value.forEach(element => {
+            this.LPGList4.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
+        });
+
+        if (!filteredData.length) {
+            if (event.value.length) {
+                this.dataSource1.data = [];
+                this.disabled1 = true
+                this.disabled2 = true
+            }
+            else {
+                this.dataSource1.data = this.LPGList4.filter(x => x.is_het_han == false)
+                this.disabled1 = false
+                this.disabled2 = false
+            }
+        }
+        else {
+            this.dataSource1.data = filteredData;
+            this.disabled1 = true
+            this.disabled2 = true
         }
 
         this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
@@ -340,6 +376,12 @@ export class LPGBusinessComponent implements OnInit {
     Convertdate(text: string): string {
         let date: string
         date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+        return date
+    }
+
+    convertyear(text: string): string {
+        let date: string
+        date = text.substring(6, 11)
         return date
     }
 
@@ -378,7 +420,4 @@ export class LPGBusinessComponent implements OnInit {
         this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 
-    Reset() {
-        window.location.reload();
-    }
 }
