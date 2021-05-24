@@ -2,6 +2,8 @@
     <mat-card-content>
         <div class="row button-control" *ngIf="object[0]">
             <div class="col-lg-12" *ngIf="!is_sent">
+                <button mat-raised-button (click)="exportTOExcel('Báo cáo','Báo cáo')">Xuất file
+                    Excel mẫu</button>
                 <button mat-raised-button (click)="dataSynthesis()" title="Tổng hợp dữ liệu">Tổng hợp số liệu</button>
                 <button mat-raised-button (click)="SaveReport()" title="Lưu">Lưu</button>
                 <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo">Trình lãnh đạo</button>
@@ -30,7 +32,7 @@
                 </mat-form-field>
             </div>
         </div>
-        <div class="layout" *ngIf="dataSource.data.length && object[0]; else ShowList">
+        <div class="layout" #TABLE *ngIf="dataSource.data.length && object[0]; else ShowList">
 
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
                 <ng-container matColumnDef="index" sticky>

@@ -290,11 +290,6 @@ export class FillReportComponent implements OnInit {
     return false;
   }
 
-  //Xuất excel
-  ExportTOExcel(filename: string, sheetname: string) {
-    // this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
   GetReportById(obj_id: number, time_id: number, org_id: number) {
     this.reportSevice
       .GetReportByKey(obj_id, time_id, org_id)
@@ -536,6 +531,13 @@ export class FillReportComponent implements OnInit {
       this.dataSource.data.push(tableRow);
     }
     // this.summaryReportObjectId();
+  }
+
+
+  @ViewChild("TABLE", { static: true }) table: ElementRef;
+
+  public exportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   // summaryReportObjectId() {
