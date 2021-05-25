@@ -179,7 +179,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="Cx">
-                            <th mat-header-cell *matHeaderCellDef> Công xuất thiết kế/năm (MW)
+                            <th mat-header-cell *matHeaderCellDef> Công xuất thiết kế (MW)
                             </th>
                             <td mat-cell *matCellDef="let element"> {{element.cong_suat_thiet_ke | formatNumber}}</td>
                         </ng-container>
@@ -198,14 +198,14 @@
 
                         <ng-container matColumnDef="Sl6tck">
                             <th mat-header-cell *matHeaderCellDef> Sản lượng 6 tháng/cùng kỳ
-                                (triệu KW) </th>
+                                (triệu KWh) </th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.san_luong_6_thang | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="Slnck">
                             <th mat-header-cell *matHeaderCellDef>Sản lượng năm/cùng kỳ
-                                (triệu KW)
+                                (triệu KWh)
                             <td mat-cell *matCellDef="let element"> {{element.san_luong_nam | formatNumber}}</td>
                         </ng-container>
 

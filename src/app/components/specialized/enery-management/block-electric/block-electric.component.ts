@@ -134,4 +134,24 @@ export class BlockElectricComponent extends BaseComponent {
     this.caculatorValue();
   }
 
+  applyDistrictFilter(event) {
+    let filteredData = [];
+
+    event.value.forEach(element => {
+      this.dataSource.data.filter(x => x['id_quan_huyen'] == element).forEach(x => filteredData.push(x));
+    });
+
+    if (!filteredData.length) {
+      if (event.value.length)
+        this.filteredDataSource.data = [];
+      else
+        this.filteredDataSource.data = this.dataSource.data;
+    }
+    else {
+      this.filteredDataSource.data = filteredData;
+    }
+    this.caculatorValue();
+    this.paginatorAgain();
+  }
+
 }
