@@ -62,6 +62,7 @@ export abstract class AbstractBaseComponent implements OnInit {
     public districts: DistrictModel[] = [];
     public wards: SubDistrictModel[] = [];
     public districtWards: DistrictWardModel[] = [];
+    public filteredDistrictWards = [];
     public districtWardSorted = {};
 
     constructor(injector: Injector) {
@@ -77,6 +78,7 @@ export abstract class AbstractBaseComponent implements OnInit {
         this.autoOpen();
         this.initListView();
         this.initFormView();
+        this.initFilters();
         this.initDistricts();
         this.getLinkDefault();
         this.sendLinkToNext(true);
@@ -92,6 +94,12 @@ export abstract class AbstractBaseComponent implements OnInit {
     protected initFormView() {
         let datas = this.getFormParams();
         this.formData = this.formBuilder.group(datas);
+    }
+
+    public initFilters() {
+        for (var key of Object.keys(this.filterModel)) {
+            this.filterModel[key] = [];
+        }
     }
 
     public setFormParams() {}
@@ -164,6 +172,7 @@ export abstract class AbstractBaseComponent implements OnInit {
             if(res['success']) {
                 let districtWardData = res['data'];
                 this.districtWards = districtWardData;
+                this.filteredDistrictWards = districtWardData.slice()
                 if (sorted) {
                     districtWardData.forEach(x => {
                         if (!this.districtWardSorted[x.ten_quan_huyen]) {
