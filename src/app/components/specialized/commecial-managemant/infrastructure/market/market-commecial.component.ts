@@ -76,11 +76,11 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     loai_hang_cho: "Hạng chợ",
     tinh_chat_cho: "Tính chất công trình",
     ten_loai_cho: "Loại chợ",
-    ke_hoach_dau_tu: "Kế hoạch đầu tư",
+    ke_hoach_dau_tu: "Đầu tư",
     hinh_thuc_quan_ly: "Hình thức quản lý",
 
-    xay_moi: "Xây mới",
-    nang_cap: "Nâng cấp",
+    nam_xay_dung: "Xây mới",
+    nam_nang_cap: "Nâng cấp",
     dau_tu: "Đầu tư",
     so_ho_duoi_30: "Số hộ KD dưới 30%",
     so_chuyen_doi_chuc_nang: "Số chợ chuyển đổi CNHĐ",
@@ -231,7 +231,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
-    this.initDistrictWard();
+    this.initDistrictWard(false);
     this.getMarketData();
 
     if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
