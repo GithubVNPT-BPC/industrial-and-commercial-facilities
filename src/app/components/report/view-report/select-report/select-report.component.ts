@@ -36,7 +36,7 @@ export class ViewSelectReportComponent implements OnInit {
   public readonly locale = 'en-US';
   reportTypes = [{ ma_so: null, noi_dung: '' }, { ma_so: 1, noi_dung: 'Tháng' }, { ma_so: 2, noi_dung: 'Quý' }, { ma_so: 3, noi_dung: '6 Tháng' }, { ma_so: 4, noi_dung: 'Năm' }];
   months: number[] = [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  selectedYear: number ;
+  selectedYear: number;
   years: number[] = [];
   quarters: number[] = [null, 1, 2, 3, 4];
   org_id: number = 0;
@@ -67,7 +67,7 @@ export class ViewSelectReportComponent implements OnInit {
         element.time_id_text = this.TimeIDToText(element.time_id.toString());
       })
       this.dataSource = null;
-      this.dataSource = new MatTableDataSource<ReportOject>(response.data.filter( x => this.org_id != 1? x.org_id == this.org_id : x));
+      this.dataSource = new MatTableDataSource<ReportOject>(response.data.filter(x => this.org_id != 1 ? x.org_id == this.org_id : x));
       this.dataSource.paginator = this.paginator;
       if (this.paginator) {
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -167,15 +167,9 @@ export class ViewSelectReportComponent implements OnInit {
     }
   }
 
-  // OpenDetailObject(obj: ReportOject) {
-  //   const url = this.router.serializeUrl(
-  //     this.router.createUrlTree(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: this.org_id, time_id: obj.time_id } })
-  //   );
-  //   window.open(url, "_blank");
-  // }
-
   OpenDetailObject(obj: ReportOject) {
-    this.router.navigate(['/report/view'], { queryParams: { obj_id: obj.obj_id, org_id: obj.org_id, time_id: obj.time_id } });
+    let url = '/#/report/view?obj_id=' + obj.obj_id + '&org_id=' + obj.org_id + '&time_id=' + obj.time_id
+    window.open(url, "_blank");
   }
 
   OpenDialog(obj: ReportOject) {

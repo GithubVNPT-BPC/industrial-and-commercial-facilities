@@ -145,7 +145,7 @@ export class HydroelectricComponent extends BaseComponent {
     let filteredData = [];
 
     event.value.forEach(element => {
-      this.dataSource.data.filter(x => x.id_phuong_xa == element).forEach(x => filteredData.push(x));
+      this.dataSource.data.filter(x => x['id_quan_huyen'] == element).forEach(x => filteredData.push(x));
     });
 
     if (!filteredData.length) {

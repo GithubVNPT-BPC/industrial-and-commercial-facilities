@@ -33,6 +33,12 @@ export class PetrolList {
     id: string;
 }
 
+export class SumStore {
+    id: number;
+    is_het_han: boolean;
+    ngay_het_han: string;
+}
+
 export class TobaccoList {
     id_thuoc_la: string;
     mst: string;

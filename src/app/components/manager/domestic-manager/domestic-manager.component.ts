@@ -249,7 +249,7 @@ export class DomesticManagerComponent implements OnInit {
 
   keys: string[];
   dataSheet = new Subject();
-  @ViewChild('inputFile', { static: true }) inputFile: ElementRef;  
+  @ViewChild('inputFile', { static: true }) inputFile: ElementRef;
   uploadExcel(evt: any) {
     let data;
     let isExcelFile: boolean;
@@ -257,7 +257,7 @@ export class DomesticManagerComponent implements OnInit {
     isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
     if (target.files.length != 1) {
       this.inputFile.nativeElement.value = '';
-    } 
+    }
     else if (isExcelFile) {
       const reader: FileReader = new FileReader();
       reader.onload = (e: any) => {
@@ -293,7 +293,7 @@ export class DomesticManagerComponent implements OnInit {
       this.inputFile.nativeElement.value = '';
     }
   }
-  
+
   public paginatorAgain() {
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';

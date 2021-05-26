@@ -22,7 +22,7 @@ export class SCTService {
     private urlDanhSachQuanLyChietNapLPG = "/danh-sach-quan-ly-chiet-nap-lpg";
     private urlDanhSachQuanLyCongNghiepThucPham = "/danh-sach-quan-ly-cong-nghiep-thuc-pham";
     private urlDanhSachQuanLyVatLieuNoCongNghiep = "/vlncn";
-    
+
     private urlDanhSachDaCap = "/danh-sach-ban-hang-da-cap";
 
     private apiSpecialized = environment.apiEndpoint + "api/qltm";
@@ -56,8 +56,8 @@ export class SCTService {
     // start api quan huyen
     private apiDanhSach = environment.apiEndpoint + "api/danh-sach";
 
-    private urlQuanHuyen = "/quan-huyen"; 
-    private urlPhuongXa = "/phuong-xa"; 
+    private urlQuanHuyen = "/quan-huyen";
+    private urlPhuongXa = "/phuong-xa";
     private urlPhuongXaQuanHuyen = "/phuong-xa-kem-quan-huyen"
     // end api quan huyen
 
@@ -67,8 +67,8 @@ export class SCTService {
     username: any;
 
     constructor(public http: HttpClient, public logOutService: LoginService) {
-        this.data = JSON.parse(localStorage.getItem('currentUser'));
-        this.token = this.data.token;
+        // this.data = JSON.parse(localStorage.getItem('currentUser'));
+        // this.token = this.data.token;
     }
 
     public GetDanhSachBuonBanThuocLa(time_id: number) {
@@ -236,7 +236,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlChiTietXuatKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        
+
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -245,7 +245,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlChiTietXuatKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        
+
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -254,7 +254,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlChiTietNhapKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        
+
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -263,7 +263,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlChiTietNhapKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
-        
+
         return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -272,7 +272,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDNNhapKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -280,8 +280,8 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDNNhapKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         // let params = new HttpParams().set('time_id', time_id.toString());
-        
-        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -289,7 +289,7 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDNXuatKhau;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -297,12 +297,12 @@ export class SCTService {
         var apiUrl = this.apiSpecialized + this.urlDNXuatKhauTC;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         // let params = new HttpParams().set('time_id', time_id.toString());
-        
-        return this.http.post<any>(apiUrl, data, { headers: headers}).pipe(tap(data => data),
+
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
-    
+
 
     public GetDuLieuXuatKhauBG(time_id: number) {
         var apiUrl = this.apiSpecialized + this.urlDuLieuBienGioiXK;
@@ -349,7 +349,7 @@ export class SCTService {
         );
     }
 
-    LaydulieuCongBoHopQuy(){
+    LaydulieuCongBoHopQuy() {
         var apiUrl = this.apiIndustry + this.url_congbohopquy;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
@@ -357,7 +357,7 @@ export class SCTService {
         );
     }
 
-    public LayDanhSachQuanHuyen(){
+    public LayDanhSachQuanHuyen() {
         var apiUrl = this.apiDanhSach + this.urlQuanHuyen;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
@@ -365,7 +365,7 @@ export class SCTService {
         );
     }
 
-    public LayDanhSachPhuongXa(){
+    public LayDanhSachPhuongXa() {
         var apiUrl = this.apiDanhSach + this.urlPhuongXa;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
@@ -373,7 +373,7 @@ export class SCTService {
         );
     }
 
-    LayDanhSachPhuongXaQuanHuyen(){
+    LayDanhSachPhuongXaQuanHuyen() {
         var apiUrl = this.apiDanhSach + this.urlPhuongXaQuanHuyen;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
@@ -384,7 +384,7 @@ export class SCTService {
     public UpdateRecord(datas) {
         var apiUrl = this.urlUpdateRecord;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.put<any>(apiUrl, datas, { headers: headers}).pipe(tap(data => data),
+        return this.http.put<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

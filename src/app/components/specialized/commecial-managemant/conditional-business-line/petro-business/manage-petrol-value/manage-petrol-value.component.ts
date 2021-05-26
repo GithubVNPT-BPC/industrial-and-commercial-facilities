@@ -15,7 +15,8 @@ import {
   PetrolList,
   DistrictModel,
   DeleteModel,
-  Businessman
+  Businessman,
+  SumStore
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -221,11 +222,14 @@ export class ManagePetrolValueComponent implements OnInit {
   petrollist2: Array<PetrolList> = new Array<PetrolList>();
   petrollist3: Array<PetrolList> = new Array<PetrolList>();
   petrollist4: Array<PetrolList> = new Array<PetrolList>();
+  // SumPetrolStore1: Array<SumStore> = new Array<SumStore>();
+  // SumPetrolStore2: Array<SumStore> = new Array<SumStore>();
 
   getPetrolListbyYear(year: string, year1: string) {
     this._Service.GetAllPetrolValue().subscribe(all => {
       this.petrollist = all.data[0];
       this.petrollist1 = all.data[1];
+      // this.SumPetrolStore1 = all.data[2];
       this.petrollist2 = this.petrollist.map(x => {
         let temp = this.petrollist1.filter(y => y.id_san_luong == x.id_san_luong)
 
@@ -269,12 +273,21 @@ export class ManagePetrolValueComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
 
-      this.petrollist4 = this.petrollist3.filter(x => x.is_het_han == false)
+      // this.SumPetrolStore1.forEach(element => {
+      //   if (element.ngay_het_han) {
+      //     let temp = this.Convertdate(element.ngay_het_han)
+      //     element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+      //   }
+      //   else {
+      //     element.is_het_han = false
+      //   }
+      // });
 
+      // this.SumPetrolStore2 = this.SumPetrolStore1.filter(x => x.is_het_han == false)
+      this.petrollist4 = this.petrollist3.filter(x => x.is_het_han == false)
       this.dataSource1.data = this.petrollist4
 
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
-
       let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
       this.SLDoanhNghiep = unique.length;
 
@@ -373,6 +386,8 @@ export class ManagePetrolValueComponent implements OnInit {
       this.disabled3 = true
       this.disabled4 = true
     }
+
+    // this.SumPetrolStore2 = this.SumPetrolStore1.filter(x => x.is_het_han == event.checked)
 
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
     let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]
@@ -518,10 +533,6 @@ export class ManagePetrolValueComponent implements OnInit {
 
   Back() {
     this.router.navigate(['specialized/commecial-management/domestic/cbl']);
-  }
-
-  Reset() {
-    this.ngOnInit();
   }
 
   OpenDetailPetrol(id: number, mst: string, time: string, id_san_luong: string) {
