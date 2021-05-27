@@ -17,6 +17,7 @@ import { LoginService } from "src/app/_services/APIService/login.service";
 })
 export class MarketCommecialManagementComponent extends BaseComponent {
   DB_TABLE = 'QLTM_CHO';
+  EXCEL_NAME = 'Chợ';
   public dataSource: MatTableDataSource<MarketModel> = new MatTableDataSource<MarketModel>();
   public filteredDataSource: MatTableDataSource<MarketModel> = new MatTableDataSource<MarketModel>();
 
