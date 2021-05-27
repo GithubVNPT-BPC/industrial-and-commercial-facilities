@@ -224,11 +224,16 @@
 
                 <hr>
                 <div class="row">
-                    <div class="col-12 col-lg-12 button-control">
-                        <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')">
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control text-left my-auto">
+                        <button mat-raised-button matTooltip="Xuất Excel" class="export-btn">
                             <mat-icon>file_download</mat-icon>
+                            <div class="export-area">
+                                <span (click)="ExportToExcel()">Xuất dữ liệu theo danh sách</span>
+                                <span (click)="ExportToExcel(true)">Xuất toàn bộ dữ liệu</span>
+                            </div>
                         </button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
                         <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>

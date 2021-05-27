@@ -28,6 +28,7 @@ export abstract class AbstractBaseComponent implements OnInit {
     LINK_DEFAULT: string = "";
     TITLE_DEFAULT: string = "";
     TEXT_DEFAULT: string = "";
+    EXCEL_NAME: string = "Sở công thương";
 
     protected sctService: SCTService;
     protected excelService: ExcelService;
@@ -114,9 +115,26 @@ export abstract class AbstractBaseComponent implements OnInit {
             if (this.accordion) this.accordion.openAll()}
         , 1000);
     }
-
-    public ExportTOExcel(filename: string, sheetname: string) {
+    public ExportTOExcel(filename, sheetname) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    public ExportToExcel(all=false) {
+        if (all) {
+            let self = this;
+            let dataSource = this.dataSource.data;
+            let datas = [];
+            dataSource.forEach(function (record: Object) {
+                let data = {};
+                for (let k in record) {
+                    if (self.displayedFields[k]) data[self.displayedFields[k]] = record[k];
+                }
+                datas.push(data);
+            });
+            this.excelService.exportJsonAsExcelFile(this.EXCEL_NAME, this.EXCEL_NAME, datas);
+        } else {
+            this.excelService.exportDomTableAsExcelFile(this.EXCEL_NAME, this.EXCEL_NAME, this.table.nativeElement);
+        }
     }
 
     @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
