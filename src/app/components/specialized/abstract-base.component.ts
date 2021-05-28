@@ -28,6 +28,7 @@ export abstract class AbstractBaseComponent implements OnInit {
     LINK_DEFAULT: string = "";
     TITLE_DEFAULT: string = "";
     TEXT_DEFAULT: string = "";
+    EXCEL_NAME: string = "Sở công thương";
 
     protected sctService: SCTService;
     protected excelService: ExcelService;
@@ -62,6 +63,7 @@ export abstract class AbstractBaseComponent implements OnInit {
     public districts: DistrictModel[] = [];
     public wards: SubDistrictModel[] = [];
     public districtWards: DistrictWardModel[] = [];
+    public filteredDistrictWards = [];
     public districtWardSorted = {};
 
     constructor(injector: Injector) {
@@ -77,6 +79,7 @@ export abstract class AbstractBaseComponent implements OnInit {
         this.autoOpen();
         this.initListView();
         this.initFormView();
+        this.initFilters();
         this.initDistricts();
         this.getLinkDefault();
         this.sendLinkToNext(true);
@@ -94,6 +97,12 @@ export abstract class AbstractBaseComponent implements OnInit {
         this.formData = this.formBuilder.group(datas);
     }
 
+    public initFilters() {
+        for (var key of Object.keys(this.filterModel)) {
+            this.filterModel[key] = [];
+        }
+    }
+
     public setFormParams() {}
 
 
@@ -106,9 +115,26 @@ export abstract class AbstractBaseComponent implements OnInit {
             if (this.accordion) this.accordion.openAll()}
         , 1000);
     }
-
-    public ExportTOExcel(filename: string, sheetname: string) {
+    public ExportTOExcel(filename, sheetname) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    }
+
+    public ExportToExcel(all=false) {
+        if (all) {
+            let self = this;
+            let dataSource = this.dataSource.data;
+            let datas = [];
+            dataSource.forEach(function (record: Object) {
+                let data = {};
+                for (let k in record) {
+                    if (self.displayedFields[k]) data[self.displayedFields[k]] = record[k];
+                }
+                datas.push(data);
+            });
+            this.excelService.exportJsonAsExcelFile(this.EXCEL_NAME, this.EXCEL_NAME, datas);
+        } else {
+            this.excelService.exportDomTableAsExcelFile(this.EXCEL_NAME, this.EXCEL_NAME, this.table.nativeElement);
+        }
     }
 
     @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
@@ -164,6 +190,7 @@ export abstract class AbstractBaseComponent implements OnInit {
             if(res['success']) {
                 let districtWardData = res['data'];
                 this.districtWards = districtWardData;
+                this.filteredDistrictWards = districtWardData.slice()
                 if (sorted) {
                     districtWardData.forEach(x => {
                         if (!this.districtWardSorted[x.ten_quan_huyen]) {
