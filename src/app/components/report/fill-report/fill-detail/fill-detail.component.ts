@@ -1,5 +1,6 @@
 import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from "@angular/core";
 import * as XLSX from "xlsx";
+import { Subject } from 'rxjs';
 
 import { ReportService } from "../../../../_services/APIService/report.service";
 
@@ -198,6 +199,7 @@ export class FillReportComponent implements OnInit {
       this.time_id = params["time_id"];
       this.org_id = params["org_id"];
     });
+
   }
 
   move(object) {
@@ -534,10 +536,56 @@ export class FillReportComponent implements OnInit {
   }
 
 
-  @ViewChild("TABLE", { static: true }) table: ElementRef;
+  @ViewChild("TABLE", { static: false }) table: ElementRef;
 
   public exportTOExcel(filename: string, sheetname: string) {
+    filename = this.tenbaocao + " - " + this.thoigianbaocao
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
+
+  keys: string[];
+  dataSheet = new Subject();
+  @ViewChild('inputFile', { static: true }) inputFile: ElementRef;
+  uploadExcel(evt: any) {
+    let data;
+    let isExcelFile: boolean;
+    const target: DataTransfer = <DataTransfer>(evt.target);
+    isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+    if (target.files.length != 1) {
+      this.inputFile.nativeElement.value = '';
+    }
+    else if (isExcelFile) {
+      const reader: FileReader = new FileReader();
+      reader.onload = (e: any) => {
+        let importedData = [];
+
+        const bstr: string = e.target.result;
+        const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+        const wsname: string = wb.SheetNames[0];
+        const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+        data = XLSX.utils.sheet_to_json(ws);
+        data.forEach(item => {
+          let datarow: ReportTable = new ReportTable();
+          datarow.ind_name = item['TÊN CHỈ TIÊU'];
+          datarow.ind_unit = item['ĐƠN VỊ TÍNH'];
+          datarow.fn01 = item['Ước đến 31/12 năm báo cáo']
+          importedData.push(datarow);
+        });
+        this.dataSource = new MatTableDataSource(importedData);
+        this.info.msgSuccess("Nhập dữ liệu từ excel thành công!");
+      };
+
+      reader.readAsBinaryString(target.files[0]);
+
+      reader.onloadend = (e) => {
+        this.keys = Object.keys(data[0]);
+        this.dataSheet.next(data)
+      }
+    } else {
+      this.inputFile.nativeElement.value = '';
+    }
   }
 
   // summaryReportObjectId() {

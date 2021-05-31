@@ -57,10 +57,10 @@ export class ViewReportComponent implements OnInit {
   org_id: number = 0;
   rows: number = 0;
 
-  thoigianbaocao:string = "";
-  tenbaocao:string ="";
-  ngaybatdaubaocao:string ="";
-  ngayketthucbaocao:string="";
+  thoigianbaocao: string = "";
+  tenbaocao: string = "";
+  ngaybatdaubaocao: string = "";
+  ngayketthucbaocao: string = "";
 
 
   attributes: Array<ReportAttribute> = [];
@@ -71,7 +71,7 @@ export class ViewReportComponent implements OnInit {
   // { formula: ' ', ind_code: 'CT03', ind_id: 123, ind_name: 'Chỉ tiêu 03', ind_type: 10, ind_unit: '%', obj_id: 123, parent_id: 123 },
   // { formula: ' ', ind_code: 'CT04', ind_id: 123, ind_name: 'Chỉ tiêu 04', ind_type: 10, ind_unit: 'USD', obj_id: 123, parent_id: 123 },
   // { formula: ' ', ind_code: 'CT05', ind_id: 123, ind_name: 'Chỉ tiêu 05', ind_type: 1, ind_unit: 'Đồng', obj_id: 123, parent_id: 123 },]
-  datarows: Array<ReportDatarow> =[]
+  datarows: Array<ReportDatarow> = []
   //  [{ data_id: 123, fc01: ' ', fc02: ' ', fc03: ' ', fc04: ' ', fc05: ' ', fc06: ' ', fc07: ' ', fc08: ' ', fc09: ' ', fc10: ' ', fd01: null, fd02: null, fd03: null, fd04: null, fd05: null, fn01: 10000, fn02: 1234, fn03: 99, fn04: 342, fn05: 1000000, fn06: 0, fn07: 0, fn08: 0, fn09: 0, fn10: 0, fn11: 0, fn12: 0, fn13: 0, fn14: 0, fn15: 0, fn16: 0, fn17: 0, fn18: 0, fn19: 0, fn20: 0, ind_id: 123, obj_id: 123, org_id: 123, time_id: 202002 },
   // { data_id: 123, fc01: ' ', fc02: ' ', fc03: ' ', fc04: ' ', fc05: ' ', fc06: ' ', fc07: ' ', fc08: ' ', fc09: ' ', fc10: ' ', fd01: null, fd02: null, fd03: null, fd04: null, fd05: null, fn01: 10000, fn02: 1234, fn03: 99, fn04: 342, fn05: 1000000, fn06: 0, fn07: 0, fn08: 0, fn09: 0, fn10: 0, fn11: 0, fn12: 0, fn13: 0, fn14: 0, fn15: 0, fn16: 0, fn17: 0, fn18: 0, fn19: 0, fn20: 0, ind_id: 123, obj_id: 123, org_id: 123, time_id: 202002 },
   // { data_id: 123, fc01: ' ', fc02: ' ', fc03: ' ', fc04: ' ', fc05: ' ', fc06: ' ', fc07: ' ', fc08: ' ', fc09: ' ', fc10: ' ', fd01: null, fd02: null, fd03: null, fd04: null, fd05: null, fn01: 10000, fn02: 1234, fn03: 99, fn04: 342, fn05: 1000000, fn06: 0, fn07: 0, fn08: 0, fn09: 0, fn10: 0, fn11: 0, fn12: 0, fn13: 0, fn14: 0, fn15: 0, fn16: 0, fn17: 0, fn18: 0, fn19: 0, fn20: 0, ind_id: 123, obj_id: 123, org_id: 123, time_id: 202002 },
@@ -188,6 +188,7 @@ export class ViewReportComponent implements OnInit {
 
   //Xuất excel
   exportToExcel(filename: string, sheetname: string) {
+    filename = "Dữ liệu - " + this.tenbaocao + " - " + this.thoigianbaocao
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
@@ -199,7 +200,7 @@ export class ViewReportComponent implements OnInit {
         this.indicators = allRecord.data[2] as ReportIndicator[];
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
-        if( this.object[0]){
+        if (this.object[0]) {
           this.formatFrameReport(this.object[0]);
         }
         this.CreateMergeHeaderTable(this.attributes);
@@ -208,22 +209,22 @@ export class ViewReportComponent implements OnInit {
       }
     )
   }
-  formatFrameReport(report: ReportOject){
+  formatFrameReport(report: ReportOject) {
     this.tenbaocao = report.obj_name;
     this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));
     this.ngaybatdaubaocao = moment(report.start_date).format('DD/MM/YYYY');
     this.ngayketthucbaocao = moment(report.end_date).format('DD/MM/YYYY');
   }
 
-  convertTimeIdToTimePeriod(time_id:number):string{
-    let time:string = time_id.toString();
+  convertTimeIdToTimePeriod(time_id: number): string {
+    let time: string = time_id.toString();
     switch (time.length) {
       case 4:
         return "Năm " + time;
-        case 6:
-          return "Tháng " + time.substr(4,2) + " năm " + time.slice(0,4);
-          case 5:
-            return "Quý " + time.substr(4,1) + " năm " + time.slice(0,4);
+      case 6:
+        return "Tháng " + time.substr(4, 2) + " năm " + time.slice(0, 4);
+      case 5:
+        return "Quý " + time.substr(4, 1) + " năm " + time.slice(0, 4);
       default:
         return time;
     }
@@ -268,7 +269,7 @@ export class ViewReportComponent implements OnInit {
       attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1);
       attributes.forEach(attribute => {
         //if (attribute.is_default == 1) {
-          attribute.attr_code = attribute.attr_code + loopCount.toString();
+        attribute.attr_code = attribute.attr_code + loopCount.toString();
         //}
       });
       layerTop.forEach(layer => {
