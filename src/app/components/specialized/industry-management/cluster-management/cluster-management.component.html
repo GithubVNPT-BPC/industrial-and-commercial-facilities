@@ -236,7 +236,7 @@
         <mat-accordion>
             <mat-card-header>
                 <mat-card-title>
-                    <strong class="mt-3">CHỈNH SỬA DỮ LIỆU</strong>
+                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
                     <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
                         class="float-right set-bg-color-primary" (click)="switchView()">
                         <mat-icon>menu</mat-icon> &nbsp;Danh sách
@@ -248,11 +248,6 @@
                 <div class="form-group row">
 
                     <div class="col-md-12">
-                        <!-- <mat-card-header>
-                            <mat-card-title class="text-left">
-                                Thêm mới cụm công nghiệp
-                            </mat-card-title>
-                        </mat-card-header> -->
                         <mat-card-content>
                             <div class="row">
                                 <div class="col-lg-3">
@@ -412,12 +407,13 @@
 
                                     <span class="btn btn-primary btn-file"> Ảnh đính kèm
                                         <input type="file" accept="image/*"
-                                            (change)="handleFileInput($event.target.files)" formControlName="duong_dan">
+                                            (change)="handleFileInput($event)" formControlName="duong_dan" multiple>
                                     </span>
 
                                 </div>
-                                <div class="col-lg-12">
-                                    <img [src]="imageUrl" style="width:250px;height:200px" *ngIf="imageUrl">
+                                <div class="flex-container image-area" *ngFor="let item of imageUrl;index as i">
+                                    <img [attr.src]="item" style="width:250px;height:200px" *ngIf="item" class="border m-1">
+                                    <a id={{i}} class="remove-image" style="display: inline;" (click)="DeleteImage($event)">&#215;</a>
                                 </div>
                             </div>
                         </mat-card-content>

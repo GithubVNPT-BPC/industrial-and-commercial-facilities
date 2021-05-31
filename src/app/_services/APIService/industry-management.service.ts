@@ -38,6 +38,7 @@ export class IndustryManagementService {
 
     // Update
     private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
+    private urlUpdateImageIndustry = '/hinh-anh';
 
     // Delete URLs
     
@@ -47,6 +48,7 @@ export class IndustryManagementService {
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
     private urlDeleteChemistry = '/hoa-chat-xoa';
     private urlDeleteClusterManagement = '/xoa-ccn';
+    private urlDeleteImageClusteManagement = '/xoa-hinh-anh'
     private urlDeleteExplosiveMat = '/vlncn/xoa';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
@@ -209,6 +211,27 @@ export class IndustryManagementService {
         var apiUrl = this.endpoint + this.urlGroupCompany;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostImageGroupCompany(body: any, id_cnn){
+        const formData = new FormData();
+        formData.append('file', body);
+        
+        const header = new HttpHeaders({'Content-Type': 'image/*'})
+        let apiUrl = this.endpoint + this.urlUpdateImageIndustry;
+        let params = new HttpParams().set('id', id_cnn.toString());
+        return this.http.post<any>(apiUrl, formData, {params: params}).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // Xoa hinh anh cum cong nghiep
+    public DeleteImageGroupCompany(body, id_image){
+        let apiUrl = this.endpoint + this.urlDeleteImageClusteManagement;
+        let params = new HttpParams().set('id', id_image.toString());
+        return this.http.post<any>(apiUrl, body, {params: params}).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

@@ -3,18 +3,20 @@ import { MatTableDataSource } from '@angular/material';
 import { ClusterFilterModel, ClusterModel } from 'src/app/_models/APIModel/cluster.model';
 import { Router } from '@angular/router';
 import { BaseComponent } from '../../base.component';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
     selector: 'cluster-management',
     templateUrl: './cluster-management.component.html',
-    styleUrls: ['/../../special_layout.scss'],
+    styleUrls: ['/../../special_layout.scss', './cluster-management.component.scss'],
 })
 
 export class ClusterManagementComponent extends BaseComponent {
 
+    serverUrl = 'http://apicongthongtin.vnptbinhphuoc.vn/';
+    id_cnn: number;
     showColumns: string[] = [];
     showSubColumns: string[] = [];
     subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
@@ -22,14 +24,18 @@ export class ClusterManagementComponent extends BaseComponent {
     totalColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
-    imageUrl: string = "";
-    fileToUpload: File = null;
+    imageUrl: string[] = [];
+    fileToUpload: any = [];
+    imagesSource: string[] = [];
+    imagesDelete: string[] = [];
 
-    hienTrangHaTang: any[] = [{ id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
-    { id: 2, ten_hien_trang_ha_tang: 'Có quy hoạch chi tiết' },
-    { id: 3, ten_hien_trang_ha_tang: 'Có Giấy phép xây dựng' },
-    { id: 4, ten_hien_trang_ha_tang: 'Đang xây dựng' },
-    { id: 5, ten_hien_trang_ha_tang: 'Có Quyết định thành lập' }];
+    hienTrangHaTang: any[] = [
+        { id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
+        { id: 2, ten_hien_trang_ha_tang: 'Có quy hoạch chi tiết' },
+        { id: 3, ten_hien_trang_ha_tang: 'Có Giấy phép xây dựng' },
+        { id: 4, ten_hien_trang_ha_tang: 'Đang xây dựng' },
+        { id: 5, ten_hien_trang_ha_tang: 'Có Quyết định thành lập' }
+    ];
 
     hienTrangXLNT: any[] = [{ id: 1, ten_hien_trang_xlnt: 'Chưa có' },
     { id: 2, ten_hien_trang_xlnt: 'Có' },
@@ -63,10 +69,17 @@ export class ClusterManagementComponent extends BaseComponent {
         this.showSubColumns = [];
         this.getDanhSachQuanLyCumCongNghiep();
         this.initWards();
-
         if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
+        this.initInforImages();        
+    }
+
+    initInforImages(){
+        this.id_cnn = 0;
+        this.imagesDelete = [];
+        this.imageUrl = [];
+        this.fileToUpload = [];
     }
 
     getLinkDefault() {
@@ -81,6 +94,7 @@ export class ClusterManagementComponent extends BaseComponent {
             if (result.data && result.data.length > 0) {
                 this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
                 this.filteredDataSource.data = [...this.dataSource.data];
+                this.imagesSource = result.data[1];
             }
             // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
@@ -128,7 +142,22 @@ export class ClusterManagementComponent extends BaseComponent {
             this.formData.controls['id_htdthtxlnt'].setValue(selectedRecord.id_htdthtxlnt);
             this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
             this.formData.controls['nhu_cau_von'].setValue(selectedRecord.nhu_cau_von);
+            // set value id to update
+            this.id_cnn = selectedRecord.id;
+            this.getImagesfromId();
         }
+    }
+
+    getImagesfromId(){
+        let temList = [];
+        this.imageUrl = [...this.imagesSource];
+        for (const imageObject of this.imageUrl) {
+            if(this.id_cnn === imageObject['id_cum_cong_nghiep']){
+                imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
+                temList.push(imageObject['duong_dan']);
+            }   
+        }
+        this.imageUrl = [...temList];        
     }
     
     getFormParams() {
@@ -158,19 +187,44 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     public prepareData(data) {
-        data['duong_dan'] = this.fileToUpload;
+        data['duong_dan'] = "";
         return data
     }
 
+    uploadImages(id_cnn){
+        if(this.fileToUpload.length){
+            for (const image of this.fileToUpload) {
+                this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
+                    this.successNotify(res);
+                })
+            }
+        }
+    }
+
+    deleteImages(){
+        let tem = [];
+        this.imagesDelete.forEach(element => {
+            tem.push({file_name: element.slice(40)});
+        });
+        this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
+            this.successNotify(res)
+        }, error => this.errorMessage(error));
+    }
+
     public callService(data) {
-        this.indService.PostDataGroupCompany(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.indService.PostDataGroupCompany(data).subscribe(response => {
+            this.uploadImages(response.data.last_inserted_id);
+        }, error => this.errorNotify(error));
     }
 
     public callEditService(data) {
         let body = Object.assign({}, this.formData.value);
         body.id = this.selection.selected[0].id;
-        console.log(body); 
-        this.indService.PostDataGroupCompany(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.indService.PostDataGroupCompany(body).subscribe(response => {
+            this.uploadImages(this.id_cnn);
+        }
+        , error => this.errorNotify(error));
+        this.deleteImages();
     }
 
     prepareRemoveData(data) {
@@ -182,14 +236,31 @@ export class ClusterManagementComponent extends BaseComponent {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    handleFileInput(file: FileList) {
-        this.fileToUpload = file.item(0);
+    handleFileInput(event) {
+        let files = event.target.files;
         //Show image preview
-        var reader = new FileReader();
-        reader.onload = (event: any) => {
-            this.imageUrl = event.target.result;
+        if(files.length){
+            for (let file of files) {
+                let reader = new FileReader();
+                reader.onload = (event: any) => {
+                    this.imageUrl.push(event.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
         }
-        reader.readAsDataURL(this.fileToUpload);
+        this.fileToUpload = files;
     }
 
+    DeleteImage(event){
+        
+        // let lsImages = this.imageUrl.map(item => {
+        //     return item['id'];
+        // });
+        // let idImage = event.target.id;
+        // let indexImage = lsImages.indexOf(idImage);
+        // this.imagesDelete.push(this.imageUrl.filter(item => item['id'] == idImage));
+        let indexImage = event.target.id;
+        this.imagesDelete.push(this.imageUrl[indexImage]);
+        this.imageUrl.splice(indexImage, 1);
+    }
 }
