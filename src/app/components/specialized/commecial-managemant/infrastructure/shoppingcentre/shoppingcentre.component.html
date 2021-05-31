@@ -224,11 +224,16 @@
 
                 <hr>
                 <div class="row">
-                    <div class="col-12 col-lg-12 button-control">
-                        <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('HTTM - Siêu thị','HTTM - Siêu thị')">
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control text-left my-auto">
+                        <button mat-raised-button matTooltip="Xuất Excel" class="export-btn">
                             <mat-icon>file_download</mat-icon>
+                            <div class="export-area">
+                                <span (click)="ExportToExcel()">Xuất dữ liệu theo danh sách</span>
+                                <span (click)="ExportToExcel(true)">Xuất toàn bộ dữ liệu</span>
+                            </div>
                         </button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
                         <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
@@ -428,7 +433,7 @@
         <mat-accordion>
             <mat-card-header>
                 <mat-card-title>
-                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
+                    <strong class="mt-3">CHỈNH SỬA DỮ LIỆU</strong>
                     <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
                         class="float-right set-bg-color-primary" (click)="switchView()">
                         <mat-icon>menu</mat-icon> &nbsp;Danh sách
@@ -670,7 +675,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button type="submit" class="btn btn-success float-right">Lưu</button>
                         <button class="btn btn-danger set-bg-color-danger float-left"
                             (click)="clearTable($event)">Xóa</button>
                     </div>

@@ -1,9 +1,8 @@
+$blue: #1f7ed0;
+$white: white;
+$green: #28a745;
+$red: #f44336;
 .mat-card.material {
-    $blue: #1f7ed0;
-    $white: white;
-    $green: #28a745;
-    $red: #f44336;
-
     .set-color-primary {
         color: $blue !important;
     }
@@ -466,4 +465,42 @@ a:hover {
     outline: none;
     cursor: inherit;
     display: block;
+}
+
+.export-btn {
+    cursor: default;
+
+    &:hover .export-area {
+        display: block;
+    }
+
+    .export-area {
+        display:none;
+        position:absolute;
+        background-color: white;
+        border: 1px solid $blue;
+        border-radius: 5px;
+        color: black;
+        left: 0;
+        bottom: 35px;
+        padding: 10px 15px 10px 15px;
+        z-index: 1000;
+        transition: 0.3s;
+    
+        &:hover {
+            display:block;
+        }
+    
+        span {
+            display: block;
+            cursor: pointer;
+            transition: 0.3s;
+            &:hover {
+                background-color: $blue;
+                color:white;
+                border-radius: 5px;
+                padding: 5px;
+            }
+        }
+    }
 }

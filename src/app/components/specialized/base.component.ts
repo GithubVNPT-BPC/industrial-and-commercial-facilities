@@ -2,6 +2,7 @@ import { AbstractBaseComponent } from 'src/app/components/specialized/abstract-b
 
 export class BaseComponent extends AbstractBaseComponent {
     public DB_TABLE = '';
+    public EXCEL_NAME: string = "Sở công thương";
     public errorMessage: any;
 
     public statusList = [

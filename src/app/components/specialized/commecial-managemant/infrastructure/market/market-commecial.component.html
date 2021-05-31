@@ -314,11 +314,16 @@
                 <hr>
 
                 <div class="row">
-                    <div class="col-lg-12 button-control my-auto">
-                        <button mat-raised-button matTooltip="Xuất Excel"
-                            (click)="ExportTOExcel('HTTM - Chợ','HTTM - Chợ')">
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control text-left my-auto">
+                        <button mat-raised-button matTooltip="Xuất Excel" class="export-btn">
                             <mat-icon>file_download</mat-icon>
+                            <div class="export-area">
+                                <span (click)="ExportToExcel()">Xuất dữ liệu theo danh sách</span>
+                                <span (click)="ExportToExcel(true)">Xuất toàn bộ dữ liệu</span>
+                            </div>
                         </button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
                         <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
@@ -365,18 +370,21 @@
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
                                     <ng-container
-                                        *ngIf="!['dau_tu', 'so_ho_duoi_30', 'so_chuyen_doi_chuc_nang', 'so_chuyen_doi_hinh_thuc_quan_ly',
-                                        'von_nstw', 'von_nsdp', 'von_dn_htx_hkd', 'von_khac', 'tong_von',
-                                        'ban_quan_ly', 'to_quan_ly', 'doanh_nghiep', 'hop_tac_xa', 'ho_kinh_doanh'].includes(field.key);else qtyFieldCond">
+                                        *ngIf="!['nam_xay_dung', 'nam_nang_cap'].includes(field.key);else yearFieldCond">
                                         <ng-container
-                                            *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
+                                            *ngIf="!['dau_tu', 'so_ho_duoi_30', 'so_chuyen_doi_chuc_nang', 'so_chuyen_doi_hinh_thuc_quan_ly',
+                                            'von_nstw', 'von_nsdp', 'von_dn_htx_hkd', 'von_khac', 'tong_von',
+                                            'ban_quan_ly', 'to_quan_ly', 'doanh_nghiep', 'hop_tac_xa', 'ho_kinh_doanh'].includes(field.key);else qtyFieldCond">
                                             <ng-container
-                                                *ngIf="!['ten_cho'].includes(field.key) ;else isTenChoFieldCond">
-                                                <td mat-cell *matCellDef="let element"> {{element[field.key]}}
-                                                </td>
+                                                *ngIf="!['ngay_het_han', 'ngay_cap'].includes(field.key) ;else dateFieldCond">
+                                                <ng-container
+                                                    *ngIf="!['ten_cho'].includes(field.key) ;else isTenChoFieldCond">
+                                                    <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                                </ng-container>
                                             </ng-container>
                                         </ng-container>
                                     </ng-container>
+                                    
                                 </ng-container>
 
                                 <ng-template #activeFieldCond>
@@ -397,6 +405,11 @@
                                 <ng-template #isTenChoFieldCond>
                                     <td mat-cell *matCellDef="let element" style="width: 150px;">
                                         {{element[field.key]}}</td>
+                                </ng-template>
+
+                                <ng-template #yearFieldCond>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{!element[field.key] ? '': element[field.key]}}</td>
                                 </ng-template>
 
                             </ng-container>
@@ -452,7 +465,7 @@
         <mat-accordion>
             <mat-card-header>
                 <mat-card-title>
-                    <strong class="mt-3">TẠO MỚI DỮ LIỆU</strong>
+                    <strong class="mt-3">CHỈNH SỬA DỮ LIỆU</strong>
                     <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
                         class="float-right set-bg-color-primary" (click)="switchView()">
                         <mat-icon>menu</mat-icon> &nbsp;Danh sách
@@ -483,12 +496,11 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
-                                            <mat-optgroup *ngFor="let dt of districtWardSorted | keyvalue"
-                                                [label]="dt.key">
-                                                <mat-option *ngFor='let dw of dt.value' [value]='dw.id_phuong_xa'>
-                                                    {{dw.ten_phuong_xa}}
-                                                </mat-option>
-                                            </mat-optgroup>
+                                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
+                                            [array]="districtWards" (filteredReturn)="filteredDistrictWards = $event"></mat-select-filter>
+                                            <mat-option *ngFor='let dw of filteredDistrictWards' [value]='dw.id_phuong_xa'>
+                                                {{dw.ten_phuong_xa}}
+                                            </mat-option>
                                         </mat-select>
                                     </mat-form-field>
                                 </div>
@@ -541,7 +553,7 @@
 
                                 <div class="col-md-6 col-lg-6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Kế hoạch đầu tư</mat-label>
+                                        <mat-label>Đầu tư</mat-label>
                                         <input matInput type="text" formControlName="ke_hoach_dau_tu">
                                     </mat-form-field>
                                 </div>
@@ -713,7 +725,7 @@
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success float-right">Tạo mới</button>
+                        <button type="submit" class="btn btn-success float-right">Lưu</button>
                         <button class="btn btn-danger set-bg-color-danger float-left"
                             (click)="clearTable($event)">Xóa</button>
                     </div>
