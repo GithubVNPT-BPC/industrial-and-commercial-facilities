@@ -79,6 +79,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     ten_loai_cho: "Loại chợ",
     ke_hoach_dau_tu: "Đầu tư",
     hinh_thuc_quan_ly: "Hình thức quản lý",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
 
     nam_xay_dung: "Xây mới",
     nam_nang_cap: "Nâng cấp",
@@ -131,40 +132,43 @@ export class MarketCommecialManagementComponent extends BaseComponent {
       doanh_nghiep: new FormControl(),
       hop_tac_xa: new FormControl(),
       ho_kinh_doanh: new FormControl(),
+      thoi_gian_chinh_sua_cuoi: new FormControl()
     }
   }
 
   setFormParams() {
     if (this.selection.selected.length) {
-        let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['ten_cho'].setValue(selectedRecord.ten_cho);
-        this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
-        this.formData.controls['id_tinh_chat_kinh_doanh'].setValue(selectedRecord.id_tinh_chat_kinh_doanh);
-        this.formData.controls['id_hang_cho'].setValue(selectedRecord.id_hang_cho);
-        this.formData.controls['id_tinh_chat_cho'].setValue(selectedRecord.id_tinh_chat_cho);
-        this.formData.controls['id_loai_cho'].setValue(selectedRecord.id_loai_cho);
-        this.formData.controls['id_hinh_thuc_quan_ly'].setValue(selectedRecord.id_hinh_thuc_quan_ly);
-        this.formData.controls['ke_hoach_dau_tu'].setValue(selectedRecord.ke_hoach_dau_tu);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_cho'].setValue(selectedRecord.ten_cho);
+      this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+      this.formData.controls['id_tinh_chat_kinh_doanh'].setValue(selectedRecord.id_tinh_chat_kinh_doanh);
+      this.formData.controls['id_hang_cho'].setValue(selectedRecord.id_hang_cho);
+      this.formData.controls['id_tinh_chat_cho'].setValue(selectedRecord.id_tinh_chat_cho);
+      this.formData.controls['id_loai_cho'].setValue(selectedRecord.id_loai_cho);
+      this.formData.controls['id_hinh_thuc_quan_ly'].setValue(selectedRecord.id_hinh_thuc_quan_ly);
+      this.formData.controls['ke_hoach_dau_tu'].setValue(selectedRecord.ke_hoach_dau_tu);
 
-        this.formData.controls['hinh_thuc_quan_ly'].setValue(selectedRecord.hinh_thuc_quan_ly);
-        this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
-        this.formData.controls['nam_nang_cap'].setValue(selectedRecord.nam_nang_cap);
-        this.formData.controls['dau_tu'].setValue(selectedRecord.dau_tu);
-        this.formData.controls['so_ho_duoi_30'].setValue(selectedRecord.so_ho_duoi_30);
-        this.formData.controls['so_chuyen_doi_chuc_nang'].setValue(selectedRecord.so_chuyen_doi_chuc_nang);
-        this.formData.controls['so_chuyen_doi_hinh_thuc_quan_ly'].setValue(selectedRecord.so_chuyen_doi_hinh_thuc_quan_ly);
-        this.formData.controls['von_nstw'].setValue(selectedRecord.von_nstw);
-        this.formData.controls['von_nsdp'].setValue(selectedRecord.von_nsdp);
+      this.formData.controls['hinh_thuc_quan_ly'].setValue(selectedRecord.hinh_thuc_quan_ly);
+      this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
+      this.formData.controls['nam_nang_cap'].setValue(selectedRecord.nam_nang_cap);
+      this.formData.controls['dau_tu'].setValue(selectedRecord.dau_tu);
+      this.formData.controls['so_ho_duoi_30'].setValue(selectedRecord.so_ho_duoi_30);
+      this.formData.controls['so_chuyen_doi_chuc_nang'].setValue(selectedRecord.so_chuyen_doi_chuc_nang);
+      this.formData.controls['so_chuyen_doi_hinh_thuc_quan_ly'].setValue(selectedRecord.so_chuyen_doi_hinh_thuc_quan_ly);
+      this.formData.controls['von_nstw'].setValue(selectedRecord.von_nstw);
+      this.formData.controls['von_nsdp'].setValue(selectedRecord.von_nsdp);
 
-        this.formData.controls['von_dn_htx_hkd'].setValue(selectedRecord.von_dn_htx_hkd);
-        this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
-        this.formData.controls['ban_quan_ly'].setValue(selectedRecord.ban_quan_ly);
+      this.formData.controls['von_dn_htx_hkd'].setValue(selectedRecord.von_dn_htx_hkd);
+      this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
+      this.formData.controls['ban_quan_ly'].setValue(selectedRecord.ban_quan_ly);
 
-        this.formData.controls['to_quan_ly'].setValue(selectedRecord.to_quan_ly);
-        this.formData.controls['doanh_nghiep'].setValue(selectedRecord.doanh_nghiep);
-        this.formData.controls['hop_tac_xa'].setValue(selectedRecord.hop_tac_xa);
-        this.formData.controls['ho_kinh_doanh'].setValue(selectedRecord.ho_kinh_doanh);
+      this.formData.controls['to_quan_ly'].setValue(selectedRecord.to_quan_ly);
+      this.formData.controls['doanh_nghiep'].setValue(selectedRecord.doanh_nghiep);
+      this.formData.controls['hop_tac_xa'].setValue(selectedRecord.hop_tac_xa);
+      this.formData.controls['ho_kinh_doanh'].setValue(selectedRecord.ho_kinh_doanh);
+
+      this.formData.controls['thoi_gian_chinh_sua_cuoi'].setValue(selectedRecord.thoi_gian_chinh_sua_cuoi);
     }
   }
 
@@ -235,7 +239,7 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     this.initDistrictWard(false);
     this.getMarketData();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }

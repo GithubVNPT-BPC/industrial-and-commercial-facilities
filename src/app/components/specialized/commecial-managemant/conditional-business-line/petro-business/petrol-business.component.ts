@@ -70,6 +70,7 @@ export class PetrolBusinessComponent implements OnInit {
         'tinh_trang_hoat_dong',
         'san_luong',
         'id_cua_hang_xang_dau',
+        'thoi_gian_chinh_sua_cuoi'
     ];
     dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
     dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();

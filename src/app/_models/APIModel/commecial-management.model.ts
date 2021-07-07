@@ -41,6 +41,7 @@ export class MarketModel {
     ten_loai_cho: string;
     ten_hinh_thuc_quan_ly: string;
     ten_tinh_chat_kinh_doanh: string;
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class SuperMarketCommonModel {

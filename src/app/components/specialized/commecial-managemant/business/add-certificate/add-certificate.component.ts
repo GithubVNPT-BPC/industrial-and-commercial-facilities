@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { formatDate } from '@angular/common';
 import { NgForm } from '@angular/forms';
-import { FormBuilder, FormGroup} from "@angular/forms";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -190,12 +190,16 @@ export class AddCertificateComponent implements OnInit {
 
     if (this.id.toString() != 'undefined') {
       this.input[0].id_giay_phep = this.id
+      this.input[0].ngay_cap = this.certificate.value.ngay_cap ? this.convertdatetostring(this.certificate.value.ngay_cap) : null
+      this.input[0].ngay_het_han = this.certificate.value.ngay_het_han ? this.convertdatetostring(this.certificate.value.ngay_het_han) : null
+    }
+    else {
+      this.input[0].ngay_cap = this.certificate.value.ngay_cap ? this.getChange(this.certificate.value.ngay_cap) : null
+      this.input[0].ngay_het_han = this.certificate.value.ngay_het_han ? this.getChange(this.certificate.value.ngay_het_han) : null
     }
 
     this.input[0].mst = this.certificate.value.mst
     this.input[0].so_giay_phep = this.certificate.value.so_giay_phep
-    this.input[0].ngay_cap = this.certificate.value.ngay_cap ? this.getChange(this.certificate.value.ngay_cap) : null
-    this.input[0].ngay_het_han = this.certificate.value.ngay_het_han ? this.getChange(this.certificate.value.ngay_het_han) : null
     this.input[0].id_loai_giay_phep = this.certificate.value.id_loai_giay_phep
     this.input[0].noi_cap = this.certificate.value.noi_cap
     this.input[0].co_quan_cap = this.certificate.value.co_quan_cap
@@ -248,6 +252,10 @@ export class AddCertificateComponent implements OnInit {
   date = new FormControl(moment);
   pickedDate = {
     date: new Date()
+  }
+
+  convertdatetostring(inputdate: Date) {
+    return formatDate(inputdate, 'yyyyMMdd', 'en-US')
   }
 
   getCurrentDate() {

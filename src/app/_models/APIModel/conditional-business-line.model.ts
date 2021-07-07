@@ -31,6 +31,8 @@ export class PetrolList {
     so_dien_thoai_tn: string;
     id_san_luong: string;
     id: string;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class SumStore {
@@ -93,6 +95,8 @@ export class LiquorList {
     so_dien_thoai_tn: string;
     id_san_luong: string;
     id: string;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class LPGList {
@@ -120,6 +124,8 @@ export class LPGList {
     so_dien_thoai_tn: string;
     id_san_luong: string;
     id: string;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class PetrolPost {
@@ -243,6 +249,8 @@ export class Businessman {
     dia_chi: string;
     so_dien_thoai: string;
     id_linh_vuc: number;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class ConditionalBusinessLineModel {
@@ -316,6 +324,8 @@ export class CertificateViewModel {
     ten_linh_vuc: string;
     ten_doanh_nghiep: string;
     is_het_han: boolean;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class CertificateType {

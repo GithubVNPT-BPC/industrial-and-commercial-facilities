@@ -62,6 +62,7 @@ export class ManageBusinessmanComponent implements OnInit {
     'ten_thuong_nhan',
     'dia_chi',
     'so_dien_thoai',
+    'thoi_gian_chinh_sua_cuoi',
 
     'id_linh_vuc'
   ];

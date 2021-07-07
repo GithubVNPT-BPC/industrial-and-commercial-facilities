@@ -75,6 +75,7 @@ export class TobaccoBusinessComponent implements OnInit {
         'tri_gia',
         'tinh_trang_hoat_dong',
         'ghi_chu',
+        'thoi_gian_chinh_sua_cuoi',
 
         'ten_quan_huyen',
         'id_thuoc_la',

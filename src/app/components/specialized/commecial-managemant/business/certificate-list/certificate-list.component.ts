@@ -67,6 +67,7 @@ export class CertificateListComponent implements OnInit {
     'ghi_chu',
 
     'id_giay_phep',
+    'thoi_gian_chinh_sua_cuoi'
   ];
 
   @ViewChild('table', { static: false }) table: ElementRef;

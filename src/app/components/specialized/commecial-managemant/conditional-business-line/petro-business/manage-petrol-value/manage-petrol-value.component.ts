@@ -209,6 +209,7 @@ export class ManagePetrolValueComponent implements OnInit {
     'san_luong',
     'tinh_trang_hoat_dong',
     'ghi_chu',
+    'thoi_gian_chinh_sua_cuoi',
 
     'ten_quan_huyen',
     'id_cua_hang_xang_dau',

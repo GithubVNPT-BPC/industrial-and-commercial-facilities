@@ -67,7 +67,8 @@ export class UpdateBusinessmanComponent implements OnInit {
       ten_thuong_nhan: '',
       dia_chi: '',
       so_dien_thoai: '',
-      id_linh_vuc: null
+      id_linh_vuc: null,
+      thoi_gian_chinh_sua_cuoi: null
     }
   }
 
@@ -126,7 +127,8 @@ export class UpdateBusinessmanComponent implements OnInit {
       ten_thuong_nhan: '',
       dia_chi: '',
       so_dien_thoai: '',
-      id_linh_vuc: this.id_linh_vuc
+      id_linh_vuc: this.id_linh_vuc,
+      thoi_gian_chinh_sua_cuoi: null
     })
 
     if (this.id != 'undefined') {
@@ -155,7 +157,8 @@ export class UpdateBusinessmanComponent implements OnInit {
         ten_thuong_nhan: this.businessmanobject.ten_thuong_nhan,
         dia_chi: this.businessmanobject.dia_chi,
         so_dien_thoai: this.businessmanobject.so_dien_thoai,
-        id_linh_vuc: this.id_linh_vuc
+        id_linh_vuc: this.id_linh_vuc,
+        thoi_gian_chinh_sua_cuoi: null
       }
     })
   }

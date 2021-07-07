@@ -168,7 +168,7 @@ export class CompanyDetailModel {
     public noi_cap: string;
     public co_quan_cap: string;
     public ghi_chu: string;
-    public ten_giay_phep: string
+    public ten_giay_phep: string;
 }
 
 export class CompanyPost {

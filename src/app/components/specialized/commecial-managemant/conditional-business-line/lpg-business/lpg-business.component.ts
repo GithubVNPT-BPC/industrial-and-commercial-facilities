@@ -75,6 +75,7 @@ export class LPGBusinessComponent implements OnInit {
         'so_luong',
         'tinh_trang_hoat_dong',
         'ghi_chu',
+        'thoi_gian_chinh_sua_cuoi',
 
         'ten_quan_huyen',
         'id_lpg',
