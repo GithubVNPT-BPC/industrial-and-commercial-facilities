@@ -16,7 +16,7 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
   DB_TABLE = 'QLTM_TMDT_dang_Ky_website'
   displayedColumns: string[] =
     ['select', 'index', 'ten_tc_cn', 'mst', 'dia_chi', 'nguoi_dai_dien',
-      'dien_thoai', 'ten_mien', 'loai_hang_hoa', 'email', 'so_gian_hang', 'ghi_chu'];
+      'dien_thoai', 'ten_mien', 'loai_hang_hoa', 'email', 'so_gian_hang', 'ghi_chu', 'thoi_gian_chinh_sua_cuoi'];
   dataSource: MatTableDataSource<regisWebsiteModel>;
   filteredDataSource: MatTableDataSource<regisWebsiteModel> = new MatTableDataSource<regisWebsiteModel>();
   filterModel = { id_quan_huyen: [] };

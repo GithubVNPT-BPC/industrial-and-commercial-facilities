@@ -47,6 +47,7 @@ export class FoodManagementComponent extends BaseComponent {
     dia_chi_day_du: "Địa chỉ",
     mst: "Mã số thuế",
     ten_san_pham: "Sản phẩm kinh doanh",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
     so_giay_phep: "Số chứng nhận ĐKKD",
     ngay_cap: "Ngày cấp",
     ngay_het_han: "Ngày hết hạn",
@@ -71,7 +72,7 @@ export class FoodManagementComponent extends BaseComponent {
     super.ngOnInit();
     this.getFoodCommerceData();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -118,11 +119,11 @@ export class FoodManagementComponent extends BaseComponent {
 
   setFormParams() {
     if (this.selection.selected.length) {
-        let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['mst'].setValue(selectedRecord.mst);
-        this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
-        this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
+      this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
+      this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
     }
   }
 

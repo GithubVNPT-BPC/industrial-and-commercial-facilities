@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material';
 
 import {
   DeleteModel,
-  CertificateModel,
+  CertificateViewModel,
   FieldList
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
@@ -59,7 +59,7 @@ export class CertificateListComponent implements OnInit {
     'index',
     'mst',
     'so_giay_phep',
-    'id_linh_vuc',
+    'ten_linh_vuc',
     'ngay_cap',
     'ngay_het_han',
     'noi_cap',
@@ -67,6 +67,7 @@ export class CertificateListComponent implements OnInit {
     'ghi_chu',
 
     'id_giay_phep',
+    'thoi_gian_chinh_sua_cuoi'
   ];
 
   @ViewChild('TABLE', { static: false }) table: ElementRef;
@@ -100,7 +101,7 @@ export class CertificateListComponent implements OnInit {
   //   });
   // }
 
-  selection = new SelectionModel<CertificateModel>(true, []);
+  selection = new SelectionModel<CertificateViewModel>(true, []);
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -115,7 +116,7 @@ export class CertificateListComponent implements OnInit {
       this.dataSource.connect().value.forEach(row => this.selection.select(row));
   }
 
-  checkboxLabel(row?: CertificateModel): string {
+  checkboxLabel(row?: CertificateViewModel): string {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
@@ -146,18 +147,9 @@ export class CertificateListComponent implements OnInit {
     }
   }
 
-  public Field: Array<FieldList> = new Array<FieldList>();
-
-  GetLinhVuc() {
-    this._Service.GetField().subscribe((allrecords) => {
-      this.Field = allrecords.data as FieldList[];
-    });
-  }
-
   ngOnInit() {
     this.getBusinessList();
     this.autoOpen();
-    this.GetLinhVuc();
   }
 
   autoOpen() {
@@ -175,7 +167,7 @@ export class CertificateListComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  dataSource: MatTableDataSource<CertificateModel> = new MatTableDataSource<CertificateModel>();
+  dataSource: MatTableDataSource<CertificateViewModel> = new MatTableDataSource<CertificateViewModel>();
 
   getBusinessList() {
     this._Service.GetCertificate('').subscribe(all => {

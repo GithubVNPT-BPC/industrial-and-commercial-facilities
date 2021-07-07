@@ -18,7 +18,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class MultilevelTradeComponent extends BaseComponent {
   DB_TABLE = 'QLTM_BHDC'
-  displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep',  'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc',
+  displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep',  'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc', 'thoi_gian_chinh_sua_cuoi',
     'so_giay_dkbhdc', 'co_quan_ban_hanh_giay_dkbhdc', 'ngay_dang_ky_giay_dkbhdc',
     'so_giay_tchtbhdc', 'co_quan_ban_hanh_giay_tchtbhdc', 'ngay_dang_ky_giay_tchtbhdc']
   filterModel = {

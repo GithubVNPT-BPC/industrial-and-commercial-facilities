@@ -59,7 +59,7 @@ export class ShoppingcentreComponent extends BaseComponent {
 
   public marketTypeList = marketTypeList;
 
-  headerArray = ['select', 'index', 'ten_sieu_thi_TTTM', 'dia_diem', 'nha_nuoc', 'ngoai_nha_nuoc', 'co_von_dau_tu_nuoc_ngoai', 'von_khac', 'tong_hop',
+  headerArray = ['select', 'index', 'ten_sieu_thi_TTTM', 'dia_diem', 'thoi_gian_chinh_sua_cuoi', 'nha_nuoc', 'ngoai_nha_nuoc', 'co_von_dau_tu_nuoc_ngoai', 'von_khac', 'tong_hop',
     'chuyen_doanh', 'nam_xay_dung', 'nam_ngung_hoat_dong', 'dien_tich_dat', 'phan_hang', 'so_lao_dong', 'ten_chu_dau_tu',
     'giay_dang_ky_kinh_doanh', 'dia_chi', 'dien_thoai', 'ho_va_ten', 'dia_chi1', 'dien_thoai1',
   ];
@@ -92,7 +92,7 @@ export class ShoppingcentreComponent extends BaseComponent {
     super.ngOnInit();
     this.getShoppingCenterData();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -158,29 +158,29 @@ export class ShoppingcentreComponent extends BaseComponent {
 
   setFormParams() {
     if (this.selection.selected.length) {
-        let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['id_phan_hang'].setValue(selectedRecord.id_phan_hang);
-        this.formData.controls['ten_sieu_thi_TTTM'].setValue(selectedRecord.ten_sieu_thi_TTTM);
-        this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
-        this.formData.controls['id_dia_ban'].setValue(selectedRecord.id_dia_ban);
-        this.formData.controls['nha_nuoc'].setValue(selectedRecord.nha_nuoc);
-        this.formData.controls['ngoai_nha_nuoc'].setValue(selectedRecord.ngoai_nha_nuoc);
-        this.formData.controls['co_von_dau_tu_nuoc_ngoai'].setValue(selectedRecord.co_von_dau_tu_nuoc_ngoai);
-        this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
-        this.formData.controls['tong_hop'].setValue(selectedRecord.tong_hop);
-        this.formData.controls['chuyen_doanh'].setValue(selectedRecord.chuyen_doanh);
-        this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
-        this.formData.controls['nam_ngung_hoat_dong'].setValue(selectedRecord.nam_ngung_hoat_dong);
-        this.formData.controls['dien_tich_dat'].setValue(selectedRecord.dien_tich_dat);
-        this.formData.controls['so_lao_dong'].setValue(selectedRecord.so_lao_dong);
-        this.formData.controls['ten_chu_dau_tu'].setValue(selectedRecord.ten_chu_dau_tu);
-        this.formData.controls['giay_dang_ky_kinh_doanh'].setValue(selectedRecord.giay_dang_ky_kinh_doanh);
-        this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
-        this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
-        this.formData.controls['ho_va_ten'].setValue(selectedRecord.ho_va_ten);
-        this.formData.controls['dia_chi1'].setValue(selectedRecord.dia_chi1);
-        this.formData.controls['dien_thoai1'].setValue(selectedRecord.dien_thoai1);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['id_phan_hang'].setValue(selectedRecord.id_phan_hang);
+      this.formData.controls['ten_sieu_thi_TTTM'].setValue(selectedRecord.ten_sieu_thi_TTTM);
+      this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
+      this.formData.controls['id_dia_ban'].setValue(selectedRecord.id_dia_ban);
+      this.formData.controls['nha_nuoc'].setValue(selectedRecord.nha_nuoc);
+      this.formData.controls['ngoai_nha_nuoc'].setValue(selectedRecord.ngoai_nha_nuoc);
+      this.formData.controls['co_von_dau_tu_nuoc_ngoai'].setValue(selectedRecord.co_von_dau_tu_nuoc_ngoai);
+      this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
+      this.formData.controls['tong_hop'].setValue(selectedRecord.tong_hop);
+      this.formData.controls['chuyen_doanh'].setValue(selectedRecord.chuyen_doanh);
+      this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
+      this.formData.controls['nam_ngung_hoat_dong'].setValue(selectedRecord.nam_ngung_hoat_dong);
+      this.formData.controls['dien_tich_dat'].setValue(selectedRecord.dien_tich_dat);
+      this.formData.controls['so_lao_dong'].setValue(selectedRecord.so_lao_dong);
+      this.formData.controls['ten_chu_dau_tu'].setValue(selectedRecord.ten_chu_dau_tu);
+      this.formData.controls['giay_dang_ky_kinh_doanh'].setValue(selectedRecord.giay_dang_ky_kinh_doanh);
+      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+      this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+      this.formData.controls['ho_va_ten'].setValue(selectedRecord.ho_va_ten);
+      this.formData.controls['dia_chi1'].setValue(selectedRecord.dia_chi1);
+      this.formData.controls['dien_thoai1'].setValue(selectedRecord.dien_thoai1);
     }
   }
 

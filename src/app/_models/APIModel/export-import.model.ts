@@ -35,6 +35,7 @@ export class new_import_export_model {
 
     // checked to delete
     isChecked?: boolean;
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class Task {

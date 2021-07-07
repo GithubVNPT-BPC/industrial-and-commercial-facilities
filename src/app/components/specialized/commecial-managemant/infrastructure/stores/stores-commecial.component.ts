@@ -19,7 +19,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class StoreManagementComponent extends BaseComponent {
   DB_TABLE = 'QLTM_CUA_HANG_TIEN_LOI';
-  
+
   message: string;
   isChecked: boolean = false;
   isFound: boolean = false;
@@ -37,13 +37,14 @@ export class StoreManagementComponent extends BaseComponent {
   public soCuaHangKhac: number;
   public soCuaHangDauTuTrongNam: number = 0;
   public soCuaHangDauTuNamTruoc: number = 0;
-  
+
   displayedFields = {
     ten_cua_hang: "Tên cửa hàng",
     dia_chi_day_du: "Địa chỉ",
     mst: "Mã số thuế",
     so_dien_thoai: "Điện thoại",
     ten_san_pham: "Sản phẩm kinh doanh",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
     so_chung_nhan: "Số chứng nhận ĐKKD",
     ngay_cap_giay_chung_nhan: "Ngày cấp",
     noi_cap_giay_chung_nhan: "Nơi cấp",
@@ -75,7 +76,7 @@ export class StoreManagementComponent extends BaseComponent {
     this.initDistrictWard();
     this.getConvenienceStoreData();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -135,16 +136,16 @@ export class StoreManagementComponent extends BaseComponent {
 
   setFormParams() {
     if (this.selection.selected.length) {
-        let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['ten_cua_hang'].setValue(selectedRecord.ten_cua_hang);
-        this.formData.controls['mst'].setValue(selectedRecord.mst);
-        this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
-        this.formData.controls['so_dien_thoai'].setValue(selectedRecord.so_dien_thoai);
-        this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
-        this.formData.controls['id_giay_cndkkd'].setValue(selectedRecord.id_giay_cndkkd);
-        this.formData.controls['id_giay_atvstp'].setValue(selectedRecord.id_giay_atvstp);
-        this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_cua_hang'].setValue(selectedRecord.ten_cua_hang);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
+      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+      this.formData.controls['so_dien_thoai'].setValue(selectedRecord.so_dien_thoai);
+      this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
+      this.formData.controls['id_giay_cndkkd'].setValue(selectedRecord.id_giay_cndkkd);
+      this.formData.controls['id_giay_atvstp'].setValue(selectedRecord.id_giay_atvstp);
+      this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
     }
   }
 
@@ -179,20 +180,20 @@ export class StoreManagementComponent extends BaseComponent {
     const filterKeys = Object.keys(filters);
     let filteredData = [...dataSource];
     filterKeys.forEach(key => {
-        let filterCrits = [];
-        if (filters[key].length) {
-          if (key == 'ngay_cap_giay_chung_nhan') {
-            filters[key].forEach(criteria => {
-              if (criteria && criteria !=0) filterCrits = filterCrits.concat(filteredData.filter(x => x[key].toString().includes(criteria)));
-              else filterCrits = filterCrits.concat(filteredData);
-            });
-          } else {
-            filters[key].forEach(criteria => {
-              filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
-            });
-          }
-          filteredData = [...filterCrits];
+      let filterCrits = [];
+      if (filters[key].length) {
+        if (key == 'ngay_cap_giay_chung_nhan') {
+          filters[key].forEach(criteria => {
+            if (criteria && criteria != 0) filterCrits = filterCrits.concat(filteredData.filter(x => x[key].toString().includes(criteria)));
+            else filterCrits = filterCrits.concat(filteredData);
+          });
+        } else {
+          filters[key].forEach(criteria => {
+            filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+          });
         }
+        filteredData = [...filterCrits];
+      }
     })
     return filteredData;
   }

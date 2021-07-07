@@ -33,6 +33,8 @@ export class InformWebsiteModel {
     ma_so_nganh_nghe: string;
     san_pham_ban_website: string;
     ghi_chu: string;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class regisWebsiteModel {
@@ -48,4 +50,6 @@ export class regisWebsiteModel {
     so_gian_hang: string;
     ghi_chu: string;
     id_quan_huyen: number;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }

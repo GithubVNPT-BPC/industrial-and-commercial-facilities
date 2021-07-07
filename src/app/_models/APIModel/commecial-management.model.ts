@@ -69,6 +69,7 @@ export class SuperMarketCommonModel {
     dia_chi1: string;
     dien_thoai1: string;
     business_area_id: number;
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class ConvenienceStoreModel {
@@ -91,6 +92,7 @@ export class ConvenienceStoreModel {
     ten_san_pham: string;
     id_quan_huyen: number;
     is_expired: boolean;
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class FoodCommerceModel {
@@ -112,6 +114,7 @@ export class FoodCommerceModel {
     id_quan_huyen: number;
     is_het_han: boolean;
     ngay_het_han: string;
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class CountrySideModel {
@@ -129,4 +132,5 @@ export class CountrySideModel {
     nam_bc_kh_6_thang_nam_cho_dat_NTM: string;
     nam_bc_ut_6_thang_nam_dat_TC_7: string;
     nam_bc_ut_6_thang_nam_cho_dat_NTM: string;
+    thoi_gian_chinh_sua_cuoi: Date
 }

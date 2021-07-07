@@ -44,6 +44,7 @@ export class CountrysideComponent extends BaseComponent {
     cho_truyen_thong: "Chợ truyền thống",
     ten_phuong_xa: "Tên Phường Xã",
     ten_quan_huyen: "Tên Huyện/Thị xã/Thành phố",
+    thoi_gian_chinh_sua_cuoi: 'Thời gian cập nhật',
     nam_dat_TC_7: "Năm đạt TC số 7",
     nam_dat_NTM: "Năm thực hiện đạt chuẩn NTM",
     th_6_thang_nam_cung_ky_dat_TC_7: "Số xã đạt tiêu chí số 7",
@@ -73,19 +74,19 @@ export class CountrysideComponent extends BaseComponent {
 
   setFormParams() {
     if (this.selection.selected.length) {
-        let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['cho_truyen_thong'].setValue(selectedRecord.cho_truyen_thong);
-        this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
-        this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
-        this.formData.controls['nam_dat_TC_7'].setValue(selectedRecord.nam_dat_TC_7);
-        this.formData.controls['nam_dat_NTM'].setValue(selectedRecord.nam_dat_NTM);
-        this.formData.controls['th_6_thang_nam_cung_ky_dat_TC_7'].setValue(selectedRecord.th_6_thang_nam_cung_ky_dat_TC_7);
-        this.formData.controls['th_6_thang_nam_cung_ky_cho_dat_NTM'].setValue(selectedRecord.th_6_thang_nam_cung_ky_cho_dat_NTM);
-        this.formData.controls['nam_bc_kh_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_dat_TC_7);
-        this.formData.controls['nam_bc_kh_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_cho_dat_NTM);
-        this.formData.controls['nam_bc_ut_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_dat_TC_7);
-        this.formData.controls['nam_bc_ut_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_cho_dat_NTM);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['cho_truyen_thong'].setValue(selectedRecord.cho_truyen_thong);
+      this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+      this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
+      this.formData.controls['nam_dat_TC_7'].setValue(selectedRecord.nam_dat_TC_7);
+      this.formData.controls['nam_dat_NTM'].setValue(selectedRecord.nam_dat_NTM);
+      this.formData.controls['th_6_thang_nam_cung_ky_dat_TC_7'].setValue(selectedRecord.th_6_thang_nam_cung_ky_dat_TC_7);
+      this.formData.controls['th_6_thang_nam_cung_ky_cho_dat_NTM'].setValue(selectedRecord.th_6_thang_nam_cung_ky_cho_dat_NTM);
+      this.formData.controls['nam_bc_kh_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_dat_TC_7);
+      this.formData.controls['nam_bc_kh_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_cho_dat_NTM);
+      this.formData.controls['nam_bc_ut_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_dat_TC_7);
+      this.formData.controls['nam_bc_ut_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_cho_dat_NTM);
     }
   }
 
@@ -106,7 +107,7 @@ export class CountrysideComponent extends BaseComponent {
     this.initDistrictWard();
     this.getCountrySideData();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }

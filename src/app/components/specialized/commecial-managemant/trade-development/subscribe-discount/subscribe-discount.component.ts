@@ -34,6 +34,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     so_van_ban: "Số văn bản",
     co_quan_ban_hanh: "Cơ quan ban hành",
     ngay_thang_nam_van_ban: "Ngày/tháng/năm",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật"
   }
 
   filterModel = {

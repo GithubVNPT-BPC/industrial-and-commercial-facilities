@@ -29,6 +29,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     displayedColumns = [
         // 'delete_checkbox',
         'index', 'ten_san_pham',
+        'thoi_gian_chinh_sua_cuoi',
         'luong_thang', 'gia_tri_thang',
         'uoc_th_so_cungky_tht',
         'uoc_th_so_thg_truoc_tht',
@@ -42,11 +43,12 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         // 'delete_checkbox',
         'index',
         'ten_san_pham',
+        'thoi_gian_chinh_sua_cuoi',
         'thuc_hien_bao_cao_thang',
         'cong_don_den_ky_bao_cao',
 
         'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep'
+        'chi_tiet_doanh_nghiep',
     ]
     displaRow2Header = [
         'luong_thang',
@@ -146,7 +148,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         //     return String(data.is_het_han).includes(filter);
         // };
         // this.handleGTXK();
-        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -180,7 +182,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         });
     }
 
-    setDatabusiness(lsBusiness){
+    setDatabusiness(lsBusiness) {
         this.dataBusiness = lsBusiness;
     }
 
@@ -276,14 +278,14 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
             data: this.handleDataBusiness(id_san_pham),
-            id: 2, 
+            id: 2,
         };
         dialogConfig.minHeight = window.innerHeight - 100;
         dialogConfig.minWidth = "90%";
         this.matDialog.open(ModalComponent, dialogConfig);
     }
 
-    handleDataBusiness(id_san_pham){
+    handleDataBusiness(id_san_pham) {
         let data = this.dataBusiness.filter(
             (item) => item.id_san_pham === id_san_pham
         );

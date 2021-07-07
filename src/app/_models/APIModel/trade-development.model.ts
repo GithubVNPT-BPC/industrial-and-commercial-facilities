@@ -15,6 +15,8 @@ export class TFEModel {
     co_quan_ban_hanh : string;
     ngay_thang_nam_van_ban : string;
     san_pham : string;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class SDModel {
@@ -32,6 +34,8 @@ export class SDModel {
     ngay_thang_nam_van_ban: string;
     id_temp?: number;
     id?: number;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class dia_diem_km{

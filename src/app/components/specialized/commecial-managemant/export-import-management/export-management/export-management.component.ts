@@ -34,6 +34,7 @@ export class ExportManagementComponent implements OnInit {
         // "delete_checkbox",
         "index",
         "ten_san_pham",
+        "thoi_gian_chinh_sua_cuoi",
         "luong_thang",
         "gia_tri_thang",
         "uoc_th_so_cungky_tht",
@@ -50,6 +51,7 @@ export class ExportManagementComponent implements OnInit {
         // "delete_checkbox",
         "index",
         "ten_san_pham",
+        "thoi_gian_chinh_sua_cuoi",
         "thuc_hien_bao_cao_thang",
         "cong_don_den_ky_bao_cao",
 
@@ -154,7 +156,7 @@ export class ExportManagementComponent implements OnInit {
         // this.filteredDataSource.filterPredicate = function (data: ex_im_model, filter): boolean {
         //     return String(data.is_het_han).includes(filter);
         // };
-        if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -244,7 +246,7 @@ export class ExportManagementComponent implements OnInit {
 
     handleDataDialog(id_mat_hang) {
         // console.log(this.dataDialog);
-        
+
         let data = this.dataDialog.filter(
             (item) => item.id_san_pham === id_mat_hang
         );
@@ -255,14 +257,14 @@ export class ExportManagementComponent implements OnInit {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
             data: this.handleDataBusiness(id_san_pham),
-            id: 2, 
+            id: 2,
         };
         dialogConfig.minHeight = window.innerHeight - 100;
         dialogConfig.minWidth = "90%";
         this.matDialog.open(ModalComponent, dialogConfig);
     }
 
-    handleDataBusiness(id_san_pham){
+    handleDataBusiness(id_san_pham) {
         let data = this.dataBusiness.filter(
             (item) => item.id_san_pham === id_san_pham
         );
@@ -309,7 +311,7 @@ export class ExportManagementComponent implements OnInit {
         this.dataDialog = [...detail_export];
     }
 
-    setDatabusiness(lsBusiness){
+    setDatabusiness(lsBusiness) {
         this.dataBusiness = lsBusiness;
     }
 

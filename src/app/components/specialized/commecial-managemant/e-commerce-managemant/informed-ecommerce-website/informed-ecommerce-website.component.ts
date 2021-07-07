@@ -31,7 +31,8 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
     "nganh_nghe",
     // "ma_nganh_nghe",
     "san_pham_tren_website",
-    "ghi_chu"
+    "ghi_chu",
+    "thoi_gian_chinh_sua_cuoi"
   ];
 
   dataSource: MatTableDataSource<InformWebsiteModel>;

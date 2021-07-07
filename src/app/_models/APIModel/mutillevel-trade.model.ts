@@ -1,4 +1,4 @@
-export class MultiLevelTradeModel{
+export class MultiLevelTradeModel {
     id: number;
     mst: string;
     ten_doanh_nghiep: string;
@@ -13,4 +13,6 @@ export class MultiLevelTradeModel{
     thoi_gian_ket_thuc: Date;
     dia_diem_to_chuc: string;
     id_phuong_xa: number;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }

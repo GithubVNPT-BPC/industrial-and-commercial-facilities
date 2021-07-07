@@ -285,6 +285,12 @@
                             <td mat-cell *matCellDef="let element"> {{element.dia_diem}} </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
+                            <th mat-header-cell *matHeaderCellDef> Thời gian cập nhật </th>
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date: 'dd/MM/yyyy, h:mm a'}}
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Nhà nước </th>
                             <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc |
@@ -382,7 +388,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="merge1">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="5">
                         </ng-container>
 
                         <ng-container matColumnDef="merge2">

@@ -149,7 +149,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_dia_ban" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_dia_ban"
+                                multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -160,8 +161,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Khu vực kinh tế</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.business_area_id"
-                                multiple>
+                            <mat-select (selectionChange)="applyFilter($event)"
+                                [(ngModel)]="filterModel.business_area_id" multiple>
                                 <mat-option *ngFor='let type of businessAreaList' [value]='type.id'>
                                     {{type.name}}
                                 </mat-option>
@@ -197,8 +198,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm ngừng hoạt động</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
-                                multiple>
+                            <mat-select (selectionChange)="applyFilter($event)"
+                                [(ngModel)]="filterModel.nam_ngung_hoat_dong" multiple>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
@@ -219,18 +220,20 @@
                         </button>
                     </div>
                     <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
-    
+
                         <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-    
+
                         <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
                     </div>
                 </div>
                 <hr>
@@ -270,6 +273,11 @@
                         <ng-container matColumnDef="dia_diem">
                             <th mat-header-cell *matHeaderCellDef>Địa điểm</th>
                             <td mat-cell *matCellDef="let element"> {{element.dia_diem}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
+                            <th mat-header-cell *matHeaderCellDef>Thời gian cập nhật</th>
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi}} </td>
                         </ng-container>
 
                         <!-- <ng-container matColumnDef="dia_ban">
@@ -374,7 +382,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="merge1">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="5">
                         </ng-container>
 
                         <ng-container matColumnDef="merge2">
