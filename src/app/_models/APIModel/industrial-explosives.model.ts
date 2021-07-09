@@ -28,6 +28,8 @@ export class IndustrialExplosivesModel {
     thuoc_no_6thang: number;
     time_id: number;
     is_expired: boolean;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class IndustrialExplosivesFilterModel {

@@ -274,9 +274,16 @@
                             <td mat-cell *matCellDef="let element"> {{element.mang_tai }}
                             </td>
                         </ng-container>
+
                         <ng-container matColumnDef="trang_thai_hoat_dong">
                             <th mat-header-cell *matHeaderCellDef> Trạng thái hoạt động </th>
                             <td mat-cell *matCellDef="let element"> {{element.ten_trang_thai_hoat_dong}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
+                            <th mat-header-cell *matHeaderCellDef> Thời gian cập nhật </th>
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date: 'dd/MM/yyyy, h:mm a'}}
                             </td>
                         </ng-container>
 

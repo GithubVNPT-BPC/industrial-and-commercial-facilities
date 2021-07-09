@@ -21,7 +21,7 @@ export class ManufacturingElectronicComponent extends BaseComponent {
   public readonly displayedColumns: string[] =
     ['select','index', 'ten_doanh_nghiep', 'dia_diem',
       'so_dien_thoai', 'so_giay_phep', 'ngay_cap',
-      'ngay_het_han'];
+      'ngay_het_han', 'thoi_gian_chinh_sua_cuoi'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();
   public filteredDataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();

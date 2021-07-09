@@ -12,9 +12,9 @@ import { BaseComponent } from '../../base.component';
   styleUrls: ['/../../special_layout.scss'],
 })
 export class ElectricDevelopmentManagementComponent extends BaseComponent {
-  DB_TABLE  = 'QLNL_35KTROXUONG';
+  DB_TABLE = 'QLNL_35KTROXUONG';
   //Constant variable
-  public readonly displayedColumns: string[] = ['select', 'index', 'ten_huyen_thi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
+  public readonly displayedColumns: string[] = ['select', 'index', 'ten_huyen_thi', 'thoi_gian_chinh_sua_cuoi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
   public readonly dsplayMergeColumns: string[] = ['indexM', 'ten_huyen_thiM', 'trung_apM', 'ha_apM', 'bien_apM'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
@@ -44,7 +44,7 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     super.ngOnInit();
     this.getDataQuyHoachDienDuoi35KV();
 
-    if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 4 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -119,18 +119,18 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   }
   setFormParams() {
     if (this.selection.selected.length) {
-     let selectedRecord = this.selection.selected[0];
-     this.formData.controls['id'].setValue(selectedRecord.id);
-     this.formData.controls['dia_ban'].setValue(selectedRecord.dia_ban);
-     this.formData.controls['trung_ap_3_pha'].setValue(selectedRecord.trung_ap_3_pha);
-     this.formData.controls['trung_ap_1_pha'].setValue(selectedRecord.trung_ap_1_pha);
-     this.formData.controls['ha_ap_3_pha'].setValue(selectedRecord.ha_ap_3_pha);
-     this.formData.controls['ha_ap_1_pha'].setValue(selectedRecord.ha_ap_1_pha);
-     this.formData.controls['so_tram'].setValue(selectedRecord.so_tram);
-     this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
-     this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
-}
-}
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['dia_ban'].setValue(selectedRecord.dia_ban);
+      this.formData.controls['trung_ap_3_pha'].setValue(selectedRecord.trung_ap_3_pha);
+      this.formData.controls['trung_ap_1_pha'].setValue(selectedRecord.trung_ap_1_pha);
+      this.formData.controls['ha_ap_3_pha'].setValue(selectedRecord.ha_ap_3_pha);
+      this.formData.controls['ha_ap_1_pha'].setValue(selectedRecord.ha_ap_1_pha);
+      this.formData.controls['so_tram'].setValue(selectedRecord.so_tram);
+      this.formData.controls['cong_suat'].setValue(selectedRecord.cong_suat);
+      this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
+    }
+  }
   public prepareData(data) {
     data['trung_ap_3_pha'] = Number(data['trung_ap_3_pha']);
     data['trung_ap_1_pha'] = Number(data['trung_ap_1_pha']);

@@ -18,7 +18,8 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 export class LPGManagementComponent extends BaseComponent {
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index']
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 
+    'email', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
 
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     filteredDataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
@@ -50,6 +51,7 @@ export class LPGManagementComponent extends BaseComponent {
         ngay_cap: "Ngày cấp",
         ngay_het_han: "Ngày hết hạn",
         tinh_trang_hoat_dong: "Trạng thái hoạt động",
+        thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật"
     }
 
     constructor(

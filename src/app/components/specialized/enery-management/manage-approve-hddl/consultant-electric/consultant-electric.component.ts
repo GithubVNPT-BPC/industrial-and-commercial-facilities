@@ -27,6 +27,7 @@ export class ConsultantElectricComponent extends BaseComponent {
     "so_giay_phep",
     "ngay_cap",
     "ngay_het_han",
+    "thoi_gian_chinh_sua_cuoi"
   ];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ManageAproveElectronic> = new MatTableDataSource<ManageAproveElectronic>();

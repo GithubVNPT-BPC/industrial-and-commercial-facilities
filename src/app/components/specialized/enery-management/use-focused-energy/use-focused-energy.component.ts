@@ -22,7 +22,7 @@ export class UseFocusedEnergyComponent extends BaseComponent {
   DB_TABLE = 'QLNL_TKNL'
   @ViewChild('district', { static: false }) district: ElementRef
 
-  public readonly displayedColumns: string[] = ['select','index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_quy_doi', 'suat_tieu_hao'];
+  public readonly displayedColumns: string[] = ['select','index', 'ten_doanh_nghiep', 'dia_chi', 'nganh_nghe', 'nang_luong_quy_doi', 'suat_tieu_hao', 'thoi_gian_chinh_sua_cuoi'];
   public readonly displayMergeColumns: string[] = ['indexM', 'ten_doanh_nghiepM', 'nganh_ngheM', 'nang_luong_trong_diemM'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<UserForcusEnergy> = new MatTableDataSource<UserForcusEnergy>();

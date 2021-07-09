@@ -27,7 +27,7 @@ export class HydroelectricComponent extends BaseComponent {
   //Constant variable
   public readonly displayedColumns: string[] = ['select', 'index', 'Tdn', 'Dd', 'Cx', 'Lnxbq', 'Dthc', 'Sl6tck',
     'Slnck', 'Dt', 'Paupttcctvhd', 'Pdpauptt', 'Paupvthkcdhctd', 'Qtvhhctd', 'Qtdhctd', 'Kdd', 'Ldhtcbvhd',
-    'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd', 'tinh_trang_hoat_dong_id'
+    'Btct', 'Lcsdlhctd', 'Pabvdhctd', 'Bcdgatdhctd', 'Bchtatdhctd', 'Tkdkatdhctd', 'tinh_trang_hoat_dong_id', 'thoi_gian_chinh_sua_cuoi'
   ];
 
   //TS & HTML Variable

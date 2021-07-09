@@ -54,6 +54,8 @@ export class SolarEneryManagementModel {
     ten_trang_thai_hoat_dong: string;
     id_trang_thai_hoat_dong: number;
     id_quan_huyen: number;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class ElectricityDevelopmentModel {
@@ -84,6 +86,8 @@ export class ElectricityDevelopment35KVModel {
     time_id: number;
     id_trang_thai_hoat_dong: number;
     ten_trang_thai_hoat_dong: string;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class RuralElectricModel {
@@ -141,31 +145,37 @@ export class UserForcusEnergy {
     nang_luong_quy_doi: number;
     suat_tieu_hao_1_dv_sp: number;
     id_quan_huyen?: number;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
-export class BlockElectricModel{
+export class BlockElectricModel {
     ten_du_an: string;
     ten_doanh_nghiep: string;
-    cong_suat_thiet_ke:number;
-    san_luong_6_thang:number;
-    san_luong_nam:number;
-    doanh_thu:number;
-    time_id:number;
-    id_quan_huyen:number;
+    cong_suat_thiet_ke: number;
+    san_luong_6_thang: number;
+    san_luong_nam: number;
+    doanh_thu: number;
+    time_id: number;
+    id_quan_huyen: number;
     id_trang_thai_hoat_dong: number;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 
 }
 
 export class ManageAproveElectronic {
     ten_doanh_nghiep: string;
-    dia_chi:string;
-    so_dien_thoai?:string;
-    so_giay_phep:string;
+    dia_chi: string;
+    so_dien_thoai?: string;
+    so_giay_phep: string;
     ngay_cap: string;
     ngay_het_han: string;
     id_group?: number;
     dien_thoai?: string;
     is_expired: boolean;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 }
 
 export class ElectricalPlan {
@@ -205,7 +215,9 @@ export class HydroEnergyModel {
     bao_cao_hien_trang_an_toan_dap_ho: string;
     to_khai_dang_ky_an_toan_dap_ho: string;
     luong_nuoc_xa_binh_quan: string;
-    id_trang_thai_hoat_dong:number;
+    id_trang_thai_hoat_dong: number;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 
 }
 
@@ -221,6 +233,8 @@ export class KeyEnergyModel {
     LPG: number;
     go: number;
     nang_luong_quy_doi: number;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class ElectricalPlan110KV {
@@ -238,19 +252,23 @@ export class ElectricalPlan110KV {
     id_trang_thai_hoat_dong: number;
     ten_trang_thai_hoat_dong: string;
     id_giai_doan?: number;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
 export class New_RuralElectricModel {
     dia_ban: string;
     tong_so_ho: number;
     tong_so_ho_co_dien: number;
-    
+
     nong_thon_tong_so_ho: number;
     nong_thon_tong_so_ho_co_dien: number;
     ccd2: number;
-    
+
     tieu_chi_41: boolean;
     tieu_chi_42: boolean;
     tieu_chi_43: boolean;
+
+    thoi_gian_chinh_sua_cuoi: Date;
 
 }

@@ -18,7 +18,8 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 'so_lao_dong', 'congSuatList', 'sanLuongList', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 
+    'so_lao_dong', 'congSuatList', 'sanLuongList', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
 
     displayedFields = {
         mst: "Mã số thuế",
@@ -37,6 +38,8 @@ export class ChemicalManagementComponent extends BaseComponent {
         so_lao_dong_sct: "Sổ lao động SCT",
         email_sct: "Email SCT",
         tinh_trang_hoat_dong: "Trạng thái hoạt động",
+
+        thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật"
     }
 
     filterModel = {

@@ -143,7 +143,8 @@
                         </mat-form-field>
                     </div>
                     <div class="col-2 col-lg-2 checkbox my-auto">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">Doanh nghiệp hết
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="filterModel.is_expired">Doanh
+                            nghiệp hết
                             hạn
                         </mat-checkbox>
                     </div>
@@ -262,6 +263,13 @@
                             <td mat-cell *matCellDef="let element">{{element.ten_tinh_trang_hoat_dong}}</td>
                         </ng-container>
 
+                        <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Thời gian cập nhật </th>
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
+                                'dd/MM/yyyy, h:mm a'}}
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="thuoc_no_6thang">
                             <th mat-header-cell *matHeaderCellDef class="no-space-top"> Thuốc nổ (kg) </th>
                             <td mat-cell *matCellDef="let element"> {{element.thuoc_no_6thang | formatNumber}}
@@ -307,11 +315,13 @@
                         </ng-container>
 
                         <ng-container matColumnDef="tinh_hinh_6thang">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="no-space-top"> Báo cáo 6 tháng </th>
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="no-space-top"> Báo cáo 6
+                                tháng </th>
                         </ng-container>
 
                         <ng-container matColumnDef="tinh_hinh_ca_nam">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="no-space-top"> Báo cáo cả năm </th>
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="no-space-top"> Báo cáo cả
+                                năm </th>
                         </ng-container>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true"></tr>
@@ -368,7 +378,8 @@
                                         class="mt-2">
                                         <mat-icon>search</mat-icon>Tìm kiếm
                                     </button>
-                                    <button *ngIf="isAddLicense" mat-raised-button color="primary" (click)="addLicenseInfo($event)" class="mt-2 green">
+                                    <button *ngIf="isAddLicense" mat-raised-button color="primary"
+                                        (click)="addLicenseInfo($event)" class="mt-2 green">
                                         <mat-icon>add</mat-icon>Thêm giấy phép cho doanh nghiệp
                                     </button>
                                 </div>
@@ -411,7 +422,8 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tình trạng hoạt động</mat-label>
                                         <mat-select formControlName="id_tinh_trang_hoat_dong">
-                                            <mat-option *ngFor='let tinhTrang of tinhTrangHoatDong' [value]='tinhTrang.id'>
+                                            <mat-option *ngFor='let tinhTrang of tinhTrangHoatDong'
+                                                [value]='tinhTrang.id'>
                                                 {{tinhTrang.tinh_trang}}
                                             </mat-option>
                                         </mat-select>
@@ -520,11 +532,12 @@
 
                     <div class="col-md-12">
                         <p>
-                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span> của doanh nghiệp đã có <span class="text-primary">Giấy phép</span></span>
+                            <strong>(*): </strong><span>Cần phải nhập đúng <span class="text-primary">Mã số thuế</span>
+                                của doanh nghiệp đã có <span class="text-primary">Giấy phép</span></span>
                         </p>
                     </div>
 
-                    <div class="col-md-12" *ngIf="isFound" >
+                    <div class="col-md-12" *ngIf="isFound">
                         <button type="submit" class="btn btn-success float-right" [hidden]=authorize>Lưu thông
                             tin</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)"

@@ -32,6 +32,7 @@ export class CertificateRegulationComponent extends BaseComponent {
     noi_cap: 'Nơi cấp',
     ban_cong_bo_hop_quy: "Bản công bố hợp quy",
     ngay_tiep_nhan: "Ngày tiếp nhận",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật"
   }
 
   //Only TS Variable

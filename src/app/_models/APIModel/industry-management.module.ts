@@ -1,4 +1,4 @@
-export class ChemicalLPGFoodManagementModel{
+export class ChemicalLPGFoodManagementModel {
     id: number;
     mst: string;
     time_id: string;
@@ -23,7 +23,7 @@ export class ChemicalLPGFoodManagementModel{
     don_vi: string;
 }
 
-export class FoodIndustryModel{
+export class FoodIndustryModel {
     id: number;
     mst: string;
     time_id: string;
@@ -47,9 +47,11 @@ export class FoodIndustryModel{
     ten_thuc_pham: string;
     don_vi: string;
     is_expired: boolean;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
-export class LPGManagementModel{
+export class LPGManagementModel {
     id: number;
     mst: string;
     time_id: string;
@@ -70,9 +72,11 @@ export class LPGManagementModel{
     ngay_cap: string;
     ngay_het_han: string;
     is_expired: boolean;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
 
-export class ChemicalManagementModel{
+export class ChemicalManagementModel {
     id_qlcn_hc: number;
     mst: string;
     time_id: string;
@@ -94,4 +98,6 @@ export class ChemicalManagementModel{
     is_expired: boolean;
     id_loai_hinh: number;
     ten_loai_hinh: string;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }

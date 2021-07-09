@@ -20,10 +20,10 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 export class IndustrialExplosivesComponent extends BaseComponent {
     DB_TABLE = 'QLCN_VLNCN';
     displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
-        'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
+        'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thoi_gian_chinh_sua_cuoi', 'tinh_hinh_6thang', 'tinh_hinh_ca_nam'];
 
     totalColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'so_dien_thoai', 'dia_chi', 'so_lao_dong', 'cong_suat', 'san_luong',
-        'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no',
+        'so_gp_gcn', 'ngay_cap', 'ngay_het_han', 'dang_hoat_dong', 'thoi_gian_chinh_sua_cuoi', 'thuoc_no_6thang', 'kip_no_6thang', 'moi_no_6thang', 'day_no_6thang', 'thuoc_no', 'kip_no',
         'moi_no', 'day_no'];
 
     dataSource: MatTableDataSource<IndustrialExplosivesModel> = new MatTableDataSource<IndustrialExplosivesModel>();
@@ -140,7 +140,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.industryManagementService.PostExplosiveMat([data], data.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    callEditService(data){
+    callEditService(data) {
         let body = Object.assign({}, this.formData.value);
         // console.log(this.formData.value);
         this.industryManagementService.PostExplosiveMat([body], body.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));

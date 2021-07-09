@@ -18,7 +18,8 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     DB_TABLE = 'QLCN_CNTP';
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 
+    'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
 
     filterModel = {
         id_quan_huyen: [],
@@ -41,6 +42,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         ngay_cap: "Ngày cấp",
         ngay_het_han: "Ngày hết hạn",
         tinh_trang_hoat_dong: "Trạng thái hoạt động",
+        thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật"
     }
 
     foodTypeList = [

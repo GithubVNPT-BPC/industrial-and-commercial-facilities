@@ -17,7 +17,8 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     dataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
     filteredDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
 
-    displayedColumns: string[] = ['select', 'index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan', 'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong'];
+    displayedColumns: string[] = ['select', 'index', 'ten_tram', 'duong_day_so_mach', 'tba', 'tiet_dien_day_dan',
+     'dien_ap', 'chieu_dai', 'p_max', 'p_min', 'p_tb', 'trang_thai_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
     constructor(
         private injector: Injector,
         private energyService: EnergyService,

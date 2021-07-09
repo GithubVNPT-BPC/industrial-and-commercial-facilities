@@ -16,4 +16,6 @@ export class ConformityAnnouncementModel {
     so_dien_thoai: string;
     datas: string;
     file_name: string;
+
+    thoi_gian_chinh_sua_cuoi: Date
 }
