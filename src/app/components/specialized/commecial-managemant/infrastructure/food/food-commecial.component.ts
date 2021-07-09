@@ -91,7 +91,7 @@ export class FoodManagementComponent extends BaseComponent {
           allrecords.data.forEach(element => {
             element.ngay_cap = this.formatDate(element.ngay_cap);
             element.ngay_het_han = this.formatDate(element.ngay_het_han);
-            element.is_het_han = element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate());
+            element.is_het_han = element.ngay_het_han ? element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate()): false;
           });
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
           this.filteredDataSource.data = [...this.dataSource.data].filter(x => !x.is_het_han)
