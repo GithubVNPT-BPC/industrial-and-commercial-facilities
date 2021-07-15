@@ -23,6 +23,9 @@ export class FooterComponent implements OnInit {
       if (this._loginService.userValue.user_role_id == 0) {
         this.CountAccess(res.ip)
       }
+      else {
+        this.CountAccess('')
+      }
     });
   }
 
