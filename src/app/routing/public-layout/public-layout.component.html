@@ -1,19 +1,19 @@
 <div>
     <app-topbar [sidebar]="sidebar" [typeOfUser]=1 [module]=MODULE01></app-topbar>
 
-<mat-sidenav-container class="sidenav-container">
-    
-    <mat-sidenav #sidebar mode="side" typeOfSideBar="1" opened>
-        <app-sidebar [typeOfSideBar]=1></app-sidebar>
-    </mat-sidenav>
-    <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'" style="margin-left: 200px;">
-        <div class="main_content" style="margin: 10px; height: 90vh;">
-            <router-outlet></router-outlet>
-            <app-footer></app-footer>
-        </div>
-    </mat-sidenav-content>
-</mat-sidenav-container>
-<!-- <div (click)="scrollToTop()" class="scroll-to-top" *ngIf="pageYoffset > 0" >
+    <mat-sidenav-container class="sidenav-container">
+        <mat-sidenav #sidebar mode="side" typeOfSideBar="1" opened>
+            <app-sidebar [typeOfSideBar]=1></app-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'" style="margin-left: 200px;">
+            <div class="main_content" style="margin: 10px; height: 80vh;">
+                <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+
+    <app-footer></app-footer>
+    <!-- <div (click)="scrollToTop()" class="scroll-to-top" *ngIf="pageYoffset > 0" >
     scrollToTop 
  </div> -->
 </div>
