@@ -6,11 +6,11 @@
             <app-sidebar [typeOfSideBar]=3></app-sidebar>
         </mat-sidenav>
         <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'" style="margin-left: 200px;">
-            <div class="main_content" style="margin: 20px; height: 77vh;">
+            <div class="main_content" style="margin: 20px; height: 85vh;">
                 <router-outlet></router-outlet>
             </div>
         </mat-sidenav-content>
     </mat-sidenav-container>
 
-    <app-footer></app-footer>
+    <!-- <app-footer></app-footer> -->
 </div>

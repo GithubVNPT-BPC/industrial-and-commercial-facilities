@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { SidebarService } from '../../_services/sidebar.service'
+import { SidebarService } from '../../_services/sidebar.service';
+import { LoginService } from 'src/app/_services/APIService/login.service';
 
 @Component({
   selector: 'app-footer',
@@ -10,6 +11,7 @@ export class FooterComponent implements OnInit {
 
   constructor(
     public _sidebarService: SidebarService,
+    public _loginService: LoginService
   ) { }
 
   ngOnInit() {
@@ -18,7 +20,9 @@ export class FooterComponent implements OnInit {
 
   getIP() {
     this._sidebarService.getIPAddress().subscribe((res: any) => {
-      this.CountAccess(res.ip)
+      if (this._loginService.userValue.user_role_id == 0) {
+        this.CountAccess(res.ip)
+      }
     });
   }
 
