@@ -13,7 +13,8 @@ export class SidebarService {
   public data: any;
   token: any;
   username: any;
-  public apisidebar = environment.apiEndpoint + "api/dang-nhap/tai-giao-dien/"
+  public apisidebar = environment.apiEndpoint + "api/dang-nhap/tai-giao-dien/";
+  public apicountaccess = environment.apiEndpoint + "api/truy-cap"
 
 
   // With this subject you can save the sidenav state and consumed later into other pages.
@@ -23,6 +24,10 @@ export class SidebarService {
     public _loginService: LoginService) {
     // this.data = JSON.parse(localStorage.getItem('NormalUser'));
     // this.token = this.data.token;
+  }
+
+  public getIPAddress() {
+    return this.http.get("http://api.ipify.org/?format=json");
   }
 
   public GetMenu() {
@@ -35,6 +40,13 @@ export class SidebarService {
     }
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+
+  public CountAccess(ipaddress: string) {
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<any>(this.apicountaccess, `\"${ipaddress}\"`, { headers: headers }).pipe(tap(data => data),
       catchError(this.handleError)
     );
   }

@@ -63,12 +63,35 @@ export class SidebarComponent implements OnInit {
     this.onSinenavToggle();
     this.logon = this._checkLocalStorage();
     this.getMenu();
+    this.getIP();
   }
 
   public getMenu() {
     this._sidebarService.GetMenu().subscribe(
       all => {
         this.navItems = this.MenuList(all.data, this.typeOfSidebar)
+      }
+    )
+  }
+
+  getIP() {
+    this._sidebarService.getIPAddress().subscribe((res: any) => {
+      this.CountAccess(res.ip)
+    });
+  }
+
+  tong_luot_truy_cap: number
+  so_luot_truy_cap_nam: number
+  so_luot_truy_cap_thang: number
+  so_luot_truy_cap_ngay: number
+
+  public CountAccess(ip: string) {
+    this._sidebarService.CountAccess(ip).subscribe(
+      all => {
+        this.tong_luot_truy_cap = all.data.tong_luot_truy_cap
+        this.so_luot_truy_cap_nam = all.data.so_luot_truy_cap_nam
+        this.so_luot_truy_cap_thang = all.data.so_luot_truy_cap_thang
+        this.so_luot_truy_cap_ngay = all.data.so_luot_truy_cap_ngay
       }
     )
   }
