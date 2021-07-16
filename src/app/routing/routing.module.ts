@@ -17,9 +17,7 @@ import { RegisterComponent } from '../components/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { LogoutComponent } from '../components/logout/logout.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DataSCTComponent } from '../components/data-sct/data-sct.component';
 import { SpecializedLayoutComponent } from './specialized-layout/specialized-layout.component';
-import { EnergyLayoutComponent } from './energy-layout/energy-layout.component';
 import { ReportLayoutComponent } from './report-layout/report-layout.component';
 import { HomeSpecializedComponent } from '../components/specialized/home-specialized/home-specialized.component';
 
@@ -149,8 +147,6 @@ const routes: Routes = [
     HomeSpecializedComponent,
     LogoutComponent,
     RegisterComponent,
-    DataSCTComponent,
-    EnergyLayoutComponent,
   ],
   imports: [
     RouterModule.forRoot(routes),
