@@ -1,8 +1,14 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { DomesticPriceModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { FormControl } from '@angular/forms';
+
+import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
+import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
+import { domesticchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { formatDate } from '@angular/common';
 
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -46,29 +52,34 @@ export const DDMMYY_FORMAT = {
 export class DomesticPriceComponent extends BaseComponent {
   public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'don_vi_tinh1', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
   public dataSource: MatTableDataSource<DomesticPriceModel>;
-  public pickedDate = new Date();
-  public EXCEL_NAME = 'Giá cả nông sản';
+
+  public ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  }
 
   constructor(
     private injector: Injector,
     public marketService: MarketServicePublic,
     public excelService: ExcelService,
-    public datepipe: DatePipe
+    public datepipe: DatePipe,
+    public dashboardService: DashboardService
   ) {
     super(injector);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.getDomesticMarketPriceByTime(this.pickedDate);
-  }
+    this.getListProduct();
+    this.defaultcode = 1
+    this.tungay = this.firstday.value
+    this.denngay = this.presentday.value
+    this.productcode = 1
 
-  public getPriceChange(param: any) {
-    this.getDomesticMarketPriceByTime(param._d);
+    this.getDomesticMarketPriceByTime(this.pickedDate2.value._d);
   }
 
   public getDomesticMarketPriceByTime(time: Date) {
-    let datepipe = this.datepipe.transform(this.pickedDate, 'yyyyMMdd')
+    let datepipe = this.datepipe.transform(time, 'yyyyMMdd')
     this.marketService.GetDomesticMarket(datepipe).subscribe(
       allrecords => {
         this.filteredDataSource.data = [];
@@ -86,14 +97,107 @@ export class DomesticPriceComponent extends BaseComponent {
     );
   }
 
-  Convertdate(text: string): string {
-    return text ? text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4) : "";
+  public firstday = new FormControl(_moment().startOf('year').format('yyyyMMDD'));
+  public presentday = new FormControl(_moment().format('yyyyMMDD'));
+
+  @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
+  lineChart: any;
+
+  defaultcode: number
+  tungay: string
+  denngay: string
+  productcode: number
+
+  timelist: string[]
+  giaca: number[]
+
+  ngAfterViewInit(): void {
+    this.lineChartMethod(this.tungay, this.denngay, this.productcode);
   }
 
-  public exportTOExcel() {
-    let datepipe = this.datepipe.transform(this.pickedDate, 'dd-MM-yyyy');
-    this.EXCEL_NAME = `Giá cả nông sản ngày ${datepipe}`; 
-    this.excelService.exportDomTableAsExcelFile(this.EXCEL_NAME, datepipe, this.table.nativeElement);
+  domesticchart: Array<domesticchart> = new Array<domesticchart>();
+
+  lineChartMethod(tungay: string, denngay: string, productcode: number) {
+    this.dashboardService.GetDomesticChart(tungay, denngay, productcode).subscribe(
+      all => {
+        this.domesticchart = all.data
+        this.timelist = this.domesticchart.map(x => this.Convertdate(x.ngay_cap_nhat.toString()))
+        this.giaca = this.domesticchart.map(x => x.gia_ca)
+
+        this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+          type: 'line',
+          data: {
+            labels: this.timelist,
+            datasets: [
+              {
+                label: 'Giá cả',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgb(255, 0, 0)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgb(255, 0, 0)',
+                pointHoverBorderColor: 'rgb(255, 0, 0)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: this.giaca,
+                spanGaps: false,
+              }
+            ]
+          }
+        });
+      },
+    );
+  }
+
+  public products: Array<ProductModel> = new Array<ProductModel>();
+  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
+
+  public getListProduct(): void {
+    this.dashboardService.GetProductList().subscribe(
+      allrecords => {
+        this.products = allrecords.data as ProductModel[];
+        this.filterproducts = this.products.slice();
+      },
+    );
+  }
+
+  applyfilter(event) {
+    this.productcode = event.value
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tungay, this.denngay, this.productcode);
+  }
+
+  Convertdate(text: string): string {
+    return text ? text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4) : "";
+  }
+
+  public pickedDate = new FormControl(_moment().startOf('year'));
+  public pickedDate1 = new FormControl(_moment());
+  public pickedDate2 = new FormControl(_moment());
+
+  public onChange(param: any) {
+    this.tungay = param.format('yyyyMMDD')
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tungay, this.denngay, this.productcode);
+  }
+
+  public onChange1(param: any) {
+    this.denngay = param.format('yyyyMMDD')
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tungay, this.denngay, this.productcode);
+  }
+
+  public onChange2(param: any) {
+    this.getDomesticMarketPriceByTime(param._d);
   }
 }
 

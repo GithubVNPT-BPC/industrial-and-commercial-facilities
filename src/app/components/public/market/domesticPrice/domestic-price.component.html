@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <strong>
-                Thông tin về giá cả trong nước
+                THÔNG TIN VỀ GIÁ CẢ TRONG NƯỚC
             </strong>
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
@@ -10,18 +10,57 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-2">
-                <mat-form-field appearance="outline">
-                    <mat-label>Ngày cập nhật giá</mat-label>
-                    <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate"
-                        (ngModelChange)="getPriceChange($event)">
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" style="width: 200px;">
+                    <mat-label>Từ ngày</mat-label>
+                    <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.value._d"
+                        (ngModelChange)="onChange($event)">
                     <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
+
+                <mat-form-field appearance="outline" style="width: 200px;" class="ml-1">
+                    <mat-label>Đến ngày</mat-label>
+                    <input matInput readonly [matDatepicker]="datePicker1" [(ngModel)]="pickedDate1.value._d"
+                        (ngModelChange)="onChange1($event)">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker1" onclick="this.blur()"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker1></mat-datepicker>
+                </mat-form-field>
             </div>
+
+            <div class="col-lg-6 text-right my-auto">
+                <mat-form-field appearance="outline" style="width: 300px;">
+                    <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
+                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
+                            [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
+                        <mat-option *ngFor="let item of filterproducts" [value]="item.id_san_pham">
+                            {{item.ten_san_pham}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <hr>
+        <div class="container-fluid">
+            <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
+        </div>
+
+        <hr color="red">
+
+        <div class="row">
+            <div class="col-2">
+                <mat-form-field appearance="outline" style="width: 200px;">
+                    <mat-label>Ngày cập nhật giá</mat-label>
+                    <input matInput readonly [matDatepicker]="datePicker2" [(ngModel)]="pickedDate2.value._d"
+                        (ngModelChange)="onChange2($event)">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker2" onclick="this.blur()"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+
             <div class="col-10 button-control my-auto">
                 <button mat-raised-button class="green"
-                    (click)="exportTOExcel()"><mat-icon>download</mat-icon>Xuất
+                    (click)="ExportTOExcel('Thông tin về giá cả trong nước','Thông tin về giá cả trong nước')">Xuất
                     Excel</button>
             </div>
         </div>
@@ -70,7 +109,7 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index"></tr>
             </table>
 
-            <h3 *ngIf="!dataSource.data.length" class="text-center">Không có dữ liệu</h3>
+            <h3 *ngIf="!dataSource.data.length" class="text-center">KHÔNG CÓ DỮ LIỆU</h3>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>

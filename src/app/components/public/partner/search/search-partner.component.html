@@ -1,7 +1,7 @@
 <mat-card class="material">
     <mat-card-header>
         <mat-card-title>
-            <h4><strong>Danh sách doanh nghiệp</strong></h4>
+            <strong>DANH SÁCH DOANH NGHIỆP</strong>
         </mat-card-title>
         <mat-card-subtitle>
         </mat-card-subtitle>
@@ -10,16 +10,22 @@
         <div class="row pt-2">
             <div class="col-lg-12 button-control my-auto">
                 <button mat-raised-button class="green text-left"
-                (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')"><mat-icon>download</mat-icon>Xuất
-                Excel</button>
+                    (click)="ExportTOExcel('Danh sách doanh nghiệp','Danh sách doanh nghiệp')">
+                    <mat-icon>download</mat-icon>Xuất
+                    Excel
+                </button>
                 <button mat-raised-button (click)="addCond()" class="green" matTooltip="Thêm bộ lọc">
                     <mat-icon>add_circle_outline</mat-icon> Thêm bộ lọc
                 </button>
-                <button mat-raised-button (click)="cancelFilter()" class="red" matTooltip="Xóa những dữ liệu lọc trước đó"> <mat-icon>search_off</mat-icon>Hủy lọc</button>
-                <button mat-raised-button (click)="applyFilter()" matTooltip="Lọc giá trị trên bảng"><mat-icon>filter_list</mat-icon>Lọc giá trị</button>
+                <button mat-raised-button (click)="cancelFilter()" class="red"
+                    matTooltip="Xóa những dữ liệu lọc trước đó">
+                    <mat-icon>search_off</mat-icon>Hủy lọc
+                </button>
+                <button mat-raised-button (click)="applyFilter()" matTooltip="Lọc giá trị trên bảng">
+                    <mat-icon>filter_list</mat-icon>Lọc giá trị
+                </button>
             </div>
         </div>
-        <hr/>
         <div class="row my-auto" *ngIf="isSearch_Advanced">
             <div class="col-lg-12">
                 <ng-container *ngFor="let item of countNumberCondition">
@@ -49,7 +55,6 @@
                 </ng-container>
             </div>
         </div>
-        <hr>
         <div class="layout" #TABLE>
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 [filterType]="filterType" [dataSource]="dataSource" matSort matSortDisableClear matSortDirection="asc">

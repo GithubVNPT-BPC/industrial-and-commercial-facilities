@@ -8,6 +8,9 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard.routing';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from 'src/app/material.module';
+import { MatSelectFilterModule } from 'mat-select-filter';
+
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -17,7 +20,9 @@ import { MaterialModule } from 'src/app/material.module';
     CommonModule,
     BsDropdownModule,
     ButtonsModule.forRoot(),
-    MaterialModule
+    MaterialModule,
+    MatSelectFilterModule,
+    ReactiveFormsModule,
   ],
   declarations: [DashboardComponent]
 })

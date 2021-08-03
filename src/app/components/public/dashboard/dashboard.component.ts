@@ -1,170 +1,248 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { CHART_THEME } from 'src/app/_enums/chart.theme.enum';
-import { ThemeService, Label, BaseChartDirective } from 'ng2-charts';
-import { ChartsModule } from 'ng2-charts/ng2-charts'
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
 import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
-import { CHART_TYPE } from 'src/app/_enums/chart.type.enum';
-import { regExpEscape } from '@ng-bootstrap/ng-bootstrap/util/util';
-import moment from 'moment';
-
-interface HashTableNumber<T> {
-  [key: number]: T;
-}
-interface HashTableString<T> {
-  [key: string]: T;
-}
+import { productchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { formatDate } from '@angular/common';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import _moment from 'moment';
+import { defaultFormat as _rollupMoment, Moment } from 'moment';
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'dashboard.component.html',
-  styleUrls: ['dashboard.component.scss']
+  styleUrls: ['dashboard.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+  ],
 })
+
 export class DashboardComponent implements OnInit {
-  //Declare
-  _selectedTheme: CHART_THEME = CHART_THEME.LIGHT;
-  public barChartOptions: ChartOptions = {
-    responsive: true,
-  };
-  public readonly RECORD_NUMBER: number = 10;
-  public data: any;
-  public showChart: boolean = false;
-  public barChartData: Array<ChartDataSets> = new Array<ChartDataSets>();
-  public barChartDataHash: HashTableNumber<ChartDataSets> = {};
-  public barChartDataMemberHash: HashTableNumber<number[]> = {};
-  public xLabelOfChart: string[][] = [];
-  public xLabelOfChartHash: HashTableString<string[]> = {};
-  public chartType: ChartType = CHART_TYPE.LINE;
-  public chartLegend = true;
-  public chartPlugins = [];
-  public labelChart: Label[] = [];
-  public listChartType: string[] = [];
-  public selectedType: CHART_TYPE;
 
-  public defaultProducts: Object[] = [{ ma_san_pham: 2 }, { ma_san_pham: 10 }, { ma_san_pham: 4 }, { ma_san_pham: 5 }];
+  @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
+  lineChart: any;
 
-  @ViewChild('CHART', { static: true }) public Chart: BaseChartDirective;
-  public CreateListChartType() {
-    for (let type in CHART_TYPE) {
-      this.listChartType.push(type.toString());
-    }
+  defaultcode: number
+  tuthang: string
+  denthang: string
+  productcode: number
+
+  timelist: string[]
+  sanluong: number[]
+  trigia: number[]
+
+  public ngOnInit() {
+    this.getListProduct();
+    this.defaultcode = 1
+    this.tuthang = '202101'
+    this.denthang = '202112'
+    this.productcode = 1
   }
-  public ChangeChartType() {
-    this.chartType = this.selectedType;
-    this.Chart.update();
+
+  ngAfterViewInit(): void {
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode);
   }
-  async ngOnInit(): Promise<void> {
-    this.selectedType = CHART_TYPE.BAR;
-    this.CreateListChartType();
-    this.data = await this.dashboardService.GetPriceAllProduct(this.RECORD_NUMBER, this.defaultProducts).toPromise();
-    // let index = 0;
-    if (this.data.data) {
-      this.data.data.forEach(element => {
 
-        element.forEach(data => {
-          if (!this.xLabelOfChartHash[data.thoi_gian_cap_nhat]) {
-            this.xLabelOfChartHash[data.thoi_gian_cap_nhat] = [];
-            this.xLabelOfChartHash[data.thoi_gian_cap_nhat].push(this.GetDate(data.thoi_gian_cap_nhat));
-          }
+  productchart: Array<productchart> = new Array<productchart>();
 
-          if (!this.barChartDataHash[data.id_san_pham]) {
-            this.barChartDataHash[data.id_san_pham] = {};
-          }
-          if (!this.barChartDataMemberHash[data.id_san_pham]) {
-            this.barChartDataMemberHash[data.id_san_pham] = [];
+  lineChartMethod(tuthang: string, denthang: string, productcode: number) {
+    this.dashboardService.GetProductChart(tuthang, denthang, productcode).subscribe(
+      all => {
+        this.productchart = all.data
+        this.timelist = this.productchart.map(x => this.Convertdate(x.time_id.toString()))
+        this.sanluong = this.productchart.map(x => x.san_luong)
+        this.trigia = this.productchart.map(x => x.tri_gia)
+
+        this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+          type: 'line',
+          data: {
+            labels: this.timelist,
+            datasets: [
+              {
+                label: 'Sản lượng',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgb(255, 0, 0)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgb(255, 0, 0)',
+                pointHoverBorderColor: 'rgb(255, 0, 0)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: this.sanluong,
+                spanGaps: false,
+              },
+              {
+                label: 'Trị giá',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgb(0, 0, 255)',
+                borderColor: 'rgb(0, 0, 255)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgb(0, 0, 255)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgb(0, 0, 255)',
+                pointHoverBorderColor: 'rgb(0, 0, 255)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: this.trigia,
+                spanGaps: false,
+              }
+            ]
           }
         });
+      },
+    );
+  }
 
-        this.barChartDataHash[element[0].id_san_pham].label = element[0].ten_san_pham;
-      });
+  public products: Array<ProductModel> = new Array<ProductModel>();
+  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
 
-      Object.keys(this.xLabelOfChartHash).forEach(key => this.labelChart.push(this.xLabelOfChartHash[key].sort()));
+  public getListProduct(): void {
+    this.dashboardService.GetProductList().subscribe(
+      allrecords => {
+        this.products = allrecords.data as ProductModel[];
+        this.filterproducts = this.products.slice();
+      },
+    );
+  }
 
-      this.labelChart = this.labelChart.sort();
+  applyfilter(event) {
+    this.productcode = event.value
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode);
+  }
 
-      this.data.data.forEach(element => {
-        let tempGia: number[] = [];
+  constructor(public dashboardService: DashboardService) {
+  }
 
-        this.labelChart.forEach(data => {
-          var temp = element.filter(x => this.GetDate(x.thoi_gian_cap_nhat) == data);
-          if (temp.length == 0)
-            tempGia.push(0)
-          else
-            tempGia.push(temp[0].gia);
-        });
+  Convertdate(text: string): string {
+    let date: string
+    date = text.substr(4, 2) + "-" + text.substring(0, 4)
+    return date
+  }
 
-        this.barChartDataMemberHash[element[0].id_san_pham] = tempGia;
-      });
+  Convertdatetostring(text: string): string {
+    let date: string
+    date = text.replace('-', '')
+    let date1: string
+    date1 = date.substring(2, 7) + date.substring(0, 2)
+    return date1
+  }
 
-      Object.keys(this.barChartDataMemberHash).forEach(key => this.barChartDataHash[key].data = this.barChartDataMemberHash[key]);
-      Object.keys(this.barChartDataHash).forEach(key => this.barChartData.push(this.barChartDataHash[key]));
+  public getCurrentMonth(): string {
+    let date = new Date;
+    return formatDate(date, 'MM/yyyy', 'en-US');
+  }
 
-      /*
-      barChartData
-      labelChart
-      barChartOptions
-      chartPlugins
-      chartLegend
-      chartType
-      */
-      this.showChart = true;
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = parseInt(time.substring(6, 8));
+
+    let date = new Date(year, month - 1, day);
+    return date
+  }
+
+  public date = new FormControl(_moment('20210101'));
+  public newdate = new FormControl(_moment('20210101'));
+  public theYear: number;
+  public theMonth: number;
+  public stringmonth: string
+  public time: string
+
+  public chosenYearHandler(normalizedYear: Moment) {
+    this.date = this.newdate
+    const ctrlValue = this.date.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date.setValue(ctrlValue);
+    this.theYear = normalizedYear.year();
+  }
+
+  public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date.setValue(ctrlValue);
+    this.theMonth = normalizedMonth.month() + 1;
+    datepicker.close();
+
+    if (this.theMonth >= 10) {
+      this.stringmonth = this.theMonth.toString();
     }
-  }
-  constructor(public themeService: ThemeService, public dashboardService: DashboardService) { }
-
-  setCurrentTheme(theme: CHART_THEME) {
-    this._selectedTheme = theme;
-  }
-
-  // getDateOfFullDate(date: Date) {
-  //   let result: string;
-  //   let newDate = new Date(date);
-  //   // result = date.substr(6, 2) + '/' + date.substr(4, 2) + '/' + date.substr(0, 4)
-  //   return result;
-  // }
-
-  // GetMonthAndYear(time: string) {
-  //   let year = time.substr(0, 4);
-  //   let month = time.substr(4, 2);
-  //   let day = time.substr(6, 2);
-  //   let result = day + "/" + month + "/" + year;
-  //   return result as string;
-  // }
-
-  GetDate(date: string) {
-    let newDate = new Date(date);
-    //return this.GetMonthAndYear(newDate.toISOString().replace('-', '').replace('-', ''));
-    return moment(newDate).format('DD/MM/YYYY');
-  }
-
-  public get SelectedTheme() {
-    return this._selectedTheme;
-  }
-
-  public set SelectedTheme(value) {
-    this._selectedTheme = value;
-    let overrides: ChartOptions;
-    if (this._selectedTheme === CHART_THEME.LIGHT) {
-      overrides = {
-        legend: {
-          labels: { fontColor: 'white' }
-        },
-        scales: {
-          xAxes: [{
-            ticks: { fontColor: 'white' },
-            gridLines: { color: 'rgba(255,255,255,0.1)' }
-          }],
-          yAxes: [{
-            ticks: { fontColor: 'white' },
-            gridLines: { color: 'rgba(255,255,255,0.1)' }
-          }]
-        }
-      };
-    } else {
-      overrides = {};
+    else {
+      this.stringmonth = "0" + this.theMonth.toString()
     }
-    this.themeService.setColorschemesOptions(overrides);
+    this.time = this.theYear.toString() + this.stringmonth
+
+    this.tuthang = this.time
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode);
+  }
+
+  public date1 = new FormControl(_moment('20211231'));
+  public newdate1 = new FormControl(_moment('20211231'));
+
+  public chosenYearHandler1(normalizedYear: Moment) {
+    this.date1 = this.newdate1
+    const ctrlValue = this.date1.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date1.setValue(ctrlValue);
+    this.theYear = normalizedYear.year();
+  }
+
+  public chosenMonthHandler1(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date1.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date1.setValue(ctrlValue);
+    this.theMonth = normalizedMonth.month() + 1;
+    datepicker.close();
+
+    if (this.theMonth >= 10) {
+      this.stringmonth = this.theMonth.toString();
+    }
+    else {
+      this.stringmonth = "0" + this.theMonth.toString()
+    }
+    this.time = this.theYear.toString() + this.stringmonth
+
+    this.denthang = this.time
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode);
   }
 
 }

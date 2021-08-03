@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <strong>
-                Thông tin về tình hình nhập khẩu
+                THÔNG TIN VỀ TÌNH HÌNH NHẬP KHẨU
             </strong>
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
@@ -21,8 +21,10 @@
                 </mat-form-field>
             </div>
             <div class="col-lg-10 button-control my-auto">
-                <button mat-raised-button (click)="exportTOExcel()" class="green"><mat-icon>download</mat-icon>Xuất
-                    Excel</button>
+                <button mat-raised-button (click)="exportTOExcel()" class="green">
+                    <mat-icon>download</mat-icon>Xuất
+                    Excel
+                </button>
             </div>
         </div>
         <div class="layout mt-3" #TABLE>
@@ -122,6 +124,8 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true;"></tr>
             </table>
+
+            <h3 *ngIf="!dataSource.data.length" class="text-center">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI</h3>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>

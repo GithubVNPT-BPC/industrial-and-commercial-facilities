@@ -8,6 +8,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { MarketRoutingModule } from './market-routing.module';
 
 import { DomesticPriceComponent, DDMMYY_FORMAT } from './domesticPrice/domestic-price.component';
+import { MatSelectFilterModule } from 'mat-select-filter';
 import { MaterialModule } from '../../../material.module';
 import { DomesticExportComponent } from './domesticExport/domestic-export.component';
 import { DomesticImportComponent } from './domesticImport/domestic-import.component';
@@ -46,6 +47,7 @@ export const customCurrencyMaskConfig = {
     ReactiveFormsModule,
     PipeModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    MatSelectFilterModule
   ],
   exports: [
   ],
@@ -59,7 +61,7 @@ export const customCurrencyMaskConfig = {
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
-  
+
   ],
   entryComponents: [CompanyTopPopup]
 })

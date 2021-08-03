@@ -219,3 +219,18 @@ export class DeleteModel1 {
     id: string
 }
 
+export class productchart {
+    san_luong: number;
+    tri_gia: number;
+    time_id: number
+}
+
+export class domesticchart {
+    gia_ca: number;
+    ngay_cap_nhat: string;
+}
+
+export class foreignchart {
+    gia_ca: number;
+    ngay_cap_nhat: string;
+}

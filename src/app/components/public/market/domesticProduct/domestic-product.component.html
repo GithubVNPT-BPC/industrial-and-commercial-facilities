@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <strong>
-                Thông tin về tình hình sản xuất
+                THÔNG TIN VỀ TÌNH HÌNH SẢN XUẤT
             </strong>
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
@@ -10,18 +10,59 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-2">
-                <mat-form-field appearance="outline">
-                    <mat-label>Thời gian</mat-label>
-                    <input matInput [matDatepicker]="dp" [formControl]="pickedDate" readonly>
+            <div class="col-lg-6">
+                <mat-form-field appearance="outline" style="width: 200px;">
+                    <mat-label>Từ tháng</mat-label>
+                    <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
                     <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
                         (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
                     </mat-datepicker>
                 </mat-form-field>
+
+                <mat-form-field appearance="outline" class="ml-1" style="width: 200px">
+                    <mat-label>Đến tháng</mat-label>
+                    <input matInput [matDatepicker]="dp1" [formControl]="date1" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                    <mat-datepicker #dp1 startView="multi-year" (yearSelected)="chosenYearHandler1($event)"
+                        (monthSelected)="chosenMonthHandler1($event, dp1)" panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
             </div>
-            <div class="col-10 button-control my-auto">
-                <button mat-raised-button (click)="exportTOExcel()" class="green"><mat-icon>download</mat-icon>Xuất
+
+            <div class="col-lg-6 text-right my-auto">
+                <mat-form-field appearance="outline" style="width: 300px;">
+                    <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
+                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
+                            [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
+                        <mat-option *ngFor="let item of filterproducts" [value]="item.id_san_pham">
+                            {{item.ten_san_pham}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <hr>
+        <div class="container-fluid">
+            <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
+        </div>
+
+        <hr color="red">
+
+        <div class="row">
+            <div class="col-3">
+                <mat-form-field appearance="outline" style="width: 200px;">
+                    <mat-label>Thời gian</mat-label>
+                    <input matInput [matDatepicker]="dp2" [formControl]="date2" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                    <mat-datepicker #dp2 startView="multi-year" (yearSelected)="chosenYearHandler2($event)"
+                        (monthSelected)="chosenMonthHandler2($event, dp2)" panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-9 button-control my-auto">
+                <button mat-raised-button class="green"
+                    (click)="ExportTOExcel('Thông tin về tình hình sản xuất','Thông tin về tình hình sản xuất')">Xuất
                     Excel</button>
             </div>
         </div>
@@ -79,6 +120,8 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
                 <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></tr>
             </table>
+
+            <h3 *ngIf="!dataSource.data.length" class="text-center">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI</h3>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>
