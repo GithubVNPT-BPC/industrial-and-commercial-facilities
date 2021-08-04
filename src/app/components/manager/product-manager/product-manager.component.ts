@@ -163,13 +163,13 @@ export class ProductManagerComponent implements OnInit {
 
     Convertdate(text: string): string {
         let date: string
-        date = text.substr(4, 2) + "/" + text.substring(0, 4)
+        date = text.substr(4, 2) + "-" + text.substring(0, 4)
         return date
     }
 
     Convertdatetostring(text: string): string {
         let date: string
-        date = text.replace('/', '')
+        date = text.replace('-', '')
         let date1: string
         date1 = date.substring(2, 7) + date.substring(0, 2)
         return date1
@@ -177,7 +177,7 @@ export class ProductManagerComponent implements OnInit {
 
     public getCurrentMonth(): string {
         let date = new Date;
-        return formatDate(date, 'MM/yyyy', 'en-US');
+        return formatDate(date, 'MM-yyyy', 'en-US');
     }
 
     public date = new FormControl(_moment());
@@ -299,13 +299,13 @@ export class ProductManagerComponent implements OnInit {
         this._rows = this.dataSource.filteredData.length;
     }
 
-    public save() {
+    public save(productvalue: Array<ProductValueModel>) {
         this.dataSource.data.forEach(element => {
             if (element.time_id) {
                 element.time_id = this.Convertdatetostring(element.time_id.toString())
             }
         });
-        this.marketService.PostProductValue(this.dataSource.data).subscribe(
+        this.marketService.PostProductValue(productvalue).subscribe(
             next => {
                 if (next.id == -1) {
                     this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
@@ -322,8 +322,10 @@ export class ProductManagerComponent implements OnInit {
     }
 
     public exportTOExcel(filename: string, sheetname: string) {
-      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
+
+    public productvalue: Array<ProductValueModel> = new Array<ProductValueModel>();
 
     spinnerEnabled = false;
     keys: string[];
@@ -359,14 +361,16 @@ export class ProductManagerComponent implements OnInit {
                     this.dataSource.data = [];
                     data.forEach(item => {
                         let datarow: ProductValueModel = new ProductValueModel();
+                        datarow.id_san_pham = item['ID sản phẩm'];
                         datarow.san_luong = item['Sản lượng'];
                         datarow.tri_gia = item['Trị giá'];
-                        datarow.id_san_pham = item['ID sản phẩm'];
                         datarow.time_id = this.getCurrentMonth();
                         this.dataSource.data.push(datarow);
                     });
-                    this.dataSource = new MatTableDataSource(this.dataSource.data);
-                    this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
+                    this.save(this.dataSource.data)
+                    this.getALLProductValueList()
+                    // this.dataSource = new MatTableDataSource(this.dataSource.data);
+                    // this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
                 };
 
                 reader.readAsBinaryString(target.files[0]);
@@ -375,9 +379,8 @@ export class ProductManagerComponent implements OnInit {
                     this.spinnerEnabled = false;
                     this.keys = Object.keys(data[0]);
                     this.dataSheet.next(data)
+                    this.inputFile.nativeElement.value = '';
                 }
-            } else {
-                this.inputFile.nativeElement.value = '';
             }
         }
     }
@@ -423,5 +426,5 @@ export class ProductManagerComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-      }
+    }
 }

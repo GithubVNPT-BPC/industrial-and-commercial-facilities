@@ -151,13 +151,13 @@ export class ForeignManagerComponent implements OnInit {
 
   Convertdate(text: string): string {
     let date: string
-    date = text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4)
+    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
     return date
   }
 
   Convertdatetostring(text: string): string {
     let date: string
-    date = text.replace('/', '').replace('/', '')
+    date = text.replace('-', '').replace('-', '')
     let date1: string
     date1 = date.substring(4, 9) + date.substring(2, 4) + date.substring(0, 2)
     return date1
@@ -165,7 +165,7 @@ export class ForeignManagerComponent implements OnInit {
 
   public getCurrentDate() {
     let date = new Date;
-    return formatDate(date, 'dd/MM/yyyy', 'en-US');
+    return formatDate(date, 'dd-MM-yyyy', 'en-US');
   }
 
   public GetForeignMarketPrice(time: Date) {
@@ -273,14 +273,14 @@ export class ForeignManagerComponent implements OnInit {
     this._rows = this.dataSource.filteredData.length;
   }
 
-  public save() {
+  public save(foreign: Array<ForeignMarketModel>) {
     this.dataSource.data.forEach(element => {
       if (element.ngay_cap_nhat) {
         let x = this.Convertdatetostring(element.ngay_cap_nhat)
         element.ngay_cap_nhat = x;
       }
     });
-    this.marketService.PostForeignMarket(this.dataSource.data).subscribe(
+    this.marketService.PostForeignMarket(foreign).subscribe(
       next => {
         this._infor.msgSuccess("Lưu thông tin thành công");
         this.GetAllForeignMarketPrice();
@@ -290,35 +290,6 @@ export class ForeignManagerComponent implements OnInit {
       }
     );
   }
-
-  // downloadExcelTemplate(filename: string, sheetname: string) {
-  //   let excelFileName: string;
-  //   let newArray: any[] = [];
-
-  //   sheetname = sheetname.replace('/', '_');
-  //   excelFileName = filename + '.xlsx';
-
-  //   let data = Object.values(this.dataSource.data);
-
-  //   Object.keys(data).forEach((key, index) => {
-  //     newArray.push({
-  //       'STT': index,
-  //       'Tên sản phẩm': data[key].ten_san_pham,
-  //       'ID sản phẩm': data[key].id_san_pham,
-  //       'Giá': '',
-  //       'Nguồn số liệu': '',
-  //     });
-  //   });
-  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(newArray);
-  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
-
-  //   XLSX.utils.book_append_sheet(wb, ws, sheetname);
-  //   XLSX.writeFile(wb, excelFileName);
-  // }
-
-  // public exportTOExcel(filename: string, sheetname: string) {
-  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  // }
 
   public exportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
@@ -358,15 +329,17 @@ export class ForeignManagerComponent implements OnInit {
           this.dataSource.data = [];
           data.forEach(item => {
             let datarow: ForeignMarketModel = new ForeignMarketModel();
+            datarow.id_san_pham = item['ID sản phẩm'];
             datarow.gia_ca = item['Giá'];
             datarow.nguon_so_lieu = item['Nguồn số liệu'];
-            datarow.id_san_pham = item['ID sản phẩm'];
             datarow.thi_truong = item['Thị trường'];
             datarow.ngay_cap_nhat = this.getCurrentDate();
             this.dataSource.data.push(datarow);
           });
-          this.dataSource = new MatTableDataSource(this.dataSource.data);
-          this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
+          this.save(this.dataSource.data)
+          this.GetAllForeignMarketPrice()
+          // this.dataSource = new MatTableDataSource(this.dataSource.data);
+          // this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
         };
 
         reader.readAsBinaryString(target.files[0]);
@@ -375,9 +348,8 @@ export class ForeignManagerComponent implements OnInit {
           this.spinnerEnabled = false;
           this.keys = Object.keys(data[0]);
           this.dataSheet.next(data)
+          this.inputFile.nativeElement.value = '';
         }
-      } else {
-        this.inputFile.nativeElement.value = '';
       }
     }
   }

@@ -1,6 +1,6 @@
 <mat-card class="material">
     <mat-card-header>
-        <mat-card-title><strong>Cập nhật giá cả sản xuất (Đơn vị tính: Nghìn tấn)</strong></mat-card-title>
+        <mat-card-title><strong>CẬP NHẬT THÔNG TIN SẢN XUẤT (ĐƠN VỊ TÍNH: NGHÌN TẤN)</strong></mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -24,12 +24,12 @@
         </div>
 
         <div class="row">
-            <div class="col-lg-7 button-control -align-left">
-                <button mat-raised-button class="white" (click)="addRow()">
+            <div class="col-lg-6 button-control -align-left">
+                <!-- <button mat-raised-button class="white" (click)="addRow()">
                     <mat-icon>add_circle_outline</mat-icon> Thêm dòng
-                </button>
+                </button> -->
                 <button mat-raised-button class="white" (click)="insertRow()">
-                    <mat-icon>add_circle</mat-icon> Chèn dòng
+                    <mat-icon>add_circle</mat-icon> Thêm dòng
                 </button>
                 <button mat-raised-button class="white" (click)="deleteRow()">
                     <mat-icon>block</mat-icon> Xóa dòng
@@ -39,14 +39,16 @@
                 </button> -->
             </div>
 
-            <div class="col-lg-5 button-control">
-                <!-- <button mat-raised-button
-                    (click)="downloadExcelTemplate('Mẫu giá cả trong nước','Mẫu giá cả trong nước')">
-                    <mat-icon>move_to_inbox</mat-icon> Tải tệp excel mẫu
-                </button> -->
+            <div class="col-lg-6 button-control">
+                <button mat-raised-button
+                    (click)="exportTOExcel('Thông tin tình hình sản xuất','Thông tin tình hình sản xuất')">
+                    <mat-icon>cloud_download</mat-icon> Xuất dữ liệu
+                </button>
 
-                <button mat-raised-button (click)="exportTOExcel('Thông tin sản xuất','Thông tin sản xuất')">Xuất file
-                    Excel mẫu</button>
+                <a mat-raised-button download="TinhHinhSanXuat.xlsx" title="Excel"
+                    href="/assets/ExcelSample/TinhHinhSanXuat.xlsx">
+                    <mat-icon>cloud_download</mat-icon> Mẫu import
+                </a>
 
                 <label id="import_excel">
                     <mat-icon>cloud_upload</mat-icon> Nhập bằng Excel <input id="customFile" type="file"
@@ -57,6 +59,11 @@
                 </button>
             </div>
         </div>
+
+        <mat-form-field id="filter">
+            <mat-label>Lọc dữ liệu</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
 
         <div class="layout" #TABLE>
             <table mat-table class="table-layout" id="small-table" [dataSource]="dataSource">

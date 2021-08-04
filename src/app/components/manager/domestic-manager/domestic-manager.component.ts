@@ -13,7 +13,7 @@ import { InformationService } from 'src/app/shared/information/information.servi
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { MarketService } from 'src/app/_services/APIService/market.service';
 
-import { DomesticPriceModel, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { domesticchart, DomesticPriceModel, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 
 import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -140,12 +140,12 @@ export class DomesticManagerComponent implements OnInit {
   }
 
   Convertdate(text: string): string {
-    return text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4);
+    return text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4);
   }
 
   Convertdatetostring(text: string): string {
     let date: string
-    date = text.replace('/', '').replace('/', '')
+    date = text.replace('-', '').replace('-', '')
     let date1: string
     date1 = date.substring(4, 9) + date.substring(2, 4) + date.substring(0, 2)
     return date1
@@ -153,7 +153,7 @@ export class DomesticManagerComponent implements OnInit {
 
   public getCurrentDate() {
     let date = new Date;
-    return formatDate(date, 'dd/MM/yyyy', 'en-US');
+    return formatDate(date, 'dd-MM-yyyy', 'en-US');
   }
 
   public getDomesticMarketPrice(time: Date) {
@@ -225,14 +225,14 @@ export class DomesticManagerComponent implements OnInit {
     this._rows = this.dataSource.filteredData.length;
   }
 
-  public save() {
+  public save(domestic: Array<DomesticPriceModel>) {
     this.dataSource.data.forEach(element => {
       if (element.ngay_cap_nhat) {
         let x = this.Convertdatetostring(element.ngay_cap_nhat)
         element.ngay_cap_nhat = x;
       }
     });
-    this.marketService.PostDomesticMarket(this.dataSource.data).subscribe(
+    this.marketService.PostDomesticMarket(domestic).subscribe(
       next => {
         this._infor.msgSuccess("Lưu thông tin thành công");
         this.getALLDomesticMarketPrice();
@@ -246,6 +246,8 @@ export class DomesticManagerComponent implements OnInit {
   public exportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
+
+  public domestic: Array<DomesticPriceModel> = new Array<DomesticPriceModel>();
 
   keys: string[];
   dataSheet = new Subject();
@@ -272,15 +274,21 @@ export class DomesticManagerComponent implements OnInit {
         data = XLSX.utils.sheet_to_json(ws);
         data.forEach(item => {
           let datarow: DomesticPriceModel = new DomesticPriceModel();
+          datarow.id_san_pham = item['ID sản phẩm'];
           datarow.gia_ca = item['Giá (VNĐ)'];
           datarow.nguon_so_lieu = item['Nguồn số liệu'];
-          datarow.id_san_pham = item['ID sản phẩm'];
           datarow.ngay_cap_nhat = this.getCurrentDate();
           importedData.push(datarow);
         });
-        this.dataSource = new MatTableDataSource(importedData);
+        this.domestic = importedData
+        this.domestic.forEach(x => {
+          x.ngay_cap_nhat = this.Convertdatetostring(x.ngay_cap_nhat)
+        })
+
+        this.save(this.domestic)
+        // this.dataSource = new MatTableDataSource(importedData);
         this.paginatorAgain();
-        this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
+        // this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
       };
 
       reader.readAsBinaryString(target.files[0]);
@@ -288,9 +296,8 @@ export class DomesticManagerComponent implements OnInit {
       reader.onloadend = (e) => {
         this.keys = Object.keys(data[0]);
         this.dataSheet.next(data)
+        this.inputFile.nativeElement.value = '';
       }
-    } else {
-      this.inputFile.nativeElement.value = '';
     }
   }
 
