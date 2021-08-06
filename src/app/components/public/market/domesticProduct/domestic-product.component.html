@@ -10,8 +10,8 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" style="width: 200px;">
+            <div class="col-6 col-lg-3">
+                <mat-form-field appearance="outline" >
                     <mat-label>Từ tháng</mat-label>
                     <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
@@ -19,8 +19,10 @@
                         (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
                     </mat-datepicker>
                 </mat-form-field>
+            </div>
 
-                <mat-form-field appearance="outline" class="ml-1" style="width: 200px">
+            <div class="col-6 col-lg-3">
+                <mat-form-field appearance="outline" >
                     <mat-label>Đến tháng</mat-label>
                     <input matInput [matDatepicker]="dp1" [formControl]="date1" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
@@ -30,8 +32,8 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6 text-right my-auto">
-                <mat-form-field appearance="outline" style="width: 300px;">
+            <div class="col-12 col-lg-6 my-auto">
+                <mat-form-field appearance="outline" >
                     <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
                         <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
                             [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
@@ -50,8 +52,8 @@
         <hr color="red">
 
         <div class="row">
-            <div class="col-3">
-                <mat-form-field appearance="outline" style="width: 200px;">
+            <div class="col-6 col-lg-6">
+                <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
                     <input matInput [matDatepicker]="dp2" [formControl]="date2" readonly>
                     <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
@@ -60,7 +62,7 @@
                     </mat-datepicker>
                 </mat-form-field>
             </div>
-            <div class="col-9 button-control my-auto">
+            <div class="col-6 col-lg-6 button-control my-auto">
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Thông tin về tình hình sản xuất','Thông tin về tình hình sản xuất')">Xuất
                     Excel</button>
@@ -121,7 +123,7 @@
                 <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky:true"></tr>
             </table>
 
-            <h3 *ngIf="!dataSource.data.length" class="text-center">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI</h3>
+            <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI</h5>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>

@@ -1,0 +1,76 @@
+#footer {
+    background: linear-gradient(to right,#0062dc,#38ade4);
+    min-height: 470px;
+    // height: auto;
+
+    @media only screen and (max-width: 993px) {
+        min-height: 600px
+    }
+
+    @media only screen and (max-width: 768px) {
+        min-height: 820px
+    }
+
+    a {
+        color: white;
+        font-size: 14px;
+    }
+
+    b {
+        font-size: 14px;
+    }
+
+    span {
+        font-size: 14px;
+    }
+
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+
+        li:not(:last-child) { 
+            margin-bottom: 3px;  
+        }
+    }
+
+    .mat-icon {
+        line-height: inherit;
+        display: table-caption
+    }
+
+    .footer-content {
+        color: white;
+        padding-top: 30px;
+        border-bottom: 1px solid rgba(255,255,255,0.12);
+
+        .main-info {
+            padding-right: 20px;
+            h3 {
+                color: #ffee69;
+                line-height: 1.4;
+            }
+
+            .address {
+                margin-top: 15px;
+            }
+        }
+        
+        .contact {
+
+        }
+
+        .access {
+            .access-info {
+                
+            }
+        }
+    }
+
+    .signature {
+        color: white;
+        text-align: center;
+        font-size: 13px;
+        padding-top: 15px;
+    }
+} 
