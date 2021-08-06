@@ -5,7 +5,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
-  styles: ['footer.component.scss']
+  styleUrls: ['./custom-footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
 

@@ -1,42 +1,104 @@
-<div class="container-fluid">
+
+
+<div id="footer">
     <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <div style="text-align: center;"><span style="font-size:15px;"><span
-                            style="font-family:Arial,Helvetica,sans-serif;"><span
-                                style="color:rgb(0, 0, 204);"><strong>TRANG THÔNG TIN ĐIỆN TỬ SỞ CÔNG THƯƠNG
-                                    TỈNH BÌNH PHƯỚC</strong></span></span></span>
-                    <div style="text-align: center; font-size: 13px;">Địa chỉ: Đường Hùng Vương, phường Tân Bình, TP.
-                        Đồng Xoài,
-                        tỉnh Bình Phước
-                        <br>Điện thoại: <a href="tel:+84988.500.777">(0271) 3870.235</a> - Email: <a
-                            href="http://www.socongthuongbp.gov.vn/home/contact/Truong-Ban-bien-tap-trang-thong-tin-dien-tu-So/">sct.bp@binhphuoc.gov.vn</a>
-                    </div>
+
+        <div class="row footer-content" >
+            <div class="col-12 col-lg-5 main-info text-center text-md-left">
+                <div>
+                    <img class="logo" src="assets/img/brand/logo.svg">
+                </div>
+                <h5 class="mt-3">
+                    CỔNG THÔNG TIN ĐIỆN TỬ
+                </h5>
+                <h3>
+                    SỞ CÔNG THƯƠNG TỈNH BÌNH PHƯỚC
+                </h3>
+                <div class="address">
+                    <ul>
+                        <li>
+                            <span><b>Địa chỉ:</b> Đường Hùng Vương, Phường Tân Bình, TP.
+                            Đồng Xoài,
+                            Tỉnh Bình Phước</span>
+                        </li>
+                        <!-- <li>
+                            <b>Website: </b> <a href="https://socongthuongbp.gov.vn/home/">socongthuongbp.gov.vn</a>
+
+                        </li> -->
+                        <!-- <li><span>
+                            © 2021 - Bản quyền thuộc về <strong>Sở Công thưởng tỉnh Bình Phước.</strong>
+                            </span>
+                        </li> -->
+                    </ul>
                 </div>
             </div>
 
-            <div class="col-3" style="font-size: 13px;">
-                <ul class="counter list-none display-table">
-                    <li>
-                        <mat-icon>accessibility</mat-icon> Tổng số lượt truy cập:
-                        <strong>{{tong_luot_truy_cap}}</strong>
-                    </li>
-                    <li>
-                        <mat-icon>calendar_today</mat-icon> Số lượt truy cập năm:
-                        <strong>{{so_luot_truy_cap_nam}}</strong>
-                    </li>
-                </ul>
+            <div class="col-12 col-md-6 col-lg-4 contact mt-3 text-left">
+                <h5>LIÊN HỆ</h5>
+                <div class="contact-info">
+                    <ul>
+                        <li>
+                            <b><mat-icon>phone</mat-icon> Điện thoại: </b><a href="tel:+842713870555">(0271) 3870.235</a>
+                        </li>
+                        <li>
+                            
+                            <b><mat-icon>print</mat-icon> Fax: </b><a href="fax:+842713879199">(0271).3879199</a>
+                        </li>
+                        <li>
+                            
+                            <b><mat-icon>mail</mat-icon> Email: </b>
+                            <a href="mailto:sct.bp@binhphuoc.gov.vn">sct.bp@binhphuoc.gov.vn</a>
+                            <!-- <a href="http://www.socongthuongbp.gov.vn/home/contact/Truong-Ban-bien-tap-trang-thong-tin-dien-tu-So/">
+                                sct.bp@binhphuoc.gov.vn
+                            </a> -->
+                        </li>
+                        <li>
+                            <b><mat-icon>find_in_page</mat-icon>Website: </b> <a href="https://socongthuongbp.gov.vn/home/">socongthuongbp.gov.vn</a>
+                        </li>
+                    </ul>
+                    
+                </div>
             </div>
 
-            <div class="col-3" style="font-size: 13px;">
-                <li>
-                    <mat-icon>event_available</mat-icon> Số lượt truy cập tháng:
-                    <strong>{{so_luot_truy_cap_thang}}</strong>
-                </li>
-                <li>
-                    <mat-icon>event_note</mat-icon> Số lượt truy cập ngày:
-                    <strong>{{so_luot_truy_cap_ngay}}</strong>
-                </li>
+            <div class="col-12 col-md-6 col-lg-3 access mt-3 text-left">
+                <h5>THÔNG TIN TRUY CẬP</h5>
+                <div class="access-info">
+                    <ul>
+                        <li>
+                            <span>
+                                <mat-icon>accessibility</mat-icon> Tổng số lượt truy cập:
+                                <strong>{{tong_luot_truy_cap}}</strong>
+                            </span>
+                            
+                        </li>
+                        <li>
+                            <span>
+                                <mat-icon>calendar_today</mat-icon> Số lượt truy cập năm:
+                            <strong>{{so_luot_truy_cap_nam}}</strong>
+                            </span>
+                            
+                        </li>
+                        <li>
+                            <span>
+                                <mat-icon>event_available</mat-icon> Số lượt truy cập tháng:
+                            <strong>{{so_luot_truy_cap_thang}}</strong>
+                            </span>
+                            
+                        </li>
+                        <li>
+                            <span>
+                                <mat-icon>event_note</mat-icon> Số lượt truy cập ngày:
+                                <strong>{{so_luot_truy_cap_ngay}}</strong>
+                            </span>
+                            
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
+
+        <div class="signature">
+            <span>Powered by <a href="https://www.vnptbinhphuoc.vn/">☆ VNPT Bình Phước ☆</a></span>
+        </div>
     </div>
+</div>

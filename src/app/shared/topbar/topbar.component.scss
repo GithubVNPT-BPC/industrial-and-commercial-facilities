@@ -1,7 +1,8 @@
 .material {
   $blue: #1f7ed0;
   $white: white;
-
+  background: linear-gradient(to left,#003fb3,#5bcaff);
+  
   .username-display {
     border-bottom: 1px solid beige;
     color:black;
@@ -16,10 +17,12 @@
   }
 
   .mat-elevation-z5.main-contain {
-    background-color: $blue;
+    background: linear-gradient(to left,#003fb3,#5bcaff);
     color: $white;
     position: relative;
     z-index: 3;
+    height: 64px;
+
     .logo {
       height: 45px;
       width: 45px;
@@ -28,6 +31,15 @@
     .spacer {
       flex: 1 1 auto;
     }
+
+    .unit-name {
+      // color: linear-gradient(to right,#ffee69,white);
+      background: -webkit-linear-gradient(45deg, #ffee69, #fff6b3 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 26px;
+    }
+
     .btn-color {
       .btn-company {
         color: $white;

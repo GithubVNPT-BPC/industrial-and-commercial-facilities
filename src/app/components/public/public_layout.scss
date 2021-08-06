@@ -1,4 +1,6 @@
 .mat-card.material {
+  height: 100%;
+
   .mat-paginator {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -96,12 +98,14 @@
       }
       max-width: 100%;
       max-height: 100%;
-      height: 390px;
       overflow: auto;
       table.mat-table.table-layout {
         border-collapse: separate;
-        width: 550%;
         table-layout: initial;
+        min-width: 900px;
+        overflow-x: hidden;
+
+
         th,
         td {
           padding-left: 5px !important;

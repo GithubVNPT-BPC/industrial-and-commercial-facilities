@@ -10,16 +10,18 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-lg-6">
-                <mat-form-field appearance="outline" style="width: 200px;">
+            <div class="col-6 col-lg-3">
+                <mat-form-field appearance="outline">
                     <mat-label>Từ ngày</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.value._d"
                         (ngModelChange)="onChange($event)">
                     <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()"></mat-datepicker-toggle>
                     <mat-datepicker #datePicker></mat-datepicker>
                 </mat-form-field>
+            </div>
 
-                <mat-form-field appearance="outline" style="width: 200px;" class="ml-1">
+            <div class="col-6 col-lg-3">
+                <mat-form-field appearance="outline">
                     <mat-label>Đến ngày</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker1" [(ngModel)]="pickedDate1.value._d"
                         (ngModelChange)="onChange1($event)">
@@ -28,8 +30,8 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-6 text-right my-auto">
-                <mat-form-field appearance="outline" style="width: 300px;">
+            <div class="col-12 col-lg-6 my-auto">
+                <mat-form-field appearance="outline">
                     <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
                         <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
                             [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
@@ -48,8 +50,8 @@
         <hr color="red">
 
         <div class="row">
-            <div class="col-lg-2">
-                <mat-form-field appearance="outline" style="width: 200px;">
+            <div class="col-6 col-lg-6">
+                <mat-form-field appearance="outline" >
                     <mat-label>Ngày cập nhật giá</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker2" [(ngModel)]="pickedDate2.value._d"
                         (ngModelChange)="onChange2($event)">
@@ -58,7 +60,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-lg-10 button-control my-auto">
+            <div class="col-6 col-lg-6 button-control my-auto">
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Thông tin về giá cả quốc tế','Thông tin về giá cả quốc tế')">Xuất
                     Excel</button>
@@ -114,7 +116,7 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-            <h3 *ngIf="!dataSource.data.length" class="text-center">KHÔNG CÓ DỮ LIỆU</h3>
+            <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU</h5>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>
