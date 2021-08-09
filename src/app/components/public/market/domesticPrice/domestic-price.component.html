@@ -11,7 +11,7 @@
     <mat-card-content>
         <div class="row">
             <div class="col-6 col-lg-3">
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-label>Từ ngày</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.value._d"
                         (ngModelChange)="onChange($event)">
@@ -31,7 +31,7 @@
             </div>
 
             <div class="col-12 col-lg-6">
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
                         <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
                             [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
@@ -44,6 +44,7 @@
         </div>
         <hr>
         <div class="container-fluid">
+            <h5 *ngIf="!domesticchart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN TẠI</h5>
             <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
         </div>
 
