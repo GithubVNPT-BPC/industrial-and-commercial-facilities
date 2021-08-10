@@ -6,6 +6,9 @@ import { EventService } from '../services/evenet.service';
 import { TYPE_OF_NAV } from '../../_enums/typeOfUser.enum';
 import { STYLESCSS_TYPE } from 'src/app/_enums/styleChoose.enum';
 import { SidebarService } from '../../_services/sidebar.service'
+import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
+import { CertificateViewModel } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { formatDate, Location } from '@angular/common';
 
 @Component({
   selector: 'app-topbar',
@@ -37,9 +40,12 @@ export class TopbarComponent implements OnInit {
     public _router: Router,
     public _eventService: EventService,
     public _sidebarService: SidebarService,
+    public _Service: ConditionBusinessService,
   ) { }
 
   ngOnInit() {
+    this.getBusinessList();
+
     this.styleOfScss = this.STYLE_SCSS_DEFAULTL;
     this.open = this._eventService.open;
     this.expression = this.typeOfUser == TYPE_OF_NAV.SPECICALIZED ? true : false;
@@ -49,6 +55,42 @@ export class TopbarComponent implements OnInit {
     this.id = '0'
   }
   ngAfterViewChecked(): void {
+  }
+
+  Convertdate(text: string): string {
+    let date: string
+    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
+    return date
+  }
+
+  public getCurrentDate() {
+    let date = new Date;
+    return formatDate(date, 'yyyy-MM-dd', 'en-US');
+  }
+
+  certificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
+  expirenumber: number;
+
+  getBusinessList() {
+    this._Service.GetCertificate('').subscribe(all => {
+      this.certificate = all.data
+
+      this.certificate.forEach(element => {
+        if (element.ngay_het_han) {
+          let temp = this.Convertdate(element.ngay_het_han)
+          element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+        }
+        else {
+          element.is_het_han = false
+        }
+      });
+
+      this.expirenumber = this.certificate.filter(x => x.is_het_han == true).length
+    })
+  }
+
+  public expirecer(status: boolean) {
+    this._router.navigate(['/specialized/commecial-management/domestic/certificate/' + status]);
   }
 
   id: string

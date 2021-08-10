@@ -18,6 +18,7 @@
                 <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
                     <mat-icon>domain</mat-icon> Trang chủ SCT
                 </a>
+
                 <a mat-raised-button class="btn-company" [routerLink]="['/register']">Doanh nghiệp đăng ký</a>
 
                 <a mat-raised-button class="btn-login" (click)="loginClick()">Đăng
@@ -32,9 +33,14 @@
                         id={{id}}
                     </div>
 
+                    <a mat-raised-button title="Doanh nghiệp hết hạn" (click)="expirecer(1)" target="blank">
+                        <mat-icon matBadge={{expirenumber}} matBadgeColor="warn">info</mat-icon>
+                    </a>
+
                     <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
                         <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
+
                     <a (click)="openAccountDropdown()" class="user-menu">
                         <img class="avatar m-2" src="{{img_avatar}}" alt="{{username}}">
                     </a>

@@ -175,8 +175,8 @@ export class SearchBusinessComponent implements OnInit {
   //   this.router.navigate(['specialized/commecial-management/domestic/edit/']);
   // }
 
-  AddCertificate() {
-    this.router.navigate(['specialized/commecial-management/domestic/certificate/']);
+  AddCertificate(status: boolean) {
+    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + status]);
   }
 
   id: string = '2'

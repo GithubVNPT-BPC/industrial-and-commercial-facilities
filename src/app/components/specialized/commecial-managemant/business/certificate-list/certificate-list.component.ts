@@ -74,8 +74,7 @@ export class CertificateListComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  type: string;
-  id_linh_vuc: number;
+  status: boolean;
 
   constructor(
     public excelService: ExcelService,
@@ -87,8 +86,7 @@ export class CertificateListComponent implements OnInit {
     public route: ActivatedRoute
   ) {
     this.route.params.subscribe((params) => {
-      this.type = params["type"];
-      this.id_linh_vuc = params["id_linh_vuc"];
+      this.status = params["status"]
     });
   }
 
@@ -155,7 +153,15 @@ export class CertificateListComponent implements OnInit {
     });
   }
 
+  isChecked: boolean
+
   ngOnInit() {
+    if (this.status == false) {
+      this.isChecked = false
+    }
+    else {
+      this.isChecked = true
+    }
     this.getBusinessList();
     this.autoOpen();
     // this.GetLinhVuc();
@@ -195,7 +201,7 @@ export class CertificateListComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
 
-      this.dataSource.data = this.certificate.filter(x => x.is_het_han == false)
+      this.dataSource.data = this.certificate.filter(x => x.is_het_han == this.status)
 
       this.dataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
