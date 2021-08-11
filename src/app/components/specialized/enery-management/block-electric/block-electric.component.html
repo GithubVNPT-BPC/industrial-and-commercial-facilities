@@ -39,12 +39,12 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Tổng công xuất(MW):
+                                    <mat-icon>filter</mat-icon> Tổng doanh thu năm (Tỷ đồng):
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{congXuat| formatNumber}}
+                                {{doanhThu| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -58,6 +58,49 @@
                             </mat-card-header>
                             <mat-card-content>
                                 {{sanluongnam| formatNumber}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
+                <div class="row">
+                
+                    <div class="col col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng công xuất(MW):
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{congXuat| formatNumber}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng doanh thu lượng 6 tháng (Tỷ đồng):
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{doanhThu6t| formatNumber}}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng sản lượng 6 tháng(triệu KWh):
+                                </mat-card-title>
+                                <mat-card-subtitle></mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{sanluong6t| formatNumber}}
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -181,19 +224,19 @@
                         </ng-container>
 
                         <ng-container matColumnDef="san_luong_6_thang">
-                            <th mat-header-cell *matHeaderCellDef>Sản lượng 6 tháng/cùng kỳ <br>(triệu KWh) </th>
+                            <th mat-header-cell *matHeaderCellDef>Sản lượng 6 tháng <br>(triệu KWh) </th>
                             <td mat-cell *matCellDef="let element"> {{element.san_luong_6_thang | formatNumber}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="san_luong_nam">
-                            <th mat-header-cell *matHeaderCellDef> Sản lượng năm/cùng kỳ<br>(triệu KWh) </th>
+                            <th mat-header-cell *matHeaderCellDef> Sản lượng năm<br>(triệu KWh) </th>
                             <td mat-cell *matCellDef="let element"> {{element.san_luong_nam | formatNumber}}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="doanh_thu">
                             <th mat-header-cell *matHeaderCellDef> Doanh thu<br>(Tỷ đồng) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.doanh_thu | formatNumber}}
+                            <td mat-cell *matCellDef="let element"> {{element.doanh_thu_nam | formatNumber}}
                             </td>
                         </ng-container>
 
@@ -301,6 +344,14 @@
                                     </mat-form-field>
                                 </div>
 
+                                <div class="col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Doanh thu 6 tháng</mat-label>
+                                        <input matInput type="number" formControlName="doanh_thu_6_thang">
+                                    </mat-form-field>
+                                </div>
+
+                                
                                 <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Sản lượng năm</mat-label>

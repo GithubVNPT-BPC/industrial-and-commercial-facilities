@@ -96,6 +96,25 @@ export class EnergyService {
         );
     }
 
+    LayDuLieuHienTrangDuongDay110KV(time_id, loai_duong_day){
+        var apiUrl = this.apiNangLuong + "/110kv/hien-trang-duong-day";
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams()
+        .set("loai_duong_day", loai_duong_day.toString())
+        .set("time_id", time_id);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    CapNhatDuLieuHienTrangDuongDay110KV(data){
+        var apiUrl = this.apiNangLuong + "/110kv/them-cap-nhat-hien-trang-duong-day";
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl,data, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     LayDuLieuQuyHoachDien110KVDuKien(id_loai){
         var apiUrl = this.apiNangLuong + this.urlDien110KVDuKien;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });

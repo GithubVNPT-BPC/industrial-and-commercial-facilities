@@ -29,6 +29,9 @@ export class SolarEneryManagementComponent extends BaseComponent {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+  doanhThu6t: number;
+  sanluong6t: number;
+
 
   constructor(
     private injector: Injector,
@@ -51,8 +54,8 @@ export class SolarEneryManagementComponent extends BaseComponent {
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/solarelectric";
-    this.TITLE_DEFAULT = "Năng lượng - Điện mặt trời";
-    this.TEXT_DEFAULT = "Năng lượng - Điện mặt trời";
+    this.TITLE_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Điện mặt trời";
+    this.TEXT_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Điện mặt trời";
   }
 
   getSolarEnergyData(time_id) {
@@ -77,6 +80,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
       dia_diem: new FormControl(),
       cong_suat_thiet_ke: new FormControl(),
       san_luong_6_thang: new FormControl(),
+      doanh_thu_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu: new FormControl(),
       id_trang_thai_hoat_dong: new FormControl(),
@@ -87,16 +91,10 @@ export class SolarEneryManagementComponent extends BaseComponent {
   setFormParams() {
     if (this.selection.selected.length) {
         let selectedRecord = this.selection.selected[0];
-        this.formData.controls['id'].setValue(selectedRecord.id);
-        this.formData.controls['ten_du_an'].setValue(selectedRecord.ten_du_an);
-        this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
-        this.formData.controls['dia_diem'].setValue(selectedRecord.dia_diem);
-        this.formData.controls['cong_suat_thiet_ke'].setValue(selectedRecord.cong_suat_thiet_ke);
-        this.formData.controls['san_luong_6_thang'].setValue(selectedRecord.san_luong_6_thang);
-        this.formData.controls['san_luong_nam'].setValue(selectedRecord.san_luong_nam);
-        this.formData.controls['doanh_thu'].setValue(selectedRecord.doanh_thu);
-        this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
-        this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
+        let objectList = this.getFormParams();
+        for (let o in objectList) {
+          this.formData.controls[o].setValue(selectedRecord[o]);
+        }
     }
   }
 
@@ -147,9 +145,12 @@ export class SolarEneryManagementComponent extends BaseComponent {
 
   caculatorValue() {
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
-    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
+    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu_nam).reduce((a, b) => a + b) : 0;
     this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
     this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
+
+    this.doanhThu6t = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu_6_thang).reduce((a, b) => a + b) : 0;
+    this.sanluong6t = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_6_thang).reduce((a, b) => a + b) : 0;
   }
 
   applyActionCheck(event) {

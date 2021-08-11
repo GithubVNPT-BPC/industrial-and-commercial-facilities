@@ -15,7 +15,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
   styleUrls: ['/../../special_layout.scss']
 })
 export class BlockElectricComponent extends BaseComponent {
-  DB_TABLE  = 'QLNL_DIENSINHKHOI'
+  DB_TABLE = 'QLNL_DSK'
   //Constant variable
   public readonly displayedColumns: string[] = ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep','ten_quan_huyen', 'cong_suat_thiet_ke', 'san_luong_6_thang',
    'san_luong_nam', 'doanh_thu','id_trang_thai_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
@@ -29,6 +29,8 @@ export class BlockElectricComponent extends BaseComponent {
   sanluongnam: number;
   soLuongDoanhNghiep: number;
   isChecked: boolean;
+  doanhThu6t: number;
+  sanluong6t: number;
 
   constructor(
     private injector: Injector,
@@ -51,8 +53,8 @@ export class BlockElectricComponent extends BaseComponent {
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/block_electric";
-    this.TITLE_DEFAULT = "Năng lượng - Điện sinh khối";
-    this.TEXT_DEFAULT = "Năng lượng - Điện sinh khối";
+    this.TITLE_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Điện sinh khối";
+    this.TEXT_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Điện sinh khối";
   }
 
   applyFilter(event: Event) {
@@ -69,6 +71,7 @@ export class BlockElectricComponent extends BaseComponent {
       cong_suat_thiet_ke: new FormControl(),
       san_luong_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
+      doanh_thu_6_thang: new FormControl(),
       doanh_thu: new FormControl(),
       time_id: new FormControl(),
       id_trang_thai_hoat_dong: new FormControl(),
@@ -78,16 +81,10 @@ export class BlockElectricComponent extends BaseComponent {
   setFormParams() {
     if (this.selection.selected.length) {
       let selectedRecord = this.selection.selected[0];
-      this.formData.controls['id'].setValue(selectedRecord.id);
-      this.formData.controls['ten_du_an'].setValue(selectedRecord.ten_du_an);
-      this.formData.controls['id_quan_huyen'].setValue(selectedRecord.id_quan_huyen);
-      this.formData.controls['cong_suat_thiet_ke'].setValue(selectedRecord.cong_suat_thiet_ke);
-      this.formData.controls['san_luong_6_thang'].setValue(selectedRecord.san_luong_6_thang);
-      this.formData.controls['san_luong_nam'].setValue(selectedRecord.san_luong_nam);
-      this.formData.controls['doanh_thu'].setValue(selectedRecord.doanh_thu);
-      this.formData.controls['time_id'].setValue(selectedRecord.time_id);
-      this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
-      this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+      let objectList = this.getFormParams();
+      for (let o in objectList) {
+        this.formData.controls[o].setValue(selectedRecord[o]);
+      }
     }
   }
 
@@ -121,10 +118,13 @@ export class BlockElectricComponent extends BaseComponent {
   }
   
   caculatorValue() {
-    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
+    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu_nam).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
     this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.cong_suat_thiet_ke).reduce((a, b) => a + b) : 0;
     this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
+
+    this.doanhThu6t = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x['doanh_thu_6_thang']).reduce((a, b) => a + b) : 0;
+    this.sanluong6t = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_6_thang).reduce((a, b) => a + b) : 0;
   }
 
   applyActionCheck(event) {

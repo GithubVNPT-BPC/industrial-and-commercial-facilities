@@ -49,8 +49,8 @@ export class KeyEnegyComponent extends BaseComponent {
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/key_enegy";
-    this.TITLE_DEFAULT = "Năng lượng - Năng lượng trọng điểm";
-    this.TEXT_DEFAULT = "Năng lượng - Năng lượng trọng điểm";
+    this.TITLE_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Năng lượng trọng điểm";
+    this.TEXT_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Năng lượng trọng điểm";
   }
 
   laydulieuNLTD() {
