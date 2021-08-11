@@ -65,7 +65,7 @@ export class TopbarComponent implements OnInit {
 
   public getCurrentDate() {
     let date = new Date;
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
+    return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 
   certificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
@@ -77,8 +77,7 @@ export class TopbarComponent implements OnInit {
 
       this.certificate.forEach(element => {
         if (element.ngay_het_han) {
-          let temp = this.Convertdate(element.ngay_het_han)
-          element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+          element.is_het_han = element.ngay_het_han < this.getCurrentDate()
         }
         else {
           element.is_het_han = false
