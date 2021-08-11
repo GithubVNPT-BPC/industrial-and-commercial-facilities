@@ -119,7 +119,7 @@ export class ManufacturingElectronicComponent extends BaseComponent {
       so_giay_phep: new FormControl(''),
       ngay_cap: new FormControl(''),
       ngay_het_han: new FormControl(''),
-      id_group: new FormControl(1)
+      id_group: new FormControl(2)
     }
   }
 

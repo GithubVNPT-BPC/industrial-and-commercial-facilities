@@ -2,12 +2,12 @@
     <mat-card-content>
         <div class="row button-control" *ngIf="object[0]">
             <div class="col-lg-12" *ngIf="!is_sent">
-                <button mat-raised-button (click)="exportTOExcel('','Sheet1')">Xuất file
+                <!-- <button mat-raised-button (click)="exportTOExcel('','Sheet1')">Xuất file
                     Excel mẫu</button>
                 <label id="import_excel">
                     <mat-icon>cloud_upload</mat-icon> Nhập bằng Excel <input id="customFile" type="file"
                         (change)="uploadExcel($event)" hidden #inputFile>
-                </label>
+                </label> -->
                 <button mat-raised-button (click)="dataSynthesis()" title="Tổng hợp dữ liệu">Tổng hợp số liệu</button>
                 <button mat-raised-button (click)="SaveReport()" title="Lưu">Lưu</button>
                 <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo">Trình lãnh đạo</button>

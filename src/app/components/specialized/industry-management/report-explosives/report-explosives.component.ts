@@ -4,6 +4,7 @@ import { ReportService } from 'src/app/_services/APIService/report.service';
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from 'src/app/_models/APIModel/report.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TreeviewItem } from 'ngx-treeview';
+import { DecimalPipe } from '@angular/common';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
@@ -25,7 +26,7 @@ export class ReportExplosivesComponent extends BaseComponent {
   //Constant
   public readonly LINK_REPORT: string = '/report/edit';
   public readonly OBJ_ID_6TH: number = 9;
-  public readonly OBJ_ID_12TH: number =  10;
+  public readonly OBJ_ID_12TH: number = 10;
   public TIME_ID: number = new Date().getFullYear();
   public readonly ORG_ID: number = 1;
   public readonly TYPE_INDICATOR_INPUT: number = 1;
@@ -81,6 +82,7 @@ export class ReportExplosivesComponent extends BaseComponent {
     public excelService: ExcelService,
     public info: InformationService,
     public loaderService: LoaderService,
+    public _decimalPipe: DecimalPipe,
     private router: Router
   ) {
     super(injector);
@@ -108,16 +110,16 @@ export class ReportExplosivesComponent extends BaseComponent {
     return list.map((x) => x.name);
   }
 
-  GetReport(){
+  GetReport() {
     let mabc = this.getMaBC(this.term);
     this.GetReportById(this._time_id, mabc);
   }
 
-  getMaBC(term){
+  getMaBC(term) {
     return term == 6 ? this.OBJ_ID_6TH : this.OBJ_ID_12TH;
   }
 
-  modifyAllRecords(allRecords: any[], cols: any[]){
+  modifyAllRecords(allRecords: any[], cols: any[]) {
     allRecords['data'][1].forEach((element) => {
       if (element.attr_code != "IND_NAME")
         this.cols.push({
@@ -133,11 +135,11 @@ export class ReportExplosivesComponent extends BaseComponent {
   }
 
   GetReportById(time_id: number, mabc: number) {
-      this._tableData.data = [];
-      this._tableDataLastYear.data = [];
-      // get data last year
-      this.getReportLastYear(mabc, time_id - 1);
-      this.reportSevice
+    this._tableData.data = [];
+    this._tableDataLastYear.data = [];
+    // get data last year
+    this.getReportLastYear(mabc, time_id - 1);
+    this.reportSevice
       .GetReportByKey(mabc, time_id, this._org_id)
       .subscribe((allRecord) => {
         // this.attributes = allRecord.data[1] as ReportAttribute[];
@@ -160,19 +162,20 @@ export class ReportExplosivesComponent extends BaseComponent {
       });
   }
 
-  setValueLastyear2Now(){
-    if(this._datarowsLastYear.length){
+  setValueLastyear2Now() {
+    if (this._datarowsLastYear.length) {
       this._datarows.forEach((element, index) => {
         element.fn02 = this._datarowsLastYear[index].fn01;
-        if(this._datarowsLastYear[index].fn01 && this._datarows[index].fn01){
-          element.fn03 = ((this._datarows[index].fn01 / this._datarowsLastYear[index].fn01) - 1)*100;
+        if (this._datarowsLastYear[index].fn01 && this._datarows[index].fn01) {
+          element.fn03 = ((this._datarows[index].fn01 / this._datarowsLastYear[index].fn01) - 1) * 100;
+          element.fn03 = parseFloat(this._decimalPipe.transform(element.fn03, '1.2-2'))
         }
       });
     }
     // console.log('xxxxxxxxxxx', this._datarows, this._datarowsLastYear);
   }
 
-  getReportLastYear(mabc, time_id){
+  getReportLastYear(mabc, time_id) {
     this.reportSevice
       .GetReportByKey(mabc, time_id, this._org_id)
       .subscribe((allRecord) => {
@@ -181,9 +184,9 @@ export class ReportExplosivesComponent extends BaseComponent {
       });
   }
 
-  init2Col(allrecords : ReportAttribute[]){
-    let attributesTemp = {...allrecords[2]};
-    let attributesTemp1 = {...allrecords[2]};
+  init2Col(allrecords: ReportAttribute[]) {
+    let attributesTemp = { ...allrecords[2] };
+    let attributesTemp1 = { ...allrecords[2] };
     attributesTemp.attr_name = 'SỐ LƯỢNG NĂM TRƯỚC';
     attributesTemp.attr_code = 'SLNT'
     attributesTemp.attr_id = 465046;
@@ -303,11 +306,11 @@ export class ReportExplosivesComponent extends BaseComponent {
         a.attr_code.toLowerCase() != "rn"
     );
     this.attributeHeaders = this.attributes
-    .sort((a, b) => b.is_default - a.is_default)
-    .filter((a) => a.fld_code.toLowerCase() != null)
-    .map((c) =>
-    c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
-    );
+      .sort((a, b) => b.is_default - a.is_default)
+      .filter((a) => a.fld_code.toLowerCase() != null)
+      .map((c) =>
+        c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
+      );
 
     // console.log(this.attributes);
     this.attributeHeaders = this.attributeHeaders.filter(
@@ -532,12 +535,12 @@ export class ReportExplosivesComponent extends BaseComponent {
     this.paginator._intl.getRangeLabel = this.RANK_LABLE;
   }
 
-  compareToLastYear(e){
+  compareToLastYear(e) {
     // console.log(e)
   }
 
-  OpenDetail(){
+  OpenDetail() {
     this._obj_id = this.getMaBC(this.term);
-    this.router.navigate([this.LINK_REPORT], { queryParams: { time_id : this._time_id, org_id : this._org_id, obj_id : this._obj_id} });
+    this.router.navigate([this.LINK_REPORT], { queryParams: { time_id: this._time_id, org_id: this._org_id, obj_id: this._obj_id } });
   }
 }

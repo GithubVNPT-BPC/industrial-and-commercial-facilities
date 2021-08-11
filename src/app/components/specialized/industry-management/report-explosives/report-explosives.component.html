@@ -20,41 +20,45 @@
             </div>
 
             <div class="col-6 col-lg-6 button-control my-auto text-right">
-                <button mat-raised-button (click)="OpenDetail()"><mat-icon>edit</mat-icon>Cập nhật dữ liệu</button>
-                <button mat-raised-button (click)="ExportTOExcel('Tổng quan CCN',year.toString())" class="green"><mat-icon>file_download</mat-icon>Xuất Excel</button>
+                <button mat-raised-button (click)="OpenDetail()">
+                    <mat-icon>edit</mat-icon>Cập nhật dữ liệu
+                </button>
+                <button mat-raised-button (click)="ExportTOExcel('Tổng quan CCN',year.toString())" class="green">
+                    <mat-icon>file_download</mat-icon>Xuất Excel
+                </button>
             </div>
         </div>
         <hr>
-        
+
         <div *ngIf="dataSource.data.length; else ShowEmpty" #TABLE class="layout">
-            
-                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
-                    <ng-container matColumnDef="index">
-                        <th mat-header-cell *matHeaderCellDef>STT</th>
-                        <td mat-cell *matCellDef="let element; let i = index" class="center-cell">{{ i + 1 }}</td>
-                    </ng-container>
-                    <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
+
+            <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>STT</th>
+                    <td mat-cell *matCellDef="let element; let i = index" class="center-cell">{{ i + 1 }}</td>
+                </ng-container>
+                <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
                                     column.attr_code.toLowerCase() : 
                                     column.fld_code.toLowerCase()">
-                        <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
+                    <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
                                         ngược lại thì lấy cột fld_code (cột dữ liệu) -->
-                        <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
-                        <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
+                    <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
+                    <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
                                     'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
-                            <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
+                        <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
                                         nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
-                            <div
-                                [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
-                                {{row[column.is_default === 1? column.attr_code.toLowerCase():
-                                column.fld_code.toLowerCase()]}}
-                            </div>
-                        </td>
-                    </ng-container>
-                    <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
-                    <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index">
-                    </tr>
-                </table>
-            
+                        <div
+                            [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                            {{row[column.is_default === 1? column.attr_code.toLowerCase():
+                            column.fld_code.toLowerCase()]}}
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index">
+                </tr>
+            </table>
+
         </div>
         <mat-paginator [pageSizeOptions]="[38,50, 100]" showFirstLastButtons></mat-paginator>
         <ng-template #ShowEmpty>

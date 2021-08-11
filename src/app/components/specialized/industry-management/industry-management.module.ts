@@ -16,6 +16,7 @@ import { CertificateRegulationComponent } from './certificate-regulation/certifi
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
 import { registerLocaleData } from '@angular/common';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { DecimalPipe } from '@angular/common';
 
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
@@ -23,33 +24,34 @@ registerLocaleData(localevi, 'vi');
 import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.component";
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        MaterialModule,
-        ReactiveFormsModule,
-        PipeModule,
-        PdfViewerModule,
-        IndustryManagementRoutingModule,
-      ],
-      exports: [
-      ],
-      declarations: [
-        ChemicalManagementComponent,
-        LPGManagementComponent,
-        FoodIndustryManagementComponent,
-        IndustrialExplosivesComponent,
-        ClusterManagementComponent,
-        DetailClusterManagementComponent,
-        IIPIndustrialComponent,
-        IIPMonthComponent,
-        CertificateRegulationComponent,
-        ReportExplosivesComponent,
-        CrudButtonsComponent
-      ],
-      entryComponents: []
+  imports: [
+    CommonModule,
+    FormsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    PipeModule,
+    PdfViewerModule,
+    IndustryManagementRoutingModule,
+  ],
+  exports: [
+  ],
+  declarations: [
+    ChemicalManagementComponent,
+    LPGManagementComponent,
+    FoodIndustryManagementComponent,
+    IndustrialExplosivesComponent,
+    ClusterManagementComponent,
+    DetailClusterManagementComponent,
+    IIPIndustrialComponent,
+    IIPMonthComponent,
+    CertificateRegulationComponent,
+    ReportExplosivesComponent,
+    CrudButtonsComponent
+  ],
+  entryComponents: [],
+  providers: [DecimalPipe]
 })
 
-export class IndustryManagement{
+export class IndustryManagement {
 
 }
