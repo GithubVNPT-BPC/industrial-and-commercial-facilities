@@ -5,6 +5,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 //Import service
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
 //Import Model
 import { LinkModel } from 'src/app/_models/link.model';
 import { Router } from '@angular/router';
@@ -30,7 +31,7 @@ export class RetailComponent implements OnInit {
     public dataSource: MatTableDataSource<RetailModel> = new MatTableDataSource<RetailModel>();
     public year: number = new Date().getFullYear() - 1;
     public years: number[];
-    public obj_id : number = 1;
+    public obj_id: number = 1;
     //Only TS Variable ------------------------------------------------------------
     private _linkOutput: LinkModel = new LinkModel();
     //ViewChild & Input & Output -------------------------------------------------
@@ -47,7 +48,7 @@ export class RetailComponent implements OnInit {
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private _router: Router,
-        private _reportService: ReportService
+        private _reportService: ReportService,
     ) { }
 
     ngOnInit() {
@@ -56,13 +57,82 @@ export class RetailComponent implements OnInit {
         this.sendLinkToNext(true);
     }
 
+    @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
+    lineChart: any;
+
+    timelist: string[] = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
+    thuchienthang: any[]
+
+    ngAfterViewInit(): void {
+        this.lineChartMethod(2020);
+    }
+
+    retail: Array<RetailModel> = new Array<RetailModel>();
+
+    lineChartMethod(time_id: number) {
+        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(
+            res => {
+                this.retail = res.data
+
+                this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+                    type: 'line',
+                    data: {
+                        labels: this.timelist,
+                        datasets: [
+                            {
+                                label: 'TỔNG MỨC BLHH VÀ DTDVTD',
+                                fill: false,
+                                lineTension: 0.1,
+                                backgroundColor: 'rgb(255, 0, 0)',
+                                borderColor: 'rgb(255, 0, 0)',
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: 'rgb(255, 0, 0)',
+                                pointBackgroundColor: '#fff',
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: 'rgb(255, 0, 0)',
+                                pointHoverBorderColor: 'rgb(255, 0, 0)',
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                data: [this.retail[0].thang_01 ? this.retail[0].thang_01 : 0, this.retail[0].thang_02 ? this.retail[0].thang_02 : 0,
+                                this.retail[0].thang_03 ? this.retail[0].thang_03 : 0, this.retail[0].thang_04 ? this.retail[0].thang_04 : 0,
+                                this.retail[0].thang_05 ? this.retail[0].thang_05 : 0, this.retail[0].thang_06 ? this.retail[0].thang_06 : 0,
+                                this.retail[0].thang_07 ? this.retail[0].thang_07 : 0, this.retail[0].thang_08 ? this.retail[0].thang_08 : 0,
+                                this.retail[0].thang_09 ? this.retail[0].thang_09 : 0, this.retail[0].thang_10 ? this.retail[0].thang_10 : 0,
+                                this.retail[0].thang_11 ? this.retail[0].thang_11 : 0, this.retail[0].thang_12 ? this.retail[0].thang_12 : 0],
+                                spanGaps: false,
+                            }
+                        ]
+                    }
+                });
+            })
+    }
+
+    private getData(time_id: number) {
+        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(res => {
+            this.dataSource = new MatTableDataSource<RetailModel>(res.data);
+            this.dataSource.paginator = this.paginator;
+            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+            this.paginator._intl.firstPageLabel = "Trang Đầu";
+            this.paginator._intl.lastPageLabel = "Trang Cuối";
+            this.paginator._intl.previousPageLabel = "Trang Trước";
+            this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        })
+    }
+
     //HTML & TS Function ----------------------------------------------------------
     public ChangeYear(year: number): void {
+        this.lineChart.config.data.datasets = []
         this.getData(this.year);
+        this.lineChartMethod(this.year);
     }
 
     public OpenDetail(month: number, year: number) {
-        this._router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id : year * 100 + month } });
+        this._router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id: year * 100 + month } });
     }
 
     //TS Function -----------------------------------------------------------------
@@ -82,17 +152,5 @@ export class RetailComponent implements OnInit {
             returnYear.push(year - index);
         }
         return returnYear;
-    }
-
-    private getData(time_id: number) {
-        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(res => {
-            this.dataSource = new MatTableDataSource<RetailModel>(res.data);
-            this.dataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        })
     }
 }

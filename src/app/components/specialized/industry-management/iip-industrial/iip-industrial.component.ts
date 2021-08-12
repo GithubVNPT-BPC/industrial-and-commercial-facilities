@@ -5,6 +5,7 @@ import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 //Import service
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
 //Import Model
 import { IIPIndustrialModel } from 'src/app/_models/industry.model';
 import { LinkModel } from 'src/app/_models/link.model';
@@ -37,7 +38,7 @@ export class IIPIndustrialComponent implements OnInit {
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild('TABLE', { static: false }) table: ElementRef;
-    
+
     ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
@@ -47,7 +48,7 @@ export class IIPIndustrialComponent implements OnInit {
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private _router: Router,
-        private _reportService : ReportService
+        private _reportService: ReportService
     ) { }
 
     ngOnInit() {
@@ -57,13 +58,70 @@ export class IIPIndustrialComponent implements OnInit {
         this.sendLinkToNext(true);
     }
 
+    @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
+    lineChart: any;
+
+    timelist: string[] = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
+    thuchienthang: any[]
+
+    ngAfterViewInit(): void {
+        this.lineChartMethod(2020);
+    }
+
+    iip: Array<IIPIndustrialModel> = new Array<IIPIndustrialModel>();
+
+    lineChartMethod(time_id: number) {
+        this._reportService.Get12MonthReports(2, time_id, 'SCT_CUS_CSSXCNT_ATTR_THT').subscribe(
+            res => {
+                this.iip = res.data
+
+                this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+                    type: 'line',
+                    data: {
+                        labels: this.timelist,
+                        datasets: [
+                            {
+                                label: 'Chỉ số sản xuất công nghiệp (IIP) so với cùng kỳ theo giá so sánh năm 2010',
+                                fill: false,
+                                lineTension: 0.1,
+                                backgroundColor: 'rgb(255, 0, 0)',
+                                borderColor: 'rgb(255, 0, 0)',
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: 'rgb(255, 0, 0)',
+                                pointBackgroundColor: '#fff',
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: 'rgb(255, 0, 0)',
+                                pointHoverBorderColor: 'rgb(255, 0, 0)',
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                data: [this.iip[0].thang_01 ? this.iip[0].thang_01 : 0, this.iip[0].thang_02 ? this.iip[0].thang_02 : 0,
+                                this.iip[0].thang_03 ? this.iip[0].thang_03 : 0, this.iip[0].thang_04 ? this.iip[0].thang_04 : 0,
+                                this.iip[0].thang_05 ? this.iip[0].thang_05 : 0, this.iip[0].thang_06 ? this.iip[0].thang_06 : 0,
+                                this.iip[0].thang_07 ? this.iip[0].thang_07 : 0, this.iip[0].thang_08 ? this.iip[0].thang_08 : 0,
+                                this.iip[0].thang_09 ? this.iip[0].thang_09 : 0, this.iip[0].thang_10 ? this.iip[0].thang_10 : 0,
+                                this.iip[0].thang_11 ? this.iip[0].thang_11 : 0, this.iip[0].thang_12 ? this.iip[0].thang_12 : 0],
+                                spanGaps: false,
+                            }
+                        ]
+                    }
+                });
+            })
+    }
+
     //HTML & TS Function ----------------------------------------------------------
     public ChangeYear(year: number): void {
-        this.getData(year);
+        this.lineChart.config.data.datasets = []
+        this.getData(this.year);
+        this.lineChartMethod(this.year);
     }
 
     public OpenDetail(month: number, year: number) {
-        this._router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id : year * 100 + month } });
+        this._router.navigate([this.REDIRECT_PAGE], { queryParams: { time_id: year * 100 + month } });
 
     }
     // //TS Function -----------------------------------------------------------------
