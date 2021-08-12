@@ -157,7 +157,7 @@ export class AddCertificateComponent implements OnInit {
     this._Service.PostCertificate(input).subscribe(
       res => {
         this._info.msgSuccess('Cập nhật thông tin thành công')
-        this.Back()
+        this.Back('0')
       },
       err => {
         this._info.msgError('Cập nhật thông tin không thành công')
@@ -268,7 +268,7 @@ export class AddCertificateComponent implements OnInit {
     return formatDate(date, 'yyyy', 'en-US');
   }
 
-  Back() {
-    this.router.navigate(['/specialized/commecial-management/domestic/certificate']);
+  Back(status: string) {
+    this.router.navigate(['/specialized/commecial-management/domestic/certificate/' + status]);
   }
 }

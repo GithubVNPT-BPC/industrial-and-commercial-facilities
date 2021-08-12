@@ -154,13 +154,16 @@ export class CertificateListComponent implements OnInit {
   }
 
   isChecked: boolean
+  showbutton: boolean
 
   ngOnInit() {
     if (this.status == false) {
       this.isChecked = false
+      this.showbutton = false
     }
     else {
       this.isChecked = true
+      this.showbutton = true
     }
     this.getBusinessList();
     this.autoOpen();
@@ -200,7 +203,12 @@ export class CertificateListComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
 
-      this.dataSource.data = this.certificate.filter(x => x.is_het_han == this.status)
+      if (this.status == true) {
+        this.dataSource.data = this.certificate.filter(x => x.is_het_han == this.status)
+      }
+      else {
+        this.dataSource.data = this.certificate
+      }
 
       this.dataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -211,8 +219,20 @@ export class CertificateListComponent implements OnInit {
     })
   }
 
+  SendEmail() {
+    this._Service.SendEmail().subscribe(all => {
+      this._info.msgSuccess('Gửi mail thành công')
+    })
+  }
+
   applyExpireCheck(event) {
-    this.dataSource.data = this.certificate.filter(x => x.is_het_han == event.checked)
+    this.showbutton = event.checked
+    if (event.checked == true) {
+      this.dataSource.data = this.certificate.filter(x => x.is_het_han == event.checked)
+    }
+    else {
+      this.dataSource.data = this.certificate
+    }
   }
 
   // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;

@@ -28,7 +28,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-8 button-control -align-left my-auto">
+                    <div class="col-6 button-control -align-left my-auto">
                         <button mat-raised-button (click)="AddCertificate(id)">Thêm giấy phép</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa giấy phép</button>
@@ -42,7 +42,10 @@
                         </button>
                     </div>
 
-                    <div class="col-1 checkbox">
+                    <div class="col-6 checkbox">
+                        <button *ngIf="showbutton" mat-raised-button (click)="SendEmail()" class="mr-3">Gửi mail thông
+                            báo GP sắp hết hạn</button>
+
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Giấy phép hết hạn
                         </mat-checkbox>
                     </div>
@@ -150,7 +153,8 @@
 
                         <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
                             <th mat-header-cell *matHeaderCellDef> Thời gian cập nhật </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date: 'dd/MM/yyyy, h:mm a'}}
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
+                                'dd/MM/yyyy, h:mm a'}}
                             </td>
                         </ng-container>
 

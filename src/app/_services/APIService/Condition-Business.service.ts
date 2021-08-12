@@ -63,10 +63,22 @@ export class ConditionBusinessService {
   urlDeletePetrol = "api/qltm/xang-dau/xoa-cua-hang";
   urlDeletePetrolValue = "api/qltm/xang-dau/xoa-san-luong";
 
+  urlSendEmail = "api/doanh-nghiep/thong-bao-giay-phep"
+
   constructor(public http: HttpClient, public logOutService: LoginService) {
     // this.data = JSON.parse(localStorage.getItem('currentUser'));
     // this.token = this.data.token;
   }
+
+  //SendEmail
+  public SendEmail() {
+    var apiUrl = this.apiHome + this.urlSendEmail;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
+  //SendEmail
 
   //Petrol
   petrol: PetrolPost
