@@ -15,7 +15,9 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 export class HydroelectricComponent extends BaseComponent {
 
-  DB_TABLE = 'QLNL_THUYDIEN';
+  DB_TABLE = 'QLNL_THUY_DIEN';
+  sanluong6t: number;
+  doanhThu6t: number;
   constructor(
     private injector: Injector,
     private energyService: EnergyService,
@@ -54,8 +56,8 @@ export class HydroelectricComponent extends BaseComponent {
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/hydroelectric";
-    this.TITLE_DEFAULT = "Năng lượng - Thủy điện";
-    this.TEXT_DEFAULT = "Năng lượng - Thủy điện";
+    this.TITLE_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Thủy điện";
+    this.TEXT_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Thủy điện";
   }
 
   laydulieuThuyDien(time_id) {
@@ -86,8 +88,9 @@ export class HydroelectricComponent extends BaseComponent {
       luong_nuoc_xa_binh_quan: new FormControl(),
       dung_tich_ho_chua: new FormControl(),
       san_luong_6_thang: new FormControl(),
+      doanh_thu_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
-      doanh_thu: new FormControl(),
+      doanh_thu_nam: new FormControl(),
       phuong_an_ung_pho_thien_tai_ha_du: new FormControl(),
       phe_duyet_phuong_an_ung_pho_thien_tai: new FormControl(),
       phuong_an_ung_pho_khan_cap: new FormControl(),
@@ -114,30 +117,6 @@ export class HydroelectricComponent extends BaseComponent {
       for (let o in objectList) {
         this.formData.controls[o].setValue(selectedRecord[o]);
       }
-
-      // this.formData.controls['id'].setValue(selectedRecord.id);
-      // this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
-      // this.formData.controls['cong_suat_thiet_ke'].setValue(selectedRecord.cong_suat_thiet_ke);
-      // this.formData.controls['luong_nuoc_xa_binh_quan'].setValue(selectedRecord.luong_nuoc_xa_binh_quan);
-      // this.formData.controls['dung_tich_ho_chua'].setValue(selectedRecord.dung_tich_ho_chua);
-      // this.formData.controls['san_luong_6_thang'].setValue(selectedRecord.san_luong_6_thang);
-      // this.formData.controls['san_luong_nam'].setValue(selectedRecord.san_luong_nam);
-      // this.formData.controls['doanh_thu'].setValue(selectedRecord.doanh_thu);
-      // this.formData.controls['phuong_an_ung_pho_thien_tai_ha_du'].setValue(selectedRecord.phuong_an_ung_pho_thien_tai_ha_du);
-      // this.formData.controls['phe_duyet_phuong_an_ung_pho_thien_tai'].setValue(selectedRecord.phe_duyet_phuong_an_ung_pho_thien_tai);
-      // this.formData.controls['phuong_an_ung_pho_khan_cap'].setValue(selectedRecord.phuong_an_ung_pho_khan_cap);
-      // this.formData.controls['quy_trinh_van_hanh_ho_chua'].setValue(selectedRecord.quy_trinh_van_hanh_ho_chua);
-      // this.formData.controls['quan_trac_dap_ho'].setValue(selectedRecord.quan_trac_dap_ho);
-      // this.formData.controls['kiem_dinh_dap'].setValue(selectedRecord.kiem_dinh_dap);
-      // this.formData.controls['lap_dat_he_thong_canh_bao_ha_du'].setValue(selectedRecord.lap_dat_he_thong_canh_bao_ha_du);
-      // this.formData.controls['bao_trinh_cong_trinh'].setValue(selectedRecord.bao_trinh_cong_trinh);
-      // this.formData.controls['lap_co_so_du_lieu_ho_chua_thuy_dien'].setValue(selectedRecord.lap_co_so_du_lieu_ho_chua_thuy_dien);
-      // this.formData.controls['phuong_an_bao_ve_dap_ho_chua_thuy_dien'].setValue(selectedRecord.phuong_an_bao_ve_dap_ho_chua_thuy_dien);
-      // this.formData.controls['bao_cao_danh_gia_an_toan'].setValue(selectedRecord.bao_cao_danh_gia_an_toan);
-      // this.formData.controls['bao_cao_hien_trang_an_toan_dap_ho'].setValue(selectedRecord.bao_cao_hien_trang_an_toan_dap_ho);
-      // this.formData.controls['to_khai_dang_ky_an_toan_dap_ho'].setValue(selectedRecord.to_khai_dang_ky_an_toan_dap_ho);
-      // this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
-      // this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.id_tinh_trang_hoat_dong);
     }
   }
 
@@ -162,10 +141,13 @@ export class HydroelectricComponent extends BaseComponent {
   }
 
   caculatorValue() {
-    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu).reduce((a, b) => a + b) : 0;
+    this.doanhThu = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu_nam).reduce((a, b) => a + b) : 0;
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
     // // this.congXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.Cx).reduce((a, b) => a + b) : 0;
     this.sanluongnam = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_nam).reduce((a, b) => a + b) : 0;
+
+    this.doanhThu6t = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.doanh_thu_6_thang).reduce((a, b) => a + b) : 0;
+    this.sanluong6t = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong_6_thang).reduce((a, b) => a + b) : 0;
   }
 
   applyActionCheck(event) {

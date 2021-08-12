@@ -23,8 +23,8 @@ export class ElectricalPlanComponent extends BaseComponent {
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/enery-management/electrical_plan";
-    this.TITLE_DEFAULT = "Năng lượng - Quy hoạch điện 110kV trở lên";
-    this.TEXT_DEFAULT = "Năng lượng - Quy hoạch điện  110kV trở lên";
+    this.TITLE_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Quy hoạch điện 110kV trở lên";
+    this.TEXT_DEFAULT = "Hiện trạng các nguồn điện sơ cấp - Quy hoạch điện  110kV trở lên";
   }
 
 }

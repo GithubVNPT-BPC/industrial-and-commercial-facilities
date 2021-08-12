@@ -50,7 +50,8 @@ export class SolarEneryManagementModel {
     cong_suat_thiet_ke: number;
     san_luong_6_thang: number;
     san_luong_nam: number;
-    doanh_thu: number;
+    doanh_thu_nam: number;
+    doanh_thu_6_thang: number;
     ten_trang_thai_hoat_dong: string;
     id_trang_thai_hoat_dong: number;
     id_quan_huyen: number;
@@ -155,7 +156,7 @@ export class BlockElectricModel {
     cong_suat_thiet_ke: number;
     san_luong_6_thang: number;
     san_luong_nam: number;
-    doanh_thu: number;
+    doanh_thu_nam: number;
     time_id: number;
     id_quan_huyen: number;
     id_trang_thai_hoat_dong: number;
@@ -200,7 +201,7 @@ export class HydroEnergyModel {
     dung_tich_ho_chua: number;
     san_luong_6_thang: number;
     san_luong_nam: number;
-    doanh_thu: number;
+    doanh_thu_nam: number;
     phuong_an_ung_pho_thien_tai_ha_du: string;
     phe_duyet_phuong_an_ung_pho_thien_tai: string;
     phuong_an_ung_pho_khan_cap: string;
@@ -218,6 +219,7 @@ export class HydroEnergyModel {
     id_trang_thai_hoat_dong: number;
 
     thoi_gian_chinh_sua_cuoi: Date;
+    doanh_thu_6_thang: number;
 
 }
 

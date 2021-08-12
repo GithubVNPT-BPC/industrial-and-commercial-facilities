@@ -48,7 +48,7 @@ export abstract class AbstractBaseComponent implements OnInit {
     
     public readonly dateFormat = 'YYYY/MM/DD';
     public currentTime = moment();
-    public currentYear = parseInt(moment().format('YYYY'));
+    public currentYear = new Date().getFullYear();
     public currentMonth = parseInt(moment().format('MM'));
     // public currentYearAndMonth = this.currentYear.toString() + (this.currentMonth >= 10 ? this.currentMonth.toString() : '0' + this.currentMonth.toString());
     public monthSelection: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
