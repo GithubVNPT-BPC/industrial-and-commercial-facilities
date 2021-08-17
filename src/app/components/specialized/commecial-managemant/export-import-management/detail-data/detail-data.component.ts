@@ -5,7 +5,6 @@ import { data_detail_model } from 'src/app/_models/APIModel/export-import.model'
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import { DownloadService } from 'src/app/_services/injectable-service/dowloadFile.service';
 import * as XLSX from "xlsx";
-import json_report_01 from "../test/report_export_01.json";
 
 @Component({
   selector: 'app-detail-data',
@@ -180,11 +179,6 @@ export class DetailDataComponent implements OnInit {
 
   getConfirm() {
     return window.confirm('Bạn có muốn lưu dữ liệu !!');
-  }
-
-  public DowloadFile(filename: string, sheetname: string) {
-    let report: any = json_report_01;
-    this.excelService.exportAsExcelFile(report, "mau_bao_cao");
   }
 
   initReport(): void {

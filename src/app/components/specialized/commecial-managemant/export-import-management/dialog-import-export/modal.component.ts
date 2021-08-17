@@ -8,6 +8,7 @@ import { log } from 'util';
 import { Route } from '@angular/compiler/src/core';
 import { Router } from '@angular/router';
 import { MatSort } from '@angular/material/sort';
+import { formatDate } from '@angular/common';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
@@ -18,7 +19,7 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
     encapsulation: ViewEncapsulation.None
 })
 export class ModalComponent implements OnInit {
-    public displayedColumns_business: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'dia_chi', 'chi_tiet_doanh_nghiep'];
+    public displayedColumns_business: string[] = ['index', 'ten_doanh_nghiep', 'cong_suat', 'dia_chi_day_du', 'chi_tiet_doanh_nghiep'];
     ten_san_pham: string = '';
     so_doanh_nghiep: number = 0;
     displayedColumns: string[] = ['index', 'ten_san_pham', 'thi_truong', 'luong_thang', 'gia_tri_thang', 'luong_cong_don', 'gia_tri_cong_don'];
@@ -30,6 +31,8 @@ export class ModalComponent implements OnInit {
     soLuongdoanhNghiep: number;
     isChecked: boolean;
     curentmonth: number = new Date().getMonth();
+    currentmonth: string
+
     @ViewChild("table", { static: false }) table: ElementRef;
     @ViewChild("table", { static: false }) table1: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
@@ -49,8 +52,8 @@ export class ModalComponent implements OnInit {
 
     ngOnInit(): void {
         this.handleData();
+        this.currentmonth = this.getCurrentMonth();
         // console.log(this.data);
-        
     }
 
     ngAfterViewInit(): void {
@@ -61,18 +64,23 @@ export class ModalComponent implements OnInit {
         this.dataSource.sort = this.sort;
     }
 
+    public getCurrentMonth(): string {
+        let date = new Date;
+        return formatDate(date, 'MM-yyyy', 'en-US');
+    }
+
     so_quoc_gia: number = 0;
     handleData() {
         this.id = this.data['id'];
         // id = 1 => Export
         if (this.id === 1) {
             this.dataSource = new MatTableDataSource<dialog_detail_model>(this.data['data']);
-            this.TongGiaTriThangThucHien = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_thang).reduce((a,b) => a + b) : 0
-            this.TongGiaTriCongDon = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_cong_don).reduce((a,b) => a + b) : 0
+            this.TongGiaTriThangThucHien = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0
+            this.TongGiaTriCongDon = this.data['data'].length ? this.data['data'].map(item => item.tri_gia_cong_don).reduce((a, b) => a + b) : 0
             this.so_quoc_gia = this.data['data'].length;
             this.ten_san_pham = this.data.data.length ? this.data['data'][0]['ten_san_pham'] : '';
         } else {
-            this.ten_san_pham = this.data['ten_san_pham'];
+            this.ten_san_pham = this.data.data.length ? this.data['data'][0]['ten_san_pham'] : '';
             this.so_doanh_nghiep = this.data['data'].length;
             if (this.data['data'].length)
                 this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.data['data'])
@@ -95,7 +103,7 @@ export class ModalComponent implements OnInit {
             this.router.createUrlTree(['/public/partner/search/' + mst]));
         window.open(url, "_blank");
     }
-    
+
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }

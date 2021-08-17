@@ -3,6 +3,9 @@ $white: white;
 $green: #28a745;
 $red: #f44336;
 .mat-card.material {
+    .highlight {
+        font-weight: bold;
+    }
     .set-color-primary {
         color: $blue !important;
     }
@@ -475,8 +478,8 @@ a:hover {
     }
 
     .export-area {
-        display:none;
-        position:absolute;
+        display: none;
+        position: absolute;
         background-color: white;
         border: 1px solid $blue;
         border-radius: 5px;
@@ -486,18 +489,18 @@ a:hover {
         padding: 10px 15px 10px 15px;
         z-index: 1000;
         transition: 0.3s;
-    
+
         &:hover {
-            display:block;
+            display: block;
         }
-    
+
         span {
             display: block;
             cursor: pointer;
             transition: 0.3s;
             &:hover {
                 background-color: $blue;
-                color:white;
+                color: white;
                 border-radius: 5px;
                 padding: 5px;
             }

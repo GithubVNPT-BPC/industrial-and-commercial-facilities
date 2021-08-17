@@ -32,17 +32,16 @@ export class new_import_export_model {
     uoc_cong_don_so_voi_cong_don_truoc: number; // uth so voi khn
     time_id: string;
     is_tong_cuc: boolean;
-
-    // checked to delete
-    isChecked?: boolean;
     thoi_gian_chinh_sua_cuoi: Date;
+    don_vi_tinh: string
+    isChecked: boolean
+    cong_suat: number
 }
 
 export class Task {
     time_id: number;
     id_san_pham: number;
 }
-
 
 export class data_detail_model {
     ten_san_pham: string;

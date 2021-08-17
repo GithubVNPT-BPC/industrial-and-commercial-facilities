@@ -4,8 +4,6 @@ import { ExcelServicesService } from 'src/app/shared/services/excel-services.ser
 import { new_import_export_model, tong_quan_bg_model } from 'src/app/_models/APIModel/export-import.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import * as XLSX from "xlsx";
-import json_report_01 from "../../export-import-management/test/report_export_01.json";
-import report_import from "../../export-import-management/test/report_export_01.json";
 @Component({
   selector: 'app-common-data-border',
   templateUrl: './common-data-border.component.html',
@@ -181,11 +179,6 @@ export class CommonDataBorderComponent implements OnInit {
 
 getConfirm() {
   return window.confirm('Bạn có muốn lưu dữ liệu !!');
-}
-
-  public DowloadFile(filename: string, sheetname: string) {
-  let report: any = this.checkType() ? report_import : json_report_01;
-  this.excelServices.exportAsExcelFile(report, "mau_bao_cao_xuat_khau");
 }
 
 checkType() {

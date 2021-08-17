@@ -7,7 +7,7 @@ import {
     MatDialogConfig,
 } from "@angular/material";
 import { SCTService } from "src/app/_services/APIService/sct.service";
-import { new_import_export_model, Task } from "src/app/_models/APIModel/export-import.model";
+import { new_import_export_model, Task, data_detail_model } from "src/app/_models/APIModel/export-import.model";
 import { MarketService } from "src/app/_services/APIService/market.service";
 import { ModalComponent } from "../dialog-import-export/modal.component";
 import { MatSort } from "@angular/material/sort";
@@ -18,29 +18,123 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ImportDataComponent } from "../import-data/import-data.component";
 import { ExcelServicesService } from "src/app/shared/services/excel-services.service";
 import { LoginService } from "src/app/_services/APIService/login.service";
+import { ReplaySubject, Subject } from 'rxjs';
+import * as XLSX from 'xlsx';
+import { InformationService } from 'src/app/shared/information/information.service';
+
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import _moment from 'moment';
+import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
+import { formatDate } from '@angular/common';
+
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'MM/YYYY',
+    },
+    display: {
+        dateInput: 'MM/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
 
 @Component({
     selector: "app-export-management",
     templateUrl: "./export-management.component.html",
     styleUrls: ["../../../special_layout.scss"],
+    providers: [
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+    ],
 })
+
 export class ExportManagementComponent implements OnInit {
-    //Constant
     private readonly LINK_DEFAULT: string =
         "/specialized/commecial-management/export_import/exported_products";
     private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
+
+    public date = new FormControl(_moment());
+    public newdate = new FormControl(_moment());
+    public theYear: number;
+    public theMonth: number;
+    public stringmonth: string
+    public time: string
+    public timechange: number
+    public month: string
+
+    public chosenYearHandler(normalizedYear: Moment) {
+        this.date = this.newdate
+        const ctrlValue = this.date.value;
+        ctrlValue.year(normalizedYear.year());
+        this.date.setValue(ctrlValue);
+        this.theYear = normalizedYear.year();
+    }
+
+    public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+        const ctrlValue = this.date.value;
+        ctrlValue.month(normalizedMonth.month());
+        this.date.setValue(ctrlValue);
+        this.theMonth = normalizedMonth.month() + 1;
+        datepicker.close();
+
+        if (this.theMonth >= 10) {
+            this.stringmonth = this.theMonth.toString();
+        }
+        else {
+            this.stringmonth = "0" + this.theMonth.toString()
+        }
+        this.time = this.theYear.toString() + this.stringmonth
+        this.timechange = parseInt(this.time)
+
+        if (this.dataTargetId == 1) {
+            this.getDanhSachXuatKhau(this.timechange)
+        }
+        else {
+            this.getDanhSachXuatKhauTC(this.timechange)
+        }
+
+        this.month = this.time.substring(5, 6)
+        this.getDanhSachXuatKhau(this.timechange)
+    }
+
+    // displayedColumns = [
+    //     "index",
+    //     "ten_san_pham",
+    //     "thoi_gian_chinh_sua_cuoi",
+    //     "luong_thang",
+    //     "gia_tri_thang",
+    //     "uoc_th_so_cungky_tht",
+    //     "uoc_th_so_thg_truoc_tht",
+
+    //     "luong_cong_don",
+    //     "gia_tri_cong_don",
+    //     "uoc_th_so_cungky_cong_don",
+    //     "uoc_th_so_thg_truoc_cong_don",
+    //     "danh_sach_doanh_nghiep",
+    //     "chi_tiet_doanh_nghiep",
+    // ];
     displayedColumns = [
-        // "delete_checkbox",
         "index",
         "ten_san_pham",
-        "thoi_gian_chinh_sua_cuoi",
-        "luong_thang",
+        "don_vi_tinh",
         "gia_tri_thang",
         "uoc_th_so_cungky_tht",
         "uoc_th_so_thg_truoc_tht",
 
-        "luong_cong_don",
         "gia_tri_cong_don",
         "uoc_th_so_cungky_cong_don",
         "uoc_th_so_thg_truoc_cong_don",
@@ -48,69 +142,51 @@ export class ExportManagementComponent implements OnInit {
         "chi_tiet_doanh_nghiep",
     ];
     displayRow1Header = [
-        // "delete_checkbox",
         "index",
         "ten_san_pham",
-        "thoi_gian_chinh_sua_cuoi",
+        "don_vi_tinh",
         "thuc_hien_bao_cao_thang",
         "cong_don_den_ky_bao_cao",
 
         "danh_sach_doanh_nghiep",
         "chi_tiet_doanh_nghiep",
     ];
+    // displaRow2Header = [
+    //     "luong_thang",
+    //     "gia_tri_thang",
+    //     "uoc_th_so_cungky_tht",
+    //     "uoc_th_so_thg_truoc_tht",
+    //     "luong_cong_don",
+    //     "gia_tri_cong_don",
+    //     "uoc_th_so_cungky_cong_don",
+    //     "uoc_th_so_thg_truoc_cong_don",
+    // ];
     displaRow2Header = [
-        "luong_thang",
         "gia_tri_thang",
         "uoc_th_so_cungky_tht",
         "uoc_th_so_thg_truoc_tht",
-        "luong_cong_don",
         "gia_tri_cong_don",
         "uoc_th_so_cungky_cong_don",
         "uoc_th_so_thg_truoc_cong_don",
     ];
-    //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
-    // displayedColumns: string[] = [];
-    // displayRow1Header: string[] = []
-    // displaRow2Header: string[] = []
-    // displayRow3Header: string[] = [];
-    // dataSource: MatTableDataSource<ex_im_model> = new MatTableDataSource<ex_im_model>();
+
     dataBusiness: any[] = [];
     dataSource: MatTableDataSource<new_import_export_model> = new MatTableDataSource<new_import_export_model>();
     dataDialog: any[] = [];
     filteredDataSource: MatTableDataSource<new_import_export_model> = new MatTableDataSource<new_import_export_model>();
-    years: number[] = this.getYears();
-    months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-    TongGiaTriThangThucHien: number = 0;
-    uth_so_cungky: number = 0;
-    TongGiaTriCongDon: number = 0;
-    uth_so_khn: number = 0;
-
-    TongLuongCongDon: number = 0;
-    TongLuongThangThucHien: number = 0;
-    isChecked: boolean;
-    pagesize: number = 0;
-    curentmonth: number = new Date().getMonth() + 1;
-    curentYear: number = new Date().getFullYear();
-    @ViewChild("TABLE", { static: false }) table: ElementRef;
+    @ViewChild("TABLE", { static: true }) table: ElementRef;
     @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
     @ViewChild("paginator", { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
-    xuat_khau_chu_yeu = [1, 6, 8, 4, 7, 21, 13, 27, 82, 51, 28, 20, 31, 19, 23];
-
-    tongluong_tc: number = 0;
-    tonggiatri_tc: number = 0;
-    tongluongcongdon_tc: number = 0;
-    tonggiatricongdon_tc: number = 0;
 
     dataTargets: any[] = [
         { id: 1, unit: "Cục hải quan" },
         { id: 2, unit: "Tổng cục hải quan" },
     ];
-    dataTargetId = 2;
-    isOnlyTongCucHQ: number = 2;
-    isNoData: boolean = true;
+    dataTargetId = 1;
+
     constructor(
         public sctService: SCTService,
         public matDialog: MatDialog,
@@ -118,48 +194,304 @@ export class ExportManagementComponent implements OnInit {
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private excelServices: ExcelServicesService,
-        public _login: LoginService
+        public _login: LoginService,
+        public _infor: InformationService,
     ) { }
 
-    handleGTXK() {
+    public exportvalue: Array<new_import_export_model> = new Array<new_import_export_model>();
 
+    spinnerEnabled = false;
+    keys: string[];
+    dataSheet = new Subject();
+    @ViewChild('inputFile', { static: true }) inputFile: ElementRef;
+    isExcelFile: boolean;
+    uploadExcel(evt: any) {
+        let isExcelFile: boolean;
+        let spinnerEnabled = false;
+        let dataSheet = new Subject();
+        let keys: string[];
+        let data, header;
+        const target: DataTransfer = <DataTransfer>(evt.target);
+        isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+        if (isExcelFile) {
+            let data, header;
+            const target: DataTransfer = <DataTransfer>(evt.target);
+            this.isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+            if (target.files.length > 1) {
+                this.inputFile.nativeElement.value = '';
+            }
+            if (this.isExcelFile) {
+                this.spinnerEnabled = true;
+                const reader: FileReader = new FileReader();
+                reader.onload = (e: any) => {
+                    const bstr: string = e.target.result;
+                    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+                    const wsname: string = wb.SheetNames[0];
+                    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+                    data = XLSX.utils.sheet_to_json(ws);
+                    this.dataSource.data = [];
+                    data.forEach(item => {
+                        let datarow: new_import_export_model = new new_import_export_model();
+                        datarow.id_san_pham = item['ID'];
+                        datarow.san_luong_thang = 0;
+                        datarow.tri_gia_thang = item['TH tháng'] ? item['TH tháng'] : 0;
+                        datarow.uoc_thang_so_voi_ki_truoc = item['ƯTH so Tháng cùng kỳ'] ? item['ƯTH so Tháng cùng kỳ'] : 0;
+                        datarow.uoc_thang_so_voi_thang_truoc = item['ƯTH so tháng trước'] ? item['ƯTH so tháng trước'] : 0;
+                        datarow.san_luong_cong_don = 0;
+                        datarow.tri_gia_cong_don = item['TH tháng (Cộng dồn)'] ? item['TH tháng (Cộng dồn)'] : 0;
+                        datarow.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so với cùng kỳ (Cộng dồn)'] ? item['ƯTH so với cùng kỳ (Cộng dồn)'] : 0;
+                        datarow.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so kế hoạch năm (Cộng dồn)'] ? item['ƯTH so kế hoạch năm (Cộng dồn)'] : 0;
+                        this.exportvalue.push(datarow)
+                    });
+                    this.save(this.timechange, this.exportvalue)
+                };
+
+                reader.readAsBinaryString(target.files[0]);
+
+                reader.onloadend = (e) => {
+                    this.spinnerEnabled = false;
+                    this.keys = Object.keys(data[0]);
+                    this.dataSheet.next(data)
+                    this.inputFile.nativeElement.value = '';
+                    this.exportvalue = []
+                }
+            }
+        }
     }
 
-    initVariable() {
-        this.TongLuongThangThucHien = 0;
-        this.TongGiaTriThangThucHien = 0;
-        this.TongLuongCongDon = 0;
-        this.TongGiaTriCongDon = 0;
-        //toongr cuuc
-        this.tongluong_tc = 0;
-        this.tonggiatri_tc = 0;
-        this.tongluongcongdon_tc = 0;
-        this.tonggiatricongdon_tc = 0;
-        // uth
-        this.uth_so_cungky = 0;
-        this.uth_so_khn = 0;
+    public save(month: number, exportvalue: Array<new_import_export_model>) {
+        if (this.dataTargetId == 1) {
+            this.sctService.CapNhatDuLieuXKThang(month, exportvalue).subscribe(
+                next => {
+                    if (next.id == -1) {
+                        this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                    }
+                    else {
+                        this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                        this.getDanhSachXuatKhau(this.timechange)
+                    }
+                },
+                error => {
+                    this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+                }
+            );
+        }
+        else {
+            this.sctService.CapNhatDuLieuXKThangTC(month, exportvalue).subscribe(
+                next => {
+                    if (next.id == -1) {
+                        this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                    }
+                    else {
+                        this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                        this.getDanhSachXuatKhauTC(this.timechange)
+                    }
+                },
+                error => {
+                    this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+                }
+            );
+        }
     }
 
-    kiem_tra(id_mat_hang) {
-        if (this.xuat_khau_chu_yeu.includes(id_mat_hang)) return true;
-        return false;
+    public exportdetail: Array<data_detail_model> = new Array<data_detail_model>();
+
+    uploadExcel1(evt: any) {
+        let isExcelFile: boolean;
+        let spinnerEnabled = false;
+        let dataSheet = new Subject();
+        let keys: string[];
+        let data, header;
+        const target: DataTransfer = <DataTransfer>(evt.target);
+        isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+        if (isExcelFile) {
+            let data, header;
+            const target: DataTransfer = <DataTransfer>(evt.target);
+            this.isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+            if (target.files.length > 1) {
+                this.inputFile.nativeElement.value = '';
+            }
+            if (this.isExcelFile) {
+                this.spinnerEnabled = true;
+                const reader: FileReader = new FileReader();
+                reader.onload = (e: any) => {
+                    const bstr: string = e.target.result;
+                    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+                    const wsname: string = wb.SheetNames[0];
+                    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+                    data = XLSX.utils.sheet_to_json(ws);
+                    this.dataSource.data = [];
+                    data.forEach(item => {
+                        let datarow: data_detail_model = new data_detail_model();
+                        datarow.id_san_pham = item['ID'];
+                        datarow.san_luong_thang = item['Lượng tháng thực hiện (Nghìn tấn)'] ? item['Lượng tháng thực hiện (Nghìn tấn)'] : 0;
+                        datarow.tri_gia_thang = item['Giá trị tháng thực hiện (Triệu USD)'] ? item['Giá trị tháng thực hiện (Triệu USD)'] : 0;
+                        datarow.san_luong_cong_don = item['Lượng cộng dồn (Nghìn tấn)'] ? item['Lượng cộng dồn (Nghìn tấn)'] : 0;
+                        datarow.tri_gia_cong_don = item['Giá trị cộng dồn (Triệu USD)'] ? item['Giá trị cộng dồn (Triệu USD)'] : 0;
+                        datarow.thi_truong = item['Thị trường chủ yếu'] ? item['Thị trường chủ yếu'] : 0;
+                        this.exportdetail.push(datarow)
+                    });
+                    this.save1(this.timechange, this.exportdetail)
+                };
+
+                reader.readAsBinaryString(target.files[0]);
+
+                reader.onloadend = (e) => {
+                    this.spinnerEnabled = false;
+                    this.keys = Object.keys(data[0]);
+                    this.dataSheet.next(data)
+                    this.inputFile.nativeElement.value = '';
+                    this.exportdetail = []
+                }
+            }
+        }
+    }
+
+    public save1(month: number, exportdetail: Array<data_detail_model>) {
+        if (this.dataTargetId == 1) {
+            this.sctService.CapNhatChiTietXKThang(month, exportdetail).subscribe(
+                next => {
+                    if (next.id == -1) {
+                        this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                    }
+                    else {
+                        this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                        this.getDanhSachXuatKhau(this.timechange)
+                    }
+                },
+                error => {
+                    this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+                }
+            );
+        }
+        else {
+            this.sctService.CapNhatChiTietXKThangTC(month, exportdetail).subscribe(
+                next => {
+                    if (next.id == -1) {
+                        this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                    }
+                    else {
+                        this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                        this.getDanhSachXuatKhauTC(this.timechange)
+                    }
+                },
+                error => {
+                    this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+                }
+            );
+        }
+    }
+
+    public exportcompany: Array<new_import_export_model> = new Array<new_import_export_model>();
+
+    uploadExcel2(evt: any) {
+        let isExcelFile: boolean;
+        let spinnerEnabled = false;
+        let dataSheet = new Subject();
+        let keys: string[];
+        let data, header;
+        const target: DataTransfer = <DataTransfer>(evt.target);
+        isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+        if (isExcelFile) {
+            let data, header;
+            const target: DataTransfer = <DataTransfer>(evt.target);
+            this.isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+            if (target.files.length > 1) {
+                this.inputFile.nativeElement.value = '';
+            }
+            if (this.isExcelFile) {
+                this.spinnerEnabled = true;
+                const reader: FileReader = new FileReader();
+                reader.onload = (e: any) => {
+                    const bstr: string = e.target.result;
+                    const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+                    const wsname: string = wb.SheetNames[0];
+                    const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+                    data = XLSX.utils.sheet_to_json(ws);
+                    this.dataSource.data = [];
+                    data.forEach(item => {
+                        let datarow: new_import_export_model = new new_import_export_model();
+                        datarow.id_san_pham = item['ID'];
+                        datarow.mst = item['Mã số thuế']
+                        datarow.cong_suat = item['Trị giá (Triệu USD)'];
+                        datarow.time_id = this.timechange.toString()
+                        this.exportcompany.push(datarow)
+                    });
+                    this.save2(this.exportcompany)
+                };
+
+                reader.readAsBinaryString(target.files[0]);
+
+                reader.onloadend = (e) => {
+                    this.spinnerEnabled = false;
+                    this.keys = Object.keys(data[0]);
+                    this.dataSheet.next(data)
+                    this.inputFile.nativeElement.value = '';
+                    this.exportcompany = []
+                }
+            }
+        }
+    }
+
+    public save2(exportcompany: Array<new_import_export_model>) {
+        if (this.dataTargetId == 1) {
+            this.sctService.CapNhatDNXKThang(exportcompany).subscribe(
+                next => {
+                    if (next.id == -1) {
+                        this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                    }
+                    else {
+                        this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                        this.getDanhSachXuatKhau(this.timechange)
+                    }
+                },
+                error => {
+                    this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+                }
+            );
+        }
+        else {
+            this.sctService.CapNhatDNXKThangTC(exportcompany).subscribe(
+                next => {
+                    if (next.id == -1) {
+                        this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
+                    }
+                    else {
+                        this._infor.msgSuccess("Dữ liệu được lưu thành công!");
+                        this.getDanhSachXuatKhauTC(this.timechange)
+                    }
+                },
+                error => {
+                    this._infor.msgError("Không thể thực thi! Lý do: " + error.message);
+                }
+            );
+        }
     }
 
     authorize: boolean = true
 
+    public getCurrentMonth(): string {
+        let date = new Date;
+        return formatDate(date, 'yyyyMM', 'en-US');
+    }
+
     ngOnInit() {
-        // this.curentmonth = 1;
-        this.applyDataTarget();
-        // this.getDanhSachXuatKhau(this.curentmonth);
+        this.month = this.getCurrentMonth().substring(5, 6)
+        this.timechange = parseInt(this.getCurrentMonth())
+        this.getDanhSachXuatKhau(this.timechange);
         this.autoOpen();
         this.sendLinkToNext(true);
-        // this.filteredDataSource.filterPredicate = function (data: ex_im_model, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
         if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
+
     public sendLinkToNext(type: boolean) {
         this._linkOutput.link = this.LINK_DEFAULT;
         this._linkOutput.title = this.TITLE_DEFAULT;
@@ -172,36 +504,7 @@ export class ExportManagementComponent implements OnInit {
         setTimeout(() => this.accordion.openAll(), 1000);
     }
 
-    // getTotalCost() {
-    //   return this.dataSource.data.map(t => t.cost).reduce((acc, value) => acc + value, 0);
-    // }
-
-    // getDanhSachXuatKhau(value) {
-    //     let tem = this.curentYear * 100 + this.curentmonth;
-    //     this.sctService.GetDanhSachXuatKhau(tem).subscribe((result) => {
-    //         this.log(this.dataSource)
-    //         this.dataDialog = result.data[0];
-    //         this.applyExpireCheck(result.data[1])
-    //     });
-    // }
-
-    tinh_tong(data) {
-        this.initVariable();
-        for (let item of data) {
-            this.TongLuongThangThucHien += item["luong_thang"];
-            this.TongGiaTriThangThucHien += item["gia_tri_thang"];
-            this.TongLuongCongDon += item["luong_cong_don"];
-            this.TongGiaTriCongDon += item["gia_tri_cong_don"];
-            this.tongluong_tc += item["luong_thang_tc"];
-            this.tonggiatri_tc += item["gia_tri_thang_tc"];
-            this.tongluongcongdon_tc += item["luong_cong_don_tc"];
-            this.tonggiatricongdon_tc += item["gia_tri_cong_don_tc"];
-        }
-    }
-
     ngAfterViewInit(): void {
-        //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-        //Add 'implements AfterViewInit' to the class.
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
@@ -215,38 +518,18 @@ export class ExportManagementComponent implements OnInit {
         }
     }
 
-    getYears() {
-        return Array(5)
-            .fill(1)
-            .map((element, index) => new Date().getFullYear() - index);
-    }
-
-    applyExpireCheck(data) {
-        let tem_data = [...data];
-        this.dataSource = new MatTableDataSource<new_import_export_model>(
-            tem_data.filter((item) =>
-                this.xuat_khau_chu_yeu.includes(item.id_mat_hang)
-            )
-        );
-        this.tinh_tong(this.dataSource.data);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-    }
-
     openDialog(id_mat_hang) {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
+            height: '70%',
+            width: '70%',
             data: this.handleDataDialog(id_mat_hang),
             id: 1,
         };
-        dialogConfig.minHeight = window.innerHeight - 100;
-        dialogConfig.minWidth = "90%";
         this.matDialog.open(ModalComponent, dialogConfig);
     }
 
     handleDataDialog(id_mat_hang) {
-        // console.log(this.dataDialog);
-
         let data = this.dataDialog.filter(
             (item) => item.id_san_pham === id_mat_hang
         );
@@ -256,11 +539,11 @@ export class ExportManagementComponent implements OnInit {
     openDanh_sach_doanh_nghiep(id_san_pham) {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
+            height: '70%',
+            width: '70%',
             data: this.handleDataBusiness(id_san_pham),
             id: 2,
         };
-        dialogConfig.minHeight = window.innerHeight - 100;
-        dialogConfig.minWidth = "90%";
         this.matDialog.open(ModalComponent, dialogConfig);
     }
 
@@ -271,26 +554,17 @@ export class ExportManagementComponent implements OnInit {
         return data;
     }
 
-    applyDataTarget() {
-        // this.dataTargetId[0] = 2
-        // 1: cuc hai quan
-        // 2: tong cuc hai quan
-
-        switch (this.dataTargetId) {
-            case 1:
-                this.getDanhSachXuatKhau();
-                break;
-            case 2:
-                this.getDanhSachXuatKhauTC();
-                break;
-
-            default:
-                break;
+    applyDataTarget(event) {
+        this.dataTargetId = event.value
+        if (this.dataTargetId == 1) {
+            this.getDanhSachXuatKhau(this.timechange)
+        }
+        else {
+            this.getDanhSachXuatKhauTC(this.timechange)
         }
     }
 
-    getDanhSachXuatKhau() {
-        let time_id = this.curentYear * 100 + this.curentmonth;
+    getDanhSachXuatKhau(time_id: number) {
         this.sctService.GetDanhSachXuatKhau(time_id).subscribe((result) => {
             this.setDataExport(result.data[0]);
             this.setDatabusiness(result.data[1]);
@@ -298,8 +572,7 @@ export class ExportManagementComponent implements OnInit {
         });
     }
 
-    getDanhSachXuatKhauTC() {
-        let time_id = this.curentYear * 100 + this.curentmonth;
+    getDanhSachXuatKhauTC(time_id: number) {
         this.sctService.GetDanhSachXuatKhauTC(time_id).subscribe((result) => {
             this.setDataExport(result.data[0]);
             this.setDatabusiness(result.data[1]);
@@ -315,11 +588,16 @@ export class ExportManagementComponent implements OnInit {
         this.dataBusiness = lsBusiness;
     }
 
+    TongGiaTriThangThucHien: number = 0;
+    uth_so_cungky: number = 0;
+    TongGiaTriCongDon: number = 0;
+    uth_so_khn: number = 0;
+
     setSumaryData(data) {
-        this.TongGiaTriThangThucHien = data[15].tri_gia_thang ? data[15].tri_gia_thang : 0;
-        this.uth_so_cungky = data[15].uoc_thang_so_voi_ki_truoc ? data[15].uoc_thang_so_voi_ki_truoc : 0;
-        this.TongGiaTriCongDon = data[15].tri_gia_cong_don ? data[15].tri_gia_cong_don : 0;
-        this.uth_so_khn = data[15].uoc_cong_don_so_voi_cong_don_truoc ? data[15].uoc_cong_don_so_voi_cong_don_truoc : 0;
+        this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
+        this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
+        this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
+        this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
     }
 
     setDataExport(data) {
@@ -334,8 +612,6 @@ export class ExportManagementComponent implements OnInit {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
     }
 
-    // declare variable isExport
-
     public ImportTOExcel() {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
@@ -346,34 +622,5 @@ export class ExportManagementComponent implements OnInit {
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 300;
         this.matDialog.open(ImportDataComponent, dialogConfig);
-    }
-
-    // checkbox delete
-    allComplete: boolean = false;
-    task: Task[] = [];
-    updateAllComplete() {
-        let dataNo = this.dataSource.data['data'][0].length
-        this.allComplete = this.task != null && this.task.length === dataNo;
-    }
-
-    // someComplete(): boolean {
-    //     if (this.task.subtasks == null) {
-    //         return false;
-    //     }
-    //     return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
-    // }
-
-    setAll() {
-        this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
-    }
-
-    setSomeIten(element) {
-        let temp_item: Task = Object.assign({}, element);
-        this.task.push(temp_item);
-        // element.isChecked = !element.isChecked;
-    }
-
-    Delete() {
-        // waiting api
     }
 }

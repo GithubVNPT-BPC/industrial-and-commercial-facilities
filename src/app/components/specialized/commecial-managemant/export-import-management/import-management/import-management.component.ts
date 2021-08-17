@@ -8,17 +8,49 @@ import { MarketService } from '../../../../../_services/APIService/market.servic
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 import { LinkModel } from 'src/app/_models/link.model';
 import { ExcelServicesService } from 'src/app/shared/services/excel-services.service';
-import report_import from "../test/report_import.json";
 import { ImportDataComponent } from '../import-data/import-data.component';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import _moment from 'moment';
+import { defaultFormat as _rollupMoment, Moment } from 'moment';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
+import { formatDate } from '@angular/common';
+
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'MM/YYYY',
+    },
+    display: {
+        dateInput: 'MM/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
+
 @Component({
     selector: 'app-import-management',
     templateUrl: './import-management.component.html',
     styleUrls: ['../../../special_layout.scss'],
+    providers: [
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+        { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+    ],
 })
 
 export class ImportManagementComponent implements OnInit, AfterViewInit {
@@ -312,11 +344,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    public DowloadFile(filename: string, sheetname: string) {
-        let report: any = report_import;
-        this.excelServices.exportAsExcelFile(report, "mau_bao_cao_nhap_khau");
     }
 
     // declare isImport

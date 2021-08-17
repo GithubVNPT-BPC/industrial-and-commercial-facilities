@@ -4,7 +4,6 @@ import { ExcelServicesService } from 'src/app/shared/services/excel-services.ser
 import { new_import_export_model } from 'src/app/_models/APIModel/export-import.model';
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 import * as XLSX from "xlsx";
-import json_report_01 from "../test/report_export_01.json";
 
 @Component({
   selector: 'app-detail-national',
@@ -172,11 +171,6 @@ export class DetailNationalComponent implements OnInit {
 
     getConfirm(){
       return window.confirm('Bạn có muốn lưu dữ liệu !!');
-    }
-
-    public DowloadFile(filename: string, sheetname: string) {
-      let report: any = json_report_01;
-      this.excelService.exportAsExcelFile(report, "mau_bao_cao_xuat_khau");
     }
 
 }
