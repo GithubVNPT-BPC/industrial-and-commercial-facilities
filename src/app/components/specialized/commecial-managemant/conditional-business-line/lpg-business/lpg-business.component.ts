@@ -198,6 +198,7 @@ export class LPGBusinessComponent implements OnInit {
     public newdate = new FormControl(_moment());
 
     SoLuongCoSo: number;
+    SLThuongNhan: number
     type: string = 'LPG'
 
     dataSource1: MatTableDataSource<LPGList> = new MatTableDataSource<LPGList>();
@@ -258,6 +259,7 @@ export class LPGBusinessComponent implements OnInit {
             this.dataSource1.data = this.LPGList4
 
             this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
+            this.SLThuongNhan = this.LPGList1.length
 
             this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';

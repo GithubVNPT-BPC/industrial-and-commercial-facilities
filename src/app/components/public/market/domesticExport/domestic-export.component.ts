@@ -4,8 +4,9 @@ import { Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { SCTService } from "src/app/_services/APIService/sct.service";
 
-import { ExportMarketModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { new_import_export_model, Task, data_detail_model } from "src/app/_models/APIModel/export-import.model";
 import { SAVE } from 'src/app/_enums/save.enum';
 
 import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
@@ -16,8 +17,8 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
-import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
+import { formatDate } from '@angular/common';
 
 export const MY_FORMATS = {
   parse: {
@@ -48,76 +49,139 @@ export const MY_FORMATS = {
 })
 
 export class DomesticExportComponent extends BaseComponent {
-  public displayedColumns: string[] = ['index', 'ten_san_pham', 'don_vi_tinh2', 'san_luong_thang', 'tri_gia_thang', 'san_luong_thang_tc', 'tri_gia_thang_tc', 'top_xuat_khau', 'id_san_pham'];
-  public dataSource: MatTableDataSource<ExportMarketModel>;
-  
-  public pickedDate = new FormControl(_moment());
-  public EXCEL_NAME = `Thông tin xuất khẩu`; 
-
-  private sumSL: number = 0;
-  private sumTG: number = 0;
-  private sumSLCT: number = 0;
-  private sumTGCT: number = 0;
+  public dataSource: MatTableDataSource<new_import_export_model>;
 
   constructor(
+    public sctService: SCTService,
     private injector: Injector,
-    public marketService: MarketServicePublic,
     public excelService: ExcelService,
     public router: Router,
     public dialog: MatDialog) {
-      super(injector);
+    super(injector);
   }
 
-  ngOnInit() {
-    super.ngOnInit();
-    this.getExportlist(this.currentTime.format('YYYYMM'));
-  }
-
-  public getExportlist(time: string) {
-    this.marketService.GetExportValue(time).subscribe(
-      allrecords => {
-        this.filteredDataSource.data = [];
-        if (allrecords.data && allrecords.data.length > 0) {
-          let data = allrecords.data[0];
-          this.dataSource = new MatTableDataSource<ExportMarketModel>(data);
-          this.filteredDataSource.data = [...this.dataSource.data];
-        }
-        this._prepareData();
-        this.paginatorAgain();
-      },
-      error => this.errorMessage = <any>error
-    );
-  }
-
-  _prepareData() {
-    let data = this.dataSource.data;
-    this.sumSL = data.length ? data.map(item => item.san_luong_thang).reduce((a, b) => a + b) : 0; 
-    this.sumTG = data.length ? data.map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0; 
-    this.sumSLCT = data.length ? data.map(item => item.san_luong_thang_tc).reduce((a, b) => a + b) : 0; 
-    this.sumTGCT = data.length ? data.map(item => item.tri_gia_thang_tc).reduce((a, b) => a + b) : 0; 
-  }
+  public date = new FormControl(_moment());
+  public newdate = new FormControl(_moment());
+  public theYear: number;
+  public theMonth: number;
+  public stringmonth: string
+  public time: string
+  public timechange: number
+  public month: string
 
   public chosenYearHandler(normalizedYear: Moment) {
-    const ctrlValue = this.pickedDate.value;
+    this.date = this.newdate
+    const ctrlValue = this.date.value;
     ctrlValue.year(normalizedYear.year());
-    this.pickedDate.setValue(ctrlValue);
-    this.currentYear = normalizedYear.year();
+    this.date.setValue(ctrlValue);
+    this.theYear = normalizedYear.year();
   }
 
   public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
-    const ctrlValue = this.pickedDate.value;
+    const ctrlValue = this.date.value;
     ctrlValue.month(normalizedMonth.month());
-    this.pickedDate.setValue(ctrlValue);
-    this.currentMonth = normalizedMonth.month() + 1;
+    this.date.setValue(ctrlValue);
+    this.theMonth = normalizedMonth.month() + 1;
     datepicker.close();
 
-    let currentYearAndMonth = this.currentYear.toString() + (this.currentMonth >= 10 ? this.currentMonth.toString() : '0' + this.currentMonth.toString());
-    this.getExportlist(currentYearAndMonth);
+    if (this.theMonth >= 10) {
+      this.stringmonth = this.theMonth.toString();
+    }
+    else {
+      this.stringmonth = "0" + this.theMonth.toString()
+    }
+    this.time = this.theYear.toString() + this.stringmonth
+    this.timechange = parseInt(this.time)
+
+    if (this.dataTargetId == 1) {
+      this.getDanhSachXuatKhau(this.timechange)
+    }
+    else {
+      this.getDanhSachXuatKhauTC(this.timechange)
+    }
+
+    this.month = this.time.substring(5, 6)
   }
 
-  public exportTOExcel() {
-    this.EXCEL_NAME = `Thông tin xuất khẩu tháng ${this.currentMonth}-${this.currentYear}`; 
-    this.excelService.exportDomTableAsExcelFile(this.EXCEL_NAME, `${this.currentMonth}-${this.currentYear}`, this.table.nativeElement);
+  dataTargets: any[] = [
+    { id: 1, unit: "Cục hải quan" },
+    { id: 2, unit: "Tổng cục hải quan" },
+  ];
+  dataTargetId = 1;
+
+  displayedColumns = [
+    // "index",
+    "ten_san_pham",
+    "don_vi_tinh",
+    "gia_tri_thang",
+    "uoc_th_so_cungky_tht",
+    "uoc_th_so_thg_truoc_tht",
+
+    "gia_tri_cong_don",
+    "uoc_th_so_cungky_cong_don",
+    "uoc_th_so_thg_truoc_cong_don",
+    "danh_sach_doanh_nghiep",
+    "chi_tiet_doanh_nghiep",
+  ];
+  displayRow1Header = [
+    // "index",
+    "ten_san_pham",
+    "don_vi_tinh",
+    "thuc_hien_bao_cao_thang",
+    "cong_don_den_ky_bao_cao",
+
+    "danh_sach_doanh_nghiep",
+    "chi_tiet_doanh_nghiep",
+  ];
+  displaRow2Header = [
+    "gia_tri_thang",
+    "uoc_th_so_cungky_tht",
+    "uoc_th_so_thg_truoc_tht",
+    "gia_tri_cong_don",
+    "uoc_th_so_cungky_cong_don",
+    "uoc_th_so_thg_truoc_cong_don",
+  ];
+
+  public getCurrentMonth(): string {
+    let date = new Date;
+    return formatDate(date, 'yyyyMM', 'en-US');
+  }
+
+  ngOnInit() {
+    this.month = this.getCurrentMonth().substring(5, 6)
+    this.timechange = parseInt(this.getCurrentMonth())
+    this.getDanhSachXuatKhau(this.timechange);
+    super.ngOnInit();
+  }
+
+  getDanhSachXuatKhau(time_id: number) {
+    this.sctService.GetDanhSachXuatKhau(time_id).subscribe((result) => {
+      this.setDataExport(result.data[0]);
+    });
+  }
+
+  getDanhSachXuatKhauTC(time_id: number) {
+    this.sctService.GetDanhSachXuatKhauTC(time_id).subscribe((result) => {
+      this.setDataExport(result.data[0]);
+    });
+  }
+
+  setDataExport(data) {
+    this.dataSource = new MatTableDataSource<new_import_export_model>(data);
+    if (data.length) {
+      this.dataSource.paginator = this.paginator;
+    }
+  }
+
+  private sumTG: number = 0;
+
+  _prepareData() {
+    let data = this.dataSource.data;
+    this.sumTG = data.length ? data.map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0;
+  }
+
+  public ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   public openCompanyTopPopup(data: any) {

@@ -151,7 +151,7 @@ export class AddLpgComponent implements OnInit {
   businessmanvalue1: Array<LPGList> = new Array<LPGList>();
 
   getBusinessmanvalue() {
-    this._Service.GetAllLiquorValue().subscribe(all => {
+    this._Service.GetAllLPGValue().subscribe(all => {
 
       this.businessmanvalue = all.data[1]
       this.businessmanvalue1 = this.businessmanvalue.filter(x => x.id_san_luong == this.id)

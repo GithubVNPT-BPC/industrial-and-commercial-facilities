@@ -54,52 +54,117 @@ export const MY_FORMATS = {
 })
 
 export class ImportManagementComponent implements OnInit, AfterViewInit {
-    //Constant
     private readonly LINK_DEFAULT: string = "/specialized/commecial-management/export_import/imported_products";
     private readonly TITLE_DEFAULT: string = "Thông tin nhập khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin nhập khẩu";
+
+    public date = new FormControl(_moment());
+    public newdate = new FormControl(_moment());
+    public theYear: number;
+    public theMonth: number;
+    public stringmonth: string
+    public time: string
+    public timechange: number
+    public month: string
+
+    public chosenYearHandler(normalizedYear: Moment) {
+        this.date = this.newdate
+        const ctrlValue = this.date.value;
+        ctrlValue.year(normalizedYear.year());
+        this.date.setValue(ctrlValue);
+        this.theYear = normalizedYear.year();
+    }
+
+    public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+        const ctrlValue = this.date.value;
+        ctrlValue.month(normalizedMonth.month());
+        this.date.setValue(ctrlValue);
+        this.theMonth = normalizedMonth.month() + 1;
+        datepicker.close();
+
+        if (this.theMonth >= 10) {
+            this.stringmonth = this.theMonth.toString();
+        }
+        else {
+            this.stringmonth = "0" + this.theMonth.toString()
+        }
+        this.time = this.theYear.toString() + this.stringmonth
+        this.timechange = parseInt(this.time)
+
+        if (this.dataTargetId == 1) {
+            this.getDanhSachNhapKhau(this.timechange)
+        }
+        else {
+            this.getDanhSachNhapKhauTC(this.timechange)
+        }
+
+        this.month = this.time.substring(5, 6)
+    }
+
+    // displayedColumns = [
+    //     "index",
+    //     "ten_san_pham",
+    //     "thoi_gian_chinh_sua_cuoi",
+    //     "luong_thang",
+    //     "gia_tri_thang",
+    //     "uoc_th_so_cungky_tht",
+    //     "uoc_th_so_thg_truoc_tht",
+
+    //     "luong_cong_don",
+    //     "gia_tri_cong_don",
+    //     "uoc_th_so_cungky_cong_don",
+    //     "uoc_th_so_thg_truoc_cong_don",
+    //     "danh_sach_doanh_nghiep",
+    //     "chi_tiet_doanh_nghiep",
+    // ];
     displayedColumns = [
-        // 'delete_checkbox',
-        'index', 'ten_san_pham',
-        'thoi_gian_chinh_sua_cuoi',
-        'luong_thang', 'gia_tri_thang',
-        'uoc_th_so_cungky_tht',
-        'uoc_th_so_thg_truoc_tht',
+        "index",
+        "ten_san_pham",
+        "don_vi_tinh",
+        "gia_tri_thang",
+        "uoc_th_so_cungky_tht",
+        "uoc_th_so_thg_truoc_tht",
 
-        'luong_cong_don', 'gia_tri_cong_don',
-        'uoc_th_so_cungky_cong_don',
-        'uoc_th_so_thg_truoc_cong_don',
-        'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep'];
+        "gia_tri_cong_don",
+        "uoc_th_so_cungky_cong_don",
+        "uoc_th_so_thg_truoc_cong_don",
+        "danh_sach_doanh_nghiep",
+        "chi_tiet_doanh_nghiep",
+    ];
     displayRow1Header = [
-        // 'delete_checkbox',
-        'index',
-        'ten_san_pham',
-        'thoi_gian_chinh_sua_cuoi',
-        'thuc_hien_bao_cao_thang',
-        'cong_don_den_ky_bao_cao',
+        "index",
+        "ten_san_pham",
+        "don_vi_tinh",
+        "thuc_hien_bao_cao_thang",
+        "cong_don_den_ky_bao_cao",
 
-        'danh_sach_doanh_nghiep',
-        'chi_tiet_doanh_nghiep',
-    ]
+        "danh_sach_doanh_nghiep",
+        "chi_tiet_doanh_nghiep",
+    ];
+    // displaRow2Header = [
+    //     "luong_thang",
+    //     "gia_tri_thang",
+    //     "uoc_th_so_cungky_tht",
+    //     "uoc_th_so_thg_truoc_tht",
+    //     "luong_cong_don",
+    //     "gia_tri_cong_don",
+    //     "uoc_th_so_cungky_cong_don",
+    //     "uoc_th_so_thg_truoc_cong_don",
+    // ];
     displaRow2Header = [
-        'luong_thang',
-        'gia_tri_thang',
-        'uoc_th_so_cungky_tht',
-        'uoc_th_so_thg_truoc_tht',
-        'luong_cong_don',
-        'gia_tri_cong_don',
-        'uoc_th_so_cungky_cong_don',
-        'uoc_th_so_thg_truoc_cong_don',
-    ]
-    //Variable for only ts
+        "gia_tri_thang",
+        "uoc_th_so_cungky_tht",
+        "uoc_th_so_thg_truoc_tht",
+        "gia_tri_cong_don",
+        "uoc_th_so_cungky_cong_don",
+        "uoc_th_so_thg_truoc_cong_don",
+    ];
+
     private _linkOutput: LinkModel = new LinkModel();
     dataSource: MatTableDataSource<new_import_export_model>;
     dataDialog: any[] = [];
     dataBusiness: any[] = [];
     filteredDataSource: MatTableDataSource<new_import_export_model> = new MatTableDataSource<new_import_export_model>();
-    years: number[] = this.getYears();
-    months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
     TongGiaTriThangThucHien: number = 0;
     TongLuongCongDon: number = 0;
@@ -109,26 +174,17 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     uth_so_khn: number = 0;
     isChecked: boolean;
     pagesize: number = 0;
-    curentmonth: number = new Date().getMonth() + 1;
-    curentYear: number = new Date().getFullYear();
     @ViewChild("TABLE", { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
     @ViewChild("paginator", { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
-    nhap_khau_chu_yeu = [1, 6, 8, 4, 7, 21, 13, 27, 82, 51, 28, 20, 31, 19, 23]
-
-    tongluong_tc: number = 0;
-    tonggiatri_tc: number = 0;
-    tongluongcongdon_tc: number = 0;
-    tonggiatricongdon_tc: number = 0;
 
     dataTargets: any[] = [
         { id: 1, unit: 'Cục hải quan' },
         { id: 2, unit: 'Tổng cục hải quan' }
     ]
-    dataTargetId = 2;
-    isOnlyTongCucHQ: number = 2;
-    dataDetail: any[] = [];
+    dataTargetId = 1;
+
     constructor(
         public sctService: SCTService,
         public matDialog: MatDialog,
@@ -162,24 +218,19 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         this.uth_so_khn = 0;
     }
 
-    kiem_tra(id_mat_hang) {
-        if (this.nhap_khau_chu_yeu.includes(id_mat_hang))
-            return true
-        return false;
-    }
-
     authorize: boolean = true;
 
+    public getCurrentMonth(): string {
+        let date = new Date;
+        return formatDate(date, 'yyyyMM', 'en-US');
+    }
+
     ngOnInit() {
-        // this.curentmonth = 1;
-        this.applyDataTarget();
-        // this.getDanhSachNhapKhau();
+        this.month = this.getCurrentMonth().substring(5, 6)
+        this.timechange = parseInt(this.getCurrentMonth())
+        this.getDanhSachNhapKhau(this.timechange);
         this.autoOpen();
         this.sendLinkToNext(true);
-        // this.filteredDataSource.filterPredicate = function (data: ex_im_model, filter): boolean {
-        //     return String(data.is_het_han).includes(filter);
-        // };
-        // this.handleGTXK();
         if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
@@ -196,8 +247,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.accordion.openAll(), 1000);
     }
 
-    getDanhSachNhapKhau() {
-        let time_id = this.curentYear * 100 + this.curentmonth;
+    getDanhSachNhapKhau(time_id: number) {
         this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
             this.setDataImport(result.data[0]);
             this.setDatabusiness(result.data[1]);
@@ -205,8 +255,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         });
     }
 
-    getDanhSachNhapKhauTC() {
-        let time_id = this.curentYear * 100 + this.curentmonth;
+    getDanhSachNhapKhauTC(time_id: number) {
         this.sctService.GetDanhSachNhapKhauTC(time_id).subscribe((result) => {
             this.setDataImport(result.data[0]);
             this.setDatabusiness(result.data[1]);
@@ -218,12 +267,16 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         this.dataBusiness = lsBusiness;
     }
 
+    tongluong_tc: number = 0;
+    tonggiatri_tc: number = 0;
+    tongluongcongdon_tc: number = 0;
+    tonggiatricongdon_tc: number = 0;
 
-    setSumaryData(data: any[]) {
-        this.TongGiaTriThangThucHien = data.length ? data.map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0
-        this.uth_so_cungky = data.length ? data.map(item => item.uoc_thang_so_voi_ki_truoc).reduce((a, b) => a + b) / data.length : 0
-        this.TongGiaTriCongDon = data.length ? data.map(item => item.tri_gia_cong_don).reduce((a, b) => a + b) : 0
-        this.uth_so_khn = data.length ? data.map(item => item.uoc_cong_don_so_voi_cong_don_truoc).reduce((a, b) => a + b) / data.length : 0
+    setSumaryData(data) {
+        this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
+        this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
+        this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
+        this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
     }
 
     setDataImport(data) {
@@ -270,22 +323,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         }
     }
 
-    getYears() {
-        return Array(5)
-            .fill(1)
-            .map((element, index) => new Date().getFullYear() - index);
-    }
-
-    applyExpireCheck(data) {
-        let tem_data = [...data]
-        this.dataSource = new MatTableDataSource<new_import_export_model>(tem_data.filter(item => this.nhap_khau_chu_yeu.includes(item.id_mat_hang)));
-        this.tinh_tong(this.dataSource.data)
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-    }
-
     openDialog(id_mat_hang) {
-        // if (this.kiem_tra(id_mat_hang)) {
         const dialogConfig = new MatDialogConfig();
         dialogConfig.data = {
             data: this.handelDataDialog(id_mat_hang),
@@ -293,10 +331,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         };
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 100;
-        // console.log(this.handelDataDialog(id_mat_hang));
-        // dialogConfig.panelClass = ['overflow-y: scroll;']
         this.matDialog.open(ModalComponent, dialogConfig);
-        // }
     }
 
     handelDataDialog(id_mat_hang) {
@@ -324,67 +359,17 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         return data;
     }
 
-    applyDataTarget() {
-        // this.dataTargetId[0] = 2
-        // 1: cuc hai quan
-        // 2: tong cuc hai quan
-        this.dataDetail = [];
-        switch (this.dataTargetId) {
-            case 1:
-                this.getDanhSachNhapKhau();
-                break;
-            case 2:
-                this.getDanhSachNhapKhauTC();
-                break;
-
-            default:
-                break;
+    applyDataTarget(event) {
+        this.dataTargetId = event.value
+        if (this.dataTargetId == 1) {
+            this.getDanhSachNhapKhau(this.timechange)
+        }
+        else {
+            this.getDanhSachNhapKhauTC(this.timechange)
         }
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
         this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }
-
-    // declare isImport
-    public ImportTOExcel() {
-        const dialogConfig = new MatDialogConfig();
-        dialogConfig.data = {
-            data: {
-                isImport: true
-            },
-        };
-        dialogConfig.minWidth = window.innerWidth - 100;
-        dialogConfig.minHeight = window.innerHeight - 100;
-        this.matDialog.open(ImportDataComponent, dialogConfig);
-    }
-
-    // checkbox delete
-    allComplete: boolean = false;
-    task: Task[] = [];
-    updateAllComplete() {
-        let dataNo = this.dataSource.data['data'][0].length
-        this.allComplete = this.task != null && this.task.length === dataNo;
-    }
-
-    // someComplete(): boolean {
-    //     if (this.task.subtasks == null) {
-    //         return false;
-    //     }
-    //     return this.task.subtasks.filter(t => t.completed).length > 0 && !this.allComplete;
-    // }
-
-    setAll() {
-        this.dataSource.data.forEach(item => item.isChecked = !item.isChecked)
-    }
-
-    setSomeIten(element) {
-        let temp_item: Task = Object.assign({}, element);
-        this.task.push(temp_item);
-        // element.isChecked = !element.isChecked;
-    }
-
-    Delete() {
-        // waiting api
     }
 }

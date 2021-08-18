@@ -4,7 +4,13 @@ $green: #28a745;
 $red: #f44336;
 .mat-card.material {
     .highlight {
-        font-weight: bold;
+        font-weight: bolder;
+    }
+    .highlight1 {
+        font-style: italic;
+    }
+    .hidecolor {
+        opacity: 0;
     }
     .set-color-primary {
         color: $blue !important;

@@ -1,6 +1,14 @@
 .mat-card.material {
   height: 100%;
-
+  .highlight {
+    font-weight: bolder;
+  }
+  .highlight1 {
+    font-style: italic;
+  }
+  .hidecolor {
+    opacity: 0;
+  }
   .mat-paginator {
     margin-top: 20px;
     margin-bottom: 10px;
@@ -104,7 +112,6 @@
         table-layout: initial;
         min-width: 900px;
         overflow-x: hidden;
-
 
         th,
         td {

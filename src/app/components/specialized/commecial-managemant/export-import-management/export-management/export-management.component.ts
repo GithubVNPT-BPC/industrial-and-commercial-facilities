@@ -108,27 +108,10 @@ export class ExportManagementComponent implements OnInit {
         }
 
         this.month = this.time.substring(5, 6)
-        this.getDanhSachXuatKhau(this.timechange)
     }
 
-    // displayedColumns = [
-    //     "index",
-    //     "ten_san_pham",
-    //     "thoi_gian_chinh_sua_cuoi",
-    //     "luong_thang",
-    //     "gia_tri_thang",
-    //     "uoc_th_so_cungky_tht",
-    //     "uoc_th_so_thg_truoc_tht",
-
-    //     "luong_cong_don",
-    //     "gia_tri_cong_don",
-    //     "uoc_th_so_cungky_cong_don",
-    //     "uoc_th_so_thg_truoc_cong_don",
-    //     "danh_sach_doanh_nghiep",
-    //     "chi_tiet_doanh_nghiep",
-    // ];
     displayedColumns = [
-        "index",
+        // "index",
         "ten_san_pham",
         "don_vi_tinh",
         "gia_tri_thang",
@@ -142,7 +125,7 @@ export class ExportManagementComponent implements OnInit {
         "chi_tiet_doanh_nghiep",
     ];
     displayRow1Header = [
-        "index",
+        // "index",
         "ten_san_pham",
         "don_vi_tinh",
         "thuc_hien_bao_cao_thang",
@@ -151,16 +134,6 @@ export class ExportManagementComponent implements OnInit {
         "danh_sach_doanh_nghiep",
         "chi_tiet_doanh_nghiep",
     ];
-    // displaRow2Header = [
-    //     "luong_thang",
-    //     "gia_tri_thang",
-    //     "uoc_th_so_cungky_tht",
-    //     "uoc_th_so_thg_truoc_tht",
-    //     "luong_cong_don",
-    //     "gia_tri_cong_don",
-    //     "uoc_th_so_cungky_cong_don",
-    //     "uoc_th_so_thg_truoc_cong_don",
-    // ];
     displaRow2Header = [
         "gia_tri_thang",
         "uoc_th_so_cungky_tht",
@@ -622,5 +595,11 @@ export class ExportManagementComponent implements OnInit {
         dialogConfig.minWidth = window.innerWidth - 100;
         dialogConfig.minHeight = window.innerHeight - 300;
         this.matDialog.open(ImportDataComponent, dialogConfig);
+    }
+
+    addexport: boolean
+
+    AddExport(event) {
+        this.addexport = event.checked
     }
 }
