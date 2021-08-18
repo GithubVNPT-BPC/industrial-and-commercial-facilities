@@ -55,7 +55,7 @@
                         (change)="uploadExcel($event)" hidden #inputFile>
                 </label>
                 
-                <button mat-raised-button (click)="save()">
+                <button mat-raised-button (click)="save(dataSource.data)">
                     <mat-icon>save</mat-icon>Lưu
                 </button>
             </div>
