@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { RetailModel } from 'src/app/_models/commecial.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ReportService } from 'src/app/_services/APIService/report.service';
+import { formatDate } from '@angular/common';
 
 @Component({
     selector: 'retail',
@@ -29,7 +30,7 @@ export class RetailComponent implements OnInit {
         'thang_04', 'thang_05', 'thang_06', 'thang_07', 'thang_08', 'thang_09', 'thang_10', 'thang_11', 'thang_12'];
     //TS & HTML variable -----------------------------------------------------------
     public dataSource: MatTableDataSource<RetailModel> = new MatTableDataSource<RetailModel>();
-    public year: number = new Date().getFullYear() - 1;
+    public year: number = new Date().getFullYear();
     public years: number[];
     public obj_id: number = 1;
     //Only TS Variable ------------------------------------------------------------
@@ -64,7 +65,12 @@ export class RetailComponent implements OnInit {
     thuchienthang: any[]
 
     ngAfterViewInit(): void {
-        this.lineChartMethod(2020);
+        this.lineChartMethod(parseInt(this.getCurrentYear()));
+    }
+
+    public getCurrentYear(): string {
+        let date = new Date;
+        return formatDate(date, 'yyyy', 'en-US');
     }
 
     retail: Array<RetailModel> = new Array<RetailModel>();

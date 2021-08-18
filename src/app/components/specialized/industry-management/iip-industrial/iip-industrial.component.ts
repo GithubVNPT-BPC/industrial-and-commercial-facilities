@@ -12,6 +12,7 @@ import { LinkModel } from 'src/app/_models/link.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ReportService } from 'src/app/_services/APIService/report.service';
+import { formatDate } from '@angular/common';
 
 @Component({
     selector: 'iip-industrial',
@@ -53,7 +54,7 @@ export class IIPIndustrialComponent implements OnInit {
 
     ngOnInit() {
         this.years = this.initYears();
-        this.year = new Date().getFullYear() - 1;
+        this.year = new Date().getFullYear();
         this.getData(this.year);
         this.sendLinkToNext(true);
     }
@@ -65,7 +66,12 @@ export class IIPIndustrialComponent implements OnInit {
     thuchienthang: any[]
 
     ngAfterViewInit(): void {
-        this.lineChartMethod(2020);
+        this.lineChartMethod(parseInt(this.getCurrentYear()));
+    }
+
+    public getCurrentYear(): string {
+        let date = new Date;
+        return formatDate(date, 'yyyy', 'en-US');
     }
 
     iip: Array<IIPIndustrialModel> = new Array<IIPIndustrialModel>();

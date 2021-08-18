@@ -3,6 +3,7 @@
   .highlight {
     font-weight: bolder;
   }
+
   .highlight1 {
     font-style: italic;
   }
@@ -28,6 +29,88 @@
     }
   }
   .mat-card-content {
+    .card-default {
+      margin-top: 5px;
+      .mat-card-header .mat-card-title {
+        margin-bottom: 5px;
+        font-size: 15px;
+        text-align: left !important;
+      }
+      .mat-card-content {
+        font-size: 15px;
+        ul {
+          list-style-type: square;
+          // display: flex;
+          justify-content: center;
+        }
+        span {
+          font-weight: bolder;
+          color: #1f7ed0;
+          text-align: center;
+        }
+      }
+    }
+
+    //card1 dùng 3 cards mỗi dòng
+    .card1 {
+      margin-top: 5px;
+      min-height: 90px;
+      .mat-card-header .mat-card-title {
+        margin-bottom: 15px;
+        font-size: 17px;
+      }
+      .mat-card-content {
+        font-size: 17px;
+        text-align: center;
+        font-weight: bolder;
+        color: #1f7ed0;
+      }
+      .mat-card-subtitle {
+        font-size: 10px;
+        text-align: center;
+        font-weight: bold;
+      }
+      span {
+        font-weight: bolder;
+        color: #1f7ed0;
+        text-align: center;
+      }
+    }
+
+    //card2 dùng 4 cards mỗi dòng
+    .card2 {
+      margin-top: 5px;
+      min-height: 120px;
+      .mat-card-header .mat-card-title {
+        margin-bottom: 5px;
+        font-size: 15px;
+      }
+      .mat-card-content {
+        font-size: 15px;
+        text-align: center;
+        font-weight: bolder;
+        color: #1f7ed0;
+      }
+      .mat-card-subtitle {
+        font-size: 10px;
+        text-align: center;
+        font-weight: bold;
+      }
+      span {
+        font-weight: bolder;
+        color: #1f7ed0;
+        text-align: center;
+      }
+    }
+
+    .card3 {
+      margin-top: 5px;
+      .detail-img {
+        width: 500px;
+        height: 300px;
+      }
+    }
+
     .cb-section {
       display: flex;
       align-content: center;

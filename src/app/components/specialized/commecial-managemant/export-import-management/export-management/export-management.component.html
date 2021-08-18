@@ -131,11 +131,16 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-2 col-lg-2">
+                    <div class="col-12 col-lg-12">
                         <mat-checkbox (change)="AddExport($event)" style="font-weight: bold;">
-                            Thêm chi tiết doanh nghiệp xuất khẩu và chi tiết xuất khẩu
+                            Thêm chi tiết
                         </mat-checkbox>
+
+                        <h5 class="text-center">
+                            BÁO CÁO THỰC HIỆN XUẤT KHẨU
+                        </h5>
                     </div>
+
                 </div>
 
                 <div class="row" [hidden]="!addexport">

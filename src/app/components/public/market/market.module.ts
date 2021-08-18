@@ -19,6 +19,8 @@ import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { PipeModule } from 'src/app/pipe.module';
 import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
+import { DialogImportExportComponent } from './dialog-import-export/dialog-import-export.component';
+
 registerLocaleData(localevi, 'vi');
 
 export const customCurrencyMaskConfig = {
@@ -47,7 +49,7 @@ export const customCurrencyMaskConfig = {
     ReactiveFormsModule,
     PipeModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    MatSelectFilterModule
+    MatSelectFilterModule,
   ],
   exports: [
   ],
@@ -58,11 +60,12 @@ export const customCurrencyMaskConfig = {
     DomesticProductComponent,
     ForeignMarketPriceComponent,
     CompanyTopPopup,
+    DialogImportExportComponent
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },
 
   ],
-  entryComponents: [CompanyTopPopup]
+  entryComponents: [CompanyTopPopup, DialogImportExportComponent]
 })
 export class MarketModule { }

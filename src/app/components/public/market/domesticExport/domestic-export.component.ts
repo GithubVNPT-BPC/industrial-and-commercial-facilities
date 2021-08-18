@@ -1,8 +1,13 @@
 import { Component, Injector } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import {
+  MatTableDataSource,
+  MatAccordion,
+  MatPaginator,
+  MatDialog,
+  MatDialogConfig,
+} from "@angular/material";
 
-import { MatDialog } from '@angular/material';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { SCTService } from "src/app/_services/APIService/sct.service";
 
@@ -19,6 +24,8 @@ import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { formatDate } from '@angular/common';
+import { ModalComponent } from 'src/app/components/specialized/commecial-managemant/export-import-management/dialog-import-export/modal.component';
+import { DialogImportExportComponent } from '../dialog-import-export/dialog-import-export.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -52,6 +59,7 @@ export class DomesticExportComponent extends BaseComponent {
   public dataSource: MatTableDataSource<new_import_export_model>;
 
   constructor(
+    public matDialog: MatDialog,
     public sctService: SCTService,
     private injector: Injector,
     public excelService: ExcelService,
@@ -157,12 +165,16 @@ export class DomesticExportComponent extends BaseComponent {
   getDanhSachXuatKhau(time_id: number) {
     this.sctService.GetDanhSachXuatKhau(time_id).subscribe((result) => {
       this.setDataExport(result.data[0]);
+      this.setDatabusiness(result.data[1]);
+      this.setDataExportDetail(result.data[2]);
     });
   }
 
   getDanhSachXuatKhauTC(time_id: number) {
     this.sctService.GetDanhSachXuatKhauTC(time_id).subscribe((result) => {
       this.setDataExport(result.data[0]);
+      this.setDatabusiness(result.data[1]);
+      this.setDataExportDetail(result.data[2]);
     });
   }
 
@@ -170,29 +182,72 @@ export class DomesticExportComponent extends BaseComponent {
     this.dataSource = new MatTableDataSource<new_import_export_model>(data);
     if (data.length) {
       this.dataSource.paginator = this.paginator;
+      this.paginator._intl.itemsPerPageLabel = "Số hàng";
+      this.paginator._intl.firstPageLabel = "Trang Đầu";
+      this.paginator._intl.lastPageLabel = "Trang Cuối";
+      this.paginator._intl.previousPageLabel = "Trang Trước";
+      this.paginator._intl.nextPageLabel = "Trang Tiếp";
     }
   }
 
-  private sumTG: number = 0;
+  setDataExportDetail(detail_export: any) {
+    this.dataDialog = [...detail_export];
+  }
 
-  _prepareData() {
-    let data = this.dataSource.data;
-    this.sumTG = data.length ? data.map(item => item.tri_gia_thang).reduce((a, b) => a + b) : 0;
+  setDatabusiness(lsBusiness) {
+    this.dataBusiness = lsBusiness;
+  }
+
+  applyDataTarget(event) {
+    this.dataTargetId = event.value
+    if (this.dataTargetId == 1) {
+      this.getDanhSachXuatKhau(this.timechange)
+    }
+    else {
+      this.getDanhSachXuatKhauTC(this.timechange)
+    }
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
-  public openCompanyTopPopup(data: any) {
-    const dialogRef = this.dialog.open(CompanyTopPopup, {
+  dataDialog: any[] = [];
+  dataBusiness: any[] = [];
+
+  handleDataDialog(id_mat_hang) {
+    let data = this.dataDialog.filter(
+      (item) => item.id_san_pham === id_mat_hang
+    );
+    return data;
+  }
+
+  openDialog(id_mat_hang) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
       height: '70%',
       width: '70%',
-      data: {
-        message: 'Dữ liệu top doanh nghiệp xuất khẩu',
-        export_data: data,
-        typeOfSave: SAVE.EXPORT,
-      }
-    });
+      data: this.handleDataDialog(id_mat_hang),
+      id: 1,
+    };
+    this.matDialog.open(DialogImportExportComponent, dialogConfig);
+  }
+
+  openDanh_sach_doanh_nghiep(id_san_pham) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = {
+      height: '70%',
+      width: '70%',
+      data: this.handleDataBusiness(id_san_pham),
+      id: 2,
+    };
+    this.matDialog.open(DialogImportExportComponent, dialogConfig);
+  }
+
+  handleDataBusiness(id_san_pham) {
+    let data = this.dataBusiness.filter(
+      (item) => item.id_san_pham === id_san_pham
+    );
+    return data;
   }
 }
