@@ -87,6 +87,16 @@ export class EnergyService {
         );
     }
 
+    LayDuLieunguonDienKhac(time_id: number) {
+        var apiUrl = this.apiNangLuong + '/cndk';
+        // apiUrl = 'https://localhost:5001/api/qlnl/dsk';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString())
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     LayDuLieuQuyHoachDien110KV(id_loai){
         var apiUrl = this.apiNangLuong + this.urlDien110KV;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -107,10 +117,29 @@ export class EnergyService {
         );
     }
 
+    LayDuLieuHienTrangTram110KV(time_id, loai_tram) {
+        var apiUrl = this.apiNangLuong + "/110kv/hien-trang-tram-bien-ap";
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams()
+            .set("loai_tram", loai_tram.toString())
+            .set("time_id", time_id);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     CapNhatDuLieuHienTrangDuongDay110KV(data){
         var apiUrl = this.apiNangLuong + "/110kv/them-cap-nhat-hien-trang-duong-day";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl,data, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    CapNhatDuLieuHienTrangTram110KV(data) {
+        var apiUrl = this.apiNangLuong + "/110kv/them-cap-nhat-hien-trang-tram";
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -173,6 +202,17 @@ export class EnergyService {
 
     PostBlockElectricData(datas, time_id) {
         let apiUrl = this.apiNangLuong + this.urlPostBlockElectricData;
+        // let apiUrl ='https://localhost:5001/api/qlnl/dsk';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    PostDiffkElectricData(datas, time_id) {
+        let apiUrl = this.apiNangLuong + '/cndk';
         // let apiUrl ='https://localhost:5001/api/qlnl/dsk';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
@@ -271,6 +311,16 @@ export class EnergyService {
         );
     }
 
+    DeleteDiffElectric(body: any[]) {
+        var apiUrl = this.apiNangLuong + '/xoa-cndk';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    
+
     DeleteRuralElectric(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlDeleteRuralElectric;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -312,6 +362,14 @@ export class EnergyService {
         );
     }
 
+    DeleteDuLieuTram(body: any[]) {
+        var apiUrl = this.apiNangLuong + '/110kv/xoa-nhieu-tram';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     DeleteDuLieuQuyHoachDien110KVDuKien(body: any[]){
         var apiUrl = this.apiNangLuong + this.urlDeleteDuLieuQuyHoachDien110KVDuKien;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -348,6 +406,34 @@ export class EnergyService {
 
     XoaDuLieuNangLuongTrongDiem(IDs: any[]){
         var apiUrl = this.apiNangLuong + this.urlXoaNLTD;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, IDs, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    ThemDuLieuDienSoCap(body: any[]) {
+        var apiUrl = this.apiNangLuong + '/dien-so-cap';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    GetDuLieuDienSoCap(time_id, id_loai_cong_trinh, id_giai_doan) {
+        var apiUrl = this.apiNangLuong + '/dien-so-cap';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams()
+        .set('time_id', time_id)
+        .set('id_loai_cong_trinh', id_loai_cong_trinh)
+        // .set('id_giai_doan', id_giai_doan);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    XoaDienSoCap(IDs){
+        var apiUrl = this.apiNangLuong + '/xoa-dien-so-cap';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, IDs, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

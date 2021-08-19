@@ -16,7 +16,9 @@ import { PowerProductionManagementComponent } from './power-production/power-pro
 import { RuralElectricManagementComponent } from './rural-electric/rural-electric-management.component';
 import { ElectricalPlanComponent } from './electrical-plan/electrical-plan.component';
 import { CurrentElectricalPlanComponent } from './current-electrical-plan/current-electrical-plan.component';
+import { CurrentPowerStationComponent } from './current-electrical-plan/current-power-station.component';
 import { FutureElectricalPlanComponent } from './future-electrical-plan/future-electrical-plan.component';
+
 import {BlockElectricComponent} from './block-electric/block-electric.component'
 import { ManageApproveHddlComponent } from "./manage-approve-hddl/manage-approve-hddl.component";
 import { ConsultantElectricComponent } from "./manage-approve-hddl/consultant-electric/consultant-electric.component";
@@ -26,6 +28,9 @@ import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 import {KeyEnegyComponent} from './key-enegy/key-enegy.component';
 import { MonthDetailComponent } from './power-production/month-detail/month-detail.component';
+import { DifferenceElectricComponent } from './difference-electric/difference-electric.component';
+import { PrimaryElectricityComponent } from './primary-electricity/primary-electricity.component';
+import { TranslateIdPeriodToNamePipe } from 'src/app/shared/pipes/translateIdPeriodToName.pipe';
 
 @NgModule({
   imports: [
@@ -37,6 +42,7 @@ import { MonthDetailComponent } from './power-production/month-detail/month-deta
     EneryManagementRoutingModule,
   ],
   exports: [
+    TranslateIdPeriodToNamePipe
   ],
   declarations: [
     HydroelectricComponent,
@@ -50,14 +56,18 @@ import { MonthDetailComponent } from './power-production/month-detail/month-deta
     RuralElectricManagementComponent,
     ElectricalPlanComponent,
     CurrentElectricalPlanComponent,
+    CurrentPowerStationComponent,
     FutureElectricalPlanComponent,
     BlockElectricComponent,
     ManageApproveHddlComponent,
     ConsultantElectricComponent,
     ManufacturingElectronicComponent,
     KeyEnegyComponent,
-    MonthDetailComponent
+    MonthDetailComponent,
+    DifferenceElectricComponent,
+    PrimaryElectricityComponent,
+    TranslateIdPeriodToNamePipe
 ],
-  entryComponents: []
+  entryComponents: [],
 })
 export class EneryManagementModule { }

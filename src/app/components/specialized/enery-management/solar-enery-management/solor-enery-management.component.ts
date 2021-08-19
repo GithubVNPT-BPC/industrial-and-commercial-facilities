@@ -82,7 +82,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
       san_luong_6_thang: new FormControl(),
       doanh_thu_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
-      doanh_thu: new FormControl(),
+      doanh_thu_nam: new FormControl(),
       id_trang_thai_hoat_dong: new FormControl(),
       id_quan_huyen: new FormControl(),
     }
