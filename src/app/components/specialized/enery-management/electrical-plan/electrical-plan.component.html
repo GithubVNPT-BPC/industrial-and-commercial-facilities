@@ -2,16 +2,24 @@
     <mat-tab>
         <ng-template mat-tab-label>
             <mat-icon> swap_calls</mat-icon>
-            Hiện trạng các nguồn cung cấp
+            Hiện trạng đường dây
         </ng-template>
         <current-electrical-plan></current-electrical-plan>
     </mat-tab>
 
     <mat-tab>
         <ng-template mat-tab-label>
-            <mat-icon>select_all</mat-icon>
-            Dự kiến các nguồn cung cấp 110KV giai đoạn đến năm 2030
+            <mat-icon> swap_calls</mat-icon>
+            Hiện trạng trạm điện
         </ng-template>
-        <future-electrical-plan></future-electrical-plan>
+        <current-power-station></current-power-station>
+    </mat-tab>
+
+    <mat-tab>
+        <ng-template mat-tab-label>
+            <mat-icon>select_all</mat-icon>
+            Điện sơ cấp
+        </ng-template>
+        <primary-electricity></primary-electricity>
     </mat-tab>
 </mat-tab-group>

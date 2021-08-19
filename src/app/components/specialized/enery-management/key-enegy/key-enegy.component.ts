@@ -38,6 +38,7 @@ export class KeyEnegyComponent extends BaseComponent {
 
   authorize: boolean = true
 
+  currentYear: number = new Date().getFullYear() -1;
   ngOnInit() {
     super.ngOnInit();
     this.laydulieuNLTD();

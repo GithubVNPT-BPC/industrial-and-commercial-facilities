@@ -14,6 +14,9 @@ import { PowerProductionManagementComponent } from './power-production/power-pro
 import { RuralElectricManagementComponent } from './rural-electric/rural-electric-management.component';
 import { KeyEnegyComponent } from './key-enegy/key-enegy.component';
 import { MonthDetailComponent } from './power-production/month-detail/month-detail.component';
+import { DifferenceElectricComponent } from './difference-electric/difference-electric.component';
+import { FutureElectricalPlanComponent } from './future-electrical-plan/future-electrical-plan.component';
+
 const routes: Routes = [
 
   {
@@ -42,6 +45,13 @@ const routes: Routes = [
           title: 'Thủy điện',
         },
         component: HydroelectricComponent
+      },
+      {
+        path: 'diffelectric',
+        data: {
+          title: 'Nguồn điện khác',
+        },
+        component: DifferenceElectricComponent
       },
       {
         path: 'countryside_electric',
@@ -112,6 +122,13 @@ const routes: Routes = [
           title: 'Năng lượng trọng điểm'
         },
         component: KeyEnegyComponent
+      },
+      {
+        path: 'future_electrical_plan',
+        data: {
+          title: 'Quy hoạch công trình điện từ 110kV trở lên'
+        },
+        component: FutureElectricalPlanComponent
       }
     ],
   },

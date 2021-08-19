@@ -72,7 +72,7 @@ export class BlockElectricComponent extends BaseComponent {
       san_luong_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu_6_thang: new FormControl(),
-      doanh_thu: new FormControl(),
+      doanh_thu_nam: new FormControl(),
       time_id: new FormControl(),
       id_trang_thai_hoat_dong: new FormControl(),
     }
