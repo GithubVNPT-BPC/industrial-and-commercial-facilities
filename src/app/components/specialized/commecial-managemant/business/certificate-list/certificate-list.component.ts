@@ -7,6 +7,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 
 import { MatDialog } from '@angular/material';
 
+import { LinkModel } from 'src/app/_models/link.model';
+import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
+
 import {
   DeleteModel,
   CertificateViewModel,
@@ -83,11 +86,25 @@ export class CertificateListComponent implements OnInit {
     public _info: InformationService,
     public dialog: MatDialog,
     private _location: Location,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    private _breadCrumService: BreadCrumService,
   ) {
     this.route.params.subscribe((params) => {
       this.status = params["status"]
     });
+  }
+
+  protected LINK_DEFAULT: string = "";
+  protected TITLE_DEFAULT: string = "QUẢN LÝ GIẤY PHÉP";
+  protected TEXT_DEFAULT: string = "QUẢN LÝ GIẤY PHÉP";
+  private _linkOutput: LinkModel = new LinkModel();
+
+  private sendLinkToNext(type: boolean): void {
+    this._linkOutput.link = this.LINK_DEFAULT;
+    this._linkOutput.title = this.TITLE_DEFAULT;
+    this._linkOutput.text = this.TEXT_DEFAULT;
+    this._linkOutput.type = type;
+    this._breadCrumService.sendLink(this._linkOutput);
   }
 
   // public AddBusiness(data: any) {
@@ -157,6 +174,7 @@ export class CertificateListComponent implements OnInit {
   showbutton: boolean
 
   ngOnInit() {
+    this.sendLinkToNext(true)
     if (this.status == false) {
       this.isChecked = false
       this.showbutton = false

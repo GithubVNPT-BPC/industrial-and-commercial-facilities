@@ -10,49 +10,8 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-6 col-lg-3">
-                <mat-form-field appearance="outline">
-                    <mat-label>Từ ngày</mat-label>
-                    <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.value._d"
-                        (ngModelChange)="onChange($event)">
-                    <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()"></mat-datepicker-toggle>
-                    <mat-datepicker #datePicker></mat-datepicker>
-                </mat-form-field>
-            </div>
-
-            <div class="col-6 col-lg-3">
-                <mat-form-field appearance="outline">
-                    <mat-label>Đến ngày</mat-label>
-                    <input matInput readonly [matDatepicker]="datePicker1" [(ngModel)]="pickedDate1.value._d"
-                        (ngModelChange)="onChange1($event)">
-                    <mat-datepicker-toggle matSuffix [for]="datePicker1" onclick="this.blur()"></mat-datepicker-toggle>
-                    <mat-datepicker #datePicker1></mat-datepicker>
-                </mat-form-field>
-            </div>
-
-            <div class="col-12 col-lg-6 my-auto">
-                <mat-form-field appearance="outline">
-                    <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
-                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
-                            [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
-                        <mat-option *ngFor="let item of filterproducts" [value]="item.id_san_pham">
-                            {{item.ten_san_pham}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-        </div>
-        <hr>
-        <div class="container-fluid">
-            <h5 *ngIf="!foreignchart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN TẠI</h5>
-            <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
-        </div>
-
-        <hr color="red">
-
-        <div class="row">
             <div class="col-6 col-lg-6">
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-label>Ngày cập nhật giá</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker2" [(ngModel)]="pickedDate2.value._d"
                         (ngModelChange)="onChange2($event)">
@@ -120,5 +79,47 @@
             <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU</h5>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
+
+        <hr color="red">
+
+        <div class="row">
+            <div class="col-6 col-lg-3">
+                <mat-form-field appearance="outline">
+                    <mat-label>Từ ngày</mat-label>
+                    <input matInput readonly [matDatepicker]="datePicker" [(ngModel)]="pickedDate.value._d"
+                        (ngModelChange)="onChange($event)">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <mat-form-field appearance="outline">
+                    <mat-label>Đến ngày</mat-label>
+                    <input matInput readonly [matDatepicker]="datePicker1" [(ngModel)]="pickedDate1.value._d"
+                        (ngModelChange)="onChange1($event)">
+                    <mat-datepicker-toggle matSuffix [for]="datePicker1" onclick="this.blur()"></mat-datepicker-toggle>
+                    <mat-datepicker #datePicker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <div class="col-12 col-lg-6 my-auto">
+                <mat-form-field appearance="outline">
+                    <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
+                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
+                            [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
+                        <mat-option *ngFor="let item of filterproducts" [value]="item.id_san_pham">
+                            {{item.ten_san_pham}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <h5 *ngIf="!foreignchart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN
+                TẠI</h5>
+            <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
+        </div>
     </mat-card-content>
 </mat-card>

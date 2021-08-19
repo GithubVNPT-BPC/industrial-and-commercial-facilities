@@ -264,8 +264,7 @@ export class ManagePetrolValueComponent implements OnInit {
       this.petrollist3 = this.petrollist2
       this.petrollist3.forEach(element => {
         if (element.ngay_het_han) {
-          let temp = this.Convertdate(element.ngay_het_han)
-          element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+          element.is_het_han = element.ngay_het_han < this.getCurrentDate()
         }
         else {
           element.is_het_han = false
@@ -336,11 +335,6 @@ export class ManagePetrolValueComponent implements OnInit {
   //     window.open(url, "_blank");
   // }
 
-  disabled1: boolean = false
-  disabled2: boolean = false
-  disabled3: boolean = false
-  disabled4: boolean = false
-
   applyDistrictFilter(event) {
     let filteredData = [];
 
@@ -351,22 +345,13 @@ export class ManagePetrolValueComponent implements OnInit {
     if (!filteredData.length) {
       if (event.value.length) {
         this.dataSource1.data = [];
-        this.disabled2 = true
-        this.disabled3 = true
-        this.disabled4 = true
       }
       else {
         this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == false)
-        this.disabled2 = false
-        this.disabled3 = false
-        this.disabled4 = false
       }
     }
     else {
       this.dataSource1.data = filteredData;
-      this.disabled2 = true
-      this.disabled3 = true
-      this.disabled4 = true
     }
 
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
@@ -377,15 +362,9 @@ export class ManagePetrolValueComponent implements OnInit {
   applyExpireCheck(event) {
     if (event.checked == false) {
       this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == event.checked)
-      this.disabled1 = false
-      this.disabled3 = false
-      this.disabled4 = false
     }
     else {
       this.dataSource1.data = this.petrollist3.filter(x => x.is_het_han == event.checked)
-      this.disabled1 = true
-      this.disabled3 = true
-      this.disabled4 = true
     }
 
     // this.SumPetrolStore2 = this.SumPetrolStore1.filter(x => x.is_het_han == event.checked)
@@ -405,22 +384,13 @@ export class ManagePetrolValueComponent implements OnInit {
     if (!filteredData.length) {
       if (event.value.length) {
         this.dataSource1.data = [];
-        this.disabled1 = true
-        this.disabled2 = true
-        this.disabled4 = true
       }
       else {
         this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == false)
-        this.disabled1 = false
-        this.disabled2 = false
-        this.disabled4 = false
       }
     }
     else {
       this.dataSource1.data = filteredData;
-      this.disabled1 = true
-      this.disabled2 = true
-      this.disabled4 = true
     }
 
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
@@ -438,22 +408,13 @@ export class ManagePetrolValueComponent implements OnInit {
     if (!filteredData.length) {
       if (event.value.length) {
         this.dataSource1.data = [];
-        this.disabled1 = true
-        this.disabled2 = true
-        this.disabled3 = true
       }
       else {
         this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == false)
-        this.disabled1 = false
-        this.disabled2 = false
-        this.disabled3 = false
       }
     }
     else {
       this.dataSource1.data = filteredData;
-      this.disabled1 = true
-      this.disabled2 = true
-      this.disabled3 = true
     }
 
     this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
@@ -463,7 +424,7 @@ export class ManagePetrolValueComponent implements OnInit {
 
   public getCurrentDate() {
     let date = new Date;
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
+    return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 
   public getCurrentYear() {

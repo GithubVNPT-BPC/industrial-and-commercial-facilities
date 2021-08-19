@@ -131,8 +131,7 @@
                     <div class="col-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm cấp GP</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyCerYear($event)" multiple
-                                [disabled]="disabled3">
+                            <mat-select #dSelect (selectionChange)="applyCerYear($event)" multiple>
                                 <!-- <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option> -->
                                 <mat-option *ngFor='let item of years' [value]='item.value'>
                                     {{item.des}}
@@ -144,8 +143,7 @@
                     <div class="col-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm cập nhật SL</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyUpdatedDate($event)" multiple
-                                [disabled]="disabled4">
+                            <mat-select #dSelect (selectionChange)="applyUpdatedDate($event)" multiple>
                                 <!-- <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option> -->
                                 <mat-option *ngFor='let item of years' [value]='item.value'>
                                     {{item.des}}
@@ -157,8 +155,7 @@
                     <div class="col-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple
-                                [disabled]="disabled1">
+                            <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple>
                                 <!-- <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option> -->
                                 <mat-option *ngFor='let item of district' [value]='item.ten_quan_huyen'>
                                     {{item.ten_quan_huyen}}
@@ -168,7 +165,7 @@
                     </div>
 
                     <div class="col-1 checkbox">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked" [disabled]="disabled2">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">
                             Doanh nghiệp hết hạn
                         </mat-checkbox>
                     </div>
