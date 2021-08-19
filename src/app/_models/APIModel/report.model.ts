@@ -39,7 +39,7 @@ export class ReportIndicator {
     parent_id: number;
     formula: string;
     obj_id: number;
-    ind_index : string;
+    ind_index: string;
 }
 
 export class ReportAttribute {
@@ -123,7 +123,7 @@ export class ReportDatarow {
     fc18: string;
     fc19: string;
     fc20: string;
-    parent_id :number;
+    parent_id: number;
 }
 
 export class ReportColumn {
@@ -143,7 +143,7 @@ export class ReportTable {
     ind_unit: string;
     ind_parent_id: number;
     ind_formula: string;
-    ind_index : string;
+    ind_index: string;
     fd01: Date;
     fd02: Date;
     fd03: Date;

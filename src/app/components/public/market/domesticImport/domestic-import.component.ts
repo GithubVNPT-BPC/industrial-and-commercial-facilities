@@ -119,6 +119,7 @@ export class DomesticImportComponent extends BaseComponent {
 
   displayedColumns = [
     // "index",
+    "tt",
     "ten_san_pham",
     "don_vi_tinh",
     "gia_tri_thang",
@@ -133,6 +134,7 @@ export class DomesticImportComponent extends BaseComponent {
   ];
   displayRow1Header = [
     // "index",
+    "tt",
     "ten_san_pham",
     "don_vi_tinh",
     "thuc_hien_bao_cao_thang",

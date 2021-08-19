@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, PercentPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
@@ -49,7 +49,7 @@ import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.
     CrudButtonsComponent
   ],
   entryComponents: [],
-  providers: [DecimalPipe]
+  providers: [DecimalPipe, PercentPipe]
 })
 
 export class IndustryManagement {

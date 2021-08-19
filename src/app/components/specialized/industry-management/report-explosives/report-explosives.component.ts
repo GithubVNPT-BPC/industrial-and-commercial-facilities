@@ -4,7 +4,7 @@ import { ReportService } from 'src/app/_services/APIService/report.service';
 import { HeaderMerge, ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, ToltalHeaderMerge } from 'src/app/_models/APIModel/report.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TreeviewItem } from 'ngx-treeview';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, PercentPipe } from '@angular/common';
 
 // Services
 import { ExcelService } from 'src/app/_services/excelUtil.service';
@@ -83,6 +83,7 @@ export class ReportExplosivesComponent extends BaseComponent {
     public info: InformationService,
     public loaderService: LoaderService,
     public _decimalPipe: DecimalPipe,
+    public _percentPipe: PercentPipe,
     private router: Router
   ) {
     super(injector);
