@@ -629,4 +629,10 @@ export class EditBusinessComponent implements OnInit {
       this.router.navigate(['manager/business/search/']);
     }
   }
+
+  detail: boolean
+
+  Detail(event) {
+    this.detail = event.checked
+  }
 }

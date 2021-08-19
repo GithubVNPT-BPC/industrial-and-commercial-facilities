@@ -398,4 +398,10 @@ export class CompanyDetailComponent implements OnInit {
 	Back() {
 		this.router.navigate(['public/partner/search']);
 	}
+
+	detail: boolean
+
+	Detail(event) {
+		this.detail = event.checked
+	}
 }

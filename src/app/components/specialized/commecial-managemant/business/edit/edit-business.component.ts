@@ -620,4 +620,10 @@ export class EditBusinessComponent implements OnInit {
     this.router.navigate(['specialized/commecial-management/domestic/search']);
   }
 
+  detail: boolean
+
+	Detail(event) {
+		this.detail = event.checked
+	}
+
 }

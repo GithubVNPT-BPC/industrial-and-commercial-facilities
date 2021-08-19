@@ -123,24 +123,6 @@
                             <div *ngIf="f.nguoi_dai_dien.errors.required">Vui lòng nhập người đại diện</div>
                         </div>
                     </mat-form-field>
-
-                    <!-- <mat-form-field appearance="outline">
-                        <mat-label>Nhu cầu bán</mat-label>
-                        <textarea formControlName="nhu_cau_ban" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban"></textarea>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Nhu cầu mua</mat-label>
-                        <textarea formControlName="nhu_cau_mua" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua"></textarea>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Tiêu chuẩn sản phẩm</mat-label>
-                        <textarea formControlName="tieu_chuan_san_pham" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham"></textarea>
-                    </mat-form-field> -->
                 </div>
 
                 <div class="col-6">
@@ -183,29 +165,35 @@
                         <input formControlName="email_sct" matInput placeholder=""
                             [(ngModel)]="_Service.companyinfo.email_sct">
                     </mat-form-field>
+                </div>
+            </div>
 
-                    <!-- <mat-form-field appearance="outline">
-                        <mat-label>Vốn điều lệ</mat-label>
-                        <input currencyMask formControlName="von_dieu_le" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.von_dieu_le">
+            <div class="row">
+                <div class="col-12 col-lg-12 mb-2">
+                    <mat-checkbox (change)="Detail($event)" style="font-weight: bold;">
+                        Thêm thông tin chi tiết
+                    </mat-checkbox>
+                </div>
+            </div>
+
+            <div class="row" [hidden]="!detail">
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu bán</mat-label>
+                        <textarea formControlName="nhu_cau_ban" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban"></textarea>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Doanh thu</mat-label>
-                        <input formControlName="doanh_thu" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.doanh_thu">
+                        <mat-label>Nhu cầu mua</mat-label>
+                        <textarea formControlName="nhu_cau_mua" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua"></textarea>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Lợi nhuận</mat-label>
-                        <input formControlName="loi_nhuan" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.loi_nhuan">
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Quy mô tài sản</mat-label>
-                        <input formControlName="quy_mo_tai_san" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.quy_mo_tai_san">
+                        <mat-label>Tiêu chuẩn sản phẩm</mat-label>
+                        <textarea formControlName="tieu_chuan_san_pham" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham"></textarea>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
@@ -231,6 +219,32 @@
                         <input currencyMask formControlName="cong_suat_thiet_ke_sct" matInput placeholder=""
                             [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke_sct">
                     </mat-form-field>
+                </div>
+
+                <div class="col-6">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Vốn điều lệ</mat-label>
+                        <input currencyMask formControlName="von_dieu_le" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.von_dieu_le">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Doanh thu</mat-label>
+                        <input formControlName="doanh_thu" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.doanh_thu">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Lợi nhuận</mat-label>
+                        <input formControlName="loi_nhuan" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.loi_nhuan">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Quy mô tài sản</mat-label>
+                        <input formControlName="quy_mo_tai_san" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.quy_mo_tai_san">
+                    </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Sản lượng</mat-label>
@@ -248,7 +262,7 @@
                         <mat-label>Nhu cầu hợp tác</mat-label>
                         <textarea formControlName="nhu_cau_hop_tac" matInput placeholder=""
                             [(ngModel)]="_Service.companyinfo.nhu_cau_hop_tac"></textarea>
-                    </mat-form-field> -->
+                    </mat-form-field>
                 </div>
             </div>
         </form>
