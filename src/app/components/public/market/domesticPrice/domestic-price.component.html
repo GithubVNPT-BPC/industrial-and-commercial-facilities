@@ -10,8 +10,8 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-2">
-                <mat-form-field appearance="outline" style="width: 200px;">
+            <div class="col-3">
+                <mat-form-field appearance="outline">
                     <mat-label>Ngày cập nhật giá</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker2" [(ngModel)]="pickedDate2.value._d"
                         (ngModelChange)="onChange2($event)">
@@ -20,7 +20,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-10 button-control my-auto">
+            <div class="col-9 button-control my-auto">
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Thông tin về giá cả trong nước','Thông tin về giá cả trong nước')">Xuất
                     Excel</button>
@@ -76,7 +76,7 @@
         <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons></mat-paginator>
 
         <hr color="red">
-        
+
         <div class="row">
             <div class="col-6 col-lg-3">
                 <mat-form-field appearance="outline">

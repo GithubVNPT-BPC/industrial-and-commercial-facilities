@@ -21,7 +21,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-2 col-lg-2">
+            <div class="col-3 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Nguồn dữ liệu: </mat-label>
                     <mat-select (selectionChange)="applyDataTarget($event)" [(ngModel)]="dataTargetId">
@@ -32,7 +32,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-7 col-lg-7 button-control my-auto">
+            <div class="col-6 col-lg-6 button-control my-auto">
                 <button mat-raised-button
                     (click)="ExportTOExcel('Thông tin tình hình xuất khẩu','Thông tin tình hình xuất khẩu')">
                     <mat-icon>cloud_download</mat-icon> Xuất dữ liệu
