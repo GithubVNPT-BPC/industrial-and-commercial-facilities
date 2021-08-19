@@ -12,13 +12,15 @@ import { ManagerDirective } from './../../shared/manager.directive';
 import { ExportTopCompanyManager } from './export-top-company-manager/export-top-company-manager.component';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
-import { MatSelectFilterModule } from 'mat-select-filter';
 import { AddCertificateComponent } from './business/add-certificate/add-certificate.component';
 import { CertificateListComponent } from './business/certificate-list/certificate-list.component';
 import { UpdateUserComponent } from './update-user/update-user.component';
 import { SystemLogComponent } from './system-log/system-log.component';
 import { ManagerUserComponent } from './manager-user/manager-user.component';
 import { AddUserComponent } from './add-user/add-user.component';
+
+import { MatSelectModule, MatFormFieldModule } from '@angular/material';
+import { MatSelectFilterModule } from 'mat-select-filter';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -43,6 +45,9 @@ export const customCurrencyMaskConfig = {
     MaterialModule,
     ReactiveFormsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+
+    MatSelectModule,
+    MatFormFieldModule,
     MatSelectFilterModule
   ],
   exports: [

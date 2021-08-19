@@ -23,10 +23,15 @@ export class SearchPartnerComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst', 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien', 'dia_chi_day_du',
-    'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
-    'so_dien_thoai', 'email', 'email_sct', 'ngay_bd_kd', 'von_dieu_le', 'quy_mo_tai_san', 'doanh_thu', 'loi_nhuan', 'cong_suat_thiet_ke', 'cong_suat_thiet_ke_sct',
-    'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 'hoat_dong',
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst',
+    'dia_chi_day_du', 'so_dien_thoai', 'email',
+    'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh',
+    // 'ten_loai_hinh_hoat_dong',
+    // 'nguoi_dai_dien',
+    // 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
+    // 'email_sct', 'ngay_bd_kd', 'von_dieu_le', 'quy_mo_tai_san', 'doanh_thu', 'loi_nhuan', 'cong_suat_thiet_ke', 'cong_suat_thiet_ke_sct',
+    // 'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 
+    'hoat_dong',
   ];
 
   public filterList: filter[] = [
@@ -179,7 +184,7 @@ export class SearchPartnerComponent implements OnInit {
 
         this.companyList5 = this.companyList4.map(d => {
           let temp = this.companyList3.filter(e => e.mst === d.mst)
-          
+
           let temp1 = temp.map(f => f.so_giay_phep);
 
           d.so_giay_phep = temp1[0] ? temp1.join('; ') : null;

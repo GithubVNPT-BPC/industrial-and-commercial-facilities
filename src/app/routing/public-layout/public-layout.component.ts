@@ -28,12 +28,12 @@ export class PublicLayoutComponent implements OnInit {
   }
 
   numberOfClicks = 0;
-  
+
   @HostListener('click', ['$event.target'])
   onClick(btn) {
   }
   private scrollToTop(): void {
-}
+  }
   public scrollEvent = (event: any): void => {
     this.pageYoffset = event.srcElement.scrollTop;
   }

@@ -83,6 +83,38 @@
                             [(ngModel)]="_Service.companyinfo.nguoi_dai_dien">
                     </mat-form-field>
 
+                    <!-- <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu bán</mat-label>
+                        <textarea readonly formControlName="nhu_cau_ban" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nhu cầu mua</mat-label>
+                        <textarea readonly formControlName="nhu_cau_mua" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua"></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Tiêu chuẩn sản phẩm</mat-label>
+                        <textarea readonly formControlName="tieu_chuan_san_pham" matInput placeholder=""
+                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham"></textarea>
+                    </mat-form-field> -->
+                </div>
+
+                <div class="col-6">
+                    <section class="cb-section">
+                    </section>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngày bắt đầu kinh doanh</mat-label>
+                        <input disabled formControlName="ngay_bd_kd" matInput readonly [matDatepicker]="datePicker"
+                            [(ngModel)]="bdkddate" (ngModelChange)="getChange($event)">
+                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #datePicker></mat-datepicker>
+                    </mat-form-field>
+
                     <mat-form-field appearance="outline">
                         <mat-label style="color: red;">Địa chỉ</mat-label>
                         <input readonly readonly formControlName="dia_chi" matInput placeholder=""
@@ -108,39 +140,7 @@
                             [(ngModel)]="_Service.companyinfo.email_sct">
                     </mat-form-field>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Nhu cầu bán</mat-label>
-                        <textarea readonly formControlName="nhu_cau_ban" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_ban"></textarea>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Nhu cầu mua</mat-label>
-                        <textarea readonly formControlName="nhu_cau_mua" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.nhu_cau_mua"></textarea>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Tiêu chuẩn sản phẩm</mat-label>
-                        <textarea readonly formControlName="tieu_chuan_san_pham" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.tieu_chuan_san_pham"></textarea>
-                    </mat-form-field>
-                </div>
-
-                <div class="col-6">
-                    <section class="cb-section">
-                    </section>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Ngày bắt đầu kinh doanh</mat-label>
-                        <input disabled formControlName="ngay_bd_kd" matInput readonly [matDatepicker]="datePicker"
-                            [(ngModel)]="bdkddate" (ngModelChange)="getChange($event)">
-                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
-                        </mat-datepicker-toggle>
-                        <mat-datepicker #datePicker></mat-datepicker>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
+                    <!-- <mat-form-field appearance="outline">
                         <mat-label>Vốn điều lệ</mat-label>
                         <input readonly currencyMask formControlName="von_dieu_le" matInput placeholder=""
                             [(ngModel)]="_Service.companyinfo.von_dieu_le">
@@ -204,7 +204,7 @@
                         <mat-label>Nhu cầu hợp tác</mat-label>
                         <textarea readonly formControlName="nhu_cau_hop_tac" matInput placeholder=""
                             [(ngModel)]="_Service.companyinfo.nhu_cau_hop_tac"></textarea>
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                 </div>
             </div>
