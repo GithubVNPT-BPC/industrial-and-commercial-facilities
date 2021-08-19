@@ -36,6 +36,7 @@ export class new_import_export_model {
     don_vi_tinh: string
     isChecked: boolean
     cong_suat: number
+    tt: string
 }
 
 export class Task {

@@ -112,6 +112,7 @@ export class ExportManagementComponent implements OnInit {
 
     displayedColumns = [
         // "index",
+        "tt",
         "ten_san_pham",
         "don_vi_tinh",
         "gia_tri_thang",
@@ -126,6 +127,7 @@ export class ExportManagementComponent implements OnInit {
     ];
     displayRow1Header = [
         // "index",
+        "tt",
         "ten_san_pham",
         "don_vi_tinh",
         "thuc_hien_bao_cao_thang",

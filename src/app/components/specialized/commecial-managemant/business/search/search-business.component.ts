@@ -41,7 +41,8 @@ export class SearchBusinessComponent implements OnInit {
   }
 
   public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst',
-    // 'ten_loai_hinh_hoat_dong', 'nguoi_dai_dien',
+    // 'ten_loai_hinh_hoat_dong', 
+    // 'nguoi_dai_dien',
     'dia_chi_day_du', 'so_dien_thoai', 'email',
     'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh',
     // 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
