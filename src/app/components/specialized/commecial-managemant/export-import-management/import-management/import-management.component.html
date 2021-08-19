@@ -12,7 +12,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
@@ -27,7 +27,7 @@
                         </mat-card>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
@@ -42,7 +42,7 @@
                         </mat-card>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
@@ -57,7 +57,7 @@
                         </mat-card>
                     </div>
 
-                    <div class="col-3">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
@@ -85,7 +85,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-2 col-lg-2">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian</mat-label>
                             <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
@@ -96,7 +96,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2 col-lg-2">
+                    <div class="col-12 col-md-6 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Nguồn dữ liệu: </mat-label>
                             <mat-select (selectionChange)="applyDataTarget($event)" [(ngModel)]="dataTargetId">
@@ -107,7 +107,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-8 col-lg-8 button-control my-auto text-right">
+                    <div class="col-12 col-md-12 col-lg-6 button-control my-auto text-right mt-3">
                         <a mat-raised-button download="TinhHinhNhapKhau.xlsx" title="Excel"
                             href="/assets/ExcelSample/TinhHinhNhapKhau.xlsx" [hidden]=authorize class="mr-1">
                             <mat-icon>cloud_download</mat-icon> Mẫu nhập khẩu
@@ -167,7 +167,8 @@
                 <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
                 </h5>
                 <div class="layout" #TABLE>
-                    <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
+                    <table mat-table [dataSource]="dataSource" matSort class="table-layout"
+                        style="min-width: 900px !important;" id="small-table">
 
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
