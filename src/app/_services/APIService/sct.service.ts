@@ -204,6 +204,16 @@ export class SCTService {
         );
     }
 
+    public CapNhatDuLieuTMBGThang(time_id: number, data: new_import_export_model[]) {
+        var apiUrl = this.apiSpecialized + this.urlDanhSachTMBG;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     // Post
     public CapNhatDuLieuNKThang(time_id: number, data: new_import_export_model[]) {
         var apiUrl = this.apiSpecialized + this.urlDanhSachNhapKhau;

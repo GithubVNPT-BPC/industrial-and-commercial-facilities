@@ -16,13 +16,13 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> business</mat-icon> Giá trị nhập khẩu tháng {{ curentmonth }} (triệu USD)
+                                    <mat-icon> business</mat-icon> Giá trị nhập khẩu tháng {{ month }}
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{TongGiaTriThangThucHien | formatNumber}}
+                                {{TongGiaTriThangThucHien | formatNumber}} (Triệu USD)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -31,13 +31,13 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> equalizer</mat-icon> ƯTH so với cùng kỳ (%)
+                                    <mat-icon> equalizer</mat-icon> ƯTH so với cùng kỳ
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{uth_so_cungky | formatNumber}}
+                                {{uth_so_cungky | formatNumber}} (%)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -46,13 +46,13 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> business</mat-icon> Tổng giá trị {{ curentmonth }} tháng (Triệu USD)
+                                    <mat-icon> business</mat-icon> Tổng giá trị {{ month }} tháng
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{ TongGiaTriCongDon | formatNumber }}
+                                {{ TongGiaTriCongDon | formatNumber }} (Triệu USD)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -61,13 +61,13 @@
                         <mat-card class="card2">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> equalizer</mat-icon> ƯTH so với kế hoạch năm (%)
+                                    <mat-icon> equalizer</mat-icon> ƯTH so với kế hoạch năm
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{ uth_so_khn | formatNumber }}
+                                {{ uth_so_khn | formatNumber }} (%)
                             </mat-card-content>
                         </mat-card>
                     </div>
