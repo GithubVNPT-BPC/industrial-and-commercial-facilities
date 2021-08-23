@@ -60,9 +60,9 @@ export const MY_FORMATS = {
 export class BorderTradeNewComponent implements OnInit {
 
   private readonly LINK_DEFAULT: string =
-    "/specialized/commecial-management/export_import/exported_products";
-  private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
-  private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
+    "/specialized/commecial-management/border_trade";
+  private readonly TITLE_DEFAULT: string = "Thương mại biên giới";
+  private readonly TEXT_DEFAULT: string = "Thương mại biên giới";
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
@@ -114,8 +114,6 @@ export class BorderTradeNewComponent implements OnInit {
     "gia_tri_cong_don",
     "uoc_th_so_cungky_cong_don",
     "uoc_th_so_thg_truoc_cong_don",
-    "danh_sach_doanh_nghiep",
-    "chi_tiet_doanh_nghiep",
   ];
   displayRow1Header = [
     // "index",
@@ -124,9 +122,6 @@ export class BorderTradeNewComponent implements OnInit {
     "don_vi_tinh",
     "thuc_hien_bao_cao_thang",
     "cong_don_den_ky_bao_cao",
-
-    "danh_sach_doanh_nghiep",
-    "chi_tiet_doanh_nghiep",
   ];
   displaRow2Header = [
     "gia_tri_thang",
@@ -147,12 +142,6 @@ export class BorderTradeNewComponent implements OnInit {
   @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
-
-  dataTargets: any[] = [
-    { id: 1, unit: "Cục hải quan" },
-    { id: 2, unit: "Tổng cục hải quan" },
-  ];
-  dataTargetId = 1;
 
   constructor(
     public sctService: SCTService,
@@ -203,13 +192,13 @@ export class BorderTradeNewComponent implements OnInit {
             let datarow: new_import_export_model = new new_import_export_model();
             datarow.id_san_pham = item['ID'];
             datarow.san_luong_thang = 0;
-            datarow.tri_gia_thang = item['TH tháng'] ? item['TH tháng'] : 0;
-            datarow.uoc_thang_so_voi_ki_truoc = item['ƯTH so Tháng cùng kỳ'] ? item['ƯTH so Tháng cùng kỳ'] : 0;
-            datarow.uoc_thang_so_voi_thang_truoc = item['ƯTH so tháng trước'] ? item['ƯTH so tháng trước'] : 0;
+            datarow.tri_gia_thang = item['Giá trị'] ? item['Giá trị'] : 0;
+            datarow.uoc_thang_so_voi_ki_truoc = item['So với cùng kỳ'] ? item['So với cùng kỳ'] : 0;
+            datarow.uoc_thang_so_voi_thang_truoc = item['So với tháng trước'] ? item['So với tháng trước'] : 0;
             datarow.san_luong_cong_don = 0;
-            datarow.tri_gia_cong_don = item['TH tháng (Cộng dồn)'] ? item['TH tháng (Cộng dồn)'] : 0;
-            datarow.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so với cùng kỳ (Cộng dồn)'] ? item['ƯTH so với cùng kỳ (Cộng dồn)'] : 0;
-            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so kế hoạch năm (Cộng dồn)'] ? item['ƯTH so kế hoạch năm (Cộng dồn)'] : 0;
+            datarow.tri_gia_cong_don = item['Giá trị (Cộng dồn)'] ? item['Giá trị (Cộng dồn)'] : 0;
+            datarow.uoc_cong_don_so_voi_ki_truoc = item['So với cùng kỳ (Cộng dồn)'] ? item['So với cùng kỳ (Cộng dồn)'] : 0;
+            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['So với tháng trước (Cộng dồn)'] ? item['So với tháng trước (Cộng dồn)'] : 0;
             this.exportvalue.push(datarow)
           });
           this.save(this.timechange, this.exportvalue)
@@ -229,7 +218,7 @@ export class BorderTradeNewComponent implements OnInit {
   }
 
   public save(month: number, exportvalue: Array<new_import_export_model>) {
-    this.sctService.CapNhatDuLieuXKThang(month, exportvalue).subscribe(
+    this.sctService.CapNhatDuLieuTMBGThang(month, exportvalue).subscribe(
       next => {
         if (next.id == -1) {
           this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
@@ -292,29 +281,15 @@ export class BorderTradeNewComponent implements OnInit {
   GetDanhSachTMBG(time_id: number) {
     this.sctService.GetDanhSachTMBG(time_id).subscribe((result) => {
       this.setDataExport(result.data[0]);
-      this.setDatabusiness(result.data[1]);
-      this.setDataExportDetail(result.data[2]);
     });
   }
 
-  setDataExportDetail(detail_export: any) {
-    this.dataDialog = [...detail_export];
-  }
-
-  setDatabusiness(lsBusiness) {
-    this.dataBusiness = lsBusiness;
-  }
-
   TongGiaTriThangThucHien: number = 0;
-  uth_so_cungky: number = 0;
   TongGiaTriCongDon: number = 0;
-  uth_so_khn: number = 0;
 
   setSumaryData(data) {
     this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
-    this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
     this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
-    this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
   }
 
   setDataExport(data) {
@@ -332,11 +307,5 @@ export class BorderTradeNewComponent implements OnInit {
 
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
-  addexport: boolean
-
-  AddExport(event) {
-    this.addexport = event.checked
   }
 }
