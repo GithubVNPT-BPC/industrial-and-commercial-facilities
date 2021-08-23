@@ -89,7 +89,6 @@ export class PetrolBusinessComponent implements OnInit {
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
-        // const numRows = this.dataSource.data.length;
         const numRows = this.dataSource1.connect().value.length;
         return numSelected === numRows;
     }
@@ -174,13 +173,13 @@ export class PetrolBusinessComponent implements OnInit {
         this.dataSource1.filter = filterValue.trim().toLowerCase();
     }
 
-    dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+    petrolstore: Array<PetrolList> = new Array<PetrolList>();
     dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
 
     getPetrolList() {
         this._Service.GetAllPetrolStore().subscribe(all => {
-            this.dataSource = new MatTableDataSource<PetrolList>(all.data);
-            this.dataSource.data.forEach(element => {
+            this.petrolstore = all.data
+            this.petrolstore.forEach(element => {
                 if (element.ngay_het_han) {
                     element.is_het_han = element.ngay_het_han < this.getCurrentDate()
                 }
@@ -190,7 +189,7 @@ export class PetrolBusinessComponent implements OnInit {
                 element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
-            this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+            this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == false)
             this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -203,7 +202,7 @@ export class PetrolBusinessComponent implements OnInit {
     // getPetrolListbyYear(year: string) {
     //     this._Service.GetPetrolValue(year).subscribe(all => {
     //         this.dataSource = new MatTableDataSource<PetrolList>(all.data[0]);
-    //         this.dataSource.data.forEach(element => {
+    //         this.petrolstore.forEach(element => {
     //             if (element.ngay_het_han) {
     //                 let temp = this.Convertdate(element.ngay_het_han)
     //                 element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
@@ -212,7 +211,7 @@ export class PetrolBusinessComponent implements OnInit {
     //                 element.is_het_han = false
     //             }
     //         });
-    //         this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+    //         this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == false)
     //         this.dataSource1.paginator = this.paginator;
     //         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
     //         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -245,14 +244,14 @@ export class PetrolBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.dataSource.data.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            this.petrolstore.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
             if (event.value.length)
                 this.dataSource1.data = [];
             else
-                this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == false)
         }
         else {
             this.dataSource1.data = filteredData;
@@ -260,12 +259,12 @@ export class PetrolBusinessComponent implements OnInit {
     }
 
     applyExpireCheck(event) {
-        this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+        this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
     }
 
     public getCurrentDate() {
         let date = new Date;
-        return formatDate(date, 'yyyy-MM-dd', 'en-US');
+        return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
     public getCurrentYear() {

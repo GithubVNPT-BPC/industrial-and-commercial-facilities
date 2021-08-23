@@ -336,29 +336,29 @@ export class EditBusinessComponent implements OnInit {
 
   public _currentRow: number = 0;
 
-  addRow(): void {
-    let newRow: Career = new Career();
-    newRow.id = null;
-    newRow.id_nganh_nghe_kinh_doanh = null;
-    newRow.nganh_nghe_kd_chinh = "";
-    newRow.id_linh_vuc;
-    newRow.ma_nganh_nghe = '';
+  // addRow(): void {
+  //   let newRow: Career = new Career();
+  //   newRow.id = null;
+  //   newRow.id_nganh_nghe_kinh_doanh = null;
+  //   newRow.nganh_nghe_kd_chinh = "";
+  //   newRow.id_linh_vuc;
+  //   newRow.ma_nganh_nghe = '';
 
-    this.dataSource.data.push(newRow);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
+  //   this.dataSource.data.push(newRow);
+  //   this.dataSource = new MatTableDataSource(this.dataSource.data);
 
-    this.filtercareer = this.career.slice();
-    this.FilterField = this.Field.slice();
+  //   this.filtercareer = this.career.slice();
+  //   this.FilterField = this.Field.slice();
 
-    this.dataSource.paginator = this.paginator;
-    this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    this.paginator._intl.firstPageLabel = "Trang Đầu";
-    this.paginator._intl.lastPageLabel = "Trang Cuối";
-    this.paginator._intl.previousPageLabel = "Trang Trước";
-    this.paginator._intl.nextPageLabel = "Trang Tiếp";
+  //   this.dataSource.paginator = this.paginator;
+  //   this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+  //   this.paginator._intl.firstPageLabel = "Trang Đầu";
+  //   this.paginator._intl.lastPageLabel = "Trang Cuối";
+  //   this.paginator._intl.previousPageLabel = "Trang Trước";
+  //   this.paginator._intl.nextPageLabel = "Trang Tiếp";
 
-    this._rows = this.dataSource.filteredData.length;
-  }
+  //   this._rows = this.dataSource.filteredData.length;
+  // }
 
   insertRow(): void {
     let data = this.dataSource.data.slice(this._currentRow);

@@ -458,21 +458,21 @@ export class UpdatePetrolComponent implements OnInit {
 
   public _currentRow: number = 0;
 
-  addRow(): void {
-    let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    if (this.id_san_luong != 'undefined') {
-      newRow.id_quan_ly = parseInt(this.id_san_luong)
-    }
-    else {
-      newRow.id_quan_ly = 0;
-    }
-    newRow.id_linh_vuc = 6;
-    this.dataSource.data.push(newRow);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
-    this.filterbusinessman = this.Businessman.slice();
+  // addRow(): void {
+  //   let newRow: PostBusinessmanValue = new PostBusinessmanValue();
+  //   if (this.id_san_luong != 'undefined') {
+  //     newRow.id_quan_ly = parseInt(this.id_san_luong)
+  //   }
+  //   else {
+  //     newRow.id_quan_ly = 0;
+  //   }
+  //   newRow.id_linh_vuc = 6;
+  //   this.dataSource.data.push(newRow);
+  //   this.dataSource = new MatTableDataSource(this.dataSource.data);
+  //   this.filterbusinessman = this.Businessman.slice();
 
-    this._rows = this.dataSource.filteredData.length;
-  }
+  //   this._rows = this.dataSource.filteredData.length;
+  // }
 
   insertRow(): void {
     let data = this.dataSource.data.slice(this._currentRow);

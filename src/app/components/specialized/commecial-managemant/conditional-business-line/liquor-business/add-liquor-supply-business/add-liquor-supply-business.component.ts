@@ -198,15 +198,15 @@ export class AddLiquorSupplyBusinessComponent implements OnInit {
 
   public _currentRow: number = 0;
 
-  addRow(): void {
-    let newRow: PostBusinessmanValue = new PostBusinessmanValue();
-    newRow.id_quan_ly = parseInt(this.id);
-    newRow.id_linh_vuc = 8;
-    this.dataSource.data.push(newRow);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
+  // addRow(): void {
+  //   let newRow: PostBusinessmanValue = new PostBusinessmanValue();
+  //   newRow.id_quan_ly = parseInt(this.id);
+  //   newRow.id_linh_vuc = 8;
+  //   this.dataSource.data.push(newRow);
+  //   this.dataSource = new MatTableDataSource(this.dataSource.data);
 
-    this._rows = this.dataSource.filteredData.length;
-  }
+  //   this._rows = this.dataSource.filteredData.length;
+  // }
 
   insertRow(): void {
     let data = this.dataSource.data.slice(this._currentRow);

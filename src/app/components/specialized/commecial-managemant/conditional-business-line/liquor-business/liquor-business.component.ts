@@ -245,8 +245,7 @@ export class LiquorBusinessComponent implements OnInit {
             this.LiquorList3 = this.LiquorList2
             this.LiquorList3.forEach(element => {
                 if (element.ngay_het_han) {
-                    let temp = this.Convertdate(element.ngay_het_han)
-                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    element.is_het_han = element.ngay_het_han < this.getCurrentDate()
                 }
                 else {
                     element.is_het_han = false
@@ -412,7 +411,7 @@ export class LiquorBusinessComponent implements OnInit {
 
     public getCurrentDate() {
         let date = new Date;
-        return formatDate(date, 'yyyy-MM-dd', 'en-US');
+        return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
     public getCurrentYear() {

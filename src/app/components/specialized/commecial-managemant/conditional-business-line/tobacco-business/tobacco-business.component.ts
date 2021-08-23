@@ -246,8 +246,7 @@ export class TobaccoBusinessComponent implements OnInit {
             this.TobaccoList3 = this.TobaccoList2
             this.TobaccoList3.forEach(element => {
                 if (element.ngay_het_han) {
-                    let temp = this.Convertdate(element.ngay_het_han)
-                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    element.is_het_han = element.ngay_het_han < this.getCurrentDate()
                 }
                 else {
                     element.is_het_han = false
@@ -414,7 +413,7 @@ export class TobaccoBusinessComponent implements OnInit {
 
     public getCurrentDate() {
         let date = new Date;
-        return formatDate(date, 'yyyy-MM-dd', 'en-US');
+        return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
     public getCurrentYear() {

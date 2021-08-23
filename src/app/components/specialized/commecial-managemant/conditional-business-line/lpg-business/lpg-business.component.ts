@@ -245,8 +245,7 @@ export class LPGBusinessComponent implements OnInit {
             this.LPGList3 = this.LPGList2
             this.LPGList3.forEach(element => {
                 if (element.ngay_het_han) {
-                    let temp = this.Convertdate(element.ngay_het_han)
-                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    element.is_het_han = element.ngay_het_han < this.getCurrentDate()
                 }
                 else {
                     element.is_het_han = false
@@ -368,7 +367,7 @@ export class LPGBusinessComponent implements OnInit {
 
     public getCurrentDate() {
         let date = new Date;
-        return formatDate(date, 'yyyy-MM-dd', 'en-US');
+        return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
     public getCurrentYear() {
