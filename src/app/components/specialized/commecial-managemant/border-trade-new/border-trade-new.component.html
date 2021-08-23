@@ -84,8 +84,7 @@
                                 (change)="uploadExcel($event)" hidden #inputFile>
                         </label>
 
-                        <button mat-raised-button
-                            (click)="ExportTOExcel('Thông tin tình hình TMBG','Thông tin tình hình TMBG')">
+                        <button mat-raised-button (click)="ExportTOExcel('TMBG','TMBG')">
                             <mat-icon>cloud_download</mat-icon> Xuất dữ liệu
                         </button>
                     </div>
@@ -125,8 +124,9 @@
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
                                 Loại hình
                             </th>
-                            <td mat-cell *matCellDef="let element" class="fillColor"
-                                [ngClass]="{'highlight': element.ten_san_pham == 'Tổng Kim ngạch TMBG', 'highlight1': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element" class="fillColor" 
+                            [ngClass]="{'highlight': element.ten_san_pham == 'Tổng Kim ngạch TMBG', 
+                                'highlight1': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
                                 {{ element.ten_san_pham }}
                             </td>
                         </ng-container>
@@ -237,7 +237,7 @@
                         </tr>
                     </table>
                 </div>
-                <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50]"></mat-paginator>
+                <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50, 100]"></mat-paginator>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>
