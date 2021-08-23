@@ -193,7 +193,7 @@
       table.mat-table.table-layout {
         border-collapse: separate;
         table-layout: initial;
-        min-width: 900px;
+        min-width: 100% !important;
         overflow-x: hidden;
 
         th,

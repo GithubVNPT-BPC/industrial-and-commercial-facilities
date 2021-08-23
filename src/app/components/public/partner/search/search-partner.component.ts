@@ -24,8 +24,10 @@ export class SearchPartnerComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst',
-    'dia_chi_day_du', 'so_dien_thoai', 'email',
-    'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh',
+    'dia_chi_tong_hop',
+    // 'dia_chi_day_du', 'so_dien_thoai', 'email',
+    'nganh_nghe',
+    // 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh',
     // 'ten_loai_hinh_hoat_dong',
     // 'nguoi_dai_dien',
     // 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
