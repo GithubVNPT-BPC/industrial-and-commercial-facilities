@@ -72,8 +72,6 @@ export class PetrolBusinessComponent implements OnInit {
         'id_cua_hang_xang_dau',
         'thoi_gian_chinh_sua_cuoi'
     ];
-    dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-    dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
 
     @ViewChild('table', { static: false }) table: ElementRef;
     @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
@@ -176,13 +174,15 @@ export class PetrolBusinessComponent implements OnInit {
         this.dataSource1.filter = filterValue.trim().toLowerCase();
     }
 
+    dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+    dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+
     getPetrolList() {
         this._Service.GetAllPetrolStore().subscribe(all => {
             this.dataSource = new MatTableDataSource<PetrolList>(all.data);
             this.dataSource.data.forEach(element => {
                 if (element.ngay_het_han) {
-                    let temp = this.Convertdate(element.ngay_het_han)
-                    element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
+                    element.is_het_han = element.ngay_het_han < this.getCurrentDate()
                 }
                 else {
                     element.is_het_han = false
@@ -252,7 +252,7 @@ export class PetrolBusinessComponent implements OnInit {
             if (event.value.length)
                 this.dataSource1.data = [];
             else
-                this.dataSource1.data = this.dataSource.data;
+                this.dataSource1.data = this.dataSource.data.filter(x => x.is_het_han == false)
         }
         else {
             this.dataSource1.data = filteredData;

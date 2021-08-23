@@ -1,0 +1,321 @@
+<mat-card class="material">
+    <mat-card-content>
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description> </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon> business</mat-icon> Giá trị xuất khẩu tháng {{ curentmonth }}
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{TongGiaTriThangThucHien | formatNumber}} (triệu USD)
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon> equalizer</mat-icon> ƯTH so với cùng kỳ
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{uth_so_cungky | formatNumber}} (%)
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon> business</mat-icon> Tổng giá trị {{ curentmonth }} tháng
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{ TongGiaTriCongDon | formatNumber }} (Triệu USD)
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon> equalizer</mat-icon> ƯTH so với kế hoạch năm (%)
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{ uth_so_khn | formatNumber }}
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>folder_open</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU CHI TIẾT</strong>
+                    </mat-panel-title>
+                    <mat-panel-description> </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Thời gian</mat-label>
+                            <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                                (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12 col-md-12 col-lg-6 button-control my-auto text-right mt-3">
+                        <a mat-raised-button download="TinhHinhXuatKhau.xlsx" title="Excel"
+                            href="/assets/ExcelSample/TinhHinhXuatKhau.xlsx" [hidden]=authorize class="mr-1">
+                            <mat-icon>cloud_download</mat-icon> Mẫu xuất khẩu
+                        </a>
+
+                        <label id="import_excel" [hidden]=authorize>
+                            <mat-icon>cloud_upload</mat-icon> Import xuất khẩu <input id="customFile" type="file"
+                                (change)="uploadExcel($event)" hidden #inputFile>
+                        </label>
+
+                        <button mat-raised-button
+                            (click)="ExportTOExcel('Thông tin tình hình xuất khẩu','Thông tin tình hình xuất khẩu')">
+                            <mat-icon>cloud_download</mat-icon> Xuất dữ liệu
+                        </button>
+
+                        <!-- <button mat-raised-button (click)="ImportTOExcel()" class="green" [hidden]=authorize>
+                            <mat-icon>file_upload</mat-icon>Import
+                        </button> -->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-lg-12">
+                        <mat-checkbox (change)="AddExport($event)" style="font-weight: bold;">
+                            Thêm chi tiết
+                        </mat-checkbox>
+
+                        <h5 class="text-center">
+                            BÁO CÁO THỰC HIỆN XUẤT KHẨU
+                        </h5>
+                    </div>
+
+                </div>
+
+                <div class="row" [hidden]="!addexport">
+                    <div class="col-12 col-lg-12 my-auto text-right">
+                        <a mat-raised-button download="ChiTietXuatKhau.xlsx" title="Excel"
+                            href="/assets/ExcelSample/ChiTietXuatKhau.xlsx" [hidden]=authorize class="mr-1">
+                            <mat-icon>cloud_download</mat-icon> Mẫu chi tiết xuất khẩu
+                        </a>
+
+                        <label id="import_excel" [hidden]=authorize class="mr-1">
+                            <mat-icon>cloud_upload</mat-icon> Import chi tiết xuất khẩu <input id="customFile"
+                                type="file" (change)="uploadExcel1($event)" hidden #inputFile>
+                        </label>
+
+                        <a mat-raised-button download="DoanhNghiepXuatKhau.xlsx" title="Excel"
+                            href="/assets/ExcelSample/DoanhNghiepXuatKhau.xlsx" [hidden]=authorize class="mr-1">
+                            <mat-icon>cloud_download</mat-icon> Mẫu doanh nghiệp xuất khẩu
+                        </a>
+
+                        <label id="import_excel" [hidden]=authorize>
+                            <mat-icon>cloud_upload</mat-icon> Import doanh nghiệp xuất khẩu <input id="customFile"
+                                type="file" (change)="uploadExcel2($event)" hidden #inputFile>
+                        </label>
+                    </div>
+                </div>
+                <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
+                </h5>
+                <div class="layout" #TABLE>
+                    <table mat-table [dataSource]="dataSource" matSort class="table-layout"
+                        style="min-width: 900px !important;" id="small-table">
+
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">STT</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                {{ i + 1 }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="tt">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
+                                TT
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="fillColor">
+                                {{ element.tt }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ten_san_pham">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
+                                Tên sản phẩm
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="fillColor"
+                                [ngClass]="{'highlight': element.ten_san_pham == 'Tổng Kim ngạch xuất khẩu', 'highlight1': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.ten_san_pham }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="don_vi_tinh">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
+                                Đơn vị tính
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="fillColor"
+                                [ngClass]="{'highlight': element.ten_san_pham == 'Tổng Kim ngạch xuất khẩu'}">
+                                {{ element.don_vi_tinh }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor"> Thời gian
+                                cập nhật </th>
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
+                                'dd/MM/yyyy, h:mm a'}}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thuc_hien_bao_cao_thang">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="fillColor">
+                                Tháng {{month}}
+                            </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cong_don_den_ky_bao_cao">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="fillColor">
+                                {{month}} Tháng
+                            </th>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="luong_thang">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sản lượng (Nghìn tấn)</th>
+                            <td mat-cell *matCellDef="let element" class="luong">
+                                {{ element.san_luong_thang | formatNumber }}
+                            </td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="gia_tri_thang">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Trị giá (Triệu USD)</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"
+                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.tri_gia_thang | formatNumber }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="uoc_th_so_cungky_tht">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
+                                so với tháng {{curentmonth}} cùng kỳ</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"
+                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.uoc_thang_so_voi_ki_truoc | formatNumber }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="uoc_th_so_thg_truoc_tht">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
+                                so với tháng trước</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"
+                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.uoc_thang_so_voi_thang_truoc | formatNumber }}
+                            </td>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="luong_cong_don">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Sản lượng (Nghìn tấn)</th>
+                            <td mat-cell *matCellDef="let element" class="luong">
+                                {{ element.san_luong_cong_don | formatNumber }}
+                            </td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="gia_tri_cong_don">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Thực hiện tháng (Triệu USD)</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"
+                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.tri_gia_cong_don | formatNumber }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="uoc_th_so_cungky_cong_don">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
+                                so với {{curentmonth}} tháng cùng kỳ</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"
+                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.uoc_cong_don_so_voi_ki_truoc | formatNumber }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="uoc_th_so_thg_truoc_cong_don">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
+                                so với kế hoạch năm</th>
+                            <td mat-cell *matCellDef="let element" class="gia-tri"
+                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng xuất khẩu chủ yếu'}">
+                                {{ element.uoc_cong_don_so_voi_cong_don_truoc | formatNumber }}
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="danh_sach_doanh_nghiep">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
+                                Doanh nghiệp xuất khẩu
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="jump text-center">
+                                <mat-icon (click)="openDanh_sach_doanh_nghiep(element.id_san_pham)"> directions_boat
+                                </mat-icon>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="chi_tiet_doanh_nghiep">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
+                                Chi tiết xuất khẩu
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="jump text-center">
+                                <mat-icon (click)="openDialog(element.id_san_pham)"> local_airport</mat-icon>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow1Header; sticky: true">
+                        </tr>
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displaRow2Header; sticky: true">
+                        </tr>
+                        <!-- <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow3Header; sticky: true">
+                        </tr> -->
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index">
+                        </tr>
+                    </table>
+                </div>
+                <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50]"></mat-paginator>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

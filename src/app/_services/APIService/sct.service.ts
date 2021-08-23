@@ -31,6 +31,8 @@ export class SCTService {
     private urlDanhSachXuatKhau = "/xnk/xuat-khau";
     private urlDanhSachXuatKhauTC = "/xnk/xuat-khau-tc";
 
+    private urlDanhSachTMBG = "/thuong-mai-bien-gioi";
+
     private urlChiTietNhapKhau = "/xnk/chi-tiet-nhap-khau";
     private urlChiTietNhapKhauTC = "/xnk/chi-tiet-nhap-khau-tc";
     private urlChiTietXuatKhau = "/xnk/chi-tiet-xuat-khau";
@@ -165,6 +167,16 @@ export class SCTService {
 
     public GetDanhSachNhapKhauTC(time_id: number) {
         var apiUrl = this.apiSpecialized + this.urlDanhSachNhapKhauTC;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetDanhSachTMBG(time_id: number) {
+        var apiUrl = this.apiSpecialized + this.urlDanhSachTMBG;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('time_id', time_id.toString());
 
