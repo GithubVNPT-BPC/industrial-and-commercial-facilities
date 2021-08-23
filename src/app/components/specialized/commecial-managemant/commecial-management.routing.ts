@@ -39,6 +39,7 @@ import { AddCertificateComponent } from './business/add-certificate/add-certific
 import { DetailBorderTradeComponent } from './border-trade/detail-border-trade/detail-border-trade.component';
 import { BorderTradeOverviewComponent } from './border-trade/border-trade-overview/border-trade-overview.component';
 import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.component';
+import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
 
 const routes: Routes = [
   {
@@ -294,32 +295,32 @@ const routes: Routes = [
       }
     ]
   },
-  // {
-  //   path: 'border_trade',
-  //   // component: BorderTradeComponent
-  //   children: [
-  //     // {
-  //     //   path: 'import',
-  //     //   component: BorderTradeImportComponent
-  //     // },
-  //     // {
-  //     //   path: 'export',
-  //     //   component: BorderTradeExportComponent
-  //     // }
-  //     {
-  //       path: 'detail',
-  //       component: DetailBorderTradeComponent
-  //     },
-  //     {
-  //       path: 'overview',
-  //       component: BorderTradeOverviewComponent
-  //     }
-  //   ]
-  // },
   {
     path: 'border_trade',
-    component: BorderTradeNewComponent
+    // component: BorderTradeComponent
+    children: [
+      // {
+      //   path: 'import',
+      //   component: BorderTradeImportComponent
+      // },
+      // {
+      //   path: 'export',
+      //   component: BorderTradeExportComponent
+      // }
+      {
+        path: 'detail',
+        component: BorderTradeNewComponent
+      },
+      {
+        path: 'overview',
+        component: BorderTradeNewOverviewComponent
+      }
+    ]
   },
+  // {
+  //   path: 'border_trade',
+  //   component: BorderTradeNewComponent
+  // },
   {
     path: 'multilevel_trade',
     component: MultilevelTradeComponent

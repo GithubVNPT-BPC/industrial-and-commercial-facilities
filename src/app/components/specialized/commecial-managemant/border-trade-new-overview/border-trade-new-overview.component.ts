@@ -44,8 +44,8 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-border-trade-new',
-  templateUrl: './border-trade-new.component.html',
+  selector: 'app-border-trade-new-overview',
+  templateUrl: './border-trade-new-overview.component.html',
   styleUrls: ["/../../special_layout.scss"],
   providers: [
     {
@@ -58,12 +58,12 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
   ],
 })
-export class BorderTradeNewComponent implements OnInit {
+export class BorderTradeNewOverviewComponent implements OnInit {
 
   private readonly LINK_DEFAULT: string =
     "/specialized/commecial-management/border_trade";
-  private readonly TITLE_DEFAULT: string = "Chi tiết - Thương mại biên giới";
-  private readonly TEXT_DEFAULT: string = "Chi tiết - Thương mại biên giới";
+  private readonly TITLE_DEFAULT: string = "Tổng quan - Thương mại biên giới";
+  private readonly TEXT_DEFAULT: string = "Tổng quan - Thương mại biên giới";
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
@@ -98,7 +98,7 @@ export class BorderTradeNewComponent implements OnInit {
     this.time = this.theYear.toString() + this.stringmonth
     this.timechange = parseInt(this.time)
 
-    this.GetDanhSachTMBG(this.timechange)
+    this.GetDanhSachTMBGTQ(this.timechange)
 
     this.month = this.time.substring(5, 6)
   }
@@ -109,29 +109,28 @@ export class BorderTradeNewComponent implements OnInit {
     "ten_san_pham",
     "don_vi_tinh",
     "gia_tri_thang",
-    // "uoc_th_so_cungky_tht",
-    // "uoc_th_so_thg_truoc_tht",
+    "uoc_th_so_cungky_tht",
+    "uoc_th_so_thg_truoc_tht",
 
-    // "gia_tri_cong_don",
-    // "uoc_th_so_cungky_cong_don",
-    // "uoc_th_so_thg_truoc_cong_don",
+    "gia_tri_cong_don",
+    "uoc_th_so_cungky_cong_don",
+    "uoc_th_so_thg_truoc_cong_don",
   ];
   displayRow1Header = [
     // "index",
     "tt",
     "ten_san_pham",
     "don_vi_tinh",
-    "gia_tri_thang",
-    // "thuc_hien_bao_cao_thang",
-    // "cong_don_den_ky_bao_cao",
+    "thuc_hien_bao_cao_thang",
+    "cong_don_den_ky_bao_cao",
   ];
   displaRow2Header = [
-    // "gia_tri_thang",
-    // "uoc_th_so_cungky_tht",
-    // "uoc_th_so_thg_truoc_tht",
-    // "gia_tri_cong_don",
-    // "uoc_th_so_cungky_cong_don",
-    // "uoc_th_so_thg_truoc_cong_don",
+    "gia_tri_thang",
+    "uoc_th_so_cungky_tht",
+    "uoc_th_so_thg_truoc_tht",
+    "gia_tri_cong_don",
+    "uoc_th_so_cungky_cong_don",
+    "uoc_th_so_thg_truoc_cong_don",
   ];
   private _linkOutput: LinkModel = new LinkModel();
 
@@ -220,14 +219,14 @@ export class BorderTradeNewComponent implements OnInit {
   }
 
   public save(month: number, exportvalue: Array<new_import_export_model>) {
-    this.sctService.CapNhatDuLieuTMBGThang(month, exportvalue).subscribe(
+    this.sctService.CapNhatDuLieuTMBGTQThang(month, exportvalue).subscribe(
       next => {
         if (next.id == -1) {
           this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
         }
         else {
           this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-          this.GetDanhSachTMBG(this.timechange)
+          this.GetDanhSachTMBGTQ(this.timechange)
         }
       },
       error => {
@@ -246,7 +245,7 @@ export class BorderTradeNewComponent implements OnInit {
   ngOnInit() {
     this.month = this.getCurrentMonth().substring(5, 6)
     this.timechange = parseInt(this.getCurrentMonth())
-    this.GetDanhSachTMBG(this.timechange);
+    this.GetDanhSachTMBGTQ(this.timechange);
     this.autoOpen();
     this.sendLinkToNext(true);
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
@@ -280,8 +279,8 @@ export class BorderTradeNewComponent implements OnInit {
     }
   }
 
-  GetDanhSachTMBG(time_id: number) {
-    this.sctService.GetDanhSachTMBG(time_id).subscribe((result) => {
+  GetDanhSachTMBGTQ(time_id: number) {
+    this.sctService.GetDanhSachTMBGTQ(time_id).subscribe((result) => {
       this.setDataExport(result.data[0]);
     });
   }

@@ -75,6 +75,7 @@ import { AddCertificateComponent } from './business/add-certificate/add-certific
 import { DetailBorderTradeComponent } from './border-trade/detail-border-trade/detail-border-trade.component';
 import { BorderTradeOverviewComponent } from './border-trade/border-trade-overview/border-trade-overview.component';
 import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.component';
+import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -167,7 +168,8 @@ export const customCurrencyMaskConfig = {
     AddCertificateComponent,
     DetailBorderTradeComponent,
     BorderTradeOverviewComponent,
-    BorderTradeNewComponent
+    BorderTradeNewComponent,
+    BorderTradeNewOverviewComponent
   ],
   entryComponents: [
     ModalComponent,
