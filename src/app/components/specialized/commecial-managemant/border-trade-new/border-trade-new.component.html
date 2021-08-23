@@ -115,7 +115,9 @@
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
                                 TT
                             </th>
-                            <td mat-cell *matCellDef="let element" class="fillColor">
+                            <td mat-cell *matCellDef="let element" class="fillColor" [ngClass]="{'highlight': element.ten_san_pham == 'Tổng', 
+                            'highlight1': element.tt == 'A.' || element.tt == 'B.' || element.tt == 'C.',
+                            'highlight': element.tt != null}">
                                 {{ element.tt }}
                             </td>
                         </ng-container>
@@ -124,9 +126,9 @@
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
                                 Loại hình
                             </th>
-                            <td mat-cell *matCellDef="let element" class="fillColor" 
-                            [ngClass]="{'highlight': element.ten_san_pham == 'Tổng Kim ngạch TMBG', 
-                                'highlight1': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element" class="fillColor" [ngClass]="{'highlight': element.ten_san_pham == 'Tổng', 
+                                'highlight1': element.tt == 'A.' || element.tt == 'B.' || element.tt == 'C.',
+                                'highlight': element.tt != null}">
                                 {{ element.ten_san_pham }}
                             </td>
                         </ng-container>
@@ -170,16 +172,14 @@
 
                         <ng-container matColumnDef="gia_tri_thang">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Giá trị</th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element">
                                 {{ element.tri_gia_thang | formatNumber }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="uoc_th_so_cungky_tht">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So với cùng kỳ</th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element">
                                 {{ element.uoc_thang_so_voi_ki_truoc | formatNumber }}
                             </td>
                         </ng-container>
@@ -187,8 +187,7 @@
                         <ng-container matColumnDef="uoc_th_so_thg_truoc_tht">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So với tháng trước
                             </th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element">
                                 {{ element.uoc_thang_so_voi_thang_truoc | formatNumber }}
                             </td>
                         </ng-container>
@@ -203,24 +202,21 @@
                         <ng-container matColumnDef="gia_tri_cong_don">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Giá trị
                             </th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element">
                                 {{ element.tri_gia_cong_don | formatNumber }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="uoc_th_so_cungky_cong_don">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So với cùng kỳ</th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element">
                                 {{ element.uoc_cong_don_so_voi_ki_truoc | formatNumber }}
                             </td>
                         </ng-container>
 
                         <ng-container matColumnDef="uoc_th_so_thg_truoc_cong_don">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So với tháng trước</th>
-                            <td mat-cell *matCellDef="let element"
-                                [ngClass]="{'hidecolor': element.ten_san_pham == 'Mặt hàng TMBG chủ yếu'}">
+                            <td mat-cell *matCellDef="let element">
                                 {{ element.uoc_cong_don_so_voi_cong_don_truoc | formatNumber }}
                             </td>
                             <td mat-footer-cell *matFooterCellDef>
