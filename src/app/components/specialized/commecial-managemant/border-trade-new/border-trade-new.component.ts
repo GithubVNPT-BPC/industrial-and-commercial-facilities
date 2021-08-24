@@ -116,15 +116,15 @@ export class BorderTradeNewComponent implements OnInit {
     // "uoc_th_so_cungky_cong_don",
     // "uoc_th_so_thg_truoc_cong_don",
   ];
-  displayRow1Header = [
-    // "index",
-    "tt",
-    "ten_san_pham",
-    "don_vi_tinh",
-    "gia_tri_thang",
-    // "thuc_hien_bao_cao_thang",
-    // "cong_don_den_ky_bao_cao",
-  ];
+  // displayRow1Header = [
+  //   // "index",
+  //   "tt",
+  //   "ten_san_pham",
+  //   "don_vi_tinh",
+  //   "gia_tri_thang",
+  //   // "thuc_hien_bao_cao_thang",
+  //   // "cong_don_den_ky_bao_cao",
+  // ];
   displaRow2Header = [
     // "gia_tri_thang",
     // "uoc_th_so_cungky_tht",

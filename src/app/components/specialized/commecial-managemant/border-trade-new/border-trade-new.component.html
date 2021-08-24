@@ -223,17 +223,19 @@
                             </td>
                         </ng-container>
 
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow1Header; sticky: true">
+                        <!-- <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow1Header; sticky: true">
                         </tr>
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displaRow2Header; sticky: true">
-                        </tr>
+                        </tr> -->
                         <!-- <tr mat-header-row class="table-header" *matHeaderRowDef="displayRow3Header; sticky: true">
                         </tr> -->
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index">
                         </tr>
                     </table>
                 </div>
-                <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50, 100]" showFirstLastButtons></mat-paginator>
+                <mat-paginator #paginator [pageSizeOptions]="[100]" showFirstLastButtons></mat-paginator>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>
