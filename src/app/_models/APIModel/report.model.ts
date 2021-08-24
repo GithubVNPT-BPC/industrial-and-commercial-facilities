@@ -48,6 +48,7 @@ export class ReportAttribute {
     attr_code: string;
     attr_name: string;
     attr_type: number;
+    attr_type_name: string;
     parent_id: number;
     formula: string;
     min_col_width: number;

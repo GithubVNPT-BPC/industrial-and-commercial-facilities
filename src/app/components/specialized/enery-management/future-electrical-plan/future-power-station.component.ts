@@ -8,7 +8,7 @@ import { BaseComponent } from '../../base.component';
 
 export class Group {
     ten_cong_trinh;
-    id_loai_duong_day;
+    id_loai_tram;
 }
 
 @Component({
@@ -16,14 +16,15 @@ export class Group {
     templateUrl: './future-electrical-plan.component.html',
     styleUrls: ['/../../special_layout.scss'],
 })
+
 export class FutureElectricalPlanComponent extends BaseComponent {
-    DB_TABLE = 'QLNL_QUY_HOACH_DUONG_DAY';
+    DB_TABLE = 'QLNL_QUY_HOACH_TRAM';
     dataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
     filteredDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
 
     displayedColumns: string[] = [
-        'select', 'ten_cong_trinh', 'giai_doan', 'so_mach',
-        'huong_tuyen_duong_day',
+        'select', 'ten_cong_trinh', 'giai_doan', 'so_may',
+        'tong_dung_luong',
         'nam_khoi_cong', 'nam_van_hanh'
     ];
     so_luong: number = 0;
@@ -34,13 +35,13 @@ export class FutureElectricalPlanComponent extends BaseComponent {
         public _login: LoginService
     ) {
         super(injector);
-        this.groupByColumns = ['id_loai_duong_day']
+        this.groupByColumns = ['id_loai_tram']
     }
 
     loai_duong_day = [
-        { id: 3, name: 'Đường dây 500KV' },
-        { id: 2, name: 'Đường dây 220KV' },
-        { id: 1, name: 'Đường dây 110KV' },
+        { id: 3, name: 'Trạm biến áp 500KV' },
+        { id: 2, name: 'Trạm biến áp 220KV' },
+        { id: 1, name: 'Trạm biến áp 110KV' },
         { id: 0, name: 'Tất cả' }
     ]
 
@@ -85,7 +86,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     }
 
     getDataElectric110KV() {
-        this.energyService.LayDuLieuQuyHoachDuongDay(this.time_id, this.selectedTypePro, this.selectedPeriod).subscribe(result => {
+        this.energyService.LayDuLieuQuyHoachTram(this.time_id, this.selectedTypePro, this.selectedPeriod).subscribe(result => {
             this.filteredDataSource.data = [];
             if (result.data && result.data.length > 0) {
                 this.dataSource = new MatTableDataSource<any | Group>(result.data);
@@ -108,7 +109,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
                 row => {
                     const result = new Group();
                     result[groupByColumns] = row[groupByColumns];
-                    result['ten_cong_trinh'] = this.loai_duong_day.find(item => item.id == row['id_loai_duong_day']).name;
+                    result['ten_cong_trinh'] = this.loai_duong_day.find(item => item.id == row['id_loai_tram']).name;
                     result['is_group'] = true;
                     return result;
                 }
@@ -143,7 +144,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     }
 
     public callService(data) {
-        this.energyService.CapNhatDuLieuQuyHoachDuongDay([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.energyService.CapNhatDuLieuQuyHoachTram([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     prepareRemoveData(data) {
@@ -152,18 +153,18 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     }
 
     callRemoveService(data) {
-        this.energyService.DeleteDuLieuQuyHoachDuongDay(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.energyService.DeleteDuLieuQuyHoachTram(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
     getFormParams() {
         return {
             id: new FormControl(0),
             ten_cong_trinh: new FormControl(''),
-            so_mach: new FormControl(''),
-            huong_tuyen_duong_day: new FormControl(''),
+            so_may: new FormControl(0),
+            tong_dung_luong: new FormControl(''),
             nam_khoi_cong: new FormControl(''),
             nam_van_hanh: new FormControl(''),
-            id_loai_duong_day: new FormControl(''),
+            id_loai_tram: new FormControl(''),
             id_giai_doan: new FormControl(''),
             nam: new FormControl(''),
             ky: new FormControl('')
@@ -180,7 +181,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     }
 
     changePeriod() {
-        this.time_id = this.selectedYear*10 + this.selectedPeriod;
+        this.time_id = this.selectedYear * 10 + this.selectedPeriod;
     }
 
     search() {

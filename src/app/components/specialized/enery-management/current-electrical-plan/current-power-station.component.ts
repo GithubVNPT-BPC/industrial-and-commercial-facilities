@@ -224,8 +224,8 @@ export class CurrentPowerStationComponent extends BaseComponent {
     getLinkDefault() {
         //Constant
         this.LINK_DEFAULT = "/specialized/enery-management/";
-        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
-        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
+        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Hiện trạng vận hành hệ thống điện";
+        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Hiện trạng vận hành hệ thống điện";
     }
 
     changeReportType() {

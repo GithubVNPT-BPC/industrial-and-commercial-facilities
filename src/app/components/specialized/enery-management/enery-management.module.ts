@@ -31,6 +31,7 @@ import { MonthDetailComponent } from './power-production/month-detail/month-deta
 import { DifferenceElectricComponent } from './difference-electric/difference-electric.component';
 import { PrimaryElectricityComponent } from './primary-electricity/primary-electricity.component';
 import { TranslateIdPeriodToNamePipe } from 'src/app/shared/pipes/translateIdPeriodToName.pipe';
+import { FutureManagementComponent } from './future-electrical-plan/future-electrical-management.component';
 
 @NgModule({
   imports: [
@@ -58,6 +59,7 @@ import { TranslateIdPeriodToNamePipe } from 'src/app/shared/pipes/translateIdPer
     CurrentElectricalPlanComponent,
     CurrentPowerStationComponent,
     FutureElectricalPlanComponent,
+    FutureManagementComponent,
     BlockElectricComponent,
     ManageApproveHddlComponent,
     ConsultantElectricComponent,

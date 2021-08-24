@@ -439,4 +439,62 @@ export class EnergyService {
             catchError(this.handleError)
         );
     }
+
+    // quy hoạch đường dây
+    LayDuLieuQuyHoachDuongDay(time_id, id_loai_duong_day, id_giai_doan) {
+        var apiUrl = this.apiNangLuong + '/quy-hoach-duong-day';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams()
+            .set('time_id', time_id)
+            .set('id_loai_duong_day', id_loai_duong_day)
+        // .set('id_giai_doan', id_giai_doan);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    
+    CapNhatDuLieuQuyHoachDuongDay(body: any[]) {
+        var apiUrl = this.apiNangLuong + '/quy-hoach-duong-day';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteDuLieuQuyHoachDuongDay(IDs) {
+        var apiUrl = this.apiNangLuong + '/xoa-quy-hoach-duong-day';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, IDs, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    
+    // quy hoạc trạm
+    LayDuLieuQuyHoachTram(time_id, id_loai_tram, id_giai_doan) {
+        var apiUrl = this.apiNangLuong + '/quy-hoach-TRAM';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams()
+            .set('time_id', time_id)
+            .set('id_loai_tram', id_loai_tram)
+        // .set('id_giai_doan', id_giai_doan);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    CapNhatDuLieuQuyHoachTram(body: any[]) {
+        var apiUrl = this.apiNangLuong + '/quy-hoach-TRAM';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    DeleteDuLieuQuyHoachTram(IDs) {
+        var apiUrl = this.apiNangLuong + '/xoa-quy-hoach-tram';
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.post<any>(apiUrl, IDs, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
 }

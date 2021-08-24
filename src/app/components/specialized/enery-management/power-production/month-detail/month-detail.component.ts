@@ -37,8 +37,8 @@ export class MonthDetailComponent implements OnInit {
     public readonly ATTRIBUTE_DEFAULT: number = 1;
 
     private readonly LINK_DEFAULT: string = "/specialized/enery-management/power-production-month-detail";
-    private readonly TITLE_DEFAULT: string = "Điện sản xuất và thương phẩm";
-    private readonly TEXT_DEFAULT: string = "Điện sản xuất và thương phẩm";
+    private readonly TITLE_DEFAULT: string = "Các chỉ tiêu chủ yếu đối với lĩnh vực năng lượng";
+    private readonly TEXT_DEFAULT: string = "Các chỉ tiêu chủ yếu đối với lĩnh vực năng lượng";
 
     public tableMergeHader: Array<ToltalHeaderMerge> = [];
     public mergeHeadersColumn: Array<string> = [];
@@ -55,7 +55,7 @@ export class MonthDetailComponent implements OnInit {
         'CB', 'CC', 'CD', 'CE', 'CF', 'CG', 'CH', 'CI', 'CJ', 'CK', 'CL', 'CM', 'CN', 'CO', 'CP',
         'CQ', 'CR', 'CS', 'CT', 'CU', 'CV', 'CW', 'CX', 'CY', 'CZ'];
 
-    obj_id: number = 3;
+    obj_id: number = 28;
     time_id: number;
     org_id: number = 5;
     rows: number = 0;
@@ -67,9 +67,9 @@ export class MonthDetailComponent implements OnInit {
     ngayketthucbaocao: string = "";
 
     years: Array<number> = [];
-    months: Array<number> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    months: Array<object> = [{ id: 1, value: '6 tháng đầu năm' }, { id: 2, value: '6 tháng cuối năm' }];
     selectedYear: number;
-    selectedMonth: number;
+    selectedMonth: number = 1;
 
     private _linkOutput: LinkModel = new LinkModel();
 
@@ -127,7 +127,7 @@ export class MonthDetailComponent implements OnInit {
         this.org_id = 5;
         this.years = this.InitialYears();
         this.selectedYear = new Date().getFullYear();
-        this.selectedMonth = new Date().getMonth();
+        
         this.calculateTimeId();
 
         this.sendLinkToNext(true);
@@ -233,7 +233,7 @@ export class MonthDetailComponent implements OnInit {
             case 6:
                 return "Tháng " + time.substr(4, 2) + " năm " + time.slice(0, 4);
             case 5:
-                return "Quý " + time.substr(4, 1) + " năm " + time.slice(0, 4);
+                return "Kỳ " + time.substr(4, 1) + " năm " + time.slice(0, 4);
             default:
                 return time;
         }
@@ -277,9 +277,9 @@ export class MonthDetailComponent implements OnInit {
             let lengthBeforeOfAttributes: number = attributes.length;
             attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1);
             attributes.forEach(attribute => {
-                //if (attribute.is_default == 1) {
+                if (attribute.is_default == 1) {
                 attribute.attr_code = attribute.attr_code + loopCount.toString();
-                //}
+                }
             });
             layerTop.forEach(layer => {
                 let mergeHeader: HeaderMerge = new HeaderMerge();
@@ -431,8 +431,8 @@ export class MonthDetailComponent implements OnInit {
 
     private sendLinkToNext(type: boolean): void {
         this._linkOutput.link = this.LINK_DEFAULT;
-        this._linkOutput.title = this.TITLE_DEFAULT + ' tháng ' + this.time_id.toString().substr(4, 2) + "/" + this.time_id.toString().slice(0, 4);
-        this._linkOutput.text = this.TEXT_DEFAULT + ' tháng ' + this.time_id.toString().substr(4, 2) + "/" + this.time_id.toString().slice(0, 4);
+        this._linkOutput.title = this.TITLE_DEFAULT + ' kỳ ' + this.time_id.toString().substr(4, 2) + "/" + this.time_id.toString().slice(0, 4);
+        this._linkOutput.text = this.TEXT_DEFAULT + ' kỳ ' + this.time_id.toString().substr(4, 2) + "/" + this.time_id.toString().slice(0, 4);
         this._linkOutput.type = type;
         this._breadCrumService.sendLink(this._linkOutput);
     }
@@ -448,7 +448,7 @@ export class MonthDetailComponent implements OnInit {
     }
 
     calculateTimeId() {
-        this.time_id = this.selectedYear * 100 + this.selectedMonth;
+        this.time_id = this.selectedYear * 10 + this.selectedMonth;
     }
 
     OpenDetail() {
