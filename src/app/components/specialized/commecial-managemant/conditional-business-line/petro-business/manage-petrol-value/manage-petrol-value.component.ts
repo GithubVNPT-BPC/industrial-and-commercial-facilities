@@ -262,8 +262,8 @@ export class ManagePetrolValueComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
 
-      this.petrollist4 = this.petrollist3.filter(x => x.is_het_han == false)
-      this.dataSource1.data = this.petrollist4
+      // this.petrollist4 = this.petrollist3.filter(x => x.is_het_han == false)
+      this.dataSource1.data = this.petrollist3
 
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
       let unique = [...new Set(this.dataSource1.data.map(x => x.mst))]

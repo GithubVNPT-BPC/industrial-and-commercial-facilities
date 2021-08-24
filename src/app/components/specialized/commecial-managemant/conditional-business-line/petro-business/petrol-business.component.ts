@@ -189,7 +189,7 @@ export class PetrolBusinessComponent implements OnInit {
                 element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
-            this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == false)
+            this.dataSource1.data = this.petrolstore
             this.dataSource1.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";

@@ -15,13 +15,14 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 })
 
 export class ChemicalManagementComponent extends BaseComponent {
-
+    DB_TABLE = 'QLCN_HC'
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
     reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 'email', 
     'so_lao_dong', 'congSuatList', 'sanLuongList', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
 
     displayedFields = {
+        id: "ID",
         mst: "Mã số thuế",
         ten_doanh_nghiep: "Tên doanh nghiệp",
         dia_chi_day_du: "Địa chỉ",
@@ -125,10 +126,12 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     getFormParams() {
         return {
+            id_qlcn_hc: new FormControl(),
             mst: new FormControl(),
             time_id: new FormControl(this.currentYear),
             details: this.formBuilder.array([
                 this.formBuilder.group({
+                    id: [],
                     id_hoa_chat: [],
                     san_luong: [],
                     cong_suat: [],
@@ -136,6 +139,28 @@ export class ChemicalManagementComponent extends BaseComponent {
                     ten_hoa_chat: []
                 })
             ])
+        }
+    }
+
+    setFormParams(){
+        if (this.selection.selected.length) {
+            let selectedRecord = this.selection.selected[0];
+            this.formData.controls['id_qlcn_hc'].setValue(selectedRecord.id_qlcn_hc);
+            this.formData.controls['mst'].setValue(selectedRecord.mst);
+            this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+
+            let details = this.formData.get('details');
+            details.controls = [];
+            for (let cs of selectedRecord.congSuatList) {
+                details.push(this.formBuilder.group({
+                    id: [cs.id],
+                    id_hoa_chat: [cs.id_hoa_chat],
+                    san_luong: [cs.san_luong],
+                    cong_suat: [cs.cong_suat],
+                    id_loai_hinh_hoat_dong: [cs.id_loai_hinh_hoat_dong],
+                    ten_hoa_chat: [cs.ten_hoa_chat]
+                }));
+            }
         }
     }
 
@@ -167,9 +192,56 @@ export class ChemicalManagementComponent extends BaseComponent {
             if (response.id != -1) {
                 self.industryManagementService.PostChemicalManagementQty(chemistryQtyData, data.time_id).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
             }
-        }, error => this.errorNotify(error));    
-        // console.log(chemistryData,chemistryQtyData);
-            
+        }, error => this.errorNotify(error));                
+    }
+
+    public prepareEditData(data) {
+        function _compareChangedData(prevData, curData) {
+            return Object.keys(curData).reduce((diff, key) => {
+                if (prevData[key] === curData[key]) return diff
+                return {
+                  ...diff,
+                  [key]: curData[key]
+                }
+            }, {});        
+        }
+
+        let chemistryData = {
+            pKey : {id_qlcn_hc : data.id_qlcn_hc},
+            modDatas : {
+                mst: data.mst,
+                time_id: data.time_id,
+            },
+            table: 'QLCN_HC',
+        }        
+
+        let chemistryQtyDatas = data.details.map(x => {
+            return {
+                pKey : {id : x.id},
+                modDatas : {
+                    san_luong: x.san_luong,
+                    cong_suat: x.cong_suat,
+                    ten_hoa_chat: x.ten_hoa_chat,
+                    id_loai_hinh_hoat_dong: x.id_loai_hinh_hoat_dong
+                },
+                table: 'QLCN_HC_SL',
+            }
+        });
+
+        return {
+            chemistryData: chemistryData,
+            chemistryQtyDatas: chemistryQtyDatas,
+        };
+    }
+
+    public callEditService(data) {
+        let chemistryData = data['chemistryData'];
+        let chemistryQtyDatas = data['chemistryQtyDatas'];
+
+        this.sctService.UpdateRecord(chemistryData).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        chemistryQtyDatas.forEach(data => {
+            this.sctService.UpdateRecord(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        });
     }
 
     getChemicalManagementData(time_id: number) {
@@ -271,9 +343,5 @@ export class ChemicalManagementComponent extends BaseComponent {
         });
         filteredData = filteredData.filter((v, i, a) => a.findIndex(t => (t.id_qlcn_hc === v.id_qlcn_hc)) === i)
         return filteredData;
-    }
-
-    setFormParams(){
-        this.formBuilder
     }
 }

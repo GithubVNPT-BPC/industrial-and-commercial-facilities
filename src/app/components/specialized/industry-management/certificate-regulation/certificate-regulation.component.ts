@@ -44,7 +44,10 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   ds_sp: any[] = [
     { id_loai_san_pham: 1, ten_san_pham: "Thực phẩm" },
-    { id_loai_san_pham: 2, ten_san_pham: "May mặc" }
+    { id_loai_san_pham: 2, ten_san_pham: "May mặc" },
+    { id_loai_san_pham: 3, ten_san_pham: "Giấy-khăn giấy" },
+    { id_loai_san_pham: 4, ten_san_pham: "Nhóm 2" },
+    { id_loai_san_pham: 5, ten_san_pham: "Sản phẩm khác" },
   ]
 
   constructor(
@@ -62,7 +65,7 @@ export class CertificateRegulationComponent extends BaseComponent {
     super.ngOnInit();
     this.GetComformityAnnounceData();
 
-    if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }

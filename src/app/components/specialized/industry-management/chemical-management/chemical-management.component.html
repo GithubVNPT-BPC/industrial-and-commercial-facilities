@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4 col-lg-4">
+                    <div class="col-12 col-md-6 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -35,7 +35,7 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-4 col-lg-4">
+                    <div class="col-12 col-md-6 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -49,7 +49,7 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-4 col-lg-4">
+                    <div class="col-12 col-md-12 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -78,7 +78,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class="col-sm-12 col-md-4 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="getChemicalManagementData($event.value)"
@@ -88,7 +88,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class="col-sm-12 col-md-4 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
                             <mat-select #dSelect (selectionChange)="applyFilter($event)"
@@ -100,7 +100,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class="col-sm-12 col-md-4 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCN</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap" multiple>
@@ -111,13 +111,13 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-6 col-lg-6">
+                    <div class="col-sm-12 col-md-8 col-lg-8">
                         <mat-form-field appearance="outline">
                             <mat-label>Lọc dữ liệu</mat-label>
                             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                         </mat-form-field>
                     </div>
-                    <div class="col-sm-6 col-md-3 col-lg-3 my-auto">
+                    <div class="col-sm-6 col-md-4 col-lg-4 my-auto">
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Doanh nghiệp hết hạn
                         </mat-checkbox>
                     </div>
@@ -267,7 +267,6 @@
             <hr>
             <form [formGroup]="formData" (ngSubmit)="onCreate()">
                 <div class="form-group row">
-
                     <div class="col-md-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
@@ -276,6 +275,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
+                                <input matInput formControlName="id_qlcn_hc" type="text" class="o_invisible">
                                 <div class="col-md-9">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Mã số thuế doanh nghiệp</mat-label>
@@ -319,6 +319,7 @@
                             <div formArrayName="details" class="form-group"
                                 *ngFor="let field of formData.get('details').controls; let ind = index;">
                                 <div [formGroupName]="ind">
+                                    <input matInput type="number" formControlName="id" class="o_invisible">
                                     <div class="row">
                                         <div class="col-md-5">
                                             <mat-form-field appearance="outline">

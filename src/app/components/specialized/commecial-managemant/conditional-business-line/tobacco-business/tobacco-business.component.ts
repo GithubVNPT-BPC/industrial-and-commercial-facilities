@@ -255,8 +255,8 @@ export class TobaccoBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            this.TobaccoList4 = this.TobaccoList3.filter(x => x.is_het_han == false)
-            this.dataSource1.data = this.TobaccoList4
+            // this.TobaccoList4 = this.TobaccoList3.filter(x => x.is_het_han == false)
+            this.dataSource1.data = this.TobaccoList3
 
 
             this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;

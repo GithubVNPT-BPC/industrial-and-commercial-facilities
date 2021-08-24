@@ -254,8 +254,8 @@ export class LPGBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            this.LPGList4 = this.LPGList3.filter(x => x.is_het_han == false)
-            this.dataSource1.data = this.LPGList4
+            // this.LPGList4 = this.LPGList3.filter(x => x.is_het_han == false)
+            this.dataSource1.data = this.LPGList3
 
             this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
             this.SLThuongNhan = this.LPGList1.length
