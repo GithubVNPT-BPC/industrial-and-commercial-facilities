@@ -25,7 +25,7 @@
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon>filter</mat-icon> 
+                                    <mat-icon>filter</mat-icon>
                                 </mat-card-title>
                                 <mat-card-subtitle></mat-card-subtitle>
                             </mat-card-header>
@@ -50,14 +50,15 @@
 
                 <div class="row">
                     <div class="col-6 col-lg-6 button-control my-auto">
-                
+
                     </div>
                     <div class="col-6 col-lg-6 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Trạm biến áp 110KV','Trạm biến áp 110KV')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()" [hidden]=authorize>
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                            [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
                         <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
@@ -69,11 +70,11 @@
                             <mat-icon>edit</mat-icon>
                         </button>
                     </div>
-                
+
                 </div>
-                
+
                 <div class="row">
-                
+
                     <div class="col-lg-2 col-md-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm dữ liệu</mat-label>
@@ -106,7 +107,7 @@
                     </div> -->
                     <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>Loại đường dây</mat-label>
+                            <mat-label>Loại trạm</mat-label>
                             <mat-select [(ngModel)]="selectedTypePro">
                                 <mat-option *ngFor="let item of loai_duong_day" [value]="item.id">
                                     {{item.name}}
@@ -143,23 +144,25 @@
 
                         <ng-container matColumnDef="ten_cong_trinh">
                             <th mat-header-cell *matHeaderCellDef> Tên công trình </th>
-                            <td mat-cell *matCellDef="let element" [style.font-weight]="element.is_group ? 'bold' : '' " class="center-cell"> 
+                            <td mat-cell *matCellDef="let element" [style.font-weight]="element.is_group ? 'bold' : '' "
+                                class="center-cell">
                                 {{element.ten_cong_trinh}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="giai_doan">
                             <th mat-header-cell *matHeaderCellDef> Giai đoạn </th>
-                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.id_giai_doan | translateName : 'TRANSLATE'}}</td>
+                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.id_giai_doan |
+                                translateName : 'TRANSLATE'}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="huong_tuyen_duong_day">
-                            <th mat-header-cell *matHeaderCellDef>Hướng tuyến đường dây </th>
-                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.huong_tuyen_duong_day}}</td>
+                        <ng-container matColumnDef="so_may">
+                            <th mat-header-cell *matHeaderCellDef> Số máy </th>
+                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.so_may}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="so_mach">
-                            <th mat-header-cell *matHeaderCellDef> Số mạch x km </th>
-                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.so_mach}}</td>
+                        <ng-container matColumnDef="tong_dung_luong">
+                            <th mat-header-cell *matHeaderCellDef> Tổng dung lượng (MVA) </th>
+                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.tong_dung_luong}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="nam_khoi_cong">
@@ -213,22 +216,23 @@
 
                     <div class="col-lg-6 col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label for="huong_tuyen_duong_day">Hướng tuyến đường dây</mat-label>
-                            <input matInput placeholder="" id="huong_tuyen_duong_day" type="text" formControlName="huong_tuyen_duong_day">
+                            <mat-label for="tong_dung_luong">Tổng dung lượng (MVA)</mat-label>
+                            <input matInput placeholder="" id="tong_dung_luong" type="text"
+                                formControlName="tong_dung_luong">
                         </mat-form-field>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label for="so_mach">Số mạch x km</mat-label>
+                            <mat-label for="so_mach">Số máy</mat-label>
                             <input matInput formControlName="so_mach" id="so_mach" type="text">
                         </mat-form-field>
                     </div>
 
                     <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
-                            <mat-label>Loại đường dây</mat-label>
-                            <mat-select formControlName="id_loai_duong_day">
+                            <mat-label>Loại trạm</mat-label>
+                            <mat-select formControlName="id_loai_tram">
                                 <mat-option *ngFor="let item of loai_duong_day" [value]="item.id">
                                     {{item.name}}
                                 </mat-option>

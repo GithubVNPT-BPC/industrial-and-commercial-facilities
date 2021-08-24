@@ -15,7 +15,7 @@ import { RuralElectricManagementComponent } from './rural-electric/rural-electri
 import { KeyEnegyComponent } from './key-enegy/key-enegy.component';
 import { MonthDetailComponent } from './power-production/month-detail/month-detail.component';
 import { DifferenceElectricComponent } from './difference-electric/difference-electric.component';
-import { FutureElectricalPlanComponent } from './future-electrical-plan/future-electrical-plan.component';
+import { FutureManagementComponent } from './future-electrical-plan/future-electrical-management.component';
 
 const routes: Routes = [
 
@@ -128,7 +128,7 @@ const routes: Routes = [
         data: {
           title: 'Quy hoạch công trình điện từ 110kV trở lên'
         },
-        component: FutureElectricalPlanComponent
+        component: FutureManagementComponent
       }
     ],
   },
