@@ -319,6 +319,7 @@ export class ViewReportComponent implements OnInit {
       tableRow.ind_type = elementIndicator.ind_type;
       tableRow.ind_unit = elementIndicator.ind_unit;
       tableRow.ind_parent_id = elementIndicator.parent_id;
+      tableRow.ind_index = elementIndicator.ind_index;
       if (elementDatarow) {
         tableRow.fc01 = elementDatarow.fc01 ? elementDatarow.fc01 : "";
         tableRow.fc02 = elementDatarow.fc02 ? elementDatarow.fc02 : "";
