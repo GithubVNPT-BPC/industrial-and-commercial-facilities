@@ -536,6 +536,17 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
 
     getDanhSachNhapKhau(time_id: number) {
         this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
+            result.data[0].forEach(x => {
+                x.san_luong_thang = x.san_luong_thang == 0 ? null : x.san_luong_thang
+                x.tri_gia_thang = x.tri_gia_thang == 0 ? null : x.tri_gia_thang
+                x.uoc_thang_so_voi_ki_truoc = x.uoc_thang_so_voi_ki_truoc == 0 ? null : x.uoc_thang_so_voi_ki_truoc
+                x.uoc_thang_so_voi_thang_truoc = x.uoc_thang_so_voi_thang_truoc == 0 ? null : x.uoc_thang_so_voi_thang_truoc
+                x.san_luong_cong_don = x.san_luong_cong_don == 0 ? null : x.san_luong_cong_don
+                x.tri_gia_cong_don = x.tri_gia_cong_don == 0 ? null : x.tri_gia_cong_don
+                x.uoc_cong_don_so_voi_ki_truoc = x.uoc_cong_don_so_voi_ki_truoc == 0 ? null : x.uoc_cong_don_so_voi_ki_truoc
+                x.uoc_cong_don_so_voi_cong_don_truoc = x.uoc_cong_don_so_voi_cong_don_truoc == 0 ? null : x.uoc_cong_don_so_voi_cong_don_truoc
+            });
+
             this.setDataImport(result.data[0]);
             this.setDatabusiness(result.data[1]);
             this.setDataImportDetail(result.data[2]);
@@ -544,6 +555,17 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
 
     getDanhSachNhapKhauTC(time_id: number) {
         this.sctService.GetDanhSachNhapKhauTC(time_id).subscribe((result) => {
+            result.data[0].forEach(x => {
+                x.san_luong_thang = x.san_luong_thang == 0 ? null : x.san_luong_thang
+                x.tri_gia_thang = x.tri_gia_thang == 0 ? null : x.tri_gia_thang
+                x.uoc_thang_so_voi_ki_truoc = x.uoc_thang_so_voi_ki_truoc == 0 ? null : x.uoc_thang_so_voi_ki_truoc
+                x.uoc_thang_so_voi_thang_truoc = x.uoc_thang_so_voi_thang_truoc == 0 ? null : x.uoc_thang_so_voi_thang_truoc
+                x.san_luong_cong_don = x.san_luong_cong_don == 0 ? null : x.san_luong_cong_don
+                x.tri_gia_cong_don = x.tri_gia_cong_don == 0 ? null : x.tri_gia_cong_don
+                x.uoc_cong_don_so_voi_ki_truoc = x.uoc_cong_don_so_voi_ki_truoc == 0 ? null : x.uoc_cong_don_so_voi_ki_truoc
+                x.uoc_cong_don_so_voi_cong_don_truoc = x.uoc_cong_don_so_voi_cong_don_truoc == 0 ? null : x.uoc_cong_don_so_voi_cong_don_truoc
+            });
+
             this.setDataImport(result.data[0]);
             this.setDatabusiness(result.data[1]);
             this.setDataImportDetail(result.data[2]);
