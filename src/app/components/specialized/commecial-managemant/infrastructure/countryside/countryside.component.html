@@ -224,7 +224,7 @@
                         </div>
 
                         <ng-container matColumnDef="general">
-                            <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="6">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="5">
                         </ng-container>
 
                         <ng-container matColumnDef="countrysideStd">
@@ -242,8 +242,13 @@
                             </th>
                         </ng-container>
 
+                        <ng-container matColumnDef="thoigian">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="1">
+                            </th>
+                        </ng-container>
+
                         <tr mat-header-row class="table-header"
-                            *matHeaderRowDef="['general','countrysideStd', 'comparePreviousYear', 'reportYear']; sticky: true">
+                            *matHeaderRowDef="['general','countrysideStd', 'comparePreviousYear', 'reportYear', 'thoigian']; sticky: true">
                         </tr>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>

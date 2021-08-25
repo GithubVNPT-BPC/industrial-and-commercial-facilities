@@ -44,13 +44,13 @@ export class StoreManagementComponent extends BaseComponent {
     mst: "Mã số thuế",
     so_dien_thoai: "Điện thoại",
     ten_san_pham: "Sản phẩm kinh doanh",
-    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
     so_chung_nhan: "Số chứng nhận ĐKKD",
     ngay_cap_giay_chung_nhan: "Ngày cấp",
     noi_cap_giay_chung_nhan: "Nơi cấp",
     so_giay_phep: "Số giấy phép",
     ngay_cap_giay_phep: "Ngày cấp",
     ngay_het_han_giay_phep: "Ngày hết hạn",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
   }
 
   businessProducts = [

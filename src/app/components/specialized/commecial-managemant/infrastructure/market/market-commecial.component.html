@@ -417,7 +417,7 @@
 
                         <!-- Table header row 2 -->
                         <ng-container matColumnDef="general">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="12">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="11">
                                 Thông tin chung
                         </ng-container>
 
@@ -436,13 +436,17 @@
                                 thức quản lý</th>
                         </ng-container>
 
+                        <ng-container matColumnDef="thoigian">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
+                        </ng-container>
+
                         <!-- <ng-container matColumnDef="investment">
                             <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6"> Vốn
                                 Đầu tư phát triển chợ </th>
                         </ng-container> -->
 
                         <tr mat-header-row class="table-header"
-                            *matHeaderRowDef="['general', 'marketManagementType', 'managementType', 'marketManageInfo']; sticky: true">
+                            *matHeaderRowDef="['general', 'marketManagementType', 'managementType', 'marketManageInfo', 'thoigian']; sticky: true">
                         </tr>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky : true">

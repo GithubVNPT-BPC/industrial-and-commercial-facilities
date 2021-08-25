@@ -44,7 +44,6 @@ export class CountrysideComponent extends BaseComponent {
     cho_truyen_thong: "Chợ truyền thống",
     ten_phuong_xa: "Tên Phường Xã",
     ten_quan_huyen: "Tên Huyện/Thị xã/Thành phố",
-    thoi_gian_chinh_sua_cuoi: 'Thời gian cập nhật',
     nam_dat_TC_7: "Năm đạt TC số 7",
     nam_dat_NTM: "Năm thực hiện đạt chuẩn NTM",
     th_6_thang_nam_cung_ky_dat_TC_7: "Số xã đạt tiêu chí số 7",
@@ -53,6 +52,7 @@ export class CountrysideComponent extends BaseComponent {
     nam_bc_kh_6_thang_nam_cho_dat_NTM: "Số xã có chợ đạt chuẩn nông thôn mới (Kế hoạch 6 tháng/năm)",
     nam_bc_ut_6_thang_nam_dat_TC_7: "Số xã đạt tiêu chí số 7 (Ước thực hiện 6 tháng/năm)",
     nam_bc_ut_6_thang_nam_cho_dat_NTM: "Số xã có chợ đạt chuẩn nông thôn mới (Ước thực hiện 6 tháng/năm)",
+    thoi_gian_chinh_sua_cuoi: 'Thời gian cập nhật',
   }
 
   getFormParams() {

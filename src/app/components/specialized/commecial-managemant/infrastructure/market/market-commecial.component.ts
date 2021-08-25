@@ -79,7 +79,6 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     ten_loai_cho: "Loại chợ",
     ke_hoach_dau_tu: "Đầu tư",
     hinh_thuc_quan_ly: "Hình thức quản lý",
-    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
 
     nam_xay_dung: "Xây mới",
     nam_nang_cap: "Nâng cấp",
@@ -99,7 +98,9 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     to_quan_ly: "Tổ quản lý",
     doanh_nghiep: "Doanh nghiệp",
     hop_tac_xa: "Hợp tác xã",
-    ho_kinh_doanh: "Hộ kinh doanh"
+    ho_kinh_doanh: "Hộ kinh doanh",
+
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
   }
 
   getFormParams() {

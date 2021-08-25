@@ -47,12 +47,12 @@ export class FoodManagementComponent extends BaseComponent {
     dia_chi_day_du: "Địa chỉ",
     mst: "Mã số thuế",
     ten_san_pham: "Sản phẩm kinh doanh",
-    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
     so_giay_phep: "Số chứng nhận ĐKKD",
     ngay_cap: "Ngày cấp",
-    ngay_het_han: "Ngày hết hạn",
+    // ngay_het_han: "Ngày hết hạn",
     nguoi_dai_dien: "Tên",
     so_dien_thoai: "Điện thoại",
+    thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
   }
   giayCndkkdList = [];
 
