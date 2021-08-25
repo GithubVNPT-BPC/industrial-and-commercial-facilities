@@ -12,8 +12,8 @@ export class Group {
 }
 
 @Component({
-    selector: 'future-electrical-plan',
-    templateUrl: './future-electrical-plan.component.html',
+    selector: 'future-power-station',
+    templateUrl: './future-power-station.component.html',
     styleUrls: ['/../../special_layout.scss'],
 })
 
