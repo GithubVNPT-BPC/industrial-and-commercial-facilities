@@ -181,7 +181,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="uoc_th_so_cungky_tht">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So sánh với thực hiện kì trước</th>
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH so với tháng trước</th>
                             <td mat-cell *matCellDef="let element" [ngClass]="{'highlight1': element.tt == 'I' || element.tt == 'II' 
                             || element.tt == 'III' ||  element.tt == 'IV',
                             'highlight2': element.tt == 1}">
@@ -190,8 +190,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="uoc_th_so_thg_truoc_tht">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So sánh với thực hiện cùng kì năm
-                                trước
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH so với cùng kỳ năm trước
                             </th>
                             <td mat-cell *matCellDef="let element" [ngClass]="{'highlight1': element.tt == 'I' || element.tt == 'II' 
                             || element.tt == 'III' ||  element.tt == 'IV',
@@ -227,8 +226,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="uoc_th_so_thg_truoc_cong_don">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">So sánh lũy kế với cùng kì năm
-                                trước</th>
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH so với lũy kế cùng kỳ năm trước</th>
                             <td mat-cell *matCellDef="let element" [ngClass]="{'highlight1': element.tt == 'I' || element.tt == 'II' 
                             || element.tt == 'III' ||  element.tt == 'IV',
                             'highlight2': element.tt == 1}">

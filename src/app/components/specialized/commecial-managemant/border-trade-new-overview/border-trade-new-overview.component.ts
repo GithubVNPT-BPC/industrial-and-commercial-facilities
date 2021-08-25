@@ -198,12 +198,12 @@ export class BorderTradeNewOverviewComponent implements OnInit {
             datarow.id_san_pham = item['ID'];
             datarow.san_luong_thang = item['Thực hiện cùng kì năm trước'] ? item['Thực hiện cùng kì năm trước'] : 0;
             datarow.tri_gia_thang = item['Thực hiện tháng'] ? item['Thực hiện tháng'] : 0;
-            datarow.uoc_thang_so_voi_ki_truoc = item['So sánh với thực hiện kì trước'] ? item['So sánh với thực hiện kì trước'] : 0;
-            datarow.uoc_thang_so_voi_thang_truoc = item['So sánh với thực hiện cùng kì năm trước'] ? item['So sánh với thực hiện cùng kì năm trước'] : 0;
+            datarow.uoc_thang_so_voi_ki_truoc = item['ƯTH so với tháng trước'] ? item['ƯTH so với tháng trước'] : 0;
+            datarow.uoc_thang_so_voi_thang_truoc = item['ƯTH so với cùng kỳ năm trước'] ? item['ƯTH so với cùng kỳ năm trước'] : 0;
             datarow.san_luong_cong_don = 0;
             datarow.tri_gia_cong_don = item['Lũy kế kì báo cáo'] ? item['Lũy kế kì báo cáo'] : 0;
             datarow.uoc_cong_don_so_voi_ki_truoc = item['Lũy kế cùng kì năm trước'] ? item['Lũy kế cùng kì năm trước'] : 0;
-            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['So sánh lũy kế với cùng kì năm trước'] ? item['So sánh lũy kế với cùng kì năm trước'] : 0;
+            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so với lũy kế cùng kỳ năm trước'] ? item['ƯTH so với lũy kế cùng kỳ năm trước'] : 0;
             this.exportvalue.push(datarow)
           });
           this.save(this.timechange, this.exportvalue)
@@ -293,8 +293,8 @@ export class BorderTradeNewOverviewComponent implements OnInit {
   TongGiaTriCongDon: number = 0;
 
   setSumaryData(data) {
-    this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
-    this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
+    this.TongGiaTriThangThucHien = data[22].tri_gia_thang ? data[22].tri_gia_thang : 0;
+    this.TongGiaTriCongDon = data[22].tri_gia_cong_don ? data[22].tri_gia_cong_don : 0;
   }
 
   setDataExport(data) {
