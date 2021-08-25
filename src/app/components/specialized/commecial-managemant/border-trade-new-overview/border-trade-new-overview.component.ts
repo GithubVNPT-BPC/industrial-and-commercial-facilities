@@ -108,12 +108,16 @@ export class BorderTradeNewOverviewComponent implements OnInit {
     "tt",
     "ten_san_pham",
     "don_vi_tinh",
+    "san_luong_thang",
+
+    "uoc_th_so_cungky_cong_don",
+
     "gia_tri_thang",
+    "gia_tri_cong_don",
+
     "uoc_th_so_cungky_tht",
     "uoc_th_so_thg_truoc_tht",
 
-    "gia_tri_cong_don",
-    "uoc_th_so_cungky_cong_don",
     "uoc_th_so_thg_truoc_cong_don",
   ];
   displayRow1Header = [
@@ -192,14 +196,14 @@ export class BorderTradeNewOverviewComponent implements OnInit {
           data.forEach(item => {
             let datarow: new_import_export_model = new new_import_export_model();
             datarow.id_san_pham = item['ID'];
-            datarow.san_luong_thang = 0;
-            datarow.tri_gia_thang = item['Giá trị'] ? item['Giá trị'] : 0;
-            datarow.uoc_thang_so_voi_ki_truoc = item['So với cùng kỳ'] ? item['So với cùng kỳ'] : 0;
-            datarow.uoc_thang_so_voi_thang_truoc = item['So với tháng trước'] ? item['So với tháng trước'] : 0;
+            datarow.san_luong_thang = item['Thực hiện cùng kì năm trước'] ? item['Thực hiện cùng kì năm trước'] : 0;
+            datarow.tri_gia_thang = item['Thực hiện tháng'] ? item['Thực hiện tháng'] : 0;
+            datarow.uoc_thang_so_voi_ki_truoc = item['So sánh với thực hiện kì trước'] ? item['So sánh với thực hiện kì trước'] : 0;
+            datarow.uoc_thang_so_voi_thang_truoc = item['So sánh với thực hiện cùng kì năm trước'] ? item['So sánh với thực hiện cùng kì năm trước'] : 0;
             datarow.san_luong_cong_don = 0;
-            datarow.tri_gia_cong_don = item['Giá trị (Cộng dồn)'] ? item['Giá trị (Cộng dồn)'] : 0;
-            datarow.uoc_cong_don_so_voi_ki_truoc = item['So với cùng kỳ (Cộng dồn)'] ? item['So với cùng kỳ (Cộng dồn)'] : 0;
-            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['So với tháng trước (Cộng dồn)'] ? item['So với tháng trước (Cộng dồn)'] : 0;
+            datarow.tri_gia_cong_don = item['Lũy kế kì báo cáo'] ? item['Lũy kế kì báo cáo'] : 0;
+            datarow.uoc_cong_don_so_voi_ki_truoc = item['Lũy kế cùng kì năm trước'] ? item['Lũy kế cùng kì năm trước'] : 0;
+            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['So sánh lũy kế với cùng kì năm trước'] ? item['So sánh lũy kế với cùng kì năm trước'] : 0;
             this.exportvalue.push(datarow)
           });
           this.save(this.timechange, this.exportvalue)
