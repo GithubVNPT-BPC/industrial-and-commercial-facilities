@@ -12,12 +12,12 @@ export class Group {
 }
 
 @Component({
-    selector: 'future-electrical-plan',
-    templateUrl: './future-electrical-plan.component.html',
+    selector: 'future-power-station',
+    templateUrl: './future-power-station.component.html',
     styleUrls: ['/../../special_layout.scss'],
 })
 
-export class FutureElectricalPlanComponent extends BaseComponent {
+export class FuturePowerStationComponent extends BaseComponent {
     DB_TABLE = 'QLNL_QUY_HOACH_TRAM';
     dataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
     filteredDataSource: MatTableDataSource<ElectricalPlan110KV> = new MatTableDataSource<ElectricalPlan110KV>();
