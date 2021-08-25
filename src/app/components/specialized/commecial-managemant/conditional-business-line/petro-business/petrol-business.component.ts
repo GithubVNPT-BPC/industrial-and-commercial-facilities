@@ -262,11 +262,12 @@ export class PetrolBusinessComponent implements OnInit {
         }
         else {
             this.dataSource1.data = filteredData;
+            this.disabled2 = true
         }
     }
 
     applyExpireCheck(event) {
-        if (event.value == true) {
+        if (event.checked == true) {
             this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
             this.disabled1 = true
         }
