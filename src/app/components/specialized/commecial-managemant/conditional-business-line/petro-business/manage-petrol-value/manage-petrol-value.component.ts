@@ -214,7 +214,6 @@ export class ManagePetrolValueComponent implements OnInit {
   petrollist1: Array<PetrolList> = new Array<PetrolList>();
   petrollist2: Array<PetrolList> = new Array<PetrolList>();
   petrollist3: Array<PetrolList> = new Array<PetrolList>();
-  petrollist4: Array<PetrolList> = new Array<PetrolList>();
 
   getPetrolListbyYear(year: string, year1: string) {
     this._Service.GetAllPetrolValue().subscribe(all => {
@@ -262,7 +261,6 @@ export class ManagePetrolValueComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
 
-      // this.petrollist4 = this.petrollist3.filter(x => x.is_het_han == false)
       this.dataSource1.data = this.petrollist3
 
       this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
@@ -322,7 +320,7 @@ export class ManagePetrolValueComponent implements OnInit {
     let filteredData = [];
 
     event.value.forEach(element => {
-      this.petrollist4.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+      this.petrollist3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
     });
 
     if (!filteredData.length) {
@@ -333,7 +331,7 @@ export class ManagePetrolValueComponent implements OnInit {
         this.disabled4 = true
       }
       else {
-        this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == false)
+        this.dataSource1.data = this.petrollist3
         this.disabled2 = false
         this.disabled3 = false
         this.disabled4 = false
@@ -374,7 +372,7 @@ export class ManagePetrolValueComponent implements OnInit {
     let filteredData = [];
 
     event.value.forEach(element => {
-      this.petrollist4.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
+      this.petrollist3.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
     });
 
     if (!filteredData.length) {
@@ -385,7 +383,7 @@ export class ManagePetrolValueComponent implements OnInit {
         this.disabled4 = true
       }
       else {
-        this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == false)
+        this.dataSource1.data = this.petrollist3
         this.disabled1 = false
         this.disabled2 = false
         this.disabled4 = false
@@ -407,7 +405,7 @@ export class ManagePetrolValueComponent implements OnInit {
     let filteredData = [];
 
     event.value.forEach(element => {
-      this.petrollist4.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
+      this.petrollist3.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
     });
 
     if (!filteredData.length) {
@@ -418,7 +416,7 @@ export class ManagePetrolValueComponent implements OnInit {
         this.disabled3 = true
       }
       else {
-        this.dataSource1.data = this.petrollist4.filter(x => x.is_het_han == false)
+        this.dataSource1.data = this.petrollist3
         this.disabled1 = false
         this.disabled2 = false
         this.disabled3 = false

@@ -206,7 +206,6 @@ export class LiquorBusinessComponent implements OnInit {
     LiquorList1: Array<LiquorList> = new Array<LiquorList>();
     LiquorList2: Array<LiquorList> = new Array<LiquorList>();
     LiquorList3: Array<LiquorList> = new Array<LiquorList>();
-    LiquorList4: Array<LiquorList> = new Array<LiquorList>();
 
     getLiquorListbyYear(year: string, year1: string) {
         this._Service.GetAllLiquorValue().subscribe(all => {
@@ -254,7 +253,6 @@ export class LiquorBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            // this.LiquorList4 = this.LiquorList3.filter(x => x.is_het_han == false)
             this.dataSource1.data = this.LiquorList3
 
             this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
@@ -297,7 +295,7 @@ export class LiquorBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.LiquorList4.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            this.LiquorList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -308,7 +306,7 @@ export class LiquorBusinessComponent implements OnInit {
                 this.disabled4 = true
             }
             else {
-                this.dataSource1.data = this.LiquorList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.LiquorList3
                 this.disabled2 = false
                 this.disabled3 = false
                 this.disabled4 = false
@@ -349,7 +347,7 @@ export class LiquorBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.LiquorList4.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
+            this.LiquorList3.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -360,7 +358,7 @@ export class LiquorBusinessComponent implements OnInit {
                 this.disabled4 = true
             }
             else {
-                this.dataSource1.data = this.LiquorList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.LiquorList3
                 this.disabled1 = false
                 this.disabled2 = false
                 this.disabled4 = false
@@ -381,7 +379,7 @@ export class LiquorBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.LiquorList4.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
+            this.LiquorList3.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -392,7 +390,7 @@ export class LiquorBusinessComponent implements OnInit {
                 this.disabled3 = true
             }
             else {
-                this.dataSource1.data = this.LiquorList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.LiquorList3
                 this.disabled1 = false
                 this.disabled2 = false
                 this.disabled3 = false

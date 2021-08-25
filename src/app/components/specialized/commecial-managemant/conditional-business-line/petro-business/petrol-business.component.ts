@@ -240,6 +240,9 @@ export class PetrolBusinessComponent implements OnInit {
     //     window.open(url, "_blank");
     // }
 
+    disabled1: boolean = false
+    disabled2: boolean = false
+
     applyDistrictFilter(event) {
         let filteredData = [];
 
@@ -248,10 +251,14 @@ export class PetrolBusinessComponent implements OnInit {
         });
 
         if (!filteredData.length) {
-            if (event.value.length)
+            if (event.value.length) {
                 this.dataSource1.data = [];
-            else
-                this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == false)
+                this.disabled2 = true
+            }
+            else {
+                this.dataSource1.data = this.petrolstore
+                this.disabled2 = false
+            }
         }
         else {
             this.dataSource1.data = filteredData;
@@ -259,7 +266,14 @@ export class PetrolBusinessComponent implements OnInit {
     }
 
     applyExpireCheck(event) {
-        this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
+        if (event.value == true) {
+            this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
+            this.disabled1 = true
+        }
+        else {
+            this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
+            this.disabled1 = false
+        }
     }
 
     public getCurrentDate() {

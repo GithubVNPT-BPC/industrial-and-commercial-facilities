@@ -207,7 +207,6 @@ export class TobaccoBusinessComponent implements OnInit {
     TobaccoList1: Array<TobaccoList> = new Array<TobaccoList>();
     TobaccoList2: Array<TobaccoList> = new Array<TobaccoList>();
     TobaccoList3: Array<TobaccoList> = new Array<TobaccoList>();
-    TobaccoList4: Array<TobaccoList> = new Array<TobaccoList>();
 
     getTobaccoListbyYear(year: string, year1: string) {
         this._Service.GetAllTobaccoValue().subscribe(all => {
@@ -255,9 +254,7 @@ export class TobaccoBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            // this.TobaccoList4 = this.TobaccoList3.filter(x => x.is_het_han == false)
             this.dataSource1.data = this.TobaccoList3
-
 
             this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
             this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
@@ -299,7 +296,7 @@ export class TobaccoBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.TobaccoList4.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            this.TobaccoList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -310,7 +307,7 @@ export class TobaccoBusinessComponent implements OnInit {
                 this.disabled4 = true
             }
             else {
-                this.dataSource1.data = this.TobaccoList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.TobaccoList3
                 this.disabled2 = false
                 this.disabled3 = false
                 this.disabled4 = false
@@ -351,7 +348,7 @@ export class TobaccoBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.TobaccoList4.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
+            this.TobaccoList3.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -362,7 +359,7 @@ export class TobaccoBusinessComponent implements OnInit {
                 this.disabled4 = true
             }
             else {
-                this.dataSource1.data = this.TobaccoList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.TobaccoList3
                 this.disabled1 = false
                 this.disabled2 = false
                 this.disabled4 = false
@@ -383,7 +380,7 @@ export class TobaccoBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.TobaccoList4.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
+            this.TobaccoList3.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -394,7 +391,7 @@ export class TobaccoBusinessComponent implements OnInit {
                 this.disabled3 = true
             }
             else {
-                this.dataSource1.data = this.TobaccoList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.TobaccoList3
                 this.disabled1 = false
                 this.disabled2 = false
                 this.disabled3 = false

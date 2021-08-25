@@ -206,7 +206,6 @@ export class LPGBusinessComponent implements OnInit {
     LPGList1: Array<LPGList> = new Array<LPGList>();
     LPGList2: Array<LPGList> = new Array<LPGList>();
     LPGList3: Array<LPGList> = new Array<LPGList>();
-    LPGList4: Array<LPGList> = new Array<LPGList>();
 
     getLPGListbyYear(year: string) {
         this._Service.GetAllLPGValue().subscribe(all => {
@@ -254,7 +253,6 @@ export class LPGBusinessComponent implements OnInit {
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            // this.LPGList4 = this.LPGList3.filter(x => x.is_het_han == false)
             this.dataSource1.data = this.LPGList3
 
             this.SoLuongCoSo = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
@@ -296,7 +294,7 @@ export class LPGBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.LPGList4.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
+            this.LPGList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -306,7 +304,7 @@ export class LPGBusinessComponent implements OnInit {
                 this.disabled3 = true
             }
             else {
-                this.dataSource1.data = this.LPGList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.LPGList3
                 this.disabled2 = false
                 this.disabled3 = false
             }
@@ -341,7 +339,7 @@ export class LPGBusinessComponent implements OnInit {
         let filteredData = [];
 
         event.value.forEach(element => {
-            this.LPGList4.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
+            this.LPGList3.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
         });
 
         if (!filteredData.length) {
@@ -351,7 +349,7 @@ export class LPGBusinessComponent implements OnInit {
                 this.disabled2 = true
             }
             else {
-                this.dataSource1.data = this.LPGList4.filter(x => x.is_het_han == false)
+                this.dataSource1.data = this.LPGList3
                 this.disabled1 = false
                 this.disabled2 = false
             }
