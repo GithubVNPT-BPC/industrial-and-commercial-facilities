@@ -195,44 +195,44 @@ export class ChemicalManagementComponent extends BaseComponent {
         }, error => this.errorNotify(error));                
     }
 
-    public prepareEditData(data) {
-        function _compareChangedData(prevData, curData) {
-            return Object.keys(curData).reduce((diff, key) => {
-                if (prevData[key] === curData[key]) return diff
-                return {
-                  ...diff,
-                  [key]: curData[key]
-                }
-            }, {});        
-        }
+    // public prepareEditData(data) {
+    //     function _compareChangedData(prevData, curData) {
+    //         return Object.keys(curData).reduce((diff, key) => {
+    //             if (prevData[key] === curData[key]) return diff
+    //             return {
+    //               ...diff,
+    //               [key]: curData[key]
+    //             }
+    //         }, {});        
+    //     }
 
-        let chemistryData = {
-            pKey : {id_qlcn_hc : data.id_qlcn_hc},
-            modDatas : {
-                mst: data.mst,
-                time_id: data.time_id,
-            },
-            table: 'QLCN_HC',
-        }        
+    //     let chemistryData = {
+    //         pKey : {id_qlcn_hc : data.id_qlcn_hc},
+    //         modDatas : {
+    //             mst: data.mst,
+    //             time_id: data.time_id,
+    //         },
+    //         table: 'QLCN_HC',
+    //     }        
 
-        let chemistryQtyDatas = data.details.map(x => {
-            return {
-                pKey : {id : x.id},
-                modDatas : {
-                    san_luong: x.san_luong,
-                    cong_suat: x.cong_suat,
-                    ten_hoa_chat: x.ten_hoa_chat,
-                    id_loai_hinh_hoat_dong: x.id_loai_hinh_hoat_dong
-                },
-                table: 'QLCN_HC_SL',
-            }
-        });
+    //     let chemistryQtyDatas = data.details.map(x => {
+    //         return {
+    //             pKey : {id : x.id},
+    //             modDatas : {
+    //                 san_luong: x.san_luong,
+    //                 cong_suat: x.cong_suat,
+    //                 ten_hoa_chat: x.ten_hoa_chat,
+    //                 id_loai_hinh_hoat_dong: x.id_loai_hinh_hoat_dong
+    //             },
+    //             table: 'QLCN_HC_SL',
+    //         }
+    //     });
 
-        return {
-            chemistryData: chemistryData,
-            chemistryQtyDatas: chemistryQtyDatas,
-        };
-    }
+    //     return {
+    //         chemistryData: chemistryData,
+    //         chemistryQtyDatas: chemistryQtyDatas,
+    //     };
+    // }
 
     public callEditService(data) {
         let chemistryData = data['chemistryData'];
