@@ -17,7 +17,8 @@ import { RuralElectricManagementComponent } from './rural-electric/rural-electri
 import { ElectricalPlanComponent } from './electrical-plan/electrical-plan.component';
 import { CurrentElectricalPlanComponent } from './current-electrical-plan/current-electrical-plan.component';
 import { CurrentPowerStationComponent } from './current-electrical-plan/current-power-station.component';
-import { FutureElectricalPlanComponent } from './future-electrical-plan/future-electrical-plan.component';
+import { FutureElectricalPlanComponent } from './future-electrical-plan/future-electrical-plan.component'; 
+
 
 import {BlockElectricComponent} from './block-electric/block-electric.component'
 import { ManageApproveHddlComponent } from "./manage-approve-hddl/manage-approve-hddl.component";
@@ -32,6 +33,7 @@ import { DifferenceElectricComponent } from './difference-electric/difference-el
 import { PrimaryElectricityComponent } from './primary-electricity/primary-electricity.component';
 import { TranslateIdPeriodToNamePipe } from 'src/app/shared/pipes/translateIdPeriodToName.pipe';
 import { FutureManagementComponent } from './future-electrical-plan/future-electrical-management.component';
+import { FuturePowerStationComponent } from './future-electrical-plan/future-power-station.component';
 
 @NgModule({
   imports: [
@@ -59,6 +61,7 @@ import { FutureManagementComponent } from './future-electrical-plan/future-elect
     CurrentElectricalPlanComponent,
     CurrentPowerStationComponent,
     FutureElectricalPlanComponent,
+    FuturePowerStationComponent,
     FutureManagementComponent,
     BlockElectricComponent,
     ManageApproveHddlComponent,
