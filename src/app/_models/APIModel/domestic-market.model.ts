@@ -3,6 +3,7 @@ export class ProductModel {
     public id_san_pham: number;
     public ten_san_pham: string;
     public don_vi_tinh: string;
+    public xnk: number;
 }
 
 export class CareerModel {
@@ -223,6 +224,12 @@ export class productchart {
     san_luong: number;
     tri_gia: number;
     time_id: number
+}
+
+export class exportchart {
+    tri_gia_thang: number;
+    tri_gia_cong_don: number;
+    time_id: number;
 }
 
 export class domesticchart {
