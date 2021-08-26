@@ -259,6 +259,7 @@ export class ViewReportComponent implements OnInit {
       hashTableParentLength[element.attr_id] = this.countChildNode(element.attr_id, attributes);
     });
     let loopCount: number = 0;
+    this.tableMergeHader = [];
     while (attributes.length > 3) {
       loopCount += 1;
       this.indexOftableMergeHader += 1;

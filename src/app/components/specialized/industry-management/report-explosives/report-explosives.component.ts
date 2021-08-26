@@ -242,6 +242,7 @@ export class ReportExplosivesComponent extends BaseComponent {
       );
     });
     let loopCount: number = 0;
+    this.tableMergeHader = [];
     while (attributes.length > 3) {
       loopCount += 1;
       this._indexOftableMergeHader += 1;

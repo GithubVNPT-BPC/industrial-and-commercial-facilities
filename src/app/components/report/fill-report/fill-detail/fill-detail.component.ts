@@ -370,6 +370,7 @@ export class FillReportComponent implements OnInit {
       );
     });
     let loopCount: number = 0;
+    this.tableMergeHader = [];
     while (attributes.length > 3) {
       loopCount += 1;
       this.indexOftableMergeHader += 1;
