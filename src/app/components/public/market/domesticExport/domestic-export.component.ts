@@ -123,12 +123,12 @@ export class DomesticExportComponent extends BaseComponent {
     "ten_san_pham",
     "don_vi_tinh",
     "gia_tri_thang",
-    "uoc_th_so_cungky_tht",
-    "uoc_th_so_thg_truoc_tht",
+    // "uoc_th_so_cungky_tht",
+    // "uoc_th_so_thg_truoc_tht",
 
     "gia_tri_cong_don",
-    "uoc_th_so_cungky_cong_don",
-    "uoc_th_so_thg_truoc_cong_don",
+    // "uoc_th_so_cungky_cong_don",
+    // "uoc_th_so_thg_truoc_cong_don",
     "danh_sach_doanh_nghiep",
     "chi_tiet_doanh_nghiep",
   ];
