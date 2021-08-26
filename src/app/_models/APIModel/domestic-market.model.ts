@@ -226,7 +226,7 @@ export class productchart {
     time_id: number
 }
 
-export class exportchart {
+export class exportimportchart {
     tri_gia_thang: number;
     tri_gia_cong_don: number;
     time_id: number;
