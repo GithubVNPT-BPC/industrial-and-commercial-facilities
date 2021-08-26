@@ -14,7 +14,7 @@ import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
 import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
 
 import { new_import_export_model, Task, data_detail_model } from "src/app/_models/APIModel/export-import.model";
-import { exportchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { exportimportchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
 
 import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
@@ -290,7 +290,7 @@ export class DomesticExportComponent extends BaseComponent {
     this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
   }
 
-  exportchart: Array<exportchart> = new Array<exportchart>();
+  exportchart: Array<exportimportchart> = new Array<exportimportchart>();
 
   lineChartMethod(tuthang: string, denthang: string, productcode: number, istongcuc: number) {
     this.dashboardService.GetExportChart(tuthang, denthang, productcode, istongcuc).subscribe(

@@ -12,6 +12,7 @@ export class DashboardService {
     public apihome = environment.apiEndpoint
     public urlchartproduct = "api/bieu-do/san-xuat";
     public urlexportproduct = "api/bieu-do/xuat-khau";
+    public urlimportproduct = "api/bieu-do/nhap-khau";
     public urldomestic = "api/bieu-do/trong-nuoc";
     public urlforeign = "api/bieu-do/quoc-te";
     public urlProductSelect = "api/danh-sach/san-pham";
@@ -40,6 +41,19 @@ export class DashboardService {
 
     public GetExportChart(tuthang: string, denthang: string, productcode: number, istongcuc: number) {
         var apiUrl = this.apihome + this.urlexportproduct;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('tu_thang', tuthang);
+        params = params.append('den_thang', denthang);
+        params = params.append('id_san_pham', productcode.toString());
+        params = params.append('is_tong_cuc', istongcuc.toString());
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetImportChart(tuthang: string, denthang: string, productcode: number, istongcuc: number) {
+        var apiUrl = this.apihome + this.urlimportproduct;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams().set('tu_thang', tuthang);
         params = params.append('den_thang', denthang);
