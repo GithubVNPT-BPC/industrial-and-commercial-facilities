@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy, Input, ViewChild, QueryList, ViewChildren
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from "@angular/router";
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
-import { InformationService } from '../../../../shared/information/information.service';
-import { MarketService } from "../../../../_services/APIService/market.service";
+import { InformationService } from 'src/app/shared/information/information.service';
+import { MarketService } from "src/app/_services/APIService/market.service";
 import { MatDialog } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
@@ -21,9 +21,12 @@ import {
   Career,
   DeleteModel1,
   FieldModel
-} from "../../../../_models/APIModel/domestic-market.model";
+} from "src/app/_models/APIModel/domestic-market.model";
 
 import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
@@ -113,7 +116,6 @@ export class EditBusinessComponent implements OnInit {
   mst: string;
   doanh_nghiep: FormGroup;
   submitted = false;
-  // danh_sach_nganh_nghe: FormArray;
 
   constructor(
     public route: ActivatedRoute,
@@ -131,29 +133,7 @@ export class EditBusinessComponent implements OnInit {
     });
   }
 
-  public career: Array<CareerModel> = new Array<CareerModel>();
-  public filtercareer: Array<CareerModel> = new Array<CareerModel>();
-  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  public filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   public district: Array<DistrictModel> = new Array<DistrictModel>();
-  public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
-  public Field: Array<FieldModel> = new Array<FieldModel>();
-  public FilterField: Array<FieldModel> = new Array<FieldModel>();
-
-  GetAllNganhNghe() {
-    this._Service.GetAllCareer().subscribe((allrecords) => {
-      this.career = allrecords.data as CareerModel[];
-      this.filtercareer = this.career.slice();
-    });
-  }
-
-  GetAllPhuongXa() {
-    this._Service.GetAllSubDistrict().subscribe((allrecords) => {
-      this.subdistrict = allrecords.data as SubDistrictModel[];
-      this.filtersubdistrict = this.subdistrict.slice();
-    });
-  }
-
   getQuan_Huyen() {
     this._Service.GetAllDistrict().subscribe((allDistrict) => {
       this.district = allDistrict["data"] as DistrictModel[];
@@ -161,17 +141,86 @@ export class EditBusinessComponent implements OnInit {
     });
   }
 
+  public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
   GetAllLoaiHinh() {
     this._Service.GetAllBusinessType().subscribe((allrecords) => {
       this.Business = allrecords.data as BusinessTypeModel[];
     });
   }
 
+  public career: Array<CareerModel> = new Array<CareerModel>();
+  public filtercareer: ReplaySubject<CareerModel[]> = new ReplaySubject<CareerModel[]>(1);
+  GetAllNganhNghe() {
+    this._Service.GetAllCareer().subscribe((allrecords) => {
+      this.career = allrecords.data as CareerModel[];
+      this.filtercareer.next(this.career.slice());
+    });
+  }
+  public nganhnghefilter: FormControl = new FormControl();
+  public filterNganhnghe() {
+    if (!this.career) {
+      return;
+    }
+    let search = this.nganhnghefilter.value;
+    if (!search) {
+      this.filtercareer.next(this.career.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filtercareer.next(
+      this.career.filter(x => x.ten_nganh_nghe.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  public filtersubdistrict: ReplaySubject<SubDistrictModel[]> = new ReplaySubject<SubDistrictModel[]>(1);
+  GetAllPhuongXa() {
+    this._Service.GetAllSubDistrict().subscribe((allrecords) => {
+      this.subdistrict = allrecords.data as SubDistrictModel[];
+      this.filtersubdistrict.next(this.subdistrict.slice());
+    });
+  }
+  public phuongxafilter: FormControl = new FormControl();
+  public filterPhuongxa() {
+    if (!this.subdistrict) {
+      return;
+    }
+    let search = this.phuongxafilter.value;
+    if (!search) {
+      this.filtersubdistrict.next(this.subdistrict.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filtersubdistrict.next(
+      this.subdistrict.filter(x => x.ten_phuong_xa.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  public Field: Array<FieldModel> = new Array<FieldModel>();
+  public FilterField: ReplaySubject<FieldModel[]> = new ReplaySubject<FieldModel[]>(1);
   GetLinhVuc() {
     this._Service.GetAllField().subscribe((allrecords) => {
       this.Field = allrecords.data as FieldModel[];
-      this.FilterField = this.Field.slice();
+      this.FilterField.next(this.Field.slice());
     });
+  }
+  public linhvucfilter: FormControl = new FormControl();
+  public filterLinhvuc() {
+    if (!this.Field) {
+      return;
+    }
+    let search = this.linhvucfilter.value;
+    if (!search) {
+      this.FilterField.next(this.Field.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.FilterField.next(
+      this.Field.filter(x => x.ten_linh_vuc.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   ngOnInit() {
@@ -215,32 +264,35 @@ export class EditBusinessComponent implements OnInit {
       nhu_cau_mua: '',
       nhu_cau_hop_tac: '',
       danh_sach_nganh_nghe: []
-      // danh_sach_nganh_nghe: this.formbuilder.array([this.newCareer()])
     })
+
+    this.linhvucfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterLinhvuc();
+      });
+
+    this.nganhnghefilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterNganhnghe();
+      });
+
+    this.phuongxafilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterPhuongxa();
+      });
   }
 
-  // newCareer(): FormGroup {
-  //   return this.formbuilder.group({
-  //     id_nganh_nghe_kinh_doanh: 0,
-  //     nganh_nghe_kd_chinh: '',
-  //     id_linh_vuc: 0
-  //   })
-  // }
+  public _onDestroy = new Subject<void>();
 
-  // addCareer(): void {
-  //   this.danh_sach_nganh_nghe = this.doanh_nghiep.get('danh_sach_nganh_nghe') as FormArray;
-  //   this.danh_sach_nganh_nghe.push(this.newCareer());
-  // }
-
-  // removeCareer(i: number) {
-  //   this.danh_sach_nganh_nghe.removeAt(i);
-  // }
   public SaveData(companyinput) {
     if (this.mst == undefined) {
       this._Service.PostCompany(companyinput).subscribe(
         res => {
           this.info.msgSuccess('Thêm doanh nghiệp thành công')
-          this.Back()
+          this.Back();
         },
         err => {
           this.info.msgError('Mã số thuế đã tồn tại')
@@ -250,9 +302,8 @@ export class EditBusinessComponent implements OnInit {
     else {
       this._Service.UpdateCompany(companyinput).subscribe(
         res => {
-          // this.resetForm(companyinput);
           this.info.msgSuccess('Cập nhật doanh nghiệp thành công')
-          this.Back()
+          this.GetCompanyInfoById();
         },
         err => {
           this.info.msgError('Cập nhật doanh nghiệp không thành công')
@@ -297,9 +348,6 @@ export class EditBusinessComponent implements OnInit {
       this.submitted = false;
       this.doanh_nghiep.reset();
     }
-
-    this.submitted = false;
-    this.doanh_nghiep.reset();
   }
 
   resetForm(form?: NgForm) {
@@ -352,9 +400,6 @@ export class EditBusinessComponent implements OnInit {
   //   this.dataSource.data.push(newRow);
   //   this.dataSource = new MatTableDataSource(this.dataSource.data);
 
-  //   this.filtercareer = this.career.slice();
-  //   this.FilterField = this.Field.slice();
-
   //   this.dataSource.paginator = this.paginator;
   //   this.paginator._intl.itemsPerPageLabel = 'Số hàng';
   //   this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -380,9 +425,6 @@ export class EditBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-    this.filtercareer = this.career.slice();
-    this.FilterField = this.Field.slice();
 
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
