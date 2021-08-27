@@ -7,6 +7,7 @@ export class PetrolList {
     ten_cua_hang: string;
     mst: string;
     dia_chi: string;
+    dia_chi_day_du: string;
     id_phuong_xa: number;
     so_dien_thoai: string;
     id_giay_phep: number;

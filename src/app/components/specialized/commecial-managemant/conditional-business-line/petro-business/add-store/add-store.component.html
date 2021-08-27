@@ -18,10 +18,13 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Chọn mã số thuế để thêm cửa hàng</mat-label>
                     <mat-select formControlName="find_mst">
-                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'mst'"
-                            [array]="allcertificate" (filteredReturn)="filterallcertificate =$event">
-                        </mat-select-filter>
-                        <mat-option *ngFor="let item of filterallcertificate" [value]="item.mst">
+                        <mat-option>
+                            <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                noEntriesFoundLabel="Giá trị không có trong danh sách" [formControl]="mstfilter">
+                            </ngx-mat-select-search>
+                        </mat-option>
+
+                        <mat-option *ngFor="let item of filterallcertificate | async" [value]="item.mst">
                             {{item.mst}}
                         </mat-option>
                     </mat-select>
@@ -79,10 +82,14 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Phường xã</mat-label>
                             <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.petrol.id_phuong_xa">
-                                <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
-                                    [array]="subdistrict" (filteredReturn)="filtersubdistrict =$event">
-                                </mat-select-filter>
-                                <mat-option *ngFor="let item of filtersubdistrict" [value]="item.id_phuong_xa">
+                                <mat-option>
+                                    <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                        noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                        [formControl]="phuongxafilter">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option *ngFor="let item of filtersubdistrict | async" [value]="item.id_phuong_xa">
                                     {{item.ten_phuong_xa}}
                                 </mat-option>
                             </mat-select>

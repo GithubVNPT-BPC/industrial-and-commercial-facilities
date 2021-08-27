@@ -22,6 +22,10 @@ import { ConditionBusinessService } from 'src/app/_services/APIService/Condition
 import { SpecialDirective } from 'src/app/shared/special.directive';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 @Component({
   selector: 'app-add-store',
   templateUrl: './add-store.component.html',
@@ -53,36 +57,67 @@ export class AddStoreComponent implements OnInit {
   }
 
   subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  district: Array<DistrictModel> = new Array<DistrictModel>();
-  Certificate: Array<CertificateModel> = new Array<CertificateModel>();
-  allcertificate: Array<CertificateModel> = new Array<CertificateModel>();
-  filterallcertificate: Array<CertificateModel> = new Array<CertificateModel>();
-
+  public filtersubdistrict: ReplaySubject<SubDistrictModel[]> = new ReplaySubject<SubDistrictModel[]>(1);
   GetAllPhuongXa() {
     this._Service.GetAllSubDistrict().subscribe((allrecords) => {
       this.subdistrict = allrecords.data as SubDistrictModel[];
-      this.filtersubdistrict = this.subdistrict.slice();
+      this.filtersubdistrict.next(this.subdistrict.slice());
     });
   }
+  public phuongxafilter: FormControl = new FormControl();
+  public filterPhuongxa() {
+    if (!this.subdistrict) {
+      return;
+    }
+    let search = this.phuongxafilter.value;
+    if (!search) {
+      this.filtersubdistrict.next(this.subdistrict.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filtersubdistrict.next(
+      this.subdistrict.filter(x => x.ten_phuong_xa.toLowerCase().indexOf(search) > -1)
+    );
+  }
 
+  district: Array<DistrictModel> = new Array<DistrictModel>();
   getQuan_Huyen() {
     this._Service.GetAllDistrict().subscribe((allDistrict) => {
       this.district = allDistrict["data"] as DistrictModel[];
     });
   }
 
+  Certificate: Array<CertificateModel> = new Array<CertificateModel>();
   GetGiayPhep(mst: string) {
     this._Service.GetCertificate(mst).subscribe((allrecords) => {
       this.Certificate = allrecords.data as CertificateModel[];
     });
   }
 
+  allcertificate: Array<CertificateModel> = new Array<CertificateModel>();
+  public filterallcertificate: ReplaySubject<CertificateModel[]> = new ReplaySubject<CertificateModel[]>(1);
   GetAllGiayPhep() {
     this._Service.GetCertificate('').subscribe((allrecords) => {
       this.allcertificate = allrecords.data as CertificateModel[];
-      this.filterallcertificate = this.allcertificate.slice();
+      this.filterallcertificate.next(this.allcertificate.slice());
     });
+  }
+  public mstfilter: FormControl = new FormControl();
+  public filterMST() {
+    if (!this.allcertificate) {
+      return;
+    }
+    let search = this.mstfilter.value;
+    if (!search) {
+      this.filterallcertificate.next(this.allcertificate.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterallcertificate.next(
+      this.allcertificate.filter(x => x.mst.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   trangthai: Array<Status> = [
@@ -151,17 +186,29 @@ export class AddStoreComponent implements OnInit {
     if (this.id.toString() != 'undefined') {
       this.check_mst = false
     }
+
+    this.mstfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterMST();
+      });
+
+    this.phuongxafilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterPhuongxa();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   SaveData(input) {
     this._Service.PostPetrol(input).subscribe(
       res => {
-        // debugger;
         this._info.msgSuccess('Thêm thành công')
         this.router.navigate(['specialized/commecial-management/domestic/petrolstore']);
       },
       err => {
-        // debugger;
       }
     )
   }

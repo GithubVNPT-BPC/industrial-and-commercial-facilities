@@ -61,7 +61,7 @@ export class PetrolBusinessComponent implements OnInit {
         'so_giay_phep',
         'ngay_cap',
         'ngay_het_han',
-        'dia_chi',
+        'dia_chi_day_du',
         'ten_quan_huyen',
         'so_dien_thoai',
         'ten_quan_ly',

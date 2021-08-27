@@ -77,6 +77,9 @@ import { BorderTradeOverviewComponent } from './border-trade/border-trade-overvi
 import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.component';
 import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
 
+import { MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 export const customCurrencyMaskConfig = {
   align: "right",
   allowNegative: true,
@@ -103,7 +106,11 @@ export const customCurrencyMaskConfig = {
     PipeModule,
     MatTabsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    MatSelectFilterModule
+    MatSelectFilterModule,
+
+    MatSelectModule,
+    MatFormFieldModule,
+    NgxMatSelectSearchModule
   ],
   exports: [
     MatPaginatorModule,
