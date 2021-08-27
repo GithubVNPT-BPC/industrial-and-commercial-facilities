@@ -21,6 +21,7 @@ import { AddUserComponent } from './add-user/add-user.component';
 
 import { MatSelectModule, MatFormFieldModule } from '@angular/material';
 import { MatSelectFilterModule } from 'mat-select-filter';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -48,7 +49,9 @@ export const customCurrencyMaskConfig = {
 
     MatSelectModule,
     MatFormFieldModule,
-    MatSelectFilterModule
+    MatSelectFilterModule,
+
+    NgxMatSelectSearchModule
   ],
   exports: [
   ],

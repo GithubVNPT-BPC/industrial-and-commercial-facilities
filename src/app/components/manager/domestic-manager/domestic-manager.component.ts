@@ -4,7 +4,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import { formatDate } from '@angular/common';
-import { Subject } from 'rxjs';
 
 import { ManagerDirective } from 'src/app/shared/manager.directive';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
@@ -15,12 +14,15 @@ import { MarketService } from 'src/app/_services/APIService/market.service';
 
 import { domesticchart, DomesticPriceModel, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 
-import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
+
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
@@ -116,7 +118,15 @@ export class DomesticManagerComponent implements OnInit {
     })
     this.getALLDomesticMarketPrice();
     this.pickedDate = null
+
+    this.sanphamfilter.valueChanges
+    .pipe(takeUntil(this._onDestroy))
+    .subscribe(() => {
+      this.filterSanpham();
+    });
   }
+
+  public _onDestroy = new Subject<void>();
 
   resetAll() {
     this.getALLDomesticMarketPrice()
@@ -124,14 +134,29 @@ export class DomesticManagerComponent implements OnInit {
   }
 
   public products: Array<ProductModel> = new Array<ProductModel>();
-  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
-
+  public filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
   public getListProduct(): void {
     this.marketService.GetProductList().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductModel[];
-        this.filterproducts = this.products.slice();
+        this.filterproducts.next(this.products.slice());
       },
+    );
+  }
+  public sanphamfilter: FormControl = new FormControl();
+  public filterSanpham() {
+    if (!this.products) {
+      return;
+    }
+    let search = this.sanphamfilter.value;
+    if (!search) {
+      this.filterproducts.next(this.products.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterproducts.next(
+      this.products.filter(x => x.ten_san_pham.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -185,19 +210,17 @@ export class DomesticManagerComponent implements OnInit {
     );
   }
 
-  public addRow(): void {
-    let newRow: DomesticPriceModel = new DomesticPriceModel();
-    newRow.gia_ca;
-    newRow.nguon_so_lieu = "";
-    newRow.ngay_cap_nhat = this.getCurrentDate();
-    // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
-    this.dataSource.data.push(newRow);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
+  // public addRow(): void {
+  //   let newRow: DomesticPriceModel = new DomesticPriceModel();
+  //   newRow.gia_ca;
+  //   newRow.nguon_so_lieu = "";
+  //   newRow.ngay_cap_nhat = this.getCurrentDate();
+  //   // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+  //   this.dataSource.data.push(newRow);
+  //   this.dataSource = new MatTableDataSource(this.dataSource.data);
 
-    this.filterproducts = this.products.slice();
-
-    this._rows = this.dataSource.filteredData.length;
-  }
+  //   this._rows = this.dataSource.filteredData.length;
+  // }
 
   public insertRow(): void {
     let data = this.dataSource.data.slice(this._currentRow);
@@ -212,8 +235,6 @@ export class DomesticManagerComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-    this.filterproducts = this.products.slice();
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -286,9 +307,7 @@ export class DomesticManagerComponent implements OnInit {
         })
 
         this.save(this.domestic)
-        // this.dataSource = new MatTableDataSource(importedData);
         this.paginatorAgain();
-        // this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
       };
 
       reader.readAsBinaryString(target.files[0]);

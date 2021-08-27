@@ -4,7 +4,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import * as XLSX from 'xlsx';
 import { formatDate } from '@angular/common';
-import { ReplaySubject, Subject } from 'rxjs';
 
 import { ManagerDirective } from './../../../shared/manager.directive';
 import { LoginService } from 'src/app/_services/APIService/login.service';
@@ -15,12 +14,16 @@ import { MarketService } from '../../../_services/APIService/market.service';
 
 import { ForeignMarketModel, ProductModel, DeleteModel1 } from '../../../_models/APIModel/domestic-market.model';
 
-import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
+
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
   parse: {
@@ -126,7 +129,15 @@ export class ForeignManagerComponent implements OnInit {
     })
     this.GetAllForeignMarketPrice();
     this.pickedDate.date = null
+
+    this.sanphamfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterSanpham();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   resetAll() {
     this.GetAllForeignMarketPrice()
@@ -134,14 +145,29 @@ export class ForeignManagerComponent implements OnInit {
   }
 
   public products: Array<ProductModel> = new Array<ProductModel>();
-  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
-
+  public filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
   public getListProduct(): void {
     this.marketService.GetProductList().subscribe(
       allrecords => {
         this.products = allrecords.data as ProductModel[];
-        this.filterproducts = this.products.slice();
+        this.filterproducts.next(this.products.slice());
       },
+    );
+  }
+  public sanphamfilter: FormControl = new FormControl();
+  public filterSanpham() {
+    if (!this.products) {
+      return;
+    }
+    let search = this.sanphamfilter.value;
+    if (!search) {
+      this.filterproducts.next(this.products.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterproducts.next(
+      this.products.filter(x => x.ten_san_pham.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -176,9 +202,6 @@ export class ForeignManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
-        // if (this.dataSource.data.length == 0) {
-        //   this.createDefault();
-        // }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -198,9 +221,6 @@ export class ForeignManagerComponent implements OnInit {
           element.ngay_cap_nhat = this.Convertdate(element.ngay_cap_nhat)
         });
         this.dataSource = new MatTableDataSource<ForeignMarketModel>(allrecords.data);
-        // if (this.dataSource.data.length == 0) {
-        //   this.createDefault();
-        // }
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
         this.paginator._intl.firstPageLabel = "Trang Đầu";
@@ -215,19 +235,17 @@ export class ForeignManagerComponent implements OnInit {
 
   public _currentRow: number = 0;
 
-  public addRow(): void {
-    let newRow: ForeignMarketModel = new ForeignMarketModel();
-    newRow.gia_ca;
-    newRow.nguon_so_lieu = "";
-    newRow.ngay_cap_nhat = this.getCurrentDate();
-    // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
-    this.dataSource.data.push(newRow);
-    this.dataSource = new MatTableDataSource(this.dataSource.data);
+  // public addRow(): void {
+  //   let newRow: ForeignMarketModel = new ForeignMarketModel();
+  //   newRow.gia_ca;
+  //   newRow.nguon_so_lieu = "";
+  //   newRow.ngay_cap_nhat = this.getCurrentDate();
+  //   // newRow.ma_nguoi_cap_nhat = this._loginService.userValue.user_id;
+  //   this.dataSource.data.push(newRow);
+  //   this.dataSource = new MatTableDataSource(this.dataSource.data);
 
-    this.filterproducts = this.products.slice();
-
-    this._rows = this.dataSource.filteredData.length;
-  }
+  //   this._rows = this.dataSource.filteredData.length;
+  // }
 
   public insertRow(): void {
     let data = this.dataSource.data.slice(this._currentRow);
@@ -243,32 +261,12 @@ export class ForeignManagerComponent implements OnInit {
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
-    this.filterproducts = this.products.slice();
-
     this._rows = this.dataSource.filteredData.length;
   }
 
   public deleteRow(): void {
     this.dataSource.data.splice(this._currentRow, 1);
     this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-    this._rows = this.dataSource.filteredData.length;
-  }
-
-  public createDefault() {
-    const Product1: number = 1;
-    const Product2: number = 2;
-    const Product3: number = 3;
-    const Product4: number = 4;
-    this.dataSource = new MatTableDataSource<ForeignMarketModel>();
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.addRow();
-    this.dataSource.data[0].id_san_pham = this.products.filter(x => x.id_san_pham == Product1)[0].id_san_pham;
-    this.dataSource.data[1].id_san_pham = this.products.filter(x => x.id_san_pham == Product2)[0].id_san_pham;
-    this.dataSource.data[2].id_san_pham = this.products.filter(x => x.id_san_pham == Product3)[0].id_san_pham;
-    this.dataSource.data[3].id_san_pham = this.products.filter(x => x.id_san_pham == Product4)[0].id_san_pham;
 
     this._rows = this.dataSource.filteredData.length;
   }
@@ -338,8 +336,6 @@ export class ForeignManagerComponent implements OnInit {
           });
           this.save(this.dataSource.data)
           this.GetAllForeignMarketPrice()
-          // this.dataSource = new MatTableDataSource(this.dataSource.data);
-          // this._infor.msgSuccess("Nhập dữ liệu từ excel thành công!");
         };
 
         reader.readAsBinaryString(target.files[0]);
