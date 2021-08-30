@@ -6,6 +6,10 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
 import { ActivatedRoute, Router } from "@angular/router";
 
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import {
   CertificateModel,
   CertificateType,
@@ -18,7 +22,6 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrums.service';
 
-import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
@@ -120,7 +123,7 @@ export class AddCertificateComponent implements OnInit {
     this.resetForm();
     this.getCertificateList();
     this.getLoaiGiayPhep();
-    this.getLinhVuc();
+    this.GetLinhVuc();
 
     this.certificate = this.formbuilder.group({
       id_giay_phep: null,
@@ -134,23 +137,46 @@ export class AddCertificateComponent implements OnInit {
       ghi_chu: '',
       id_linh_vuc: 1,
     })
+
+    this.linhvucfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterLinhvuc();
+      });
   }
 
-  LoaiGiayPhep: Array<CertificateType> = new Array<CertificateType>();
-  LoaiLinhVuc: Array<FieldList> = new Array<FieldList>();
-  filterloailinhvuc: Array<FieldList> = new Array<FieldList>();
+  public _onDestroy = new Subject<void>();
 
+  LoaiGiayPhep: Array<CertificateType> = new Array<CertificateType>();
   getLoaiGiayPhep() {
     this._Service.GetCertificateType().subscribe((all) => {
       this.LoaiGiayPhep = all.data as CertificateType[];
     });
   }
 
-  getLinhVuc() {
-    this._Service.GetField().subscribe((all) => {
-      this.LoaiLinhVuc = all.data as FieldList[];
-      this.filterloailinhvuc = this.LoaiLinhVuc.slice();
+  public Field: Array<FieldList> = new Array<FieldList>();
+  public FilterField: ReplaySubject<FieldList[]> = new ReplaySubject<FieldList[]>(1);
+  GetLinhVuc() {
+    this._Service.GetField().subscribe((allrecords) => {
+      this.Field = allrecords.data as FieldList[];
+      this.FilterField.next(this.Field.slice());
     });
+  }
+  public linhvucfilter: FormControl = new FormControl();
+  public filterLinhvuc() {
+    if (!this.Field) {
+      return;
+    }
+    let search = this.linhvucfilter.value;
+    if (!search) {
+      this.FilterField.next(this.Field.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.FilterField.next(
+      this.Field.filter(x => x.ten_linh_vuc.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   SaveData(input) {

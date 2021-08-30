@@ -1,19 +1,10 @@
 <mat-card class="material">
     <mat-card-header>
-        <!-- <mat-card-title><strong></strong></mat-card-title> -->
         <mat-card-subtitle hidden>
             type={{type}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <!-- <div class="button-control">
-            <button mat-raised-button (click)="accordion.openAll()">
-                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
-            </button>
-            <button mat-raised-button (click)="accordion.closeAll()">
-                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
-            </button>
-        </div> -->
         <form [formGroup]="certificate" autocomplete="off" (ngSubmit)="onSubmit(certificate.getRawValue())">
             <div class="row">
                 <div class="col-6 button-control -align-left my-auto">
@@ -47,9 +38,14 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Lĩnh vực quản lý (*) </mat-label>
                         <mat-select formControlName="id_linh_vuc" [(ngModel)]="_Service.certificate.id_linh_vuc">
-                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_linh_vuc'"
-                                [array]="LoaiLinhVuc" (filteredReturn)="filterloailinhvuc =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of filterloailinhvuc" [value]="item.id_linh_vuc">
+                            <mat-option>
+                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                    [formControl]="linhvucfilter">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let item of FilterField | async" [value]="item.id_linh_vuc">
                                 {{item.ten_linh_vuc}}
                             </mat-option>
                         </mat-select>
@@ -106,7 +102,4 @@
             </div>
         </form>
     </mat-card-content>
-    <!-- <mat-dialog-actions align="end">
-        <button mat-button mat-dialog-close>Đóng</button>
-    </mat-dialog-actions> -->
 </mat-card>
