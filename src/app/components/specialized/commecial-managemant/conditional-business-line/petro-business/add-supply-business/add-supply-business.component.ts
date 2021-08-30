@@ -138,7 +138,6 @@ export class AddSupplyBusinessComponent implements OnInit {
     });
   }
 
-
   ngOnInit() {
     this._keyboardservice.keyBoard.subscribe(res => {
       this.move(res)

@@ -69,7 +69,7 @@
                     </div>
                     <div class="col-5 col-lg-5">
                         <mat-form-field appearance="outline">
-                            <mat-label>Tên doanh nghiệp/Loại hàng hóa</mat-label>
+                            <mat-label>Tìm kiếm</mat-label>
                             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                         </mat-form-field>
                     </div>
@@ -88,8 +88,10 @@
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
                     </div>
                 </div>
                 <hr />
@@ -97,14 +99,14 @@
                 <div class="layout" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
-                            <th mat-header-cell *matHeaderCellDef disableClear style="text-align: left;">
+                            <th mat-header-cell *matHeaderCellDef disableClear class="text-center">
                                 <mat-checkbox (change)="$event ? masterToggle() : null"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="text-center">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -145,8 +147,7 @@
 
                         <ng-container matColumnDef="ten_mien">
                             <th mat-header-cell *matHeaderCellDef> Tên miền </th>
-                            <td mat-cell *matCellDef="let element"><a
-                                    href="{{element.ten_mien}}"
+                            <td mat-cell *matCellDef="let element"><a href="{{element.ten_mien}}"
                                     target="_blank">{{element.ten_mien}}</a></td>
                         </ng-container>
 
@@ -172,7 +173,8 @@
 
                         <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
                             <th mat-header-cell *matHeaderCellDef> Thời gian cập nhật </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date: 'dd/MM/yyyy, h:mm a'}}
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
+                                'dd/MM/yyyy, h:mm a'}}
                             </td>
                         </ng-container>
 
@@ -217,7 +219,7 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label for="to_chu_ca_nhan">Tổ chức/cá nhân</mat-label>
                                         <input matInput placeholder="VD: Công ty TNHH" id="to_chu_ca_nhan" type="text"
@@ -225,65 +227,87 @@
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-6 col-lg-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Phường xã (*)</mat-label>
+                                        <mat-select formControlName="id_phuong_xa">
+                                            <mat-option>
+                                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                                    [formControl]="phuongxafilter">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+
+                                            <mat-option *ngFor="let item of filtersubdistrict | async"
+                                                [value]="item.id_phuong_xa">
+                                                {{item.ten_phuong_xa}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label for="mst">Mã số thuế</mat-label>
                                         <input matInput formControlName="mst" id="mst" type="text">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label for="nguoi_dai_dien">Người đại diện</mat-label>
                                         <input matInput formControlName="nguoi_dai_dien" id="nguoi_dai_dien"
                                             type="text">
                                     </mat-form-field>
                                 </div>
+                            </div>
 
-                                <div class="col-md-6">
+
+                            <div class="row">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label for="dia_diem">Địa chỉ</mat-label>
                                         <input matInput formControlName="dia_diem">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label for="dien_thoai">Số điện thoại</mat-label>
                                         <input matInput formControlName="dien_thoai">
                                     </mat-form-field>
                                 </div>
+                            </div>
 
 
-
-                                <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên miền</mat-label>
                                         <input matInput formControlName="ten_mien">
                                     </mat-form-field>
                                 </div>
 
-                                <!-- <div class="col-md-3" >
-                                    <mat-form-field appearance="outline"> 
-                                        <mat-label>Mã số ngành nghề</mat-label>
-                                        <input matInput formControlName="ma_so_nganh_nghe">
-                                    </mat-form-field>
-                                </div> -->
-                                <div class="col-md-3">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Ngành nghề</mat-label>
                                         <input matInput formControlName="nganh_nghe">
                                     </mat-form-field>
                                 </div>
+                            </div>
 
-                                <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Sản phẩm bán trên website</mat-label>
                                         <input matInput formControlName="san_pham_ban_website">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Ghi chú</mat-label>
                                         <input matInput formControlName="ghi_chu">
