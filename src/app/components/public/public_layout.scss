@@ -322,4 +322,8 @@
   ::ng-deep .mat-sort-header-arrow {
     color: white !important;
   }
+
+  ::ng-deep.mat-select-disabled .mat-select-value {
+    color: black;
+  }
 }

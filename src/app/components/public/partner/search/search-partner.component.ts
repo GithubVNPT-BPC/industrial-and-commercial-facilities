@@ -150,7 +150,6 @@ export class SearchPartnerComponent implements OnInit {
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        // TODO: Need to optimize, too much ambiguous
         this.companyList1 = allrecords.data[0]
         this.companyList2 = allrecords.data[1]
         this.companyList3 = allrecords.data[2]
