@@ -22,9 +22,9 @@ export class PetrolList {
     time_id: string;
     san_luong: number;
     ghi_chu: string;
-    is_het_han: boolean;
     ten_quan_huyen: string;
     ten_doanh_nghiep: string;
+    is_expired: string;
 
     id_thuong_nhan: string;
     ten_thuong_nhan: string;
@@ -282,6 +282,11 @@ export class ConditionalBusinessLineModel {
 }
 
 //mat-select model
+export class Statusfilter {
+    id: number;
+    status: string;
+}
+
 export class DistrictModel {
     id: number;
     ten_quan_huyen: string;

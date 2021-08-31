@@ -18,7 +18,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
   DB_TABLE = 'QLNL_DMT';
   public readonly displayedColumns: string[] =
     ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep', 'ten_huyen_thi', 'cong_suat_thiet_ke',
-      'san_luong_6_thang', 'san_luong_nam', 'doanh_thu', 'trang_thai', 'thoi_gian_chinh_sua_cuoi'];
+      'san_luong_6_thang', 'san_luong_nam', 'doanh_thu_6_thang' ,'doanh_thu_nam', 'trang_thai', 'thoi_gian_chinh_sua_cuoi'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<SolarEneryManagementModel> = new MatTableDataSource<SolarEneryManagementModel>();
   public filteredDataSource: MatTableDataSource<SolarEneryManagementModel> = new MatTableDataSource<SolarEneryManagementModel>();
