@@ -177,10 +177,6 @@ export class ManagePetrolValueComponent implements OnInit {
   //   this.dataSource1.filter = filterValue.trim().toLowerCase();
   // }
 
-  SanLuongBanRa: number;
-  SLThuongNhan: number;
-  SLDoanhNghiep: number;
-
   displayedColumns: string[] = [
     'select',
     'index',
@@ -258,9 +254,7 @@ export class ManagePetrolValueComponent implements OnInit {
       this.dataSource.data = petrollist2
       this.filteredDataSource.data = [...this.dataSource.data]
 
-      this.SanLuongBanRa = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => Number(x.san_luong)).reduce((a, b) => a + b) : 0;
-      let unique = [...new Set(this.filteredDataSource.data.map(x => x.mst))]
-      this.SLDoanhNghiep = unique.length;
+      this.summary();
 
       this.filteredDataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -271,8 +265,17 @@ export class ManagePetrolValueComponent implements OnInit {
     })
   }
 
-  countthuongnhan: Array<Businessman> = new Array<Businessman>();
+  SanLuongBanRa: number = 0;
+  SLThuongNhan: number = 0;
+  SLDoanhNghiep: number = 0;
+  summary() {
+    let data = this.filteredDataSource.data;
+    this.SanLuongBanRa = data.length ? data.map(x => Number(x.san_luong) || 0).reduce((a, b) => a + b) : 0;
+    let unique = [...new Set(data.map(x => x.mst))]
+    this.SLDoanhNghiep = unique.length;
+  }
 
+  countthuongnhan: Array<Businessman> = new Array<Businessman>();
   getBusinessList() {
     this._Service.GetBusinessman().subscribe(all => {
       this.countthuongnhan = all.data.filter(x => x.id_linh_vuc == this.id_linh_vuc)
@@ -362,6 +365,7 @@ export class ManagePetrolValueComponent implements OnInit {
         this.filteredDataSource.data = filteredData;
       }
     }
+    this.summary();
   }
 
 }
