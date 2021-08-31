@@ -152,7 +152,7 @@ export class ManagePetrolValueComponent implements OnInit {
 
   ngOnInit() {
     this.autoOpen();
-    this.getPetrolListbyYear('', '');
+    this.getPetrolListbyYear();
     this.getQuan_Huyen();
     this.getBusinessList();
     this.sendLinkToNext(true);
@@ -210,7 +210,7 @@ export class ManagePetrolValueComponent implements OnInit {
   dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
   filteredDataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
 
-  getPetrolListbyYear(year: string, year1: string) {
+  getPetrolListbyYear() {
     this._Service.GetAllPetrolValue().subscribe(all => {
       let petrollist = all.data[0];
       let petrollist1 = all.data[1];
@@ -271,15 +271,13 @@ export class ManagePetrolValueComponent implements OnInit {
     })
   }
 
-  filterdatasource: Array<Businessman> = new Array<Businessman>();
-  filterdatasource1: Array<Businessman> = new Array<Businessman>();
+  countthuongnhan: Array<Businessman> = new Array<Businessman>();
 
   getBusinessList() {
     this._Service.GetBusinessman().subscribe(all => {
-      this.filterdatasource = all.data
-      this.filterdatasource1 = this.filterdatasource.filter(x => x.id_linh_vuc == this.id_linh_vuc)
+      this.countthuongnhan = all.data.filter(x => x.id_linh_vuc == this.id_linh_vuc)
 
-      this.SLThuongNhan = this.filterdatasource1.length
+      this.SLThuongNhan = this.countthuongnhan.length
     })
   }
 

@@ -1,6 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { MatOption, MatSelect, MatTable, MatTableDataSource } from '@angular/material';
-import { formatDate } from '@angular/common';
 import { NgForm, NumberValueAccessor } from '@angular/forms';
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
@@ -9,15 +8,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CommonFuntions } from 'src/app/components/specialized/commecial-managemant/conditional-business-line/common-functions.service';
 
 import {
-  DistrictModel,
-  SubDistrictModel,
   PetrolList,
-  CertificateModel,
   PetrolPost,
   PetrolValuePost,
   DeleteModel,
   Status,
-  PetrolStore,
   PostBusinessmanValue,
   BusinessmanSelect,
   StoreSelect,
@@ -31,8 +26,10 @@ import { ConditionBusinessService } from 'src/app/_services/APIService/Condition
 import { SpecialDirective } from 'src/app/shared/special.directive';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 
-
 import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -143,39 +140,64 @@ export class UpdatePetrolComponent implements OnInit {
     }
   }
 
-  BM: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
-  Businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
-  filterbusinessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
-
+  businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
+  public filterbusinessman: ReplaySubject<BusinessmanSelect[]> = new ReplaySubject<BusinessmanSelect[]>(1);
   GetBusinessman() {
     this._Service.GetBusinessman().subscribe((allrecords) => {
-      this.BM = allrecords.data
-      this.Businessman = this.BM.filter(x => x.id_linh_vuc == 6) as BusinessmanSelect[];
-      this.filterbusinessman = this.Businessman.slice();
+      this.businessman = allrecords.data.filter(x => x.id_linh_vuc == 6) as BusinessmanSelect[];
+      this.filterbusinessman.next(this.businessman.slice());
     });
   }
+  public thuongnhanfilter: FormControl = new FormControl();
+  public filterThuongnhan() {
+    if (!this.businessman) {
+      return;
+    }
+    let search = this.thuongnhanfilter.value;
+    if (!search) {
+      this.filterbusinessman.next(this.businessman.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterbusinessman.next(
+      this.businessman.filter(x => x.ten_thuong_nhan.toLowerCase().indexOf(search) > -1)
+    );
+  }
 
-  PetrolStore: Array<StoreSelect> = new Array<StoreSelect>();
-  filterpetrolstore: Array<StoreSelect> = new Array<StoreSelect>();
-
+  petrolstore: Array<StoreSelect> = new Array<StoreSelect>();
+  public filterpetrolstore: ReplaySubject<StoreSelect[]> = new ReplaySubject<StoreSelect[]>(1);
   GetStore() {
     this._Service.GetAllPetrolStore().subscribe((all) => {
-      this.PetrolStore = all.data as StoreSelect[];
-      this.filterpetrolstore = this.PetrolStore.slice();
+      this.petrolstore = all.data as StoreSelect[];
+      this.filterpetrolstore.next(this.petrolstore.slice());
     })
+  }
+  public cuahangfilter: FormControl = new FormControl();
+  public filterCuahang() {
+    if (!this.petrolstore) {
+      return;
+    }
+    let search = this.cuahangfilter.value;
+    if (!search) {
+      this.filterpetrolstore.next(this.petrolstore.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterpetrolstore.next(
+      this.petrolstore.filter(x => x.storeselect.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   dataSource: MatTableDataSource<PostBusinessmanValue> = new MatTableDataSource<PostBusinessmanValue>();
   businessmanvalue: Array<PetrolList> = new Array<PetrolList>();
-  businessmanvalue1: Array<PetrolList> = new Array<PetrolList>();
 
   getBusinessmanvalue() {
     this._Service.GetAllPetrolValue().subscribe(all => {
+      this.businessmanvalue = all.data[1].filter(x => x.id_san_luong == this.id_san_luong)
 
-      this.businessmanvalue = all.data[1]
-      this.businessmanvalue1 = this.businessmanvalue.filter(x => x.id_san_luong == this.id_san_luong)
-
-      this.businessmanvalue1.forEach(x => {
+      this.businessmanvalue.forEach(x => {
         this.dataSource.data.push({
           id_linh_vuc: 6,
           id: '',
@@ -184,10 +206,10 @@ export class UpdatePetrolComponent implements OnInit {
         })
       })
 
-      for (let index = 0; index < this.businessmanvalue1.length; index++) {
-        this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue1[index].id_thuong_nhan ? this.businessmanvalue1[index].id_thuong_nhan : null
-        this.dataSource.data[index].id_quan_ly = parseInt(this.businessmanvalue1[index].id_san_luong) ? parseInt(this.businessmanvalue1[index].id_san_luong) : null
-        this.dataSource.data[index].id = this.businessmanvalue1[index].id ? this.businessmanvalue1[index].id : null
+      for (let index = 0; index < this.businessmanvalue.length; index++) {
+        this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue[index].id_thuong_nhan ? this.businessmanvalue[index].id_thuong_nhan : null
+        this.dataSource.data[index].id_quan_ly = parseInt(this.businessmanvalue[index].id_san_luong) ? parseInt(this.businessmanvalue[index].id_san_luong) : null
+        this.dataSource.data[index].id = this.businessmanvalue[index].id ? this.businessmanvalue[index].id : null
       }
 
       this.dataSource.paginator = this.paginator;
@@ -197,31 +219,6 @@ export class UpdatePetrolComponent implements OnInit {
       this.paginator._intl.previousPageLabel = "Trang Trước";
       this.paginator._intl.nextPageLabel = "Trang Tiếp";
     })
-  }
-
-
-  subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  district: Array<DistrictModel> = new Array<DistrictModel>();
-  Certificate: Array<CertificateModel> = new Array<CertificateModel>();
-
-  GetAllPhuongXa() {
-    this._Service.GetAllSubDistrict().subscribe((allrecords) => {
-      this.subdistrict = allrecords.data as SubDistrictModel[];
-      this.filtersubdistrict = this.subdistrict.slice();
-    });
-  }
-
-  getQuan_Huyen() {
-    this._Service.GetAllDistrict().subscribe((allDistrict) => {
-      this.district = allDistrict["data"] as DistrictModel[];
-    });
-  }
-
-  GetAllGiayPhep(mst: string) {
-    this._Service.GetCertificate(mst).subscribe((allrecords) => {
-      this.Certificate = allrecords.data as CertificateModel[];
-    });
   }
 
   trangthai: Array<Status> = [
@@ -266,10 +263,6 @@ export class UpdatePetrolComponent implements OnInit {
       this.move(res)
     })
     this.resetForm();
-    this.getQuan_Huyen();
-    this.GetAllPhuongXa();
-    this.getPetrolValue();
-    this.GetAllGiayPhep(this.mst);
     this.getPetrolInfo();
     this.getBusinessmanvalue();
     this.GetBusinessman();
@@ -292,9 +285,23 @@ export class UpdatePetrolComponent implements OnInit {
     })
 
     this.years = this.commonfunctions.getYears()
+
+    this.thuongnhanfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterThuongnhan();
+      });
+
+    this.cuahangfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterCuahang();
+      });
   }
 
-  SaveData(input1, input2, input3) {
+  public _onDestroy = new Subject<void>();
+
+  SaveData(input1, input2) {
     if (this.id.toString() != 'undefined') {
       this._Service.PostPetrolValue(input1).subscribe(
         next => {
@@ -304,15 +311,6 @@ export class UpdatePetrolComponent implements OnInit {
           this._info.msgError("Lưu thông tin không thành công");
         }
       );
-
-      // this._Service.PostPetrol(input2).subscribe(
-      //   res => {
-      //     this._info.msgSuccess("Lưu thông tin thành công");
-      //   },
-      //   err => {
-      //     this._info.msgError("Lưu thông tin không thành công");
-      //   }
-      // )
 
       if (this.dataSource.data) {
         this._Service.PostBusinessmanValue(this.dataSource.data).subscribe(
@@ -327,7 +325,7 @@ export class UpdatePetrolComponent implements OnInit {
       }
     }
     else {
-      this._Service.PostPetrolValueNEW(input3).subscribe(
+      this._Service.PostPetrolValueNEW(input2).subscribe(
         next => {
           this._info.msgSuccess("Lưu thông tin thành công");
           this.Back();
@@ -341,7 +339,6 @@ export class UpdatePetrolComponent implements OnInit {
 
   petrolvaluepost: Array<PetrolValuePost> = new Array<PetrolValuePost>();
   petrolvaluepost1: Array<PetrolValuePostNEW> = new Array<PetrolValuePostNEW>();
-  petrolstorepost: Array<PetrolStore> = new Array<PetrolStore>();
 
   input: PetrolPost
   onSubmit() {
@@ -382,61 +379,14 @@ export class UpdatePetrolComponent implements OnInit {
     }
     this.petrolvaluepost1[0].danh_sach_thuong_nhan = this.dataSource.data
 
-    this.petrolstorepost.push({
-      id_cua_hang_xang_dau: null,
-      ten_cua_hang: '',
-      mst: '',
-      dia_chi: '',
-      id_phuong_xa: 25195,
-      so_dien_thoai: '',
-      id_tinh_trang_hoat_dong: 1,
-      ten_quan_ly: '',
-      ten_nhan_vien: '',
-      id_giay_phep: 0
-    })
-
-    this.petrolstorepost[0].ten_cua_hang = this.input.ten_cua_hang
-    this.petrolstorepost[0].mst = this.input.mst
-    this.petrolstorepost[0].dia_chi = this.input.dia_chi
-    this.petrolstorepost[0].id_phuong_xa = this.input.id_phuong_xa
-    this.petrolstorepost[0].so_dien_thoai = this.input.so_dien_thoai
-    this.petrolstorepost[0].id_tinh_trang_hoat_dong = this.input.id_tinh_trang_hoat_dong
-    this.petrolstorepost[0].ten_quan_ly = this.input.ten_quan_ly
-    this.petrolstorepost[0].ten_nhan_vien = this.input.ten_nhan_vien
-    this.petrolstorepost[0].id_giay_phep = this.input.id_giay_phep
-
-    this.SaveData(this.petrolvaluepost, this.petrolstorepost[0], this.petrolvaluepost1[0]);
+    this.SaveData(this.petrolvaluepost, this.petrolvaluepost1[0]);
   }
 
   petrolobject = new PetrolList();
-  petrolValue = new PetrolValuePost();
-
-  dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-  dataSource2: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
-  dataSource3: MatTableDataSource<PetrolValuePost> = new MatTableDataSource<PetrolValuePost>();
-  dataSource4: MatTableDataSource<PetrolValuePost> = new MatTableDataSource<PetrolValuePost>();
-
-  getPetrolValue() {
-    this._Service.GetAllPetrolValue().subscribe(all => {
-      this.dataSource3 = new MatTableDataSource<PetrolValuePost>(all.data[0]);
-      this.dataSource4.data = this.dataSource3.data.filter(x => x.id_cua_hang_xang_dau == this.id)
-
-      this.dataSource4.paginator = this.paginator;
-      this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-      this.paginator._intl.firstPageLabel = "Trang Đầu";
-      this.paginator._intl.lastPageLabel = "Trang Cuối";
-      this.paginator._intl.previousPageLabel = "Trang Trước";
-      this.paginator._intl.nextPageLabel = "Trang Tiếp";
-
-      this._rows = this.dataSource4.filteredData.length;
-    })
-  }
-
   getPetrolInfo() {
     this._Service.GetAllPetrolValue().subscribe(all => {
-      this.dataSource1 = new MatTableDataSource<PetrolList>(all.data[0]);
-      this.dataSource2.data = this.dataSource1.data.filter(x => x.id_san_luong == this.id_san_luong)
-      this.petrolobject = this.dataSource2.data[0]
+      let temp = all.data[0].filter(x => x.id_san_luong == this.id_san_luong)
+      this.petrolobject = temp[0]
 
       this._Service.petrol = {
         id_cua_hang_xang_dau: this.petrolobject.id_cua_hang_xang_dau,
@@ -469,7 +419,6 @@ export class UpdatePetrolComponent implements OnInit {
   //   newRow.id_linh_vuc = 6;
   //   this.dataSource.data.push(newRow);
   //   this.dataSource = new MatTableDataSource(this.dataSource.data);
-  //   this.filterbusinessman = this.Businessman.slice();
 
   //   this._rows = this.dataSource.filteredData.length;
   // }
@@ -490,9 +439,8 @@ export class UpdatePetrolComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
-    this.filterbusinessman = this.Businessman.slice();
 
-    this._rows = this.dataSource.data.length
+    this._rows = this.dataSource.filteredData.length;
   }
 
   deleteRow(): void {
@@ -500,16 +448,6 @@ export class UpdatePetrolComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.dataSource.data);
 
     this._rows = this.dataSource.data.length
-  }
-
-  getCurrentDate() {
-    let date = new Date;
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
-  getCurrentYear() {
-    let date = new Date;
-    return formatDate(date, 'yyyy', 'en-US');
   }
 
   public changeRow(index: number) {
