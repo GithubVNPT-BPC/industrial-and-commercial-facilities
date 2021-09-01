@@ -3,9 +3,50 @@
   $white: white;
   background: linear-gradient(to left,#003fb3,#5bcaff);
   
+  .floating-home{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom: 50px;
+    right:40px;
+    background-color:#1f7ed0;
+    border-radius:50px;
+    text-align:center;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 1000;
+    transition: 0.3s;
+    cursor: pointer;
+
+    .float-icon{
+      color:#FFF;
+      margin-top: 13px;
+    }
+
+    &:hover {
+      background-color: #2196F3;
+    }
+
+  }
+
   .username-display {
     border-bottom: 1px solid beige;
     color:black;
+  }
+
+  .check-expired-btn {
+    color: white;
+    top: 8px;
+    
+    .mat-icon {
+      font-size: 30px;
+      top: 13px;
+      right: 5px;
+      transition: transform .3s;
+
+      &:hover {
+        transform: scale(1.1); 
+      }
+    }
   }
 
   .toggle-sidebar{
@@ -32,13 +73,19 @@
       flex: 1 1 auto;
     }
 
-    .unit-name {
-      // color: linear-gradient(to right,#ffee69,white);
-      background: -webkit-linear-gradient(45deg, #ffee69, #fff6b3 80%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-size: 26px;
+    .unit-block {
+      width: 70%;
+
+      .unit-name {
+        // color: linear-gradient(to right,#ffee69,white);
+        background: -webkit-linear-gradient(45deg, #ffee69, #fff6b3 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 26px;
+        margin-top: 5px;
+      }
     }
+    
 
     .btn-color {
       .btn-company {

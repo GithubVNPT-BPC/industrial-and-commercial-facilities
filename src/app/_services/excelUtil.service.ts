@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import * as FileSaver from 'file-saver';
 import { Workbook } from 'exceljs';
 import * as XLSX from 'xlsx';
-import { domain } from 'process';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -91,7 +90,7 @@ export class ExcelService {
         for (let h in headerRows) {
             headerRows[h].eachCell((cell, number) => {
                 cell.font = { bold: true, color: { argb: '000000'}};
-                cell.alignment = { wrapText: false };
+                cell.alignment = { wrapText: true };
             });
         }
     }
@@ -136,7 +135,7 @@ export class ExcelService {
             let maxLength = 0;
             column["eachCell"]({ includeEmpty: true }, (cell) => {
                 if (!cell.isMerged) {   
-                    let columnLength = cell.value ? (cell.value.toString().length) + 1 : 10;
+                    let columnLength = cell.value ? (cell.value.toString().length) - 10 : 10;
                     if (columnLength > maxLength ) {
                         maxLength = columnLength;
                     }
