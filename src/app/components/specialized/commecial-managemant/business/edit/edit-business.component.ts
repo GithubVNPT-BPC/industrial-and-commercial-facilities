@@ -22,8 +22,12 @@ import {
   DeleteModel1,
   FieldModel
 } from "src/app/_models/APIModel/domestic-market.model";
+import { LoginService } from "src/app/_services/APIService/login.service";
 
 import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
@@ -112,7 +116,6 @@ export class EditBusinessComponent implements OnInit {
   mst: string;
   doanh_nghiep: FormGroup;
   submitted = false;
-  // danh_sach_nganh_nghe: FormArray;
 
   constructor(
     public route: ActivatedRoute,
@@ -123,55 +126,118 @@ export class EditBusinessComponent implements OnInit {
     public info: InformationService,
     private formbuilder: FormBuilder,
     public _keyboardservice: KeyboardService,
+    public _login: LoginService
   ) {
     this.route.params.subscribe((params) => {
       this.mst = params["mst"];
     });
   }
 
-  public career: Array<CareerModel> = new Array<CareerModel>();
-  public filtercareer: Array<CareerModel> = new Array<CareerModel>();
-  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  public filtersubdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
   public district: Array<DistrictModel> = new Array<DistrictModel>();
-  public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
-  public Field: Array<FieldModel> = new Array<FieldModel>();
-  public FilterField: Array<FieldModel> = new Array<FieldModel>();
-
-  GetAllNganhNghe() {
-    this._Service.GetAllCareer().subscribe((allrecords) => {
-      this.career = allrecords.data as CareerModel[];
-      this.filtercareer = this.career.slice();
-    });
-  }
-
-  GetAllPhuongXa() {
-    this._Service.GetAllSubDistrict().subscribe((allrecords) => {
-      this.subdistrict = allrecords.data as SubDistrictModel[];
-      this.filtersubdistrict = this.subdistrict.slice();
-    });
-  }
-
   getQuan_Huyen() {
     this._Service.GetAllDistrict().subscribe((allDistrict) => {
       this.district = allDistrict["data"] as DistrictModel[];
+
     });
   }
 
+  public Business: Array<BusinessTypeModel> = new Array<BusinessTypeModel>();
   GetAllLoaiHinh() {
     this._Service.GetAllBusinessType().subscribe((allrecords) => {
       this.Business = allrecords.data as BusinessTypeModel[];
     });
   }
 
+  public career: Array<CareerModel> = new Array<CareerModel>();
+  public filtercareer: ReplaySubject<CareerModel[]> = new ReplaySubject<CareerModel[]>(1);
+  GetAllNganhNghe() {
+    this._Service.GetAllCareer().subscribe((allrecords) => {
+      this.career = allrecords.data as CareerModel[];
+      this.filtercareer.next(this.career.slice());
+    });
+  }
+  public nganhnghefilter: FormControl = new FormControl();
+  public filterNganhnghe() {
+    if (!this.career) {
+      return;
+    }
+    let search = this.nganhnghefilter.value;
+    if (!search) {
+      this.filtercareer.next(this.career.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filtercareer.next(
+      this.career.filter(x => x.ten_nganh_nghe.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  public filtersubdistrict: ReplaySubject<SubDistrictModel[]> = new ReplaySubject<SubDistrictModel[]>(1);
+  GetAllPhuongXa() {
+    this._Service.GetAllSubDistrict().subscribe((allrecords) => {
+      this.subdistrict = allrecords.data as SubDistrictModel[];
+      this.filtersubdistrict.next(this.subdistrict.slice());
+    });
+  }
+  public phuongxafilter: FormControl = new FormControl();
+  public filterPhuongxa() {
+    if (!this.subdistrict) {
+      return;
+    }
+    let search = this.phuongxafilter.value;
+    if (!search) {
+      this.filtersubdistrict.next(this.subdistrict.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filtersubdistrict.next(
+      this.subdistrict.filter(x => x.ten_phuong_xa.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  public Field: Array<FieldModel> = new Array<FieldModel>();
+  public FilterField: ReplaySubject<FieldModel[]> = new ReplaySubject<FieldModel[]>(1);
   GetLinhVuc() {
     this._Service.GetAllField().subscribe((allrecords) => {
       this.Field = allrecords.data as FieldModel[];
-      this.FilterField = this.Field.slice();
+      this.FilterField.next(this.Field.slice());
     });
   }
+  public linhvucfilter: FormControl = new FormControl();
+  public filterLinhvuc() {
+    if (!this.Field) {
+      return;
+    }
+    let search = this.linhvucfilter.value;
+    if (!search) {
+      this.FilterField.next(this.Field.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.FilterField.next(
+      this.Field.filter(x => x.ten_linh_vuc.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  authorize: boolean = true;
+  SCT: boolean = true
+  DN: boolean = false
 
   ngOnInit() {
+    if (this._login.userValue.user_role_id == 1 || this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 4
+      || this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 7) {
+      this.authorize = false
+    }
+
+    if (this._login.userValue.user_role_id != 2) {
+      this.SCT = false
+      this.DN = true
+    }
+
     if (this.mst != undefined) {
       this.GetCompanyInfoById();
     }
@@ -187,7 +253,7 @@ export class EditBusinessComponent implements OnInit {
       mst: ['', Validators.required],
       id_loai_hinh_hoat_dong: [null, Validators.required],
       mst_parent: '',
-      sct: true,
+      sct: false,
       hoat_dong: true,
       dia_chi: ['', Validators.required],
       id_phuong_xa: [null, Validators.required],
@@ -212,45 +278,46 @@ export class EditBusinessComponent implements OnInit {
       nhu_cau_mua: '',
       nhu_cau_hop_tac: '',
       danh_sach_nganh_nghe: []
-      // danh_sach_nganh_nghe: this.formbuilder.array([this.newCareer()])
     })
+
+    this.linhvucfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterLinhvuc();
+      });
+
+    this.nganhnghefilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterNganhnghe();
+      });
+
+    this.phuongxafilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterPhuongxa();
+      });
   }
 
-  // newCareer(): FormGroup {
-  //   return this.formbuilder.group({
-  //     id_nganh_nghe_kinh_doanh: 0,
-  //     nganh_nghe_kd_chinh: '',
-  //     id_linh_vuc: 0
-  //   })
-  // }
-
-  // addCareer(): void {
-  //   this.danh_sach_nganh_nghe = this.doanh_nghiep.get('danh_sach_nganh_nghe') as FormArray;
-  //   this.danh_sach_nganh_nghe.push(this.newCareer());
-  // }
-
-  // removeCareer(i: number) {
-  //   this.danh_sach_nganh_nghe.removeAt(i);
-  // }
+  public _onDestroy = new Subject<void>();
 
   public SaveData(companyinput) {
     if (this.mst == undefined) {
       this._Service.PostCompany(companyinput).subscribe(
-        next => {
-          this.info.msgSuccess("Thêm doanh nghiệp thành công");
-          this.Back()
+        res => {
+          this.info.msgSuccess('Thêm doanh nghiệp thành công')
+          this.Back();
         },
-        error => {
-          this.info.msgError("Mã số thuế đã tồn tại");
+        err => {
+          this.info.msgError('Mã số thuế đã tồn tại')
         }
       )
     }
     else {
       this._Service.UpdateCompany(companyinput).subscribe(
         res => {
-          // this.resetForm(companyinput);
           this.info.msgSuccess('Cập nhật doanh nghiệp thành công')
-          this.Back()
+          this.GetCompanyInfoById();
         },
         err => {
           this.info.msgError('Cập nhật doanh nghiệp không thành công')
@@ -304,7 +371,7 @@ export class EditBusinessComponent implements OnInit {
       mst: '',
       id_loai_hinh_hoat_dong: null,
       mst_parent: '',
-      sct: true,
+      sct: false,
       hoat_dong: true,
       dia_chi: '',
       id_phuong_xa: null,
@@ -339,16 +406,13 @@ export class EditBusinessComponent implements OnInit {
   // addRow(): void {
   //   let newRow: Career = new Career();
   //   newRow.id = null;
-  //   newRow.id_nganh_nghe_kinh_doanh = null;
+  //   newRow.id_nganh_nghe_kinh_doanh;
   //   newRow.nganh_nghe_kd_chinh = "";
   //   newRow.id_linh_vuc;
   //   newRow.ma_nganh_nghe = '';
 
   //   this.dataSource.data.push(newRow);
   //   this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-  //   this.filtercareer = this.career.slice();
-  //   this.FilterField = this.Field.slice();
 
   //   this.dataSource.paginator = this.paginator;
   //   this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -375,9 +439,6 @@ export class EditBusinessComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
-
-    this.filtercareer = this.career.slice();
-    this.FilterField = this.Field.slice();
 
     this.dataSource.paginator = this.paginator;
     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -559,7 +620,7 @@ export class EditBusinessComponent implements OnInit {
             this.careerarray[index].id = this.companyList2[index].id.toString()
             this.careerarray[index].id_nganh_nghe_kinh_doanh = this.companyList2[index].id_nganh_nghe_kd
             this.careerarray[index].nganh_nghe_kd_chinh = this.companyList2[index].nganh_nghe_kd_chinh
-            this.careerarray[index].ma_nganh_nghe = ''
+            this.careerarray[index].ma_nganh_nghe = this.companyList2[index].id_nganh_nghe
             this.careerarray[index].id_linh_vuc = this.companyList2[index].id_linh_vuc
           }
           this.dataSource.data = this.careerarray
@@ -578,7 +639,7 @@ export class EditBusinessComponent implements OnInit {
             mst: this.company.mst,
             id_loai_hinh_hoat_dong: this.company.id_loai_hinh_hoat_dong,
             mst_parent: this.company.mst_cha,
-            sct: true,
+            sct: this.company.sct,
             hoat_dong: this.company.hoat_dong,
             dia_chi: this.company.dia_chi,
             id_phuong_xa: this.company.id_phuong_xa,
@@ -617,13 +678,12 @@ export class EditBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['specialized/commecial-management/domestic/search']);
+    this.router.navigate(['manager/business/search/']);
   }
 
   detail: boolean
 
-	Detail(event) {
-		this.detail = event.checked
-	}
-
+  Detail(event) {
+    this.detail = event.checked
+  }
 }

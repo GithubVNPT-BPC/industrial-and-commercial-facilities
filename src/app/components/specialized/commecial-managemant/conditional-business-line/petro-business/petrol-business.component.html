@@ -1,13 +1,5 @@
 <mat-card class="material">
     <mat-card-content>
-        <!-- <div class="button-control">
-            <button mat-raised-button (click)="accordion.openAll()">
-                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
-            </button>
-            <button mat-raised-button (click)="accordion.closeAll()">
-                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
-            </button>
-        </div> -->
         <mat-accordion class="accord" multi>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -24,9 +16,8 @@
                     <div class="col-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple
-                                [disabled]="disabled1">
-                                <!-- <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option> -->
+                            <mat-select (selectionChange)="applyFilter($event)" multiple
+                                [(ngModel)]="filterModel.ten_quan_huyen">
                                 <mat-option *ngFor='let item of district' [value]='item.ten_quan_huyen'>
                                     {{item.ten_quan_huyen}}
                                 </mat-option>
@@ -34,13 +25,19 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-1 checkbox">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked" [disabled]="disabled2">
-                            Doanh nghiệp hết hạn
-                        </mat-checkbox>
+                    <div class="col-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trạng thái giấy phép</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" multiple
+                                [(ngModel)]="filterModel.is_expired">
+                                <mat-option *ngFor='let item of status' [value]='item'>
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
 
-                    <div class="col-8 button-control -align-right my-auto">
+                    <div class="col-6 button-control -align-right my-auto">
                         <button mat-raised-button (click)="AddStore()">Thêm cửa hàng</button>
 
                         <button mat-raised-button class="red" (click)="removeRows()">Xóa cửa hàng</button>
@@ -55,13 +52,13 @@
                     </div>
                 </div>
 
-                <div class="layout" #table>
-                    <mat-form-field id="filter1">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
 
-                    <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table1">
+                <div class="layout" #table>
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table1">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>
                                 <mat-checkbox (change)="$event ? masterToggle() : null"

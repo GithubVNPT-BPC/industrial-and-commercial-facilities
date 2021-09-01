@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="col-6 button-control -align-right my-auto">
-                    <button type="button" mat-raised-button (click)="Back()">
+                    <button type="button" mat-raised-button (click)="Back()" [hidden]="SCT">
                         <mat-icon>keyboard_backspace</mat-icon>
                     </button>
                 </div>
@@ -140,14 +140,15 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Email</mat-label>
-                        <input formControlName="email" matInput placeholder="" [(ngModel)]="_Service.companyinfo.email">
+                        <mat-label [ngClass]="{'alert': DN}">Email</mat-label>
+                        <input formControlName="email" matInput placeholder="" [(ngModel)]="_Service.companyinfo.email"
+                            [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Email (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Email (Nguồn: SCT)</mat-label>
                         <input formControlName="email_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.email_sct">
+                            [(ngModel)]="_Service.companyinfo.email_sct" [readonly]="SCT">
                     </mat-form-field>
                 </div>
             </div>
@@ -181,27 +182,27 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Số lao động</mat-label>
+                        <mat-label [ngClass]="{'alert': DN}">Số lao động</mat-label>
                         <input currencyMask formControlName="so_lao_dong" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.so_lao_dong">
+                            [(ngModel)]="_Service.companyinfo.so_lao_dong" [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Số lao động (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Số lao động (Nguồn: SCT)</mat-label>
                         <input currencyMask formControlName="so_lao_dong_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.so_lao_dong_sct">
+                            [(ngModel)]="_Service.companyinfo.so_lao_dong_sct" [readonly]="SCT">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Công suất thiết kế</mat-label>
+                        <mat-label [ngClass]="{'alert': DN}">Công suất thiết kế</mat-label>
                         <input currencyMask formControlName="cong_suat_thiet_ke" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke">
+                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke" [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Công suất thiết kế (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Công suất thiết kế (Nguồn: SCT)</mat-label>
                         <input currencyMask formControlName="cong_suat_thiet_ke_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke_sct">
+                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke_sct" [readonly]="SCT">
                     </mat-form-field>
                 </div>
 
@@ -231,15 +232,15 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Sản lượng</mat-label>
+                        <mat-label [ngClass]="{'alert': DN}">Sản lượng</mat-label>
                         <input currencyMask formControlName="san_luong" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.san_luong">
+                            [(ngModel)]="_Service.companyinfo.san_luong" [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Sản lượng (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Sản lượng (Nguồn: SCT)</mat-label>
                         <input currencyMask formControlName="san_luong_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.san_luong_sct">
+                            [(ngModel)]="_Service.companyinfo.san_luong_sct" [readonly]="SCT">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">

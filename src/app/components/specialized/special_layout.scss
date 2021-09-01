@@ -3,6 +3,9 @@ $white: white;
 $green: #28a745;
 $red: #f44336;
 .mat-card.material {
+    .alert {
+        color: red;
+    }
     .highlight {
         font-weight: bolder;
     }
@@ -441,26 +444,6 @@ $red: #f44336;
 
     .table-layout#small-table3 {
         width: 300%;
-    }
-
-    #filter {
-        width: 100%;
-    }
-
-    #filter1 {
-        width: 150%;
-    }
-
-    #filter2 {
-        width: 200%;
-    }
-
-    #filter3 {
-        width: 300%;
-    }
-
-    #large-filter {
-        width: 550%;
     }
 
     form .form-group .container {

@@ -42,7 +42,7 @@ export class SearchBusinessComponent implements OnInit {
 
   public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst',
     // 'ten_loai_hinh_hoat_dong', 
-    // 'nguoi_dai_dien',
+    // 'nguoi_dai_dien', 
     'dia_chi_tong_hop',
     // 'dia_chi_day_du', 'so_dien_thoai', 'email',
     'nganh_nghe',
@@ -50,10 +50,10 @@ export class SearchBusinessComponent implements OnInit {
     // 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
     // 'email_sct', 'ngay_bd_kd', 'von_dieu_le', 'quy_mo_tai_san', 'doanh_thu', 'loi_nhuan', 'cong_suat_thiet_ke', 'cong_suat_thiet_ke_sct',
     // 'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 
-    'hoat_dong',
+    'hoat_dong'
   ];
 
-  public filter1: filter[] = [
+  public filterList = [
     { filed_name: 'mst', detail_name: 'Mã số thuế' },
     { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
     { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
@@ -134,39 +134,25 @@ export class SearchBusinessComponent implements OnInit {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
-  deletemodel1: Array<DeleteModel> = new Array<DeleteModel>();
-  selectionarray: string[];
   removeRows() {
-    if (confirm('Bạn Có Chắc Muốn Xóa?')) {
-      this.selection.selected.forEach(x => {
-        this.selectionarray = this.selection.selected.map(item => item.mst)
-        this.deletemodel1.push({
-          mst: ''
+    if (!this.selection.selected.length) {
+      this.info.msgError('Bạn chưa chọn doanh nghiệp để xóa')
+    } else {
+      if (confirm('Bạn Có Chắc Muốn Xóa?')) {
+        let datas = this.selection.selected.map(element => new Object({ mst: element.mst }));
+        this._marketService.DeleteCompany(datas).subscribe(res => {
+          this.info.msgSuccess('Xóa thành công')
+          this.ngOnInit();
+          this.selection.clear();
+          this.paginator.pageIndex = 0;
         })
-      })
-      for (let index = 0; index < this.selectionarray.length; index++) {
-        const element = this.deletemodel1[index];
-        element.mst = this.selectionarray[index]
       }
-      this._marketService.DeleteCompany(this.deletemodel1).subscribe(res => {
-        this.info.msgSuccess('Xóa thành công')
-        this.ngOnInit();
-        this.deletemodel1 = []
-        this.selection.clear();
-        this.paginator.pageIndex = 0;
-      })
     }
   }
 
   ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
   }
-
-  // OpenDetailCompany(mst: string) {
-  //   let url = this.router.serializeUrl(
-  //     this.router.createUrlTree(['manager/business/edit/' + mst]));
-  //   window.open(url, "_blank");
-  // }
 
   OpenDetailCompany(mst: string) {
     let url = '/#/specialized/commecial-management/domestic/edit/' + mst
@@ -178,18 +164,15 @@ export class SearchBusinessComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  // AddCompany() {
-  //   this.router.navigate(['specialized/commecial-management/domestic/edit/']);
-  // }
-
-  AddCertificate(status: boolean) {
-    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + status]);
-  }
-
   id: string = '2'
 
   ManageUser(id: string) {
-    this.router.navigate(['/manager/manage-user/' + id])
+    let url = '/#/manager/manage-user/' + id;
+    window.open(url, '_blank');
+  }
+
+  AddCertificate(status: boolean) {
+    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + status]);
   }
 
   selected_field: string = 'mst';
@@ -201,7 +184,7 @@ export class SearchBusinessComponent implements OnInit {
   tempFilter: CompanyDetailModel;
   filterType: MatTableFilter;
 
-  filter() {
+  applyFilter() {
     this.tempFilter = new CompanyDetailModel();
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
@@ -211,19 +194,19 @@ export class SearchBusinessComponent implements OnInit {
     this.filterEntity = Object.assign({}, this.tempFilter);
   }
 
-  cancel() {
+  cancelFilter() {
     this.tempFilter = new CompanyDetailModel();
     this.filterEntity = new CompanyDetailModel();
     this.dataSource.filter = '';
   }
 
-  add_condition() {
+  addCond() {
     this.count++;
     let new_ob = { id: this.count, filed_name: 'mst', filed_value: '' }
     this.countNumberCondition.push(new_ob);
   }
 
-  Xoa_dong() {
+  removeCond() {
     if (this.countNumberCondition.length === 1) {
       return;
     } else {
@@ -238,20 +221,17 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
-  companyList6: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
 
   Convertdate(text: string): string {
-    let date: string
-    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
-    return date
+    return text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4);
   }
 
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
       allrecords => {
-        this.companyList1 = allrecords.data[0];
-        this.companyList2 = allrecords.data[1];
-        this.companyList3 = allrecords.data[2];
+        this.companyList1 = allrecords.data[0]
+        this.companyList2 = allrecords.data[1]
+        this.companyList3 = allrecords.data[2]
 
         this.companyList4 = this.companyList1.map(a => {
           let temp = this.companyList2.filter(b => b.mst === a.mst)
@@ -344,9 +324,7 @@ export class SearchBusinessComponent implements OnInit {
           }
         })
 
-        this.companyList6 = this.companyList5.filter(x => x.sct == true)
-
-        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList6);
+        this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -354,12 +332,7 @@ export class SearchBusinessComponent implements OnInit {
         this.paginator._intl.lastPageLabel = "Trang Cuối";
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
+
       });
   }
-
-  public applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
 }

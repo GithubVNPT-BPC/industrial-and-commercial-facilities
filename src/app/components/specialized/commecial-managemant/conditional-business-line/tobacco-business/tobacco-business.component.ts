@@ -125,10 +125,8 @@ export class TobaccoBusinessComponent implements OnInit {
 
     ngOnInit() {
         this.autoOpen();
-        this.getTobaccoListbyYear('', '')
+        this.getTobaccoListbyYear()
         this.getQuan_Huyen();
-        this.date = null
-        this.UpdatedDate = null
         this.sendLinkToNext(true)
 
         if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
@@ -146,23 +144,23 @@ export class TobaccoBusinessComponent implements OnInit {
     //     this.accordion.openAll();
     // }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource1.filter = filterValue.trim().toLowerCase();
-    }
+    // applyFilter(event: Event) {
+    //     const filterValue = (event.target as HTMLInputElement).value;
+    //     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    // }
 
     selection = new SelectionModel<TobaccoList>(true, []);
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource1.connect().value.length;
+        const numRows = this.filteredDataSource.connect().value.length;
         return numSelected === numRows;
     }
 
     masterToggle() {
         this.isAllSelected() ?
             this.selection.clear() :
-            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+            this.filteredDataSource.connect().value.forEach(row => this.selection.select(row));
     }
 
     checkboxLabel(row?: TobaccoList): string {
@@ -196,24 +194,16 @@ export class TobaccoBusinessComponent implements OnInit {
         }
     }
 
-    public newdate = new FormControl(_moment());
+    dataSource: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
+    filteredDataSource: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
 
-    SanLuongBanRa: number;
-    TriGiaBanRa: number;
-    type: string = 'Tobacco'
-
-    dataSource1: MatTableDataSource<TobaccoList> = new MatTableDataSource<TobaccoList>();
-    TobaccoList: Array<TobaccoList> = new Array<TobaccoList>();
-    TobaccoList1: Array<TobaccoList> = new Array<TobaccoList>();
-    TobaccoList2: Array<TobaccoList> = new Array<TobaccoList>();
-    TobaccoList3: Array<TobaccoList> = new Array<TobaccoList>();
-
-    getTobaccoListbyYear(year: string, year1: string) {
+    getTobaccoListbyYear() {
         this._Service.GetAllTobaccoValue().subscribe(all => {
-            this.TobaccoList = all.data[0];
-            this.TobaccoList1 = all.data[1];
-            this.TobaccoList2 = this.TobaccoList.map(x => {
-                let temp = this.TobaccoList1.filter(y => y.id_san_luong == x.id_thuoc_la)
+            this.filteredDataSource.data = [];
+            let TobaccoList = all.data[0];
+            let TobaccoList1 = all.data[1];
+            let TobaccoList2 = TobaccoList.map(x => {
+                let temp = TobaccoList1.filter(y => y.id_san_luong == x.id_thuoc_la)
 
                 let temp1 = temp.map(z => z.ten_thuong_nhan)
                 if (temp1 == undefined || temp1 == null) {
@@ -242,24 +232,23 @@ export class TobaccoBusinessComponent implements OnInit {
                 return x
             })
 
-            this.TobaccoList3 = this.TobaccoList2
-            this.TobaccoList3.forEach(element => {
+            TobaccoList2.forEach(element => {
                 if (element.ngay_het_han) {
-                    element.is_het_han = element.ngay_het_han < this.getCurrentDate()
+                    element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : "Doanh nghiệp còn hạn"
                 }
                 else {
-                    element.is_het_han = false
+                    element.is_expired = "Doanh nghiệp còn hạn"
                 }
                 element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
 
-            this.dataSource1.data = this.TobaccoList3
+            this.dataSource.data = TobaccoList2
+            this.filteredDataSource.data = [...this.dataSource.data]
 
-            this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-            this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
+            this.summary();
 
-            this.dataSource1.paginator = this.paginator;
+            this.filteredDataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";
             this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -268,144 +257,13 @@ export class TobaccoBusinessComponent implements OnInit {
         })
     }
 
-    // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    // allSelected = false;
-    // toggleAllSelection() {
-    //     this.allSelected = !this.allSelected;
-
-    //     if (this.allSelected) {
-    //         this.dSelect.options.forEach((item: MatOption) => item.select());
-    //     } else {
-    //         this.dSelect.options.forEach((item: MatOption) => item.deselect());
-    //     }
-    //     this.dSelect.close();
-    // }
-
-    // OpenDetailPetrol(id: number, mst: string) {
-    //     let url = this.router.serializeUrl(
-    //         this.router.createUrlTree(['specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
-    //     window.open(url, "_blank");
-    // }
-
-    disabled1: boolean = false
-    disabled2: boolean = false
-    disabled3: boolean = false
-    disabled4: boolean = false
-
-    applyDistrictFilter(event) {
-        let filteredData = [];
-
-        event.value.forEach(element => {
-            this.TobaccoList3.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length) {
-                this.dataSource1.data = [];
-                this.disabled2 = true
-                this.disabled3 = true
-                this.disabled4 = true
-            }
-            else {
-                this.dataSource1.data = this.TobaccoList3
-                this.disabled2 = false
-                this.disabled3 = false
-                this.disabled4 = false
-            }
-        }
-        else {
-            this.dataSource1.data = filteredData;
-            this.disabled2 = true
-            this.disabled3 = true
-            this.disabled4 = true
-        }
-
-        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
-    }
-
-    applyExpireCheck(event) {
-        if (event.checked == false) {
-            this.dataSource1.data = this.TobaccoList3.filter(x => x.is_het_han == event.checked)
-            this.disabled1 = false
-            this.disabled3 = false
-            this.disabled4 = false
-        }
-        else {
-            this.dataSource1.data = this.TobaccoList3.filter(x => x.is_het_han == event.checked)
-            this.disabled1 = true
-            this.disabled3 = true
-            this.disabled4 = true
-        }
-
-        // this.SumPetrolStore2 = this.SumPetrolStore1.filter(x => x.is_het_han == event.checked)
-
-        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
-    }
-
-    applyCerYear(event) {
-        let filteredData = [];
-
-        event.value.forEach(element => {
-            this.TobaccoList3.filter(x => this.convertyear(x.ngay_cap).includes(element)).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length) {
-                this.dataSource1.data = [];
-                this.disabled1 = true
-                this.disabled2 = true
-                this.disabled4 = true
-            }
-            else {
-                this.dataSource1.data = this.TobaccoList3
-                this.disabled1 = false
-                this.disabled2 = false
-                this.disabled4 = false
-            }
-        }
-        else {
-            this.dataSource1.data = filteredData;
-            this.disabled1 = true
-            this.disabled2 = true
-            this.disabled4 = true
-        }
-
-        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
-    }
-
-    applyUpdatedDate(event) {
-        let filteredData = [];
-
-        event.value.forEach(element => {
-            this.TobaccoList3.filter(x => x.time_id.toString().includes(element) && x.is_het_han == false).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length) {
-                this.dataSource1.data = [];
-                this.disabled1 = true
-                this.disabled2 = true
-                this.disabled3 = true
-            }
-            else {
-                this.dataSource1.data = this.TobaccoList3
-                this.disabled1 = false
-                this.disabled2 = false
-                this.disabled3 = false
-            }
-        }
-        else {
-            this.dataSource1.data = filteredData;
-            this.disabled1 = true
-            this.disabled2 = true
-            this.disabled3 = true
-        }
-
-        this.SanLuongBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.so_luong)).reduce((a, b) => a + b) : 0;
-        this.TriGiaBanRa = this.dataSource1.data.length ? this.dataSource1.data.map(x => Number(x.tri_gia)).reduce((a, b) => a + b) : 0;
+    type: string = 'Tobacco'
+    SanLuongBanRa: number = 0;
+    TriGiaBanRa: number = 0;
+    summary() {
+        let data = this.filteredDataSource.data;
+        this.SanLuongBanRa = data.length ? data.map(x => Number(x.so_luong) || 0).reduce((a, b) => a + b) : 0;
+        this.TriGiaBanRa = data.length ? data.map(x => Number(x.tri_gia) || 0).reduce((a, b) => a + b) : 0;
     }
 
     public getCurrentDate() {
@@ -413,50 +271,10 @@ export class TobaccoBusinessComponent implements OnInit {
         return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
-    public getCurrentYear() {
-        let date = new Date;
-        return formatDate(date, 'yyyy', 'en-US');
-    }
-
     Convertdate(text: string): string {
         let date: string
         date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
         return date
-    }
-
-    convertyear(text: string): string {
-        let date: string
-        date = text.substring(6, 11)
-        return date
-    }
-
-    public date = new FormControl(_moment());
-    public date1 = new FormControl(_moment());
-    public date2 = new FormControl(_moment());
-    public UpdatedDate = new FormControl(_moment());
-    public theYear: number;
-    public theYear1: number;
-
-    public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-        this.date = this.date1;
-        const ctrlValue = this.date.value;
-        ctrlValue.year(normalizedYear.year());
-        this.date.setValue(ctrlValue);
-        this.theYear = normalizedYear.year();
-        datepicker.close();
-        this.selection.clear();
-        this.getTobaccoListbyYear(this.theYear.toString(), this.theYear1 ? this.theYear1.toString() : '')
-    }
-
-    public chosenYearHandler1(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-        this.UpdatedDate = this.date2;
-        const ctrlValue = this.UpdatedDate.value;
-        ctrlValue.year(normalizedYear.year());
-        this.UpdatedDate.setValue(ctrlValue);
-        this.theYear1 = normalizedYear.year();
-        datepicker.close();
-        this.selection.clear();
-        this.getTobaccoListbyYear(this.theYear ? this.theYear.toString() : '', this.theYear1.toString())
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
@@ -481,6 +299,50 @@ export class TobaccoBusinessComponent implements OnInit {
 
     Back() {
         this.router.navigate(['specialized/commecial-management/domestic/cbl']);
+    }
+
+    status: any[] = ["Doanh nghiệp còn hạn", "Doanh nghiệp hết hạn"]
+
+    filterModel = {
+        nam_cap: [],
+        time_id: [],
+        ten_quan_huyen: [],
+        is_expired: [],
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(key => {
+            let filterCrits = [];
+            if (filters[key].length) {
+                filters[key].forEach(criteria => {
+                    filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+                });
+                filteredData = [...filterCrits];
+            }
+        })
+        return filteredData;
+    }
+
+    applyFilter(event) {
+        if (event.target) {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
+        }
+        this.summary();
     }
 
 }

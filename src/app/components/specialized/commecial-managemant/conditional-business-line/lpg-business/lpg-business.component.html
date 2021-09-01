@@ -38,19 +38,7 @@
                                 </mat-card-title>
                             </mat-card-header>
                             <mat-card-content>
-                                {{this.dataSource1.filteredData.length | number: '1.0-0':'vi'}} doanh nghiệp
-                            </mat-card-content>
-                        </mat-card>
-                    </div>
-                    <div class="col-3">
-                        <mat-card class="card2">
-                            <mat-card-header>
-                                <mat-card-title>
-                                    <mat-icon>filter</mat-icon> Tổng số thương nhân cung cấp LPG:
-                                </mat-card-title>
-                            </mat-card-header>
-                            <mat-card-content>
-                                {{SLThuongNhan | number: '1.0-0':'vi'}} thương nhân
+                                {{this.filteredDataSource.filteredData.length | number: '1.0-0':'vi'}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -63,6 +51,18 @@
                             </mat-card-header>
                             <mat-card-content>
                                 {{SoLuongCoSo | number: '1.0-0':'vi'}} cơ sở
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                    <div class="col-3">
+                        <mat-card class="card2">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    <mat-icon>filter</mat-icon> Tổng số thương nhân cung cấp LPG:
+                                </mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{SLThuongNhan | number: '1.0-0':'vi'}} thương nhân
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -81,23 +81,11 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <!-- <div class="col-2">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm cấp GP</mat-label>
-                            <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)"
-                                panelClass="example-month-picker">
-                            </mat-datepicker>
-                        </mat-form-field>
-                    </div> -->
-
-                    <div class="col-2">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Năm cấp GP</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyCerYear($event)" multiple
-                                [disabled]="disabled3">
-                                <!-- <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option> -->
+                            <mat-select (selectionChange)="applyFilter($event)" multiple
+                                [(ngModel)]="filterModel.nam_cap">
                                 <mat-option *ngFor='let item of years' [value]='item.value'>
                                     {{item.des}}
                                 </mat-option>
@@ -105,12 +93,11 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple
-                                [disabled]="disabled1">
-                                <!-- <mat-option [value]="0" (click)="toggleAllSelection()">Tất cả</mat-option> -->
+                            <mat-select (selectionChange)="applyFilter($event)" multiple
+                                [(ngModel)]="filterModel.ten_quan_huyen">
                                 <mat-option *ngFor='let item of district' [value]='item.ten_quan_huyen'>
                                     {{item.ten_quan_huyen}}
                                 </mat-option>
@@ -118,13 +105,19 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2 checkbox">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked" [disabled]="disabled2">
-                            Doanh nghiệp hết hạn
-                        </mat-checkbox>
+                    <div class="col-2 col-lg-2">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Trạng thái giấy phép</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" multiple
+                                [(ngModel)]="filterModel.is_expired">
+                                <mat-option *ngFor='let item of status' [value]='item'>
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
 
-                    <div class="col-6 button-control my-auto">
+                    <div class="col-6 col-lg-6 button-control my-auto">
                         <button mat-raised-button (click)="AddLPG()" [hidden]=authorize>Thêm DN</button>
 
                         <button mat-raised-button (click)="ManageBusiness(type, id_linh_vuc)" [hidden]=authorize>Quản lý
@@ -135,13 +128,13 @@
                     </div>
                 </div>
 
-                <div class="layout" #table>
-                    <mat-form-field id="filter2">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
 
-                    <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table2">
+                <div class="layout" #table>
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
 
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>

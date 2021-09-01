@@ -10,7 +10,8 @@ import {
     SubDistrictModel,
     DeleteModel,
     PetrolList,
-    CertificateModel
+    CertificateModel,
+    Statusfilter
 } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { MatAccordion } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
@@ -89,14 +90,14 @@ export class PetrolBusinessComponent implements OnInit {
 
     isAllSelected() {
         const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource1.connect().value.length;
+        const numRows = this.filteredDataSource.connect().value.length;
         return numSelected === numRows;
     }
 
     masterToggle() {
         this.isAllSelected() ?
             this.selection.clear() :
-            this.dataSource1.connect().value.forEach(row => this.selection.select(row));
+            this.filteredDataSource.connect().value.forEach(row => this.selection.select(row));
     }
 
     checkboxLabel(row?: PetrolList): string {
@@ -168,29 +169,30 @@ export class PetrolBusinessComponent implements OnInit {
     //     this.accordion.openAll();
     // }
 
-    applyFilter(event: Event) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.dataSource1.filter = filterValue.trim().toLowerCase();
-    }
+    // applyFilter(event: Event) {
+    //     const filterValue = (event.target as HTMLInputElement).value;
+    //     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    // }
 
-    petrolstore: Array<PetrolList> = new Array<PetrolList>();
-    dataSource1: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+    dataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
+    filteredDataSource: MatTableDataSource<PetrolList> = new MatTableDataSource<PetrolList>();
 
     getPetrolList() {
         this._Service.GetAllPetrolStore().subscribe(all => {
-            this.petrolstore = all.data
-            this.petrolstore.forEach(element => {
+            this.dataSource.data = all.data
+            this.dataSource.data.forEach(element => {
                 if (element.ngay_het_han) {
-                    element.is_het_han = element.ngay_het_han < this.getCurrentDate()
+                    element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : "Doanh nghiệp còn hạn"
                 }
                 else {
-                    element.is_het_han = false
+                    element.is_expired = "Doanh nghiệp còn hạn"
                 }
                 element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
                 element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
             });
-            this.dataSource1.data = this.petrolstore
-            this.dataSource1.paginator = this.paginator;
+
+            this.filteredDataSource.data = [...this.dataSource.data];
+            this.filteredDataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = 'Số hàng';
             this.paginator._intl.firstPageLabel = "Trang Đầu";
             this.paginator._intl.lastPageLabel = "Trang Cuối";
@@ -199,110 +201,15 @@ export class PetrolBusinessComponent implements OnInit {
         })
     }
 
-    // getPetrolListbyYear(year: string) {
-    //     this._Service.GetPetrolValue(year).subscribe(all => {
-    //         this.dataSource = new MatTableDataSource<PetrolList>(all.data[0]);
-    //         this.petrolstore.forEach(element => {
-    //             if (element.ngay_het_han) {
-    //                 let temp = this.Convertdate(element.ngay_het_han)
-    //                 element.is_het_han = Date.parse(temp) < Date.parse(this.getCurrentDate())
-    //             }
-    //             else {
-    //                 element.is_het_han = false
-    //             }
-    //         });
-    //         this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == false)
-    //         this.dataSource1.paginator = this.paginator;
-    //         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-    //         this.paginator._intl.firstPageLabel = "Trang Đầu";
-    //         this.paginator._intl.lastPageLabel = "Trang Cuối";
-    //         this.paginator._intl.previousPageLabel = "Trang Trước";
-    //         this.paginator._intl.nextPageLabel = "Trang Tiếp";
-    //     })
-    // }
-
-    // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-    // allSelected = false;
-    // toggleAllSelection() {
-    //     this.allSelected = !this.allSelected;
-
-    //     if (this.allSelected) {
-    //         this.dSelect.options.forEach((item: MatOption) => item.select());
-    //     } else {
-    //         this.dSelect.options.forEach((item: MatOption) => item.deselect());
-    //     }
-    //     this.dSelect.close();
-    // }
-
-    // OpenDetailPetrol(id: number, mst: string) {
-    //     let url = this.router.serializeUrl(
-    //         this.router.createUrlTree(['specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
-    //     window.open(url, "_blank");
-    // }
-
-    disabled1: boolean = false
-    disabled2: boolean = false
-
-    applyDistrictFilter(event) {
-        let filteredData = [];
-
-        event.value.forEach(element => {
-            this.petrolstore.filter(x => x.ten_quan_huyen.toLowerCase().includes(element.toLowerCase())).forEach(x => filteredData.push(x));
-        });
-
-        if (!filteredData.length) {
-            if (event.value.length) {
-                this.dataSource1.data = [];
-                this.disabled2 = true
-            }
-            else {
-                this.dataSource1.data = this.petrolstore
-                this.disabled2 = false
-            }
-        }
-        else {
-            this.dataSource1.data = filteredData;
-            this.disabled2 = true
-        }
-    }
-
-    applyExpireCheck(event) {
-        if (event.checked == true) {
-            this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
-            this.disabled1 = true
-        }
-        else {
-            this.dataSource1.data = this.petrolstore.filter(x => x.is_het_han == event.checked)
-            this.disabled1 = false
-        }
-    }
-
     public getCurrentDate() {
         let date = new Date;
         return formatDate(date, 'yyyyMMdd', 'en-US');
-    }
-
-    public getCurrentYear() {
-        let date = new Date;
-        return formatDate(date, 'yyyy', 'en-US');
     }
 
     Convertdate(text: string): string {
         let date: string
         date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
         return date
-    }
-
-    public date = new FormControl(_moment());
-    public theYear: number;
-
-    public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-        const ctrlValue = this.date.value;
-        ctrlValue.year(normalizedYear.year());
-        this.date.setValue(ctrlValue);
-        this.theYear = normalizedYear.year();
-        datepicker.close();
-        // this.getPetrolListbyYear(this.theYear.toString())
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
@@ -319,5 +226,46 @@ export class PetrolBusinessComponent implements OnInit {
 
     Back() {
         this.router.navigate(['specialized/commecial-management/domestic/petrol']);
+    }
+
+    status: any[] = ["Doanh nghiệp còn hạn", "Doanh nghiệp hết hạn"]
+
+    filterModel = {
+        ten_quan_huyen: [],
+        is_expired: []
+    }
+
+    filterArray(dataSource, filters) {
+        const filterKeys = Object.keys(filters);
+        let filteredData = [...dataSource];
+        filterKeys.forEach(key => {
+            let filterCrits = [];
+            if (filters[key].length) {
+                filters[key].forEach(criteria => {
+                    filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+                });
+                filteredData = [...filterCrits];
+            }
+        })
+        return filteredData;
+    }
+
+    applyFilter(event) {
+        if (event.target) {
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+        } else {
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
+        }
     }
 }

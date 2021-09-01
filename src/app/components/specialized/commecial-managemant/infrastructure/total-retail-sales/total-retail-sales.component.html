@@ -33,12 +33,12 @@
                     </mat-panel-description>
                 </mat-expansion-panel-header>
 
-                <div class="layout">
-                    <mat-form-field id="filter1">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
 
+                <div class="layout">
                     <table mat-table [dataSource]="dataSource" #table class="table-layout" id="small-table1">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>

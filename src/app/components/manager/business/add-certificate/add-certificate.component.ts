@@ -8,6 +8,10 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import {
   CertificateModel,
   CertificateType,
@@ -20,7 +24,6 @@ import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 import { SpecialDirective } from 'src/app/shared/special.directive';
 
-import { FormControl } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
@@ -82,8 +85,6 @@ export class AddCertificateComponent implements OnInit {
   id: number;
 
   constructor(
-    // @Inject(MAT_DIALOG_DATA) public data: any,
-    // public dialogRef: MatDialogRef<UpdateCertificateModelComponent>,
     public excelService: ExcelService,
     public _Service: ConditionBusinessService,
     public formbuilder: FormBuilder,
@@ -101,7 +102,7 @@ export class AddCertificateComponent implements OnInit {
     this.resetForm();
     this.getCertificateList();
     this.getLoaiGiayPhep();
-    this.getLinhVuc();
+    this.GetLinhVuc();
 
     this.certificate = this.formbuilder.group({
       id_giay_phep: null,
@@ -115,7 +116,15 @@ export class AddCertificateComponent implements OnInit {
       ghi_chu: '',
       id_linh_vuc: 1,
     })
+
+    this.linhvucfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterLinhvuc();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   LoaiGiayPhep: Array<CertificateType> = new Array<CertificateType>();
   LoaiLinhVuc: Array<FieldList> = new Array<FieldList>();
@@ -127,18 +136,35 @@ export class AddCertificateComponent implements OnInit {
     });
   }
 
-  getLinhVuc() {
-    this._Service.GetField().subscribe((all) => {
-      this.LoaiLinhVuc = all.data as FieldList[];
-      this.filterloailinhvuc = this.LoaiLinhVuc.slice();
+  public Field: Array<FieldList> = new Array<FieldList>();
+  public FilterField: ReplaySubject<FieldList[]> = new ReplaySubject<FieldList[]>(1);
+  GetLinhVuc() {
+    this._Service.GetField().subscribe((allrecords) => {
+      this.Field = allrecords.data as FieldList[];
+      this.FilterField.next(this.Field.slice());
     });
+  }
+  public linhvucfilter: FormControl = new FormControl();
+  public filterLinhvuc() {
+    if (!this.Field) {
+      return;
+    }
+    let search = this.linhvucfilter.value;
+    if (!search) {
+      this.FilterField.next(this.Field.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.FilterField.next(
+      this.Field.filter(x => x.ten_linh_vuc.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   SaveData(input) {
     this._Service.PostCertificate(input).subscribe(
       res => {
         this._info.msgSuccess('Cập nhật thông tin thành công')
-        // this.dialogRef.close()
         this.Back()
       },
       err => {

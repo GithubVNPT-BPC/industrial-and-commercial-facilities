@@ -15,11 +15,11 @@
                     <button mat-raised-button (click)="save()" cdkFocusInitial>Lưu</button>
                 </div>
             </div>
+            <mat-form-field>
+                <mat-label>Lọc dữ liệu</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+            </mat-form-field>
             <div class="layout" #TABLE>
-                <mat-form-field id="filter">
-                    <mat-label>Lọc dữ liệu</mat-label>
-                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                </mat-form-field>
                 <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table">
 
                     <ng-container matColumnDef="select">

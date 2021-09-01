@@ -9,24 +9,13 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 })
 
 export class ConditionalBusinessLineComponent implements OnInit {
-    //Constant
     private readonly LINK_DEFAULT: string = "";
     private readonly TITLE_DEFAULT: string = "KINH DOANH CÓ ĐIỀU KIỆN";
     private readonly TEXT_DEFAULT: string = "KINH DOANH CÓ ĐIỀU KIỆN";
-    //Variable for only ts
     private _linkOutput: LinkModel = new LinkModel();
-    navLinks: any[];
-    activeLinkIndex = -1;
 
     constructor(private _breadCrumService: BreadCrumService,
         private router: Router) {
-        this.navLinks = [
-            {
-                label: 'Petrol',
-                link: './petrol',
-                index: 0,
-            },
-        ];
     }
 
     Petrol() {
@@ -47,9 +36,6 @@ export class ConditionalBusinessLineComponent implements OnInit {
 
     ngOnInit() {
         this.sendLinkToNext(true);
-        this.router.events.subscribe((res) => {
-            this.activeLinkIndex = this.navLinks.indexOf(this.navLinks.find(tab => tab.link === '.' + this.router.url));
-        });
     }
 
     public sendLinkToNext(type: boolean) {

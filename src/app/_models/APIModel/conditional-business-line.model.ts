@@ -22,9 +22,9 @@ export class PetrolList {
     time_id: string;
     san_luong: number;
     ghi_chu: string;
-    is_het_han: boolean;
     ten_quan_huyen: string;
     ten_doanh_nghiep: string;
+    is_expired: string;
 
     id_thuong_nhan: string;
     ten_thuong_nhan: string;
@@ -57,7 +57,6 @@ export class TobaccoList {
     so_giay_phep: string
     ngay_cap: string;
     ngay_het_han: string;
-    is_het_han: boolean;
     ghi_chu: string;
     tinh_trang_hoat_dong: string;
     id_tinh_trang_hoat_dong: number;
@@ -68,6 +67,8 @@ export class TobaccoList {
     so_dien_thoai_tn: string;
     id_san_luong: string;
     id: string;
+
+    is_expired: string;
 }
 
 export class LiquorList {
@@ -85,7 +86,6 @@ export class LiquorList {
     so_giay_phep: string
     ngay_cap: string;
     ngay_het_han: string;
-    is_het_han: boolean;
     ghi_chu: string;
     tinh_trang_hoat_dong: string;
     id_tinh_trang_hoat_dong: number;
@@ -98,6 +98,7 @@ export class LiquorList {
     id: string;
 
     thoi_gian_chinh_sua_cuoi: Date;
+    is_expired: string
 }
 
 export class LPGList {
@@ -114,7 +115,6 @@ export class LPGList {
     so_giay_phep: string
     ngay_cap: string;
     ngay_het_han: string;
-    is_het_han: boolean;
     ghi_chu: string;
     tinh_trang_hoat_dong: string;
     id_tinh_trang_hoat_dong: number;
@@ -127,6 +127,7 @@ export class LPGList {
     id: string;
 
     thoi_gian_chinh_sua_cuoi: Date;
+    is_expired: string
 }
 
 export class PetrolPost {
@@ -282,6 +283,11 @@ export class ConditionalBusinessLineModel {
 }
 
 //mat-select model
+export class Statusfilter {
+    id: number;
+    status: string;
+}
+
 export class DistrictModel {
     id: number;
     ten_quan_huyen: string;

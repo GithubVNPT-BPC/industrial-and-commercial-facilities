@@ -156,6 +156,7 @@ export class BlockElectricModel {
     cong_suat_thiet_ke: number;
     san_luong_6_thang: number;
     san_luong_nam: number;
+    doanh_thu_6_tháng: number;
     doanh_thu_nam: number;
     time_id: number;
     id_quan_huyen: number;

@@ -17,6 +17,9 @@ import { registerLocaleData } from '@angular/common';
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 
+import { MatSelectModule, MatFormFieldModule } from '@angular/material';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 export const customCurrencyMaskConfig = {
   align: "right",
   allowNegative: true,
@@ -40,6 +43,10 @@ export const customCurrencyMaskConfig = {
     MaterialModule,
     ReactiveFormsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+
+    MatSelectModule,
+    MatFormFieldModule,
+    NgxMatSelectSearchModule
   ],
   providers: [
   ],

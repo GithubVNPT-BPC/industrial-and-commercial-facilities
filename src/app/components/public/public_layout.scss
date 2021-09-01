@@ -298,27 +298,15 @@
     width: 200%;
   }
 
-  #filter {
-    width: 100%;
-  }
-
-  #filter1 {
-    width: 150%;
-  }
-
-  #filter2 {
-    width: 200%;
-  }
-
-  #large-filter {
-    width: 550%;
-  }
-
   #small {
     height: 300px !important;
   }
 
   ::ng-deep .mat-sort-header-arrow {
     color: white !important;
+  }
+
+  ::ng-deep.mat-select-disabled .mat-select-value {
+    color: black;
   }
 }

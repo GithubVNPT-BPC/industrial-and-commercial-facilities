@@ -92,15 +92,6 @@ export class CertificateListComponent implements OnInit {
     });
   }
 
-  // public AddBusiness(data: any) {
-  //   const dialogRef = this.dialog.open(UpdateCertificateModelComponent, {
-  //     data: {
-  //       message: 'Dữ liệu top doanh nghiệp sản xuất',
-  //       business_data: data,
-  //     }
-  //   });
-  // }
-
   selection = new SelectionModel<CertificateViewModel>(true, []);
 
   isAllSelected() {
@@ -186,60 +177,15 @@ export class CertificateListComponent implements OnInit {
     })
   }
 
-  // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-  // allSelected = false;
-  // toggleAllSelection() {
-  //     this.allSelected = !this.allSelected;
-
-  //     if (this.allSelected) {
-  //         this.dSelect.options.forEach((item: MatOption) => item.select());
-  //     } else {
-  //         this.dSelect.options.forEach((item: MatOption) => item.deselect());
-  //     }
-  //     this.dSelect.close();
-  // }
-
-  // OpenDetailPetrol(id: number, mst: string) {
-  //     let url = this.router.serializeUrl(
-  //         this.router.createUrlTree(['specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
-  //     window.open(url, "_blank");
-  // }
-
-  public getCurrentDate() {
-    let date = new Date;
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
-  public getCurrentYear() {
-    let date = new Date;
-    return formatDate(date, 'yyyy', 'en-US');
-  }
-
   Convertdate(text: string): string {
     let date: string
     date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
     return date
   }
 
-  public date = new FormControl(_moment());
-  public theYear: number;
-
-  public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-    const ctrlValue = this.date.value;
-    ctrlValue.year(normalizedYear.year());
-    this.date.setValue(ctrlValue);
-    this.theYear = normalizedYear.year();
-    datepicker.close();
-    // this.getPetrolListbyYear(this.theYear.toString())
-  }
-
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
-
-  // Back() {
-  //   this._location.back();
-  // }
 
   AddCertificate(id: number) {
     this.router.navigate(['manager/business/add-certificate/' + id]);

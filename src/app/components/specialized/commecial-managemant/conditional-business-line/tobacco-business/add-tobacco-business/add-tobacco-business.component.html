@@ -39,15 +39,6 @@
                         <mat-label>Năm</mat-label>
                         <input formControlName="time_id" matInput placeholder="" [(ngModel)]="_Service.tobacco.time_id">
                     </mat-form-field>
-
-                    <!-- <mat-form-field appearance="outline">
-                        <mat-label>Thời gian</mat-label>
-                        <input [(ngModel)]="year" matInput [matDatepicker]="dp" [formControl]="date" readonly>
-                        <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-                        <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, dp)"
-                            panelClass="example-month-picker">
-                        </mat-datepicker>
-                    </mat-form-field> -->
                 </div>
 
                 <div class="col-6">
@@ -123,9 +114,14 @@
                     <th mat-header-cell *matHeaderCellDef> Tên thương nhân </th>
                     <td mat-cell *matCellDef="let element">
                         <mat-select [(ngModel)]="element.id_thuong_nhan">
-                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_thuong_nhan'"
-                                [array]="Businessman" (filteredReturn)="filterbusinessman =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of filterbusinessman" [value]="item.id_thuong_nhan">
+                            <mat-option>
+                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                    [formControl]="thuongnhanfilter">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let item of filterbusinessman | async" [value]="item.id_thuong_nhan">
                                 {{item.ten_thuong_nhan}}
                             </mat-option>
                         </mat-select>

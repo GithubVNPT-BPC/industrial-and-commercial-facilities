@@ -253,10 +253,6 @@ export class ManagerUserComponent implements OnInit {
     }
   }
 
-  // Back() {
-  //   this._location.back();
-  // }
-
   AddUser() {
     this.router.navigate(['manager/add-user/']);
   }

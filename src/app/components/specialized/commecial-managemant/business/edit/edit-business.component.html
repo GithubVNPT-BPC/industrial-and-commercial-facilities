@@ -1,13 +1,10 @@
 <mat-card class="material">
     <mat-card-header>
-        <!-- <mat-card-title></mat-card-title> -->
         <mat-card-subtitle hidden>
             mst={{mst}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <!-- <button (click)="addCareer()" mat-raised-button>Thêm ngành nghề</button> -->
-
         <form [formGroup]="doanh_nghiep" autocomplete="off" (ngSubmit)="onSubmit(doanh_nghiep.getRawValue())">
             <div class="row">
                 <div class="col-6 button-control -align-left my-auto">
@@ -21,33 +18,16 @@
                         <mat-icon>keyboard_backspace</mat-icon>
                     </button>
                 </div>
-
             </div>
             <div class="row">
                 <div class="col-6">
-                    <!-- <div formArrayName="danh_sach_nganh_nghe"
-                        *ngFor="let item of doanh_nghiep.get('danh_sach_nganh_nghe')['controls']; let i = index;">
-                        <div [formGroupName]="i">
-                            <mat-form-field appearance="outline">
-                                <mat-label>Ngành nghề kinh doanh</mat-label>
-                                <mat-select formControlName="id_nganh_nghe_kinh_doanh">
-                                    <mat-option *ngFor="let item of career" [value]="item.id_nganh_nghe_kinh_doanh">
-                                        {{item.ma_nganh_nghe}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-
-                            <mat-form-field appearance="outline">
-                                <mat-label>Ngành nghề kinh doanh chính</mat-label>
-                                <input formControlName="nganh_nghe_kd_chinh" matInput placeholder="">
-                            </mat-form-field>
-                        </div>
-                        <button (click)="removeCareer(i)" mat-raised-button>Xóa ngành nghề</button>
-                    </div> -->
-
                     <section class="cb-section">
                         <mat-checkbox class="cb" formControlName="hoat_dong"
                             [(ngModel)]="_Service.companyinfo.hoat_dong"> Còn hoạt động
+                        </mat-checkbox>
+
+                        <mat-checkbox class="cb" formControlName="sct" [(ngModel)]="_Service.companyinfo.sct"> Doanh
+                            nghiệp thuộc dữ liệu chuyên ngành
                         </mat-checkbox>
                     </section>
 
@@ -74,9 +54,14 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Phường xã (*)</mat-label>
                         <mat-select formControlName="id_phuong_xa" [(ngModel)]="_Service.companyinfo.id_phuong_xa">
-                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
-                                [array]="subdistrict" (filteredReturn)="filtersubdistrict =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of filtersubdistrict" [value]="item.id_phuong_xa">
+                            <mat-option>
+                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                    [formControl]="phuongxafilter">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let item of filtersubdistrict | async" [value]="item.id_phuong_xa">
                                 {{item.ten_phuong_xa}}
                             </mat-option>
                         </mat-select>
@@ -102,7 +87,6 @@
                             </div>
                         </mat-form-field>
                     </ng-template>
-
 
                     <!-- <mat-form-field appearance="outline">
                         <mat-label>Mã số thuế cha (*)</mat-label>
@@ -156,14 +140,15 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Email</mat-label>
-                        <input formControlName="email" matInput placeholder="" [(ngModel)]="_Service.companyinfo.email">
+                        <mat-label [ngClass]="{'alert': DN}">Email</mat-label>
+                        <input formControlName="email" matInput placeholder="" [(ngModel)]="_Service.companyinfo.email"
+                            [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Email (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Email (Nguồn: SCT)</mat-label>
                         <input formControlName="email_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.email_sct">
+                            [(ngModel)]="_Service.companyinfo.email_sct" [readonly]="SCT">
                     </mat-form-field>
                 </div>
             </div>
@@ -197,27 +182,27 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Số lao động</mat-label>
+                        <mat-label [ngClass]="{'alert': DN}">Số lao động</mat-label>
                         <input currencyMask formControlName="so_lao_dong" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.so_lao_dong">
+                            [(ngModel)]="_Service.companyinfo.so_lao_dong" [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Số lao động (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Số lao động (Nguồn: SCT)</mat-label>
                         <input currencyMask formControlName="so_lao_dong_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.so_lao_dong_sct">
+                            [(ngModel)]="_Service.companyinfo.so_lao_dong_sct" [readonly]="SCT">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Công suất thiết kế</mat-label>
+                        <mat-label [ngClass]="{'alert': DN}">Công suất thiết kế</mat-label>
                         <input currencyMask formControlName="cong_suat_thiet_ke" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke">
+                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke" [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Công suất thiết kế (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Công suất thiết kế (Nguồn: SCT)</mat-label>
                         <input currencyMask formControlName="cong_suat_thiet_ke_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke_sct">
+                            [(ngModel)]="_Service.companyinfo.cong_suat_thiet_ke_sct" [readonly]="SCT">
                     </mat-form-field>
                 </div>
 
@@ -247,15 +232,15 @@
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Sản lượng</mat-label>
+                        <mat-label [ngClass]="{'alert': DN}">Sản lượng</mat-label>
                         <input currencyMask formControlName="san_luong" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.san_luong">
+                            [(ngModel)]="_Service.companyinfo.san_luong" [readonly]="DN">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
-                        <mat-label>Sản lượng (Nguồn: SCT)</mat-label>
+                        <mat-label [ngClass]="{'alert': SCT}">Sản lượng (Nguồn: SCT)</mat-label>
                         <input currencyMask formControlName="san_luong_sct" matInput placeholder=""
-                            [(ngModel)]="_Service.companyinfo.san_luong_sct">
+                            [(ngModel)]="_Service.companyinfo.san_luong_sct" [readonly]="SCT">
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
@@ -310,9 +295,15 @@
                     <th mat-header-cell *matHeaderCellDef> Ngành nghề kinh doanh </th>
                     <td mat-cell *matCellDef="let element">
                         <mat-select [(ngModel)]="element.id_nganh_nghe_kinh_doanh">
-                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'combine'"
-                                [array]="career" (filteredReturn)="filtercareer =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of filtercareer" [value]="item.id_nganh_nghe_kinh_doanh">
+                            <mat-option>
+                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                    [formControl]="nganhnghefilter">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let item of filtercareer | async"
+                                [value]="item.id_nganh_nghe_kinh_doanh">
                                 {{item.combine}}
                             </mat-option>
                         </mat-select>
@@ -323,9 +314,14 @@
                     <th mat-header-cell *matHeaderCellDef> Lĩnh vực quản lý </th>
                     <td mat-cell *matCellDef="let element">
                         <mat-select [(ngModel)]="element.id_linh_vuc">
-                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_linh_vuc'"
-                                [array]="Field" (filteredReturn)="FilterField =$event"></mat-select-filter>
-                            <mat-option *ngFor="let item of FilterField" [value]="item.id_linh_vuc">
+                            <mat-option>
+                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                    [formControl]="linhvucfilter">
+                                </ngx-mat-select-search>
+                            </mat-option>
+
+                            <mat-option *ngFor="let item of FilterField | async" [value]="item.id_linh_vuc">
                                 {{item.ten_linh_vuc}}
                             </mat-option>
                         </mat-select>

@@ -29,6 +29,9 @@ import { SpecialDirective } from 'src/app/shared/special.directive';
 import { KeyboardService } from 'src/app/shared/services/keyboard.service';
 
 import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -134,29 +137,38 @@ export class AddLpgComponent implements OnInit {
     }
   }
 
-  BM: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
-  Businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
-  filterbusinessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
-
+  businessman: Array<BusinessmanSelect> = new Array<BusinessmanSelect>();
+  public filterbusinessman: ReplaySubject<BusinessmanSelect[]> = new ReplaySubject<BusinessmanSelect[]>(1);
   GetBusinessman() {
     this._Service.GetBusinessman().subscribe((allrecords) => {
-      this.BM = allrecords.data
-      this.Businessman = this.BM.filter(x => x.id_linh_vuc == 9) as BusinessmanSelect[];
-      this.filterbusinessman = this.Businessman.slice();
+      this.businessman = allrecords.data.filter(x => x.id_linh_vuc == 9) as BusinessmanSelect[];
+      this.filterbusinessman.next(this.businessman.slice());
     });
+  }
+  public thuongnhanfilter: FormControl = new FormControl();
+  public filterThuongnhan() {
+    if (!this.businessman) {
+      return;
+    }
+    let search = this.thuongnhanfilter.value;
+    if (!search) {
+      this.filterbusinessman.next(this.businessman.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterbusinessman.next(
+      this.businessman.filter(x => x.ten_thuong_nhan.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   dataSource: MatTableDataSource<PostBusinessmanValue> = new MatTableDataSource<PostBusinessmanValue>();
   businessmanvalue: Array<LPGList> = new Array<LPGList>();
-  businessmanvalue1: Array<LPGList> = new Array<LPGList>();
-
   getBusinessmanvalue() {
     this._Service.GetAllLPGValue().subscribe(all => {
+      this.businessmanvalue = all.data[1].filter(x => x.id_san_luong == this.id)
 
-      this.businessmanvalue = all.data[1]
-      this.businessmanvalue1 = this.businessmanvalue.filter(x => x.id_san_luong == this.id)
-
-      this.businessmanvalue1.forEach(x => {
+      this.businessmanvalue.forEach(x => {
         this.dataSource.data.push({
           id_linh_vuc: 9,
           id: '',
@@ -165,10 +177,10 @@ export class AddLpgComponent implements OnInit {
         })
       })
 
-      for (let index = 0; index < this.businessmanvalue1.length; index++) {
-        this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue1[index].id_thuong_nhan ? this.businessmanvalue1[index].id_thuong_nhan : null
+      for (let index = 0; index < this.businessmanvalue.length; index++) {
+        this.dataSource.data[index].id_thuong_nhan = this.businessmanvalue[index].id_thuong_nhan ? this.businessmanvalue[index].id_thuong_nhan : null
         this.dataSource.data[index].id_quan_ly = parseInt(this.id)
-        this.dataSource.data[index].id = this.businessmanvalue1[index].id ? this.businessmanvalue1[index].id : null
+        this.dataSource.data[index].id = this.businessmanvalue[index].id ? this.businessmanvalue[index].id : null
       }
 
       this.dataSource.paginator = this.paginator;
@@ -193,7 +205,6 @@ export class AddLpgComponent implements OnInit {
   //   newRow.id_linh_vuc = 9;
   //   this.dataSource.data.push(newRow);
   //   this.dataSource = new MatTableDataSource(this.dataSource.data);
-  //   this.filterbusinessman = this.Businessman.slice();
 
   //   this._rows = this.dataSource.filteredData.length;
   // }
@@ -214,7 +225,6 @@ export class AddLpgComponent implements OnInit {
       this.dataSource.data.push(element);
     });
     this.dataSource = new MatTableDataSource(this.dataSource.data);
-    this.filterbusinessman = this.Businessman.slice();
 
     this._rows = this.dataSource.data.length
   }
@@ -253,22 +263,6 @@ export class AddLpgComponent implements OnInit {
     if (index >= 0 && index < this.inputs.length) {
       inputToArray[index].element.nativeElement.focus();
     }
-  }
-
-  subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
-  district: Array<DistrictModel> = new Array<DistrictModel>();
-  Certificate: Array<CertificateModel> = new Array<CertificateModel>();
-
-  GetAllPhuongXa() {
-    this._Service.GetAllSubDistrict().subscribe((allrecords) => {
-      this.subdistrict = allrecords.data as SubDistrictModel[];
-    });
-  }
-
-  getQuan_Huyen() {
-    this._Service.GetAllDistrict().subscribe((allDistrict) => {
-      this.district = allDistrict["data"] as DistrictModel[];
-    });
   }
 
   resetForm(form?: NgForm) {
@@ -310,9 +304,6 @@ export class AddLpgComponent implements OnInit {
 
   ngOnInit() {
     this.resetForm();
-    this.getQuan_Huyen();
-    this.GetAllPhuongXa();
-    this.theYear = parseInt(this.getCurrentYear());
     this.getLPGList()
     this.getBusinessmanvalue()
     this.GetBusinessman()
@@ -326,7 +317,15 @@ export class AddLpgComponent implements OnInit {
       ghi_chu: '',
       id_tinh_trang_hoat_dong: 1
     })
+
+    this.thuongnhanfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterThuongnhan();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   SaveData(input, input1) {
     if (this.id != 'undefined') {
@@ -419,33 +418,6 @@ export class AddLpgComponent implements OnInit {
 
   public exportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  }
-
-  public getCurrentDate() {
-    let date = new Date;
-    return formatDate(date, 'yyyy-MM-dd', 'en-US');
-  }
-
-  public getCurrentYear() {
-    let date = new Date;
-    return formatDate(date, 'yyyy', 'en-US');
-  }
-
-  Convertdate(text: string): string {
-    let date: string
-    date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
-    return date
-  }
-
-  public date = new FormControl(_moment());
-  public theYear: number;
-
-  public chosenYearHandler(normalizedYear: Moment, datepicker: MatDatepicker<Moment>) {
-    const ctrlValue = this.date.value;
-    ctrlValue.year(normalizedYear.year());
-    this.date.setValue(ctrlValue);
-    this.theYear = normalizedYear.year();
-    datepicker.close();
   }
 
   Back() {

@@ -58,7 +58,7 @@
         </div>
         <hr />
         <div class="layout" #TABLE>
-            <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity" 
+            <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 style="min-width:  900px !important;" [filterType]="filterType" [dataSource]="dataSource" matSort
                 matSortDisableClear matSortDirection="asc">
 
@@ -97,7 +97,8 @@
 
                 <ng-container matColumnDef="dia_chi_tong_hop">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Liên lạc </th>
-                    <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}} <br> {{element.so_dien_thoai}} <br> {{element.email}} </td>
+                    <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}} <br> {{element.so_dien_thoai}}
+                        <br> {{element.email}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="dia_chi_day_du">
@@ -127,7 +128,8 @@
 
                 <ng-container matColumnDef="nganh_nghe">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Ngành nghề </th>
-                    <td mat-cell *matCellDef="let element"> {{element.ma_nganh_nghe}} - {{element.ten_nganh_nghe}} <br> {{element.nganh_nghe_kd_chinh}}</td>
+                    <td mat-cell *matCellDef="let element"> {{element.ma_nganh_nghe}} - {{element.ten_nganh_nghe}} <br>
+                        {{element.nganh_nghe_kd_chinh}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="ma_nganh_nghe">

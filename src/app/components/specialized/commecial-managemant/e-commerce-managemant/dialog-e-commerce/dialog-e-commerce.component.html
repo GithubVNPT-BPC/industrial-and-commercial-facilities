@@ -38,7 +38,7 @@
                 </div>
                 *ngIf="filteredDataSource.data.length; else ShowEmpty"
                 <div class="layout" #TABLE>
-                    <mat-form-field id="filter2">
+                    <mat-form-field>
                         <mat-label>Lọc dữ liệu</mat-label>
                         <input matInput (keyup)="applyFilter1($event)" placeholder="" #input>
                     </mat-form-field>

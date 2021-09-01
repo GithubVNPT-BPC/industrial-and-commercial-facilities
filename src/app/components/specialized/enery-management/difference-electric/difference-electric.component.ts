@@ -18,7 +18,7 @@ export class DifferenceElectricComponent extends BaseComponent {
     DB_TABLE = 'QLNL_CNDK'
     //Constant variable
     public readonly displayedColumns: string[] = ['select', 'index', 'ten_du_an', 'ten_doanh_nghiep', 'ten_quan_huyen', 'cong_suat_thiet_ke', 'san_luong_6_thang',
-        'san_luong_nam', 'doanh_thu', 'id_trang_thai_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
+        'san_luong_nam', 'doanh_thu_6_thang', 'doanh_thu_nam', 'id_trang_thai_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
     //TS & HTML Variable
     public dataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
     public filteredDataSource: MatTableDataSource<BlockElectricModel> = new MatTableDataSource<BlockElectricModel>();
