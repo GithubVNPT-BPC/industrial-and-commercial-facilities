@@ -115,7 +115,6 @@ export class LPGList {
     so_giay_phep: string
     ngay_cap: string;
     ngay_het_han: string;
-    is_het_han: boolean;
     ghi_chu: string;
     tinh_trang_hoat_dong: string;
     id_tinh_trang_hoat_dong: number;
@@ -128,6 +127,7 @@ export class LPGList {
     id: string;
 
     thoi_gian_chinh_sua_cuoi: Date;
+    is_expired: string
 }
 
 export class PetrolPost {

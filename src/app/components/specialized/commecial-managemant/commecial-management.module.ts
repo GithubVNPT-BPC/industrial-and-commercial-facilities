@@ -60,7 +60,6 @@ import { ManagePetrolValueComponent } from './conditional-business-line/petro-bu
 import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
 import { UpdatePetrolComponent } from './conditional-business-line/petro-business/update-petrol/update-petrol.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
-import { AddSupplyBusinessComponent } from './conditional-business-line/petro-business/add-supply-business/add-supply-business.component';
 import { AddTobaccoBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-business/add-tobacco-business.component';
 import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-supply-business/add-tobacco-supply-business.component';
 import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
@@ -163,7 +162,6 @@ export const customCurrencyMaskConfig = {
     UpdatePetrolComponent,
     ManageBusinessmanComponent,
     UpdateBusinessmanComponent,
-    AddSupplyBusinessComponent,
     AddTobaccoBusinessComponent,
     AddTobaccoSupplyBusinessComponent,
     AddLiquorBusinessComponent,
