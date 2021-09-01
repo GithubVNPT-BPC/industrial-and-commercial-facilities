@@ -12,17 +12,27 @@
                     <img class="logo" src="assets/img/brand/logo.svg">
                 </a>
             </div>
-            <h1 class="unit-name d-none d-lg-block"><strong>SỞ CÔNG THƯƠNG BÌNH PHƯỚC</strong></h1>
+
+            <div class="unit-block">
+                <h1 class="unit-name d-none d-md-block"><strong>SỞ CÔNG THƯƠNG BÌNH PHƯỚC</strong></h1>
+                <h1 class="unit-name d-none d-sm-block d-md-none d-lg-none text-center"><strong>SỞ CÔNG THƯƠNG</strong></h1>
+            </div>
             <div class="spacer"></div>
             <div *ngIf="!checkLogin() else divUser" class="btn-color d-none d-lg-block">
-                <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
-                    <mat-icon>domain</mat-icon> Trang chủ SCT
-                </a>
-
-                <a mat-raised-button class="btn-company" [routerLink]="['/register']">Doanh nghiệp đăng ký</a>
-
-                <a mat-raised-button class="btn-login" (click)="loginClick()">Đăng
-                    nhập</a>
+                <button mat-raised-button class="blue"
+                [matMenuTriggerFor]="menu" aria-label="Login/Logout menu">
+                    <mat-icon>account_circle</mat-icon> Đăng nhập/Đăng ký
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="loginClick()">
+                        <mat-icon>contacts</mat-icon>
+                        <span>Đăng nhập</span>
+                    </button>
+                    <a mat-menu-item [routerLink]="['/register']" >
+                        <mat-icon>perm_contact_calendar</mat-icon>
+                        <span>Doanh nghiệp đăng ký</span>
+                    </a> 
+                </mat-menu>
             </div>
             <ng-template #divUser>
                 <div class="btn-color">
@@ -33,12 +43,8 @@
                         id={{id}}
                     </div>
 
-                    <a mat-raised-button title="Doanh nghiệp hết hạn" (click)="expirecer(1)" target="blank">
+                    <a class="check-expired-btn" href="/#/specialized/commecial-management/domestic/certificate/1" title="Doanh nghiệp hết hạn" target="_blank">
                         <mat-icon matBadge={{expirenumber}} matBadgeColor="warn">info</mat-icon>
-                    </a>
-
-                    <a mat-raised-button class="btn-sct-page" href="http://socongthuongbp.gov.vn/" target="blank">
-                        <mat-icon>domain</mat-icon> Trang chủ SCT
                     </a>
 
                     <a (click)="openAccountDropdown()" class="user-menu">
@@ -171,4 +177,11 @@
             </ng-template>
         </mat-toolbar-row>
     </mat-toolbar>
+
+    <div class="floating-home">
+        <a href="http://socongthuongbp.gov.vn/" target="blank" matTooltip="Trang chủ SCT">
+            <i class="fa fa-home fa-2x float-icon"></i>
+        </a>
+    </div>
+    
 </div>

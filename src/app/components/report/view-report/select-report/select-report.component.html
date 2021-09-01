@@ -10,13 +10,13 @@
     <hr/>
     <mat-card-content>
         <div class="row">
-            <div class="col-lg-9 col-md-9">
+            <div class="col-12 col-sm-12 col-lg-9 col-md-9">
                 <mat-form-field appearance="outline">
                     <mat-label>Tên báo cáo</mat-label>
                     <input matInput placeholder="" [(ngModel)]="tempObject.obj_name">
                 </mat-form-field>
             </div>
-            <div class="col-lg-3 col-md-3">
+            <div class="col-12 col-sm-6 col-lg-3 col-md-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Loại báo cáo</mat-label>
                     <mat-select (selectionChange)="changeReportType()" [(ngModel)]="tempObject.submit_type">
@@ -25,7 +25,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-lg-3 col-md-3">
+            <div class="col-12 col-sm-6 col-lg-3 col-md-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Kỳ báo cáo</mat-label>
                     <mat-select [(ngModel)]="selectedPeriod" (selectionChange)="changePeriod()">
@@ -35,7 +35,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-lg-3 col-md-3">
+            <div class="col-12 col-sm-6 col-lg-3 col-md-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Năm báo cáo</mat-label>
                     <mat-select [(ngModel)]="selectedYear" (selectionChange)="changePeriod()">
@@ -45,7 +45,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-lg-3 col-md-3" *ngIf="this.org_id == 1">
+            <div class="col-12 col-sm-6 col-lg-3 col-md-3" *ngIf="this.org_id == 1">
                 <mat-form-field appearance="outline">
                     <mat-label>Đơn vị báo cáo</mat-label>
                     <mat-select [(ngModel)]="tempObject.org_name">
@@ -55,7 +55,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-lg-6 col-md-6 my-auto text-right">
+            <div class="col-12 col-sm-6 col-md-3 col-lg-3 my-auto">
                 <button mat-raised-button (click)="click()"><mat-icon>search</mat-icon>Tìm kiếm</button>
             </div>
         </div>
