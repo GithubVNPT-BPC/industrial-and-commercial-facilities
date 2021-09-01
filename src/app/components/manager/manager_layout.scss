@@ -195,7 +195,6 @@
         }
       }
 
-      
       table.mat-table.business-table-layout {
         border-collapse: separate;
         width: 100%;
@@ -332,22 +331,6 @@
     width: 200%;
   }
 
-  #filter {
-    width: 100%;
-  }
-
-  #filter1 {
-    width: 150%;
-  }
-
-  #filter2 {
-    width: 200%;
-  }
-
-  #large-filter {
-    width: 550%;
-  }
-
   .hide {
     visibility: hidden;
   }
@@ -362,5 +345,9 @@
 
   ::ng-deep .mat-checkbox-layout {
     margin-bottom: 0 !important;
+  }
+
+  .alert {
+    color: red;
   }
 }

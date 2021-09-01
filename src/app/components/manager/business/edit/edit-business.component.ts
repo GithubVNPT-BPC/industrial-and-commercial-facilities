@@ -223,9 +223,17 @@ export class EditBusinessComponent implements OnInit {
     );
   }
 
+  SCT: boolean = true
+  DN: boolean = false
+
   ngOnInit() {
     if (this.mst != undefined) {
       this.GetCompanyInfoById();
+    }
+
+    if (this._login.userValue.user_role_id != 2) {
+      this.SCT = false
+      this.DN = true
     }
 
     this.GetAllNganhNghe();

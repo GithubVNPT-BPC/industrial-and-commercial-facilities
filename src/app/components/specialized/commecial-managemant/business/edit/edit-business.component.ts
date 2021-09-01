@@ -224,11 +224,18 @@ export class EditBusinessComponent implements OnInit {
   }
 
   authorize: boolean = true;
+  SCT: boolean = true
+  DN: boolean = false
 
   ngOnInit() {
     if (this._login.userValue.user_role_id == 1 || this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 4
       || this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 7) {
       this.authorize = false
+    }
+
+    if (this._login.userValue.user_role_id != 2) {
+      this.SCT = false
+      this.DN = true
     }
 
     if (this.mst != undefined) {

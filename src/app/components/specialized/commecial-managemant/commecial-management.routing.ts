@@ -26,7 +26,6 @@ import { UpdatePetrolComponent } from './conditional-business-line/petro-busines
 import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
 import { UpdateBusinessmanComponent } from './conditional-business-line/petro-business/update-businessman/update-businessman.component';
 import { AddTobaccoBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-business/add-tobacco-business.component';
-import { AddTobaccoSupplyBusinessComponent } from './conditional-business-line/tobacco-business/add-tobacco-supply-business/add-tobacco-supply-business.component';
 import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
 import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
@@ -172,13 +171,6 @@ const routes: Routes = [
         component: AddTobaccoBusinessComponent,
         data: {
           title: 'Thêm doanh nghiệp buôn bán thuốc lá',
-        }
-      },
-      {
-        path: 'add-tobacco-supply/:id/:time',
-        component: AddTobaccoSupplyBusinessComponent,
-        data: {
-          title: 'Thêm thương nhân cung cấp thuốc lá',
         }
       },
       {
