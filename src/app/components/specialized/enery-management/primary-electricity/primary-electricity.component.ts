@@ -218,8 +218,8 @@ export class PrimaryElectricityComponent extends BaseComponent {
     getLinkDefault() {
         //Constant
         this.LINK_DEFAULT = "/specialized/enery-management/";
-        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
-        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 100KV trở lên";
+        this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 110KV trở lên";
+        this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện 110KV trở lên";
     }
 
     changeReportType(s) {
