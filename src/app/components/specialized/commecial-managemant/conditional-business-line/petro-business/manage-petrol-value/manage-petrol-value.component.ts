@@ -174,7 +174,7 @@ export class ManagePetrolValueComponent implements OnInit {
 
   // applyFilter(event: Event) {
   //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource1.filter = filterValue.trim().toLowerCase();
+  //   this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   // }
 
   displayedColumns: string[] = [

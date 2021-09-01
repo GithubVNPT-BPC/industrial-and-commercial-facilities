@@ -7,7 +7,7 @@
         </mat-card-title>
         <mat-card-subtitle></mat-card-subtitle>
     </mat-card-header>
-    <hr/>
+    <hr />
     <mat-card-content>
         <div class="row">
             <div class="col-lg-2">
@@ -52,17 +52,19 @@
                 </mat-form-field>
             </div>
             <div class="col-lg-3 my-auto">
-                <button mat-raised-button (click)="filter()"><mat-icon>search</mat-icon>Tìm kiếm</button>
+                <button mat-raised-button (click)="filter()">
+                    <mat-icon>search</mat-icon>Tìm kiếm
+                </button>
             </div>
         </div>
-        
-        <hr />
-        <div class="layout" id="special" *ngIf="dataSource.data.length;else ShowList">
-            <mat-form-field id="filter">
-                <mat-label>Lọc dữ liệu</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-            </mat-form-field>
 
+        <hr />
+        <mat-form-field>
+            <mat-label>Lọc dữ liệu</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+        </mat-form-field>
+
+        <div class="layout" id="special" *ngIf="dataSource.data.length;else ShowList">
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index">

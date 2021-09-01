@@ -135,12 +135,12 @@
                     </div>
                 </div>
 
-                <div class="layout" #table>
-                    <mat-form-field id="filter2">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
 
+                <div class="layout" #table>
                     <table mat-table [dataSource]="dataSource1" class="table-layout" id="small-table2">
 
                         <ng-container matColumnDef="select">

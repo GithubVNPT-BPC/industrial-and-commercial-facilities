@@ -49,12 +49,12 @@
                     </div> -->
                 </div>
 
-                <div class="layout" #table>
-                    <mat-form-field id="filter">
-                        <mat-label>Lọc dữ liệu</mat-label>
-                        <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
-                    </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
 
+                <div class="layout" #table>
                     <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>

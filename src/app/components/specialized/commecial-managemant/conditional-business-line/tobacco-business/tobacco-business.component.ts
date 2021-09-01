@@ -146,7 +146,7 @@ export class TobaccoBusinessComponent implements OnInit {
 
     // applyFilter(event: Event) {
     //     const filterValue = (event.target as HTMLInputElement).value;
-    //     this.dataSource1.filter = filterValue.trim().toLowerCase();
+    //     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     // }
 
     selection = new SelectionModel<TobaccoList>(true, []);
