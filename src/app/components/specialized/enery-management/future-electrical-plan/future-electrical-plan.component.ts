@@ -44,7 +44,6 @@ export class FutureElectricalPlanComponent extends BaseComponent {
         { id: 0, name: 'Tất cả' }
     ]
 
-
     selectedType = 11;
     authorize: boolean = true;
     periods: Object = [
@@ -180,7 +179,7 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     }
 
     changePeriod() {
-        this.time_id = this.selectedYear*10 + this.selectedPeriod;
+        this.time_id = this.selectedYear * 10 + this.selectedPeriod;
     }
 
     search() {

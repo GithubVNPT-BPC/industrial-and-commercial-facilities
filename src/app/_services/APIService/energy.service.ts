@@ -471,7 +471,7 @@ export class EnergyService {
     
     // quy hoạc trạm
     LayDuLieuQuyHoachTram(time_id, id_loai_tram, id_giai_doan) {
-        var apiUrl = this.apiNangLuong + '/quy-hoach-TRAM';
+        var apiUrl = this.apiNangLuong + '/quy-hoach-tram';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         let params = new HttpParams()
             .set('time_id', time_id)
