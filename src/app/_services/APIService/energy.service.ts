@@ -483,7 +483,7 @@ export class EnergyService {
     }
 
     CapNhatDuLieuQuyHoachTram(body: any[]) {
-        var apiUrl = this.apiNangLuong + '/quy-hoach-TRAM';
+        var apiUrl = this.apiNangLuong + '/quy-hoach-tram';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
