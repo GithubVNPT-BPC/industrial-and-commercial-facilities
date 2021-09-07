@@ -56,7 +56,7 @@ export class PrimaryElectricityComponent extends BaseComponent {
         // { ma_so: 1, noi_dung: 'Tháng' },
         // { ma_so: 2, noi_dung: 'Quý' },
         { ma_so: 3, noi_dung: '6 Tháng' },
-        { ma_so: 4, noi_dung: 'Năm' }
+        // { ma_so: 4, noi_dung: 'Năm' }
     ];
 
     half = [
@@ -75,10 +75,10 @@ export class PrimaryElectricityComponent extends BaseComponent {
     so_luong: number = 0;
     selectedPeriodYear: number = 0;
     selectedTypePro: number = 0;
-    isShowPeriod: boolean = false;
+    isShowPeriod: boolean = true;
 
-    selectedPeriodSearch: number = 0;
-    selectTypeSearch: number = 4;
+    selectedPeriodSearch: number = 1;
+    selectTypeSearch: number = 3;
     selectedYearSearch: number = new Date().getFullYear();
     selectTypeStreetSearch: number = 0;
     selectedTypeProSearch: number = 0;

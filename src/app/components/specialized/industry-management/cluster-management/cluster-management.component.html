@@ -71,8 +71,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht" (selectionChange)="applyFilter($event)"
-                                multiple>
+                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht"
+                                (selectionChange)="applyFilter($event)" multiple>
                                 <mat-option *ngFor='let hienTrang of hienTrangHaTang' [value]='hienTrang.id'>
                                     {{hienTrang.ten_hien_trang_ha_tang}}
                                 </mat-option>
@@ -83,8 +83,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt" (selectionChange)="applyFilter($event)"
-                                multiple>
+                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt"
+                                (selectionChange)="applyFilter($event)" multiple>
                                 <mat-option *ngFor='let hienTrang of hienTrangXLNT' [value]='hienTrang.id'>
                                     {{hienTrang.ten_hien_trang_xlnt}}
                                 </mat-option>
@@ -93,7 +93,7 @@
                     </div>
 
                     <!-- <div class="col-2 col-lg-2 checkbox"> -->
-                        <!-- <mat-checkbox (change)=" changeTable($event)" [ngModel]="isChecked">Xem đầy đủ</mat-checkbox> -->
+                    <!-- <mat-checkbox (change)=" changeTable($event)" [ngModel]="isChecked">Xem đầy đủ</mat-checkbox> -->
                     <!-- </div> -->
 
                     <div class="col-4 col-lg-4 button-control my-auto">
@@ -127,23 +127,23 @@
                     <table mat-table [dataSource]="filteredDataSource"
                         id="{{showColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
                         <ng-container matColumnDef="select">
-                            <th mat-header-cell *matHeaderCellDef disableClear >
+                            <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element" >
+                            <td mat-cell *matCellDef="let element">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
                                 </mat-checkbox>
                             </td>
                         </ng-container>
-                        
+
                         <ng-container matColumnDef="index">
-                            <th mat-header-cell *matHeaderCellDef > STT </th>
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell stt">
                                 {{this.filteredDataSource.paginator.pageIndex == 0 ? i
                                 + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
@@ -152,31 +152,31 @@
                         </ng-container>
 
                         <ng-container matColumnDef="ten_cum_cn" sticky>
-                            <th mat-header-cell *matHeaderCellDef > Tên, địa điểm CCN </th>
+                            <th mat-header-cell *matHeaderCellDef> Tên, địa điểm CCN </th>
                             <td mat-cell *matCellDef="let element" class="jump">
                                 <div class="view-detail" (click)="openDetailCluster(element.id)">{{element.ten_cum}}
                                 </div>
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dien_tich_qh" >
-                            <th mat-header-cell *matHeaderCellDef > Diện tích theo quy hoạch (ha)
+                        <ng-container matColumnDef="dien_tich_qh">
+                            <th mat-header-cell *matHeaderCellDef> Diện tích theo quy hoạch (ha)
                             </th>
                             <td mat-cell *matCellDef="let element"> {{element.dien_tich_theo_qh}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="dien_tich_tl">
-                            <th mat-header-cell *matHeaderCellDef > Diện tích đã thành lập (ha) </th>
+                            <th mat-header-cell *matHeaderCellDef> Diện tích đã thành lập (ha) </th>
                             <td mat-cell *matCellDef="let element"> {{element.dien_tich_da_thanh_lap}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="chu_dau_tu">
-                            <th mat-header-cell *matHeaderCellDef > Chủ đầu tư </th>
+                            <th mat-header-cell *matHeaderCellDef> Chủ đầu tư </th>
                             <td mat-cell *matCellDef="let element"> {{element.chu_dau_tu}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="dien_tich_qhct">
-                            <th mat-header-cell *matHeaderCellDef > Diện tích đã QHCT </th>
+                            <th mat-header-cell *matHeaderCellDef> Diện tích đã QHCT </th>
                             <td mat-cell *matCellDef="let element"> {{element.dien_tich_qhct}}</td>
                         </ng-container>
 
@@ -207,7 +207,8 @@
 
                         <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
                             <th mat-header-cell *matHeaderCellDef> Thời gian cập nhật </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date: 'dd/MM/yyyy, h:mm a'}}
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
+                                'dd/MM/yyyy, h:mm a'}}
                             </td>
                         </ng-container>
 
@@ -219,7 +220,8 @@
                             <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">Tình hình đầu tư hạ tầng CCN</th>
                         </ng-container>
 
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2']; sticky : true"></tr>
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2']; sticky : true">
+                        </tr>
                         <tr mat-header-row class="table-header" *matHeaderRowDef="showColumns; sticky:true"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: showColumns;let i = index; ">
                     </table>
@@ -251,10 +253,13 @@
             <hr>
             <form [formGroup]="formData" (ngSubmit)="onCreate()">
                 <div class="form-group row">
-
                     <div class="col-md-12">
                         <mat-card-content>
                             <div class="row">
+                                <div class="col-6 col-lg-6">
+
+                                </div>
+
                                 <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên cụm công nghiệp</mat-label>
@@ -411,21 +416,24 @@
                                     <!-- <mat-label>Hình ảnh</mat-label> -->
 
                                     <span class="btn btn-primary btn-file"> Ảnh đính kèm
-                                        <input type="file" accept="image/*"
-                                            (change)="handleFileInput($event)" formControlName="duong_dan" multiple>
+                                        <input type="file" accept="image/*" (change)="handleFileInput($event)"
+                                            formControlName="duong_dan" multiple>
                                     </span>
 
                                 </div>
                                 <div class="flex-container image-area" *ngFor="let item of imageUrl;index as i">
-                                    <img [attr.src]="item" style="width:250px;height:200px" *ngIf="item" class="border m-1">
-                                    <a id={{i}} class="remove-image" style="display: inline;" (click)="DeleteImage($event)">&#215;</a>
+                                    <img [attr.src]="item" style="width:250px;height:200px" *ngIf="item"
+                                        class="border m-1">
+                                    <a id={{i}} class="remove-image" style="display: inline;"
+                                        (click)="DeleteImage($event)">&#215;</a>
                                 </div>
                             </div>
                         </mat-card-content>
                     </div>
 
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success float-right" [hidden]=authorize>Lưu thông tin</button>
+                        <button type="submit" class="btn btn-success float-right" [hidden]=authorize>Lưu thông
+                            tin</button>
                         <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)"
                             [hidden]=authorize>Xóa</button>
                     </div>
