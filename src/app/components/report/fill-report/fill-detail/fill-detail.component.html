@@ -2,8 +2,8 @@
     <mat-card-content>
         <div class="row button-control" *ngIf="object[0]">
             <div class="col-lg-6 text-left">
-                <button mat-raised-button class="blue"
-                [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <button mat-raised-button class="blue" [matMenuTriggerFor]="menu"
+                    aria-label="Example icon-button with a menu">
                     <mat-icon>attach_file</mat-icon> Nhập/Xuất Excel
                 </button>
                 <mat-menu #menu="matMenu">
@@ -18,16 +18,19 @@
                     <label mat-menu-item>
                         <mat-icon>cloud_upload</mat-icon>
                         <span>Cập nhật dữ liệu</span>
-                        <input id="inputFile" type="file"
-                        (change)="uploadExcel($event)" hidden #inputFile />
+                        <input id="inputFile" type="file" (change)="uploadExcel($event)" hidden #inputFile />
                     </label>
                 </mat-menu>
             </div>
             <div class="col-lg-6" *ngIf="!is_sent">
-                
+
                 <button mat-raised-button (click)="dataSynthesis()" title="Tổng hợp dữ liệu">Tổng hợp số liệu</button>
-                <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo"><mat-icon>send</mat-icon> Trình lãnh đạo</button>
-                <button mat-raised-button (click)="SaveReport()" class="green" title="Lưu"><mat-icon>save</mat-icon> Lưu</button>
+                <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo">
+                    <mat-icon>send</mat-icon> Trình lãnh đạo
+                </button>
+                <button mat-raised-button (click)="SaveReport()" class="green" title="Lưu">
+                    <mat-icon>save</mat-icon> Lưu
+                </button>
             </div>
         </div>
         <hr />
@@ -61,7 +64,7 @@
 
                 <ng-container matColumnDef="ind_id">
                     <th mat-header-cell *matHeaderCellDef>CODE</th>
-                    <td mat-cell *matCellDef="let element;" >{{element.ind_id}}</td>
+                    <td mat-cell *matCellDef="let element;">{{element.ind_id}}</td>
                 </ng-container>
 
                 <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
@@ -81,9 +84,16 @@
                         </div>
                         <!-- && indicators[rowIndex].ind_type_id != '1' -->
                         <ng-template #other_content>
-                            <span class="d-none" >{{ row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()] }}</span>
-                            <input appReport currencyMask
-                                [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                            <span class="d-none">{{ row[column.is_default === 1? column.attr_code.toLowerCase():
+                                column.fld_code.toLowerCase()] }}</span>
+                            <ng-container *ngIf="column.fld_code.substr(0,2) == 'fc'; else elseTemplate">
+                                <input appReport
+                                    [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                                <input appReport currencyMask
+                                    [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                            </ng-template>
                         </ng-template>
                     </td>
                 </ng-container>
