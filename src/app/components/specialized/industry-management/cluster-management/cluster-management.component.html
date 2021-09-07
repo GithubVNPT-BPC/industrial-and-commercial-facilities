@@ -128,13 +128,13 @@
                         id="{{showColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null" class="float-left"
+                                <mat-checkbox (change)="$event ? masterToggle() : null" class="text-center"
                                     [checked]="selection.hasValue() && isAllSelected()"
                                     [indeterminate]="selection.hasValue() && !isAllSelected()"
                                     [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
-                            <td mat-cell *matCellDef="let element">
+                            <td mat-cell *matCellDef="let element" class="text-center">
                                 <mat-checkbox (click)="$event.stopPropagation()"
                                     (change)="$event ? selection.toggle(element) : null"
                                     [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
@@ -144,7 +144,7 @@
 
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
-                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell stt">
+                            <td mat-cell *matCellDef="let element; let i = index;" class="text-center">
                                 {{this.filteredDataSource.paginator.pageIndex == 0 ? i
                                 + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
                                 this.filteredDataSource.paginator.pageSize}}
@@ -257,45 +257,31 @@
                         <mat-card-content>
                             <div class="row">
                                 <div class="col-6 col-lg-6">
-
-                                </div>
-
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên cụm công nghiệp</mat-label>
                                         <input matInput formControlName="ten_cum">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Chủ đầu tư</mat-label>
                                         <input matInput formControlName="chu_dau_tu">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Diện tích theo quy hoạch</mat-label>
                                         <input matInput type="number" formControlName="dien_tich_theo_qh">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Diện tích đã thành lập</mat-label>
                                         <input matInput type="number" formControlName="dien_tich_da_thanh_lap">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa chỉ</mat-label>
                                         <input matInput type="text" formControlName="dia_chi">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-3 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
@@ -304,73 +290,55 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Quyết định thành lập</mat-label>
                                         <input matInput type="text" formControlName="quyet_dinh_thanh_lap">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Quyết định tham gia DTM </mat-label>
                                         <input matInput type="text" formControlName="quyet_dinh_danh_gia_dtm">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Điều kiện kinh doanh</mat-label>
                                         <input matInput type="text" formControlName="dieu_kien_kinh_doanh">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Vị trí, quy mô</mat-label>
                                         <input matInput type="text" formControlName="vi_tri_quy_mo">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-lg-3">
+                                <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label> Tổng mức đầu tư</mat-label>
                                         <input matInput type="number" formControlName="tong_muc_dau_tu">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label> Quy mô, diện tích</mat-label>
                                         <input matInput type="number" formControlName="quy_mo_dien_tich">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label> Diễn giải</mat-label>
                                         <textarea matInput placeholder="." formControlName="dien_giai">
-                                        </textarea>
+                                            </textarea>
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Diện tích QHCT</mat-label>
                                         <input matInput type="number" formControlName="dien_tich_qhct">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Diện tích DDTHT</mat-label>
                                         <input matInput type="number" formControlName="dien_tich_ddtht">
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-3 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
                                         <mat-select formControlName="id_htdtht">
@@ -380,9 +348,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-3 col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
                                         <mat-select formControlName="id_htdthtxlnt">
@@ -391,9 +357,7 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-md-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Trạng thái hoạt động</mat-label>
                                         <mat-select formControlName="id_trang_thai_hoat_dong">
@@ -403,30 +367,25 @@
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
-                                </div>
 
-                                <div class="col-lg-3">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Nhu cầu vốn</mat-label>
                                         <input matInput type="number" formControlName="nhu_cau_von">
                                     </mat-form-field>
                                 </div>
 
-                                <div class="col-lg-12">
-                                    <!-- <mat-label>Hình ảnh</mat-label> -->
-
+                                <!-- <div class="col-12 col-lg-12">
                                     <span class="btn btn-primary btn-file"> Ảnh đính kèm
                                         <input type="file" accept="image/*" (change)="handleFileInput($event)"
                                             formControlName="duong_dan" multiple>
                                     </span>
-
                                 </div>
                                 <div class="flex-container image-area" *ngFor="let item of imageUrl;index as i">
                                     <img [attr.src]="item" style="width:250px;height:200px" *ngIf="item"
                                         class="border m-1">
                                     <a id={{i}} class="remove-image" style="display: inline;"
                                         (click)="DeleteImage($event)">&#215;</a>
-                                </div>
+                                </div> -->
                             </div>
                         </mat-card-content>
                     </div>

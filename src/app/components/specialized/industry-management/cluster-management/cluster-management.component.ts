@@ -72,10 +72,10 @@ export class ClusterManagementComponent extends BaseComponent {
         if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
-        this.initInforImages();        
+        this.initInforImages();
     }
 
-    initInforImages(){
+    initInforImages() {
         this.id_cnn = 0;
         this.imagesDelete = [];
         this.imageUrl = [];
@@ -148,18 +148,18 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    getImagesfromId(){
+    getImagesfromId() {
         let temList = [];
         this.imageUrl = [...this.imagesSource];
         for (const imageObject of this.imageUrl) {
-            if(this.id_cnn === imageObject['id_cum_cong_nghiep']){
+            if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
                 imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
                 temList.push(imageObject['duong_dan']);
-            }   
+            }
         }
-        this.imageUrl = [...temList];        
+        this.imageUrl = [...temList];
     }
-    
+
     getFormParams() {
         return {
             ten_cum: new FormControl(''),
@@ -191,8 +191,8 @@ export class ClusterManagementComponent extends BaseComponent {
         return data
     }
 
-    uploadImages(id_cnn){
-        if(this.fileToUpload.length){
+    uploadImages(id_cnn) {
+        if (this.fileToUpload.length) {
             for (const image of this.fileToUpload) {
                 this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
                     this.successNotify(res);
@@ -201,10 +201,10 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    deleteImages(){
+    deleteImages() {
         let tem = [];
         this.imagesDelete.forEach(element => {
-            tem.push({file_name: element.slice(40)});
+            tem.push({ file_name: element.slice(40) });
         });
         this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
             this.successNotify(res)
@@ -214,6 +214,7 @@ export class ClusterManagementComponent extends BaseComponent {
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
             this.uploadImages(response.data.last_inserted_id);
+            this.successNotify(response)
         }, error => this.errorNotify(error));
     }
 
@@ -223,7 +224,7 @@ export class ClusterManagementComponent extends BaseComponent {
         this.indService.PostDataGroupCompany(body).subscribe(response => {
             this.uploadImages(this.id_cnn);
         }
-        , error => this.errorNotify(error));
+            , error => this.errorNotify(error));
         this.deleteImages();
     }
 
@@ -231,7 +232,7 @@ export class ClusterManagementComponent extends BaseComponent {
         let datas = data.map(element => new Object({ id: element.id }));
         return datas;
     }
-    
+
     callRemoveService(data) {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
@@ -239,7 +240,7 @@ export class ClusterManagementComponent extends BaseComponent {
     handleFileInput(event) {
         let files = event.target.files;
         //Show image preview
-        if(files.length){
+        if (files.length) {
             for (let file of files) {
                 let reader = new FileReader();
                 reader.onload = (event: any) => {
@@ -251,8 +252,8 @@ export class ClusterManagementComponent extends BaseComponent {
         this.fileToUpload = files;
     }
 
-    DeleteImage(event){
-        
+    DeleteImage(event) {
+
         // let lsImages = this.imageUrl.map(item => {
         //     return item['id'];
         // });

@@ -51,7 +51,8 @@ export class FutureElectricalPlanComponent extends BaseComponent {
         { id: 2, name: '6 tháng cuối năm' }
     ];
     selectedYear: number = new Date().getFullYear();
-    selectedPeriod: number = new Date().getMonth() <= 6 ? 1 : 2;
+    // selectedPeriod: number = new Date().getMonth() <= 6 ? 1 : 2;
+    selectedPeriod: number = 1
     periodYear = [
         { id: 1, name: 'Giai đoạn 2021-2030' },
         { id: 2, name: 'Giai đoạn 2031-2050' },
