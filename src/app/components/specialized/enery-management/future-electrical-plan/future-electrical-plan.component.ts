@@ -53,11 +53,8 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     selectedYear: number = new Date().getFullYear();
     selectedPeriod: number = new Date().getMonth() <= 6 ? 1 : 2;
     periodYear = [
-        { id: 0, name: 'Tất cả' },
-        { id: 1, name: 'Giai đoạn 2021-2025' },
-        { id: 2, name: 'Giai đoạn 2026-2030' },
-        { id: 3, name: 'Giai đoạn 2031-2035' },
-
+        { id: 1, name: 'Giai đoạn 2021-2030' },
+        { id: 2, name: 'Giai đoạn 2031-2050' },
     ]
     selectedTypePro: number = 0;
     years: number[] = [];

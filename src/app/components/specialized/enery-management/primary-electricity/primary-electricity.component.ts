@@ -27,11 +27,11 @@ export class PrimaryElectricityComponent extends BaseComponent {
     groupByColumns: string[] = [];
 
     fields = {
-        ten_cong_trinh : 'Tên công trình', 
+        ten_cong_trinh: 'Tên công trình',
         id_giai_doan: 'Giai đoạn',
-        cong_suat: 'Công suất (MW)', 
+        cong_suat: 'Công suất (MW)',
         ten_quan_huyen: 'Địa điểm quy hoạch',
-        nam_khoi_cong: 'Năm khởi công', 
+        nam_khoi_cong: 'Năm khởi công',
         nam_van_hanh: 'Năm đưa vào vận hành'
     }
 
@@ -40,9 +40,8 @@ export class PrimaryElectricityComponent extends BaseComponent {
     authorize: boolean = true
 
     periodYear = [
-        { id: 1, name: 'Giai đoạn 2021-2025' },
-        { id: 2, name: 'Giai đoạn 2026-2030' },
-        { id: 3, name: 'Giai đoạn 2031-2035' },
+        { id: 1, name: 'Giai đoạn 2021-2030' },
+        { id: 2, name: 'Giai đoạn 2031-2050' },
     ]
 
     danhmuc = [
@@ -139,7 +138,7 @@ export class PrimaryElectricityComponent extends BaseComponent {
             const rowsInGroup = data.filter(row => group[currentColumn] === row[currentColumn]);
             group.totalCounts = rowsInGroup.length;
             const subGroup = rowsInGroup;
-            subGroup.sort((a,b) => {return (a.id_giai_doan - b.id_giai_doan)});
+            subGroup.sort((a, b) => { return (a.id_giai_doan - b.id_giai_doan) });
             // this.getSublevel(rowsInGroup, 1, groupByColumns, group);
             subGroup.unshift(group);
             subGroups = subGroups.concat(subGroup);
@@ -165,12 +164,12 @@ export class PrimaryElectricityComponent extends BaseComponent {
         data['time_id'] = this.time_id;
         data['id_loai_cong_trinh'] = this.selectedTypePro;
         data['id_giai_doan'] = this.selectedPeriodYear;
-        
+
         return data;
     }
 
     public callService(data) {
-        
+
         this.energyService.ThemDuLieuDienSoCap([data])
             .subscribe(response => {
                 this.successNotify(response), error => this.errorNotify(error)
@@ -285,7 +284,7 @@ export class PrimaryElectricityComponent extends BaseComponent {
         return item.loai_tram;
     }
 
-    getnamePeriod(id){
+    getnamePeriod(id) {
         this.periodYear.find(i => {
             if (i.id == id)
                 return i.name.toString();
