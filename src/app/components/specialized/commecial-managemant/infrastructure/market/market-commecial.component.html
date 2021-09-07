@@ -315,13 +315,9 @@
 
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-xs-12 button-control text-left my-auto">
-                        <button mat-raised-button matTooltip="Xuất Excel" class="export-btn">
-                            <mat-icon>file_download</mat-icon>
-                            <div class="export-area">
-                                <span (click)="ExportToExcel()">Xuất dữ liệu theo danh sách</span>
-                                <span (click)="ExportToExcel(true)">Xuất toàn bộ dữ liệu</span>
-                            </div>
-                        </button>
+                        <button mat-raised-button class="green"
+                            (click)="ExportTOExcel('DỮ LIỆU CHỢ','DỮ LIỆU CHỢ')">Xuất
+                            Excel</button>
                     </div>
                     <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
                         <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
@@ -334,7 +330,9 @@
                             <mat-icon>delete</mat-icon>
                         </button>
                         <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" [hidden]=authorize
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
+                            mat-raised-button (click)="switchEditMode()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
                     </div>
                 </div>
                 <hr />
@@ -384,7 +382,7 @@
                                             </ng-container>
                                         </ng-container>
                                     </ng-container>
-                                    
+
                                 </ng-container>
 
                                 <ng-template #activeFieldCond>
@@ -398,7 +396,8 @@
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy, h:mm a'}}
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy,
+                                        h:mm a'}}
                                     </td>
                                 </ng-template>
 
@@ -500,9 +499,11 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
-                                            <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_phuong_xa'"
-                                            [array]="districtWards" (filteredReturn)="filteredDistrictWards = $event"></mat-select-filter>
-                                            <mat-option *ngFor='let dw of filteredDistrictWards' [value]='dw.id_phuong_xa'>
+                                            <mat-select-filter [placeholder]="'Lọc dữ liệu'"
+                                                [displayMember]="'ten_phuong_xa'" [array]="districtWards"
+                                                (filteredReturn)="filteredDistrictWards = $event"></mat-select-filter>
+                                            <mat-option *ngFor='let dw of filteredDistrictWards'
+                                                [value]='dw.id_phuong_xa'>
                                                 {{dw.ten_phuong_xa}}
                                             </mat-option>
                                         </mat-select>
