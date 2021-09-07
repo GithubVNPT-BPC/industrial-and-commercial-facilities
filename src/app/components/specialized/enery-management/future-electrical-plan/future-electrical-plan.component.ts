@@ -88,7 +88,6 @@ export class FutureElectricalPlanComponent extends BaseComponent {
 
                 this.filteredDataSource.data = this.addGroups([...this.dataSource.data], this.groupByColumns);
                 this.so_luong = this.filteredDataSource.data.filter(i => !i['is_group']).length
-                console.log(this.filteredDataSource.data)
             }
             this.paginatorAgain();
         })

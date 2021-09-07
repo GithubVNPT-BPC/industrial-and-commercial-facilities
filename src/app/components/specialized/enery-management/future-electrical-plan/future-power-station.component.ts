@@ -25,7 +25,7 @@ export class FuturePowerStationComponent extends BaseComponent {
     displayedColumns: string[] = [
         'select', 'ten_cong_trinh', 'giai_doan', 'so_may',
         'tong_dung_luong',
-        'nam_khoi_cong', 'nam_van_hanh'
+        'nam_khoi_cong', 'nam_van_hanh', 'ghi_chu'
     ];
     so_luong: number = 0;
     groupByColumns: any;
@@ -90,7 +90,6 @@ export class FuturePowerStationComponent extends BaseComponent {
 
                 this.filteredDataSource.data = this.addGroups([...this.dataSource.data], this.groupByColumns);
                 this.so_luong = this.filteredDataSource.data.filter(i => !i['is_group']).length
-                console.log(this.filteredDataSource.data)
             }
             this.paginatorAgain();
         })
@@ -164,7 +163,8 @@ export class FuturePowerStationComponent extends BaseComponent {
             id_loai_tram: new FormControl(''),
             id_giai_doan: new FormControl(''),
             nam: new FormControl(''),
-            ky: new FormControl('')
+            ky: new FormControl(''),
+            ghi_chu: new FormControl('')
         }
     }
     setFormParams() {
@@ -176,7 +176,6 @@ export class FuturePowerStationComponent extends BaseComponent {
             }
         }
     }
-
     changePeriod() {
         this.time_id = this.selectedYear * 10 + this.selectedPeriod;
     }

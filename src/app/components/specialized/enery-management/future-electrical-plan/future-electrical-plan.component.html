@@ -211,30 +211,25 @@
             <form [formGroup]="formData" (ngSubmit)="onCreate()">
                 <div class="form-group row">
                     <input matInput formControlName="id" type="text" class="o_invisible">
+
                     <div class="col-lg-6 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="ten_cong_trinh">Tên công trình</mat-label>
                             <input matInput placeholder="VD: Công ty TNHH" id="ten_cong_trinh" type="text"
                                 formControlName="ten_cong_trinh">
                         </mat-form-field>
-                    </div>
 
-                    <div class="col-lg-6 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="huong_tuyen_duong_day">Hướng tuyến đường dây</mat-label>
                             <input matInput placeholder="" id="huong_tuyen_duong_day" type="text"
                                 formControlName="huong_tuyen_duong_day">
                         </mat-form-field>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="so_mach">Số mạch x km</mat-label>
                             <input matInput formControlName="so_mach" id="so_mach" type="text">
                         </mat-form-field>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Loại đường dây</mat-label>
                             <mat-select formControlName="id_loai_duong_day">
@@ -243,23 +238,28 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Giai đoạn</mat-label>
+                            <mat-select formControlName="id_giai_doan">
+                                <mat-option *ngFor="let item of periodYear" [value]="item.id">
+                                    {{item.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
 
-                    <div class="col-lg-3 col-md-6">
+                    <div class="col-lg-6 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="nam_khoi_cong">Năm khởi công</mat-label>
                             <input matInput formControlName="nam_khoi_cong" id="nam_khoi_cong" type="text">
                         </mat-form-field>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="nam_van_hanh">Năm vận hành</mat-label>
                             <input matInput formControlName="nam_van_hanh" id="nam_van_hanh" type="text">
                         </mat-form-field>
-                    </div>
 
-                    <div class="col-lg-3 col-md-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm dữ liệu</mat-label>
                             <mat-select formControlName="nam">
@@ -268,22 +268,11 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
+
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select formControlName="ky">
                                 <mat-option *ngFor="let item of periods" [value]="item.id">
-                                    {{item.name}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Giai đoạn</mat-label>
-                            <mat-select formControlName="id_giai_doan">
-                                <mat-option *ngFor="let item of periodYear" [value]="item.id">
                                     {{item.name}}
                                 </mat-option>
                             </mat-select>

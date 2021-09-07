@@ -35,7 +35,7 @@ export class PrimaryElectricityComponent extends BaseComponent {
         nam_van_hanh: 'Năm đưa vào vận hành'
     }
 
-    displayedColumns: string[] = ['select', 'ten_cong_trinh', 'id_giai_doan', 'cong_suat', 'ten_quan_huyen', 'nam_khoi_cong', 'nam_van_hanh'];
+    displayedColumns: string[] = ['select', 'ten_cong_trinh', 'id_giai_doan', 'cong_suat', 'ten_quan_huyen', 'nam_khoi_cong', 'nam_van_hanh', 'ghi_chu'];
 
     authorize: boolean = true
 
@@ -59,12 +59,16 @@ export class PrimaryElectricityComponent extends BaseComponent {
         { ma_so: 4, noi_dung: 'Năm' }
     ];
 
+    half = [
+        { id: 1, name: '6 tháng đầu năm' },
+        { id: 2, name: '6 tháng cuối năm' }
+    ];
+
     months: number[] = [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     selectedYear: number = new Date().getFullYear();
     years: number[] = [];
     quarters: number[] = [null, 1, 2, 3, 4];
-    half: number[] = [null, 1, 2];
-    periods: Object[];
+    periods: any[];
     selectedPeriod: number = 0;
     selectType: number = 4;
     selectTypeStreet: number = 0;
@@ -108,7 +112,6 @@ export class PrimaryElectricityComponent extends BaseComponent {
 
                 this.filteredDataSource.data = this.addGroups([...this.dataSource.data], this.groupByColumns);
                 this.so_luong = this.filteredDataSource.data.filter(i => !i['is_group']).length
-                console.log(this.filteredDataSource.data)
             }
             // this._prepareData();
             this.paginatorAgain();
@@ -192,7 +195,8 @@ export class PrimaryElectricityComponent extends BaseComponent {
             cong_suat: new FormControl(0),
             id_dia_diem_quy_hoach: new FormControl(),
             nam_khoi_cong: new FormControl(),
-            nam_van_hanh: new FormControl()
+            nam_van_hanh: new FormControl(),
+            ghi_chu: new FormControl()
             // id_giai_doan: new FormControl(this.selectedPeriodYear),
             // time_id: new FormControl(this.time_id),
             // id_loai_cong_trinh: new FormControl(this.selectedTypePro)
@@ -222,7 +226,6 @@ export class PrimaryElectricityComponent extends BaseComponent {
     }
 
     changeReportType(s) {
-        console.log(s);
         switch (s) {
             case 1:
                 this.periods = this.months;
@@ -230,7 +233,7 @@ export class PrimaryElectricityComponent extends BaseComponent {
             case 2:
                 this.periods = this.quarters;
                 break;
-            case 3: this.periods = this.half;
+            case 3:
                 this.isShowPeriod = true;
                 break;
             case 4: this.periods = [];
