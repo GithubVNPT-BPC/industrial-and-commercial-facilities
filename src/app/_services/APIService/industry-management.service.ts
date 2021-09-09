@@ -25,7 +25,7 @@ export class IndustryManagementService {
     private urlGetComformityAnnounce = '/cbhq';
     private urlGetExplosiveMat = '/vlncn';
 
-    
+
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
@@ -40,8 +40,10 @@ export class IndustryManagementService {
     private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
     private urlUpdateImageIndustry = '/hinh-anh';
 
+    private urlUploadmultipleimages = '/uploadimages';
+
     // Delete URLs
-    
+
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
     private urlDeleteFoodIndustry = '/cntp-xoa';
@@ -54,7 +56,7 @@ export class IndustryManagementService {
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
     private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
     private urlDeleteAttachment = environment.apiEndpoint + 'api/delete-attachment';
-    
+
     constructor(public http: HttpClient, public logOutService: LoginService) {
         this.data = JSON.parse(localStorage.getItem('currentUser'));
         this.token = this.data.token;
@@ -71,7 +73,7 @@ export class IndustryManagementService {
 
     public GetChemicalNameList() {
         var apiUrl = this.endpoint + this.urlGetChemicalNames;
-        return this.http.get<any>(apiUrl, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -95,7 +97,7 @@ export class IndustryManagementService {
     public GetComformityAnnounce() {
         var apiUrl = this.endpoint + this.urlGetComformityAnnounce;
         // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.get<any>(apiUrl, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -194,7 +196,7 @@ export class IndustryManagementService {
         var apiUrl = this.endpoint + this.urlGroupCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -207,80 +209,94 @@ export class IndustryManagementService {
         );
     }
 
-    public PostDataGroupCompany(body: any){
+    public PostDataGroupCompany(body: any) {
         var apiUrl = this.endpoint + this.urlGroupCompany;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public PostImageGroupCompany(body: any, id_cnn){
+    fileToUpload: Array<File> = []
+
+    public postFile(fileToUpload: Array<File>) {
+        let apiUrl = this.endpoint + this.urlUploadmultipleimages
+        const files: FormData = new FormData();
+        for (var i = 0; i < this.fileToUpload.length; i++) {
+            files.append('file', fileToUpload[i], fileToUpload[i].name);
+        }
+
+        return this.http.post<any>(apiUrl, files, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostImageGroupCompany(body: any, id_cnn) {
         const formData = new FormData();
         formData.append('file', body);
-        
-        const header = new HttpHeaders({'Content-Type': 'image/*'})
+
+        const header = new HttpHeaders({ 'Content-Type': 'image/*' })
         let apiUrl = this.endpoint + this.urlUpdateImageIndustry;
         let params = new HttpParams().set('id', id_cnn.toString());
-        return this.http.post<any>(apiUrl, formData, {params: params}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, formData, { params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
     // Xoa hinh anh cum cong nghiep
-    public DeleteImageGroupCompany(body, id_image){
+    public DeleteImageGroupCompany(body, id_image) {
         let apiUrl = this.endpoint + this.urlDeleteImageClusteManagement;
         let params = new HttpParams().set('id', id_image.toString());
-        return this.http.post<any>(apiUrl, body, {params: params}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
     // xóa công bố hợp quy
-    public DeleteCBHQ(body: any){
+    public DeleteCBHQ(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public DeleteFoodIndustry(body: any){
+    public DeleteFoodIndustry(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteFoodIndustry;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public DeleteChemistry(body: any){
+    public DeleteChemistry(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteChemistry;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public DeleteChemistryQty(body: any){
+    public DeleteChemistryQty(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteChemistryQty;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public DeleteExplosiveMat(body: any){
+    public DeleteExplosiveMat(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteExplosiveMat;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public DeleteClusterManagement(body: any){
+    public DeleteClusterManagement(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteClusterManagement;
         // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -288,21 +304,21 @@ export class IndustryManagementService {
     // ATTACHMENTS
     public PostAttachment(datas) {
         var apiUrl = this.urlPostAttachment;
-        return this.http.post<any>(apiUrl, datas, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
     public UpdateAttachment(datas) {
         var apiUrl = this.urlUpdateAttachment;
-        return this.http.post<any>(apiUrl, datas, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
     public DeleteAttachment(id) {
         var apiUrl = this.urlDeleteAttachment;
-        return this.http.post<any>(apiUrl, id, { headers: HEADERS}).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, id, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

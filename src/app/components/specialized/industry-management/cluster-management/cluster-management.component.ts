@@ -25,7 +25,6 @@ export class ClusterManagementComponent extends BaseComponent {
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     imageUrl: string[] = [];
-    fileToUpload: any = [];
     imagesSource: string[] = [];
     imagesDelete: string[] = [];
 
@@ -191,14 +190,38 @@ export class ClusterManagementComponent extends BaseComponent {
         return data
     }
 
-    uploadImages(id_cnn) {
-        if (this.fileToUpload.length) {
-            for (const image of this.fileToUpload) {
-                this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
-                    this.successNotify(res);
-                })
+    urls = new Array<string>();
+    fileToUpload: Array<File> = []
+    selctedFileName: string[] = []
+    handleFileInput(fileInput: any) {
+        this.urls = []
+        this.fileToUpload = fileInput.target.files
+
+        for (let i = 0; i < this.fileToUpload.length; i++) {
+            var reader = new FileReader();
+            reader.onload = (event: any) => {
+                this.urls.push(event.target.result)
             }
+            reader.readAsDataURL(this.fileToUpload[i]);
+
+            this.selctedFileName.push(this.fileToUpload[i].name)
         }
+    }
+
+    // uploadImages(id_cnn) {
+    //     if (this.fileToUpload.length) {
+    //         for (const image of this.fileToUpload) {
+    //             this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
+    //                 this.successNotify(res);
+    //             })
+    //         }
+    //     }
+    // }
+
+    uploadmultipleimages(any) {
+        this.indService.postFile(any)
+            .subscribe(data => {
+            })
     }
 
     deleteImages() {
@@ -213,7 +236,7 @@ export class ClusterManagementComponent extends BaseComponent {
 
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
-            this.uploadImages(response.data.last_inserted_id);
+            // this.uploadImages(response.data.last_inserted_id);
             this.successNotify(response)
         }, error => this.errorNotify(error));
     }
@@ -222,7 +245,8 @@ export class ClusterManagementComponent extends BaseComponent {
         let body = Object.assign({}, this.formData.value);
         body.id = this.selection.selected[0].id;
         this.indService.PostDataGroupCompany(body).subscribe(response => {
-            this.uploadImages(this.id_cnn);
+
+            // this.uploadImages(this.id_cnn);
         }
             , error => this.errorNotify(error));
         this.deleteImages();
@@ -237,20 +261,20 @@ export class ClusterManagementComponent extends BaseComponent {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
-    handleFileInput(event) {
-        let files = event.target.files;
-        //Show image preview
-        if (files.length) {
-            for (let file of files) {
-                let reader = new FileReader();
-                reader.onload = (event: any) => {
-                    this.imageUrl.push(event.target.result);
-                }
-                reader.readAsDataURL(file);
-            }
-        }
-        this.fileToUpload = files;
-    }
+    // handleFileInput(event) {
+    //     let files = event.target.files;
+    //     //Show image preview
+    //     if (files.length) {
+    //         for (let file of files) {
+    //             let reader = new FileReader();
+    //             reader.onload = (event: any) => {
+    //                 this.imageUrl.push(event.target.result);
+    //             }
+    //             reader.readAsDataURL(file);
+    //         }
+    //     }
+    //     this.fileToUpload = files;
+    // }
 
     DeleteImage(event) {
 

@@ -104,11 +104,19 @@ export class PrimaryElectricityComponent extends BaseComponent {
         }
     }
 
+    applyFilter(event: Event) {
+        const filterValue = (event.target as HTMLInputElement).value;
+        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+    }
+
     getDataElectric110KV(time_id, id_loai_cong_trinh, id_giai_doan) {
         this.energyService.GetDuLieuDienSoCap(time_id, id_loai_cong_trinh, id_giai_doan).subscribe(result => {
             this.filteredDataSource.data = [];
             if (result.data && result.data.length > 0) {
                 this.dataSource = new MatTableDataSource<any | Group>(result.data);
+                this.dataSource.data.forEach(x => {
+                    x.ten_giai_doan = x.id_giai_doan == 1 ? 'Giai đoạn 2021-2030' : 'Giai đoạn 2031-2050'
+                })
 
                 this.filteredDataSource.data = this.addGroups([...this.dataSource.data], this.groupByColumns);
                 this.so_luong = this.filteredDataSource.data.filter(i => !i['is_group']).length

@@ -255,6 +255,7 @@ export class ElectricalPlan110KV {
     id_trang_thai_hoat_dong: number;
     ten_trang_thai_hoat_dong: string;
     id_giai_doan?: number;
+    ten_giai_doan: string;
     id_loai_tram: number;
 
     thoi_gian_chinh_sua_cuoi: Date

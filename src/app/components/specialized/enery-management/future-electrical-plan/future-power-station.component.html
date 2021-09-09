@@ -125,7 +125,10 @@
                         </button>
                     </div>
                 </div>
-                <hr>
+                <mat-form-field>
+                    <mat-label>Lọc dữ liệu</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                </mat-form-field>
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" #table class="table-layout" id="small-table">
@@ -155,8 +158,7 @@
 
                         <ng-container matColumnDef="giai_doan">
                             <th mat-header-cell *matHeaderCellDef> Giai đoạn </th>
-                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.id_giai_doan |
-                                translateName : 'TRANSLATE'}}</td>
+                            <td mat-cell *matCellDef="let element" class="center-cell"> {{element.ten_giai_doan}}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="so_may">
