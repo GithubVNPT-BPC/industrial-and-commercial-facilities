@@ -26,6 +26,7 @@
     "@fortawesome/fontawesome-free": "^5.15.1",
     "@ng-bootstrap/ng-bootstrap": "5.3.0",
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
+    "@syncfusion/ej2-angular-dropdowns": "^19.2.59",
     "acorn": "^7.3.1",
     "bootstrap": "^4.5.0",
     "chart.js": "^2.9.3",

@@ -49,10 +49,28 @@
   }
 
   .toggle-sidebar {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 50%;
+    left: -30px;
+    background-color: #1f7ed0;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 1000;
+    transition: 0.3s;
+    cursor: pointer;
+
     &:hover {
-      color: var(--primary-color);
-      background-color: white;
+      color: white;
+      background-color: #1b6bb1;
       border-radius: 50%;
+    }
+    a {
+      &:hover {
+        color: white;
+      }
     }
   }
 
