@@ -30,6 +30,7 @@ export class TopbarComponent implements OnInit {
   public styleOfScss: STYLESCSS_TYPE;
   public userrole: number;
   public mst: string
+  public menuIcon = 'menu';
 
   @Input() open: boolean = this._eventService.open;
   @Input('typeOfUser') typeOfUser: TYPE_OF_NAV;
@@ -173,4 +174,8 @@ export class TopbarComponent implements OnInit {
     this._router.navigate(['/logout']);
   }
 
+  public toggleSidebar() {
+    this.sidebar.toggle();
+    // this.menuIcon = this.menuIcon == 'arrow_forward_ios' ? 'arrow_back_ios': 'arrow_forward_ios';
+  }
 }

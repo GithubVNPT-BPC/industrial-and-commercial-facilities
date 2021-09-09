@@ -3,6 +3,10 @@ import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { FormControl } from '@angular/forms';
 
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {Observable} from 'rxjs';
+import {map, startWith} from 'rxjs/operators';
+
 import { ConvenienceStoreModel } from 'src/app/_models/APIModel/commecial-management.model';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
@@ -70,6 +74,8 @@ export class StoreManagementComponent extends BaseComponent {
   }
 
   authorize: boolean = true
+  _timeout: any = null;
+  mstOptions: [];
 
   ngOnInit(): void {
     super.ngOnInit();
@@ -81,11 +87,32 @@ export class StoreManagementComponent extends BaseComponent {
     }
   }
 
+  findEnterpriseByMst(mst) {
+    let self = this;
+    this._timeout  = null;
+     if(this._timeout){ //if there is already a timeout in process cancel it
+       window.clearTimeout(this._timeout);
+     }
+     this._timeout = window.setTimeout(() => {
+        self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+          results => {
+            if (results && results.data && results.data[0].length) {
+              self.mstOptions = results.data[0];
+              self.giayCndkkdList = results.data[2];
+              self.giayAtvstpList = results.data[2];
+            }
+          },
+          error => this.errorMessage = <any>error
+        );
+        self._timeout = null;
+     }, 2000);
+  }
+
   ngAfterViewInit() {
     this.paginator.pageIndex = 0;
     this.paginatorAgain();
   }
-
+ 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
@@ -149,6 +176,12 @@ export class StoreManagementComponent extends BaseComponent {
     }
   }
 
+  prepareData(data) {
+    data.id_giay_atvstp = data.id_giay_atvstp ? data.id_giay_atvstp : 0;
+    data.id_giay_cndkkd = data.id_giay_cndkkd ? data.id_giay_cndkkd : 0;
+    return data;
+  }
+
   callService(data) {
     this.commerceManagementService.postConvenienceStore(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
@@ -202,42 +235,6 @@ export class StoreManagementComponent extends BaseComponent {
     this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
     this._prepareData();
     this.paginatorAgain();
-  }
-
-  findLicenseInfo(event) {
-    event.preventDefault();
-    let mst = this.formData.controls.mst.value;
-    this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
-      if (response.success) {
-        if (response.data.length > 0) {
-
-          let giayCndkkdList = response.data.filter(x => x.id_loai_giay_phep == 1);
-          let giayAtvstpList = response.data.filter(x => x.id_loai_giay_phep == 4);
-
-          if (giayAtvstpList.length == 0 || giayCndkkdList.length == 0) {
-            this.isAddLicense = true;
-            this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
-          }
-          else {
-            this.isFound = true;
-            this.giayCndkkdList = giayCndkkdList;
-            this.giayAtvstpList = giayAtvstpList;
-            this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
-          }
-        } else {
-          this.isAddLicense = true;
-          this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này");
-        }
-      } else {
-        this.isFound = false;
-        this.isAddLicense = false;
-        this.logger.msgSuccess("Không tìm thấy dữ liệu");
-      }
-    }, error => {
-      this.isFound = false;
-      this.isAddLicense = false;
-      this.logger.msgError("Lỗi khi xử lý \n" + error);
-    });
   }
 
   addLicenseInfo(event) {
