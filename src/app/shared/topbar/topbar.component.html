@@ -1,9 +1,9 @@
 <div class="{{styleOfScss}}">
     <mat-toolbar class="mat-elevation-z5 main-contain">
         <mat-toolbar-row>
-            <div class="toggle-sidebar">
-                <a mat-icon-button class="btn-sct-page" (click)="sidebar.toggle();">
-                    <mat-icon matTooltip="Ẩn/ Hiện Menu">menu</mat-icon>
+            <div class="toggle-sidebar" (click)="toggleSidebar($event)" matTooltip="Ẩn/ Hiện Menu"> 
+                <a mat-icon-button class="btn-sct-page ml-4 mt-2" >
+                    <mat-icon >{{menuIcon}}</mat-icon>
                 </a>
             </div>
 

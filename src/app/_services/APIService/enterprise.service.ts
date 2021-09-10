@@ -19,6 +19,7 @@ export class EnterpriseService {
     private endpoint = environment.apiEndpoint + "api/doanh-nghiep";
 
     private urlGetAllEnterprise = '/danh-sach-doanh-nghiep';
+    private urlGetEnterpriseByMst = '/danh-sach-doanh-nghiep-sct-theo-mst';
     private urlGetLicense = '/giay-phep';
 
     constructor(public http: HttpClient, public logOutService: LoginService) {
@@ -30,6 +31,14 @@ export class EnterpriseService {
     public GetAllEnterpriseData() {
         var apiUrl = this.endpoint + this.urlGetAllEnterprise;
         return this.http.get<any>(apiUrl, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetLikeEnterpriseByMst(mst) {
+        var apiUrl = this.endpoint + this.urlGetEnterpriseByMst;
+        let params = new HttpParams().set('mst', mst.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

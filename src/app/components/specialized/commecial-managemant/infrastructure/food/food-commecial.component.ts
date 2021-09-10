@@ -55,6 +55,8 @@ export class FoodManagementComponent extends BaseComponent {
     thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
   }
   giayCndkkdList = [];
+  _timeout: any = null;
+  mstOptions: [];
 
   //Angular FUnction --------------------------------------------------------------------
   constructor(
@@ -103,6 +105,26 @@ export class FoodManagementComponent extends BaseComponent {
     );
   }
 
+  findEnterpriseByMst(mst) {
+    let self = this;
+    this._timeout  = null;
+     if(this._timeout){ //if there is already a timeout in process cancel it
+       window.clearTimeout(this._timeout);
+     }
+     this._timeout = window.setTimeout(() => {
+        self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+          results => {
+            if (results && results.data && results.data[0].length) {
+              self.mstOptions = results.data[0];
+              self.giayCndkkdList = results.data[2];
+            }
+          },
+          error => this.errorMessage = <any>error
+        );
+        self._timeout = null;
+     }, 2000);
+  }
+
   public getCurrentDate() {
     let date = new Date;
     return formatDate(date, 'yyyy-MM-dd', 'en-US');
@@ -125,6 +147,11 @@ export class FoodManagementComponent extends BaseComponent {
       this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
       this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
     }
+  }
+
+  prepareData(data) {
+    data.id_giay_phep = data.id_giay_phep ? data.id_giay_phep : 0;
+    return data;
   }
 
   callService(data) {
@@ -152,39 +179,6 @@ export class FoodManagementComponent extends BaseComponent {
 
   applyExpireCheck(event) {
     this.filteredDataSource.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
-  }
-
-  findLicenseInfo(event) {
-    event.preventDefault();
-    let mst = this.formData.controls.mst.value;
-    this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
-      if (response.success) {
-        if (response.data.length > 0) {
-          let giayCndkkdList = response.data.filter(x => x.id_linh_vuc == 5);
-
-          if (giayCndkkdList.length == 0) {
-            this.isAddLicense = true;
-            this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
-          }
-          else {
-            this.isFound = true;
-            this.giayCndkkdList = giayCndkkdList;
-            this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
-          }
-        } else {
-          this.isAddLicense = true;
-          this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
-        }
-      } else {
-        this.isFound = false;
-        this.isAddLicense = false;
-        this.logger.msgSuccess("Không tìm thấy dữ liệu");
-      }
-    }, error => {
-      this.isFound = false;
-      this.isAddLicense = false;
-      this.logger.msgError("Lỗi khi xử lý \n" + error);
-    });
   }
 
   addLicenseInfo(event) {
