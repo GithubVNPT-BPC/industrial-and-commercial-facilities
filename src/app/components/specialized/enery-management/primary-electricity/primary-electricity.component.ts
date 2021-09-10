@@ -69,14 +69,13 @@ export class PrimaryElectricityComponent extends BaseComponent {
     years: number[] = [];
     quarters: number[] = [null, 1, 2, 3, 4];
     periods: any[];
-    selectedPeriod: number = 0;
-    selectType: number = 4;
+    selectedPeriod: number = 1;
+    selectType: number = 3;
     selectTypeStreet: number = 0;
     so_luong: number = 0;
     selectedPeriodYear: number = 0;
     selectedTypePro: number = 0;
     isShowPeriod: boolean = true;
-
     selectedPeriodSearch: number = 1;
     selectTypeSearch: number = 3;
     selectedYearSearch: number = new Date().getFullYear();
@@ -173,8 +172,10 @@ export class PrimaryElectricityComponent extends BaseComponent {
         data['nam_khoi_cong'] = Number(data['nam_khoi_cong']);
         data['nam_van_hanh'] = Number(data['nam_van_hanh']);
         data['time_id'] = this.time_id;
-        data['id_loai_cong_trinh'] = this.selectedTypePro;
-        data['id_giai_doan'] = this.selectedPeriodYear;
+        data['id_loai_cong_trinh'] = Number(data['id_loai_cong_trinh']);
+        data['id_giai_doan'] = Number(data['id_giai_doan']);
+        data['year'] = Number(data['year']);
+        data['halfofyear'] = Number(data['halfofyear']);
 
         return data;
     }
@@ -200,14 +201,16 @@ export class PrimaryElectricityComponent extends BaseComponent {
         return {
             id: new FormControl(0),
             ten_cong_trinh: new FormControl(''),
-            cong_suat: new FormControl(0),
+            cong_suat: new FormControl(),
             id_dia_diem_quy_hoach: new FormControl(),
             nam_khoi_cong: new FormControl(),
             nam_van_hanh: new FormControl(),
-            ghi_chu: new FormControl()
-            // id_giai_doan: new FormControl(this.selectedPeriodYear),
-            // time_id: new FormControl(this.time_id),
-            // id_loai_cong_trinh: new FormControl(this.selectedTypePro)
+            ghi_chu: new FormControl(),
+            id_giai_doan: new FormControl(),
+            time_id: new FormControl(),
+            id_loai_cong_trinh: new FormControl(),
+            year: new FormControl(),
+            halfofyear: new FormControl()
         }
     }
 
@@ -222,8 +225,8 @@ export class PrimaryElectricityComponent extends BaseComponent {
             for (let o in objectList) {
                 this.formData.controls[o].setValue(selectedRecord[o]);
             }
-            this.selectedPeriodYear = selectedRecord['id_giai_doan'];
-            this.selectedTypePro = selectedRecord['id_loai_cong_trinh'];
+            this.selectedYear = parseInt(this.time_id.toString().substring(0, 4));
+            this.selectedPeriod = parseInt(this.time_id.toString().substring(4, 5));
         }
     }
     getLinkDefault() {
@@ -249,15 +252,13 @@ export class PrimaryElectricityComponent extends BaseComponent {
                 break;
             default: this.periods = [];
         }
-        // this.tempObject.time_id = null;
-        // this.selectedPeriod = null;
     }
 
     time_id: number = 0;
     changePeriodSearch() {
         switch (this.selectTypeSearch) {
             case 3:
-                this.time_id = Number(this.selectedYearSearch + this.selectedPeriodSearch.toString());;
+                this.time_id = Number(this.selectedYearSearch + this.selectedPeriodSearch.toString());
                 break;
             case 4:
                 this.time_id = this.selectedYearSearch;
@@ -268,14 +269,13 @@ export class PrimaryElectricityComponent extends BaseComponent {
     changePeriod() {
         switch (this.selectType) {
             case 3:
-                this.time_id = Number(this.selectedYear + this.selectedPeriod.toString());;
+                this.time_id = Number(this.selectedYear + this.selectedPeriod.toString());
                 break;
             case 4:
                 this.time_id = this.selectedYear;
                 break;
         }
     }
-
 
     InitialYears() {
         let returnYear: Array<any> = [];

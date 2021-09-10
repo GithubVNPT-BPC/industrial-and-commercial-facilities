@@ -94,7 +94,6 @@ export class BaseComponent extends AbstractBaseComponent {
         this.formPrevData = this.formData.value;
     }
 
-
     public clearTable(event) {
         event.preventDefault();
         this.formData.reset();
