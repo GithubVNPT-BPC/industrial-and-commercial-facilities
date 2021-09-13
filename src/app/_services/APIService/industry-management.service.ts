@@ -217,33 +217,18 @@ export class IndustryManagementService {
         );
     }
 
-    fileToUpload: Array<File> = []
-
     public postFile(fileToUpload: Array<File>) {
         let apiUrl = this.endpoint + this.urlUploadmultipleimages
-        const files: FormData = new FormData();
-        for (var i = 0; i < this.fileToUpload.length; i++) {
-            files.append('file', fileToUpload[i], fileToUpload[i].name);
+        const formData: FormData = new FormData();
+        for (var i = 0; i < fileToUpload.length; i++) {
+            formData.append('files', fileToUpload[i], fileToUpload[i].name);
         }
 
-        return this.http.post<any>(apiUrl, files, { headers: HEADERS }).pipe(tap(data => data),
+        return this.http.post<any>(apiUrl, formData).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public PostImageGroupCompany(body: any, id_cnn) {
-        const formData = new FormData();
-        formData.append('file', body);
-
-        const header = new HttpHeaders({ 'Content-Type': 'image/*' })
-        let apiUrl = this.endpoint + this.urlUpdateImageIndustry;
-        let params = new HttpParams().set('id', id_cnn.toString());
-        return this.http.post<any>(apiUrl, formData, { params: params }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    // Xoa hinh anh cum cong nghiep
     public DeleteImageGroupCompany(body, id_image) {
         let apiUrl = this.endpoint + this.urlDeleteImageClusteManagement;
         let params = new HttpParams().set('id', id_image.toString());
@@ -252,7 +237,6 @@ export class IndustryManagementService {
         );
     }
 
-    // xóa công bố hợp quy
     public DeleteCBHQ(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
         // let params = new HttpParams().set('id', id.toString());

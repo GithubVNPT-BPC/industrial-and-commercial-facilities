@@ -190,36 +190,39 @@ export class ClusterManagementComponent extends BaseComponent {
         return data
     }
 
-    urls = new Array<string>();
+    imageDeleteFrom: FormGroup;
+    imageurls = [];
+    base64String: string;
+    imagePath: string;
+
+    removeImageEdit(i, imagepath) {
+        this.imageDeleteFrom.value.id = i;
+        this.imageDeleteFrom.value.ImagePath = imagepath;
+    }
+
+    removeImage(i) {
+        this.imageurls.splice(i, 1);
+        this.fileToUpload.splice(i, 1);
+    }
+
     fileToUpload: Array<File> = []
-    selctedFileName: string[] = []
-    handleFileInput(fileInput: any) {
-        this.urls = []
-        this.fileToUpload = fileInput.target.files
 
-        for (let i = 0; i < this.fileToUpload.length; i++) {
-            var reader = new FileReader();
-            reader.onload = (event: any) => {
-                this.urls.push(event.target.result)
+    onSelectFile(event) {
+        if (event.target.files && event.target.files[0]) {
+            var filesAmount = event.target.files.length;
+            for (let i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+                reader.onload = (event: any) => {
+                    this.imageurls.push({ base64String: event.target.result, });
+                }
+                reader.readAsDataURL(event.target.files[i]);
+                this.fileToUpload.push(event.target.files[i])
             }
-            reader.readAsDataURL(this.fileToUpload[i]);
-
-            this.selctedFileName.push(this.fileToUpload[i].name)
         }
     }
 
-    // uploadImages(id_cnn) {
-    //     if (this.fileToUpload.length) {
-    //         for (const image of this.fileToUpload) {
-    //             this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
-    //                 this.successNotify(res);
-    //             })
-    //         }
-    //     }
-    // }
-
-    uploadmultipleimages(any) {
-        this.indService.postFile(any)
+    uploadmultipleimages() {
+        this.indService.postFile(this.fileToUpload)
             .subscribe(data => {
             })
     }
@@ -236,8 +239,9 @@ export class ClusterManagementComponent extends BaseComponent {
 
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
-            // this.uploadImages(response.data.last_inserted_id);
+            this.uploadmultipleimages()
             this.successNotify(response)
+            // this.uploadImages(response.data.last_inserted_id);
         }, error => this.errorNotify(error));
     }
 
@@ -245,10 +249,9 @@ export class ClusterManagementComponent extends BaseComponent {
         let body = Object.assign({}, this.formData.value);
         body.id = this.selection.selected[0].id;
         this.indService.PostDataGroupCompany(body).subscribe(response => {
-
             // this.uploadImages(this.id_cnn);
-        }
-            , error => this.errorNotify(error));
+        }, error => this.errorNotify(error));
+        this.uploadmultipleimages()
         this.deleteImages();
     }
 
@@ -259,33 +262,5 @@ export class ClusterManagementComponent extends BaseComponent {
 
     callRemoveService(data) {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-    }
-
-    // handleFileInput(event) {
-    //     let files = event.target.files;
-    //     //Show image preview
-    //     if (files.length) {
-    //         for (let file of files) {
-    //             let reader = new FileReader();
-    //             reader.onload = (event: any) => {
-    //                 this.imageUrl.push(event.target.result);
-    //             }
-    //             reader.readAsDataURL(file);
-    //         }
-    //     }
-    //     this.fileToUpload = files;
-    // }
-
-    DeleteImage(event) {
-
-        // let lsImages = this.imageUrl.map(item => {
-        //     return item['id'];
-        // });
-        // let idImage = event.target.id;
-        // let indexImage = lsImages.indexOf(idImage);
-        // this.imagesDelete.push(this.imageUrl.filter(item => item['id'] == idImage));
-        let indexImage = event.target.id;
-        this.imagesDelete.push(this.imageUrl[indexImage]);
-        this.imageUrl.splice(indexImage, 1);
     }
 }

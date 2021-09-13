@@ -297,19 +297,16 @@
                                 <div class="col-12 col-lg-12">
                                     <mat-form-field appearance="outline">
                                         <mat-label>MST</mat-label>
-                                        <input type="text"
-                                            placeholder="MST"
-                                            matInput
-                                            formControlName="mst" (ngModelChange)="findEnterpriseByMst($event)"
-                                            [matAutocomplete]="auto">
+                                        <input type="text" placeholder="MST" matInput formControlName="mst"
+                                            (ngModelChange)="findEnterpriseByMst($event)" [matAutocomplete]="auto">
                                         <mat-autocomplete #auto="matAutocomplete">
-                                            <mat-option *ngFor="let option of mstOptions" [value]="option.mst" >
+                                            <mat-option *ngFor="let option of mstOptions" [value]="option.mst">
                                                 <strong>{{option.ten_doanh_nghiep}}</strong> - {{option.mst}}
                                             </mat-option>
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
-                
+
                                 <!-- <div class="col-6 col-md-6">
                                     <button mat-raised-button color="primary" (click)="findLicenseInfo($event)"
                                         class="mt-2">
@@ -322,7 +319,29 @@
                                 </div> -->
                             </div>
 
-                            <div class="row" >
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Chứng nhận đăng ký kinh doanh</mat-label>
+                                        <mat-select formControlName="id_giay_cndkkd">
+                                            <mat-option *ngFor="let item of giayCndkkdList" [value]="item.id_giay_phep">
+                                                {{item.ten_giay_phep}} - {{item.so_giay_phep}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="col-12 col-md-6 col-lg-6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Giấy chứng nhận đủ điều kiện ATTP</mat-label>
+                                        <mat-select formControlName="id_giay_atvstp">
+                                            <mat-option *ngFor="let item of giayAtvstpList" [value]="item.id_giay_phep">
+                                                {{item.ten_giay_phep}} - {{item.so_giay_phep}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên cửa hàng</mat-label>
@@ -372,7 +391,7 @@
                         </mat-card-content>
                     </div>
 
-                    <div class="col-12" >
+                    <!-- <div class="col-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Chứng nhận đăng ký kinh doanh </span>
@@ -393,9 +412,9 @@
 
                             </div>
                         </mat-card-content>
-                    </div>
+                    </div> -->
 
-                    <div class="col-12">
+                    <!-- <div class="col-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Giấy chứng nhận đủ điều kiện ATTP </span>
@@ -415,7 +434,7 @@
                                 </div>
                             </div>
                         </mat-card-content>
-                    </div>
+                    </div> -->
 
                     <div class="col-12">
                         <p>
