@@ -122,12 +122,12 @@ export class SearchPartnerComponent implements OnInit {
     this.countNumberCondition.push(new_ob);
   }
 
-  removeCond() {
+  removeCond(id: number) {
     if (this.countNumberCondition.length === 1) {
       return;
     } else {
       let cloneArray = [...this.countNumberCondition];
-      this.countNumberCondition = cloneArray.filter(item => item.id !== parseInt(this.ele.nativeElement.id));
+      this.countNumberCondition = cloneArray.filter(item => item.id !== id);
     }
   }
 
