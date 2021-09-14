@@ -253,18 +253,6 @@
                         <mat-card-content>
                             <div class="row">
                                 <div class="col-6 col-lg-6">
-                                    <!-- <div>
-                                        <span class="btn btn-primary btn-file"> Ảnh đính kèm
-                                            <input type="file" accept="image/*"
-                                                (change)="handleFileInput($event)" formControlName="duong_dan" multiple>
-                                        </span>
-    
-                                    </div>
-                                    <div class="flex-container image-area" *ngFor="let item of imageUrl;index as i">
-                                        <img [attr.src]="item" style="width:250px;height:200px" *ngIf="item" class="border m-1">
-                                        <a id={{i}} class="remove-image" style="display: inline;" (click)="DeleteImage($event)">&#215;</a>
-                                    </div> -->
-
                                     <ng-container *ngIf="id_cnn == null; else elseTemplate">
                                         <label id="import_excel">
                                             <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile"

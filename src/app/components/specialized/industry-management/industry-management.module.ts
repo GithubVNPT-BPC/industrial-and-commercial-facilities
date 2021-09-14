@@ -17,6 +17,7 @@ import { ReportExplosivesComponent } from './report-explosives/report-explosives
 import { registerLocaleData } from '@angular/common';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DecimalPipe } from '@angular/common';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
@@ -32,6 +33,7 @@ import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.
     PipeModule,
     PdfViewerModule,
     IndustryManagementRoutingModule,
+    MatCarouselModule.forRoot(),
   ],
   exports: [
   ],
