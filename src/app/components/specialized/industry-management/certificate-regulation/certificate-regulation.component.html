@@ -21,9 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col col-lg-4">
-                    </div>
-                    <div class="col col-lg-4">
+                    <div class="col-12 col-lg-12">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -35,8 +33,6 @@
                                 {{soLuongDoanhNghiep| number: '1.0-2':'vi'}}
                             </mat-card-content>
                         </mat-card>
-                    </div>
-                    <div class="col col-lg-4">
                     </div>
                 </div>
             </mat-expansion-panel>
@@ -194,10 +190,19 @@
                         <mat-card-content>
                             <div class="row">
                                 <input matInput formControlName="id" type="text" class="o_invisible">
-                                <div class="col-md-6">
+                                <div class="col-12 col-lg-12">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Mã số thuế doanh nghiệp</mat-label>
-                                        <input matInput formControlName="mst">
+                                        <mat-label>MST</mat-label>
+                                        <input type="text"
+                                            placeholder="MST"
+                                            matInput
+                                            formControlName="mst" (ngModelChange)="findEnterpriseByMst($event)"
+                                            [matAutocomplete]="auto">
+                                        <mat-autocomplete #auto="matAutocomplete">
+                                            <mat-option *ngFor="let option of mstOptions" [value]="option.mst" >
+                                                <strong>{{option.ten_doanh_nghiep}}</strong> - {{option.mst}}
+                                            </mat-option>
+                                        </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
                             </div>

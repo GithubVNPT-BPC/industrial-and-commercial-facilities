@@ -1,7 +1,7 @@
 //Import Library
 import { Component, Injector } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 //Import Model
 import { MarketModel } from 'src/app/_models/APIModel/commecial-management.model';
@@ -106,33 +106,33 @@ export class MarketCommecialManagementComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      ten_cho: new FormControl(),
-      id_phuong_xa: new FormControl(),
-      id_tinh_chat_kinh_doanh: new FormControl(),
-      id_hang_cho: new FormControl(),
-      id_tinh_chat_cho: new FormControl(),
-      id_loai_cho: new FormControl(),
-      id_hinh_thuc_quan_ly: new FormControl(0),
+      ten_cho: new FormControl('', Validators.required),
+      id_phuong_xa: new FormControl('', Validators.required),
+      id_tinh_chat_kinh_doanh: new FormControl('', Validators.required),
+      id_hang_cho: new FormControl('', Validators.required),
+      id_tinh_chat_cho: new FormControl('', Validators.required),
+      id_loai_cho: new FormControl('', Validators.required),
+      id_hinh_thuc_quan_ly: new FormControl(0, Validators.required),
       ke_hoach_dau_tu: new FormControl(),
       hinh_thuc_quan_ly: new FormControl(),
 
-      nam_xay_dung: new FormControl(),
-      nam_nang_cap: new FormControl(),
-      dau_tu: new FormControl(),
-      so_ho_duoi_30: new FormControl(),
-      so_chuyen_doi_chuc_nang: new FormControl(),
-      so_chuyen_doi_hinh_thuc_quan_ly: new FormControl(),
+      nam_xay_dung: new FormControl(0, Validators.required),
+      nam_nang_cap: new FormControl(0, Validators.required),
+      dau_tu: new FormControl(0, Validators.required),
+      so_ho_duoi_30: new FormControl(0, Validators.required),
+      so_chuyen_doi_chuc_nang: new FormControl(0, Validators.required),
+      so_chuyen_doi_hinh_thuc_quan_ly: new FormControl(0, Validators.required),
 
-      von_nstw: new FormControl(),
-      von_nsdp: new FormControl(),
-      von_dn_htx_hkd: new FormControl(),
-      von_khac: new FormControl(),
+      von_nstw: new FormControl(0, Validators.required),
+      von_nsdp: new FormControl(0, Validators.required),
+      von_dn_htx_hkd: new FormControl(0, Validators.required),
+      von_khac: new FormControl(0, Validators.required),
 
-      ban_quan_ly: new FormControl(),
-      to_quan_ly: new FormControl(),
-      doanh_nghiep: new FormControl(),
-      hop_tac_xa: new FormControl(),
-      ho_kinh_doanh: new FormControl(),
+      ban_quan_ly: new FormControl(0, Validators.required),
+      to_quan_ly: new FormControl(0, Validators.required),
+      doanh_nghiep: new FormControl(0, Validators.required),
+      hop_tac_xa: new FormControl(0, Validators.required),
+      ho_kinh_doanh: new FormControl(0, Validators.required),
     }
   }
 

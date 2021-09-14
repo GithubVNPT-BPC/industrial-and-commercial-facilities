@@ -1,11 +1,7 @@
 //Import Library
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
-
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
+import { FormControl, Validators } from '@angular/forms';
 
 import { ConvenienceStoreModel } from 'src/app/_models/APIModel/commecial-management.model';
 
@@ -150,14 +146,14 @@ export class StoreManagementComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      ten_cua_hang: new FormControl(),
-      mst: new FormControl(),
+      ten_cua_hang: new FormControl('', Validators.required),
+      mst: new FormControl('', Validators.required),
       dia_chi: new FormControl(),
       so_dien_thoai: new FormControl(),
-      id_spkd: new FormControl(),
-      id_giay_cndkkd: new FormControl(),
-      id_giay_atvstp: new FormControl(),
-      id_phuong_xa: new FormControl(),
+      id_spkd: new FormControl('', Validators.required),
+      id_giay_cndkkd: new FormControl('', Validators.required),
+      id_giay_atvstp: new FormControl('', Validators.required),
+      id_phuong_xa: new FormControl('', Validators.required),
     }
   }
 

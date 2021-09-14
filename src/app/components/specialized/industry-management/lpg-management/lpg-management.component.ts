@@ -1,7 +1,7 @@
 import { Component, ElementRef, Injector, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { LPGManagementModel } from 'src/app/_models/APIModel/industry-management.module';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/base.component';
@@ -94,9 +94,9 @@ export class LPGManagementComponent extends BaseComponent {
     getFormParams() {
         return {
             id: new FormControl(),
-            mst: new FormControl(),
-            san_luong: new FormControl(),
-            cong_suat: new FormControl(),
+            mst: new FormControl('', Validators.required),
+            san_luong: new FormControl('', Validators.required),
+            cong_suat: new FormControl('', Validators.required),
             time_id: new FormControl(this.currentYear),
             tinh_trang_hoat_dong: new FormControl("true"),
         }

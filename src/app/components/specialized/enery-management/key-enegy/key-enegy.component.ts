@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { KeyEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
@@ -77,18 +77,18 @@ export class KeyEnegyComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      ten_khach_hang: new FormControl(),
-      dia_chi: new FormControl(),
-      nganh_nghe: new FormControl(),
-      dien: new FormControl(),
-      than: new FormControl(),
-      DO: new FormControl(),
-      FO: new FormControl(),
-      xang: new FormControl(),
-      LPG: new FormControl(),
-      _go: new FormControl(),
-      nang_luong_quy_doi: new FormControl(),
-      time_id: new FormControl()
+      ten_khach_hang: new FormControl('', Validators.required),
+      dia_chi: new FormControl('', Validators.required),
+      nganh_nghe: new FormControl('', Validators.required),
+      dien: new FormControl('', Validators.required),
+      than: new FormControl('', Validators.required),
+      DO: new FormControl('', Validators.required),
+      FO: new FormControl('', Validators.required),
+      xang: new FormControl('', Validators.required),
+      LPG: new FormControl('', Validators.required),
+      _go: new FormControl('', Validators.required),
+      nang_luong_quy_doi: new FormControl('', Validators.required),
+      time_id: new FormControl('', Validators.required),
     }
   }
   setFormParams() {

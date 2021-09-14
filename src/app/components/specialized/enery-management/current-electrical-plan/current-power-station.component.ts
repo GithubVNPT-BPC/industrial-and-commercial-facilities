@@ -1,7 +1,6 @@
 import { Component, Injector } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
-import { ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { BaseComponent } from '../../base.component';
@@ -195,7 +194,7 @@ export class CurrentPowerStationComponent extends BaseComponent {
     getFormParams() {
         return {
             id: new FormControl(0),
-            ten_tram: new FormControl(''),
+            ten_tram: new FormControl('', Validators.required),
             so_may: new FormControl(0),
             dung_luong_thiet_ke: new FormControl(0),
             dung_luong_hien_huu: new FormControl(0),

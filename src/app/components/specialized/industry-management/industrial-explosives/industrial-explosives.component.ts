@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { IndustrialExplosivesModel } from 'src/app/_models/APIModel/industrial-explosives.model';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
@@ -35,14 +35,14 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         { id: 3, tinh_trang: 'Giải thể' }
     ];
     isChecked: boolean;
-    isFound: boolean = false;
-    isAddLicense: boolean = false;
     tongDoanhNghiep: number = 0;
     tongSoLaoDong: number = 0;
     tongCongSuatThietKe: number = 0;
     tongMucSanLuong: number = 0;
 
     giayCndkkdList = [];
+    _timeout: any = null;
+    mstOptions: [];
 
     filterModel = {
         id_quan_huyen: [],
@@ -78,8 +78,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     }
 
     resetAll() {
-        this.isFound = false;
-        this.isAddLicense = false;
         super.resetAll();
     }
 
@@ -92,11 +90,11 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     getFormParams() {
         return {
             id: new FormControl(),
-            mst: new FormControl(),
+            mst: new FormControl('', Validators.required),
             dia_chi: new FormControl(),
-            id_phuong_xa: new FormControl(),
+            id_phuong_xa: new FormControl('', Validators.required),
             time_id: new FormControl(this.currentYear),
-            id_so_giay_phep: new FormControl(),
+            id_so_giay_phep: new FormControl('', Validators.required),
             id_tinh_trang_hoat_dong: new FormControl(1),
 
             thuoc_no: new FormControl(0),
@@ -182,37 +180,24 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         this.tongMucSanLuong = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => x.san_luong || 0).reduce((a, b) => a + b) : 0;
     }
 
-    findLicenseInfo(event) {
-        event.preventDefault();
-        let mst = this.formData.controls.mst.value;
-        this.enterpriseService.GetLicenseByMst(mst).subscribe(response => {
-            if (response.success) {
-                if (response.data.length) {
-                    let giayCndkkdList = response.data.filter(x => x.id_linh_vuc == 33);
-
-                    if (giayCndkkdList.length == 0) {
-                        this.isAddLicense = true;
-                        this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
-                    }
-                    else {
-                        this.isFound = true;
-                        this.giayCndkkdList = giayCndkkdList;
-                        this.logger.msgSuccess("Hãy tiếp tục nhập dữ liệu");
-                    }
-                } else {
-                    this.isAddLicense = true;
-                    this.logger.msgWaring("Không có dữ liệu về giấy phép, hãy thêm giấy phép cho doanh nghiệp này!");
+    findEnterpriseByMst(mst) {
+        let self = this;
+        this._timeout  = null;
+         if(this._timeout){ //if there is already a timeout in process cancel it
+           window.clearTimeout(this._timeout);
+         }
+         this._timeout = window.setTimeout(() => {
+            self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+              results => {
+                if (results && results.data && results.data[0].length) {
+                  self.mstOptions = results.data[0];
+                  self.giayCndkkdList = results.data[2];
                 }
-            } else {
-                this.isFound = false;
-                this.isAddLicense = false;
-                this.logger.msgSuccess("Không tìm thấy dữ liệu");
-            }
-        }, error => {
-            this.isFound = false;
-            this.isAddLicense = false;
-            this.logger.msgError("Lỗi khi xử lý \n" + error);
-        });
+              },
+              error => this.errorMessage = <any>error
+            );
+            self._timeout = null;
+         }, 2000);
     }
 
     addLicenseInfo(event) {

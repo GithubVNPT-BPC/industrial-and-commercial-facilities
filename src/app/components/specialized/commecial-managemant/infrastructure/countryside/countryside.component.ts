@@ -1,7 +1,7 @@
 //Import Library
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 import { CountrySideModel } from 'src/app/_models/APIModel/commecial-management.model';
 
@@ -58,9 +58,8 @@ export class CountrysideComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      cho_truyen_thong: new FormControl(),
-      id_phuong_xa: new FormControl(),
-      id_giay_phep: new FormControl(),
+      cho_truyen_thong: new FormControl('', Validators.required),
+      id_phuong_xa: new FormControl('', Validators.required),
       nam_dat_TC_7: new FormControl(),
       nam_dat_NTM: new FormControl(),
       th_6_thang_nam_cung_ky_dat_TC_7: new FormControl(),
@@ -78,7 +77,6 @@ export class CountrysideComponent extends BaseComponent {
       this.formData.controls['id'].setValue(selectedRecord.id);
       this.formData.controls['cho_truyen_thong'].setValue(selectedRecord.cho_truyen_thong);
       this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
-      this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
       this.formData.controls['nam_dat_TC_7'].setValue(selectedRecord.nam_dat_TC_7);
       this.formData.controls['nam_dat_NTM'].setValue(selectedRecord.nam_dat_NTM);
       this.formData.controls['th_6_thang_nam_cung_ky_dat_TC_7'].setValue(selectedRecord.th_6_thang_nam_cung_ky_dat_TC_7);

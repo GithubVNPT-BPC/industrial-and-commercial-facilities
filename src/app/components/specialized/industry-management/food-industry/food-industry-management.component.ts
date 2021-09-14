@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { FoodIndustryModel } from 'src/app/_models/APIModel/industry-management.module';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/base.component';
@@ -123,10 +123,10 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     getFormParams() {
         return {
             id: new FormControl(),
-            mst: new FormControl(),
-            san_luong: new FormControl(),
-            cong_suat: new FormControl(),
-            id_thuc_pham: new FormControl(),
+            mst: new FormControl('', Validators.required),
+            san_luong: new FormControl(0, Validators.required),
+            cong_suat: new FormControl(0, Validators.required),
+            id_thuc_pham: new FormControl('', Validators.required),
             tinh_trang_hoat_dong: new FormControl("true"),
             time_id: new FormControl(this.currentYear)
         }

@@ -50,14 +50,18 @@ export class BaseComponent extends AbstractBaseComponent {
 
     public onCreate() {
         // Must change to async function
-        let data = this.formData.value;
-        if (this.mode == 'edit') {
-            data = this.prepareEditData(data);
-            this.callEditService(data);
-        }
-        else {
-            data = this.prepareData(data);
-            this.callService(data);
+        if (this.formData.invalid) {
+            this.logger.msgError("Cần nhập đầy đủ các thông tin cần thiết trên biểu mẫu");
+        } else {
+            let data = this.formData.value;
+            if (this.mode == 'edit') {
+                data = this.prepareEditData(data);
+                this.callEditService(data);
+            }
+            else {
+                data = this.prepareData(data);
+                this.callService(data);
+            }
         }
     }
 

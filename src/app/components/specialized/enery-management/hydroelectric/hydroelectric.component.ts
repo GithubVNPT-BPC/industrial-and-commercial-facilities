@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { HydroEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { LoginService } from 'src/app/_services/APIService/login.service';
@@ -83,14 +83,14 @@ export class HydroelectricComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      ten_doanh_nghiep: new FormControl(),
-      cong_suat_thiet_ke: new FormControl(),
-      luong_nuoc_xa_binh_quan: new FormControl(),
-      dung_tich_ho_chua: new FormControl(),
-      san_luong_6_thang: new FormControl(),
-      doanh_thu_6_thang: new FormControl(),
-      san_luong_nam: new FormControl(),
-      doanh_thu_nam: new FormControl(),
+      ten_doanh_nghiep: new FormControl('', Validators.required),
+      cong_suat_thiet_ke: new FormControl(0, Validators.required),
+      luong_nuoc_xa_binh_quan: new FormControl(0, Validators.required),
+      dung_tich_ho_chua: new FormControl(0, Validators.required),
+      san_luong_6_thang: new FormControl(0, Validators.required),
+      doanh_thu_6_thang: new FormControl(0, Validators.required),
+      san_luong_nam: new FormControl(0, Validators.required),
+      doanh_thu_nam: new FormControl(0, Validators.required),
       phuong_an_ung_pho_thien_tai_ha_du: new FormControl(),
       phe_duyet_phuong_an_ung_pho_thien_tai: new FormControl(),
       phuong_an_ung_pho_khan_cap: new FormControl(),
@@ -105,8 +105,8 @@ export class HydroelectricComponent extends BaseComponent {
       bao_cao_hien_trang_an_toan_dap_ho: new FormControl(),
       to_khai_dang_ky_an_toan_dap_ho: new FormControl(),
       time_id: new FormControl(this.currentYear),
-      id_phuong_xa: new FormControl(),
-      id_trang_thai_hoat_dong: new FormControl()
+      id_phuong_xa: new FormControl('', Validators.required),
+      id_trang_thai_hoat_dong: new FormControl('', Validators.required),
     }
   }
 
