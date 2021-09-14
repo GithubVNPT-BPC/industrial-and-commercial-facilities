@@ -6,6 +6,7 @@ import { BaseComponent } from '../../base.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'cluster-management',
@@ -15,7 +16,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class ClusterManagementComponent extends BaseComponent {
 
-    serverUrl = 'http://apicongthongtin.vnptbinhphuoc.vn/';
+    serverUrl = environment.apiEndpoint
     id_cnn: number;
     showColumns: string[] = [];
     showSubColumns: string[] = [];
@@ -147,18 +148,6 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    getImagesfromId() {
-        let temList = [];
-        this.imageUrl = [...this.imagesSource];
-        for (const imageObject of this.imageUrl) {
-            if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
-                imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
-                temList.push(imageObject['duong_dan']);
-            }
-        }
-        this.imageUrl = [...temList];
-    }
-
     getFormParams() {
         return {
             ten_cum: new FormControl(''),
@@ -190,53 +179,81 @@ export class ClusterManagementComponent extends BaseComponent {
         return data
     }
 
-    urls = new Array<string>();
+    imageDeleteFrom: FormGroup;
+    imageurls = [];
+    base64String: string;
+    imagePath: string;
+
+    removeImageEdit(i, imagepath) {
+        this.imageDeleteFrom.value.id = i;
+        this.imageDeleteFrom.value.ImagePath = imagepath;
+    }
+
+    removeImage(i) {
+        this.imageurls.splice(i, 1);
+        this.fileToUpload.splice(i, 1);
+    }
+
     fileToUpload: Array<File> = []
-    selctedFileName: string[] = []
-    handleFileInput(fileInput: any) {
-        this.urls = []
-        this.fileToUpload = fileInput.target.files
 
-        for (let i = 0; i < this.fileToUpload.length; i++) {
-            var reader = new FileReader();
-            reader.onload = (event: any) => {
-                this.urls.push(event.target.result)
+    onSelectFile(event) {
+        if (event.target.files && event.target.files[0]) {
+            var filesAmount = event.target.files.length;
+            for (let i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+                reader.onload = (event: any) => {
+                    this.imageurls.push({ base64String: event.target.result, });
+                }
+                reader.readAsDataURL(event.target.files[i]);
+                this.fileToUpload.push(event.target.files[i])
             }
-            reader.readAsDataURL(this.fileToUpload[i]);
-
-            this.selctedFileName.push(this.fileToUpload[i].name)
         }
     }
 
-    // uploadImages(id_cnn) {
-    //     if (this.fileToUpload.length) {
-    //         for (const image of this.fileToUpload) {
-    //             this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
-    //                 this.successNotify(res);
-    //             })
-    //         }
-    //     }
-    // }
+    uploadImages(id_cnn) {
+        if (this.fileToUpload.length) {
+            for (const image of this.fileToUpload) {
+                this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
+                    // this.successNotify(res);
+                })
+            }
+        }
+    }
 
-    uploadmultipleimages(any) {
-        this.indService.postFile(any)
-            .subscribe(data => {
-            })
+    imageurlsedit = [];
+
+    getImagesfromId() {
+        let temList = [];
+        this.imageUrl = [...this.imagesSource];
+        for (const imageObject of this.imageUrl) {
+            if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
+                imageObject['delete'] = imageObject['duong_dan']
+                imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
+                temList.push(imageObject['duong_dan']);
+            }
+        }
+        this.imageurlsedit = [...temList];
     }
 
     deleteImages() {
         let tem = [];
         this.imagesDelete.forEach(element => {
-            tem.push({ file_name: element.slice(40) });
+            tem.push({ file_name: element['delete'] });
         });
         this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
             this.successNotify(res)
         }, error => this.errorMessage(error));
     }
 
+    DeleteImage(event) {
+        let indexImage = event.target.id;
+        this.imagesDelete.push(this.imageUrl[indexImage]);
+        this.imageurlsedit.splice(indexImage, 1);
+    }
+
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
-            // this.uploadImages(response.data.last_inserted_id);
+            this.uploadImages(response.data.last_inserted_id);
             this.successNotify(response)
         }, error => this.errorNotify(error));
     }
@@ -245,10 +262,9 @@ export class ClusterManagementComponent extends BaseComponent {
         let body = Object.assign({}, this.formData.value);
         body.id = this.selection.selected[0].id;
         this.indService.PostDataGroupCompany(body).subscribe(response => {
-
-            // this.uploadImages(this.id_cnn);
-        }
-            , error => this.errorNotify(error));
+            this.successNotify(response)
+        }, error => this.errorNotify(error));
+        this.uploadImages(this.id_cnn);
         this.deleteImages();
     }
 
@@ -259,33 +275,5 @@ export class ClusterManagementComponent extends BaseComponent {
 
     callRemoveService(data) {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-    }
-
-    // handleFileInput(event) {
-    //     let files = event.target.files;
-    //     //Show image preview
-    //     if (files.length) {
-    //         for (let file of files) {
-    //             let reader = new FileReader();
-    //             reader.onload = (event: any) => {
-    //                 this.imageUrl.push(event.target.result);
-    //             }
-    //             reader.readAsDataURL(file);
-    //         }
-    //     }
-    //     this.fileToUpload = files;
-    // }
-
-    DeleteImage(event) {
-
-        // let lsImages = this.imageUrl.map(item => {
-        //     return item['id'];
-        // });
-        // let idImage = event.target.id;
-        // let indexImage = lsImages.indexOf(idImage);
-        // this.imagesDelete.push(this.imageUrl.filter(item => item['id'] == idImage));
-        let indexImage = event.target.id;
-        this.imagesDelete.push(this.imageUrl[indexImage]);
-        this.imageUrl.splice(indexImage, 1);
     }
 }

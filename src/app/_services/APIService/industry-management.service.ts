@@ -211,22 +211,7 @@ export class IndustryManagementService {
 
     public PostDataGroupCompany(body: any) {
         var apiUrl = this.endpoint + this.urlGroupCompany;
-        // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    fileToUpload: Array<File> = []
-
-    public postFile(fileToUpload: Array<File>) {
-        let apiUrl = this.endpoint + this.urlUploadmultipleimages
-        const files: FormData = new FormData();
-        for (var i = 0; i < this.fileToUpload.length; i++) {
-            files.append('file', fileToUpload[i], fileToUpload[i].name);
-        }
-
-        return this.http.post<any>(apiUrl, files, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -243,7 +228,6 @@ export class IndustryManagementService {
         );
     }
 
-    // Xoa hinh anh cum cong nghiep
     public DeleteImageGroupCompany(body, id_image) {
         let apiUrl = this.endpoint + this.urlDeleteImageClusteManagement;
         let params = new HttpParams().set('id', id_image.toString());
@@ -252,7 +236,6 @@ export class IndustryManagementService {
         );
     }
 
-    // xóa công bố hợp quy
     public DeleteCBHQ(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
         // let params = new HttpParams().set('id', id.toString());

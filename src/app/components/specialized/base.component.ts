@@ -6,9 +6,9 @@ export class BaseComponent extends AbstractBaseComponent {
     public errorMessage: any;
 
     public statusList = [
-        {id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG'},
-        {id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG'},
-        {id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'ĐANG XIN GIẤY PHÉP'}
+        { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG' },
+        { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG' },
+        { id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'ĐANG XIN GIẤY PHÉP' }
     ];
     // ======================================
     // =========== CRUD FUNCTIONS ===========
@@ -24,17 +24,17 @@ export class BaseComponent extends AbstractBaseComponent {
             return Object.keys(curData).reduce((diff, key) => {
                 if (prevData[key] === curData[key]) return diff
                 return {
-                  ...diff,
-                  [key]: curData[key]
+                    ...diff,
+                    [key]: curData[key]
                 }
-            }, {});        
+            }, {});
         }
-        let pKey = {id : data.id};
+        let pKey = { id: data.id };
         let modDatas = _compareChangedData(this.formPrevData, data);
         modDatas = this.prepareModDataForEdit(modDatas);
         let datas = {
-            pKey : pKey,
-            modDatas : modDatas,
+            pKey: pKey,
+            modDatas: modDatas,
             table: this.DB_TABLE,
         }
         return datas;
@@ -42,7 +42,7 @@ export class BaseComponent extends AbstractBaseComponent {
 
     public callService(data) { }
 
-    public callRemoveService(data) {}
+    public callRemoveService(data) { }
 
     public callEditService(data) {
         this.sctService.UpdateRecord(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
@@ -140,7 +140,7 @@ export class BaseComponent extends AbstractBaseComponent {
     // =========== FILTERS AND PAGINATION FUNCTIONS ===========
     // ========================================================
 
-    _prepareData() {}
+    _prepareData() { }
 
     paginatorAgain() {
         this.paginator._intl.itemsPerPageLabel = "Số hàng";
@@ -149,6 +149,19 @@ export class BaseComponent extends AbstractBaseComponent {
         this.paginator._intl.previousPageLabel = "Trang Trước";
         this.paginator._intl.nextPageLabel = "Trang Tiếp";
         this.filteredDataSource.paginator = this.paginator;
+    }
+
+    isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        // const numRows = this.dataSource.data.length;
+        const numRows = this.filteredDataSource.connect().value.length;
+        return numSelected === numRows;
+    }
+
+    masterToggle() {
+        this.isAllSelected() ?
+            this.selection.clear() :
+            this.filteredDataSource.connect().value.forEach(row => this.selection.select(row));
     }
 
     filterArray(dataSource, filters) {
@@ -168,21 +181,21 @@ export class BaseComponent extends AbstractBaseComponent {
 
     applyFilter(event) {
         if (event.target) {
-          const filterValue = (event.target as HTMLInputElement).value;
-          this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+            const filterValue = (event.target as HTMLInputElement).value;
+            this.filteredDataSource.filter = filterValue.trim().toLowerCase();
         } else {
-          let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
-    
-          if (!filteredData.length) {
-            if (this.filterModel)
-              this.filteredDataSource.data = [];
-            else
-              this.filteredDataSource.data = this.dataSource.data;
-          }
-          else {
-            this.filteredDataSource.data = filteredData;
-          }
-    
+            let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+
+            if (!filteredData.length) {
+                if (this.filterModel)
+                    this.filteredDataSource.data = [];
+                else
+                    this.filteredDataSource.data = this.dataSource.data;
+            }
+            else {
+                this.filteredDataSource.data = filteredData;
+            }
+
         }
         this._prepareData();
         this.paginatorAgain();
