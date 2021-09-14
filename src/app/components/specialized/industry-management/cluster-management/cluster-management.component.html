@@ -253,18 +253,53 @@
                         <mat-card-content>
                             <div class="row">
                                 <div class="col-6 col-lg-6">
-                                    <label id="import_excel">
-                                        <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile"
-                                            type="file" (change)="onSelectFile($event)" multiple accept="image/*"
-                                            hidden>
-                                    </label>
-
-                                    <div class="row">
-                                        <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
-                                            <img class="img-fluid" [src]="url.base64String">
-                                            <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
-                                        </div>
+                                    <!-- <div>
+                                        <span class="btn btn-primary btn-file"> Ảnh đính kèm
+                                            <input type="file" accept="image/*"
+                                                (change)="handleFileInput($event)" formControlName="duong_dan" multiple>
+                                        </span>
+    
                                     </div>
+                                    <div class="flex-container image-area" *ngFor="let item of imageUrl;index as i">
+                                        <img [attr.src]="item" style="width:250px;height:200px" *ngIf="item" class="border m-1">
+                                        <a id={{i}} class="remove-image" style="display: inline;" (click)="DeleteImage($event)">&#215;</a>
+                                    </div> -->
+
+                                    <ng-container *ngIf="id_cnn == null; else elseTemplate">
+                                        <label id="import_excel">
+                                            <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile"
+                                                type="file" (change)="onSelectFile($event)" multiple accept="image/*"
+                                                hidden>
+                                        </label>
+
+                                        <div class="row">
+                                            <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
+                                                <img class="img-fluid" [src]="url.base64String">
+                                                <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-template #elseTemplate>
+                                        <label id="import_excel">
+                                            <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile"
+                                                type="file" (change)="onSelectFile($event)" multiple accept="image/*"
+                                                hidden>
+                                        </label>
+
+                                        <div class="row">
+                                            <div class="col-2 col-lg-2"
+                                                *ngFor='let url of imageurlsedit; let i = index'>
+                                                <img class="img-fluid" [src]="url">
+                                                <a class="btn btn-sm btn-danger mt-1" (click)="DeleteImage($event)"
+                                                    id={{i}}>Xóa</a>
+                                            </div>
+
+                                            <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
+                                                <img class="img-fluid" [src]="url.base64String">
+                                                <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
+                                            </div>
+                                        </div>
+                                    </ng-template>
 
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên cụm công nghiệp</mat-label>

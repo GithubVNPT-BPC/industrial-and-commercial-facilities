@@ -211,20 +211,19 @@ export class IndustryManagementService {
 
     public PostDataGroupCompany(body: any) {
         var apiUrl = this.endpoint + this.urlGroupCompany;
-        // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public postFile(fileToUpload: Array<File>) {
-        let apiUrl = this.endpoint + this.urlUploadmultipleimages
-        const formData: FormData = new FormData();
-        for (var i = 0; i < fileToUpload.length; i++) {
-            formData.append('files', fileToUpload[i], fileToUpload[i].name);
-        }
+    public PostImageGroupCompany(body: any, id_cnn) {
+        const formData = new FormData();
+        formData.append('file', body);
 
-        return this.http.post<any>(apiUrl, formData).pipe(tap(data => data),
+        const header = new HttpHeaders({ 'Content-Type': 'image/*' })
+        let apiUrl = this.endpoint + this.urlUpdateImageIndustry;
+        let params = new HttpParams().set('id', id_cnn.toString());
+        return this.http.post<any>(apiUrl, formData, { params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

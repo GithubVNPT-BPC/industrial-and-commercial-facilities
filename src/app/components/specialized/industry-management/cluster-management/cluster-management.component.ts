@@ -6,6 +6,7 @@ import { BaseComponent } from '../../base.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
     selector: 'cluster-management',
@@ -15,7 +16,7 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 
 export class ClusterManagementComponent extends BaseComponent {
 
-    serverUrl = 'http://apicongthongtin.vnptbinhphuoc.vn/';
+    serverUrl = environment.apiEndpoint
     id_cnn: number;
     showColumns: string[] = [];
     showSubColumns: string[] = [];
@@ -147,18 +148,6 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    getImagesfromId() {
-        let temList = [];
-        this.imageUrl = [...this.imagesSource];
-        for (const imageObject of this.imageUrl) {
-            if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
-                imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
-                temList.push(imageObject['duong_dan']);
-            }
-        }
-        this.imageUrl = [...temList];
-    }
-
     getFormParams() {
         return {
             ten_cum: new FormControl(''),
@@ -221,27 +210,51 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    uploadmultipleimages() {
-        this.indService.postFile(this.fileToUpload)
-            .subscribe(data => {
-            })
+    uploadImages(id_cnn) {
+        if (this.fileToUpload.length) {
+            for (const image of this.fileToUpload) {
+                this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
+                    // this.successNotify(res);
+                })
+            }
+        }
+    }
+
+    imageurlsedit = [];
+
+    getImagesfromId() {
+        let temList = [];
+        this.imageUrl = [...this.imagesSource];
+        for (const imageObject of this.imageUrl) {
+            if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
+                imageObject['delete'] = imageObject['duong_dan']
+                imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
+                temList.push(imageObject['duong_dan']);
+            }
+        }
+        this.imageurlsedit = [...temList];
     }
 
     deleteImages() {
         let tem = [];
         this.imagesDelete.forEach(element => {
-            tem.push({ file_name: element.slice(40) });
+            tem.push({ file_name: element['delete'] });
         });
         this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
             this.successNotify(res)
         }, error => this.errorMessage(error));
     }
 
+    DeleteImage(event) {
+        let indexImage = event.target.id;
+        this.imagesDelete.push(this.imageUrl[indexImage]);
+        this.imageurlsedit.splice(indexImage, 1);
+    }
+
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
-            this.uploadmultipleimages()
+            this.uploadImages(response.data.last_inserted_id);
             this.successNotify(response)
-            // this.uploadImages(response.data.last_inserted_id);
         }, error => this.errorNotify(error));
     }
 
@@ -249,9 +262,9 @@ export class ClusterManagementComponent extends BaseComponent {
         let body = Object.assign({}, this.formData.value);
         body.id = this.selection.selected[0].id;
         this.indService.PostDataGroupCompany(body).subscribe(response => {
-            // this.uploadImages(this.id_cnn);
+            this.successNotify(response)
         }, error => this.errorNotify(error));
-        this.uploadmultipleimages()
+        this.uploadImages(this.id_cnn);
         this.deleteImages();
     }
 
