@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 import { BlockElectricModel } from 'src/app/_models/APIModel/electric-management.module';
 
@@ -65,16 +65,16 @@ export class DifferenceElectricComponent extends BaseComponent {
     getFormParams() {
         return {
             id: new FormControl(),
-            ten_du_an: new FormControl(),
-            ten_doanh_nghiep: new FormControl(),
-            id_quan_huyen: new FormControl(),
-            cong_suat_thiet_ke: new FormControl(),
-            san_luong_6_thang: new FormControl(),
-            san_luong_nam: new FormControl(),
-            doanh_thu_6_thang: new FormControl(),
-            doanh_thu_nam: new FormControl(),
-            time_id: new FormControl(),
-            id_trang_thai_hoat_dong: new FormControl(),
+            ten_du_an: new FormControl('', Validators.required),
+            ten_doanh_nghiep: new FormControl('', Validators.required),
+            id_quan_huyen: new FormControl('', Validators.required),
+            cong_suat_thiet_ke: new FormControl(0, Validators.required),
+            san_luong_6_thang: new FormControl(0, Validators.required),
+            san_luong_nam: new FormControl(0, Validators.required),
+            doanh_thu_6_thang: new FormControl(0, Validators.required),
+            doanh_thu_nam: new FormControl(0, Validators.required),
+            time_id: new FormControl(this.currentTime, Validators.required),
+            id_trang_thai_hoat_dong: new FormControl('', Validators.required),
         }
     }
 

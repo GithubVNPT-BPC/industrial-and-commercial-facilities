@@ -15,7 +15,7 @@ import {
   SubDistrictModel,
 } from "src/app/_models/APIModel/domestic-market.model";
 
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
@@ -102,8 +102,8 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      mst: new FormControl(),
-      to_chu_ca_nhan: new FormControl(),
+      mst: new FormControl('', Validators.required),
+      to_chu_ca_nhan: new FormControl('', Validators.required),
       dia_diem: new FormControl(),
       nguoi_dai_dien: new FormControl(),
       dien_thoai: new FormControl(),
@@ -112,7 +112,7 @@ export class InformedEcommerceWebsiteComponent extends BaseComponent {
       nganh_nghe: new FormControl(),
       san_pham_ban_website: new FormControl(),
       ghi_chu: new FormControl(),
-      id_phuong_xa: new FormControl()
+      id_phuong_xa: new FormControl('', Validators.required),
     }
   }
 

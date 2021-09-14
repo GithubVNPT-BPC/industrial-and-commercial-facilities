@@ -2,7 +2,7 @@ import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { regisWebsiteModel } from 'src/app/_models/APIModel/e-commerce.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { BaseComponent } from '../../../base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
@@ -58,8 +58,8 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      mst_quyet_dinh: new FormControl(),
-      to_chu_ca_nhan: new FormControl(),
+      mst_quyet_dinh: new FormControl('', Validators.required),
+      to_chu_ca_nhan: new FormControl('', Validators.required),
       dia_diem: new FormControl(),
       nguoi_dai_dien: new FormControl(),
       dien_thoai: new FormControl(),
@@ -68,7 +68,7 @@ export class RegisteredSaleWebsiteComponent extends BaseComponent {
       email: new FormControl(),
       so_gian_hang: new FormControl(),
       ghi_chu: new FormControl(),
-      id_quan_huyen: new FormControl(),
+      id_quan_huyen: new FormControl('', Validators.required),
     }
   }
 

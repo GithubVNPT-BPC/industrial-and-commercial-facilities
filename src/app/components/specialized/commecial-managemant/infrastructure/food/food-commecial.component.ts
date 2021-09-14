@@ -1,7 +1,7 @@
 //Import Library
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
 
 //Import Model
@@ -133,9 +133,9 @@ export class FoodManagementComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      mst: new FormControl(),
-      id_spkd: new FormControl(),
-      id_giay_phep: new FormControl(),
+      mst: new FormControl('', Validators.required),
+      id_spkd: new FormControl('', Validators.required),
+      id_giay_phep: new FormControl('', Validators.required),
     }
   }
 

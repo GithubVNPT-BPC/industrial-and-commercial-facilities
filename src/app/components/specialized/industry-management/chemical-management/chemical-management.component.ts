@@ -1,7 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { ChemicalManagementModel } from 'src/app/_models/APIModel/industry-management.module';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/base.component';
@@ -127,7 +127,7 @@ export class ChemicalManagementComponent extends BaseComponent {
     getFormParams() {
         return {
             id_qlcn_hc: new FormControl(),
-            mst: new FormControl(),
+            mst: new FormControl('', Validators.required),
             time_id: new FormControl(this.currentYear),
             details: this.formBuilder.array([
                 this.formBuilder.group({

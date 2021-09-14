@@ -5,10 +5,12 @@ import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificat
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
+import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import moment from 'moment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-certificate-regulation',
@@ -41,6 +43,8 @@ export class CertificateRegulationComponent extends BaseComponent {
   isChecked: boolean;
   selectedFile: File = null;
   fileBin;
+  mstOptions: [];
+  _timeout: any = null;
 
   ds_sp: any[] = [
     { id_loai_san_pham: 1, ten_san_pham: "Thực phẩm" },
@@ -54,6 +58,7 @@ export class CertificateRegulationComponent extends BaseComponent {
     private injector: Injector,
     private modalService: NgbModal,
     private industryManagementService: IndustryManagementService,
+    public enterpriseService: EnterpriseService,
     public _login: LoginService
   ) {
     super(injector);
@@ -79,14 +84,14 @@ export class CertificateRegulationComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      mst: new FormControl(),
-      ten_san_pham: new FormControl(),
+      mst: new FormControl('', Validators.required),
+      ten_san_pham: new FormControl('', Validators.required),
       ban_cong_bo_hop_quy: new FormControl(),
       ngay_tiep_nhan: new FormControl(),
       duong_dan_nhan_san_pham: { value: '', disabled: true },
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl("Bình Phước"),
-      id_loai_san_pham: new FormControl(),
+      id_loai_san_pham: new FormControl('', Validators.required),
       file_name: new FormControl(),
       attachment_id: new FormControl(),
     }
@@ -120,6 +125,25 @@ export class CertificateRegulationComponent extends BaseComponent {
       this._prepareData();
       this.paginatorAgain();
     })
+  }
+
+  findEnterpriseByMst(mst) {
+    let self = this;
+    this._timeout  = null;
+     if(this._timeout){ //if there is already a timeout in process cancel it
+       window.clearTimeout(this._timeout);
+     }
+     this._timeout = window.setTimeout(() => {
+        self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+          results => {
+            if (results && results.data && results.data[0].length) {
+              self.mstOptions = results.data[0];
+            }
+          },
+          error => this.errorMessage = <any>error
+        );
+        self._timeout = null;
+     }, 2000);
   }
 
   applyFilter(event: Event) {

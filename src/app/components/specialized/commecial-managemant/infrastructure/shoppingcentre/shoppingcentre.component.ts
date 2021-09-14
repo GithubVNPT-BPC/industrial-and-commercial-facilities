@@ -1,7 +1,7 @@
 //Import Library
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 //Import Services
 import { ReportService } from 'src/app/_services/APIService/report.service';
@@ -127,10 +127,10 @@ export class ShoppingcentreComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      id_phan_hang: new FormControl(),
-      ten_sieu_thi_TTTM: new FormControl(),
+      id_phan_hang: new FormControl('', Validators.required),
+      ten_sieu_thi_TTTM: new FormControl('', Validators.required),
       dia_diem: new FormControl(),
-      id_dia_ban: new FormControl(),
+      id_dia_ban: new FormControl('', Validators.required),
       nha_nuoc: new FormControl(),
       ngoai_nha_nuoc: new FormControl(),
       co_von_dau_tu_nuoc_ngoai: new FormControl(),

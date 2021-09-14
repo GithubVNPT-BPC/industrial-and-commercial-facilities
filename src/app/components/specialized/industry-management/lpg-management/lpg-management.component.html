@@ -21,7 +21,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4 col-lg-4">
+                    <div class="col-12 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -35,7 +35,7 @@
                             </mat-card-content>
                         </mat-card>
                     </div>
-                    <div class="col-4 col-lg-4">
+                    <div class="col-12 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -49,7 +49,7 @@
                         </mat-card>
                     </div>
 
-                    <div class="col-4 col-lg-4">
+                    <div class="col-12 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
@@ -120,23 +120,28 @@
                     </div>
                 </div>
                 <hr />
-                    <button mat-raised-button matTooltip="Xuất Excel"
-                        (click)="ExportTOExcel('QLCN - LPG', currentYear.toString())">
-                        <mat-icon>file_download</mat-icon>
-                    </button>
-                    <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
-                        [hidden]=authorize>
-                        <mat-icon>add_circle_outline</mat-icon>
-                    </button>
-                    <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
-                        (click)="openRemoveDialog()" [hidden]=authorize>
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                    <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
-                        (click)="switchEditMode()" [hidden]=authorize>
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                    <!-- <app-crud-buttons [authorize]="authorize" [name_report]="name_report" [selection]="selection" [table]="table"></app-crud-buttons> -->
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control text-left my-auto">
+                        <button mat-raised-button class="green"
+                            (click)="ExportTOExcel('QLCN - LPG', currentYear.toString())">Xuất
+                            Excel</button>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                            [hidden]=authorize>
+                            <mat-icon>add_circle_outline</mat-icon>
+                        </button>
+
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
+                            (click)="openRemoveDialog()" [hidden]=authorize>
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" [hidden]=authorize
+                            mat-raised-button (click)="switchEditMode()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </div>
+                </div>
                 <hr>
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
