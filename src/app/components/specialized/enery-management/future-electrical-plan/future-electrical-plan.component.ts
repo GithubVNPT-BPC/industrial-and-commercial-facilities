@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
@@ -167,8 +167,8 @@ export class FutureElectricalPlanComponent extends BaseComponent {
             huong_tuyen_duong_day: new FormControl(''),
             nam_khoi_cong: new FormControl(''),
             nam_van_hanh: new FormControl(''),
-            id_loai_duong_day: new FormControl(''),
-            id_giai_doan: new FormControl(''),
+            id_loai_duong_day: new FormControl('', Validators.required),
+            id_giai_doan: new FormControl('', Validators.required),
             nam: new FormControl(''),
             ky: new FormControl('')
         }
@@ -185,9 +185,5 @@ export class FutureElectricalPlanComponent extends BaseComponent {
 
     changePeriod() {
         this.time_id = this.selectedYear * 10 + this.selectedPeriod;
-    }
-
-    search() {
-        this.getDataElectric110KV();
     }
 }
