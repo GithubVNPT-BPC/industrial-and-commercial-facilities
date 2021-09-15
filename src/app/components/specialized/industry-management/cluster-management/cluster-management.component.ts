@@ -233,9 +233,11 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     uploadFile(id_cnn) {
-        this.indService.PostFileGroupCompany(this.fileToUpload1, parseInt(id_cnn)).subscribe(res => {
-            // this.successNotify(res);
-        })
+        if (this.fileToUpload1.length != 0) {
+            this.indService.PostFileGroupCompany(this.fileToUpload1, parseInt(id_cnn)).subscribe(res => {
+                // this.successNotify(res);
+            })
+        }
     }
 
     imageurlsedit = [];
@@ -266,11 +268,13 @@ export class ClusterManagementComponent extends BaseComponent {
     oldfile: string;
 
     deleteFile() {
-        let temp = []
-        temp.push({ file_name: this.oldfile })
-        this.indService.DeleteFileGroupCompany(temp, this.id_cnn).subscribe(res => {
-            this.successNotify(res)
-        }, error => this.errorMessage(error));
+        if (this.fileToUpload1.length != 0) {
+            let temp = []
+            temp.push({ file_name: this.oldfile })
+            this.indService.DeleteFileGroupCompany(temp, this.id_cnn).subscribe(res => {
+                this.successNotify(res)
+            }, error => this.errorMessage(error));
+        }
     }
 
     DeleteImage(event) {
@@ -282,7 +286,7 @@ export class ClusterManagementComponent extends BaseComponent {
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
             this.uploadImages(response.data.last_inserted_id);
-            this.uploadImages(response.data.last_inserted_id)
+            this.uploadFile(response.data.last_inserted_id);
             this.successNotify(response)
         }, error => this.errorNotify(error));
     }
