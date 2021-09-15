@@ -11,7 +11,7 @@ import { environment } from 'src/environments/environment';
 @Component({
     selector: 'cluster-management',
     templateUrl: './cluster-management.component.html',
-    styleUrls: ['/../../special_layout.scss', './cluster-management.component.scss'],
+    styleUrls: ['/../../special_layout.scss'],
 })
 
 export class ClusterManagementComponent extends BaseComponent {

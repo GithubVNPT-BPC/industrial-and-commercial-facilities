@@ -2,16 +2,18 @@
     <div>
         <mat-card-content>
             <h3 class="text-center"><strong>Cụm công nghiệp: {{_clusterDetail.ten_cum}}</strong></h3>
-            <a href="{{_clusterDetail.downloadPDF}}" target="blank">Tải xuống tài liệu chi tiết</a>
+            <button mat-raised-button matTooltip="Tải xuống tài liệu chi tiết">
+                <mat-icon>file_download</mat-icon>
+            </button>
             <hr>
             <mat-carousel timings="250ms ease-in" [autoplay]="true" interval="5000" color="accent" maxWidth="auto"
-                proportion="25" slides="5" [loop]="true" [hideArrows]="false" [hideIndicators]="false"
+                proportion="25" slides="5" [loop]="true" [hideArrows]="false" [hideIndicators]="false" [maintainAspectRatio]="true"
                 [useKeyboard]="true" [useMouseWheel]="false" orientation="ltr">
                 <mat-carousel-slide #matCarouselSlide *ngFor="let url of imageurls; let i = index" [image]="url"
-                    overlayColor="#00000040" [hideOverlay]="false" style="height: 2000px !important">
+                    overlayColor="#00000040" [hideOverlay]="false">
                 </mat-carousel-slide>
             </mat-carousel>
-
+            <hr>
             <div class="layout">
                 <table mat-table [dataSource]="dataSource" #table class="table-layout" id="small-table">
                     <ng-container matColumnDef="index">
@@ -38,102 +40,6 @@
                     <tr mat-row class="table-row" *matRowDef="let row;columns: topColumns;let i = index; ">
                 </table>
             </div>
-
-            <!-- <div class="row">
-                <mat-card class="card3">
-                    <mat-card-header>
-                        <mat-card-title>
-                            <mat-icon> business</mat-icon> Chi tiết quy hoạch:
-                        </mat-card-title>
-                        <mat-card-subtitle>
-                        </mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <img class="card-img-top" src="./assets/img/cluster/TANPHU/CNN-TANPHU-001.png" alt="Quy hoạch">
-                    </mat-card-content>
-                </mat-card>
-            </div>
-            <hr>
-            <div class="row">
-                <mat-card class="card3">
-                    <mat-card-header>
-                        <mat-card-title>
-                            <mat-icon> business</mat-icon> Sơ đồ quy hoạch:
-                        </mat-card-title>
-                        <mat-card-subtitle>
-                        </mat-card-subtitle>
-                    </mat-card-header>
-                    <mat-card-content>
-                        <img class="card-img-top" src="./assets/img/cluster/TANPHU/CNN-TANPHU-001.png" alt="Sơ đồ">
-                    </mat-card-content>
-                </mat-card>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-lg-6">
-                    <mat-card class="card3">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
-                            </mat-card-title>
-                            <mat-card-subtitle>
-                            </mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <img class="detail-img" src="./assets/img/cluster/TANPHU/CNN-TANPHU-001.png"
-                                alt="Chi tiết 1">
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-                <div class="col-lg-6">
-                    <mat-card class="card3">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
-                            </mat-card-title>
-                            <mat-card-subtitle>
-                            </mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <img class="detail-img" src="./assets/img/cluster/TANPHU/CNN-TANPHU-001.png"
-                                alt="Chi tiết 2">
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-lg-6">
-                    <mat-card class="card3">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
-                            </mat-card-title>
-                            <mat-card-subtitle>
-                            </mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <img class="detail-img" src="./assets/img/cluster/TANPHU/CNN-TANPHU-001.png"
-                                alt="Chi tiết 3">
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-                <div class="col-lg-6">
-                    <mat-card class="card3">
-                        <mat-card-header>
-                            <mat-card-title>
-                                <mat-icon> business</mat-icon> Tổng quan chi tiết:
-                            </mat-card-title>
-                            <mat-card-subtitle>
-                            </mat-card-subtitle>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <img class="detail-img" src="./assets/img/cluster/TANPHU/CNN-TANPHU-001.png"
-                                alt="Chi tiết 4">
-                        </mat-card-content>
-                    </mat-card>
-                </div>
-            </div> -->
         </mat-card-content>
     </div>
     <ng-template #ShowEmpty>
