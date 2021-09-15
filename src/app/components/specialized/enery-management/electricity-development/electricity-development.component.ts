@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { ElectricityDevelopment35KVModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
@@ -105,16 +105,16 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      dia_ban: new FormControl(''),
+      dia_ban: new FormControl('', Validators.required),
       trung_ap_3_pha: new FormControl(''),
       trung_ap_1_pha: new FormControl(''),
       ha_ap_3_pha: new FormControl(''),
       ha_ap_1_pha: new FormControl(''),
       so_tram: new FormControl(''),
       cong_suat: new FormControl(''),
-      time_id: new FormControl(this.currentYear),
-      id_trang_thai_hoat_dong: new FormControl(1),
-      id_quan_huyen: new FormControl()
+      time_id: new FormControl(this.currentYear, Validators.required),
+      id_trang_thai_hoat_dong: new FormControl(1, Validators.required),
+      id_quan_huyen: new FormControl('', Validators.required)
     }
   }
   setFormParams() {

@@ -188,8 +188,4 @@ export class FuturePowerStationComponent extends BaseComponent {
     changePeriod() {
         this.time_id = this.selectedYear * 10 + this.selectedPeriod;
     }
-
-    search() {
-        this.getDataElectric110KV();
-    }
 }
