@@ -2,7 +2,7 @@ import { Component, Input, Injector } from "@angular/core";
 import { MatTableDataSource } from "@angular/material";
 import { ManageAproveElectronic } from "src/app/_models/APIModel/electric-management.module";
 import { EnergyService } from "src/app/_services/APIService/energy.service";
-import { FormControl } from "@angular/forms";
+import { FormControl, Validators } from "@angular/forms";
 import { BaseComponent } from "../../../base.component";
 import moment from "moment";
 import { LoginService } from "src/app/_services/APIService/login.service";
@@ -116,13 +116,13 @@ export class ConsultantElectricComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      ten_doanh_nghiep: new FormControl(''),
+      ten_doanh_nghiep: new FormControl('', Validators.required),
       dia_chi: new FormControl(''),
       dien_thoai: new FormControl(''),
       so_giay_phep: new FormControl(''),
       ngay_cap: new FormControl(''),
       ngay_het_han: new FormControl(''),
-      id_group: new FormControl(1)
+      id_group: new FormControl(1, Validators.required)
     }
   }
 

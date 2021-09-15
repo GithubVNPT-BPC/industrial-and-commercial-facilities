@@ -1,7 +1,6 @@
 import { Component, Injector } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
-import { ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { BaseComponent } from '../../base.component';
@@ -200,15 +199,15 @@ export class PrimaryElectricityComponent extends BaseComponent {
     getFormParams() {
         return {
             id: new FormControl(0),
-            ten_cong_trinh: new FormControl(''),
+            ten_cong_trinh: new FormControl('', Validators.required),
             cong_suat: new FormControl(),
-            id_dia_diem_quy_hoach: new FormControl(),
+            id_dia_diem_quy_hoach: new FormControl('', Validators.required),
             nam_khoi_cong: new FormControl(),
             nam_van_hanh: new FormControl(),
             ghi_chu: new FormControl(),
-            id_giai_doan: new FormControl(),
-            time_id: new FormControl(),
-            id_loai_cong_trinh: new FormControl(),
+            id_giai_doan: new FormControl('', Validators.required),
+            time_id: new FormControl('', Validators.required),
+            id_loai_cong_trinh: new FormControl('', Validators.required),
             year: new FormControl(),
             halfofyear: new FormControl()
         }
