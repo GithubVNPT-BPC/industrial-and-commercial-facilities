@@ -144,6 +144,8 @@ export class ClusterManagementComponent extends BaseComponent {
             this.formData.controls['nhu_cau_von'].setValue(selectedRecord.nhu_cau_von);
             // set value id to update
             this.id_cnn = selectedRecord.id;
+            this.oldfile = selectedRecord.duong_dan;
+            this.filename = selectedRecord.duong_dan;
             this.getImagesfromId();
         }
     }
@@ -210,6 +212,16 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
+    fileToUpload1: Array<File> = []
+    filename: string
+
+    onSelectFile1(event) {
+        if (event.target.files && event.target.files[0]) {
+            this.filename = event.target.files[0].name
+            this.fileToUpload1 = event.target.files[0]
+        }
+    }
+
     uploadImages(id_cnn) {
         if (this.fileToUpload.length) {
             for (const image of this.fileToUpload) {
@@ -218,6 +230,12 @@ export class ClusterManagementComponent extends BaseComponent {
                 })
             }
         }
+    }
+
+    uploadFile(id_cnn) {
+        this.indService.PostFileGroupCompany(this.fileToUpload1, parseInt(id_cnn)).subscribe(res => {
+            // this.successNotify(res);
+        })
     }
 
     imageurlsedit = [];
@@ -245,6 +263,16 @@ export class ClusterManagementComponent extends BaseComponent {
         }, error => this.errorMessage(error));
     }
 
+    oldfile: string;
+
+    deleteFile() {
+        let temp = []
+        temp.push({ file_name: this.oldfile })
+        this.indService.DeleteFileGroupCompany(temp, this.id_cnn).subscribe(res => {
+            this.successNotify(res)
+        }, error => this.errorMessage(error));
+    }
+
     DeleteImage(event) {
         let indexImage = event.target.id;
         this.imagesDelete.push(this.imageUrl[indexImage]);
@@ -254,6 +282,7 @@ export class ClusterManagementComponent extends BaseComponent {
     public callService(data) {
         this.indService.PostDataGroupCompany(data).subscribe(response => {
             this.uploadImages(response.data.last_inserted_id);
+            this.uploadImages(response.data.last_inserted_id)
             this.successNotify(response)
         }, error => this.errorNotify(error));
     }
@@ -265,7 +294,9 @@ export class ClusterManagementComponent extends BaseComponent {
             this.successNotify(response)
         }, error => this.errorNotify(error));
         this.uploadImages(this.id_cnn);
+        this.uploadFile(this.id_cnn)
         this.deleteImages();
+        this.deleteFile();
     }
 
     prepareRemoveData(data) {

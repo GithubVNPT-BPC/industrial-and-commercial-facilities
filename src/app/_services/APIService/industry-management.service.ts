@@ -39,9 +39,10 @@ export class IndustryManagementService {
     // Update
     private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
     private urlUpdateImageIndustry = '/hinh-anh';
+    private urlUpdateFileIndustry = '/tai-lieu';
 
-    private urlUploadmultipleimages = '/uploadimages';
-
+    private urlDeleteImageClusteManagement = '/xoa-hinh-anh'
+    private urlDeleteFileClusteManagement = '/xoa-tai-lieu'
     // Delete URLs
 
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
@@ -50,7 +51,6 @@ export class IndustryManagementService {
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
     private urlDeleteChemistry = '/hoa-chat-xoa';
     private urlDeleteClusterManagement = '/xoa-ccn';
-    private urlDeleteImageClusteManagement = '/xoa-hinh-anh'
     private urlDeleteExplosiveMat = '/vlncn/xoa';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
@@ -228,8 +228,28 @@ export class IndustryManagementService {
         );
     }
 
+    public PostFileGroupCompany(body: any, id_cnn) {
+        const formData = new FormData();
+        formData.append('file', body);
+
+        const header = new HttpHeaders({ 'Content-Type': 'image/*' })
+        let apiUrl = this.endpoint + this.urlUpdateFileIndustry;
+        let params = new HttpParams().set('id', id_cnn.toString());
+        return this.http.post<any>(apiUrl, formData, { params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     public DeleteImageGroupCompany(body, id_image) {
         let apiUrl = this.endpoint + this.urlDeleteImageClusteManagement;
+        let params = new HttpParams().set('id', id_image.toString());
+        return this.http.post<any>(apiUrl, body, { params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteFileGroupCompany(body, id_image) {
+        let apiUrl = this.endpoint + this.urlDeleteFileClusteManagement;
         let params = new HttpParams().set('id', id_image.toString());
         return this.http.post<any>(apiUrl, body, { params: params }).pipe(tap(data => data),
             catchError(this.handleError)
