@@ -223,7 +223,7 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     uploadImages(id_cnn) {
-        if (this.fileToUpload.length) {
+        if (this.fileToUpload.length != 0) {
             for (const image of this.fileToUpload) {
                 this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
                     // this.successNotify(res);
@@ -256,13 +256,15 @@ export class ClusterManagementComponent extends BaseComponent {
     }
 
     deleteImages() {
-        let tem = [];
-        this.imagesDelete.forEach(element => {
-            tem.push({ file_name: element['delete'] });
-        });
-        this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
-            this.successNotify(res)
-        }, error => this.errorMessage(error));
+        if (this.fileToUpload.length != 0) {
+            let tem = [];
+            this.imagesDelete.forEach(element => {
+                tem.push({ file_name: element['delete'] });
+            });
+            this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
+                this.successNotify(res)
+            }, error => this.errorMessage(error));
+        }
     }
 
     oldfile: string;

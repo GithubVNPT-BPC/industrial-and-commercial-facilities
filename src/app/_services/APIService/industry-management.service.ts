@@ -201,6 +201,14 @@ export class IndustryManagementService {
         );
     }
 
+    public Downloadfile(filesource: string) {
+        var apiUrl = environment.apiEndpoint + filesource;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     public GetDetailGroupCompany(id) {
         var apiUrl = this.endpoint + this.urlGetDetailGroupCompany;
         let params = new HttpParams().set('id', id.toString());

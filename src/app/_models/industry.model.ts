@@ -12,6 +12,7 @@ export class ClusterDetailModel{
     vi_tri_quy_mo : string;
     quy_mo_dien_tich : string;
     tong_muc_dau_tu : string;
+    duong_dan: string;
 }
 
 export class ClusterDetailShortModel{

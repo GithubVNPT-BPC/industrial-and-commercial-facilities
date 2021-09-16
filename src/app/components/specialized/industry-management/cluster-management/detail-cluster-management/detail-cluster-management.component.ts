@@ -10,6 +10,7 @@ import { BreadCrumService } from 'src/app/_services/injectable-service/breadcrum
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { environment } from 'src/environments/environment';
 import { MatCarousel, MatCarouselComponent } from '@ngmodule/material-carousel';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'detail-cluster-management',
@@ -38,7 +39,8 @@ export class DetailClusterManagementComponent implements OnInit {
     constructor(
         private _breadCrumService: BreadCrumService,
         public route: ActivatedRoute,
-        private indService: IndustryManagementService
+        private indService: IndustryManagementService,
+        public router: Router,
     ) {
         this.route.params.subscribe(params => {
             this._id = params['id'];
@@ -61,10 +63,13 @@ export class DetailClusterManagementComponent implements OnInit {
     imageurls = [];
     imageUrl: string[]
     imagesSource: string[]
+    fileSource: string
 
     _getClusterDetail(id_cluster: number) {
         this.indService.GetDetailGroupCompany(id_cluster).subscribe(res => {
             this._clusterDetail = res['data'][0][0];
+            this.fileSource = this._clusterDetail.duong_dan;
+
             this.imagesSource = res.data[1];
 
             let temList = [];
@@ -92,5 +97,10 @@ export class DetailClusterManagementComponent implements OnInit {
         dataTableTemp.push(new ClusterDetailShortModel("Quy mô, diện tích", this._clusterDetail.quy_mo_dien_tich));
         dataTableTemp.push(new ClusterDetailShortModel("Diễn giải", this._clusterDetail.dien_giai));
         this.dataSource.data = dataTableTemp;
+    }
+
+    public DownloadFile() {
+        this.indService.Downloadfile(this.fileSource).subscribe(res => {
+        });
     }
 }
