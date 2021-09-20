@@ -4,7 +4,7 @@ import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { LoginService } from './login.service';
-import { data_detail_model, new_import_export_model, tong_quan_bg_model } from 'src/app/_models/APIModel/export-import.model';
+import { data_detail_model, new_import_export_model, tong_quan_bg_model, new_model } from 'src/app/_models/APIModel/export-import.model';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +33,9 @@ export class SCTService {
 
     private urlDanhSachTMBG = "/thuong-mai-bien-gioi";
     private urlDanhSachTMBGTQ = "/thuong-mai-bien-gioi-tq";
+
+    private urlDanhSachCSSX = "/cssx";
+    private urlDanhSachCSSXTH = "/cssx-tonghop";
 
     private urlChiTietNhapKhau = "/xnk/chi-tiet-nhap-khau";
     private urlChiTietNhapKhauTC = "/xnk/chi-tiet-nhap-khau-tc";
@@ -176,6 +179,26 @@ export class SCTService {
         );
     }
 
+    public GetDanhSachCSSX(time_id: number) {
+        var apiUrl = this.apiSpecialized + this.urlDanhSachCSSX;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetDanhSachCSSXTongHop(time_id: number) {
+        var apiUrl = this.apiSpecialized + this.urlDanhSachCSSXTH;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     public GetDanhSachTMBG(time_id: number) {
         var apiUrl = this.apiSpecialized + this.urlDanhSachTMBG;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -211,6 +234,16 @@ export class SCTService {
         let params = new HttpParams().set('time_id', time_id.toString());
 
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public CapNhatDuLieuCSSXThang(time_id: number, data: new_model[]) {
+        var apiUrl = this.apiSpecialized + this.urlDanhSachCSSX;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id.toString());
+
+        return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

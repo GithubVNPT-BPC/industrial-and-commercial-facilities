@@ -10,6 +10,7 @@ import { IndustrialExplosivesComponent } from './industrial-explosives/industria
 import { LPGManagementComponent } from './lpg-management/lpg-management.component';
 import { CertificateRegulationComponent } from './certificate-regulation/certificate-regulation.component';
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
+import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
 
 const routes: Routes = [
     {
@@ -39,9 +40,19 @@ const routes: Routes = [
                     title: 'Công nghiệp - Công nghiệp thực phẩm',
                 }
             },
+            // {
+            //     path: 'iip',
+            //     component: IIPIndustrialComponent,
+            //     data: {
+            //         title: 'Chỉ số sản xuất công nghiệp',
+            //     },
+            //     children: [
+
+            //     ]
+            // },
             {
                 path: 'iip',
-                component: IIPIndustrialComponent,
+                component: IipMonthNewComponent,
                 data: {
                     title: 'Chỉ số sản xuất công nghiệp',
                 },
@@ -49,13 +60,13 @@ const routes: Routes = [
 
                 ]
             },
-            {
-                path: 'iip/iip-detail',
-                component: IIPMonthComponent,
-                data: {
-                    title: 'Chi tiết Chỉ số tháng',
-                }
-            },
+            // {
+            //     path: 'iip/iip-detail',
+            //     component: IipMonthNewComponent,
+            //     data: {
+            //         title: 'Chi tiết Chỉ số tháng',
+            //     }
+            // },
             {
                 path: 'explosives',
                 component: IndustrialExplosivesComponent,

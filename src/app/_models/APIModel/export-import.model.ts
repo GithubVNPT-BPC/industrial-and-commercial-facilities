@@ -1,3 +1,40 @@
+export class chartmodel {
+    ten_chi_tieu: string;
+    thang_01: number;
+    thang_02: number;
+    thang_03: number;
+    thang_04: number;
+    thang_05: number;
+    thang_06: number;
+    thang_07: number;
+    thang_08: number;
+    thang_09: number;
+    thang_10: number;
+    thang_11: number;
+    thang_12: number;
+}
+
+export class new_model {
+    ten_chi_tieu: string;
+    id_chi_tieu: string;
+
+    san_luong_thang: number;
+    tri_gia_thang: number;
+    uoc_thang_so_voi_ki_truoc: number;
+    uoc_thang_so_voi_thang_truoc: number;
+
+    san_luong_cong_don: number;
+    tri_gia_cong_don: number;
+    uoc_cong_don_so_voi_ki_truoc: number;
+    uoc_cong_don_so_voi_cong_don_truoc: number;
+
+    time_id: string;
+    is_tong_cuc: boolean;
+    thoi_gian_chinh_sua_cuoi: Date;
+    don_vi_tinh: string
+    stt: string
+}
+
 export class ex_im_model {
     ten_san_pham?: string;
     luong_thang?: number;
@@ -17,7 +54,6 @@ export class ex_im_model {
     isChecked?: boolean;
 }
 
-
 export class new_import_export_model {
     mst: number;
     ten_san_pham: string;
@@ -29,7 +65,7 @@ export class new_import_export_model {
     san_luong_cong_don: number;
     tri_gia_cong_don: number;
     uoc_cong_don_so_voi_ki_truoc: number;
-    uoc_cong_don_so_voi_cong_don_truoc: number; // uth so voi khn
+    uoc_cong_don_so_voi_cong_don_truoc: number;
     time_id: string;
     is_tong_cuc: boolean;
     thoi_gian_chinh_sua_cuoi: Date;
@@ -54,7 +90,7 @@ export class data_detail_model {
     san_luong_cong_don: number;
     tri_gia_cong_don: number;
     uoc_cong_don_so_voi_ki_truoc: number;
-    uoc_cong_don_so_voi_cong_don_truoc: number; // uth so voi khn
+    uoc_cong_don_so_voi_cong_don_truoc: number;
     time_id: string;
     is_tong_cuc: boolean;
 

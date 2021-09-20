@@ -23,6 +23,7 @@ import localevi from '@angular/common/locales/vi';
 registerLocaleData(localevi, 'vi');
 
 import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.component";
+import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.
     IIPMonthComponent,
     CertificateRegulationComponent,
     ReportExplosivesComponent,
-    CrudButtonsComponent
+    CrudButtonsComponent,
+    IipMonthNewComponent
   ],
   entryComponents: [],
   providers: [DecimalPipe, PercentPipe]
