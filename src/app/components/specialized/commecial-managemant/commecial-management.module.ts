@@ -77,6 +77,7 @@ import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/bor
 
 import { MatFormFieldModule, MatSelectModule } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { RetailMonthNewComponent } from './retail/retail-month-new/retail-month-new.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -172,7 +173,8 @@ export const customCurrencyMaskConfig = {
     DetailBorderTradeComponent,
     BorderTradeOverviewComponent,
     BorderTradeNewComponent,
-    BorderTradeNewOverviewComponent
+    BorderTradeNewOverviewComponent,
+    RetailMonthNewComponent
   ],
   entryComponents: [
     ModalComponent,

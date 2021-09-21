@@ -45,8 +45,8 @@ export const MY_FORMATS = {
 };
 
 @Component({
-  selector: 'app-iip-month-new',
-  templateUrl: './iip-month-new.component.html',
+  selector: 'app-retail-month-new',
+  templateUrl: './retail-month-new.component.html',
   styleUrls: ['../../../special_layout.scss'],
   providers: [
     {
@@ -59,12 +59,12 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
   ],
 })
-export class IipMonthNewComponent implements OnInit {
+export class RetailMonthNewComponent implements OnInit {
 
   private readonly LINK_DEFAULT: string =
-    "/specialized/industry-management/iip/iip";
-  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
-  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
+    "/specialized/commecial-management/retail";
+  private readonly TITLE_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
+  private readonly TEXT_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
@@ -99,7 +99,7 @@ export class IipMonthNewComponent implements OnInit {
     this.time = this.theYear.toString() + this.stringmonth
     this.timechange = parseInt(this.time)
 
-    this.GetDanhSachCSSXCN(this.timechange)
+    this.GetDanhSachBLHH(this.timechange)
     this.lineChart.config.data.datasets = []
     this.lineChartMethod(this.theYear);
 
@@ -222,14 +222,14 @@ export class IipMonthNewComponent implements OnInit {
   }
 
   public save(month: number, prototype: Array<new_model>) {
-    this.sctService.CapNhatDuLieuCSSXThang(month, prototype).subscribe(
+    this.sctService.CapNhatDuLieuBLHHThang(month, prototype).subscribe(
       next => {
         if (next.id == -1) {
           this._infor.msgError("Lưu lỗi! Lý do: " + next.message);
         }
         else {
           this._infor.msgSuccess("Dữ liệu được lưu thành công!");
-          this.GetDanhSachCSSXCN(this.timechange)
+          this.GetDanhSachBLHH(this.timechange)
         }
       },
       error => {
@@ -248,10 +248,10 @@ export class IipMonthNewComponent implements OnInit {
   ngOnInit() {
     this.month = this.getCurrentMonth().substring(5, 6)
     this.timechange = parseInt(this.getCurrentMonth())
-    this.GetDanhSachCSSXCN(this.timechange);
+    this.GetDanhSachBLHH(this.timechange);
     this.autoOpen();
     this.sendLinkToNext(true);
-    if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -277,8 +277,8 @@ export class IipMonthNewComponent implements OnInit {
     }
   }
 
-  GetDanhSachCSSXCN(time_id: number) {
-    this.sctService.GetDanhSachCSSX(time_id).subscribe((result) => {
+  GetDanhSachBLHH(time_id: number) {
+    this.sctService.GetDanhSachBLHH(time_id).subscribe((result) => {
       result.data[0].forEach(x => {
         x.san_luong_thang = x.san_luong_thang == 0 ? null : x.san_luong_thang
         x.tri_gia_thang = x.tri_gia_thang == 0 ? null : x.tri_gia_thang
@@ -291,7 +291,7 @@ export class IipMonthNewComponent implements OnInit {
       });
 
       this.setDataExport(result.data[0]);
-      this.setSumaryData(result.data[0] ? result.data[0] : 0)
+      this.setSumaryData(result.data[0] ? result.data[0] : 0);
     });
   }
 
@@ -325,9 +325,7 @@ export class IipMonthNewComponent implements OnInit {
 
   @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
   lineChart: any;
-
   timelist: string[] = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
-  thuchienthang: any[]
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -343,7 +341,7 @@ export class IipMonthNewComponent implements OnInit {
   chart: Array<chartmodel> = new Array<chartmodel>();
 
   lineChartMethod(time_id: number) {
-    this.sctService.GetDanhSachCSSXTongHop(time_id).subscribe(
+    this.sctService.GetDanhSachBLHHTongHop(time_id).subscribe(
       res => {
         this.chart = res.data[0]
 
@@ -353,7 +351,7 @@ export class IipMonthNewComponent implements OnInit {
             labels: this.timelist,
             datasets: [
               {
-                label: 'Chỉ số sản xuất công nghiệp (IIP) so với cùng kỳ theo giá so sánh năm 2010',
+                label: 'TỔNG MỨC BLHH VÀ DTDVTD',
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: 'rgb(255, 0, 0)',
@@ -384,4 +382,5 @@ export class IipMonthNewComponent implements OnInit {
         });
       })
   }
+
 }

@@ -38,6 +38,7 @@ import { DetailBorderTradeComponent } from './border-trade/detail-border-trade/d
 import { BorderTradeOverviewComponent } from './border-trade/border-trade-overview/border-trade-overview.component';
 import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.component';
 import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
+import { RetailMonthNewComponent } from './retail/retail-month-new/retail-month-new.component';
 
 const routes: Routes = [
   {
@@ -68,13 +69,6 @@ const routes: Routes = [
           title: 'Quản lý siêu thị',
         }
       },
-      // {
-      //   path: 'shoppingcentre',
-      //   component:,
-      //   data: {
-      //     title: 'Quản lý TTTM',
-      //   }
-      // },
       {
         path: 'search',
         component: SearchBusinessComponent,
@@ -215,13 +209,6 @@ const routes: Routes = [
           title: 'Tổng mức bán lẻ HH&DV',
         }
       },
-      // {
-      //   path: 'trs',
-      //   component: TRSManagementComponent,
-      //   data: {
-      //     title: 'Đăng ký khuyến mãi',
-      //   }
-      // },
     ]
   },
   {
@@ -260,7 +247,7 @@ const routes: Routes = [
   },
   {
     path: 'retail',
-    component: RetailComponent,
+    component: RetailMonthNewComponent,
   },
   {
     path: 'retail/retail-detail',
