@@ -238,10 +238,14 @@
 
             <div class="col-6 col-lg-3 my-auto">
                 <mat-form-field appearance="outline">
-                    <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
-                        <mat-select-filter [placeholder]="'Lọc dữ liệu'" [displayMember]="'ten_san_pham'"
-                            [array]="products" (filteredReturn)="filterproducts =$event"></mat-select-filter>
-                        <mat-option *ngFor="let item of filterproducts" [value]="item.id_san_pham">
+                    <mat-select [(ngModel)]="defaultcode">
+                        <mat-option>
+                            <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                noEntriesFoundLabel="Giá trị không có trong danh sách" [formControl]="profilter">
+                            </ngx-mat-select-search>
+                        </mat-option>
+
+                        <mat-option *ngFor="let item of filterproducts | async" [value]="item.id_san_pham">
                             {{item.ten_san_pham}}
                         </mat-option>
                     </mat-select>

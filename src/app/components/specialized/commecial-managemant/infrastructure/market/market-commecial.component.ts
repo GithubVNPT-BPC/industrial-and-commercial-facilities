@@ -2,9 +2,12 @@
 import { Component, Injector } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { FormControl, Validators } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 //Import Model
 import { MarketModel } from 'src/app/_models/APIModel/commecial-management.model';
+import { SubDistrictModel } from "src/app/_models/APIModel/domestic-market.model";
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
@@ -236,10 +239,44 @@ export class MarketCommecialManagementComponent extends BaseComponent {
     super.ngOnInit();
     this.initDistrictWard(false);
     this.getMarketData();
+    this.GetAllPhuongXa();
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
+
+    this.phuongxafilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterPhuongxa();
+      });
+  }
+
+  public _onDestroy = new Subject<void>();
+
+  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  public filtersubdistrict: ReplaySubject<SubDistrictModel[]> = new ReplaySubject<SubDistrictModel[]>(1);
+  GetAllPhuongXa() {
+    this.commerceManagementService.GetAllSubDistrict().subscribe((allrecords) => {
+      this.subdistrict = allrecords.data as SubDistrictModel[];
+      this.filtersubdistrict.next(this.subdistrict.slice());
+    });
+  }
+  public phuongxafilter: FormControl = new FormControl();
+  public filterPhuongxa() {
+    if (!this.subdistrict) {
+      return;
+    }
+    let search = this.phuongxafilter.value;
+    if (!search) {
+      this.filtersubdistrict.next(this.subdistrict.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filtersubdistrict.next(
+      this.subdistrict.filter(x => x.ten_phuong_xa.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   ngAfterViewInit() {

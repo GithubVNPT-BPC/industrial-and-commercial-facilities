@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '../../material.module';
+import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 import { ManagerRoutingModule } from './manager-routing.module';
 import { DomesticManagerComponent } from './domestic-manager/domestic-manager.component';
 import { ForeignManagerComponent } from './foreign-manager/foreign-manager.component';
-import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { ProductManagerComponent } from './product-manager/product-manager.component';
 import { ManagerDirective } from './../../shared/manager.directive';
 import { ExportTopCompanyManager } from './export-top-company-manager/export-top-company-manager.component';
@@ -18,10 +20,6 @@ import { UpdateUserComponent } from './update-user/update-user.component';
 import { SystemLogComponent } from './system-log/system-log.component';
 import { ManagerUserComponent } from './manager-user/manager-user.component';
 import { AddUserComponent } from './add-user/add-user.component';
-
-import { MatSelectModule, MatFormFieldModule } from '@angular/material';
-import { MatSelectFilterModule } from 'mat-select-filter';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -46,11 +44,6 @@ export const customCurrencyMaskConfig = {
     MaterialModule,
     ReactiveFormsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-
-    MatSelectModule,
-    MatFormFieldModule,
-    MatSelectFilterModule,
-
     NgxMatSelectSearchModule
   ],
   exports: [

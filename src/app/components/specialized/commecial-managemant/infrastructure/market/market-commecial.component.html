@@ -499,12 +499,16 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
-                                            <mat-select-filter [placeholder]="'Lọc dữ liệu'"
-                                                [displayMember]="'ten_phuong_xa'" [array]="districtWards"
-                                                (filteredReturn)="filteredDistrictWards = $event"></mat-select-filter>
-                                            <mat-option *ngFor='let dw of filteredDistrictWards'
-                                                [value]='dw.id_phuong_xa'>
-                                                {{dw.ten_phuong_xa}}
+                                            <mat-option>
+                                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                                    [formControl]="phuongxafilter">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+
+                                            <mat-option *ngFor="let item of filtersubdistrict | async"
+                                                [value]="item.id_phuong_xa">
+                                                {{item.ten_phuong_xa}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>

@@ -1,27 +1,25 @@
 import { CommonModule } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localevi from '@angular/common/locales/vi';
+registerLocaleData(localevi, 'vi');
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { NgModule } from '@angular/core';
 import { MatDialogModule } from "@angular/material/dialog";
+import { MaterialModule } from 'src/app/material.module';
+import { PipeModule } from 'src/app/pipe.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 
 import { MarketRoutingModule } from './market-routing.module';
-
-import { DomesticPriceComponent, DDMMYY_FORMAT } from './domesticPrice/domestic-price.component';
-import { MatSelectFilterModule } from 'mat-select-filter';
-import { MaterialModule } from '../../../material.module';
+import { DomesticPriceComponent } from './domesticPrice/domestic-price.component';
 import { DomesticExportComponent } from './domesticExport/domestic-export.component';
 import { DomesticImportComponent } from './domesticImport/domestic-import.component';
 import { DomesticProductComponent } from './domesticProduct/domestic-product.component';
 import { ForeignMarketPriceComponent } from './foreignPrice/foreign-price.component';
 import { CompanyTopPopup } from './company-top-popup/company-top-popup.component';
-import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
-import { PipeModule } from 'src/app/pipe.module';
-import { registerLocaleData } from '@angular/common';
-import localevi from '@angular/common/locales/vi';
 import { DialogImportExportComponent } from './dialog-import-export/dialog-import-export.component';
-
-registerLocaleData(localevi, 'vi');
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -49,7 +47,7 @@ export const customCurrencyMaskConfig = {
     ReactiveFormsModule,
     PipeModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    MatSelectFilterModule,
+    NgxMatSelectSearchModule
   ],
   exports: [
   ],

@@ -1,8 +1,19 @@
 import { CommonModule, formatNumber } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MaterialModule } from '../../../material.module';
+import { MaterialModule } from 'src/app/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material';
+import { PipeModule } from 'src/app/pipe.module';
+import { registerLocaleData } from '@angular/common';
+import localevi from '@angular/common/locales/vi';
+registerLocaleData(localevi, 'vi');
+import { MatTabsModule } from '@angular/material/tabs';
+import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+
 import { CommecialManagementRoutingModule } from './commecial-management.routing';
 import { MarketCommecialManagementComponent } from './infrastructure/market/market-commecial.component';
 import { CommonCommecialComponent } from './infrastructure/common/common-commecial.component';
@@ -20,28 +31,19 @@ import { CountrysideComponent } from './infrastructure/countryside/countryside.c
 import { TRSManagementComponent } from './infrastructure/total-retail-sales/total-retail-sales.component';
 import { ImportManagementComponent } from './export-import-management/import-management/import-management.component';
 import { ExportManagementComponent } from './export-import-management/export-management/export-management.component';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ModalComponent } from './export-import-management/dialog-import-export/modal.component';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { BorderTradeComponent } from './border-trade/border-trade.component';
 import { RegisteredSaleWebsiteComponent } from './e-commerce-managemant/registered-sale-website/registered-sale-website.component';
 import { MultilevelTradeComponent } from './multilevel-trade/multilevel-trade.component';
 import { RetailMonthComponent } from './retail/retail-month/retail-month.component';
 import { RetailComponent } from './retail/retail.component';
-// import { FormatNumberReportPipe } from "src/app/shared/pipes/formatNumber.pipe";
-import { MatSortModule } from '@angular/material';
-import { PipeModule } from 'src/app/pipe.module';
 import { TradeFairsExhibitionsComponent } from './trade-development/trade-fairs-exhibitions/trade-fairs-exhibitions.component';
 import { SubscribeDiscountComponent } from './trade-development/subscribe-discount/subscribe-discount.component';
 import { CommonFuntions } from './conditional-business-line/common-functions.service';
-import { registerLocaleData } from '@angular/common';
-import localevi from '@angular/common/locales/vi';
-registerLocaleData(localevi, 'vi');
 import { BorderTradeExportComponent } from "./border-trade/border-trade-export/border-trade-export.component";
 import { BorderTradeImportComponent } from "./border-trade/border-trade-import/border-trade-import.component";
 import { ImportDataComponent } from './export-import-management/import-data/import-data.component';
 import { ExcelServicesService } from 'src/app/shared/services/excel-services.service';
-import { MatTabsModule } from '@angular/material/tabs';
 import { MatTabComponent } from './export-import-management/mat-tab/mat-tab.component';
 import { DetailNationalComponent } from './export-import-management/detail-national/detail-national.component';
 import { DetailDataComponent } from './export-import-management/detail-data/detail-data.component';
@@ -54,7 +56,6 @@ import { CommonDataBorderComponent } from './border-trade/common-data-border/com
 import { DetailDataBorderComponent } from './border-trade/detail-data-border/detail-data-border.component';
 import { MatTabBorderComponent } from './border-trade/mat-tab-border/mat-tab-border.component';
 import { ImportDataBorderComponent } from './border-trade/import-data-border/import-data-border.component';
-import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { SpecialDirective } from 'src/app/shared/special.directive';
 import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
 import { AddStoreComponent } from './conditional-business-line/petro-business/add-store/add-store.component';
@@ -64,7 +65,6 @@ import { AddTobaccoBusinessComponent } from './conditional-business-line/tobacco
 import { AddLiquorBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-business/add-liquor-business.component';
 import { AddLiquorSupplyBusinessComponent } from './conditional-business-line/liquor-business/add-liquor-supply-business/add-liquor-supply-business.component';
 import { ManageBusinessmanComponent } from './conditional-business-line/petro-business/manage-businessman/manage-businessman.component';
-import { MatSelectFilterModule } from 'mat-select-filter';
 import { SearchBusinessComponent } from './business/search/search-business.component';
 import { EditBusinessComponent } from './business/edit/edit-business.component';
 import { AddLpgComponent } from './conditional-business-line/lpg-business/add-lpg/add-lpg.component';
@@ -74,9 +74,6 @@ import { DetailBorderTradeComponent } from './border-trade/detail-border-trade/d
 import { BorderTradeOverviewComponent } from './border-trade/border-trade-overview/border-trade-overview.component';
 import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.component';
 import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
-
-import { MatFormFieldModule, MatSelectModule } from '@angular/material';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { RetailMonthNewComponent } from './retail/retail-month-new/retail-month-new.component';
 
 export const customCurrencyMaskConfig = {
@@ -105,10 +102,6 @@ export const customCurrencyMaskConfig = {
     PipeModule,
     MatTabsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    MatSelectFilterModule,
-
-    MatSelectModule,
-    MatFormFieldModule,
     NgxMatSelectSearchModule
   ],
   exports: [

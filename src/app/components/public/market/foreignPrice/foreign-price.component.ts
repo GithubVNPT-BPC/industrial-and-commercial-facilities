@@ -1,11 +1,14 @@
 import { Component, Injector, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { FormControl } from '@angular/forms';
 import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
 import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
 import { foreignchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { formatDate } from '@angular/common';
+
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ForeignMarketModel } from 'src/app/_models/APIModel/domestic-market.model';
@@ -67,14 +70,22 @@ export class ForeignMarketPriceComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.getListProduct();
+    this.GetProduct();
     this.defaultcode = 1
     this.tungay = this.firstday.value
     this.denngay = this.presentday.value
     this.productcode = 1
 
     this.getForeignMarketPriceByTime(this.pickedDate2.value._d);
+
+    this.profilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterThuongnhan();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   public getForeignMarketPriceByTime(time: Date) {
     let datepipe = this.datepipe.transform(time, 'yyyyMMdd');
@@ -156,15 +167,28 @@ export class ForeignMarketPriceComponent extends BaseComponent {
     );
   }
 
-  public products: Array<ProductModel> = new Array<ProductModel>();
-  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
-
-  public getListProduct(): void {
-    this.dashboardService.GetProductList().subscribe(
-      allrecords => {
-        this.products = allrecords.data as ProductModel[];
-        this.filterproducts = this.products.slice();
-      },
+  products: Array<ProductModel> = new Array<ProductModel>();
+  filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
+  GetProduct() {
+    this.dashboardService.GetProductList().subscribe((allrecords) => {
+      this.products = allrecords.data as ProductModel[];
+      this.filterproducts.next(this.products.slice());
+    });
+  }
+  public profilter: FormControl = new FormControl();
+  public filterThuongnhan() {
+    if (!this.products) {
+      return;
+    }
+    let search = this.profilter.value;
+    if (!search) {
+      this.filterproducts.next(this.products.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterproducts.next(
+      this.products.filter(x => x.ten_san_pham.toLowerCase().indexOf(search) > -1)
     );
   }
 

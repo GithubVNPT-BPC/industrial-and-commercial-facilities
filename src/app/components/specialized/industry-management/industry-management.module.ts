@@ -3,6 +3,13 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material.module';
 import { PipeModule } from 'src/app/pipe.module';
+import { registerLocaleData } from '@angular/common';
+import localevi from '@angular/common/locales/vi';
+registerLocaleData(localevi, 'vi');
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { DecimalPipe } from '@angular/common';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
+
 import { ChemicalManagementComponent } from './chemical-management/chemical-management.component';
 import { ClusterManagementComponent } from './cluster-management/cluster-management.component';
 import { DetailClusterManagementComponent } from './cluster-management/detail-cluster-management/detail-cluster-management.component';
@@ -14,14 +21,6 @@ import { IndustryManagementRoutingModule } from './industry-management.routing';
 import { LPGManagementComponent } from './lpg-management/lpg-management.component';
 import { CertificateRegulationComponent } from './certificate-regulation/certificate-regulation.component';
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
-import { registerLocaleData } from '@angular/common';
-import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { DecimalPipe } from '@angular/common';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
-
-import localevi from '@angular/common/locales/vi';
-registerLocaleData(localevi, 'vi');
-
 import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.component";
 import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
 

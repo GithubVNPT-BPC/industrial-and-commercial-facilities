@@ -83,10 +83,6 @@ const routes: Routes = [
       title: 'Sở công thương'
     },
     children: [
-      {//Dashboard
-        path: 'dashboard',
-        loadChildren: () => import('../components/public/dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
       {//Market
         path: 'market',
         loadChildren: () => import('../components/public/market/market.module').then(m => m.MarketModule)

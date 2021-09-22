@@ -95,25 +95,25 @@ export class CommerceManagementService {
     public getMultiLevelTradeData() {
         let apiUrl = this.apiHome + this.urlGetMultiLevelTrade;
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public getMarketData(is_tttm=true) {
+    public getMarketData(is_tttm = true) {
         let apiUrl = this.apiHome + this.urlGetMarket;
         let headers = new HttpHeaders(HEADERS);
         let params = new HttpParams().set('is_tttm', is_tttm.toString());
-        return this.http.get<any>(apiUrl, { headers: headers, params: params}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public getMarketPlaceData(is_tttm=true) {
+    public getMarketPlaceData(is_tttm = true) {
         let apiUrl = this.apiHome + this.urlGetMarketPlace;
         let headers = new HttpHeaders(HEADERS);
         let params = new HttpParams().set('is_tttm', is_tttm.toString());
-        return this.http.get<any>(apiUrl, { headers: headers, params: params}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -121,7 +121,7 @@ export class CommerceManagementService {
     public getFoodCommerceData() {
         let apiUrl = this.apiHome + this.urlGetFoodCommerce;
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -129,7 +129,7 @@ export class CommerceManagementService {
     public getConvenienceStoreData() {
         let apiUrl = this.apiHome + this.urlGetConvenienceStore;
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -137,7 +137,7 @@ export class CommerceManagementService {
     public getCountrySideData() {
         let apiUrl = this.apiHome + this.urlGetCountrSide;
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers}).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -317,7 +317,7 @@ export class CommerceManagementService {
             catchError(this.handleError)
         );
     }
-    CapNhatDanhSachThongBaoWeb(body:any[]) {
+    CapNhatDanhSachThongBaoWeb(body: any[]) {
         var apiUrl = this.apiHome + this.urlPostInformWebsite;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
@@ -333,7 +333,7 @@ export class CommerceManagementService {
         );
     }
 
-    CapNhatDanhSachDangKiWeb(body: any[]){
+    CapNhatDanhSachDangKiWeb(body: any[]) {
         var apiUrl = this.apiHome + this.urlPostRegisWebsite;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
@@ -341,7 +341,7 @@ export class CommerceManagementService {
         );
     }
 
-    XoaDanhSachWeb(body: any[]){
+    XoaDanhSachWeb(body: any[]) {
         var apiUrl = this.apiHome + this.urlDeleteECommerceWebsite;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
@@ -349,10 +349,19 @@ export class CommerceManagementService {
         );
     }
 
-    XoaDanhSachDangKiWeb(body: any[]){
+    XoaDanhSachDangKiWeb(body: any[]) {
         var apiUrl = this.apiHome + this.urlDeleteRegistedWebsite;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.post<any>(apiUrl, body, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public urlSubDistrict = "api/danh-sach/phuong-xa";
+    public GetAllSubDistrict() {
+        var apiUrl = this.apiHome + this.urlSubDistrict;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

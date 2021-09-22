@@ -8,6 +8,10 @@ import {
   MatDialogConfig,
 } from "@angular/material";
 
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { SCTService } from "src/app/_services/APIService/sct.service";
 import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
@@ -19,7 +23,6 @@ import { SAVE } from 'src/app/_enums/save.enum';
 
 import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
 
-import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -163,7 +166,7 @@ export class DomesticImportComponent extends BaseComponent {
   }
 
   ngOnInit() {
-    this.getListProduct()
+    this.GetProduct();
     this.defaultcode = 55
     this.tuthang = this.firstmonth.value
     this.denthang = this.presentmonth.value
@@ -173,7 +176,15 @@ export class DomesticImportComponent extends BaseComponent {
     this.timechange = parseInt(this.getCurrentMonth())
     this.getDanhSachNhapKhau(this.timechange);
     super.ngOnInit();
+
+    this.profilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterThuongnhan();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   getDanhSachNhapKhau(time_id: number) {
     this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
@@ -349,15 +360,28 @@ export class DomesticImportComponent extends BaseComponent {
     );
   }
 
-  public products: Array<ProductModel> = new Array<ProductModel>();
-  public filterproducts: Array<ProductModel> = new Array<ProductModel>();
-
-  public getListProduct(): void {
-    this.dashboardService.GetProductListAll().subscribe(
-      allrecords => {
-        this.products = allrecords.data.filter(x => x.xnk == 2) as ProductModel[];
-        this.filterproducts = this.products.slice();
-      },
+  products: Array<ProductModel> = new Array<ProductModel>();
+  filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
+  GetProduct() {
+    this.dashboardService.GetProductListAll().subscribe((allrecords) => {
+      this.products = allrecords.data.filter(x => x.xnk == 2) as ProductModel[];
+      this.filterproducts.next(this.products.slice());
+    });
+  }
+  public profilter: FormControl = new FormControl();
+  public filterThuongnhan() {
+    if (!this.products) {
+      return;
+    }
+    let search = this.profilter.value;
+    if (!search) {
+      this.filterproducts.next(this.products.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterproducts.next(
+      this.products.filter(x => x.ten_san_pham.toLowerCase().indexOf(search) > -1)
     );
   }
 
