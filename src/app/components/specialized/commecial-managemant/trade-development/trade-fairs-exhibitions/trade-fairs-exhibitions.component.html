@@ -116,8 +116,10 @@
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
                     </div>
                 </div>
 
@@ -131,7 +133,7 @@
                 </div>
 
                 <div *ngIf="filteredDataSource.data.length; else ShowEmpty" class="layout" #TABLE>
-                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null"
@@ -163,7 +165,8 @@
                                 <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
                                 <ng-container *ngIf="field.key != 'id_trang_thai';else activeFieldCond">
                                     <ng-container *ngIf="![].includes(field.key);else qtyFieldCond">
-                                        <ng-container *ngIf="!['thoi_gian_chinh_sua_cuoi'].includes(field.key) ;else dateFieldCond">
+                                        <ng-container
+                                            *ngIf="!['thoi_gian_chinh_sua_cuoi'].includes(field.key) ;else dateFieldCond">
                                             <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
                                         </ng-container>
                                     </ng-container>
@@ -179,7 +182,8 @@
                                 </ng-template>
 
                                 <ng-template #dateFieldCond>
-                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy, h:mm a'}}
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy,
+                                        h:mm a'}}
                                     </td>
                                 </ng-template>
 
@@ -222,7 +226,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label for="ten_doanh_nghiep">Doanh nghiệp</mat-label>
                             <input matInput placeholder="VD: Công ty TNHH" id="ten_doanh_nghiep" type="text"
-                                required="true" formControlName="ten_doanh_nghiep">
+                                formControlName="ten_doanh_nghiep">
                         </mat-form-field>
                     </div>
 
@@ -270,7 +274,7 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Bắt đầu</mat-label>
-                            <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau">
+                            <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau" readonly>
                             <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                             <mat-datepicker #startDate></mat-datepicker>
                         </mat-form-field>
@@ -279,8 +283,7 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Kết thúc</mat-label>
-                            <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc"
-                                datetime="DD/MM/yyyy">
+                            <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc" readonly>
                             <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                             <mat-datepicker #endDate></mat-datepicker>
                         </mat-form-field>
@@ -335,7 +338,7 @@
                     <div class="col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Ngày, tháng, năm văn bản</mat-label>
-                            <input matInput [matDatepicker]="docDate" formControlName="ngay_thang_nam_van_ban">
+                            <input matInput [matDatepicker]="docDate" formControlName="ngay_thang_nam_van_ban" readonly>
                             <mat-datepicker-toggle matSuffix [for]="docDate"></mat-datepicker-toggle>
                             <mat-datepicker #docDate></mat-datepicker>
                         </mat-form-field>

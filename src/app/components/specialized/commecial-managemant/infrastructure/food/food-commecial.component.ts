@@ -43,15 +43,16 @@ export class FoodManagementComponent extends BaseComponent {
   ];
 
   displayedFields = {
-    ten_cua_hang: "Tên cửa hàng",
-    dia_chi_day_du: "Địa chỉ",
     mst: "Mã số thuế",
-    ten_san_pham: "Sản phẩm kinh doanh",
-    so_giay_phep: "Số chứng nhận ĐKKD",
-    ngay_cap: "Ngày cấp",
-    // ngay_het_han: "Ngày hết hạn",
-    nguoi_dai_dien: "Tên",
+    ten_cua_hang: "Tên cơ sở",
+    dia_chi_day_du: "Địa chỉ",
+    nguoi_dai_dien: "Người đại diện theo pháp luật",
     so_dien_thoai: "Điện thoại",
+    ten_san_pham: "Mặt hàng kinh doanh",
+    so_giay_phep: "Số GCN ATTP",
+    ngay_cap: "Ngày cấp",
+    ngay_het_han: "Ngày hết hạn",
+    // ngay_het_han: "Ngày hết hạn",
     thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
   }
   giayCndkkdList = [];
@@ -91,9 +92,9 @@ export class FoodManagementComponent extends BaseComponent {
         this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           allrecords.data.forEach(element => {
-            element.ngay_cap = this.formatDate(element.ngay_cap);
-            element.ngay_het_han = this.formatDate(element.ngay_het_han);
-            element.is_het_han = element.ngay_het_han ? element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate()): false;
+            element.ngay_cap = element.ngay_cap ? this.formatDate(element.ngay_cap) : '';
+            element.ngay_het_han = element.ngay_het_han ? this.formatDate(element.ngay_het_han) : '';
+            element.is_het_han = element.ngay_het_han ? element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate()) : false;
           });
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
           this.filteredDataSource.data = [...this.dataSource.data].filter(x => !x.is_het_han)
@@ -107,22 +108,22 @@ export class FoodManagementComponent extends BaseComponent {
 
   findEnterpriseByMst(mst) {
     let self = this;
-    this._timeout  = null;
-     if(this._timeout){ //if there is already a timeout in process cancel it
-       window.clearTimeout(this._timeout);
-     }
-     this._timeout = window.setTimeout(() => {
-        self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
-          results => {
-            if (results && results.data && results.data[0].length) {
-              self.mstOptions = results.data[0];
-              self.giayCndkkdList = results.data[2];
-            }
-          },
-          error => this.errorMessage = <any>error
-        );
-        self._timeout = null;
-     }, 2000);
+    this._timeout = null;
+    if (this._timeout) { //if there is already a timeout in process cancel it
+      window.clearTimeout(this._timeout);
+    }
+    this._timeout = window.setTimeout(() => {
+      self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+        results => {
+          if (results && results.data && results.data[0].length) {
+            self.mstOptions = results.data[0];
+            self.giayCndkkdList = results.data[2];
+          }
+        },
+        error => this.errorMessage = <any>error
+      );
+      self._timeout = null;
+    }, 2000);
   }
 
   public getCurrentDate() {

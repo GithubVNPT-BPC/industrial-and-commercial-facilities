@@ -46,7 +46,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
 
   public promotionTypes: string[] = [];
   form: FormGroup;
-  
+
   constructor(
     private injector: Injector,
     public commerceManagementService: CommerceManagementService,
@@ -63,7 +63,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.getPromotionTypes();
     this.getSDList();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -95,7 +95,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     }
   }
 
-  setFormParams(){
+  setFormParams() {
     if (this.selection.selected.length) {
       let selectedRecord = this.selection.selected[0];
       this.formData.controls['id'].setValue(selectedRecord.id);
@@ -106,10 +106,10 @@ export class SubscribeDiscountComponent extends BaseComponent {
       this.formData.controls['thoi_gian_bat_dau'].setValue(selectedRecord.thoi_gian_bat_dau);
       this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_ket_thuc);
       this.formData.controls['hang_hoa_km'].setValue(selectedRecord.hang_hoa_km);
-      this.formData.controls['so_van_ban'].setValue(selectedRecord.so_van_ban);  
-      this.formData.controls['co_quan_ban_hanh'].setValue(selectedRecord.co_quan_ban_hanh);  
-      this.formData.controls['ngay_thang_nam_van_ban'].setValue(selectedRecord.ngay_thang_nam_van_ban);  
-      this.formData.controls['id_hinh_thuc'].setValue(selectedRecord.id_hinh_thuc);  
+      this.formData.controls['so_van_ban'].setValue(selectedRecord.so_van_ban);
+      this.formData.controls['co_quan_ban_hanh'].setValue(selectedRecord.co_quan_ban_hanh);
+      this.formData.controls['ngay_thang_nam_van_ban'].setValue(selectedRecord.ngay_thang_nam_van_ban);
+      this.formData.controls['id_hinh_thuc'].setValue(selectedRecord.id_hinh_thuc);
     }
   }
 
@@ -140,7 +140,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.commerceManagementService.getSubcribeDiscountTypeData().subscribe(
       result => {
         if (result.data && result.data.length > 0) {
-          this.promotionTypes = result.data          
+          this.promotionTypes = result.data
         }
       },
       error => this.errorMessage = <any>error
@@ -194,7 +194,8 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    console.log(data)
+    // this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   prepareRemoveData() {
@@ -208,47 +209,47 @@ export class SubscribeDiscountComponent extends BaseComponent {
 
   applyFilter(event) {
     if (event.target) {
-        const filterValue = (event.target as HTMLInputElement).value;
-        this.filteredDataSource.filter = filterValue.trim().toLowerCase();
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.filteredDataSource.filter = filterValue.trim().toLowerCase();
     } else {
-        let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
+      let filteredData = this.filterArray(this.dataSource.data, this.filterModel);
 
-        if (!filteredData.length) {
-            if (this.filterModel)
-                this.filteredDataSource.data = [];
-            else
-                this.filteredDataSource.data = this.dataSource.data;
-        }
-        else {
-            this.filteredDataSource.data = filteredData;
-        }
+      if (!filteredData.length) {
+        if (this.filterModel)
+          this.filteredDataSource.data = [];
+        else
+          this.filteredDataSource.data = this.dataSource.data;
+      }
+      else {
+        this.filteredDataSource.data = filteredData;
+      }
     }
 
-    if(event.value){
-        // const filterValue = (event as HTMLInputElement).value;
-        this.filteredDataSource.filter = event.value.toString().trim().toLowerCase();
+    if (event.value) {
+      // const filterValue = (event as HTMLInputElement).value;
+      this.filteredDataSource.filter = event.value.toString().trim().toLowerCase();
     }
     this._prepareData();
     this.paginatorAgain();
-}
+  }
 
   filterArray(dataSource, filters) {
     const filterKeys = Object.keys(filters);
     let filteredData = [...dataSource];
     filterKeys.forEach(key => {
-        let filterCrits = [];
-        if (filters[key].length) {
-          if (key == 'id_quan_huyen') {
-            filters[key].forEach(criteria => {
-              filterCrits = filterCrits.concat(filteredData.filter(x => x.dia_diem_km.map(y => y.id_quan_huyen).includes(criteria)));
-            });
-          } else {
-            filters[key].forEach(criteria => {
-              filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
-            });
-          }
-          filteredData = [...filterCrits];
+      let filterCrits = [];
+      if (filters[key].length) {
+        if (key == 'id_quan_huyen') {
+          filters[key].forEach(criteria => {
+            filterCrits = filterCrits.concat(filteredData.filter(x => x.dia_diem_km.map(y => y.id_quan_huyen).includes(criteria)));
+          });
+        } else {
+          filters[key].forEach(criteria => {
+            filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+          });
         }
+        filteredData = [...filterCrits];
+      }
     })
     return filteredData;
   }

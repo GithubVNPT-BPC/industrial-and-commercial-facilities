@@ -93,7 +93,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
+    // this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
     this.getTFEList(new Date().getFullYear());
     this.initWards();
 

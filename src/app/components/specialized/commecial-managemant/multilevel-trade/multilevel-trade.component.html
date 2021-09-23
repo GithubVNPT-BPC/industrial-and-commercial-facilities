@@ -70,7 +70,8 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" multiple [(ngModel)]="filterModel.thoi_gian_bat_dau">
+                            <mat-select (selectionChange)="applyFilter($event)" multiple
+                                [(ngModel)]="filterModel.thoi_gian_bat_dau">
                                 <mat-option [value]='0'>-- Tất cả --</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
@@ -90,8 +91,10 @@
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa"
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" mat-raised-button
+                            (click)="switchEditMode()">
+                            <mat-icon>edit</mat-icon>
+                        </button>
                     </div>
 
                     <div class="col-md-12 col-lg-12">
@@ -124,9 +127,9 @@
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>
                                 {{this.filteredDataSource.paginator.pageIndex == 0 ? i
-                                    + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
-                                    this.filteredDataSource.paginator.pageSize}}
-                                </td>
+                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
+                                this.filteredDataSource.paginator.pageSize}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="mst">
@@ -203,10 +206,11 @@
 
                         <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
                             <th mat-header-cell *matHeaderCellDef> Thời gian cập nhật </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date: 'dd/MM/yyyy, h:mm a'}}
+                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
+                                'dd/MM/yyyy, h:mm a'}}
                             </td>
                         </ng-container>
-                        
+
                         <ng-container matColumnDef="thong_tin_dn">
                             <th mat-header-cell *matHeaderCellDef [attr.colspan]='9'></th>
                         </ng-container>
@@ -267,7 +271,7 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label for="ten_doanh_nghiep">Doanh nghiệp</mat-label>
                                         <input matInput placeholder="VD: Công ty TNHH" id="ten_doanh_nghiep" type="text"
-                                            required="true" formControlName="ten_doanh_nghiep">
+                                            formControlName="ten_doanh_nghiep">
                                     </mat-form-field>
                                 </div>
 
@@ -295,7 +299,8 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Bắt đầu</mat-label>
-                                        <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau">
+                                        <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau"
+                                            readonly>
                                         <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
                                         <mat-datepicker #startDate></mat-datepicker>
                                     </mat-form-field>
@@ -304,7 +309,8 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Kết thúc</mat-label>
-                                        <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc">
+                                        <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc"
+                                            readonly>
                                         <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
                                         <mat-datepicker #endDate></mat-datepicker>
                                     </mat-form-field>
@@ -333,7 +339,7 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Ngày đăng ký</mat-label>
                                         <input matInput [matDatepicker]="ngay_dang_ky_giay_dkbhdc"
-                                            formControlName="ngay_dang_ky_giay_dkbhdc">
+                                            formControlName="ngay_dang_ky_giay_dkbhdc" readonly>
                                         <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_dkbhdc">
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #ngay_dang_ky_giay_dkbhdc></mat-datepicker>
@@ -369,7 +375,7 @@
                                     <mat-form-field appearance="outline">
                                         <mat-label>Ngày đăng ký</mat-label>
                                         <input matInput [matDatepicker]="ngay_dang_ky_giay_tchtbhdc"
-                                            formControlName="ngay_dang_ky_giay_tchtbhdc">
+                                            formControlName="ngay_dang_ky_giay_tchtbhdc" readonly>
                                         <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_tchtbhdc">
                                         </mat-datepicker-toggle>
                                         <mat-datepicker #ngay_dang_ky_giay_tchtbhdc></mat-datepicker>

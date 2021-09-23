@@ -167,7 +167,7 @@
                             </ng-container>
                         </div>
 
-                        <ng-container matColumnDef="general">
+                        <!-- <ng-container matColumnDef="general">
                             <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6">
                         </ng-container>
 
@@ -183,11 +183,11 @@
 
                         <ng-container matColumnDef="thoigian">
                             <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
-                        </ng-container>
+                        </ng-container> -->
 
-                        <tr mat-header-row class="table-header"
+                        <!-- <tr mat-header-row class="table-header"
                             *matHeaderRowDef="['general','businessLicense', 'representInfo', 'thoigian']; sticky: true">
-                        </tr>
+                        </tr> -->
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>

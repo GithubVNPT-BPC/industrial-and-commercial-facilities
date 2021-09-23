@@ -19,7 +19,6 @@ import { TradeFairsExhibitionsComponent } from './trade-development/trade-fairs-
 import { SubscribeDiscountComponent } from './trade-development/subscribe-discount/subscribe-discount.component';
 import { BorderTradeImportComponent } from './border-trade/border-trade-import/border-trade-import.component';
 import { BorderTradeExportComponent } from './border-trade/border-trade-export/border-trade-export.component';
-
 import { PetrolBusinessComponent } from './conditional-business-line/petro-business/petrol-business.component';
 import { ManagePetrolValueComponent } from './conditional-business-line/petro-business/manage-petrol-value/manage-petrol-value.component';
 import { UpdatePetrolComponent } from './conditional-business-line/petro-business/update-petrol/update-petrol.component';
@@ -39,6 +38,7 @@ import { BorderTradeOverviewComponent } from './border-trade/border-trade-overvi
 import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.component';
 import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
 import { RetailMonthNewComponent } from './retail/retail-month-new/retail-month-new.component';
+import { GeneralAddComponent } from './general-add/general-add.component';
 
 const routes: Routes = [
   {
@@ -295,6 +295,10 @@ const routes: Routes = [
   {
     path: 'multilevel_trade',
     component: MultilevelTradeComponent
+  },
+  {
+    path: 'generaladd',
+    component: GeneralAddComponent
   },
 ];
 
