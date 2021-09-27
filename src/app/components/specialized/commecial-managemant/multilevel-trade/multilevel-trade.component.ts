@@ -8,17 +8,45 @@ import { MarketService } from 'src/app/_services/APIService/market.service';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
-import moment from 'moment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
+const moment = _rollupMoment || _moment;
+export const DDMMYY_FORMAT = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @Component({
   selector: 'app-multilevel-trade',
   templateUrl: './multilevel-trade.component.html',
   styleUrls: ['/../../special_layout.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    DatePipe
+  ],
 })
 export class MultilevelTradeComponent extends BaseComponent {
   DB_TABLE = 'QLTM_BHDC'
-  displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep',  'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc', 'thoi_gian_chinh_sua_cuoi',
+  displayedColumns: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_doanh_nghiep', 'thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'dia_diem_to_chuc', 'thoi_gian_chinh_sua_cuoi',
     'so_giay_dkbhdc', 'co_quan_ban_hanh_giay_dkbhdc', 'ngay_dang_ky_giay_dkbhdc',
     'so_giay_tchtbhdc', 'co_quan_ban_hanh_giay_tchtbhdc', 'ngay_dang_ky_giay_tchtbhdc']
   filterModel = {
@@ -55,21 +83,22 @@ export class MultilevelTradeComponent extends BaseComponent {
     }
   }
 
-  setFormParams(){
+  setFormParams() {
     if (this.selection.selected.length) {
       let selectedRecord = this.selection.selected[0];
       this.formData.controls['id'].setValue(selectedRecord.id);
       this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
-      this.formData.controls['dia_chi_doanh_nghiep'].setValue(selectedRecord.to_chu_ca_nhan);
+      this.formData.controls['dia_chi_doanh_nghiep'].setValue(selectedRecord.dia_chi_doanh_nghiep);
       this.formData.controls['mst'].setValue(selectedRecord.mst);
       this.formData.controls['so_giay_dkbhdc'].setValue(selectedRecord.so_giay_dkbhdc);
       this.formData.controls['co_quan_ban_hanh_giay_dkbhdc'].setValue(selectedRecord.co_quan_ban_hanh_giay_dkbhdc);
-      this.formData.controls['ngay_dang_ky_giay_dkbhdc'].setValue(selectedRecord.ngay_dang_ky_giay_dkbhdc);
+      this.formData.controls['ngay_dang_ky_giay_dkbhdc'].setValue(selectedRecord.ngay_dang_ky_giay_dkbhdc._d);
       this.formData.controls['so_giay_tchtbhdc'].setValue(selectedRecord.so_giay_tchtbhdc);
-      this.formData.controls['co_quan_ban_hanh_giay_tchtbhdc'].setValue(selectedRecord.co_quan_ban_hanh_giay_tchtbhdc);  
-      this.formData.controls['ngay_dang_ky_giay_tchtbhdc'].setValue(selectedRecord.ngay_dang_ky_giay_tchtbhdc);  
-      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_bat_dau);  
-      this.formData.controls['dia_diem_to_chuc'].setValue(selectedRecord.dia_diem_to_chuc);  
+      this.formData.controls['co_quan_ban_hanh_giay_tchtbhdc'].setValue(selectedRecord.co_quan_ban_hanh_giay_tchtbhdc);
+      this.formData.controls['ngay_dang_ky_giay_tchtbhdc'].setValue(selectedRecord.ngay_dang_ky_giay_tchtbhdc._d);
+      this.formData.controls['thoi_gian_bat_dau'].setValue(selectedRecord.thoi_gian_bat_dau._d);
+      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_ket_thuc._d);
+      this.formData.controls['dia_diem_to_chuc'].setValue(selectedRecord.dia_diem_to_chuc);
     }
   }
 
@@ -79,7 +108,7 @@ export class MultilevelTradeComponent extends BaseComponent {
     super.ngOnInit();
     this.getMultiLevelTradeList();
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -116,34 +145,29 @@ export class MultilevelTradeComponent extends BaseComponent {
     const filterKeys = Object.keys(filters);
     let filteredData = [...dataSource];
     filterKeys.forEach(key => {
-        let filterCrits = [];
-        if (filters[key].length) {
-          if (key == 'thoi_gian_bat_dau') {
-            filters[key].forEach(criteria => {
-              if (criteria) filterCrits = filterCrits.concat(filteredData.filter(x => x[key].toString().includes(criteria)));
-            });
-          } else {
-            filters[key].forEach(criteria => {
-              filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
-            });
-          }
-          filteredData = [...filterCrits];
+      let filterCrits = [];
+      if (filters[key].length) {
+        if (key == 'thoi_gian_bat_dau') {
+          filters[key].forEach(criteria => {
+            if (criteria) filterCrits = filterCrits.concat(filteredData.filter(x => x[key].toString().includes(criteria)));
+          });
+        } else {
+          filters[key].forEach(criteria => {
+            filterCrits = filterCrits.concat(filteredData.filter(x => x[key] == criteria));
+          });
         }
+        filteredData = [...filterCrits];
+      }
     })
     return filteredData;
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
-    data['ngay_dang_ky_giay_dkbhdc'] = moment(data['ngay_dang_ky_giay_dkbhdc']).format('yyyyMMDD');
-    data['ngay_dang_ky_giay_tchtbhdc'] = moment(data['ngay_dang_ky_giay_tchtbhdc']).format('yyyyMMDD');
-    
-    data = {
-      ...data, ...{
-        id_trang_thai: 1,
-      }
-    };
+    data['thoi_gian_bat_dau'] = _moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
+    data['thoi_gian_ket_thuc'] = _moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
+    data['ngay_dang_ky_giay_dkbhdc'] = _moment(data['ngay_dang_ky_giay_dkbhdc']).format('yyyyMMDD');
+    data['ngay_dang_ky_giay_tchtbhdc'] = _moment(data['ngay_dang_ky_giay_tchtbhdc']).format('yyyyMMDD');
+
     return data;
   }
 

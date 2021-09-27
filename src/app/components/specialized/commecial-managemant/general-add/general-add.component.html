@@ -5,6 +5,7 @@
                 <mat-card-title>
                 </mat-card-title>
             </mat-card-header>
+
             <form [formGroup]="formData" (ngSubmit)="onCreate()">
                 <div class="col-12 col-md-12 col-lg-12 text-right">
                     <button type="submit" class="btn btn-success">Lưu</button>
@@ -38,314 +39,374 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <hr color="red">
-                <div class="row">
-                    <div class="col-12 col-lg-12 text-center">
-                        <h5><strong>Hoạt động bán hàng đa cấp</strong></h5>
-                    </div>
 
-                    <div class="col-12 col-lg-12">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Địa điểm tổ chức</mat-label>
-                            <input matInput formControlName="dia_diem_to_chuc">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Bắt đầu</mat-label>
-                            <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-                            <mat-datepicker #startDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Kết thúc</mat-label>
-                            <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-                            <mat-datepicker #endDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-12 text-left">
-                        <h6>Thông tin bán hàng đa cấp tại địa phương</h6>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Số giấy</mat-label>
-                            <input matInput formControlName="so_giay_dkbhdc">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Ngày đăng ký</mat-label>
-                            <input matInput [matDatepicker]="ngay_dang_ky_giay_dkbhdc"
-                                formControlName="ngay_dang_ky_giay_dkbhdc" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_dkbhdc">
-                            </mat-datepicker-toggle>
-                            <mat-datepicker #ngay_dang_ky_giay_dkbhdc></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Cơ quan ban hành</mat-label>
-                            <input matInput formControlName="co_quan_ban_hanh_giay_dkbhdc">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-12 text-left">
-                        <h6>Tổ chức hội thảo về bán hàng đa cấp</h6>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Số giấy</mat-label>
-                            <input matInput formControlName="so_giay_tchtbhdc">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Ngày đăng ký</mat-label>
-                            <input matInput [matDatepicker]="ngay_dang_ky_giay_tchtbhdc"
-                                formControlName="ngay_dang_ky_giay_tchtbhdc" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_tchtbhdc">
-                            </mat-datepicker-toggle>
-                            <mat-datepicker #ngay_dang_ky_giay_tchtbhdc></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Cơ quan ban hành</mat-label>
-                            <input matInput formControlName="co_quan_ban_hanh_giay_tchtbhdc">
-                        </mat-form-field>
-                    </div>
+                <div class="col-12 col-lg-12 row text-left">
+                    <h5 class="mt-1"><strong>- Thêm hoạt động bán hàng đa cấp</strong></h5>
+                    <button mat-mini-fab class="ml-2" matTooltip="Thêm hoạt động bán hàng đa cấp"
+                        (click)="addMulti($event)">
+                        <mat-icon>add</mat-icon>
+                    </button>
                 </div>
-                <hr color="red">
-                <div class="row">
-                    <div class="col-12 col-lg-12 text-center">
-                        <h5><strong>Hội chợ triển lãm</strong></h5>
-                    </div>
 
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Tên hội chợ</mat-label>
-                            <input matInput formControlName="ten_hoi_cho">
-                        </mat-form-field>
-                    </div>
+                <div formArrayName="danh_sach_da_cap" *ngFor="let dc of danh_sach_da_cap.controls; let i = index"
+                    class="col-12 col-lg-12">
+                    <div [formGroupName]="i" class="row">
 
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Địa điểm tổ chức</mat-label>
-                            <input matInput formControlName="dia_diem_to_chuc1">
-                        </mat-form-field>
-                    </div>
+                        <div class="row">
+                            <div class="col-12 col-lg-12 row text-center ml-2">
+                                <h5 class="mt-1"><strong>+ Hoạt động bán hàng đa cấp</strong></h5>
+                                <button class="btn btn-sm btn-danger ml-2 my-auto" (click)="removeMulti(i)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
 
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Bắt đầu</mat-label>
-                            <input matInput [matDatepicker]="startDate1" formControlName="thoi_gian_bat_dau1" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="startDate1"></mat-datepicker-toggle>
-                            <mat-datepicker #startDate1></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Kết thúc</mat-label>
-                            <input matInput [matDatepicker]="endDate1" formControlName="thoi_gian_ket_thuc1"
-                                datetime="DD/MM/yyyy" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="endDate1"></mat-datepicker-toggle>
-                            <mat-datepicker #endDate1></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select formControlName="time_id">
-                                <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Trạng thái</mat-label>
-                            <mat-select formControlName="id_trang_thai">
-                                <mat-option value="1">Hoạt động</mat-option>
-                                <mat-option value="0">Ngừng hoạt động</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Sản phẩm</mat-label>
-                            <input matInput formControlName="san_pham">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Số lượng gian hàng</mat-label>
-                            <input matInput type="number" formControlName="so_luong_gian_hang">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Phường xã (*)</mat-label>
-                            <mat-select formControlName="id_phuong_xa">
-                                <mat-option>
-                                    <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
-                                        noEntriesFoundLabel="Giá trị không có trong danh sách"
-                                        [formControl]="phuongxafilter">
-                                    </ngx-mat-select-search>
-                                </mat-option>
-
-                                <mat-option *ngFor="let item of filtersubdistrict | async" [value]="item.id_phuong_xa">
-                                    {{item.ten_phuong_xa}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Số văn bản</mat-label>
-                            <input matInput formControlName="so_van_ban_hc">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Cơ quan ban hành</mat-label>
-                            <input matInput formControlName="co_quan_ban_hanh_hc">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Ngày, tháng, năm văn bản</mat-label>
-                            <input matInput [matDatepicker]="docDate" formControlName="ngay_thang_nam_van_ban_hc"
-                                readonly>
-                            <mat-datepicker-toggle matSuffix [for]="docDate"></mat-datepicker-toggle>
-                            <mat-datepicker #docDate></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <hr color="red">
-                <div class="row">
-                    <div class="col-12 col-lg-12 text-center">
-                        <h5><strong>Khuyến mãi</strong></h5>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Chương trình khuyến mãi</mat-label>
-                            <input matInput formControlName="ten_chuong_trinh_km">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Hàng hóa khuyến mãi</mat-label>
-                            <input matInput formControlName="hang_hoa_km">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Hình thức khuyến mãi</mat-label>
-                            <mat-select formControlName="id_hinh_thuc">
-                                <mat-option *ngFor='let type of promotionTypes' [value]='type.id_hinh_thuc'>
-                                    {{type.ten_hinh_thuc}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Bắt đầu</mat-label>
-                            <input matInput [matDatepicker]="startDate2" formControlName="thoi_gian_bat_dau2" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="startDate2"></mat-datepicker-toggle>
-                            <mat-datepicker #startDate2></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Kết thúc</mat-label>
-                            <input matInput [matDatepicker]="endDate2" formControlName="thoi_gian_ket_thuc2" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="endDate2"></mat-datepicker-toggle>
-                            <mat-datepicker #endDate2></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Số văn bản</mat-label>
-                            <input matInput formControlName="so_van_ban_km">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Cơ quan ban hành</mat-label>
-                            <input matInput formControlName="co_quan_ban_hanh_km">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Ngày, tháng, năm văn bản</mat-label>
-                            <input matInput [matDatepicker]="docDate1" formControlName="ngay_thang_nam_van_ban_km"
-                                readonly>
-                            <mat-datepicker-toggle matSuffix [for]="docDate1"></mat-datepicker-toggle>
-                            <mat-datepicker #docDate1></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-12 col-lg-12 text-left">
-                        <h6>Danh sách địa điểm khuyến mãi</h6>
-                        <button mat-mini-fab class="ml-2 green" matTooltip="Thêm sản lượng"
-                            (click)="addAddress($event)">
-                            <mat-icon>add</mat-icon>
-                        </button>
-                    </div>
-
-                    <div formArrayName="danh_sach_dia_diem"
-                        *ngFor="let dc of danh_sach_dia_diem.controls; let i = index" class="col-12 col-lg-12">
-                        <div [formGroupName]="i" class="row">
-                            <div class="col-5 col-lg-5">
+                            <div class="col-12 col-lg-12">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Địa điểm khuyến mãi</mat-label>
-                                    <input matInput formControlName="dia_diem">
+                                    <mat-label>Địa điểm tổ chức (*)</mat-label>
+                                    <input matInput formControlName="dia_diem_to_chuc">
                                 </mat-form-field>
                             </div>
-                            <div class="col-5 col-lg-5">
+
+                            <div class="col-12 col-lg-6">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Địa bàn</mat-label>
-                                    <mat-select formControlName="id_quan_huyen">
-                                        <mat-option *ngFor='let district of districts' [value]='district.id'>
-                                            {{district.ten_quan_huyen}}
+                                    <mat-label>Bắt đầu</mat-label>
+                                    <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau"
+                                        readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #startDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Kết thúc</mat-label>
+                                    <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc"
+                                        readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #endDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-12 text-left">
+                                <h6>Thông tin bán hàng đa cấp tại địa phương</h6>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Số giấy</mat-label>
+                                    <input matInput formControlName="so_giay_dkbhdc">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày đăng ký</mat-label>
+                                    <input matInput [matDatepicker]="ngay_dang_ky_giay_dkbhdc"
+                                        formControlName="ngay_dang_ky_giay_dkbhdc" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_dkbhdc">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #ngay_dang_ky_giay_dkbhdc></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Cơ quan ban hành</mat-label>
+                                    <input matInput formControlName="co_quan_ban_hanh_giay_dkbhdc">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-12 text-left">
+                                <h6>Tổ chức hội thảo về bán hàng đa cấp</h6>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Số giấy</mat-label>
+                                    <input matInput formControlName="so_giay_tchtbhdc">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày đăng ký</mat-label>
+                                    <input matInput [matDatepicker]="ngay_dang_ky_giay_tchtbhdc"
+                                        formControlName="ngay_dang_ky_giay_tchtbhdc" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="ngay_dang_ky_giay_tchtbhdc">
+                                    </mat-datepicker-toggle>
+                                    <mat-datepicker #ngay_dang_ky_giay_tchtbhdc></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Cơ quan ban hành</mat-label>
+                                    <input matInput formControlName="co_quan_ban_hanh_giay_tchtbhdc">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="col-12 col-lg-12 row text-left">
+                    <h5 class="mt-1"><strong>- Thêm hội chợ triển lãm</strong></h5>
+                    <button mat-mini-fab class="ml-2" matTooltip="Thêm hội chợ triển lãm" (click)="addTFE($event)">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                <div formArrayName="danh_sach_hoi_cho" *ngFor="let dc of danh_sach_hoi_cho.controls; let i = index"
+                    class="col-12 col-lg-12">
+                    <div [formGroupName]="i" class="row">
+
+                        <div class="row">
+                            <div class="col-12 col-lg-12 row text-center ml-2">
+                                <h5 class="mt-1"><strong>+ Hội trợ triển lãm</strong></h5>
+                                <button class="btn btn-sm btn-danger ml-2 my-auto" (click)="removeTFE(i)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Tên hội chợ (*)</mat-label>
+                                    <input matInput formControlName="ten_hoi_cho">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Địa điểm tổ chức</mat-label>
+                                    <input matInput formControlName="dia_diem_to_chuc1">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-6 col-lg-3">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Bắt đầu</mat-label>
+                                    <input matInput [matDatepicker]="startDate1" formControlName="thoi_gian_bat_dau1"
+                                        readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="startDate1"></mat-datepicker-toggle>
+                                    <mat-datepicker #startDate1></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-6 col-lg-3">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Kết thúc</mat-label>
+                                    <input matInput [matDatepicker]="endDate1" formControlName="thoi_gian_ket_thuc1"
+                                        datetime="DD/MM/yyyy" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="endDate1"></mat-datepicker-toggle>
+                                    <mat-datepicker #endDate1></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-6 col-lg-3">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Kỳ dữ liệu</mat-label>
+                                    <mat-select formControlName="time_id">
+                                        <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
                                         </mat-option>
                                     </mat-select>
                                 </mat-form-field>
                             </div>
-                            <div class="col-2 col-lg-2">
-                                <button class="btn btn-danger mt-1" (click)="removeAddress(i)">
+
+                            <div class="col-6 col-lg-3">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Trạng thái</mat-label>
+                                    <mat-select formControlName="id_trang_thai">
+                                        <mat-option value="1">Hoạt động</mat-option>
+                                        <mat-option value="0">Ngừng hoạt động</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Sản phẩm</mat-label>
+                                    <input matInput formControlName="san_pham">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Số lượng gian hàng</mat-label>
+                                    <input matInput type="number" formControlName="so_luong_gian_hang">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Phường xã (*)</mat-label>
+                                    <mat-select formControlName="id_phuong_xa">
+                                        <mat-option>
+                                            <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                                noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                                [formControl]="phuongxafilter">
+                                            </ngx-mat-select-search>
+                                        </mat-option>
+
+                                        <mat-option *ngFor="let item of filtersubdistrict | async"
+                                            [value]="item.id_phuong_xa">
+                                            {{item.ten_phuong_xa}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Số văn bản</mat-label>
+                                    <input matInput formControlName="so_van_ban_hc">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Cơ quan ban hành</mat-label>
+                                    <input matInput formControlName="co_quan_ban_hanh_hc">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày, tháng, năm văn bản</mat-label>
+                                    <input matInput [matDatepicker]="docDate"
+                                        formControlName="ngay_thang_nam_van_ban_hc" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="docDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #docDate></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div class="col-12 col-lg-12 row text-left">
+                    <h5 class="mt-1"><strong>- Thêm chương trình khuyến mãi</strong></h5>
+                    <button mat-mini-fab class="ml-2" matTooltip="Thêm chương trình khuyến mãi" (click)="addSD()"
+                        type="button">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </div>
+
+                <div formArrayName="danh_sach_khuyen_mai"
+                    *ngFor="let dc of danh_sach_khuyen_mai.controls; let i = index" class="col-12 col-lg-12">
+                    <div [formGroupName]="i" class="row">
+
+                        <div class="row">
+                            <div class="col-12 col-lg-12 row text-center ml-2">
+                                <h5 class="mt-1"><strong>+ Chương trình khuyến mãi</strong></h5>
+                                <button class="btn btn-sm btn-danger ml-2 my-auto" (click)="removeSD(i)">
                                     <mat-icon>delete</mat-icon>
                                 </button>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Chương trình khuyến mãi</mat-label>
+                                    <input matInput formControlName="ten_chuong_trinh_km">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Hàng hóa khuyến mãi</mat-label>
+                                    <input matInput formControlName="hang_hoa_km">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Hình thức khuyến mãi</mat-label>
+                                    <mat-select formControlName="id_hinh_thuc">
+                                        <mat-option *ngFor='let type of promotionTypes' [value]='type.id_hinh_thuc'>
+                                            {{type.ten_hinh_thuc}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Bắt đầu</mat-label>
+                                    <input matInput [matDatepicker]="startDate2" formControlName="thoi_gian_bat_dau2"
+                                        readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="startDate2"></mat-datepicker-toggle>
+                                    <mat-datepicker #startDate2></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Kết thúc</mat-label>
+                                    <input matInput [matDatepicker]="endDate2" formControlName="thoi_gian_ket_thuc2"
+                                        readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="endDate2"></mat-datepicker-toggle>
+                                    <mat-datepicker #endDate2></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Số văn bản</mat-label>
+                                    <input matInput formControlName="so_van_ban_km">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Cơ quan ban hành</mat-label>
+                                    <input matInput formControlName="co_quan_ban_hanh_km">
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-4 col-lg-4">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Ngày, tháng, năm văn bản</mat-label>
+                                    <input matInput [matDatepicker]="docDate1"
+                                        formControlName="ngay_thang_nam_van_ban_km" readonly>
+                                    <mat-datepicker-toggle matSuffix [for]="docDate1"></mat-datepicker-toggle>
+                                    <mat-datepicker #docDate1></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-12 col-lg-12 text-left">
+                                <h6>Danh sách địa điểm khuyến mãi</h6>
+                                <button mat-mini-fab class="ml-2 green" matTooltip="Thêm sản lượng"
+                                    (click)="addAddress(i)" type="button">
+                                    <mat-icon>add</mat-icon>
+                                </button>
+                            </div>
+
+                            <div formArrayName="danh_sach_dia_diem"
+                                *ngFor="let dc of danh_sach_dia_diem.controls; let j = index" class="col-12 col-lg-12">
+                                <div [formGroupName]="j" class="row">
+                                    <div class="col-5 col-lg-5">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Địa điểm khuyến mãi</mat-label>
+                                            <input matInput formControlName="dia_diem">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-5 col-lg-5">
+                                        <mat-form-field appearance="outline">
+                                            <mat-label>Địa bàn</mat-label>
+                                            <mat-select formControlName="id_quan_huyen">
+                                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                                    {{district.ten_quan_huyen}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-2 col-lg-2">
+                                        <button class="btn btn-danger mt-1" (click)="removeAddress(i)">
+                                            <mat-icon>delete</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
