@@ -1,6 +1,6 @@
 import { Component, Injector } from '@angular/core';
 import { formatDate } from '@angular/common';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 // Services
 import { BaseComponent } from 'src/app/components/specialized/base.component';
@@ -104,11 +104,24 @@ export class khuyenmai {
 })
 export class GeneralAddComponent extends BaseComponent {
 
+  form: FormGroup;
+
   constructor(
     private injector: Injector,
+    private fb: FormBuilder,
     public commerceManagementService: CommerceManagementService,
   ) {
     super(injector);
+    this.form = fb.group({
+      id: new FormControl(),
+      ten_doanh_nghiep: new FormControl('', Validators.required),
+      dia_chi_doanh_nghiep: new FormControl(),
+      mst: new FormControl('', Validators.required),
+
+      danh_sach_da_cap: this.fb.array([]),
+      danh_sach_hoi_cho: this.fb.array([]),
+      danh_sach_khuyen_mai: this.fb.array([]),
+    })
   }
 
   ngOnInit() {
@@ -132,26 +145,10 @@ export class GeneralAddComponent extends BaseComponent {
     this.TEXT_DEFAULT = "THÊM DỮ LIỆU XÚC TIẾN THƯƠNG MẠI VÀ HOẠT ĐỘNG BÁN HÀNG ĐA CẤP";
   }
 
-  getFormParams() {
-    return {
-      id: new FormControl(),
-      ten_doanh_nghiep: new FormControl('', Validators.required),
-      dia_chi_doanh_nghiep: new FormControl(),
-      mst: new FormControl('', Validators.required),
+  //** */
 
-      danh_sach_da_cap: this.formBuilder.array([]),
-      danh_sach_hoi_cho: this.formBuilder.array([]),
-      danh_sach_khuyen_mai: this.formBuilder.array([])
-    }
-  }
-
-  get danh_sach_da_cap(): FormArray {
-    return this.formData.get('danh_sach_da_cap') as FormArray
-  }
-
-  addMulti(event) {
-    event.preventDefault();
-    let temp = this.formBuilder.group({
+  addMulti() {
+    let temp = this.fb.group({
       dia_diem_to_chuc: new FormControl('', Validators.required),
       thoi_gian_bat_dau: new FormControl(),
       thoi_gian_ket_thuc: new FormControl(),
@@ -162,22 +159,17 @@ export class GeneralAddComponent extends BaseComponent {
       co_quan_ban_hanh_giay_tchtbhdc: new FormControl(),
       ngay_dang_ky_giay_tchtbhdc: new FormControl(),
     });
-    this.formData.get('danh_sach_da_cap').push(temp);
+    (<FormArray>this.form.get('danh_sach_da_cap')).push(temp);
   }
 
   removeMulti(index: number) {
-    this.formData.get('danh_sach_da_cap').removeAt(index);
+    (<FormArray>this.form.get('danh_sach_da_cap')).removeAt(index);
   }
 
   //** */
 
-  get danh_sach_hoi_cho(): FormArray {
-    return this.formData.get('danh_sach_hoi_cho') as FormArray
-  }
-
-  addTFE(event) {
-    event.preventDefault();
-    let temp = this.formBuilder.group({
+  addTFE() {
+    let temp = this.fb.group({
       ten_hoi_cho: new FormControl('', Validators.required),
       dia_diem_to_chuc1: new FormControl(),
       thoi_gian_bat_dau1: new FormControl(),
@@ -191,37 +183,17 @@ export class GeneralAddComponent extends BaseComponent {
       id_trang_thai: new FormControl('1'),
       time_id: new FormControl(parseInt(this.getCurrentYear())),
     });
-    this.formData.get('danh_sach_hoi_cho').push(temp);
+    (<FormArray>this.form.get('danh_sach_hoi_cho')).push(temp);
   }
 
   removeTFE(index: number) {
-    this.formData.get('danh_sach_hoi_cho').removeAt(index);
+    (<FormArray>this.form.get('danh_sach_hoi_cho')).removeAt(index);
   }
 
   //** */
 
-  get danh_sach_khuyen_mai(): FormArray {
-    return this.formData.get('danh_sach_khuyen_mai') as FormArray
-  }
-
-  get danh_sach_dia_diem(): FormArray {
-    for (let index = 0; index < this.index; index++) {
-      return (this.formData.controls['danh_sach_khuyen_mai'].controls[index]).controls['danh_sach_dia_diem'] as FormArray
-    }
-  }
-
-  removeSD(index: number) {
-    this.formData.get('danh_sach_khuyen_mai').removeAt(index);
-  }
-
-  removeAddress(index1: number, index2: number) {
-    (this.formData.controls['danh_sach_khuyen_mai'].controls[index1]).controls['danh_sach_dia_diem'].removeAt(index2);
-  }
-
-  index: number
-
   addSD() {
-    let temp = this.formBuilder.group({
+    let temp = this.fb.group({
       ten_chuong_trinh_km: new FormControl('', Validators.required),
       thoi_gian_bat_dau2: new FormControl(),
       thoi_gian_ket_thuc2: new FormControl(),
@@ -231,26 +203,36 @@ export class GeneralAddComponent extends BaseComponent {
       ngay_thang_nam_van_ban_km: new FormControl(),
       id_hinh_thuc: new FormControl(),
       id_temp: new FormControl(1),
-      danh_sach_dia_diem: this.formBuilder.array([]),
+      danh_sach_dia_diem: this.fb.array([]),
     });
-    this.formData.get('danh_sach_khuyen_mai').push(temp);
-    this.index = (this.formData.get('danh_sach_khuyen_mai')).length
-    console.log(this.formData.controls['danh_sach_khuyen_mai'])
-    console.log((this.formData.controls['danh_sach_khuyen_mai'].controls[this.index - 1]).controls['danh_sach_dia_diem'])
+    (<FormArray>this.form.get('danh_sach_khuyen_mai')).push(temp);
+    let index = (<FormArray>this.form.get('danh_sach_khuyen_mai')).length - 1;
+    this.addAddress(index)
   }
 
-  addAddress(index: number) {
-    let temp = this.formBuilder.group(
-      { 
+  removeSD(index: number) {
+    (<FormArray>this.form.get('danh_sach_khuyen_mai')).removeAt(index);
+  }
+
+  //** */
+
+  addAddress(addressindex: number) {
+    let temp = this.fb.group(
+      {
         dia_diem: new FormControl('', Validators.required),
         id_quan_huyen: new FormControl(688),
         id_xttm_km: new FormControl(1)
       }
     );
-    (this.formData.controls['danh_sach_khuyen_mai'].controls[index]).controls['danh_sach_dia_diem'].push(temp)
-    console.log(this.formData.controls['danh_sach_khuyen_mai'])
-    console.log((this.formData.controls['danh_sach_khuyen_mai'].controls[this.index - 1]).controls['danh_sach_dia_diem'])
+    (<FormArray>(<FormGroup>(<FormArray>this.form.controls['danh_sach_khuyen_mai'])
+      .controls[addressindex]).controls['danh_sach_dia_diem']).push(temp);
   }
+
+  removeAddress(index1: number, index2: number) {
+    (<FormArray>(<FormGroup>(<FormArray>this.form.controls['danh_sach_khuyen_mai']).controls[index1]).controls['danh_sach_dia_diem']).removeAt(index2);
+  }
+
+  //** */
 
   getCurrentYear() {
     let date = new Date;
@@ -294,15 +276,11 @@ export class GeneralAddComponent extends BaseComponent {
     );
   }
 
-  prepareData(data) {
-    return data;
-  }
-
   dacapinput: Array<dacap> = new Array<dacap>();
   hoichoinput: Array<hoicho> = new Array<hoicho>();
   khuyenmaiinput: Array<khuyenmai> = new Array<khuyenmai>();
 
-  callService(data) {
+  onSubmit(data) {
     data.danh_sach_da_cap.forEach(element => {
       this.dacapinput.push({
         id: null,
@@ -427,5 +405,9 @@ export class GeneralAddComponent extends BaseComponent {
     if (this.khuyenmaiinput.length != 0) {
       this.commerceManagementService.postSubcribeDiscountData(this.khuyenmaiinput).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
+  }
+
+  onCancle() {
+    this.form.reset();
   }
 }

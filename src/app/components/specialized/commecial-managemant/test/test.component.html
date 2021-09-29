@@ -1,11 +1,12 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
-	<div class="container">
-		<p class="heading text-center">User Directory</p>
-		<button type="button" (click)="addUser()">New User</button>
-		<button type="submit" >submit</button>
+  <div class="container">
+    <p class="heading text-center">User Directory</p>
+    <button type="button" (click)="addUser()">New User</button>
+    <button type="submit">submit</button>
   </div>
   <div formArrayName="user">
-    <div class="container user-container"  *ngFor="let user of form.controls.user.controls; let i = index" formGroupName="{{i}}">
+    <div class="container user-container" *ngFor="let user of form.controls.user.controls; let i = index"
+      formGroupName="{{i}}">
       <div class="row">
         <div class="col-8">
           Name
@@ -28,7 +29,8 @@
                 <input formControlName="phone" placeholder="Phone">
               </div>
               <div class="col-4 text-right">
-                <button *ngIf="user.controls.phones.controls.length > 1" type="button" (click)="deletePhone(i,j)">Delete</button>
+                <button *ngIf="user.controls.phones.controls.length > 1" type="button"
+                  (click)="deletePhone(i,j)">Delete</button>
               </div>
             </div>
           </div>
