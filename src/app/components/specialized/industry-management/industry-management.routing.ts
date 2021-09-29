@@ -40,14 +40,19 @@ const routes: Routes = [
                     title: 'Công nghiệp - Công nghiệp thực phẩm',
                 }
             },
+            // {
+            //     path: 'iip',
+            //     component: IipMonthNewComponent,
+            //     data: {
+            //         title: 'Chỉ số sản xuất công nghiệp',
+            //     },
+            // },
             {
                 path: 'iip',
-                component: IipMonthNewComponent,
+                component: IIPIndustrialComponent,
                 data: {
                     title: 'Chỉ số sản xuất công nghiệp',
                 },
-                children: [
-                ]
             },
             {
                 path: 'iip-detail',
@@ -55,8 +60,6 @@ const routes: Routes = [
                 data: {
                     title: 'Chỉ số sản xuất công nghiệp',
                 },
-                children: [
-                ]
             },
             {
                 path: 'explosives',

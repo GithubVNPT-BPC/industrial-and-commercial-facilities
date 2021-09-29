@@ -22,7 +22,7 @@ import { formatDate } from '@angular/common';
 
 export class IIPIndustrialComponent implements OnInit {
     //Constant variable -----------------------------------------------------------
-    private readonly REDIRECT_PAGE: string = "/specialized/industry-management/iip/iip-detail";
+    private readonly REDIRECT_PAGE: string = "/specialized/industry-management/iip-detail";
     private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip";
     private readonly TITLE_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp";
     private readonly TEXT_DEFAULT: string = "Công nghiệp - Chỉ số sản xuất công nghiệp";
