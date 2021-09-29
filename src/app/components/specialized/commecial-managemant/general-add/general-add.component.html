@@ -295,19 +295,19 @@
 
                 <div formArrayName="danh_sach_khuyen_mai"
                     *ngFor="let dc of danh_sach_khuyen_mai.controls; let i = index" class="col-12 col-lg-12">
-                    <div [formGroupName]="i" class="row">
+                    <div formGroupName="{{i}}" class="row">
 
                         <div class="row">
                             <div class="col-12 col-lg-12 row text-center ml-2">
                                 <h5 class="mt-1"><strong>+ Chương trình khuyến mãi</strong></h5>
-                                <button class="btn btn-sm btn-danger ml-2 my-auto" (click)="removeSD(i)">
+                                <button class="btn btn-sm btn-danger ml-2 my-auto" (click)="removeSD(i)" type="button">
                                     <mat-icon>delete</mat-icon>
                                 </button>
                             </div>
 
                             <div class="col-12 col-lg-6">
                                 <mat-form-field appearance="outline">
-                                    <mat-label>Chương trình khuyến mãi</mat-label>
+                                    <mat-label>Chương trình khuyến mãi (*)</mat-label>
                                     <input matInput formControlName="ten_chuong_trinh_km">
                                 </mat-form-field>
                             </div>
@@ -376,18 +376,18 @@
 
                             <div class="col-12 col-lg-12 text-left">
                                 <h6>Danh sách địa điểm khuyến mãi</h6>
-                                <button mat-mini-fab class="ml-2 green" matTooltip="Thêm sản lượng"
+                                <button mat-mini-fab class="ml-2 green" matTooltip="Thêm địa điểm"
                                     (click)="addAddress(i)" type="button">
                                     <mat-icon>add</mat-icon>
                                 </button>
                             </div>
 
                             <div formArrayName="danh_sach_dia_diem"
-                                *ngFor="let dc of danh_sach_dia_diem.controls; let j = index" class="col-12 col-lg-12">
-                                <div [formGroupName]="j" class="row">
+                                *ngFor="let dc of danh_sach_khuyen_mai.controls.danh_sach_dia_diem.controls; let j = index" class="col-12 col-lg-12">
+                                <div formGroupName="{{j}}" class="row">
                                     <div class="col-5 col-lg-5">
                                         <mat-form-field appearance="outline">
-                                            <mat-label>Địa điểm khuyến mãi</mat-label>
+                                            <mat-label>Địa điểm khuyến mãi (*)</mat-label>
                                             <input matInput formControlName="dia_diem">
                                         </mat-form-field>
                                     </div>
@@ -402,7 +402,7 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-2 col-lg-2">
-                                        <button class="btn btn-danger mt-1" (click)="removeAddress(i)">
+                                        <button class="btn btn-danger mt-1" (click)="removeAddress(i, j)" type="button">
                                             <mat-icon>delete</mat-icon>
                                         </button>
                                     </div>

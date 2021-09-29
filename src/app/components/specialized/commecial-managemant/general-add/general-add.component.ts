@@ -55,14 +55,14 @@ export class hoicho {
   mst: string
 
   ten_hoi_cho: string
-  dia_diem_to_chuc1: string
-  thoi_gian_bat_dau1: string
-  thoi_gian_ket_thuc1: string
+  dia_diem_to_chuc: string
+  thoi_gian_bat_dau: string
+  thoi_gian_ket_thuc: string
   san_pham: string
   so_luong_gian_hang: string
-  so_van_ban_hc: string
-  co_quan_ban_hanh_hc: string
-  ngay_thang_nam_van_ban_hc: string
+  so_van_ban: string
+  co_quan_ban_hanh: string
+  ngay_thang_nam_van_ban: string
   id_phuong_xa: string
   id_trang_thai: string
   time_id: string
@@ -75,13 +75,14 @@ export class khuyenmai {
   mst: string
 
   ten_chuong_trinh_km: string
-  thoi_gian_bat_dau2: string
-  thoi_gian_ket_thuc2: string
+  thoi_gian_bat_dau: string
+  thoi_gian_ket_thuc: string
   hang_hoa_km: string
-  so_van_ban_km: string
-  co_quan_ban_hanh_km: string
-  ngay_thang_nam_van_ban_km: string
+  so_van_ban: string
+  co_quan_ban_hanh: string
+  ngay_thang_nam_van_ban: string
   id_hinh_thuc: string
+  id_temp: number
   danh_sach_dia_diem: []
 }
 
@@ -161,11 +162,11 @@ export class GeneralAddComponent extends BaseComponent {
       co_quan_ban_hanh_giay_tchtbhdc: new FormControl(),
       ngay_dang_ky_giay_tchtbhdc: new FormControl(),
     });
-    (<FormArray>this.formData.get('danh_sach_da_cap')).push(temp);
+    this.formData.get('danh_sach_da_cap').push(temp);
   }
 
   removeMulti(index: number) {
-    (<FormArray>this.formData.get('danh_sach_da_cap')).removeAt(index);
+    this.formData.get('danh_sach_da_cap').removeAt(index);
   }
 
   //** */
@@ -190,11 +191,11 @@ export class GeneralAddComponent extends BaseComponent {
       id_trang_thai: new FormControl('1'),
       time_id: new FormControl(parseInt(this.getCurrentYear())),
     });
-    (<FormArray>this.formData.get('danh_sach_hoi_cho')).push(temp);
+    this.formData.get('danh_sach_hoi_cho').push(temp);
   }
 
   removeTFE(index: number) {
-    (<FormArray>this.formData.get('danh_sach_hoi_cho')).removeAt(index);
+    this.formData.get('danh_sach_hoi_cho').removeAt(index);
   }
 
   //** */
@@ -204,18 +205,22 @@ export class GeneralAddComponent extends BaseComponent {
   }
 
   get danh_sach_dia_diem(): FormArray {
-    return this.formData.get('danh_sach_dia_diem') as FormArray
+    for (let index = 0; index < this.index; index++) {
+      return (this.formData.controls['danh_sach_khuyen_mai'].controls[index]).controls['danh_sach_dia_diem'] as FormArray
+    }
   }
 
   removeSD(index: number) {
-    (<FormArray>this.formData.get('danh_sach_khuyen_mai')).removeAt(index);
+    this.formData.get('danh_sach_khuyen_mai').removeAt(index);
   }
 
-  // removeAddress(i: number) {
-  //   this.danh_sach_dia_diem.removeAt(i);
-  // }
+  removeAddress(index1: number, index2: number) {
+    (this.formData.controls['danh_sach_khuyen_mai'].controls[index1]).controls['danh_sach_dia_diem'].removeAt(index2);
+  }
 
-  addSD(danh_sach_khuyen_mai?: any) {
+  index: number
+
+  addSD() {
     let temp = this.formBuilder.group({
       ten_chuong_trinh_km: new FormControl('', Validators.required),
       thoi_gian_bat_dau2: new FormControl(),
@@ -225,28 +230,26 @@ export class GeneralAddComponent extends BaseComponent {
       co_quan_ban_hanh_km: new FormControl(),
       ngay_thang_nam_van_ban_km: new FormControl(),
       id_hinh_thuc: new FormControl(),
+      id_temp: new FormControl(1),
       danh_sach_dia_diem: this.formBuilder.array([]),
     });
-    (<FormArray>this.formData.get('danh_sach_khuyen_mai')).push(temp);
-    let Index = (<FormArray>this.formData.get('danh_sach_khuyen_mai')).length - 1;
-    this.addAddress(Index)
-    // if (!data) {
-    //   this.addAddress(Index);
-    // } else {
-
-    // }
+    this.formData.get('danh_sach_khuyen_mai').push(temp);
+    this.index = (this.formData.get('danh_sach_khuyen_mai')).length
+    console.log(this.formData.controls['danh_sach_khuyen_mai'])
+    console.log((this.formData.controls['danh_sach_khuyen_mai'].controls[this.index - 1]).controls['danh_sach_dia_diem'])
   }
 
-  addAddress(Index) {
+  addAddress(index: number) {
     let temp = this.formBuilder.group(
-      {
-        dia_diem: new FormControl(),
+      { 
+        dia_diem: new FormControl('', Validators.required),
         id_quan_huyen: new FormControl(688),
         id_xttm_km: new FormControl(1)
       }
     );
-    (<FormArray>(<FormGroup>(<FormArray>this.formData.controls['danh_sach_khuyen_mai'])
-      .controls[Index]).controls['danh_sach_dia_diem']).push(temp);
+    (this.formData.controls['danh_sach_khuyen_mai'].controls[index]).controls['danh_sach_dia_diem'].push(temp)
+    console.log(this.formData.controls['danh_sach_khuyen_mai'])
+    console.log((this.formData.controls['danh_sach_khuyen_mai'].controls[this.index - 1]).controls['danh_sach_dia_diem'])
   }
 
   getCurrentYear() {
@@ -344,14 +347,14 @@ export class GeneralAddComponent extends BaseComponent {
         mst: null,
 
         ten_hoi_cho: null,
-        dia_diem_to_chuc1: null,
-        thoi_gian_bat_dau1: null,
-        thoi_gian_ket_thuc1: null,
+        dia_diem_to_chuc: null,
+        thoi_gian_bat_dau: null,
+        thoi_gian_ket_thuc: null,
         san_pham: null,
         so_luong_gian_hang: null,
-        so_van_ban_hc: null,
-        co_quan_ban_hanh_hc: null,
-        ngay_thang_nam_van_ban_hc: null,
+        so_van_ban: null,
+        co_quan_ban_hanh: null,
+        ngay_thang_nam_van_ban: null,
         id_phuong_xa: null,
         id_trang_thai: null,
         time_id: null
@@ -365,17 +368,54 @@ export class GeneralAddComponent extends BaseComponent {
       this.hoichoinput[index].mst = data.mst
 
       this.hoichoinput[index].ten_hoi_cho = data.danh_sach_hoi_cho[index].ten_hoi_cho
-      this.hoichoinput[index].dia_diem_to_chuc1 = data.danh_sach_hoi_cho[index].dia_diem_to_chuc1
-      this.hoichoinput[index].thoi_gian_bat_dau1 = data.danh_sach_hoi_cho[index].thoi_gian_bat_dau1 ? _moment(data.danh_sach_hoi_cho[index].thoi_gian_bat_dau1).format('yyyyMMDD') : null
-      this.hoichoinput[index].thoi_gian_ket_thuc1 = data.danh_sach_hoi_cho[index].thoi_gian_ket_thuc1 ? _moment(data.danh_sach_hoi_cho[index].thoi_gian_ket_thuc1).format('yyyyMMDD') : null
+      this.hoichoinput[index].dia_diem_to_chuc = data.danh_sach_hoi_cho[index].dia_diem_to_chuc1
+      this.hoichoinput[index].thoi_gian_bat_dau = data.danh_sach_hoi_cho[index].thoi_gian_bat_dau1 ? _moment(data.danh_sach_hoi_cho[index].thoi_gian_bat_dau1).format('yyyyMMDD') : null
+      this.hoichoinput[index].thoi_gian_ket_thuc = data.danh_sach_hoi_cho[index].thoi_gian_ket_thuc1 ? _moment(data.danh_sach_hoi_cho[index].thoi_gian_ket_thuc1).format('yyyyMMDD') : null
       this.hoichoinput[index].san_pham = data.danh_sach_hoi_cho[index].san_pham
       this.hoichoinput[index].so_luong_gian_hang = data.danh_sach_hoi_cho[index].so_luong_gian_hang
-      this.hoichoinput[index].so_van_ban_hc = data.danh_sach_hoi_cho[index].so_van_ban_hc
-      this.hoichoinput[index].co_quan_ban_hanh_hc = data.danh_sach_hoi_cho[index].co_quan_ban_hanh_hc
-      this.hoichoinput[index].ngay_thang_nam_van_ban_hc = data.danh_sach_hoi_cho[index].ngay_thang_nam_van_ban_hc ? _moment(data.danh_sach_hoi_cho[index].ngay_thang_nam_van_ban_hc).format('yyyyMMDD') : null
+      this.hoichoinput[index].so_van_ban = data.danh_sach_hoi_cho[index].so_van_ban_hc
+      this.hoichoinput[index].co_quan_ban_hanh = data.danh_sach_hoi_cho[index].co_quan_ban_hanh_hc
+      this.hoichoinput[index].ngay_thang_nam_van_ban = data.danh_sach_hoi_cho[index].ngay_thang_nam_van_ban_hc ? _moment(data.danh_sach_hoi_cho[index].ngay_thang_nam_van_ban_hc).format('yyyyMMDD') : null
       this.hoichoinput[index].id_phuong_xa = data.danh_sach_hoi_cho[index].id_phuong_xa
       this.hoichoinput[index].id_trang_thai = data.danh_sach_hoi_cho[index].id_trang_thai
       this.hoichoinput[index].time_id = data.danh_sach_hoi_cho[index].time_id
+    }
+
+    data.danh_sach_khuyen_mai.forEach(element => {
+      this.khuyenmaiinput.push({
+        id: null,
+        ten_doanh_nghiep: null,
+        dia_chi_doanh_nghiep: null,
+        mst: null,
+
+        ten_chuong_trinh_km: null,
+        thoi_gian_bat_dau: null,
+        thoi_gian_ket_thuc: null,
+        hang_hoa_km: null,
+        so_van_ban: null,
+        co_quan_ban_hanh: null,
+        ngay_thang_nam_van_ban: null,
+        id_hinh_thuc: null,
+        id_temp: 1,
+        danh_sach_dia_diem: []
+      })
+    });
+
+    for (let index = 0; index < this.khuyenmaiinput.length; index++) {
+      this.khuyenmaiinput[index].id = null
+      this.khuyenmaiinput[index].ten_doanh_nghiep = data.ten_doanh_nghiep
+      this.khuyenmaiinput[index].dia_chi_doanh_nghiep = data.dia_chi_doanh_nghiep
+      this.khuyenmaiinput[index].mst = data.mst
+
+      this.khuyenmaiinput[index].ten_chuong_trinh_km = data.danh_sach_khuyen_mai[index].ten_chuong_trinh_km
+      this.khuyenmaiinput[index].thoi_gian_bat_dau = data.danh_sach_khuyen_mai[index].thoi_gian_bat_dau2 ? _moment(data.danh_sach_khuyen_mai[index].thoi_gian_bat_dau2).format('yyyyMMDD') : null
+      this.khuyenmaiinput[index].thoi_gian_ket_thuc = data.danh_sach_khuyen_mai[index].thoi_gian_ket_thuc2 ? _moment(data.danh_sach_khuyen_mai[index].thoi_gian_ket_thuc2).format('yyyyMMDD') : null
+      this.khuyenmaiinput[index].hang_hoa_km = data.danh_sach_khuyen_mai[index].hang_hoa_km
+      this.khuyenmaiinput[index].so_van_ban = data.danh_sach_khuyen_mai[index].so_van_ban_km
+      this.khuyenmaiinput[index].co_quan_ban_hanh = data.danh_sach_khuyen_mai[index].co_quan_ban_hanh_km
+      this.khuyenmaiinput[index].ngay_thang_nam_van_ban = data.danh_sach_khuyen_mai[index].ngay_thang_nam_van_ban_km ? _moment(data.danh_sach_khuyen_mai[index].ngay_thang_nam_van_ban_km).format('yyyyMMDD') : null
+      this.khuyenmaiinput[index].id_hinh_thuc = data.danh_sach_khuyen_mai[index].id_hinh_thuc
+      this.khuyenmaiinput[index].danh_sach_dia_diem = data.danh_sach_khuyen_mai[index].danh_sach_dia_diem
     }
 
     if (this.dacapinput.length != 0) {
@@ -384,6 +424,8 @@ export class GeneralAddComponent extends BaseComponent {
     if (this.hoichoinput.length != 0) {
       this.commerceManagementService.postExpoData(this.hoichoinput).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
-    // this.commerceManagementService.postSubcribeDiscountData([this.khuyenmaiobject]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    if (this.khuyenmaiinput.length != 0) {
+      this.commerceManagementService.postSubcribeDiscountData(this.khuyenmaiinput).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
   }
 }

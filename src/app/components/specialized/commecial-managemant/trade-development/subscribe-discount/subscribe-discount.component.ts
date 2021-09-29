@@ -187,15 +187,14 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
-    data['thoi_gian_ket_thuc'] = moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
-    data['ngay_thang_nam_van_ban'] = moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD');
+    data['thoi_gian_bat_dau'] = data['thoi_gian_bat_dau'] ? moment(data['thoi_gian_bat_dau']).format('yyyyMMDD') : ''
+    data['thoi_gian_ket_thuc'] = data['thoi_gian_ket_thuc'] ? moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD') : ''
+    data['ngay_thang_nam_van_ban'] = data['ngay_thang_nam_van_ban'] ? moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD') : ''
     return data;
   }
 
   callService(data) {
-    console.log(data)
-    // this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.commerceManagementService.postSubcribeDiscountData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   prepareRemoveData() {
