@@ -76,7 +76,6 @@ import { BorderTradeNewComponent } from './border-trade-new/border-trade-new.com
 import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/border-trade-new-overview.component';
 import { RetailMonthNewComponent } from './retail/retail-month-new/retail-month-new.component';
 import { GeneralAddComponent } from './general-add/general-add.component';
-import { TestComponent } from './test/test.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -171,7 +170,6 @@ export const customCurrencyMaskConfig = {
     BorderTradeNewOverviewComponent,
     RetailMonthNewComponent,
     GeneralAddComponent,
-    TestComponent
   ],
   entryComponents: [
     ModalComponent,

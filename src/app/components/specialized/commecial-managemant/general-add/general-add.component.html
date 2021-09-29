@@ -296,7 +296,8 @@
                 </div>
 
                 <div formArrayName="danh_sach_khuyen_mai">
-                    <div class="row" *ngFor="let dc of form.controls.danh_sach_khuyen_mai.controls; let i = index"
+                    <div class="row"
+                        *ngFor="let khuyenmai of form.controls.danh_sach_khuyen_mai.controls; let i = index"
                         class="col-12 col-lg-12" formGroupName="{{i}}">
                         <div class="row">
                             <div class="col-12 col-lg-12 row text-center ml-2">
@@ -383,10 +384,10 @@
                                 </button>
                             </div>
 
-                            <div formArrayName="danh_sach_dia_diem">
+                            <div formArrayName="danh_sach_dia_diem" class="col-12 col-lg-12">
                                 <div class="row"
-                                    *ngFor="let dc of danh_sach_khuyen_mai.controls.danh_sach_dia_diem.controls; let j = index"
-                                    class="col-12 col-lg-12" formGroupName="{{j}}">
+                                    *ngFor="let dc of khuyenmai.controls.danh_sach_dia_diem.controls; let j = index"
+                                    formGroupName="{{j}}">
                                     <div class="col-5 col-lg-5">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Địa điểm khuyến mãi (*)</mat-label>

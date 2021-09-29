@@ -206,8 +206,8 @@ export class GeneralAddComponent extends BaseComponent {
       danh_sach_dia_diem: this.fb.array([]),
     });
     (<FormArray>this.form.get('danh_sach_khuyen_mai')).push(temp);
-    let index = (<FormArray>this.form.get('danh_sach_khuyen_mai')).length - 1;
-    this.addAddress(index)
+    // let index = (<FormArray>this.form.get('danh_sach_khuyen_mai')).length - 1;
+    // this.addAddress(index)
   }
 
   removeSD(index: number) {
