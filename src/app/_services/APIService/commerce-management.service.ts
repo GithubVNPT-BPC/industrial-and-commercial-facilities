@@ -41,6 +41,7 @@ export class CommerceManagementService {
 
     // DELETE
     private urldeletePromo = "api/qltm/khuyen-mai/xoa";
+    private urldeleteAddressPromo = "api/qltm/khuyen-mai/xoa-dia-ban";
     private urldeleteMultiLevel = "api/qltm/da-cap/xoa";
     private urldeleteTradeFairs = "api/qltm/hoi-cho-trien-lam/xoa";
     private urlDeleteMarket = "api/qltm/httm/xoa-cho";
@@ -230,6 +231,15 @@ export class CommerceManagementService {
 
     deletePromo(datas) {
         let apiUrl = this.apiHome + this.urldeletePromo;
+        let headers = new HttpHeaders(HEADERS);
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    deleteAddressPromo(datas) {
+        let apiUrl = this.apiHome + this.urldeleteAddressPromo;
         let headers = new HttpHeaders(HEADERS);
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),

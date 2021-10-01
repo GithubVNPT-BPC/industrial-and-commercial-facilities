@@ -6,14 +6,41 @@ import { dia_diem_km, SDModel } from 'src/app/_models/APIModel/trade-development
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
 
-import moment from 'moment';
-
 import { LoginService } from 'src/app/_services/APIService/login.service';
+
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
+const moment = _rollupMoment || _moment;
+export const DDMMYY_FORMAT = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @Component({
   selector: 'app-subscribe-discount',
   templateUrl: './subscribe-discount.component.html',
   styleUrls: ['../../../special_layout.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    DatePipe
+  ],
 })
 export class SubscribeDiscountComponent extends BaseComponent {
   DB_TABLE = 'QLTM_XTTM_KM'
@@ -66,6 +93,7 @@ export class SubscribeDiscountComponent extends BaseComponent {
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
+
   }
 
   getLinkDefault() {
@@ -77,8 +105,8 @@ export class SubscribeDiscountComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      ten_doanh_nghiep: new FormControl(''),
-      dia_chi_doanh_nghiep: new FormControl(''),
+      ten_doanh_nghiep: new FormControl(),
+      dia_chi_doanh_nghiep: new FormControl(),
       mst: new FormControl(),
       ten_chuong_trinh_km: new FormControl(),
       thoi_gian_bat_dau: new FormControl(),
@@ -103,13 +131,17 @@ export class SubscribeDiscountComponent extends BaseComponent {
       this.formData.controls['dia_chi_doanh_nghiep'].setValue(selectedRecord.to_chu_ca_nhan);
       this.formData.controls['mst'].setValue(selectedRecord.mst);
       this.formData.controls['ten_chuong_trinh_km'].setValue(selectedRecord.ten_chuong_trinh_km);
-      this.formData.controls['thoi_gian_bat_dau'].setValue(selectedRecord.thoi_gian_bat_dau);
-      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_ket_thuc);
+      this.formData.controls['thoi_gian_bat_dau'].setValue(selectedRecord.thoi_gian_bat_dau._d);
+      this.formData.controls['thoi_gian_ket_thuc'].setValue(selectedRecord.thoi_gian_ket_thuc._d);
       this.formData.controls['hang_hoa_km'].setValue(selectedRecord.hang_hoa_km);
       this.formData.controls['so_van_ban'].setValue(selectedRecord.so_van_ban);
       this.formData.controls['co_quan_ban_hanh'].setValue(selectedRecord.co_quan_ban_hanh);
-      this.formData.controls['ngay_thang_nam_van_ban'].setValue(selectedRecord.ngay_thang_nam_van_ban);
+      this.formData.controls['ngay_thang_nam_van_ban'].setValue(selectedRecord.ngay_thang_nam_van_ban._d);
       this.formData.controls['id_hinh_thuc'].setValue(selectedRecord.id_hinh_thuc);
+      let temp1 = this.temp.filter(x => x.id_xttm_km === selectedRecord.id)
+      for (let index = 0; index < temp1.length; index++) {
+        this.danh_sach_dia_diem.push(this.formBuilder.group(temp1[index]))
+      }
     }
   }
 
@@ -120,8 +152,9 @@ export class SubscribeDiscountComponent extends BaseComponent {
   newAddress(): FormGroup {
     return this.formBuilder.group(
       {
+        id: new FormControl(),
         dia_diem: new FormControl(),
-        id_quan_huyen: new FormControl(),
+        id_quan_huyen: new FormControl(688),
         id_xttm_km: new FormControl(1)
       }
     )
@@ -132,8 +165,22 @@ export class SubscribeDiscountComponent extends BaseComponent {
     this.danh_sach_dia_diem.push(this.newAddress())
   }
 
+  public onRemove1(temp: any) {
+    let data = [temp].map(element => new Object({ id: element }));
+    this.callRemoveService1(data);
+  }
+
   removeAddress(i: number) {
-    this.danh_sach_dia_diem.removeAt(i);
+    let temp1 = this.temp.filter(x => x.id_xttm_km === this.selection.selected[0].id)
+    this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+      .then(confirm => {
+        if (confirm) {
+          this.danh_sach_dia_diem.removeAt(i);
+          this.onRemove1(temp1[i].id);
+          return;
+        }
+      })
+      .catch((err) => console.log('Hủy không thao tác: \n' + err));
   }
 
   getPromotionTypes(): void {
@@ -147,11 +194,42 @@ export class SubscribeDiscountComponent extends BaseComponent {
     );
   }
 
+  public onCreate1() {
+    // Must change to async function
+    if (this.formData.invalid) {
+      this.logger.msgError("Cần nhập đầy đủ các thông tin cần thiết trên biểu mẫu");
+    } else {
+      let data = this.formData.value;
+      if (this.mode == 'edit') {
+        data = this.prepareData(data);
+        this.callService(data);
+      }
+    }
+  }
+
+  temp: Array<{
+    id: number,
+    dia_diem: string,
+    id_quan_huyen: number,
+    id_xttm_km: number
+  }> = new Array<{
+    id: number,
+    dia_diem: string,
+    id_quan_huyen: number,
+    id_xttm_km: number
+  }>();
+
   getSDList(): void {
     this.commerceManagementService.getSubcribeDiscountData().subscribe(
       result => {
         this.filteredDataSource.data = [];
         if (result.data && result.data.length > 0) {
+          result.data[0].forEach(element => {
+            element.thoi_gian_bat_dau = this.formatDate(element.thoi_gian_bat_dau);
+            element.thoi_gian_ket_thuc = this.formatDate(element.thoi_gian_ket_thuc);
+            element.ngay_thang_nam_van_ban = this.formatDate(element.ngay_thang_nam_van_ban);
+          });
+          this.temp = result.data[1]
           let data = this.handleData(result.data);
           this.dataSource = new MatTableDataSource<SDModel>(data);
           this.filteredDataSource = new MatTableDataSource<SDModel>(data);
@@ -187,9 +265,9 @@ export class SubscribeDiscountComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = data['thoi_gian_bat_dau'] ? moment(data['thoi_gian_bat_dau']).format('yyyyMMDD') : ''
-    data['thoi_gian_ket_thuc'] = data['thoi_gian_ket_thuc'] ? moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD') : ''
-    data['ngay_thang_nam_van_ban'] = data['ngay_thang_nam_van_ban'] ? moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD') : ''
+    data['thoi_gian_bat_dau'] = data['thoi_gian_bat_dau'] ? _moment(data['thoi_gian_bat_dau']).format('yyyyMMDD') : ''
+    data['thoi_gian_ket_thuc'] = data['thoi_gian_ket_thuc'] ? _moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD') : ''
+    data['ngay_thang_nam_van_ban'] = data['ngay_thang_nam_van_ban'] ? _moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD') : ''
     return data;
   }
 
@@ -204,6 +282,23 @@ export class SubscribeDiscountComponent extends BaseComponent {
 
   callRemoveService(data) {
     this.commerceManagementService.deletePromo(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  callRemoveService1(data) {
+    this.commerceManagementService.deleteAddressPromo(data).subscribe(response => this.successNotify1(response), error => this.errorNotify1(error));
+  }
+
+  public successNotify1(response) {
+    if (response.id == -1) {
+      this.logger.msgError("Lưu lỗi! Lý do: " + response.message);
+    }
+    else {
+      this.logger.msgSuccess("Dữ liệu được xóa thành công!");
+    }
+  }
+
+  public errorNotify1(error) {
+    this.logger.msgError("Không thể thực thi! Lý do: \n" + error);
   }
 
   applyFilter(event) {

@@ -59,7 +59,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   displayedFields = {
     mst: "Mã số thuế",
     ten_doanh_nghiep: "Tên doanh nghiệp",
-    dia_chi_doanh_nghiep: "Địa chỉ",
+    dia_chi_doanh_nghiep: "Địa chỉ doanh nghiệp",
     ten_hoi_cho: "Tên hội chợ",
     thoi_gian_bat_dau: "Thời gian bắt đầu",
     thoi_gian_ket_thuc: "Thời gian kết thúc",
@@ -243,9 +243,9 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = _moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
-    data['thoi_gian_ket_thuc'] = _moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
-    data['ngay_thang_nam_van_ban'] = _moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD');
+    data['thoi_gian_bat_dau'] = data['thoi_gian_bat_dau'] ? _moment(data['thoi_gian_bat_dau']).format('yyyyMMDD') : ''
+    data['thoi_gian_ket_thuc'] = data['thoi_gian_ket_thuc'] ? _moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD') : ''
+    data['ngay_thang_nam_van_ban'] = data['ngay_thang_nam_van_ban'] ? _moment(data['ngay_thang_nam_van_ban']).format('yyyyMMDD') : ''
 
     return data;
   }

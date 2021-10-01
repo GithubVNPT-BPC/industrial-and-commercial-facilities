@@ -163,10 +163,10 @@ export class MultilevelTradeComponent extends BaseComponent {
   }
 
   prepareData(data) {
-    data['thoi_gian_bat_dau'] = _moment(data['thoi_gian_bat_dau']).format('yyyyMMDD');
-    data['thoi_gian_ket_thuc'] = _moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD');
-    data['ngay_dang_ky_giay_dkbhdc'] = _moment(data['ngay_dang_ky_giay_dkbhdc']).format('yyyyMMDD');
-    data['ngay_dang_ky_giay_tchtbhdc'] = _moment(data['ngay_dang_ky_giay_tchtbhdc']).format('yyyyMMDD');
+    data['thoi_gian_bat_dau'] = data['thoi_gian_bat_dau'] ? _moment(data['thoi_gian_bat_dau']).format('yyyyMMDD') : ''
+    data['thoi_gian_ket_thuc'] = data['thoi_gian_ket_thuc'] ? _moment(data['thoi_gian_ket_thuc']).format('yyyyMMDD') : ''
+    data['ngay_dang_ky_giay_dkbhdc'] = data['ngay_dang_ky_giay_dkbhdc'] ? _moment(data['ngay_dang_ky_giay_dkbhdc']).format('yyyyMMDD') : ''
+    data['ngay_dang_ky_giay_tchtbhdc'] = data['ngay_dang_ky_giay_tchtbhdc'] ? _moment(data['ngay_dang_ky_giay_tchtbhdc']).format('yyyyMMDD') : ''
 
     return data;
   }

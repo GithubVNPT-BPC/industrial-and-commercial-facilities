@@ -112,10 +112,10 @@
                             (click)="ExportTOExcel('Đăng ký khuyến mại','Đăng ký khuyến mại')">
                             <mat-icon>file_download</mat-icon>
                         </button>
-                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
+                        <!-- <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
                             [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
-                        </button>
+                        </button> -->
                         <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
                             (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
@@ -172,7 +172,10 @@
                                         <ng-container
                                             *ngIf="!['thoi_gian_chinh_sua_cuoi'].includes(field.key) ;else dateFieldCond">
                                             <ng-container *ngIf="field.key != 'dia_diem_km'; else listAddress">
-                                                <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                                <ng-container
+                                                    *ngIf="!['thoi_gian_bat_dau', 'thoi_gian_ket_thuc', 'ngay_thang_nam_van_ban'].includes(field.key) ;else date1FieldCond">
+                                                    <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
+                                                </ng-container>
                                             </ng-container>
                                         </ng-container>
                                     </ng-container>
@@ -190,6 +193,11 @@
                                 <ng-template #dateFieldCond>
                                     <td mat-cell *matCellDef="let element"> {{element[field.key] | date:'dd/MM/yyyy,
                                         h:mm a'}}
+                                    </td>
+                                </ng-template>
+
+                                <ng-template #date1FieldCond>
+                                    <td mat-cell *matCellDef="let element"> {{element[field.key] | date: 'dd/MM/yyyy'}}
                                     </td>
                                 </ng-template>
 
@@ -236,8 +244,8 @@
             </mat-card-header>
             <hr>
             <form [formGroup]="formData">
-                <div class="form-group row">
-                    <div class="col-md-6">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="ten_doanh_nghiep">Doanh nghiệp</mat-label>
                             <input matInput placeholder="VD: Công ty TNHH" id="ten_doanh_nghiep" type="text"
@@ -245,28 +253,28 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label for="mst">Mã số thuế</mat-label>
                             <input matInput formControlName="mst" id="mst" type="text">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-12 col-lg-6">
+                        <mat-form-field appearance="outline">
+                            <mat-label for="dia_chi_doanh_nghiep">Địa chỉ doanh nghiệp</mat-label>
+                            <input matInput formControlName="dia_chi_doanh_nghiep">
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Chương trình khuyến mãi</mat-label>
                             <input matInput formControlName="ten_chuong_trinh_km">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-6">
-                        <mat-form-field appearance="outline">
-                            <mat-label for="dia_chi_doanh_nghiep">Địa chỉ</mat-label>
-                            <input matInput formControlName="dia_chi_doanh_nghiep">
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-md-3">
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Bắt đầu</mat-label>
                             <input matInput [matDatepicker]="startDate" formControlName="thoi_gian_bat_dau" readonly>
@@ -275,7 +283,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Kết thúc</mat-label>
                             <input matInput [matDatepicker]="endDate" formControlName="thoi_gian_ket_thuc" readonly>
@@ -284,14 +292,14 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Hàng hóa khuyến mãi</mat-label>
                             <input matInput formControlName="hang_hoa_km">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-12 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Hình thức khuyến mãi</mat-label>
                             <mat-select formControlName="id_hinh_thuc">
@@ -302,21 +310,21 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-6 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Số văn bản</mat-label>
                             <input matInput formControlName="so_van_ban">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-6 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Cơ quan ban hành</mat-label>
                             <input matInput formControlName="co_quan_ban_hanh">
                         </mat-form-field>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-6 col-lg-6">
                         <mat-form-field appearance="outline">
                             <mat-label>Ngày, tháng, năm văn bản</mat-label>
                             <input matInput [matDatepicker]="docDate" formControlName="ngay_thang_nam_van_ban" readonly>
@@ -325,14 +333,7 @@
                         </mat-form-field>
                     </div>
 
-                    <!-- <div class="col-md-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Mã chương trình khuyến mãi</mat-label>
-                            <input matInput formControlName="ma_km">
-                        </mat-form-field>
-                    </div> -->
-
-                    <div class="col-md-12 mt-3">
+                    <div class="col-12 mt-12">
                         <mat-card-header>
                             <mat-card-title class="text-left">
                                 <span class="pt-2"> Danh sách địa điểm khuyến mãi </span>
@@ -367,7 +368,8 @@
                                             </mat-form-field>
                                         </div>
                                         <div class="col-3 col-lg-3">
-                                            <button class="btn btn-danger mt-1" (click)="removeAddress(i)">
+                                            <button class="btn btn-danger mt-1" (click)="removeAddress(i)"
+                                                type="button">
                                                 <mat-icon>delete</mat-icon>
                                             </button>
                                         </div>
@@ -378,7 +380,7 @@
                     </div>
 
                     <div class="col-md-12 mt-3">
-                        <button class="btn btn-success float-right ml-2" (click)='onCreate()'>Lưu</button>
+                        <button class="btn btn-success float-right ml-2" (click)='onCreate1()'>Lưu</button>
                         <button class="btn btn-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
                 </div>

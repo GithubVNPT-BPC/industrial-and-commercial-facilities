@@ -48,9 +48,9 @@
                     </button>
                 </div>
 
-                <div formArrayName="danh_sach_da_cap"
-                    *ngFor="let dc of form.controls.danh_sach_da_cap.controls; let i = index" class="col-12 col-lg-12">
-                    <div [formGroupName]="i" class="row">
+                <div formArrayName="danh_sach_da_cap">
+                    <div *ngFor="let dc of form.controls.danh_sach_da_cap.controls; let i = index"
+                        class="col-12 col-lg-12" [formGroupName]="i">
 
                         <div class="row">
                             <div class="col-12 col-lg-12 row text-center ml-2">
@@ -159,9 +159,9 @@
                     </button>
                 </div>
 
-                <div formArrayName="danh_sach_hoi_cho"
-                    *ngFor="let dc of form.controls.danh_sach_hoi_cho.controls; let i = index" class="col-12 col-lg-12">
-                    <div [formGroupName]="i" class="row">
+                <div formArrayName="danh_sach_hoi_cho">
+                    <div *ngFor="let dc of form.controls.danh_sach_hoi_cho.controls; let i = index"
+                        class="col-12 col-lg-12" [formGroupName]="i">
 
                         <div class="row">
                             <div class="col-12 col-lg-12 row text-center ml-2">
@@ -296,8 +296,7 @@
                 </div>
 
                 <div formArrayName="danh_sach_khuyen_mai">
-                    <div class="row"
-                        *ngFor="let khuyenmai of form.controls.danh_sach_khuyen_mai.controls; let i = index"
+                    <div *ngFor="let khuyenmai of form.controls.danh_sach_khuyen_mai.controls; let i = index"
                         class="col-12 col-lg-12" formGroupName="{{i}}">
                         <div class="row">
                             <div class="col-12 col-lg-12 row text-center ml-2">
