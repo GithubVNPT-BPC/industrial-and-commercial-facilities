@@ -155,6 +155,21 @@
                             </td>
                         </ng-container>
 
+                        <ng-container matColumnDef="cap_nhat_dn_ccn">
+                            <th mat-header-cell *matHeaderCellDef> Cập nhật DN <br> thuộc CCN</th>
+                            <td mat-cell *matCellDef="let element" class="jump center-cell">
+                                <mat-icon (click)="editclusterbusiness(element)">emoji_events</mat-icon>
+                            </td>
+                            <td mat-footer-cell *matFooterCellDef> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="them_dn_ccn">
+                            <th mat-header-cell *matHeaderCellDef> Thêm DN <br> thuộc CCN </th>
+                            <td mat-cell *matCellDef="let element" class="jump center-cell">
+                                <mat-icon (click)="addclusterbusiness(element)">update</mat-icon>
+                            </td>
+                        </ng-container>
+
                         <ng-container matColumnDef="dien_tich_qh">
                             <th mat-header-cell *matHeaderCellDef> Diện tích theo quy hoạch (ha)
                             </th>
@@ -209,7 +224,7 @@
                         </ng-container>
 
                         <ng-container matColumnDef="merge1">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="8">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="10">
                         </ng-container>
 
                         <ng-container matColumnDef="merge2">

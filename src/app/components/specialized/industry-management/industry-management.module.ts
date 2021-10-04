@@ -23,6 +23,7 @@ import { CertificateRegulationComponent } from './certificate-regulation/certifi
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
 import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.component";
 import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
+import { ClusterBusinessComponent } from './cluster-management/cluster-business/cluster-business.component';
 
 @NgModule({
   imports: [
@@ -49,9 +50,10 @@ import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-n
     CertificateRegulationComponent,
     ReportExplosivesComponent,
     CrudButtonsComponent,
-    IipMonthNewComponent
+    IipMonthNewComponent,
+    ClusterBusinessComponent
   ],
-  entryComponents: [],
+  entryComponents: [ClusterBusinessComponent],
   providers: [DecimalPipe, PercentPipe]
 })
 

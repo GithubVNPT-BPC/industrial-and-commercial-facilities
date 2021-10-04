@@ -24,3 +24,19 @@ export class ClusterFilterModel {
     id_htdtht: number[];
     id_htdthtxlnt: number[];
 }
+
+export class ClusterBusiness {
+    public id_dn: string;
+    public id: string;
+    public id_ccn: number;
+    public mst: string;
+    public ten_doanh_nghiep: string;
+    public dia_chi: string;
+    public so_dien_thoai: string;
+}
+
+export class PostClusterBusiness {
+    public id: string;
+    public id_ccn: number;
+    public mst: string;
+}

@@ -7,6 +7,9 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { environment } from 'src/environments/environment';
+import { MatDialog } from '@angular/material';
+import { SAVE } from 'src/app/_enums/save.enum';
+import { ClusterBusinessComponent } from './cluster-business/cluster-business.component';
 
 @Component({
     selector: 'cluster-management',
@@ -21,8 +24,8 @@ export class ClusterManagementComponent extends BaseComponent {
     showColumns: string[] = [];
     showSubColumns: string[] = [];
     subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
-    topColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi'];
-    totalColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
+    topColumns: string[] = ['select', 'index', 'cap_nhat_dn_ccn', 'them_dn_ccn', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi'];
+    totalColumns: string[] = ['select', 'index', 'cap_nhat_dn_ccn', 'them_dn_ccn', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     imageUrl: string[] = [];
@@ -56,7 +59,8 @@ export class ClusterManagementComponent extends BaseComponent {
         public indService: IndustryManagementService,
         public router: Router,
         private injector: Injector,
-        public _login: LoginService
+        public _login: LoginService,
+        public dialog: MatDialog
     ) {
         super(injector)
     }
@@ -312,5 +316,25 @@ export class ClusterManagementComponent extends BaseComponent {
 
     callRemoveService(data) {
         this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    }
+
+    public editclusterbusiness(data: any) {
+        const dialogRef = this.dialog.open(ClusterBusinessComponent, {
+            data: {
+                message: 'Chỉnh sửa DN thuộc CCN',
+                cluster_data: data,
+                typeOfSave: SAVE.CLUSTER,
+            }
+        });
+    }
+
+    public addclusterbusiness(data: any) {
+        const dialogRef = this.dialog.open(ClusterBusinessComponent, {
+            data: {
+                message: 'Thêm DN thuộc CCN',
+                cluster_data: data,
+                typeOfSave: SAVE.ADD,
+            }
+        });
     }
 }

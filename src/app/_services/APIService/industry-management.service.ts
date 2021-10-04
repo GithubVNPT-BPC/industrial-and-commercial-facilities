@@ -33,24 +33,12 @@ export class IndustryManagementService {
     private urlPostComformityAnnounce = '/cbhq';
     private urlPostExplosiveMat = '/vlncn';
 
-    private urlGetDetailGroupCompany = '/ccn/chi-tiet';
-    private urlGroupCompany = '/ccn/';
-
-    // Update
     private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
-    private urlUpdateImageIndustry = '/hinh-anh';
-    private urlUpdateFileIndustry = '/tai-lieu';
-
-    private urlDeleteImageClusteManagement = '/xoa-hinh-anh'
-    private urlDeleteFileClusteManagement = '/xoa-tai-lieu'
-    // Delete URLs
-
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
     private urlDeleteFoodIndustry = '/cntp-xoa';
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
     private urlDeleteChemistry = '/hoa-chat-xoa';
-    private urlDeleteClusterManagement = '/xoa-ccn';
     private urlDeleteExplosiveMat = '/vlncn/xoa';
 
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
@@ -192,17 +180,41 @@ export class IndustryManagementService {
         return throwError(errorMessage);
     }
 
-    public GetDanhSachQuanLyCumCongNghiep() {
-        var apiUrl = this.endpoint + this.urlGroupCompany;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+    //Cụm công nghiệp
+
+    private urlclusterbusiness = '/ccn/doanh-nghiep';
+    private urldeleteclusterbusiness = '/cnn/xoa-doanh-nghiep';
+
+    public GetClusterBusiness(id) {
+        var apiUrl = this.endpoint + this.urlclusterbusiness;
+        let params = new HttpParams().set('id', id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
 
-    public Downloadfile(filesource: string) {
-        var apiUrl = environment.apiEndpoint + filesource;
+    public PostClusterBusiness(data) {
+        var apiUrl = this.endpoint + this.urlclusterbusiness;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteClusterBusiness(body: any) {
+        var apiUrl = this.endpoint + this.urldeleteclusterbusiness;
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    private urlGroupCompany = '/ccn/';
+    private urlGetDetailGroupCompany = '/ccn/chi-tiet';
+    private urlDeleteClusterManagement = '/xoa-ccn';
+
+    public GetDanhSachQuanLyCumCongNghiep() {
+        var apiUrl = this.endpoint + this.urlGroupCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
@@ -220,6 +232,26 @@ export class IndustryManagementService {
     public PostDataGroupCompany(body: any) {
         var apiUrl = this.endpoint + this.urlGroupCompany;
         return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteClusterManagement(body: any) {
+        var apiUrl = this.endpoint + this.urlDeleteClusterManagement;
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    private urlUpdateImageIndustry = '/hinh-anh';
+    private urlUpdateFileIndustry = '/tai-lieu';
+    private urlDeleteImageClusteManagement = '/xoa-hinh-anh'
+    private urlDeleteFileClusteManagement = '/xoa-tai-lieu'
+
+    public Downloadfile(filesource: string) {
+        var apiUrl = environment.apiEndpoint + filesource;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -264,6 +296,8 @@ export class IndustryManagementService {
         );
     }
 
+    //
+
     public DeleteCBHQ(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
         // let params = new HttpParams().set('id', id.toString());
@@ -298,14 +332,6 @@ export class IndustryManagementService {
 
     public DeleteExplosiveMat(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteExplosiveMat;
-        // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public DeleteClusterManagement(body: any) {
-        var apiUrl = this.endpoint + this.urlDeleteClusterManagement;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
