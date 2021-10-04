@@ -41,7 +41,7 @@ export class IndustryBusinessComponent implements OnInit {
   }
 
   public displayedColumns: string[] = [
-    // 'select',
+    'select',
     'index', 'ten_doanh_nghiep', 'mst',
     // 'ten_loai_hinh_hoat_dong', 
     // 'nguoi_dai_dien', 
