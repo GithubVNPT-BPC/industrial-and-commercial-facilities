@@ -678,7 +678,7 @@ export class EditBusinessComponent implements OnInit {
   }
 
   Back() {
-    this.router.navigate(['manager/business/search/']);
+    this.router.navigate(['specialized/commecial-management/domestic/search']);
   }
 
   detail: boolean

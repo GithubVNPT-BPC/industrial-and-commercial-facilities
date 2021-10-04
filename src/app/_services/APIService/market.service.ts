@@ -45,6 +45,7 @@ export class MarketService {
     public urlPostCompany = "api/doanh-nghiep/them-doanh-nghiep";
     public urlUpdateCompany = "api/doanh-nghiep";
     public urlAllCompany = "api/doanh-nghiep/danh-sach-doanh-nghiep";
+    public urlAllIndustryCompany = "api/doanh-nghiep/danh-sach-doanh-nghiep-cong-nghiep";
     public urlCompanyInfo = "api/doanh-nghiep";
     public urlDeleteCompany = "api/doanh-nghiep/xoa-nhieu-doanh-nghiep";
     public urlDeleteCareer = "api/doanh-nghiep/xoa-nganh-nghe";
@@ -76,6 +77,13 @@ export class MarketService {
     }
     public GetAllCompany() {
         var apiUrl = this.apiHome + this.urlAllCompany;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+    public GetAllIndustryCompany() {
+        var apiUrl = this.apiHome + this.urlAllIndustryCompany;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

@@ -9,6 +9,7 @@ registerLocaleData(localevi, 'vi');
 import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { DecimalPipe } from '@angular/common';
 import { MatCarouselModule } from '@ngmodule/material-carousel';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 import { ChemicalManagementComponent } from './chemical-management/chemical-management.component';
 import { ClusterManagementComponent } from './cluster-management/cluster-management.component';
@@ -24,6 +25,7 @@ import { ReportExplosivesComponent } from './report-explosives/report-explosives
 import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.component";
 import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
 import { ClusterBusinessComponent } from './cluster-management/cluster-business/cluster-business.component';
+import { IndustryBusinessComponent } from './industry-business/industry-business.component';
 
 @NgModule({
   imports: [
@@ -35,6 +37,7 @@ import { ClusterBusinessComponent } from './cluster-management/cluster-business/
     PdfViewerModule,
     IndustryManagementRoutingModule,
     MatCarouselModule.forRoot(),
+    NgxMatSelectSearchModule
   ],
   exports: [
   ],
@@ -51,7 +54,8 @@ import { ClusterBusinessComponent } from './cluster-management/cluster-business/
     ReportExplosivesComponent,
     CrudButtonsComponent,
     IipMonthNewComponent,
-    ClusterBusinessComponent
+    ClusterBusinessComponent,
+    IndustryBusinessComponent
   ],
   entryComponents: [ClusterBusinessComponent],
   providers: [DecimalPipe, PercentPipe]

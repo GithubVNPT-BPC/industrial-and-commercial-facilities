@@ -11,6 +11,7 @@ import { LPGManagementComponent } from './lpg-management/lpg-management.componen
 import { CertificateRegulationComponent } from './certificate-regulation/certificate-regulation.component';
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
 import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
+import { IndustryBusinessComponent } from './industry-business/industry-business.component';
 
 const routes: Routes = [
     {
@@ -19,6 +20,13 @@ const routes: Routes = [
             title: 'Quản lý công nghiệp',
         },
         children: [
+            {
+                path: 'industrybusiness',
+                component: IndustryBusinessComponent,
+                data: {
+                    title: 'Doanh nghiệp',
+                }
+            },
             {
                 path: 'chemical',
                 component: ChemicalManagementComponent,
