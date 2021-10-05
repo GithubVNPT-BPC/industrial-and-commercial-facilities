@@ -26,6 +26,7 @@ import { CrudButtonsComponent } from "../../../shared/crud-buttons/crud-buttons.
 import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
 import { ClusterBusinessComponent } from './cluster-management/cluster-business/cluster-business.component';
 import { IndustryBusinessComponent } from './industry-business/industry-business.component';
+import { SupportBusinessComponent } from './support-business/support-business.component';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import { IndustryBusinessComponent } from './industry-business/industry-business
     CrudButtonsComponent,
     IipMonthNewComponent,
     ClusterBusinessComponent,
-    IndustryBusinessComponent
+    IndustryBusinessComponent,
+    SupportBusinessComponent
   ],
   entryComponents: [ClusterBusinessComponent],
   providers: [DecimalPipe, PercentPipe]

@@ -12,6 +12,7 @@ import { CertificateRegulationComponent } from './certificate-regulation/certifi
 import { ReportExplosivesComponent } from './report-explosives/report-explosives.component';
 import { IipMonthNewComponent } from './iip-industrial/iip-month-new/iip-month-new.component';
 import { IndustryBusinessComponent } from './industry-business/industry-business.component';
+import { SupportBusinessComponent } from './support-business/support-business.component';
 
 const routes: Routes = [
     {
@@ -20,6 +21,13 @@ const routes: Routes = [
             title: 'Quản lý công nghiệp',
         },
         children: [
+            {
+                path: 'supportbusiness',
+                component: SupportBusinessComponent,
+                data: {
+                    title: 'Doanh nghiệp hỗ trợ',
+                }
+            },
             {
                 path: 'industrybusiness',
                 component: IndustryBusinessComponent,
