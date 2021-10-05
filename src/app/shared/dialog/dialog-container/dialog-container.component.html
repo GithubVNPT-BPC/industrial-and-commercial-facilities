@@ -1,0 +1,46 @@
+<h2 mat-dialog-title style="text-align:center;">Import dữ liệu</h2>
+
+<mat-dialog-content class="mat-typography">
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-xs-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Loại dữ liệu</mat-label>
+                <mat-select (selectionChange)="changeReportType()" [(ngModel)]="selectType">
+                    <mat-option *ngFor="let type of reportTypes" [value]="type.ma_so">{{type.noi_dung}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4">
+            <mat-form-field appearance="outline">
+                <mat-label>Năm dữ liệu</mat-label>
+                <mat-select [(ngModel)]="selectedYear" (selectionChange)="changePeriod()">
+                    <mat-option *ngFor="let item of years" [value]="item">
+                        {{item}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4" *ngIf="isShowPeriod">
+            <mat-form-field appearance="outline">
+                <mat-label>Kỳ dữ liệu</mat-label>
+                <mat-select [(ngModel)]="selectedPeriod" (selectionChange)="changePeriod()">
+                    <mat-option *ngFor="let p of periods" [value]="p.id">
+                        {{p.title}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+    <div class="content">
+        <label class="btn btn-success" for="customFile">
+            Chọn file
+        </label>
+        <input class="btn btn-success" id="customFile" type="file" (change)="uploadExcel($event)" hidden #inputFile>
+        {{name}}
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <div class="col-2 btn btn-primary" style="margin-right: 5px;" (click)="save()">Lưu</div>
+    <button mat-raised-button mat-dialog-close color="warn">Cancel</button>
+</mat-dialog-actions>
