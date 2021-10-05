@@ -1,9 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { ElectricalPlan110KV } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 import { BaseComponent } from '../../base.component';
 
 export class Group {
@@ -31,7 +33,9 @@ export class FutureElectricalPlanComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         private energyService: EnergyService,
-        public _login: LoginService
+        public _login: LoginService,
+        private dialogService: DialogService,
+        public matDialog: MatDialog
     ) {
         super(injector);
         this.groupByColumns = ['id_loai_duong_day']
@@ -185,5 +189,55 @@ export class FutureElectricalPlanComponent extends BaseComponent {
 
     changePeriod() {
         this.time_id = this.selectedYear * 10 + this.selectedPeriod;
+    }
+
+    uploadExcel(e) {
+        // open dialog upload excel file 
+        this.openDialog("Quy hoạch tuyến đường dây");
+    }
+
+    openDialog(nameSheet) {
+        const dialogConfig = new MatDialogConfig();
+        console.log(window.innerWidth);
+        if (window.innerWidth > 375) {
+            dialogConfig.width = window.innerWidth * 0.7 + 'px';
+            dialogConfig.height = window.innerHeight * 0.4 + 'px';
+        } else {
+            dialogConfig.width = window.innerWidth * 0.8 + 'px';
+            dialogConfig.height = window.innerHeight * 0.2 + 'px';
+        }
+        dialogConfig.data = {
+            nameSheet: nameSheet,
+        };
+        let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+        dialogRef.afterClosed().subscribe(res => {
+            console.log(res);
+            if (res) {
+                console.log(this.handleData(res));
+                const body = this.handleData(res);
+                this.energyService.CapNhatDuLieuQuyHoachDuongDay(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+            }
+
+        })
+    }
+
+    handleData(time_id) {
+        let ls: any[] = [];
+        let dataExcel = this.dialogService.getDataTransform();
+        for (let i = 1; i < dataExcel.length; i++) {
+            let body: any = {};
+            body['ten_cong_trinh'] = dataExcel[i]['__EMPTY'];
+            body['so_mach'] = dataExcel[i]['__EMPTY_4'];
+            body['huong_tuyen_duong_day'] = dataExcel[i]['__EMPTY_2'];
+            body['nam_khoi_cong'] = dataExcel[i]['__EMPTY_1'];
+            body['nam_van_hanh'] = dataExcel[i]['__EMPTY_3'];
+            body['id_giai_doan'] = dataExcel[i]['__EMPTY_7'];
+            body['id_loai_duong_day'] = dataExcel[i]['__EMPTY_8'];
+            body['time_id'] = time_id;
+
+            ls.push(body)
+        }
+        return ls;
     }
 }

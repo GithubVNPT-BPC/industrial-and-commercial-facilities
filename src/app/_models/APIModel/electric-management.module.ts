@@ -55,7 +55,7 @@ export class SolarEneryManagementModel {
     ten_trang_thai_hoat_dong: string;
     id_trang_thai_hoat_dong: number;
     id_quan_huyen: number;
-
+    time_id: number;
     thoi_gian_chinh_sua_cuoi: Date;
 }
 

@@ -65,6 +65,14 @@
                     </div>
 
                     <div class="col-6 col-lg-6 button-control my-auto">
+                        <button mat-raised-button matTooltip="Import" (click)="uploadExcel($event)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        
+                        <a mat-raised-button download="Mẫu import.xlsx" [hidden]=authorize title="Excel"
+                            href="assets/ExcelExampleEnergy/ImportFile.xlsx" class="mr-1" matTooltip="File mẫu">
+                            <mat-icon>cloud_download</mat-icon>
+                        </a>
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Trạm biến áp 110KV','Trạm biến áp 110KV')">
                             <mat-icon>file_download</mat-icon>
@@ -87,7 +95,7 @@
 
                 <div class="row">
 
-                    <div class="col-lg-2 col-md-2">
+                    <!-- <div class="col-lg-2 col-md-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Loại dữ liệu</mat-label>
                             <mat-select (selectionChange)="changeReportType()" [(ngModel)]="selectType">
@@ -95,8 +103,8 @@
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
-                    </div>
-                    <div class="col-lg-2 col-md-2">
+                    </div> -->
+                    <div class="col-lg-3 col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm dữ liệu</mat-label>
                             <mat-select [(ngModel)]="selectedYear" (selectionChange)="changePeriod()">
@@ -106,17 +114,17 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="col-lg-2 col-md-2" *ngIf="isShowPeriod">
+                    <div class="col-lg-3 col-md-3">
                         <mat-form-field appearance="outline">
-                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <mat-label>Kỳ dữ liệu11</mat-label>
                             <mat-select [(ngModel)]="selectedPeriod" (selectionChange)="changePeriod()">
-                                <mat-option *ngFor="let item of periods" [value]="item">
-                                    {{item}}
+                                <mat-option *ngFor="let item of periods" [value]="item.id">
+                                    {{item.title}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="col-lg-2 col-md-2">
+                    <div class="col-lg-3 col-md-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Loại đường dây</mat-label>
                             <mat-select [(ngModel)]="selectTypeStreet">
@@ -129,7 +137,7 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="col-lg-2 col-md-2  my-auto">
+                    <div class="col-lg-3 col-md-3  my-auto">
                         <button matTooltip="Tìm kiếm" mat-raised-button (click)="search()">
                             <mat-icon>search</mat-icon>
                         </button>
@@ -252,7 +260,7 @@
             <!-- kỳ dữ liệu -->
             <div class="row">
 
-                <div class="col-lg-3 col-md-3">
+                <!-- <div class="col-lg-3 col-md-3">
                     <mat-form-field appearance="outline">
                         <mat-label>Loại dữ liệu</mat-label>
                         <mat-select (selectionChange)="changeReportType()" [(ngModel)]="selectType">
@@ -260,7 +268,7 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
-                </div>
+                </div> -->
                 <div class="col-lg-3 col-md-3">
                     <mat-form-field appearance="outline">
                         <mat-label>Năm dữ liệu</mat-label>

@@ -179,7 +179,7 @@ export class EnergyService {
     }
 
     // POST method
-    PostSolarEnergyData(datas, time_id) {
+    PostSolarEnergyData(datas, time_id?) {
         let apiUrl = this.apiNangLuong + this.urlPostSolarEnergyData;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
@@ -189,7 +189,7 @@ export class EnergyService {
         );
     }
 
-    PostHydroEnergyData(datas, time_id) {
+    PostHydroEnergyData(datas, time_id?) {
         let apiUrl = this.apiNangLuong + this.urlPostHydroEnergyData;
         // let apiUrl = "https://localhost:5001/api/qlnl/thuy-dien";
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -200,7 +200,7 @@ export class EnergyService {
         );
     }
 
-    PostBlockElectricData(datas, time_id) {
+    PostBlockElectricData(datas, time_id?) {
         let apiUrl = this.apiNangLuong + this.urlPostBlockElectricData;
         // let apiUrl ='https://localhost:5001/api/qlnl/dsk';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
@@ -211,7 +211,7 @@ export class EnergyService {
         );
     }
 
-    PostDiffkElectricData(datas, time_id) {
+    PostDiffkElectricData(datas, time_id?) {
         let apiUrl = this.apiNangLuong + '/cndk';
         // let apiUrl ='https://localhost:5001/api/qlnl/dsk';
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });

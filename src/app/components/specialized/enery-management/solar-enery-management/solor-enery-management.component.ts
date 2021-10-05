@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
 import { SolarEneryManagementModel } from 'src/app/_models/APIModel/electric-management.module';
 
 import { FormControl, Validators } from '@angular/forms';
@@ -7,6 +7,8 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 
 @Component({
   selector: 'app-solar-enery-management',
@@ -36,7 +38,9 @@ export class SolarEneryManagementComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     private energyService: EnergyService,
-    public _login: LoginService
+    public _login: LoginService,
+    public matDialog: MatDialog,
+    private dialogService: DialogService,
   ) {
     super(injector);
   }
@@ -83,8 +87,9 @@ export class SolarEneryManagementComponent extends BaseComponent {
       doanh_thu_6_thang: new FormControl(),
       san_luong_nam: new FormControl(),
       doanh_thu_nam: new FormControl(),
-      id_trang_thai_hoat_dong: new FormControl('', Validators.required),
+      id_trang_thai_hoat_dong: new FormControl(1, Validators.required),
       id_quan_huyen: new FormControl('', Validators.required),
+      time_id: new FormControl('', Validators.required),
     }
   }
 
@@ -108,7 +113,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.energyService.PostSolarEnergyData([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.energyService.PostSolarEnergyData([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   applyDistrictFilter(event) {
@@ -168,5 +173,57 @@ export class SolarEneryManagementComponent extends BaseComponent {
 
   callRemoveService(data) {
     this.energyService.DeleteSolarEnergy(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  uploadExcel(e){
+    // open dialog upload excel file 
+    this.openDialog("Điện mặt trời");
+  }
+
+  openDialog(nameSheet) {
+    const dialogConfig = new MatDialogConfig();
+    console.log(window.innerWidth);
+    if (window.innerWidth > 375){
+      dialogConfig.width = window.innerWidth*0.7 + 'px';
+      dialogConfig.height = window.innerHeight*0.4 + 'px';
+    }else{
+      dialogConfig.width = window.innerWidth * 0.8 + 'px';
+      dialogConfig.height = window.innerHeight * 0.2 + 'px';
+    }
+    dialogConfig.data = {
+      nameSheet: nameSheet,
+    };
+    let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res);
+      if(res){
+        console.log(this.handleData(res));
+        const body = this.handleData(res);
+        this.energyService.PostSolarEnergyData(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+      }
+      
+    })
+  }
+
+  handleData(time_id){
+    let ls: any[] = [];
+    let dataExcel = this.dialogService.getDataTransform();
+    for (let i = 1; i < dataExcel.length; i++) {
+      let body: any = {};
+      body['ten_doanh_nghiep'] = dataExcel[i]['__EMPTY'];
+      body['ten_du_an'] = dataExcel[i]['__EMPTY_1'];
+      body['dia_diem'] = dataExcel[i]['__EMPTY_2'];
+      body['cong_suat_thiet_ke'] = dataExcel[i]['__EMPTY_5'];
+      body['san_luong_6_thang'] = dataExcel[i]['__EMPTY_6'];
+      body['doanh_thu_6_thang'] = dataExcel[i]['__EMPTY_7'];
+      body['san_luong_nam'] = dataExcel[i]['__EMPTY_8'];
+      body['doanh_thu_nam'] = dataExcel[i]['__EMPTY_9'];
+      body['time_id'] = time_id;
+      body['id_trang_thai_hoat_dong'] = 1;
+      body['id_quan_huyen'] = dataExcel[i]['__EMPTY_3'];
+      ls.push(body)
+    }
+    return ls;
   }
 }

@@ -1,8 +1,10 @@
 import { Component, Injector } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 import { BaseComponent } from '../../base.component';
 
 
@@ -84,7 +86,9 @@ export class PrimaryElectricityComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         private energyService: EnergyService,
-        public _login: LoginService
+        public _login: LoginService,
+        private dialogService: DialogService,
+        public matDialog: MatDialog,
     ) {
         super(injector);
         this.groupByColumns = ['id_loai_cong_trinh', 'id_giai_doan']
@@ -300,6 +304,58 @@ export class PrimaryElectricityComponent extends BaseComponent {
                 return i.name.toString();
             return "";
         })
+    }
+
+    uploadExcel(e) {
+        // open dialog upload excel file 
+        this.openDialog("Quy hoạch nguồn điện sơ cấp");
+    }
+
+    openDialog(nameSheet) {
+        const dialogConfig = new MatDialogConfig();
+        console.log(window.innerWidth);
+        if (window.innerWidth > 375) {
+            dialogConfig.width = window.innerWidth * 0.7 + 'px';
+            dialogConfig.height = window.innerHeight * 0.4 + 'px';
+        } else {
+            dialogConfig.width = window.innerWidth * 0.8 + 'px';
+            dialogConfig.height = window.innerHeight * 0.2 + 'px';
+        }
+        dialogConfig.data = {
+            nameSheet: nameSheet,
+        };
+        let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+        dialogRef.afterClosed().subscribe(res => {
+            console.log(res);
+            if (res) {
+                console.log(this.handleData(res));
+                const body = this.handleData(res);
+                this.energyService.ThemDuLieuDienSoCap(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+            }
+
+        })
+    }
+
+    handleData(time_id) {
+        let ls: any[] = [];
+        let dataExcel = this.dialogService.getDataTransform();
+        for (let i = 1; i < dataExcel.length; i++) {
+            let body: any = {};
+            body['ten_cong_trinh'] = dataExcel[i]['__EMPTY'];
+            body['cong_suat'] = dataExcel[i]['__EMPTY_2'];
+            body['id_dia_diem_quy_hoach'] = dataExcel[i]['__EMPTY_7'];
+            body['nam_khoi_cong'] = dataExcel[i]['__EMPTY_1'];
+            body['nam_van_hanh'] = dataExcel[i]['__EMPTY_3'];
+            body['time_id'] = time_id;
+            body['id_giai_doan'] = dataExcel[i]['__EMPTY_9'];
+            body['id_loai_cong_trinh'] = dataExcel[i]['__EMPTY_8'];
+            body['ghi_chu'] = dataExcel[i]['__EMPTY_10'];
+            
+            
+            ls.push(body)
+        }
+        return ls;
     }
 
 }
