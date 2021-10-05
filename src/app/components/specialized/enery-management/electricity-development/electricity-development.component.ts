@@ -1,9 +1,11 @@
 import { Component, Injector } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { ElectricityDevelopment35KVModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 import { BaseComponent } from '../../base.component';
 
 @Component({
@@ -33,7 +35,9 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     private energyService: EnergyService,
-    public _login: LoginService
+    public _login: LoginService,
+    private dialogService: DialogService,
+    public matDialog: MatDialog,
   ) {
     super(injector);
   }
@@ -161,5 +165,56 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
     this.LINK_DEFAULT = "/specialized/enery-management/35kv_electricity_development";
     this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện cấp điện áp từ 22kV trở xuống";
     this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Quy hoạch điện cấp điện áp từ 22kV trở xuống";
+  }
+
+  uploadExcel(e) {
+    // open dialog upload excel file 
+    this.openDialog("Quy hoạch điện áp 22kv");
+  }
+
+  openDialog(nameSheet) {
+    const dialogConfig = new MatDialogConfig();
+    console.log(window.innerWidth);
+    if (window.innerWidth > 375) {
+      dialogConfig.width = window.innerWidth * 0.7 + 'px';
+      dialogConfig.height = window.innerHeight * 0.4 + 'px';
+    } else {
+      dialogConfig.width = window.innerWidth * 0.8 + 'px';
+      dialogConfig.height = window.innerHeight * 0.2 + 'px';
+    }
+    dialogConfig.data = {
+      nameSheet: nameSheet,
+    };
+    let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res);
+      if (res) {
+        console.log(this.handleData(res));
+        const body = this.handleData(res);
+        this.energyService.CapNhatDuLieuQuyHoachDien35KV(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+      }
+
+    })
+  }
+
+  handleData(time_id) {
+    let ls: any[] = [];
+    let dataExcel = this.dialogService.getDataTransform();
+    for (let i = 1; i < dataExcel.length; i++) {
+      let body: any = {};
+      body['dia_ban'] = dataExcel[i]['__EMPTY'];
+      body['trung_ap_3_pha'] = dataExcel[i]['__EMPTY_3'];
+      body['trung_ap_1_pha'] = dataExcel[i]['__EMPTY_4'];
+      body['ha_ap_3_pha'] = dataExcel[i]['__EMPTY_5'];
+      body['ha_ap_1_pha'] = dataExcel[i]['__EMPTY_6'];
+      body['so_tram'] = dataExcel[i]['__EMPTY_7'];
+      body['cong_suat'] = dataExcel[i]['__EMPTY_8'];
+      body['time_id'] = time_id;
+      body['id_trang_thai_hoat_dong'] = 1;
+      body['id_quan_huyen'] = dataExcel[i]['__EMPTY_1'];
+      ls.push(body)
+    }
+    return ls;
   }
 }

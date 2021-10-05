@@ -17,8 +17,23 @@ import { ConfirmationDialogComponent } from './shared/confirmation-dialog/confir
 import { ConfirmationDialogService } from './shared/confirmation-dialog/confirmation-dialog.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { PipeModule } from './pipe.module';
-import { MatFormFieldModule, MatSelectModule } from '@angular/material';
+import { DateAdapter, MatFormFieldModule, MatSelectModule, MAT_DATE_LOCALE } from '@angular/material';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MAT_DATE_FORMATS } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DialogContainerComponent } from './shared/dialog/dialog-container/dialog-container.component';
+
+const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @NgModule({
   imports: [
@@ -51,10 +66,13 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
     },
     InformationService,
     ConfirmationDialogService,
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   entryComponents: [
     InformationComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    DialogContainerComponent
   ],
   bootstrap: [RoutingComponent]
 })

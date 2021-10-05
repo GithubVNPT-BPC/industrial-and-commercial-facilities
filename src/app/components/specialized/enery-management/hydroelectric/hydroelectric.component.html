@@ -106,7 +106,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-3 col-lg-3">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="laydulieuThuyDien($event.value)" [(value)]="currentYear">
@@ -115,7 +115,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3 col-lg-3">
+                    <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
                             <mat-select #dSelect (selectionChange)="applyDistrictFilter($event)" multiple>
@@ -127,12 +127,21 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3 col-lg-3 checkbox my-auto">
+                    <div class="col-2 col-lg-2 checkbox my-auto">
                         <mat-checkbox (change)="applyActionCheck($event)" [ngModel]="isChecked">Nhà máy đang xây dựng
                         </mat-checkbox>
                     </div>
 
-                    <div class="col-lg-3 button-control my-auto">
+                    <div class="col-lg-6 button-control my-auto">
+                        <button mat-raised-button matTooltip="Import" (click)="uploadExcel($event)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        
+                        <a mat-raised-button download="Mẫu import.xlsx" [hidden]=authorize title="Excel"
+                            href="assets/ExcelExampleEnergy/ImportFile.xlsx" class="mr-1" matTooltip="File mẫu">
+                            <mat-icon>cloud_download</mat-icon>
+                        </a>
+                        
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Thủy điện', 'Thủy điện')">
                             <mat-icon>file_download</mat-icon>

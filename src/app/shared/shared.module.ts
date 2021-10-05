@@ -14,7 +14,7 @@ import { SidebarService } from '../_services/sidebar.service';
 import { SimplebarAngularModule } from 'simplebar-angular';
 import { FilterByTextPipe } from './pipes/filterByText.pipe';
 import { HeaderComponent } from './header/header.component';
-
+import { DialogContainerComponent } from './dialog/dialog-container/dialog-container.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +25,7 @@ import { HeaderComponent } from './header/header.component';
     LoaderComponent,
     SidebarComponent,
     FilterByTextPipe,
+    DialogContainerComponent,
   ],
   imports: [
     CommonModule,
@@ -39,7 +40,8 @@ import { HeaderComponent } from './header/header.component';
     FooterComponent,
     PageNotFoundComponent,
     LoaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    MaterialModule
   ],
   bootstrap: [TopbarComponent],
   providers: [

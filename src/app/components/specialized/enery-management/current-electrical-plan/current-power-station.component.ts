@@ -1,8 +1,10 @@
 import { Component, Injector } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 import { BaseComponent } from '../../base.component';
 
 
@@ -69,10 +71,13 @@ export class CurrentPowerStationComponent extends BaseComponent {
     selectedYear: number = new Date().getFullYear();
     years: number[] = [];
     quarters: number[] = [null, 1, 2, 3, 4];
-    half: number[] =[null, 1, 2];
-    periods: Object[];
-    selectedPeriod: number = 0;
-    selectType: number = 4;
+    half: Object[] =[
+        {id: 1, title: "6 tháng đầu năm"},
+        {id: 2, title: "6 tháng cuối năm" }
+    ];
+    periods: Object[] = this.periodList;
+    selectedPeriod: number = new Date().getMonth() + 1 > 6 ? 2 : 1;
+    selectType: number = 3;
     selectTypeStreet: number = 0;
     so_luong: number = 0;
     isShowPeriod: boolean = false;
@@ -80,7 +85,9 @@ export class CurrentPowerStationComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         private energyService: EnergyService,
-        public _login: LoginService
+        public _login: LoginService,
+        private dialogService: DialogService,
+        public matDialog: MatDialog,
     ) {
         super(injector);
         this.groupByColumns = ['loai_tram']
@@ -176,7 +183,7 @@ export class CurrentPowerStationComponent extends BaseComponent {
 
     public callService(data) {
 
-        this.energyService.CapNhatDuLieuHienTrangTram110KV(data)
+        this.energyService.CapNhatDuLieuHienTrangTram110KV([data])
             .subscribe(response => {
                 this.successNotify(response), error => this.errorNotify(error)
             });
@@ -284,6 +291,55 @@ export class CurrentPowerStationComponent extends BaseComponent {
 
     isGroup(index, item): boolean {
         return item.loai_tram;
+    }
+
+    uploadExcel(e) {
+        // open dialog upload excel file 
+        this.openDialog("Hiện trạng trạm điện");
+    }
+
+    openDialog(nameSheet) {
+        const dialogConfig = new MatDialogConfig();
+        console.log(window.innerWidth);
+        if (window.innerWidth > 375) {
+            dialogConfig.width = window.innerWidth * 0.7 + 'px';
+            dialogConfig.height = window.innerHeight * 0.4 + 'px';
+        } else {
+            dialogConfig.width = window.innerWidth * 0.8 + 'px';
+            dialogConfig.height = window.innerHeight * 0.2 + 'px';
+        }
+        dialogConfig.data = {
+            nameSheet: nameSheet,
+        };
+        let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+        dialogRef.afterClosed().subscribe(res => {
+            console.log(res);
+            if (res) {
+                console.log(this.handleData(res));
+                const body = this.handleData(res);
+                this.energyService.CapNhatDuLieuHienTrangTram110KV(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+            }
+
+        })
+    }
+
+    handleData(time_id) {
+        let ls: any[] = [];
+        let dataExcel = this.dialogService.getDataTransform();
+        for (let i = 1; i < dataExcel.length; i++) {
+            let body: any = {};
+            body['ten_tram'] = dataExcel[i]['__EMPTY'];
+            body['so_may'] = dataExcel[i]['__EMPTY_2'];
+            body['dung_luong_thiet_ke'] = dataExcel[i]['__EMPTY_4'];
+            body['dung_luong_hien_huu'] = dataExcel[i]['__EMPTY_5'];
+            body['dat'] = dataExcel[i]['__EMPTY_6'];
+            body['ghi_chu'] = dataExcel[i]['__EMPTY_7'];
+            body['time_id'] = time_id;
+            body['loai_tram'] = dataExcel[i]['__EMPTY_3'];
+            ls.push(body)
+        }
+        return ls;
     }
 
 }

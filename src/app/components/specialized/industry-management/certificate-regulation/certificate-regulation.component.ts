@@ -227,4 +227,8 @@ export class CertificateRegulationComponent extends BaseComponent {
     this.fileBin = file_data ? file_data : this.fileBin;
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true });
   }
+
+  formatDateTime(date) {
+    return date._i.slice(6, 8) + '/' + date._i.slice(4, 6) + '/' + date._i.slice(0,4);
+  }
 }

@@ -46,6 +46,7 @@ import { MatTableFilterModule } from 'mat-table-filter';
 import {TreeTableModule} from 'primeng/treetable';
 import {MultiSelectModule} from 'primeng/multiselect';
 import { TreeviewModule } from 'ngx-treeview';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports:[TreeviewModule.forRoot(), ],
@@ -97,7 +98,8 @@ import { TreeviewModule } from 'ngx-treeview';
     MatFormFieldModule,
     TreeTableModule,
     MultiSelectModule,
-    TreeviewModule
+    TreeviewModule,
+    FormsModule
   ]
 })
 export class MaterialModule { }

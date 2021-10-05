@@ -1,5 +1,4 @@
 import { AbstractBaseComponent } from 'src/app/components/specialized/abstract-base.component';
-
 export class BaseComponent extends AbstractBaseComponent {
     public DB_TABLE = '';
     public EXCEL_NAME: string = "Sở công thương";
@@ -9,6 +8,11 @@ export class BaseComponent extends AbstractBaseComponent {
         { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'ĐANG HOẠT ĐỘNG' },
         { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'KHÔNG HOẠT ĐỘNG' },
         { id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'ĐANG XIN GIẤY PHÉP' }
+    ];
+
+    public periodList: Object[] = [
+        { id: 1, title: "6 tháng đầu năm" },
+        { id: 2, title: "6 tháng cuối năm" }
     ];
     // ======================================
     // =========== CRUD FUNCTIONS ===========

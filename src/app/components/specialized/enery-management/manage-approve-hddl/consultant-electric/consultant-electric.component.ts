@@ -1,11 +1,13 @@
 import { Component, Input, Injector } from "@angular/core";
-import { MatTableDataSource } from "@angular/material";
+import { MatDialog, MatDialogConfig, MatTableDataSource } from "@angular/material";
 import { ManageAproveElectronic } from "src/app/_models/APIModel/electric-management.module";
 import { EnergyService } from "src/app/_services/APIService/energy.service";
 import { FormControl, Validators } from "@angular/forms";
 import { BaseComponent } from "../../../base.component";
 import moment from "moment";
 import { LoginService } from "src/app/_services/APIService/login.service";
+import { DialogContainerComponent } from "src/app/shared/dialog/dialog-container/dialog-container.component";
+import { DialogService } from "src/app/_services/injectable-service/dialog.service";
 
 
 
@@ -44,7 +46,9 @@ export class ConsultantElectricComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     private energyService: EnergyService,
-    public _login: LoginService
+    public _login: LoginService,
+    private dialogService: DialogService,
+    public matDialog: MatDialog,
   ) {
     super(injector);
   }
@@ -174,4 +178,52 @@ export class ConsultantElectricComponent extends BaseComponent {
   //   this.TITLE_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
   //   this.TEXT_DEFAULT = "Quy hoạch phát triển lưới điện - Điện nông thôn";
   // }
+
+  uploadExcel(e) {
+    // open dialog upload excel file 
+    this.openDialog("Cấp phép hoạt động điện");
+  }
+
+  openDialog(nameSheet) {
+    const dialogConfig = new MatDialogConfig();
+    console.log(window.innerWidth);
+    if (window.innerWidth > 375) {
+      dialogConfig.width = window.innerWidth * 0.7 + 'px';
+      dialogConfig.height = window.innerHeight * 0.4 + 'px';
+    } else {
+      dialogConfig.width = window.innerWidth * 0.8 + 'px';
+      dialogConfig.height = window.innerHeight * 0.2 + 'px';
+    }
+    dialogConfig.data = {
+      nameSheet: nameSheet,
+    };
+    let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res);
+      if (res) {
+        console.log(this.handleData(res));
+        const body = this.handleData(res);
+        this.energyService.CapNhatDuLieuCapPhepHoatDong(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+      }
+
+    })
+  }
+
+  handleData(time_id) {
+    let ls: any[] = [];
+    let dataExcel = this.dialogService.getDataTransform();
+    for (let i = 1; i < dataExcel.length; i++) {
+      let body: any = {};
+      body['ten_doanh_nghiep'] = dataExcel[i]['__EMPTY'];
+      body['dia_chi'] = dataExcel[i]['__EMPTY_1'] + ' ' + dataExcel[i]['__EMPTY_3'];
+      body['dien_thoai'] = dataExcel[i]['__EMPTY_4'];
+      body['so_giay_phep'] = dataExcel[i]['__EMPTY_5'];
+      body['ngay_cap'] = dataExcel[i]['__EMPTY_6'];
+      body['ngay_het_han'] = dataExcel[i]['__EMPTY_7'];
+      body['id_group'] = 1;
+      ls.push(body)
+    }
+    return ls;
+  }
 }

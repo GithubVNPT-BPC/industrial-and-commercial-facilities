@@ -1,5 +1,5 @@
 import { Component, Injector } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
 
 import { BlockElectricModel } from 'src/app/_models/APIModel/electric-management.module';
@@ -8,6 +8,8 @@ import { EnergyService } from 'src/app/_services/APIService/energy.service';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 
 @Component({
     selector: 'app-difference-electric',
@@ -35,7 +37,9 @@ export class DifferenceElectricComponent extends BaseComponent {
     constructor(
         private injector: Injector,
         private energyService: EnergyService,
-        public _login: LoginService
+        public _login: LoginService,
+        private dialogService: DialogService,
+        public matDialog: MatDialog,
     ) {
         super(injector);
     }
@@ -153,6 +157,58 @@ export class DifferenceElectricComponent extends BaseComponent {
         }
         this.caculatorValue();
         this.paginatorAgain();
+    }
+
+    uploadExcel(e) {
+        // open dialog upload excel file 
+        this.openDialog("Nguồn điện khác");
+    }
+
+    openDialog(nameSheet) {
+        const dialogConfig = new MatDialogConfig();
+        console.log(window.innerWidth);
+        if (window.innerWidth > 375) {
+            dialogConfig.width = window.innerWidth * 0.7 + 'px';
+            dialogConfig.height = window.innerHeight * 0.4 + 'px';
+        } else {
+            dialogConfig.width = window.innerWidth * 0.8 + 'px';
+            dialogConfig.height = window.innerHeight * 0.2 + 'px';
+        }
+        dialogConfig.data = {
+            nameSheet: nameSheet,
+        };
+        let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+        dialogRef.afterClosed().subscribe(res => {
+            console.log(res);
+            if (res) {
+                console.log(this.handleData(res));
+                const body = this.handleData(res);
+                this.energyService.PostDiffkElectricData(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+            }
+
+        })
+    }
+
+    handleData(time_id) {
+        let ls: any[] = [];
+        let dataExcel = this.dialogService.getDataTransform();
+        for (let i = 1; i < dataExcel.length; i++) {
+            let body: any = {};
+            body['ten_doanh_nghiep'] = dataExcel[i]['__EMPTY'];
+            body['ten_du_an'] = dataExcel[i]['__EMPTY_1'];
+            body['dia_diem'] = dataExcel[i]['__EMPTY_2'];
+            body['cong_suat_thiet_ke'] = dataExcel[i]['__EMPTY_5'];
+            body['san_luong_6_thang'] = dataExcel[i]['__EMPTY_6'];
+            body['doanh_thu_6_thang'] = dataExcel[i]['__EMPTY_7'];
+            body['san_luong_nam'] = dataExcel[i]['__EMPTY_8'];
+            body['doanh_thu_nam'] = dataExcel[i]['__EMPTY_9'];
+            body['time_id'] = time_id;
+            body['id_trang_thai_hoat_dong'] = 1;
+            body['id_quan_huyen'] = dataExcel[i]['__EMPTY_3'];
+            ls.push(body)
+        }
+        return ls;
     }
 
 }

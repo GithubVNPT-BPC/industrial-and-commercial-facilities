@@ -156,6 +156,15 @@
                 <hr>
                 <div class="row">
                     <div class="col-12 col-lg-12 button-control my-auto">
+                        <button mat-raised-button matTooltip="Import" (click)="uploadExcel($event)">
+                            <mat-icon>cloud_upload</mat-icon>
+                        </button>
+                        
+                        <a mat-raised-button download="Mẫu import.xlsx" [hidden]=authorize title="Excel"
+                            href="assets/ExcelExampleEnergy/ImportFile.xlsx" class="mr-1" matTooltip="File mẫu">
+                            <mat-icon>cloud_download</mat-icon>
+                        </a>
+
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Điện sinh khối', 'Điện sinh khối')">
                             <mat-icon>file_download</mat-icon>
