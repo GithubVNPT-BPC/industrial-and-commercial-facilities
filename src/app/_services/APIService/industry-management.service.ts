@@ -24,15 +24,12 @@ export class IndustryManagementService {
     private urlGetLPGManagement = '/lpg';
     private urlGetComformityAnnounce = '/cbhq';
     private urlGetExplosiveMat = '/vlncn';
-
-
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
     private urlPostFoodIndustry = '/cntp';
     private urlPostComformityAnnounce = '/cbhq';
     private urlPostExplosiveMat = '/vlncn';
-
     private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
@@ -40,7 +37,6 @@ export class IndustryManagementService {
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
     private urlDeleteChemistry = '/hoa-chat-xoa';
     private urlDeleteExplosiveMat = '/vlncn/xoa';
-
     private urlPostAttachment = environment.apiEndpoint + 'api/upload-attachment';
     private urlUpdateAttachment = environment.apiEndpoint + 'api/update-attachment';
     private urlDeleteAttachment = environment.apiEndpoint + 'api/delete-attachment';
@@ -160,26 +156,6 @@ export class IndustryManagementService {
         );
     }
 
-    // UNLINK
-    public DeleteLPGManagement(datas) {
-        let apiUrl = this.endpoint + this.urlDeleteLPGManagement;
-        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public handleError(error: HttpErrorResponse) {
-        let errorMessage = '';
-        if (error.error instanceof ErrorEvent) {
-            // client-side error
-            errorMessage = `Lỗi: ${error.error.message}`;
-        } else {
-            // server-side error
-            errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
-        }
-        return throwError(errorMessage);
-    }
-
     //Cụm công nghiệp
 
     private urlclusterbusiness = '/ccn/doanh-nghiep';
@@ -296,7 +272,43 @@ export class IndustryManagementService {
         );
     }
 
-    //
+    //Doanh nghiệp hỗ trợ
+
+    private urlsupportbusiness = '/dnht';
+    private urldeletesupportbusiness = '/xoa-dnht';
+
+    public GetSupportBusiness() {
+        var apiUrl = this.endpoint + this.urlsupportbusiness;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostSupportBusiness(data) {
+        var apiUrl = this.endpoint + this.urlsupportbusiness;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, data, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public DeleteSupportBusiness(body: any) {
+        var apiUrl = this.endpoint + this.urldeletesupportbusiness;
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // Delete methods
+
+    public DeleteLPGManagement(datas) {
+        let apiUrl = this.endpoint + this.urlDeleteLPGManagement;
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
 
     public DeleteCBHQ(body: any) {
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
@@ -358,6 +370,18 @@ export class IndustryManagementService {
         return this.http.post<any>(apiUrl, id, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
+    }
+
+    public handleError(error: HttpErrorResponse) {
+        let errorMessage = '';
+        if (error.error instanceof ErrorEvent) {
+            // client-side error
+            errorMessage = `Lỗi: ${error.error.message}`;
+        } else {
+            // server-side error
+            errorMessage = `Mã lỗi: ${error.status}\nMessage: ${error.error.message}`;
+        }
+        return throwError(errorMessage);
     }
 
 }

@@ -34,7 +34,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{dataSource.data.length}} doanh nghiệp
+                                {{filteredDataSource.data.length}} doanh nghiệp
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -68,31 +68,7 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-3 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_ht"
-                                (selectionChange)="applyFilter($event)" multiple>
-                                <mat-option *ngFor='let hienTrang of hienTrangHaTang' [value]='hienTrang.id'>
-                                    {{hienTrang.ten_hien_trang_ha_tang}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-3 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
-                            <mat-select [(ngModel)]="filterModel.id_hien_trang_xlnt"
-                                (selectionChange)="applyFilter($event)" multiple>
-                                <mat-option *ngFor='let hienTrang of hienTrangXLNT' [value]='hienTrang.id'>
-                                    {{hienTrang.ten_hien_trang_xlnt}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-
-                    <div class="col-4 col-lg-4 button-control my-auto">
+                    <div class="col-10 col-lg-10 button-control my-auto">
                         <button mat-raised-button matTooltip="Xuất Excel"
                             (click)="ExportTOExcel('Điện nông thôn','Điện nông thôn')">
                             <mat-icon>file_download</mat-icon>
@@ -121,7 +97,7 @@
                 <hr>
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource"
-                        id="{{showColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
+                        id="{{totalColumns.length == 5 ? 'small-table': 'small-table1'}}" class="table-layout">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null" class="text-center"
@@ -147,58 +123,55 @@
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="ten_cum_cn" sticky>
-                            <th mat-header-cell *matHeaderCellDef> Tên, địa điểm CCN </th>
-                            <td mat-cell *matCellDef="let element" class="jump">
-                                <div class="view-detail" (click)="openDetailCluster(element.id)">{{element.ten_cum}}
-                                </div>
+                        <ng-container matColumnDef="ten_dn" sticky>
+                            <th mat-header-cell *matHeaderCellDef> Tên doanh nghiệp </th>
+                            <td mat-cell *matCellDef="let element">{{element.ten_dn}}
                             </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dien_tich_qh">
-                            <th mat-header-cell *matHeaderCellDef> Diện tích theo quy hoạch (ha)
+                        <ng-container matColumnDef="mst">
+                            <th mat-header-cell *matHeaderCellDef> MST
                             </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_theo_qh}}</td>
+                            <td mat-cell *matCellDef="let element"> {{element.mst}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dien_tich_tl">
-                            <th mat-header-cell *matHeaderCellDef> Diện tích đã thành lập (ha) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_da_thanh_lap}}</td>
+                        <ng-container matColumnDef="dia_chi_day_du">
+                            <th mat-header-cell *matHeaderCellDef> Địa chỉ </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dia_chi_day_du}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="chu_dau_tu">
-                            <th mat-header-cell *matHeaderCellDef> Chủ đầu tư </th>
-                            <td mat-cell *matCellDef="let element"> {{element.chu_dau_tu}}</td>
+                        <ng-container matColumnDef="ten_quan_huyen">
+                            <th mat-header-cell *matHeaderCellDef> Địa bàn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ten_quan_huyen}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dien_tich_qhct">
-                            <th mat-header-cell *matHeaderCellDef> Diện tích đã QHCT </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_qhct}}</td>
+                        <ng-container matColumnDef="dien_thoai">
+                            <th mat-header-cell *matHeaderCellDef> Điện thoại </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dien_thoai}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="dien_tich_da_dang_dau_tu">
-                            <th mat-header-cell *matHeaderCellDef> Diện tích đã và đang ĐT HT </th>
-                            <td mat-cell *matCellDef="let element"> {{element.dien_tich_ddtht}}</td>
+                        <ng-container matColumnDef="nganh_nghe">
+                            <th mat-header-cell *matHeaderCellDef> Ngành nghề chính </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nganh_nghe}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="ten_hien_trang_ha_tang">
-                            <th mat-header-cell *matHeaderCellDef> Hiện trạng đầu tư hạ tầng </th>
-                            <td mat-cell *matCellDef="let element"> {{element.hien_trang_dau_tu_ha_tang}}</td>
+                        <ng-container matColumnDef="giay_cn">
+                            <th mat-header-cell *matHeaderCellDef> Giấy CN </th>
+                            <td mat-cell *matCellDef="let element"> {{element.giay_cn}}</td>
                         </ng-container>
 
-                        <ng-container matColumnDef="ten_hien_trang_xlnt">
-                            <th mat-header-cell *matHeaderCellDef> Hiện trạng đầu tư hệ thống XLNT chung </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{element.hien_trang_dau_tu_he_thong_xu_ly_nuoc_thai}}</td>
+                        <ng-container matColumnDef="ngay_cap">
+                            <th mat-header-cell *matHeaderCellDef> Ngày cấp </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_cap | date:
+                                'dd/MM/yyyy'}}
+                            </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="tong_von_dau_tu">
-                            <th mat-header-cell *matHeaderCellDef> Tổng vốn đầu tư (tỷ đồng) </th>
-                            <td mat-cell *matCellDef="let element"> {{element.nhu_cau_von}}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="tinh_hinh_dau_tu">
-                            <th mat-header-cell *matHeaderCellDef> Tình hình đầu tư hạ tầng CCN </th>
+                        <ng-container matColumnDef="ngay_het_han">
+                            <th mat-header-cell *matHeaderCellDef> Ngày hết hạn </th>
+                            <td mat-cell *matCellDef="let element"> {{element.ngay_het_han | date:
+                                'dd/MM/yyyy'}}
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
@@ -216,10 +189,10 @@
                             <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">Tình hình đầu tư hạ tầng CCN</th>
                         </ng-container>
 
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2']; sticky : true">
-                        </tr>
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="showColumns; sticky:true"></tr>
-                        <tr mat-row class="table-row" *matRowDef="let row; columns: showColumns;let i = index; ">
+                        <!-- <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2']; sticky : true">
+                        </tr> -->
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="totalColumns; sticky:true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">
                     </table>
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
@@ -253,168 +226,71 @@
                         <mat-card-content>
                             <div class="row">
                                 <div class="col-6 col-lg-6">
-                                    <ng-container *ngIf="id_cnn == null; else elseTemplate">
-                                        <label id="import_excel">
-                                            <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile"
-                                                type="file" (change)="onSelectFile($event)" multiple accept="image/*"
-                                                hidden>
-                                        </label>
-
-                                        <div class="row">
-                                            <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
-                                                <img class="img-fluid" [src]="url.base64String">
-                                                <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
-                                            </div>
-                                        </div>
-                                    </ng-container>
-                                    <ng-template #elseTemplate>
-                                        <label id="import_excel">
-                                            <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile"
-                                                type="file" (change)="onSelectFile($event)" multiple accept="image/*"
-                                                hidden>
-                                        </label>
-
-                                        <div class="row">
-                                            <div class="col-2 col-lg-2"
-                                                *ngFor='let url of imageurlsedit; let i = index'>
-                                                <img class="img-fluid" [src]="url">
-                                                <a class="btn btn-sm btn-danger mt-1" (click)="DeleteImage($event)"
-                                                    id={{i}}>Xóa</a>
-                                            </div>
-
-                                            <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
-                                                <img class="img-fluid" [src]="url.base64String">
-                                                <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
-                                            </div>
-                                        </div>
-                                    </ng-template>
-
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Tên cụm công nghiệp</mat-label>
-                                        <input matInput formControlName="ten_cum">
+                                        <mat-label>Tên doanh nghiệp</mat-label>
+                                        <input matInput formControlName="ten_dn">
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Chủ đầu tư</mat-label>
-                                        <input matInput formControlName="chu_dau_tu">
+                                        <mat-label>MST</mat-label>
+                                        <input matInput formControlName="mst">
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa chỉ</mat-label>
-                                        <input matInput type="text" formControlName="dia_chi">
+                                        <input matInput formControlName="dia_chi">
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
                                         <mat-label>Địa bàn</mat-label>
                                         <mat-select formControlName="id_phuong_xa">
-                                            <mat-option *ngFor='let district of wards' [value]='district.id_phuong_xa'>
-                                                {{district.ten_phuong_xa}}
+                                            <mat-option>
+                                                <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                                    noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                                    [formControl]="phuongxafilter">
+                                                </ngx-mat-select-search>
+                                            </mat-option>
+
+                                            <mat-option *ngFor="let item of filtersubdistrict | async"
+                                                [value]="item.id_phuong_xa">
+                                                {{item.ten_phuong_xa}}
                                             </mat-option>
                                         </mat-select>
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Quyết định thành lập</mat-label>
-                                        <input matInput type="text" formControlName="quyet_dinh_thanh_lap">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Quyết định tham gia DTM </mat-label>
-                                        <input matInput type="text" formControlName="quyet_dinh_danh_gia_dtm">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Điều kiện kinh doanh</mat-label>
-                                        <input matInput type="text" formControlName="dieu_kien_kinh_doanh">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Vị trí, quy mô</mat-label>
-                                        <input matInput type="text" formControlName="vi_tri_quy_mo">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label> Diễn giải</mat-label>
-                                        <textarea matInput placeholder="." formControlName="dien_giai">
-                                            </textarea>
+                                        <mat-label>Số điện thoại</mat-label>
+                                        <input matInput formControlName="dien_thoai">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-6 col-lg-6">
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">File đính kèm</span>
-                                        </div>
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="inputGroupFile01"
-                                                (change)="onSelectFile1($event)" accept=".pdf,.doc,.docx,.xls,.xlsx">
-                                            <label class="custom-file-label" for="inputGroupFile01"
-                                                data-browse="Chọn file">{{filename}}</label>
-                                        </div>
-                                    </div>
-
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Nhu cầu vốn</mat-label>
-                                        <input matInput type="number" formControlName="nhu_cau_von">
+                                        <mat-label>Ngành nghề chính</mat-label>
+                                        <input matInput formControlName="nganh_nghe">
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Diện tích theo quy hoạch</mat-label>
-                                        <input matInput type="number" formControlName="dien_tich_theo_qh">
+                                        <mat-label>Giấy CN</mat-label>
+                                        <input matInput formControlName="giay_cn">
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
-                                        <mat-label>Diện tích đã thành lập</mat-label>
-                                        <input matInput type="number" formControlName="dien_tich_da_thanh_lap">
+                                        <mat-label>Ngày cấp</mat-label>
+                                        <input formControlName="ngay_cap" matInput readonly
+                                            [matDatepicker]="datePicker">
+                                        <mat-datepicker-toggle matSuffix [for]="datePicker" onclick="this.blur()">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #datePicker></mat-datepicker>
                                     </mat-form-field>
 
                                     <mat-form-field appearance="outline">
-                                        <mat-label> Tổng mức đầu tư</mat-label>
-                                        <input matInput type="number" formControlName="tong_muc_dau_tu">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label> Quy mô, diện tích</mat-label>
-                                        <input matInput type="number" formControlName="quy_mo_dien_tich">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Diện tích QHCT</mat-label>
-                                        <input matInput type="number" formControlName="dien_tich_qhct">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Diện tích DDTHT</mat-label>
-                                        <input matInput type="number" formControlName="dien_tich_ddtht">
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Tình trạng đầu tư hạ tầng</mat-label>
-                                        <mat-select formControlName="id_htdtht">
-                                            <mat-option *ngFor='let hienTrang of hienTrangHaTang'
-                                                [value]='hienTrang.id'>
-                                                {{hienTrang.ten_hien_trang_ha_tang}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Tình trạng đầu tư hệ thống XLNT</mat-label>
-                                        <mat-select formControlName="id_htdthtxlnt">
-                                            <mat-option *ngFor='let hienTrang of hienTrangXLNT' [value]='hienTrang.id'>
-                                                {{hienTrang.ten_hien_trang_xlnt}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Trạng thái hoạt động</mat-label>
-                                        <mat-select formControlName="id_trang_thai_hoat_dong">
-                                            <mat-option *ngFor='let tt of trang_thai_hd'
-                                                [value]='tt.id_trang_thai_hoat_dong'>
-                                                {{tt.ten_trang_thai_hoat_dong}}
-                                            </mat-option>
-                                        </mat-select>
+                                        <mat-label>Ngày hết hạn</mat-label>
+                                        <input formControlName="ngay_het_han" matInput readonly
+                                            [matDatepicker]="datePicker1">
+                                        <mat-datepicker-toggle matSuffix [for]="datePicker1" onclick="this.blur()">
+                                        </mat-datepicker-toggle>
+                                        <mat-datepicker #datePicker1></mat-datepicker>
                                     </mat-form-field>
                                 </div>
                             </div>

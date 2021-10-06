@@ -1,63 +1,86 @@
 import { Component, Injector } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import { ClusterFilterModel, ClusterModel } from 'src/app/_models/APIModel/cluster.model';
 import { Router } from '@angular/router';
 import { BaseComponent } from '../../base.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
-import { environment } from 'src/environments/environment';
-import { MatDialog } from '@angular/material';
+
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import {
+  SubDistrictModel,
+} from "src/app/_models/APIModel/domestic-market.model";
+import { CommerceManagementService } from 'src/app/_services/APIService/commerce-management.service';
+
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
+const moment = _rollupMoment || _moment;
+export const DDMMYY_FORMAT = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
+export class supportbusiness {
+  id: number;
+  ten_dn: string;
+  mst: string;
+  id_phuong_xa: number;
+  dien_thoai: string;
+  nganh_nghe: string;
+  giay_cn: string;
+  ngay_cap: Date;
+  ngay_het_han: Date;
+  dia_chi_day_du: string;
+  ten_quan_huyen: string;
+}
+
+export class SPBusinessFilterModel {
+  id_quan_huyen: number[];
+}
 
 @Component({
   selector: 'app-support-business',
   templateUrl: './support-business.component.html',
   styleUrls: ['/../../special_layout.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    DatePipe
+  ],
 })
 export class SupportBusinessComponent extends BaseComponent {
 
-  serverUrl = environment.apiEndpoint
-  id_cnn: number;
-  showColumns: string[] = [];
-  showSubColumns: string[] = [];
-  subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
-  topColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi'];
-  totalColumns: string[] = ['select', 'index', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
-  dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
-  filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
-  imageUrl: string[] = [];
-  imagesSource: string[] = [];
-  imagesDelete: string[] = [];
+  totalColumns: string[] = ['select', 'index', 'ten_dn', 'mst', 'dia_chi_day_du', 'dien_thoai', 'nganh_nghe',
+    'giay_cn', 'ngay_cap', 'ngay_het_han', 'thoi_gian_chinh_sua_cuoi'];
 
-  hienTrangHaTang: any[] = [
-    { id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
-    { id: 2, ten_hien_trang_ha_tang: 'Có quy hoạch chi tiết' },
-    { id: 3, ten_hien_trang_ha_tang: 'Có Giấy phép xây dựng' },
-    { id: 4, ten_hien_trang_ha_tang: 'Đang xây dựng' },
-    { id: 5, ten_hien_trang_ha_tang: 'Có Quyết định thành lập' }
-  ];
-
-  hienTrangXLNT: any[] = [{ id: 1, ten_hien_trang_xlnt: 'Chưa có' },
-  { id: 2, ten_hien_trang_xlnt: 'Có' },
-  { id: 3, ten_hien_trang_xlnt: 'Đang xây dựng' }];
-
-  isChecked: boolean = false;
-  sanLuongSanXuat: number = 0;
-  sanLuongKinhDoanh: number = 0;
-  filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
-
-  trang_thai_hd: any[] = [
-    { id_trang_thai_hoat_dong: 1, ten_trang_thai_hoat_dong: 'Đã thành lập' },
-    { id_trang_thai_hoat_dong: 2, ten_trang_thai_hoat_dong: 'Đã quy hoạch' },
-    { id_trang_thai_hoat_dong: 3, ten_trang_thai_hoat_dong: 'chưa có nhà đầu tư' },
-  ];
+  dataSource: MatTableDataSource<supportbusiness> = new MatTableDataSource<supportbusiness>();
+  filteredDataSource: MatTableDataSource<supportbusiness> = new MatTableDataSource<supportbusiness>();
+  filterModel: SPBusinessFilterModel = { id_quan_huyen: [] };
+  DB_TABLE = 'QLCN_DOANH_NGHIEP_HO_TRO'
 
   constructor(
     public indService: IndustryManagementService,
     public router: Router,
     private injector: Injector,
     public _login: LoginService,
-    public dialog: MatDialog
+    public commerceManagementService: CommerceManagementService,
   ) {
     super(injector)
   }
@@ -66,244 +89,109 @@ export class SupportBusinessComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.showColumns = this.totalColumns;
-    this.showSubColumns = [];
-    this.getDanhSachQuanLyCumCongNghiep();
-    this.initWards();
+    this.getSPBusiness();
+    this.GetAllPhuongXa();
     if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
-    this.initInforImages();
+
+    this.phuongxafilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterPhuongxa();
+      });
   }
 
-  initInforImages() {
-    this.id_cnn = 0;
-    this.imagesDelete = [];
-    this.imageUrl = [];
-    this.fileToUpload = [];
-  }
+  public _onDestroy = new Subject<void>();
 
   getLinkDefault() {
-    this.LINK_DEFAULT = "/specialized/industry-management/cluster";
-    this.TITLE_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
-    this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
+    this.LINK_DEFAULT = "/specialized/industry-management/supportbusiness";
+    this.TITLE_DEFAULT = "Doanh nghiệp hỗ trợ";
+    this.TEXT_DEFAULT = "Doanh nghiệp hỗ trợ";
   }
 
-  getDanhSachQuanLyCumCongNghiep() {
-    this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
+  getSPBusiness() {
+    this.indService.GetSupportBusiness().subscribe(result => {
       this.filteredDataSource.data = [];
       if (result.data && result.data.length > 0) {
-        this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
+        result.data[0].forEach(element => {
+          element.ngay_cap = this.formatDate(element.ngay_cap)
+          element.ngay_het_han = this.formatDate(element.ngay_het_han)
+        });
+        this.dataSource = new MatTableDataSource<supportbusiness>(result.data[0]);
         this.filteredDataSource.data = [...this.dataSource.data];
-        this.imagesSource = result.data[1];
       }
-      // this.sanLuongKinhDoanh = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.san_luong)||0).reduce((a, b) => a + b) : 0;
-      // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
       this.paginatorAgain();
     })
-  }
-
-  changeTable(event) {
-    this.isChecked = event.checked;
-    if (this.isChecked) {
-      this.showColumns = this.totalColumns;
-      this.showSubColumns = this.subColumns;
-    }
-    else {
-      this.showColumns = this.topColumns;
-      this.showSubColumns = [];
-    }
-  }
-
-  public openDetailCluster(id: string) {
-    this.router.navigate(['/specialized/industry-management/cluster/' + id]);
   }
 
   setFormParams() {
     if (this.selection.selected.length) {
       let selectedRecord = this.selection.selected[0];
-      this.formData.controls['ten_cum'].setValue(selectedRecord.ten_cum);
-      this.formData.controls['chu_dau_tu'].setValue(selectedRecord.chu_dau_tu);
-      this.formData.controls['dien_tich_theo_qh'].setValue(selectedRecord.dien_tich_theo_qh);
-      this.formData.controls['dien_tich_da_thanh_lap'].setValue(selectedRecord.dien_tich_da_thanh_lap);
-      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+      this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ten_dn'].setValue(selectedRecord.ten_dn);
+      this.formData.controls['mst'].setValue(selectedRecord.mst);
       this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
-      this.formData.controls['quyet_dinh_thanh_lap'].setValue(selectedRecord.quyet_dinh_thanh_lap);
-      this.formData.controls['quyet_dinh_quy_hoach_chi_tiet'].setValue(selectedRecord.quyet_dinh_quy_hoach_chi_tiet);
-      this.formData.controls['quyet_dinh_danh_gia_dtm'].setValue(selectedRecord.quyet_dinh_danh_gia_dtm);
-      this.formData.controls['dieu_kien_kinh_doanh'].setValue(selectedRecord.dieu_kien_kinh_doanh);
-      this.formData.controls['vi_tri_quy_mo'].setValue(selectedRecord.vi_tri_quy_mo);
-      this.formData.controls['tong_muc_dau_tu'].setValue(selectedRecord.tong_muc_dau_tu);
-      this.formData.controls['quy_mo_dien_tich'].setValue(selectedRecord.quy_mo_dien_tich);
-      this.formData.controls['dien_giai'].setValue(selectedRecord.dien_giai);
-      this.formData.controls['duong_dan'].setValue('');
-      this.formData.controls['dien_tich_qhct'].setValue(selectedRecord.dien_tich_qhct);
-      this.formData.controls['dien_tich_ddtht'].setValue(selectedRecord.dien_tich_ddtht);
-      this.formData.controls['id_htdtht'].setValue(selectedRecord.id_htdtht);
-      this.formData.controls['id_htdthtxlnt'].setValue(selectedRecord.id_htdthtxlnt);
-      this.formData.controls['id_trang_thai_hoat_dong'].setValue(selectedRecord.id_trang_thai_hoat_dong);
-      this.formData.controls['nhu_cau_von'].setValue(selectedRecord.nhu_cau_von);
-      // set value id to update
-      this.id_cnn = selectedRecord.id;
-      this.oldfile = selectedRecord.duong_dan;
-      this.filename = selectedRecord.duong_dan;
-      this.getImagesfromId();
+      this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+      this.formData.controls['nganh_nghe'].setValue(selectedRecord.nganh_nghe);
+      this.formData.controls['giay_cn'].setValue(selectedRecord.giay_cn);
+      this.formData.controls['ngay_cap'].setValue(selectedRecord.ngay_cap._d);
+      this.formData.controls['ngay_het_han'].setValue(selectedRecord.ngay_het_han._d);
+      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
     }
   }
 
   getFormParams() {
     return {
-      ten_cum: new FormControl(''),
-      chu_dau_tu: new FormControl(''),
-      dien_tich_theo_qh: new FormControl(0),
-      dien_tich_da_thanh_lap: new FormControl(0),
+      id: new FormControl(),
+      ten_dn: new FormControl(''),
+      mst: new FormControl(''),
+      id_phuong_xa: new FormControl(25195),
+      dien_thoai: new FormControl(''),
+      nganh_nghe: new FormControl(''),
+      giay_cn: new FormControl(),
+      ngay_cap: new FormControl(''),
+      ngay_het_han: new FormControl(''),
       dia_chi: new FormControl(''),
-      id_phuong_xa: new FormControl(),
-      quyet_dinh_thanh_lap: new FormControl(''),
-      quyet_dinh_quy_hoach_chi_tiet: new FormControl(''),
-      quyet_dinh_danh_gia_dtm: new FormControl(''),
-      dieu_kien_kinh_doanh: new FormControl(''),
-      vi_tri_quy_mo: new FormControl(''),
-      tong_muc_dau_tu: new FormControl(0),
-      quy_mo_dien_tich: new FormControl(0),
-      dien_giai: new FormControl(''),
-      duong_dan: new FormControl(),
-      dien_tich_qhct: new FormControl(0),
-      dien_tich_ddtht: new FormControl(0),
-      id_htdtht: new FormControl(),
-      id_htdthtxlnt: new FormControl(),
-      id_trang_thai_hoat_dong: new FormControl(),
-      nhu_cau_von: new FormControl(),
     }
   }
 
-  public prepareData(data) {
-    data['duong_dan'] = "";
-    return data
+  public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
+  public filtersubdistrict: ReplaySubject<SubDistrictModel[]> = new ReplaySubject<SubDistrictModel[]>(1);
+  GetAllPhuongXa() {
+    this.commerceManagementService.GetAllSubDistrict().subscribe((allrecords) => {
+      this.subdistrict = allrecords.data as SubDistrictModel[];
+      this.filtersubdistrict.next(this.subdistrict.slice());
+    });
   }
-
-  imageDeleteFrom: FormGroup;
-  imageurls = [];
-  base64String: string;
-  imagePath: string;
-
-  removeImageEdit(i, imagepath) {
-    this.imageDeleteFrom.value.id = i;
-    this.imageDeleteFrom.value.ImagePath = imagepath;
-  }
-
-  removeImage(i) {
-    this.imageurls.splice(i, 1);
-    this.fileToUpload.splice(i, 1);
-  }
-
-  fileToUpload: Array<File> = []
-
-  onSelectFile(event) {
-    if (event.target.files && event.target.files[0]) {
-      var filesAmount = event.target.files.length;
-      for (let i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
-        reader.onload = (event: any) => {
-          this.imageurls.push({ base64String: event.target.result, });
-        }
-        reader.readAsDataURL(event.target.files[i]);
-        this.fileToUpload.push(event.target.files[i])
-      }
+  public phuongxafilter: FormControl = new FormControl();
+  public filterPhuongxa() {
+    if (!this.subdistrict) {
+      return;
     }
-  }
-
-  fileToUpload1: Array<File> = []
-  filename: string
-
-  onSelectFile1(event) {
-    if (event.target.files && event.target.files[0]) {
-      this.filename = event.target.files[0].name
-      this.fileToUpload1 = event.target.files[0]
+    let search = this.phuongxafilter.value;
+    if (!search) {
+      this.filtersubdistrict.next(this.subdistrict.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
     }
+    this.filtersubdistrict.next(
+      this.subdistrict.filter(x => x.ten_phuong_xa.toLowerCase().indexOf(search) > -1)
+    );
   }
 
-  uploadImages(id_cnn) {
-    if (this.fileToUpload.length != 0) {
-      for (const image of this.fileToUpload) {
-        this.indService.PostImageGroupCompany(image, parseInt(id_cnn)).subscribe(res => {
-          // this.successNotify(res);
-        })
-      }
-    }
-  }
+  prepareData(data) {
+    data['ngay_cap'] = data['ngay_cap'] ? _moment(data['ngay_cap']).format('yyyyMMDD') : ''
+    data['ngay_het_han'] = data['ngay_het_han'] ? _moment(data['ngay_het_han']).format('yyyyMMDD') : ''
 
-  uploadFile(id_cnn) {
-    if (this.fileToUpload1.length != 0) {
-      this.indService.PostFileGroupCompany(this.fileToUpload1, parseInt(id_cnn)).subscribe(res => {
-        // this.successNotify(res);
-      })
-    }
-  }
-
-  imageurlsedit = [];
-
-  getImagesfromId() {
-    let temList = [];
-    this.imageUrl = [...this.imagesSource];
-    for (const imageObject of this.imageUrl) {
-      if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
-        imageObject['delete'] = imageObject['duong_dan']
-        imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
-        temList.push(imageObject['duong_dan']);
-      }
-    }
-    this.imageurlsedit = [...temList];
-  }
-
-  deleteImages() {
-    if (this.fileToUpload.length != 0) {
-      let tem = [];
-      this.imagesDelete.forEach(element => {
-        tem.push({ file_name: element['delete'] });
-      });
-      this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
-        this.successNotify(res)
-      }, error => this.errorMessage(error));
-    }
-  }
-
-  oldfile: string;
-
-  deleteFile() {
-    if (this.fileToUpload1.length != 0) {
-      let temp = []
-      temp.push({ file_name: this.oldfile })
-      this.indService.DeleteFileGroupCompany(temp, this.id_cnn).subscribe(res => {
-        this.successNotify(res)
-      }, error => this.errorMessage(error));
-    }
-  }
-
-  DeleteImage(event) {
-    let indexImage = event.target.id;
-    this.imagesDelete.push(this.imageUrl[indexImage]);
-    this.imageurlsedit.splice(indexImage, 1);
+    return data;
   }
 
   public callService(data) {
-    this.indService.PostDataGroupCompany(data).subscribe(response => {
-      this.uploadImages(response.data.last_inserted_id);
-      this.uploadFile(response.data.last_inserted_id);
+    this.indService.PostSupportBusiness([data]).subscribe(response => {
       this.successNotify(response)
     }, error => this.errorNotify(error));
-  }
-
-  public callEditService(data) {
-    let body = Object.assign({}, this.formData.value);
-    body.id = this.selection.selected[0].id;
-    this.indService.PostDataGroupCompany(body).subscribe(response => {
-      this.successNotify(response)
-    }, error => this.errorNotify(error));
-    this.uploadImages(this.id_cnn);
-    this.uploadFile(this.id_cnn)
-    this.deleteImages();
-    this.deleteFile();
   }
 
   prepareRemoveData(data) {
@@ -312,7 +200,7 @@ export class SupportBusinessComponent extends BaseComponent {
   }
 
   callRemoveService(data) {
-    this.indService.DeleteClusterManagement(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.indService.DeleteSupportBusiness(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
 }
