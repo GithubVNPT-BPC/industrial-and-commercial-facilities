@@ -5,18 +5,18 @@ import { InformationService } from 'src/app/shared/information/information.servi
 
 @Component({
   selector: 'app-logout',
-  templateUrl:'./logout.component.html',
+  templateUrl: './logout.component.html',
 })
-export class LogoutComponent implements OnInit{
+export class LogoutComponent implements OnInit {
 
-  constructor(public loginService: LoginService, public info:InformationService, public router:Router ) {
+  constructor(public loginService: LoginService, public info: InformationService, public router: Router) {
   }
-  ngOnInit(){
-      this.LogOut();
+  ngOnInit() {
+    this.LogOut();
   }
   LogOut() {
     this.loginService.LogoutUser();
     this.info.msgSuccess("Bạn đã đăng xuất thành công");
-    this.router.navigate(['/public/dashboard']);
+    this.router.navigate(['public/market/domestic/price']);
   }
 }
