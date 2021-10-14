@@ -16,7 +16,6 @@ import { ClusterManagementComponent } from './cluster-management/cluster-managem
 import { DetailClusterManagementComponent } from './cluster-management/detail-cluster-management/detail-cluster-management.component';
 import { FoodIndustryManagementComponent } from './food-industry/food-industry-management.component';
 import { IIPIndustrialComponent } from './iip-industrial/iip-industrial.component';
-import { IIPMonthComponent } from './iip-industrial/iip-month/iip-month-component';
 import { IndustrialExplosivesComponent } from './industrial-explosives/industrial-explosives.component';
 import { IndustryManagementRoutingModule } from './industry-management.routing';
 import { LPGManagementComponent } from './lpg-management/lpg-management.component';
@@ -50,14 +49,14 @@ import { SupportBusinessComponent } from './support-business/support-business.co
     ClusterManagementComponent,
     DetailClusterManagementComponent,
     IIPIndustrialComponent,
-    IIPMonthComponent,
     CertificateRegulationComponent,
     ReportExplosivesComponent,
     CrudButtonsComponent,
     IipMonthNewComponent,
     ClusterBusinessComponent,
     IndustryBusinessComponent,
-    SupportBusinessComponent
+    SupportBusinessComponent,
+    
   ],
   entryComponents: [ClusterBusinessComponent],
   providers: [DecimalPipe, PercentPipe]

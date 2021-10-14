@@ -72,7 +72,7 @@ const routes: Routes = [
             },
             {
                 path: 'iip-detail',
-                component: IIPMonthComponent,
+                component: IipMonthNewComponent,
                 data: {
                     title: 'Chỉ số sản xuất công nghiệp',
                 },
