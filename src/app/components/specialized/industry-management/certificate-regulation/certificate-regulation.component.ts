@@ -97,6 +97,8 @@ export class CertificateRegulationComponent extends BaseComponent {
     }
   }
 
+  id_cbhq: number
+
   setFormParams() {
     if (this.selection.selected.length) {
       let selectedRecord = this.selection.selected[0];
@@ -111,6 +113,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       this.formData.controls['file_name'].setValue(selectedRecord.file_name);
       this.formData.controls['attachment_id'].setValue(selectedRecord.attachment_id);
       this.fileBin = selectedRecord.datas;
+      this.id_cbhq = selectedRecord.id;
     }
   }
 
@@ -129,21 +132,21 @@ export class CertificateRegulationComponent extends BaseComponent {
 
   findEnterpriseByMst(mst) {
     let self = this;
-    this._timeout  = null;
-     if(this._timeout){ //if there is already a timeout in process cancel it
-       window.clearTimeout(this._timeout);
-     }
-     this._timeout = window.setTimeout(() => {
-        self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
-          results => {
-            if (results && results.data && results.data[0].length) {
-              self.mstOptions = results.data[0];
-            }
-          },
-          error => this.errorMessage = <any>error
-        );
-        self._timeout = null;
-     }, 2000);
+    this._timeout = null;
+    if (this._timeout) { //if there is already a timeout in process cancel it
+      window.clearTimeout(this._timeout);
+    }
+    this._timeout = window.setTimeout(() => {
+      self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+        results => {
+          if (results && results.data && results.data[0].length) {
+            self.mstOptions = results.data[0];
+          }
+        },
+        error => this.errorMessage = <any>error
+      );
+      self._timeout = null;
+    }, 2000);
   }
 
   applyFilter(event: Event) {
@@ -229,6 +232,6 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   formatDateTime(date) {
-    return date._i.slice(6, 8) + '/' + date._i.slice(4, 6) + '/' + date._i.slice(0,4);
+    return date._i.slice(6, 8) + '/' + date._i.slice(4, 6) + '/' + date._i.slice(0, 4);
   }
 }

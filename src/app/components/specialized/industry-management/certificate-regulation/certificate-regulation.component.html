@@ -193,13 +193,10 @@
                                 <div class="col-12 col-lg-12">
                                     <mat-form-field appearance="outline">
                                         <mat-label>MST</mat-label>
-                                        <input type="text"
-                                            placeholder="MST"
-                                            matInput
-                                            formControlName="mst" (ngModelChange)="findEnterpriseByMst($event)"
-                                            [matAutocomplete]="auto">
+                                        <input type="text" placeholder="MST" matInput formControlName="mst"
+                                            (ngModelChange)="findEnterpriseByMst($event)" [matAutocomplete]="auto">
                                         <mat-autocomplete #auto="matAutocomplete">
-                                            <mat-option *ngFor="let option of mstOptions" [value]="option.mst" >
+                                            <mat-option *ngFor="let option of mstOptions" [value]="option.mst">
                                                 <strong>{{option.ten_doanh_nghiep}}</strong> - {{option.mst}}
                                             </mat-option>
                                         </mat-autocomplete>
@@ -277,6 +274,39 @@
                             </mat-card-title>
                         </mat-card-header>
                         <mat-card-content>
+                            <ng-container *ngIf="id_cbhq == null; else elseTemplate">
+                                <label id="import_excel">
+                                    <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile" type="file"
+                                        (change)="onSelectFile($event)" multiple accept="image/*" hidden>
+                                </label>
+
+                                <div class="row">
+                                    <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
+                                        <img class="img-fluid" [src]="url.base64String">
+                                        <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #elseTemplate>
+                                <label id="import_excel">
+                                    <mat-icon>cloud_upload</mat-icon> Ảnh đính kèm <input id="customFile" type="file"
+                                        (change)="onSelectFile($event)" multiple accept="image/*" hidden>
+                                </label>
+
+                                <div class="row">
+                                    <div class="col-2 col-lg-2" *ngFor='let url of imageurlseditstring; let i = index'>
+                                        <img class="img-fluid" [src]="url">
+                                        <a class="btn btn-sm btn-danger mt-1" (click)="DeleteImage($event)"
+                                            id={{i}}>Xóa</a>
+                                    </div>
+
+                                    <div class="col-2 col-lg-2" *ngFor='let url of imageurls; let i = index'>
+                                        <img class="img-fluid" [src]="url.base64String">
+                                        <a (click)="removeImage(i)" class="btn btn-sm btn-danger mt-1">Xóa</a>
+                                    </div>
+                                </div>
+                            </ng-template>
+
                             <div class="row">
                                 <input matInput formControlName="attachment_id" type="text" class="o_invisible">
                                 <div class="col-md-4">

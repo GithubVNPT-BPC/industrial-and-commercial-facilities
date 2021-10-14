@@ -19,18 +19,9 @@ import { ClusterBusinessComponent } from './cluster-business/cluster-business.co
 
 export class ClusterManagementComponent extends BaseComponent {
 
-    serverUrl = environment.apiEndpoint
-    id_cnn: number;
-    showColumns: string[] = [];
-    showSubColumns: string[] = [];
-    subColumns: string[] = ['dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
-    topColumns: string[] = ['select', 'index', 'cap_nhat_dn_ccn', 'them_dn_ccn', 'ten_cum_cn', 'dien_tich_qh', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi'];
     totalColumns: string[] = ['select', 'index', 'cap_nhat_dn_ccn', 'them_dn_ccn', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
-    imageUrl: string[] = [];
-    imagesSource: string[] = [];
-    imagesDelete: string[] = [];
 
     hienTrangHaTang: any[] = [
         { id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
@@ -44,9 +35,7 @@ export class ClusterManagementComponent extends BaseComponent {
     { id: 2, ten_hien_trang_xlnt: 'Có' },
     { id: 3, ten_hien_trang_xlnt: 'Đang xây dựng' }];
 
-    isChecked: boolean = false;
-    sanLuongSanXuat: number = 0;
-    sanLuongKinhDoanh: number = 0;
+
     filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
     trang_thai_hd: any[] = [
@@ -69,21 +58,11 @@ export class ClusterManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.showColumns = this.totalColumns;
-        this.showSubColumns = [];
         this.getDanhSachQuanLyCumCongNghiep();
         this.initWards();
         if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
-        this.initInforImages();
-    }
-
-    initInforImages() {
-        this.id_cnn = 0;
-        this.imagesDelete = [];
-        this.imageUrl = [];
-        this.fileToUpload = [];
     }
 
     getLinkDefault() {
@@ -91,6 +70,16 @@ export class ClusterManagementComponent extends BaseComponent {
         this.TITLE_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
         this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
     }
+
+    serverUrl = environment.apiEndpoint
+    id_cnn: number;
+    imageUrl = [];
+    imageurlsedit = [];
+    imageurlseditstring: string[] = [];
+    imagesSource: string[] = [];
+    imagesDelete = [];
+    sanLuongSanXuat: number = 0;
+    sanLuongKinhDoanh: number = 0;
 
     getDanhSachQuanLyCumCongNghiep() {
         this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
@@ -106,20 +95,16 @@ export class ClusterManagementComponent extends BaseComponent {
         })
     }
 
-    changeTable(event) {
-        this.isChecked = event.checked;
-        if (this.isChecked) {
-            this.showColumns = this.totalColumns;
-            this.showSubColumns = this.subColumns;
-        }
-        else {
-            this.showColumns = this.topColumns;
-            this.showSubColumns = [];
-        }
-    }
-
-    public openDetailCluster(id: string) {
-        this.router.navigate(['/specialized/industry-management/cluster/' + id]);
+    getImagesfromId() {
+        this.imageurls = []
+        this.imageurlseditstring = []
+        this.imageUrl = [...this.imagesSource];
+        this.imageUrl.forEach(x => {
+            x.delete = x.duong_dan
+            x.duong_dan = this.serverUrl + x.duong_dan
+        })
+        this.imageurlsedit = this.imageUrl.filter(x => x.id_cum_cong_nghiep == this.id_cnn)
+        this.imageurlseditstring = this.imageurlsedit.map(x => x.duong_dan)
     }
 
     setFormParams() {
@@ -185,23 +170,9 @@ export class ClusterManagementComponent extends BaseComponent {
         return data
     }
 
-    imageDeleteFrom: FormGroup;
     imageurls = [];
     base64String: string;
-    imagePath: string;
-
-    removeImageEdit(i, imagepath) {
-        this.imageDeleteFrom.value.id = i;
-        this.imageDeleteFrom.value.ImagePath = imagepath;
-    }
-
-    removeImage(i) {
-        this.imageurls.splice(i, 1);
-        this.fileToUpload.splice(i, 1);
-    }
-
     fileToUpload: Array<File> = []
-
     onSelectFile(event) {
         if (event.target.files && event.target.files[0]) {
             var filesAmount = event.target.files.length;
@@ -216,14 +187,47 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    fileToUpload1: Array<File> = []
-    filename: string
+    DeleteImage(event) {
+        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+            .then(confirm => {
+                if (confirm) {
+                    let indexImage = event.target.id;
+                    this.imagesDelete.push(this.imageurlsedit[indexImage]);
+                    this.imageurlsedit.splice(indexImage, 1)
+                    this.imageurlseditstring.splice(indexImage, 1);
+                    return;
+                }
+            })
+            .catch((err) => console.log('Hủy không thao tác: \n' + err));
+    }
 
+    removeImage(i) {
+        this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+            .then(confirm => {
+                if (confirm) {
+                    this.imageurls.splice(i, 1);
+                    this.fileToUpload.splice(i, 1);
+                    return;
+                }
+            })
+            .catch((err) => console.log('Hủy không thao tác: \n' + err));
+    }
+
+    filename: string
+    fileToUpload1: Array<File> = []
     onSelectFile1(event) {
         if (event.target.files && event.target.files[0]) {
             this.filename = event.target.files[0].name
             this.fileToUpload1 = event.target.files[0]
         }
+    }
+
+    public callService(data) {
+        this.indService.PostDataGroupCompany(data).subscribe(response => {
+            this.uploadImages(response.data.last_inserted_id);
+            this.uploadFile(response.data.last_inserted_id);
+            this.successNotify(response)
+        }, error => this.errorNotify(error));
     }
 
     uploadImages(id_cnn) {
@@ -244,59 +248,6 @@ export class ClusterManagementComponent extends BaseComponent {
         }
     }
 
-    imageurlsedit = [];
-
-    getImagesfromId() {
-        let temList = [];
-        this.imageUrl = [...this.imagesSource];
-        for (const imageObject of this.imageUrl) {
-            if (this.id_cnn === imageObject['id_cum_cong_nghiep']) {
-                imageObject['delete'] = imageObject['duong_dan']
-                imageObject['duong_dan'] = this.serverUrl + imageObject['duong_dan'];
-                temList.push(imageObject['duong_dan']);
-            }
-        }
-        this.imageurlsedit = [...temList];
-    }
-
-    deleteImages() {
-        if (this.fileToUpload.length != 0) {
-            let tem = [];
-            this.imagesDelete.forEach(element => {
-                tem.push({ file_name: element['delete'] });
-            });
-            this.indService.DeleteImageGroupCompany(tem, this.id_cnn).subscribe(res => {
-                this.successNotify(res)
-            }, error => this.errorMessage(error));
-        }
-    }
-
-    oldfile: string;
-
-    deleteFile() {
-        if (this.fileToUpload1.length != 0) {
-            let temp = []
-            temp.push({ file_name: this.oldfile })
-            this.indService.DeleteFileGroupCompany(temp, this.id_cnn).subscribe(res => {
-                this.successNotify(res)
-            }, error => this.errorMessage(error));
-        }
-    }
-
-    DeleteImage(event) {
-        let indexImage = event.target.id;
-        this.imagesDelete.push(this.imageUrl[indexImage]);
-        this.imageurlsedit.splice(indexImage, 1);
-    }
-
-    public callService(data) {
-        this.indService.PostDataGroupCompany(data).subscribe(response => {
-            this.uploadImages(response.data.last_inserted_id);
-            this.uploadFile(response.data.last_inserted_id);
-            this.successNotify(response)
-        }, error => this.errorNotify(error));
-    }
-
     public callEditService(data) {
         let body = Object.assign({}, this.formData.value);
         body.id = this.selection.selected[0].id;
@@ -307,6 +258,29 @@ export class ClusterManagementComponent extends BaseComponent {
         this.uploadFile(this.id_cnn)
         this.deleteImages();
         this.deleteFile();
+    }
+
+    deleteImages() {
+        let temp = this.imagesDelete.map(x => new Object({ file_name: x.delete }))
+
+        if (temp.length != 0) {
+            this.indService.DeleteImageGroupCompany(temp, this.id_cnn).subscribe(res => {
+                this.successNotify(res)
+            }, error => this.errorMessage(error));
+        }
+    }
+
+    oldfile: string;
+    deleteFile() {
+        let temp = []
+        if (this.oldfile) {
+            temp.push({ file_name: this.oldfile })
+        }
+        if (temp.length != 0) {
+            this.indService.DeleteFileGroupCompany(temp, this.id_cnn).subscribe(res => {
+                this.successNotify(res)
+            }, error => this.errorMessage(error));
+        }
     }
 
     prepareRemoveData(data) {
@@ -336,5 +310,9 @@ export class ClusterManagementComponent extends BaseComponent {
                 typeOfSave: SAVE.ADD,
             }
         });
+    }
+
+    public openDetailCluster(id: string) {
+        this.router.navigate(['/specialized/industry-management/cluster/' + id]);
     }
 }

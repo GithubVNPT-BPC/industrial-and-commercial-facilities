@@ -121,7 +121,7 @@
                 <hr>
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource"
-                        id="{{showColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
+                        id="{{totalColumns.length == 5 ? 'small-table': 'small-table2'}}" class="table-layout">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null" class="text-center"
@@ -233,8 +233,8 @@
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2']; sticky : true">
                         </tr>
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="showColumns; sticky:true"></tr>
-                        <tr mat-row class="table-row" *matRowDef="let row; columns: showColumns;let i = index; ">
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="totalColumns; sticky:true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">
                     </table>
                 </div>
                 <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons></mat-paginator>
@@ -291,7 +291,7 @@
 
                                         <div class="row">
                                             <div class="col-2 col-lg-2"
-                                                *ngFor='let url of imageurlsedit; let i = index'>
+                                                *ngFor='let url of imageurlseditstring; let i = index'>
                                                 <img class="img-fluid" [src]="url">
                                                 <a class="btn btn-sm btn-danger mt-1" (click)="DeleteImage($event)"
                                                     id={{i}}>Xóa</a>
