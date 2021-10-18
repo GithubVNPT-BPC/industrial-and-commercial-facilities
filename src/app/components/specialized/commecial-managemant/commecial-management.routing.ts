@@ -255,7 +255,7 @@ const routes: Routes = [
   },
   {
     path: 'retail/retail-detail',
-    component: RetailMonthComponent
+    component: RetailMonthNewComponent
   },
   {
     path: 'export_import',

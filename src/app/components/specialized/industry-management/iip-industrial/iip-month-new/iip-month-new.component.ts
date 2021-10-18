@@ -61,20 +61,21 @@ export const MY_FORMATS = {
 })
 export class IipMonthNewComponent implements OnInit {
 
-  private readonly LINK_DEFAULT: string =
-    "/specialized/industry-management/iip/iip";
-  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
-  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
+  private readonly LINK_DEFAULT: string ="/specialized/industry-management/iip/iip-detail";
+  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp xxx";
+  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp xxx";
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
-  public theYear: number;
-  public theMonth: number;
+  d = new Date();
+  public theYear: number = this.d.getFullYear();
+  public theMonth: number = this.d.getMonth() + 1;
   public stringmonth: string
   public time: string
   public timechange: number
   public month: string
-
+  fields: { stt: string; ten_chi_tieu: string; don_vi_tinh: string; thuc_hien_ky_truoc: string; thuc_hien_cung_ky: string; thuc_hien_thang: string; ke_hoach_nam: string; luy_ke_thang: string; luy_ke_cung_ky: string; so_sanh_ky_truoc: string; so_sanh_cung_ky: string; so_sanh_luy_ke_cung_ky: string; so_sanh_luy_ke_ke_hoach_nam: string; ke_hoach_nam_sau: string; thuc_hien_6_thang_dau_nam_cung_ky: string; uoc_thuc_hien_thang_6: string; uoc_thuc_hien_6_thang: string; so_sanh_uoc_6_thang_cung_ky: string; so_sanh_uoc_6_thang_ke_hoach_nam: string; thuc_hien_nam_truoc: string; uoc_thuc_hien_nam: string; so_sanh_uoc_thuc_hien_nam_cung_ky: string; so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam: string; so_sanh_ke_hoach_nam_sau_thuc_hien_nam: string; };
+  public href_file: string = '';
   public chosenYearHandler(normalizedYear: Moment) {
     this.date = this.newdate
     const ctrlValue = this.date.value;
@@ -103,7 +104,9 @@ export class IipMonthNewComponent implements OnInit {
     this.lineChart.config.data.datasets = []
     this.lineChartMethod(this.theYear);
 
-    this.month = this.time.substring(5, 6)
+    this.month = this.time.substring(5, 6);
+    this.displayedColumns = this.excelService.initialdisplayedColumns(this.theMonth);
+    this.href_file = this.excelService.getHref();
   }
 
   displayedColumns = [
@@ -111,30 +114,9 @@ export class IipMonthNewComponent implements OnInit {
     "stt",
     "ten_chi_tieu",
     "don_vi_tinh",
-    "gia_tri_thang",
-    "uoc_th_so_cungky_tht",
-    "uoc_th_so_thg_truoc_tht",
-
-    "gia_tri_cong_don",
-    "uoc_th_so_cungky_cong_don",
-    "uoc_th_so_thg_truoc_cong_don",
+    
   ];
-  displayRow1Header = [
-    // "index",
-    "stt",
-    "ten_chi_tieu",
-    "don_vi_tinh",
-    "thuc_hien_bao_cao_thang",
-    "cong_don_den_ky_bao_cao",
-  ];
-  displaRow2Header = [
-    "gia_tri_thang",
-    "uoc_th_so_cungky_tht",
-    "uoc_th_so_thg_truoc_tht",
-    "gia_tri_cong_don",
-    "uoc_th_so_cungky_cong_don",
-    "uoc_th_so_thg_truoc_cong_don",
-  ];
+  
   private _linkOutput: LinkModel = new LinkModel();
 
   dataBusiness: any[] = [];
@@ -142,7 +124,7 @@ export class IipMonthNewComponent implements OnInit {
   dataDialog: any[] = [];
   filteredDataSource: MatTableDataSource<new_model> = new MatTableDataSource<new_model>();
 
-  @ViewChild("TABLE", { static: true }) table: ElementRef;
+  @ViewChild("TABLE", { static: false }) table: ElementRef;
   @ViewChild(MatAccordion, { static: true }) accordion: MatAccordion;
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -192,19 +174,20 @@ export class IipMonthNewComponent implements OnInit {
 
           data = XLSX.utils.sheet_to_json(ws);
           this.dataSource.data = [];
-          data.forEach(item => {
-            let datarow: new_model = new new_model();
-            datarow.id_chi_tieu = item['ID'];
-            datarow.san_luong_thang = 0;
-            datarow.tri_gia_thang = item['TH tháng'] ? item['TH tháng'] : 0;
-            datarow.uoc_thang_so_voi_ki_truoc = item['ƯTH so Tháng cùng kỳ'] ? item['ƯTH so Tháng cùng kỳ'] : 0;
-            datarow.uoc_thang_so_voi_thang_truoc = item['ƯTH so tháng trước'] ? item['ƯTH so tháng trước'] : 0;
-            datarow.san_luong_cong_don = 0;
-            datarow.tri_gia_cong_don = item['TH tháng (Cộng dồn)'] ? item['TH tháng (Cộng dồn)'] : 0;
-            datarow.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so với cùng kỳ (Cộng dồn)'] ? item['ƯTH so với cùng kỳ (Cộng dồn)'] : 0;
-            datarow.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so kế hoạch năm (Cộng dồn)'] ? item['ƯTH so kế hoạch năm (Cộng dồn)'] : 0;
-            this.prototype.push(datarow)
-          });
+          this.prototype = this.mappingData(data);
+          // data.forEach(item => {
+          //   let datarow: new_model = new new_model();
+          //   datarow.id_chi_tieu = item['ID'];
+          //   datarow.san_luong_thang = 0;
+          //   datarow.tri_gia_thang = item['TH tháng'] ? item['TH tháng'] : 0;
+          //   datarow.uoc_thang_so_voi_ki_truoc = item['ƯTH so Tháng cùng kỳ'] ? item['ƯTH so Tháng cùng kỳ'] : 0;
+          //   datarow.uoc_thang_so_voi_thang_truoc = item['ƯTH so tháng trước'] ? item['ƯTH so tháng trước'] : 0;
+          //   datarow.san_luong_cong_don = 0;
+          //   datarow.tri_gia_cong_don = item['TH tháng (Cộng dồn)'] ? item['TH tháng (Cộng dồn)'] : 0;
+          //   datarow.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so với cùng kỳ (Cộng dồn)'] ? item['ƯTH so với cùng kỳ (Cộng dồn)'] : 0;
+          //   datarow.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so kế hoạch năm (Cộng dồn)'] ? item['ƯTH so kế hoạch năm (Cộng dồn)'] : 0;
+          //   this.prototype.push(datarow)
+          // });
           this.save(this.timechange, this.prototype)
         };
 
@@ -218,6 +201,36 @@ export class IipMonthNewComponent implements OnInit {
           this.prototype = []
         }
       }
+    }
+  }
+
+  mappingData(data) {
+    switch (this.theMonth) {
+      case 1:
+        return this.excelService.mappingDataSource1(data);
+
+      case 2:
+      case 3:
+      case 4:
+        return this.excelService.mappingDataSource234(data);
+
+      case 5:
+      case 6:
+        return this.excelService.mappingDataSource56(data);
+
+      case 7:
+      case 8:
+      case 9:
+      case 11:
+        return this.excelService.mappingDataSource78911(data);
+
+      case 10:
+        return this.excelService.mappingDataSource78911(data);
+
+      case 12:
+        return this.excelService.mappingDataSource12(data);
+      default:
+        break;
     }
   }
 
@@ -254,6 +267,10 @@ export class IipMonthNewComponent implements OnInit {
     if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
+
+    this.displayedColumns = this.excelService.initialdisplayedColumns(new Date().getMonth() + 1);
+    this.fields = this.excelService.fields;
+    this.href_file = this.excelService.getHref();
   }
 
   public sendLinkToNext(type: boolean) {
@@ -384,4 +401,5 @@ export class IipMonthNewComponent implements OnInit {
         });
       })
   }
+
 }

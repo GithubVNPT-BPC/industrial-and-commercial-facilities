@@ -132,6 +132,7 @@ export const customCurrencyMaskConfig = {
     TRSManagementComponent,
     BorderTradeComponent,
     RetailMonthComponent,
+    RetailMonthNewComponent,
     RetailComponent,
     MultilevelTradeComponent,
     TradeFairsExhibitionsComponent,
