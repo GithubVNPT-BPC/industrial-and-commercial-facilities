@@ -1,12 +1,20 @@
 import { Component, Injector } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificate-regulation';
+
+import {
+  CertificateViewModel
+} from 'src/app/_models/APIModel/conditional-business-line.model';
+
+import { FormControl } from '@angular/forms';
+import { ReplaySubject, Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 
 import moment from 'moment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
@@ -59,7 +67,8 @@ export class CertificateRegulationComponent extends BaseComponent {
     private modalService: NgbModal,
     private industryManagementService: IndustryManagementService,
     public enterpriseService: EnterpriseService,
-    public _login: LoginService
+    public _login: LoginService,
+    public _Service: ConditionBusinessService,
   ) {
     super(injector);
   }
@@ -73,12 +82,47 @@ export class CertificateRegulationComponent extends BaseComponent {
     if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
+
+    this.GetAllGiayPhep();
+
+    this.mstfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterMST();
+      });
   }
+
+  public _onDestroy = new Subject<void>();
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/industry-management/cr";
     this.TITLE_DEFAULT = "Công nghiệp - Công bố hợp quy";
     this.TEXT_DEFAULT = "Công nghiệp - Công bố hợp quy";
+  }
+
+  allcertificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
+  public filterallcertificate: ReplaySubject<CertificateViewModel[]> = new ReplaySubject<CertificateViewModel[]>(1);
+  GetAllGiayPhep() {
+    this._Service.GetCertificate('').subscribe((allrecords) => {
+      this.allcertificate = allrecords.data as CertificateViewModel[];
+      this.filterallcertificate.next(this.allcertificate.slice());
+    });
+  }
+  public mstfilter: FormControl = new FormControl();
+  public filterMST() {
+    if (!this.allcertificate) {
+      return;
+    }
+    let search = this.mstfilter.value;
+    if (!search) {
+      this.filterallcertificate.next(this.allcertificate.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterallcertificate.next(
+      this.allcertificate.filter(x => x.combine.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   getFormParams() {
@@ -91,9 +135,9 @@ export class CertificateRegulationComponent extends BaseComponent {
       duong_dan_nhan_san_pham: { value: '', disabled: true },
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl("Bình Phước"),
-      id_loai_san_pham: new FormControl('', Validators.required),
-      file_name: new FormControl(),
-      attachment_id: new FormControl(),
+      id_loai_san_pham: new FormControl('1', Validators.required),
+      // file_name: new FormControl(),
+      // attachment_id: new FormControl(),
     }
   }
 
@@ -110,8 +154,8 @@ export class CertificateRegulationComponent extends BaseComponent {
       this.formData.controls['tieu_chuan_san_pham'].setValue(selectedRecord.tieu_chuan_san_pham);
       this.formData.controls['noi_cap'].setValue(selectedRecord.noi_cap);
       this.formData.controls['id_loai_san_pham'].setValue(selectedRecord.id_loai_san_pham);
-      this.formData.controls['file_name'].setValue(selectedRecord.file_name);
-      this.formData.controls['attachment_id'].setValue(selectedRecord.attachment_id);
+      // this.formData.controls['file_name'].setValue(selectedRecord.file_name);
+      // this.formData.controls['attachment_id'].setValue(selectedRecord.attachment_id);
       this.fileBin = selectedRecord.datas;
       this.id_cbhq = selectedRecord.id;
     }
@@ -207,19 +251,20 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   callService(data) {
-    this.industryManagementService.PostComformityAnnounce(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.industryManagementService.PostComformityAnnounce(data).subscribe(response => {
+      this.successNotify(response);
+      // this.uploadfiles(response.data.last_inserted_id)
+    }
+      , error => this.errorNotify(error));
   }
 
   callEditService(data) {
     let body = Object.assign({}, this.formData.value);
-    // if (data.attachment_id && this.selectedFile) {
-    //   data['attachment'] = { file_name: this.selectedFile.name ? this.selectedFile.name : 'old_file', binary: this.fileBin, id: data.attachment_id }
-    // }
+    console.log(body)
     if (this.selectedFile !== null) {
-      // data['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin }
       body['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin };
     }
-    this.industryManagementService.UpdateComformityAnnounce(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    // this.industryManagementService.PostComformityAnnounce(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
   callRemoveService(data) {
@@ -234,4 +279,67 @@ export class CertificateRegulationComponent extends BaseComponent {
   formatDateTime(date) {
     return date._i.slice(6, 8) + '/' + date._i.slice(4, 6) + '/' + date._i.slice(0, 4);
   }
+
+  fileUrl = [];
+  fileurlsedit = [];
+  fileurlseditstring: string[] = [];
+  filesSource: string[] = [];
+  filesDelete = [];
+
+  fileurls = [];
+  filedata = [];
+  fileToUpload: Array<File> = []
+  onSelectFile(event) {
+    if (event.target.files && event.target.files[0]) {
+      var filesAmount = event.target.files.length;
+      for (let i = 0; i < filesAmount; i++) {
+        var reader = new FileReader();
+        reader.onload = (event: any) => {
+          this.filedata.push(event.target.result)
+        }
+        reader.readAsDataURL(event.target.files[i])
+        this.fileurls.push(event.target.files[i].name)
+        this.fileToUpload.push(event.target.files[i])
+      }
+      console.log(this.fileurls)
+      console.log(this.filedata)
+    }
+  }
+
+  uploadfiles(id_cbhq) {
+    if (this.fileToUpload.length != 0) {
+      for (const file of this.fileToUpload) {
+        this.industryManagementService.PostComformityAnnounceFiles(file, parseInt(id_cbhq)).subscribe(res => {
+          // this.successNotify(res);
+        })
+      }
+    }
+  }
+
+  Deletefile(event) {
+    this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+      .then(confirm => {
+        if (confirm) {
+          let indexfile = event.target.id;
+          this.filesDelete.push(this.fileurlsedit[indexfile]);
+          this.fileurlsedit.splice(indexfile, 1)
+          this.fileurlseditstring.splice(indexfile, 1);
+          return;
+        }
+      })
+      .catch((err) => console.log('Hủy không thao tác: \n' + err));
+  }
+
+  removefile(i) {
+    this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
+      .then(confirm => {
+        if (confirm) {
+          this.fileurls.splice(i, 1);
+          this.fileToUpload.splice(i, 1);
+          return;
+        }
+      })
+      .catch((err) => console.log('Hủy không thao tác: \n' + err));
+  }
+
 }

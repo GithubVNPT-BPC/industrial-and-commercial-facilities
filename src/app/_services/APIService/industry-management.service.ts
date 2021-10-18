@@ -22,16 +22,12 @@ export class IndustryManagementService {
     private urlGetChemicalNames = '/danh-sach-hoa-chat';
     private urlGetFoodIndustry = '/cntp';
     private urlGetLPGManagement = '/lpg';
-    private urlGetComformityAnnounce = '/cbhq';
     private urlGetExplosiveMat = '/vlncn';
     private urlPostChemicalManagement = '/hoa-chat';
     private urlPostChemicalManagementQty = '/san-luong-hoa-chat';
     private urlPostLPGManagement = '/lpg';
     private urlPostFoodIndustry = '/cntp';
-    private urlPostComformityAnnounce = '/cbhq';
     private urlPostExplosiveMat = '/vlncn';
-    private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
-    private urlDeleteCertificatedRegulation = '/cbhq/xoa';
     private urlDeleteLPGManagement = '/lpg-xoa';
     private urlDeleteFoodIndustry = '/cntp-xoa';
     private urlDeleteChemistryQty = '/san-luong-hoa-chat-xoa';
@@ -78,14 +74,6 @@ export class IndustryManagementService {
         );
     }
 
-    public GetComformityAnnounce() {
-        var apiUrl = this.endpoint + this.urlGetComformityAnnounce;
-        // let params = new HttpParams().set('time_id', time_id.toString());
-        return this.http.get<any>(apiUrl, { headers: HEADERS }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
     public GetExplosiveMat(time_id) {
         var apiUrl = this.endpoint + this.urlGetExplosiveMat;
         let params = new HttpParams().set('time_id', time_id.toString());
@@ -127,22 +115,6 @@ export class IndustryManagementService {
         //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         let params = new HttpParams().set('time_id', time_id.toString());
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS, params }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public PostComformityAnnounce(datas) {
-        let apiUrl = this.endpoint + this.urlPostComformityAnnounce;
-        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public UpdateComformityAnnounce(datas) {
-        let apiUrl = this.endpoint + this.urlUpdateComformityAnnounce;
-        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
@@ -301,10 +273,44 @@ export class IndustryManagementService {
         );
     }
 
-    // Delete methods
+    //Công bố hợp quy
 
-    public DeleteLPGManagement(datas) {
-        let apiUrl = this.endpoint + this.urlDeleteLPGManagement;
+    private urlGetComformityAnnounce = '/cbhq';
+    private urlPostComformityAnnounce = '/cbhq';
+    private urlPostComformityAnnounceFiles = '/cbhq/tai-lieu';
+    private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
+    private urlDeleteCertificatedRegulation = '/cbhq/xoa';
+
+    public GetComformityAnnounce() {
+        var apiUrl = this.endpoint + this.urlGetComformityAnnounce;
+        // let params = new HttpParams().set('time_id', time_id.toString());
+        return this.http.get<any>(apiUrl, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostComformityAnnounce(datas) {
+        let apiUrl = this.endpoint + this.urlPostComformityAnnounce;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostComformityAnnounceFiles(body: any, id_cbhq) {
+        const formData = new FormData();
+        formData.append('file', body);
+
+        let apiUrl = this.endpoint + this.urlPostComformityAnnounceFiles;
+        let params = new HttpParams().set('id', id_cbhq.toString());
+        return this.http.post<any>(apiUrl, formData, { params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public UpdateComformityAnnounce(datas) {
+        let apiUrl = this.endpoint + this.urlUpdateComformityAnnounce;
+        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
         return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
@@ -314,6 +320,15 @@ export class IndustryManagementService {
         var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
         // let params = new HttpParams().set('id', id.toString());
         return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    // Delete methods
+
+    public DeleteLPGManagement(datas) {
+        let apiUrl = this.endpoint + this.urlDeleteLPGManagement;
+        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
