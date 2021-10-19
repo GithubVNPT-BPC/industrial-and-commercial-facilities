@@ -278,7 +278,7 @@ export class IndustryManagementService {
     private urlGetComformityAnnounce = '/cbhq';
     private urlPostComformityAnnounce = '/cbhq';
     private urlPostComformityAnnounceFiles = '/cbhq/tai-lieu';
-    private urlUpdateComformityAnnounce = '/cbhq/chinh-sua';
+    private urlDeleteComformityAnnounceFiles = '/cbhq/xoa-tai-lieu';
     private urlDeleteCertificatedRegulation = '/cbhq/xoa';
 
     public GetComformityAnnounce() {
@@ -297,6 +297,14 @@ export class IndustryManagementService {
         );
     }
 
+    public DeleteCBHQ(body: any) {
+        var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
+        // let params = new HttpParams().set('id', id.toString());
+        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
     public PostComformityAnnounceFiles(body: any, id_cbhq) {
         const formData = new FormData();
         formData.append('file', body);
@@ -308,18 +316,10 @@ export class IndustryManagementService {
         );
     }
 
-    public UpdateComformityAnnounce(datas) {
-        let apiUrl = this.endpoint + this.urlUpdateComformityAnnounce;
-        //headers = headers.append('Authorization', 'Bearer ' + `${this.token}`);
-        return this.http.post<any>(apiUrl, datas, { headers: HEADERS }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
-    }
-
-    public DeleteCBHQ(body: any) {
-        var apiUrl = this.endpoint + this.urlDeleteCertificatedRegulation;
-        // let params = new HttpParams().set('id', id.toString());
-        return this.http.post<any>(apiUrl, body, { headers: HEADERS }).pipe(tap(data => data),
+    public DeleteComformityAnnounceFiles(body, id_image) {
+        let apiUrl = this.endpoint + this.urlDeleteComformityAnnounceFiles;
+        let params = new HttpParams().set('id', id_image.toString());
+        return this.http.post<any>(apiUrl, body, { params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

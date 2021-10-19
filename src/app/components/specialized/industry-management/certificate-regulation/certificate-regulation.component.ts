@@ -5,6 +5,7 @@ import { ConformityAnnouncementModel } from 'src/app/_models/APIModel/certificat
 import {
   CertificateViewModel
 } from 'src/app/_models/APIModel/conditional-business-line.model';
+import { environment } from 'src/environments/environment';
 
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -16,14 +17,42 @@ import { EnterpriseService } from 'src/app/_services/APIService/enterprise.servi
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 
-import moment from 'moment';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { Validators } from '@angular/forms';
+
+import { DatePipe } from '@angular/common';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
+import { defaultFormat as _rollupMoment } from 'moment';
+import _moment from 'moment';
+const moment = _rollupMoment || _moment;
+export const DDMMYY_FORMAT = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @Component({
   selector: 'app-certificate-regulation',
   templateUrl: './certificate-regulation.component.html',
   styleUrls: ['/../../special_layout.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: DDMMYY_FORMAT },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+    DatePipe
+  ],
 })
 export class CertificateRegulationComponent extends BaseComponent {
   //TS & HTML Variable
@@ -46,13 +75,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   }
 
   //Only TS Variable
-  sanluongnam: number;
   soLuongDoanhNghiep: number;
-  isChecked: boolean;
-  selectedFile: File = null;
-  fileBin;
-  mstOptions: [];
-  _timeout: any = null;
 
   ds_sp: any[] = [
     { id_loai_san_pham: 1, ten_san_pham: "Thực phẩm" },
@@ -135,9 +158,7 @@ export class CertificateRegulationComponent extends BaseComponent {
       duong_dan_nhan_san_pham: { value: '', disabled: true },
       tieu_chuan_san_pham: new FormControl(),
       noi_cap: new FormControl("Bình Phước"),
-      id_loai_san_pham: new FormControl('1', Validators.required),
-      // file_name: new FormControl(),
-      // attachment_id: new FormControl(),
+      id_loai_san_pham: new FormControl(1, Validators.required),
     }
   }
 
@@ -150,47 +171,13 @@ export class CertificateRegulationComponent extends BaseComponent {
       this.formData.controls['mst'].setValue(selectedRecord.mst);
       this.formData.controls['ten_san_pham'].setValue(selectedRecord.ten_san_pham);
       this.formData.controls['ban_cong_bo_hop_quy'].setValue(selectedRecord.ban_cong_bo_hop_quy);
-      this.formData.controls['ngay_tiep_nhan'].setValue(new Date(selectedRecord.ngay_tiep_nhan));
+      this.formData.controls['ngay_tiep_nhan'].setValue(selectedRecord.ngay_tiep_nhan._d);
       this.formData.controls['tieu_chuan_san_pham'].setValue(selectedRecord.tieu_chuan_san_pham);
       this.formData.controls['noi_cap'].setValue(selectedRecord.noi_cap);
       this.formData.controls['id_loai_san_pham'].setValue(selectedRecord.id_loai_san_pham);
-      // this.formData.controls['file_name'].setValue(selectedRecord.file_name);
-      // this.formData.controls['attachment_id'].setValue(selectedRecord.attachment_id);
-      this.fileBin = selectedRecord.datas;
       this.id_cbhq = selectedRecord.id;
+      this.getfilesbyid();
     }
-  }
-
-  GetComformityAnnounceData() {
-    this.industryManagementService.GetComformityAnnounce().subscribe(res => {
-      this.filteredDataSource.data = [];
-      if (res.data && res.data.length > 0) {
-        res.data.forEach(element => element.ngay_tiep_nhan = this.formatDate(element.ngay_tiep_nhan));
-        this.dataSource = new MatTableDataSource<ConformityAnnouncementModel>(res['data']);
-        this.filteredDataSource.data = [...this.dataSource.data];
-      }
-      this._prepareData();
-      this.paginatorAgain();
-    })
-  }
-
-  findEnterpriseByMst(mst) {
-    let self = this;
-    this._timeout = null;
-    if (this._timeout) { //if there is already a timeout in process cancel it
-      window.clearTimeout(this._timeout);
-    }
-    this._timeout = window.setTimeout(() => {
-      self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
-        results => {
-          if (results && results.data && results.data[0].length) {
-            self.mstOptions = results.data[0];
-          }
-        },
-        error => this.errorMessage = <any>error
-      );
-      self._timeout = null;
-    }, 2000);
   }
 
   applyFilter(event: Event) {
@@ -198,43 +185,29 @@ export class CertificateRegulationComponent extends BaseComponent {
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onFileSelected(event) {
-    if (event.target.files.length) {
-      this.selectedFile = <File>event.target.files[0];
-      var reader = new FileReader();
-      reader.onload = (event: any) => {
-        this.fileBin = event.target.result;
-      }
-      reader.readAsDataURL(this.selectedFile);
-      this.formData.controls['file_name'].setValue(event.target.files[0].name);
-    }
-  }
-
   _prepareData() {
     this.soLuongDoanhNghiep = this.filteredDataSource.data.length;
   }
 
-  switchView() {
-    super.switchView();
-    this.selectedFile = null;
-    this.fileBin = null;
+  prepareData(data) {
+    data['ngay_tiep_nhan'] = _moment(data['ngay_tiep_nhan']).format('yyyyMMDD');
+    return data;
   }
 
-  resetAll() {
-    super.resetAll();
-    this.selectedFile = null;
-    this.fileBin = null;
+  callService(data) {
+    this.industryManagementService.PostComformityAnnounce(data).subscribe(response => {
+      this.successNotify(response);
+      this.uploadfiles(response.data.last_inserted_id)
+    }
+      , error => this.errorNotify(error));
   }
 
-  clearTable(event) {
-    super.clearTable(event);
-    this.selectedFile = null;
-    this.fileBin = null;
-  }
-
-  applyActionCheck(event) {
-    this.filteredDataSource.filter = (event.checked) ? "true" : "";
-    this.paginatorAgain();
+  callEditService(data) {
+    let body = Object.assign({}, this.formData.value);
+    body['ngay_tiep_nhan']  = _moment(body['ngay_tiep_nhan']).format('yyyyMMDD');
+    this.industryManagementService.PostComformityAnnounce(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.uploadfiles(this.id_cbhq)
+    this.deleteFiles();
   }
 
   prepareRemoveData() {
@@ -242,49 +215,60 @@ export class CertificateRegulationComponent extends BaseComponent {
     return datas;
   }
 
-  prepareData(data) {
-    data['ngay_tiep_nhan'] = moment(data['ngay_tiep_nhan']).format('yyyyMMDD');
-    if (this.selectedFile !== null) {
-      data['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin }
-    }
-    return data;
-  }
-
-  callService(data) {
-    this.industryManagementService.PostComformityAnnounce(data).subscribe(response => {
-      this.successNotify(response);
-      // this.uploadfiles(response.data.last_inserted_id)
-    }
-      , error => this.errorNotify(error));
-  }
-
-  callEditService(data) {
-    let body = Object.assign({}, this.formData.value);
-    console.log(body)
-    if (this.selectedFile !== null) {
-      body['attachment'] = { file_name: this.selectedFile.name, binary: this.fileBin };
-    }
-    // this.industryManagementService.PostComformityAnnounce(body).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
-  }
-
   callRemoveService(data) {
     this.industryManagementService.DeleteCBHQ(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
+  fileBin;
   private openPreviewer(content, file_data = false) {
+    this.fileurlsviewer = []
+    this.filedataviewer = []
     this.fileBin = file_data ? file_data : this.fileBin;
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true });
   }
 
-  formatDateTime(date) {
-    return date._i.slice(6, 8) + '/' + date._i.slice(4, 6) + '/' + date._i.slice(0, 4);
+  fileurlsviewer = [];
+  filedataviewer = [];
+  temp = []
+  temp_id
+  private openFiles(content, id) {
+    this.fileurlsviewer = []
+    this.filedataviewer = []
+
+    this.temp_id = id
+    let fileviewer = this.temp.filter(x => x.id_cbhq == id)
+    this.fileurlsviewer = fileviewer.map(x => x.delete)
+    this.filedataviewer = fileviewer.map(x => new Object({ data: x.duong_dan }))
+
+    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', scrollable: true });
   }
 
-  fileUrl = [];
-  fileurlsedit = [];
-  fileurlseditstring: string[] = [];
-  filesSource: string[] = [];
-  filesDelete = [];
+  openpdffile(data) {
+    let url = data
+    window.open(url, '_blank');
+  }
+
+  filesource: any
+
+  GetComformityAnnounceData() {
+    this.industryManagementService.GetComformityAnnounce().subscribe(res => {
+      this.filteredDataSource.data = [];
+      if (res.data && res.data.length > 0) {
+        res.data[0].forEach(element => element.ngay_tiep_nhan = this.formatDate(element.ngay_tiep_nhan));
+        this.dataSource = new MatTableDataSource<ConformityAnnouncementModel>(res.data[0]);
+        this.filteredDataSource.data = [...this.dataSource.data];
+        this.filesource = res.data[1]
+
+        this.temp = this.filesource
+        this.temp.forEach(element => {
+          element.delete = element.duong_dan
+          element.duong_dan = this.serverUrl + element.duong_dan
+        });
+      }
+      this._prepareData();
+      this.paginatorAgain();
+    })
+  }
 
   fileurls = [];
   filedata = [];
@@ -295,14 +279,12 @@ export class CertificateRegulationComponent extends BaseComponent {
       for (let i = 0; i < filesAmount; i++) {
         var reader = new FileReader();
         reader.onload = (event: any) => {
-          this.filedata.push(event.target.result)
+          this.filedata.push({ data: event.target.result })
         }
         reader.readAsDataURL(event.target.files[i])
         this.fileurls.push(event.target.files[i].name)
         this.fileToUpload.push(event.target.files[i])
       }
-      console.log(this.fileurls)
-      console.log(this.filedata)
     }
   }
 
@@ -316,18 +298,47 @@ export class CertificateRegulationComponent extends BaseComponent {
     }
   }
 
-  Deletefile(event) {
+  serverUrl = environment.apiEndpoint
+  filesedit
+
+  getfilesbyid(){
+    this.fileToUpload = []
+    this.filesDelete = []
+    this.fileurls = []
+    this.filedata = []
+    this.fileurlsedit = []
+    this.filedataedit = []
+
+    this.filesedit = this.temp.filter(x => x.id_cbhq == this.id_cbhq)
+    this.fileurlsedit = this.filesedit.map(x => x.delete)
+    this.filedataedit = this.filesedit.map(x => new Object({ data: x.duong_dan }))
+  }
+
+  fileurlsedit = [];
+  filedataedit = [];
+  filesDelete = [];
+  Deletefile(i) {
     this.confirmationDialogService.confirm('Xác nhận', 'Bạn chắc chắn muốn xóa?', 'Đồng ý', 'Đóng')
       .then(confirm => {
         if (confirm) {
-          let indexfile = event.target.id;
-          this.filesDelete.push(this.fileurlsedit[indexfile]);
-          this.fileurlsedit.splice(indexfile, 1)
-          this.fileurlseditstring.splice(indexfile, 1);
+          this.filesDelete.push(this.filesedit[i]);
+          this.filesedit.splice(i, 1)
+          this.fileurlsedit.splice(i, 1)
+          this.filedataedit.splice(i, 1)
           return;
         }
       })
       .catch((err) => console.log('Hủy không thao tác: \n' + err));
+  }
+
+  deleteFiles() {
+    let temp = this.filesDelete.map(x => new Object({ file_name: x.delete }))
+
+    if (temp.length != 0) {
+        this.industryManagementService.DeleteComformityAnnounceFiles(temp, this.id_cbhq).subscribe(res => {
+            this.successNotify(res)
+        }, error => this.errorMessage(error));
+    }
   }
 
   removefile(i) {
@@ -335,11 +346,11 @@ export class CertificateRegulationComponent extends BaseComponent {
       .then(confirm => {
         if (confirm) {
           this.fileurls.splice(i, 1);
+          this.filedata.splice(i, 1);
           this.fileToUpload.splice(i, 1);
           return;
         }
       })
       .catch((err) => console.log('Hủy không thao tác: \n' + err));
   }
-
 }
