@@ -196,7 +196,7 @@ export class ExcelService {
         let displayedColumns = [];
         switch (month) {
             case 1:
-                this.setHref('/assets/ExcelSample/BLHH/1.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/1.xlsx');
                 displayedColumns = [
                     // "index",
                     "stt",
@@ -212,7 +212,7 @@ export class ExcelService {
             case 2:
             case 3:
             case 4:
-                this.setHref('/assets/ExcelSample/BLHH/234.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/234.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
@@ -234,7 +234,7 @@ export class ExcelService {
 
             case 5:
             case 6:
-                this.setHref('/assets/ExcelSample/BLHH/56.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/56.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
@@ -260,7 +260,7 @@ export class ExcelService {
             case 8:
             case 9:
             case 11:
-                this.setHref('/assets/ExcelSample/BLHH/78911.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/78911.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
@@ -282,7 +282,7 @@ export class ExcelService {
                 break;
 
             case 10:
-                this.setHref('/assets/ExcelSample/BLHH/10.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/10.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
@@ -309,7 +309,7 @@ export class ExcelService {
                 break;
 
             case 12:
-                this.setHref('/assets/ExcelSample/BLHH/12.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/12.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
