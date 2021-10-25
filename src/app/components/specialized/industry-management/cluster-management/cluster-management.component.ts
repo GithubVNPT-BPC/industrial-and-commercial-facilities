@@ -71,13 +71,7 @@ export class ClusterManagementComponent extends BaseComponent {
         this.TEXT_DEFAULT = "Công nghiệp - Tổng quan cụm công nghiệp";
     }
 
-    serverUrl = environment.apiEndpoint
-    id_cnn: number;
-    imageUrl = [];
-    imageurlsedit = [];
-    imageurlseditstring: string[] = [];
     imagesSource: string[] = [];
-    imagesDelete = [];
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
 
@@ -93,18 +87,6 @@ export class ClusterManagementComponent extends BaseComponent {
             // this.sanLuongSanXuat = this.filteredDataSource.data.length ? this.filteredDataSource.data.map(x => parseInt(x.cong_suat)||0).reduce((a, b) => a + b) : 0;
             this.paginatorAgain();
         })
-    }
-
-    getImagesfromId() {
-        this.imageurls = []
-        this.imageurlseditstring = []
-        this.imageUrl = [...this.imagesSource];
-        this.imageUrl.forEach(x => {
-            x.delete = x.duong_dan
-            x.duong_dan = this.serverUrl + x.duong_dan
-        })
-        this.imageurlsedit = this.imageUrl.filter(x => x.id_cum_cong_nghiep == this.id_cnn)
-        this.imageurlseditstring = this.imageurlsedit.map(x => x.duong_dan)
     }
 
     setFormParams() {
@@ -168,6 +150,26 @@ export class ClusterManagementComponent extends BaseComponent {
     public prepareData(data) {
         data['duong_dan'] = "";
         return data
+    }
+
+    serverUrl = environment.apiEndpoint
+    id_cnn: number;
+    imageUrl = [];
+    imageurlsedit = [];
+    imageurlseditstring: string[] = [];
+    imagesDelete = [];
+    getImagesfromId() {
+        this.imageurls = []
+        this.imageurlseditstring = []
+        this.imagesDelete = []
+        this.fileToUpload = []
+        this.imageUrl = [...this.imagesSource];
+        this.imageUrl.forEach(x => {
+            x.delete = x.duong_dan
+            x.duong_dan = this.serverUrl + x.duong_dan
+        })
+        this.imageurlsedit = this.imageUrl.filter(x => x.id_cum_cong_nghiep == this.id_cnn)
+        this.imageurlseditstring = this.imageurlsedit.map(x => x.duong_dan)
     }
 
     imageurls = [];
