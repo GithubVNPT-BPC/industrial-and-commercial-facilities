@@ -62,8 +62,8 @@ export const MY_FORMATS = {
 export class IipMonthNewComponent implements OnInit {
 
   private readonly LINK_DEFAULT: string ="/specialized/industry-management/iip/iip-detail";
-  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp xxx";
-  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp xxx";
+  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
+  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());

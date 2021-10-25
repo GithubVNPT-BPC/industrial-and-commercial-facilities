@@ -128,20 +128,15 @@
                             <mat-icon>file_upload</mat-icon>Import
                         </button> -->
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-12 col-lg-12">
+                    <div class="col-12 col-md-12 col-lg-12">
                         <mat-checkbox (change)="AddExport($event)" style="font-weight: bold;">
                             Thêm chi tiết
                         </mat-checkbox>
-
-                        <h5 class="text-center">
-                            BÁO CÁO THỰC HIỆN XUẤT KHẨU
-                        </h5>
                     </div>
-
                 </div>
+
+                <br/>
 
                 <div class="row" [hidden]="!addexport">
                     <div class="col-12 col-lg-12 my-auto text-right">
@@ -166,8 +161,16 @@
                         </label>
                     </div>
                 </div>
-                <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
-                </h5>
+
+                <div class="row">
+                    <div class="col-12 col-lg-12">
+                        <h5 class="text-center">
+                            BÁO CÁO THỰC HIỆN XUẤT KHẨU
+                        </h5>
+                    </div>
+
+                </div>
+
                 <div class="layout" #TABLE>
                     <table mat-table [dataSource]="dataSource" matSort class="table-layout"
                         style="min-width: 900px !important;" id="small-table">
@@ -191,7 +194,7 @@
 
                         <ng-container matColumnDef="ten_san_pham">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                Tên sản phẩm
+                                Tên chỉ tiêu
                             </th>
                             <td mat-cell *matCellDef="let element" class="fillColor"
                                 [ngClass]="{'highlight': element.tt == '1', 'highlight1': element.tt == null}">
@@ -325,6 +328,8 @@
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index">
                         </tr>
                     </table>
+                    <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
+                    </h5>
                 </div>
                 <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50]" showFirstLastButtons></mat-paginator>
             </mat-expansion-panel>

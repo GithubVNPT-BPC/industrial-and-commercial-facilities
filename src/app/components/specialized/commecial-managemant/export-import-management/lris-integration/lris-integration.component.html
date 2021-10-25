@@ -1,0 +1,211 @@
+<mat-card class="material">
+    <mat-card-content>
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description> </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-label>Báo cáo</mat-label>
+                            <mat-select (selectionChange)="getData()" [(ngModel)]="selectedReport">
+                                <mat-option *ngFor="let item of reportList" [value]="item.id">
+                                    {{ item.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                                (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-12 button-control my-auto">
+                        <button mat-raised-button (click)="getDataFromLris()" class="blue" matTooltip="Gửi dữ liệu">
+                            <mat-icon>cloud_download</mat-icon> Lấy dữ liệu từ KTXH
+                        </button>
+                        <button mat-raised-button (click)="getDataFromSystem()" class="blue" matTooltip="Gửi dữ liệu">
+                            <mat-icon>sync</mat-icon> Lấy dữ liệu từ hệ thống
+                        </button>
+                        <button mat-raised-button (click)="sendData()" class="green" matTooltip="Gửi dữ liệu">
+                            <mat-icon>send</mat-icon> Gửi dữ liệu
+                        </button>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h5>{{ getReportName() }}</h5>
+                    </div>
+                </div>
+
+                <div class="layout">
+                    <table class="table mat-table business-table-layout" id="small-table">
+                        <thead >
+                            <tr class="table-header mat-header-row ng-star-inserted">
+                               <th class="mat-header-cell" rowspan="2" colspan="1" >
+                                  <div class="th-inner " title="">STT</div>
+                                  <div class="fht-cell" style="width: 50px;"></div>
+                               </th>
+                               <th class="mat-header-cell" rowspan="2" colspan="1" >
+                                  <div class="th-inner " title="">Tên chỉ tiêu</div>
+                                  <div class="fht-cell" style="width: 200px;"></div>
+                               </th>
+                               <th class="mat-header-cell" rowspan="2" colspan="1" >
+                                  <div class="th-inner " title="">Đơn vị tính</div>
+                                  <div class="fht-cell" style="width: 70px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="4" >
+                                  <div class="th-inner " title="">Kỳ báo cáo</div>
+                                  <div class="fht-cell"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="2" >
+                                  <div class="th-inner " title="">Cùng kỳ</div>
+                                  <div class="fht-cell"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="4" >
+                                  <div class="th-inner " title="">So sánh</div>
+                                  <div class="fht-cell"></div>
+                               </th>
+                            </tr>
+                            <tr class="table-header mat-header-row ng-star-inserted">
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Thực hiện tháng</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Thực hiện tháng trước</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Luỹ kế</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Kế hoạch năm</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Thực hiện tháng</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Luỹ kế</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Thực hiện tháng so cùng kỳ</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Thực hiện so với kế hoạch</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Luỹ kế so với cùng kỳ</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                               <th class="mat-header-cell"  rowspan="1" colspan="1" >
+                                  <div class="th-inner " title="">Luỹ kế so với kế hoạch</div>
+                                  <div class="fht-cell" style="width: 100px;"></div>
+                               </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="mat-cell">1</td>
+                                <td class="mat-cell"><b>Xuất khẩu</b></td>
+                                <td class="mat-cell">Triệu USD</td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.thuc_hien_thang" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.thuc_hien_thang_truoc" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.luy_ke" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.ke_hoach_nam" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.thuc_hien_thang_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.luy_ke_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.thuc_hien_thang_so_voi_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.thuc_hien_so_voi_ke_hoach" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.luy_ke_so_voi_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="exportRecord.luy_ke_so_voi_ke_hoach" type="text" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="mat-cell">2</td>
+                                <td class="mat-cell"><b>Nhập khẩu</b></td>
+                                <td class="mat-cell">Triệu USD</td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.thuc_hien_thang" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.thuc_hien_thang_truoc" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.luy_ke" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.ke_hoach_nam" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.thuc_hien_thang_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.luy_ke_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.thuc_hien_thang_so_voi_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.thuc_hien_so_voi_ke_hoach" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.luy_ke_so_voi_cung_ky" type="text" />
+                                </td>
+                                <td class="mat-cell">
+                                    <input matInput [(ngModel)]="importRecord.luy_ke_so_voi_ke_hoach" type="text" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </mat-expansion-panel>
+
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

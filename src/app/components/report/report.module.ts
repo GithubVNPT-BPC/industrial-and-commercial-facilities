@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 
 import {FillReportComponent} from '../report/fill-report/fill-detail/fill-detail.component';
@@ -34,6 +34,7 @@ export const customCurrencyMaskConfig = {
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     ReportRoutingModule,
     MaterialModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),

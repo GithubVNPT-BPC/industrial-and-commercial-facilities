@@ -90,7 +90,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4 col-md-3 col-lg-2">
+                    <div class="col-4 col-md-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian</mat-label>
                             <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
@@ -101,13 +101,13 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-8 col-md-9 col-lg-10 button-control my-auto text-right mt-3">
+                    <div class="col-8 col-md-9 col-lg-9 button-control my-auto text-right">
                         <a mat-raised-button download="BLHH.xlsx" title="Excel" href="/assets/ExcelSample/BLHH.xlsx"
-                            [hidden]=authorize class="mr-1">
+                            [hidden]=authorize class="mr-3">
                             <mat-icon>cloud_download</mat-icon> Mẫu BLHH
                         </a>
 
-                        <label id="import_excel" [hidden]=authorize>
+                        <label id="import_excel" class="mr-2" [hidden]=authorize>
                             <mat-icon>cloud_upload</mat-icon> Import BLHH <input id="customFile" type="file"
                                 (change)="uploadExcel($event)" hidden #inputFile>
                         </label>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mt-3">
                     <div class="col-12 col-lg-12">
                         <h5 class="text-center">
                             TỔNG MỨC BÁN LẺ HÀNG HÓA VÀ DỊCH VỤ {{theMonth}}/{{theYear}}
@@ -126,12 +126,9 @@
                     </div>
                 </div>
 
-                <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
-                </h5>
                 <div class="layout" #TABLE *ngIf="dataSource.data.length">
                     <table mat-table [dataSource]="dataSource" matSort class="table-layout"
                         style="min-width: 900px !important;" id="small-table">
-
 
                         <ng-container *ngFor="let item of displayedColumns" matColumnDef="{{item}}">
                             <th mat-header-cell *matHeaderCellDef class="fillColor">
@@ -142,102 +139,15 @@
                             </td>
                         </ng-container>
 
-
-                        <!-- <ng-container matColumnDef="stt">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                TT
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="fillColor"
-                                [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.stt }}
-                            </td>
-                        </ng-container> -->
-
-                        <!-- <ng-container matColumnDef="ten_chi_tieu">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                Loại hình
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="fillColor"
-                                [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.ten_chi_tieu }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="don_vi_tinh">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor">
-                                Đơn vị tính
-                            </th>
-                            <td mat-cell *matCellDef="let element" class="fillColor"
-                                [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.don_vi_tinh }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="thoi_gian_chinh_sua_cuoi">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="3" class="fillColor"> Thời gian
-                                cập nhật </th>
-                            <td mat-cell *matCellDef="let element"> {{element.thoi_gian_chinh_sua_cuoi | date:
-                                'dd/MM/yyyy, h:mm a'}}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="gia_tri_thang">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Thực hiện tháng</th>
-                            <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.tri_gia_thang | formatNumber }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="uoc_th_so_cungky_tht">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                so với tháng {{curentmonth}} cùng kỳ</th>
-                            <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.uoc_thang_so_voi_ki_truoc | formatNumber }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="uoc_th_so_thg_truoc_tht">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                so với tháng trước
-                            </th>
-                            <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.uoc_thang_so_voi_thang_truoc | formatNumber }}
-                            </td>
-                        </ng-container>
-
-
-                        <ng-container matColumnDef="gia_tri_cong_don">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Thực hiện tháng
-                            </th>
-                            <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.tri_gia_cong_don | formatNumber }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="uoc_th_so_cungky_cong_don">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                so với {{curentmonth}} tháng cùng kỳ</th>
-                            <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.uoc_cong_don_so_voi_ki_truoc | formatNumber }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="uoc_th_so_thg_truoc_cong_don">
-                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                so với kế hoạch năm</th>
-                            <td mat-cell *matCellDef="let element" [ngClass]="{'highlight': element.stt == 'A'}">
-                                {{ element.uoc_cong_don_so_voi_cong_don_truoc | formatNumber }}
-                            </td>
-                            <td mat-footer-cell *matFooterCellDef>
-                            </td>
-                        </ng-container> -->
-
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true">
                         </tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns; let i = index">
                         </tr>
                     </table>
                 </div>
+
+                <h3 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI</h3>
+
                 <mat-paginator #paginator [pageSizeOptions]="[100, 200, 300]" showFirstLastButtons></mat-paginator>
             </mat-expansion-panel>
         </mat-accordion>

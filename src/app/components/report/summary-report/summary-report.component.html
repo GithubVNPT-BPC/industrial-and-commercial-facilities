@@ -1,111 +1,94 @@
-<!-- <div class="row">
-    <div class="col-lg-6"> -->
-<!-- <button mat-raised-button (click)="Back()" title="Trở lại">Trở lại</button> -->
-<!-- </div>
-    <div class="col-lg-6" style="text-align: right;">
-        <button mat-raised-button [ngStyle]="{'background-color': 'blue', 'color': 'white'}" (click)="SendReport()" title="Lưu">Lưu</button> &nbsp;
-        <button mat-raised-button [ngStyle]="{'background-color': 'green', 'color': 'white'}" title="Trình lãnh đạo">Trình
-            lãnh đạo</button>
-    </div>
-</div> -->
 <mat-card class="material">
     <mat-card-content>
-        <div class="row">
-            <div class="col-3 col-lg-3">
-                <mat-form-field appearance="outline">
-                    <mat-label>Năm thực hiện</mat-label>
-                    <mat-select (selectionChange)="getSummaryReportData($event.value, currentMonth)" [(ngModel)]="currentYear">
-                        <mat-option *ngFor="let year of yearSelection" [value]="year">{{ year }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-
-            <div class="col-3 col-lg-3">
-                <mat-form-field appearance="outline">
-                    <mat-label>Tháng thực hiện</mat-label>
-                    <mat-select (selectionChange)="getSummaryReportData(currentYear, $event.value)" [(ngModel)]="currentMonth">
-                        <mat-option *ngFor="let month of monthSelection" [value]="month">{{ month }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-
-            <div class="col-lg-6 button-control my-auto text-right button-control">
-                <!-- <button mat-raised-button (click)="GetReportById(this.time_id)"><mat-icon>search</mat-icon>Tra dữ liệu</button>
-                <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401"
-                    (click)="OpenDetail()"><mat-icon>edit</mat-icon>Sửa dữ liệu</button> -->
-                <button mat-raised-button class="green"
-                    (click)="ExportTOExcel('Tổng hợp báo cáo - ' + this.currentMonth + '/' + this.currentYear, this.currentMonth + '/' + this.currentYear)"><mat-icon>file_download</mat-icon>Xuất Excel</button>
-            </div>
-        </div>
-        <hr/>
-        <div class="row">
-            <div class="col-12">
-                <mat-card-header>
-                    <mat-card-title>
-                        <h2 > <strong>Tổng hợp báo cáo</strong></h2>
-                        <h4> Kỳ báo cáo: <strong> Tháng {{ currentMonth }} năm {{ currentYear }}</strong></h4>
-                    </mat-card-title>
-                </mat-card-header>
-            </div>
-        </div>
+        <mat-panel-title>
+            <mat-icon> show_chart</mat-icon>
+            &nbsp;
+            <strong>TỔNG HỢP BÁO CÁO</strong>
+        </mat-panel-title>
         <hr />
-        <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
-            <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
-                <ng-container matColumnDef="index">
-                    <th mat-header-cell *matHeaderCellDef> STT </th>
-                    <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
-                        {{this.filteredDataSource.paginator.pageIndex == 0 ? i
-                        + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
-                        this.filteredDataSource.paginator.pageSize}}
-                    </td>
-                </ng-container>
 
-                <div *ngFor="let field of displayedFields | keyvalue">
-                    <ng-container matColumnDef="{{field.key}}"
-                        [sticky]="['ten_chi_tieu'].includes(field.key) ? true : null">
-                        <th mat-header-cell *matHeaderCellDef> {{field.value}} </th>
-                        <ng-container *ngIf="field.key != 'tinh_trang_hoat_dong';else activeFieldCond">
-                            <ng-container *ngIf="!['thuc_hien_cung_ki_nam_truoc', 'thuc_hien_ki_truoc', 'thuc_hien_thang', 'so_sanh_thuc_hien_voi_ki_truoc', 'thuc_hien_thang_12_nam_truoc'].includes(field.key);else qtyFieldCond">
-                                <ng-container *ngIf="!['ma_chi_tieu'].includes(field.key) ;else codeCond">
-                                    <ng-container *ngIf="!['ten_chi_tieu'].includes(field.key) ;else highlightCond">
-                                        <td mat-cell *matCellDef="let element"> {{element[field.key]}}</td>
-                                    </ng-container>
-                                    
-                                </ng-container>
-                            </ng-container>
-                        </ng-container>
+        <div class="row">
+            <div class="col-12 col-md-3 col-lg-3">
+                <mat-form-field appearance="outline">
+                    <mat-label>Kỳ dữ liệu</mat-label>
+                    <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                    <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                    <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                        (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                    </mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
 
-                        <ng-template #activeFieldCond>
-                            <td mat-cell *matCellDef="let element"> {{element[field.key] == 1? 'Hoạt động' :
-                                'Hết hạn'}}</td>
-                        </ng-template>
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12 button-control my-auto">
 
-                        <ng-template #qtyFieldCond>
-                            <td mat-cell *matCellDef="let element" style="max-width: 30px;"> <b>{{element[field.key]}}</b></td>
-                        </ng-template>
+            </div>
+        </div>
 
-                        <ng-template #highlightCond>
-                            <td mat-cell *matCellDef="let element" style="max-width: 150px;"> <strong>{{element[field.key] }}</strong>
-                            </td>
-                        </ng-template>
+        <hr />
+        <div class="row p-2">
+            <div class="col-12 text-center">
+                <h5>Tổng hợp báo cáo</h5>
+            </div>
+        </div>
 
-                        <ng-template #codeCond>
-                            <td mat-cell *matCellDef="let element" style="max-width: 50px;"> {{element[field.key] }}
-                            </td>
-                        </ng-template>
+        <div class="layout">
+            <table class="table mat-table business-table-layout" id="small-table">
+                <thead>
+                    <tr class="table-header mat-header-row ng-star-inserted">
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">#</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Tên chỉ tiêu</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Đơn vị tính</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Thực hiện cùng kỳ</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Thực hiện tháng trước</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Thực hiện tháng</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Thực hiện so với tháng trước</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Thực hiện so cùng kỳ</div>
+                            <div class="fht-cell" style="width: 50px;"></div>
+                        </th>
+                    </tr>
+                </thead>
 
-                    </ng-container>
-                </div>
+                <tbody>
+                    <tr *ngFor="let item of displayedDatas; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td><strong>{{ item.ten_chi_tieu }}</strong></td>
+                        <td>{{ item.don_vi_tinh }}</td>
+                        <td>{{ item.thuc_hien_cung_ky }}</td>
+                        <td>{{ item.thuc_hien_ky_truoc }}</td>
+                        <td>{{ item.thuc_hien_thang }}</td>
+                        <td>{{ item.so_sanh_ky_truoc }}</td>
+                        <td>{{ item.so_sanh_cung_ky }}</td>
+                    </tr>
 
-                <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+                </tbody>
+
+                <!-- <h5 *ngIf="!displayedDatas.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU</h5> -->
+
             </table>
         </div>
-        <mat-paginator [pageSizeOptions]="[30, 50, 100]" showFirstLastButtons></mat-paginator>
-        <ng-template #ShowEmpty>
-            <h3 class="text-center">Không có dữ liệu</h3>
-        </ng-template>
     </mat-card-content>
 </mat-card>
