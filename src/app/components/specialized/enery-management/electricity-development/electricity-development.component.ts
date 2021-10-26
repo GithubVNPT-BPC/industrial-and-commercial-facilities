@@ -16,8 +16,8 @@ import { BaseComponent } from '../../base.component';
 export class ElectricDevelopmentManagementComponent extends BaseComponent {
   DB_TABLE = 'QLNL_35KTROXUONG';
   //Constant variable
-  public readonly displayedColumns: string[] = ['select', 'index', 'ten_huyen_thi', 'thoi_gian_chinh_sua_cuoi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap'];
-  public readonly dsplayMergeColumns: string[] = ['indexM', 'ten_huyen_thiM', 'trung_apM', 'ha_apM', 'bien_apM'];
+  public readonly displayedColumns: string[] = ['select', 'index', 'ten_huyen_thi', 'trung_ap_3p', 'trung_ap_1p', 'ha_ap_3p', 'ha_ap_1p', 'so_tram_bien_ap', 'cong_xuat_bien_ap', 'thoi_gian_chinh_sua_cuoi'];
+  public readonly dsplayMergeColumns: string[] = ['indexM', 'ten_huyen_thiM', 'trung_apM', 'ha_apM', 'bien_apM', 'thoi_gian'];
   //TS & HTML Variable
   public dataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();
   public filteredDataSource: MatTableDataSource<ElectricityDevelopment35KVModel> = new MatTableDataSource<ElectricityDevelopment35KVModel>();

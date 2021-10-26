@@ -93,7 +93,7 @@
                 <hr />
 
                 <div class="layout" #TABLE>
-                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear class="text-center">
                                 <mat-checkbox (change)="$event ? masterToggle() : null"

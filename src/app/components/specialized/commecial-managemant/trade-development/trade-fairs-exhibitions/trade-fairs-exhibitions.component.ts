@@ -65,7 +65,7 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
     thoi_gian_ket_thuc: "Thời gian kết thúc",
     dia_diem_to_chuc: "Địa điểm tổ chức",
     so_luong_gian_hang: "Số lượng gian hàng",
-    san_pham: "Sản phẩm bán tại hội chợ",
+    san_pham: "SP bán tại hội chợ",
     so_van_ban: "Số văn bản",
     co_quan_ban_hanh: "Cơ quan ban hành",
     ngay_thang_nam_van_ban: "Ngày tháng năm",
