@@ -21,7 +21,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{TongGiaTriThangThucHien | formatNumber}} (Triệu USD)
+                                {{ThucHienThang | formatNumber}} (Triệu USD)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -36,7 +36,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{uth_so_cungky | formatNumber}} (%)
+                                {{ThucHienSoVoiCungKy | formatNumber}} (%)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -51,7 +51,7 @@
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{ TongGiaTriCongDon | formatNumber }} (Triệu USD)
+                                {{ LuyKeKyBaoCao | formatNumber }} (Triệu USD)
                             </mat-card-content>
                         </mat-card>
                     </div>
@@ -73,8 +73,8 @@
                 </div>
                 <hr color="red">
                 <div class="container-fluid">
-                    <h5 *ngIf="!chart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN
-                        TẠI</h5>
+                    <h5 *ngIf="!chart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN TẠI
+                    </h5>
                     <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
                 </div>
             </mat-expansion-panel>
@@ -95,15 +95,13 @@
                             <mat-label>Thời gian</mat-label>
                             <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
                             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
-                                (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)" (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
                             </mat-datepicker>
                         </mat-form-field>
                     </div>
 
                     <div class="col-8 col-md-9 col-lg-10 button-control my-auto text-right mt-3">
-                        <a mat-raised-button download="BLHH.xlsx" title="Excel" href="{{href_file}}"
-                            [hidden]=authorize class="mr-1">
+                        <a mat-raised-button download="BLHH.xlsx" title="Excel" href="{{href_file}}" [hidden]=authorize class="mr-1">
                             <mat-icon>cloud_download</mat-icon> Mẫu BLHH
                         </a>
 
@@ -114,6 +112,10 @@
 
                         <button mat-raised-button (click)="ExportTOExcel('BLHH','BLHH')">
                             <mat-icon>cloud_download</mat-icon> Xuất dữ liệu
+                        </button>
+
+                        <button mat-raised-button (click)="DataSynthesize()">
+                            <mat-icon>auto_awesome</mat-icon> Tổng hợp dữ liệu
                         </button>
                     </div>
                 </div>
@@ -127,9 +129,7 @@
                 </div>
 
                 <div class="layout" #TABLE *ngIf="dataSource.data.length">
-                    <table mat-table [dataSource]="dataSource" matSort class="table-layout"
-                        style="min-width: 900px !important;" id="small-table">
-
+                    <table mat-table [dataSource]="dataSource" matSort class="table-layout" style="min-width: 900px !important;" id="small-table">
                         <ng-container *ngFor="let item of displayedColumns" matColumnDef="{{item}}">
                             <th mat-header-cell *matHeaderCellDef class="fillColor">
                                 {{fields[item]}}

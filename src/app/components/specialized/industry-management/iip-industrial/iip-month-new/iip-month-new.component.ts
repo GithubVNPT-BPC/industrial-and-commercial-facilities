@@ -74,6 +74,14 @@ export class IipMonthNewComponent implements OnInit {
   public time: string
   public timechange: number
   public month: string
+
+  public duLieuKyBaoCao: Array<new_model> = [];
+  public duLieuKyTruoc: Array<new_model> = [];
+  public duLieuCungKy: Array<new_model> = [];
+  public duLieuThang6CungKy: Array<new_model> = [];
+  public duLieuThang12CungKy: Array<new_model> = [];
+  public defaultDatasource: Array<new_model> = [];
+
   fields: { stt: string; ten_chi_tieu: string; don_vi_tinh: string; thuc_hien_ky_truoc: string; thuc_hien_cung_ky: string; thuc_hien_thang: string; ke_hoach_nam: string; luy_ke_thang: string; luy_ke_cung_ky: string; so_sanh_ky_truoc: string; so_sanh_cung_ky: string; so_sanh_luy_ke_cung_ky: string; so_sanh_luy_ke_ke_hoach_nam: string; ke_hoach_nam_sau: string; thuc_hien_6_thang_dau_nam_cung_ky: string; uoc_thuc_hien_thang_6: string; uoc_thuc_hien_6_thang: string; so_sanh_uoc_6_thang_cung_ky: string; so_sanh_uoc_6_thang_ke_hoach_nam: string; thuc_hien_nam_truoc: string; uoc_thuc_hien_nam: string; so_sanh_uoc_thuc_hien_nam_cung_ky: string; so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam: string; so_sanh_ke_hoach_nam_sau_thuc_hien_nam: string; };
   public href_file: string = '';
   public chosenYearHandler(normalizedYear: Moment) {
@@ -114,9 +122,9 @@ export class IipMonthNewComponent implements OnInit {
     "stt",
     "ten_chi_tieu",
     "don_vi_tinh",
-    
+
   ];
-  
+
   private _linkOutput: LinkModel = new LinkModel();
 
   dataBusiness: any[] = [];
@@ -169,7 +177,7 @@ export class IipMonthNewComponent implements OnInit {
           const bstr: string = e.target.result;
           const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
 
-          const wsname: string = wb.SheetNames[0];
+          const wsname: string = wb.SheetNames[1];
           const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
           data = XLSX.utils.sheet_to_json(ws);
@@ -207,28 +215,28 @@ export class IipMonthNewComponent implements OnInit {
   mappingData(data) {
     switch (this.theMonth) {
       case 1:
-        return this.excelService.mappingDataSource1(data);
+        return this.excelService.mappingDataSource1(data, this.timechange);
 
       case 2:
       case 3:
       case 4:
-        return this.excelService.mappingDataSource234(data);
+        return this.excelService.mappingDataSource234(data, this.timechange);
 
       case 5:
       case 6:
-        return this.excelService.mappingDataSource56(data);
+        return this.excelService.mappingDataSource56(data, this.timechange);
 
       case 7:
       case 8:
       case 9:
       case 11:
-        return this.excelService.mappingDataSource78911(data);
+        return this.excelService.mappingDataSource78911(data, this.timechange);
 
       case 10:
-        return this.excelService.mappingDataSource10(data);
+        return this.excelService.mappingDataSource10(data, this.timechange);
 
       case 12:
-        return this.excelService.mappingDataSource12(data);
+        return this.excelService.mappingDataSource12(data, this.timechange);
       default:
         break;
     }
@@ -261,6 +269,34 @@ export class IipMonthNewComponent implements OnInit {
   ngOnInit() {
     this.month = this.getCurrentMonth().substring(5, 6)
     this.timechange = parseInt(this.getCurrentMonth())
+
+    this.defaultDatasource.push(
+      new new_model("I", this.timechange, "%", "Chỉ số sản xuất công nghiệp (IIP) so với cùng kỳ theo giá so sánh năm 2010", 165),
+      new new_model("1", this.timechange, "%", "Công nghiệp khai khoáng", 166),
+      new new_model("2", this.timechange, "%", "Công nghiệp chế biến, chế tạo", 167),
+      new new_model("3", this.timechange, "%", "Sản xuất và phân phối điện, khí đốt, nước", 168),
+      new new_model("4", this.timechange, "%", "Cung cấp nước, quản lý và xử lý rác thải, nước thải", 169),
+      new new_model("II", this.timechange, "", "Một số sản phẩm công nghiệp chủ yếu", 170),
+      new new_model("1", this.timechange, "M3", "Đá xây dựng khác", 171),
+      new new_model("2", this.timechange, "Tấn", "Hạt điều nhân", 172),
+      new new_model("3", this.timechange, "1000 m2", "Vải dệt nổi vòng, vải sonin từ sợi nhân tạo", 173),
+      new new_model("4", this.timechange, "Triệu đồng", "Dịch vụ in từ sợi và vải (gồm cả đồ để mặc)", 174),
+      new new_model("5", this.timechange, "Triệu đồng", "Dịch vụ hoàn thiện sản phẩm dệt khác", 175),
+      new new_model("6", this.timechange, "999 cái", "Quần áo các loại", 176),
+      new new_model("7", this.timechange, "1000 đôi", "Giày, dép có đế hoặc mũ bằng da", 177),
+      new new_model("8", this.timechange, "Triệu đồng", "Dịch vụ sản xuất giày, dép", 178),
+      new new_model("9", this.timechange, "M2", "Gỗ cưa, xẻ các loại", 179),
+      new new_model("10", this.timechange, "M3", "Ván ép từ gỗ và các vật liệu tương tự", 180),
+      new new_model("11", this.timechange, "1000 chiếc", "Bao bì và túi bằng giấy nhăn và bìa nhăn", 181),
+      new new_model("12", this.timechange, "Tấn", "Các hợp chất từ cao su tổng hợp và cao su tự nhiên và các loại nhựa tự nhiên tương tự, ở dạng nguyên sinh hoặc tấm lỏ hoặc dải", 182),
+      new new_model("13", this.timechange, "Tấn", "Dịch vụ sản xuất tấm, phiến, ống và các mặt nghiêng bằng plastic", 183),
+      new new_model("14", this.timechange, "Tấn", "Xi măng Portland đen", 184),
+      new new_model("15", this.timechange, "Tấn", "Chì chưa gia công", 185),
+      new new_model("16", this.timechange, "Triệu đồng", "Dịch vụ sản xuất bao bì bằng kim loại", 186),
+      new new_model("17", this.timechange, "Chiếc", "tử, bàn, đồ nội thất bàng gỗ", 187),
+      new new_model("18", this.timechange, "Triệu KWh", "Điện sản xuất", 188)
+    )
+
     this.GetDanhSachCSSXCN(this.timechange);
     this.autoOpen();
     this.sendLinkToNext(true);
@@ -297,15 +333,52 @@ export class IipMonthNewComponent implements OnInit {
   GetDanhSachCSSXCN(time_id: number) {
     this.sctService.GetDanhSachCSSX(time_id).subscribe((result) => {
       result.data[0].forEach(x => {
-        x.san_luong_thang = x.san_luong_thang == 0 ? null : x.san_luong_thang
-        x.tri_gia_thang = x.tri_gia_thang == 0 ? null : x.tri_gia_thang
-        x.uoc_thang_so_voi_ki_truoc = x.uoc_thang_so_voi_ki_truoc == 0 ? null : x.uoc_thang_so_voi_ki_truoc
-        x.uoc_thang_so_voi_thang_truoc = x.uoc_thang_so_voi_thang_truoc == 0 ? null : x.uoc_thang_so_voi_thang_truoc
-        x.san_luong_cong_don = x.san_luong_cong_don == 0 ? null : x.san_luong_cong_don
-        x.tri_gia_cong_don = x.tri_gia_cong_don == 0 ? null : x.tri_gia_cong_don
-        x.uoc_cong_don_so_voi_ki_truoc = x.uoc_cong_don_so_voi_ki_truoc == 0 ? null : x.uoc_cong_don_so_voi_ki_truoc
-        x.uoc_cong_don_so_voi_cong_don_truoc = x.uoc_cong_don_so_voi_cong_don_truoc == 0 ? null : x.uoc_cong_don_so_voi_cong_don_truoc
+        x.ten_chi_tieu = x.ten_chi_tieu == 0 ? null : x.ten_chi_tieu;
+        x.id_chi_tieu = x.id_chi_tieu == 0 ? null : x.id_chi_tieu;
+        x.thuc_hien_ky_truoc = x.thuc_hien_ky_truoc == 0 ? null : x.thuc_hien_ky_truoc;
+        x.thuc_hien_cung_ky = x.thuc_hien_cung_ky == 0 ? null : x.thuc_hien_cung_ky;
+        x.thuc_hien_thang = x.thuc_hien_thang == 0 ? null : x.thuc_hien_thang;
+        x.thuc_hien_6_thang_dau_nam_cung_ky = x.thuc_hien_6_thang_dau_nam_cung_ky == 0 ? null : x.thuc_hien_6_thang_dau_nam_cung_ky;
+        x.thuc_hien_nam_truoc = x.thuc_hien_nam_truoc == 0 ? null : x.thuc_hien_nam_truoc;
+        x.luy_ke_thang = x.luy_ke_thang == 0 ? null : x.luy_ke_thang;
+        x.luy_ke_cung_ky = x.luy_ke_cung_ky == 0 ? null : x.luy_ke_cung_ky;
+        x.ke_hoach_nam = x.ke_hoach_nam == 0 ? null : x.ke_hoach_nam;
+        x.ke_hoach_nam_sau = x.ke_hoach_nam_sau == 0 ? null : x.ke_hoach_nam_sau;
+        x.uoc_thuc_hien_nam = x.uoc_thuc_hien_nam == 0 ? null : x.uoc_thuc_hien_nam;
+        x.uoc_thuc_hien_thang_6 = x.uoc_thuc_hien_thang_6 == 0 ? null : x.uoc_thuc_hien_thang_6;
+        x.uoc_thuc_hien_6_thang = x.uoc_thuc_hien_6_thang == 0 ? null : x.uoc_thuc_hien_6_thang;
+        x.so_sanh_uoc_6_thang_cung_ky = x.so_sanh_uoc_6_thang_cung_ky == 0 ? null : x.so_sanh_uoc_6_thang_cung_ky;
+        x.so_sanh_uoc_6_thang_ke_hoach_nam = x.so_sanh_uoc_6_thang_ke_hoach_nam == 0 ? null : x.so_sanh_uoc_6_thang_ke_hoach_nam;
+        x.so_sanh_ky_truoc = x.so_sanh_ky_truoc == 0 ? null : x.so_sanh_ky_truoc;
+        x.so_sanh_cung_ky = x.so_sanh_cung_ky == 0 ? null : x.so_sanh_cung_ky;
+        x.so_sanh_luy_ke_cung_ky = x.so_sanh_luy_ke_cung_ky == 0 ? null : x.so_sanh_luy_ke_cung_ky;
+        x.so_sanh_luy_ke_ke_hoach_nam = x.so_sanh_luy_ke_ke_hoach_nam == 0 ? null : x.so_sanh_luy_ke_ke_hoach_nam;
+        x.so_sanh_uoc_thuc_hien_nam_cung_ky = x.so_sanh_uoc_thuc_hien_nam_cung_ky == 0 ? null : x.so_sanh_uoc_thuc_hien_nam_cung_ky;
+        x.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam = x.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam == 0 ? null : x.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam;
+        x.so_sanh_ke_hoach_nam_sau_thuc_hien_nam = x.so_sanh_ke_hoach_nam_sau_thuc_hien_nam == 0 ? null : x.so_sanh_ke_hoach_nam_sau_thuc_hien_nam;
+        x.time_id = x.time_id == 0 ? null : x.time_id;
+        x.thoi_gian_chinh_sua_cuoi = x.thoi_gian_chinh_sua_cuoi == 0 ? null : x.thoi_gian_chinh_sua_cuoi;
+        x.don_vi_tinh = x.don_vi_tinh == 0 ? null : x.don_vi_tinh;
+        x.stt = x.stt == 0 ? null : x.stt;
       });
+
+      this.duLieuKyBaoCao = result.data[0].filter(x => x.time_id == time_id);
+
+      if (this.duLieuKyBaoCao.length == 0)
+        this.duLieuKyBaoCao = this.defaultDatasource;
+
+      let time_id_ky_truoc = time_id % 100 == 1 ? (time_id / 100 - 1) * 100 + 12 : time_id - 1;
+      this.duLieuKyTruoc = result.data[0].filter(x => x.time_id == time_id_ky_truoc);
+
+      let time_id_cung_ky = time_id - 100;
+      this.duLieuCungKy = result.data[0].filter(x => x.time_id == time_id_cung_ky);
+
+      let time_id_thang_6_cung_ky = (time_id / 100 - 1) * 100 + 6;
+      this.duLieuThang6CungKy = result.data[0].filter(x => x.time_id == time_id_thang_6_cung_ky);
+
+      let time_id_thang_12_cung_ky = (time_id / 100 - 1) * 100 + 12;
+      this.duLieuThang12CungKy = result.data[0].filter(x => x.time_id == time_id_thang_12_cung_ky);
+
 
       this.setDataExport(result.data[0]);
       this.setSumaryData(result.data[0] ? result.data[0] : 0)
@@ -402,4 +475,55 @@ export class IipMonthNewComponent implements OnInit {
       })
   }
 
+  DataSynthesize() {
+    this.duLieuKyBaoCao.forEach(row => {
+      if (this.duLieuKyTruoc.length != 0) {
+        let rowToCopy = this.duLieuKyTruoc.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_ky_truoc = rowToCopy.thuc_hien_thang;
+
+        if (rowToCopy.luy_ke_thang)
+          row.luy_ke_thang = row.thuc_hien_thang + rowToCopy.luy_ke_thang;
+        else
+          row.luy_ke_thang = row.thuc_hien_thang;
+      }
+
+      if (this.duLieuCungKy.length != 0) {
+        let rowToCopy = this.duLieuCungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_cung_ky = rowToCopy.thuc_hien_thang;
+        row.luy_ke_cung_ky = row.luy_ke_cung_ky;
+      }
+
+      if (this.duLieuThang6CungKy.length != 0) {
+        let rowToCopy = this.duLieuThang6CungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_6_thang_dau_nam_cung_ky = rowToCopy.luy_ke_thang;
+      }
+
+      if (this.duLieuThang12CungKy.length != 0) {
+        let rowToCopy = this.duLieuThang12CungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_nam_truoc = rowToCopy.luy_ke_thang;
+        row.ke_hoach_nam = rowToCopy.ke_hoach_nam_sau;
+      }
+
+      row.so_sanh_ky_truoc = this.CalculateDivision(row.thuc_hien_thang, row.thuc_hien_ky_truoc);
+      row.so_sanh_cung_ky = this.CalculateDivision(row.thuc_hien_thang, row.thuc_hien_cung_ky);
+      row.so_sanh_luy_ke_cung_ky = this.CalculateDivision(row.luy_ke_thang, row.luy_ke_cung_ky);
+      row.so_sanh_luy_ke_ke_hoach_nam = this.CalculateDivision(row.luy_ke_thang, row.ke_hoach_nam);
+      row.so_sanh_uoc_6_thang_cung_ky = this.CalculateDivision(row.uoc_thuc_hien_6_thang, row.thuc_hien_6_thang_dau_nam_cung_ky);
+      row.so_sanh_uoc_6_thang_ke_hoach_nam = this.CalculateDivision(row.uoc_thuc_hien_6_thang, row.ke_hoach_nam);
+      row.so_sanh_uoc_thuc_hien_nam_cung_ky = this.CalculateDivision(row.uoc_thuc_hien_nam, row.thuc_hien_nam_truoc);
+      row.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam = this.CalculateDivision(row.ke_hoach_nam_sau, row.uoc_thuc_hien_nam);
+      row.so_sanh_ke_hoach_nam_sau_thuc_hien_nam = this.CalculateDivision(row.ke_hoach_nam_sau, row.luy_ke_thang);
+    });
+  }
+
+  CalculateDivision(devidend: number, devisor: number) {
+    if (!devidend || !devisor || devisor == 0)
+      return null;
+    else
+      return Math.round(devidend / devisor * 100) / 100;
+  }
 }

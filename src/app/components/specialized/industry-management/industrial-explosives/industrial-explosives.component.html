@@ -173,7 +173,7 @@
 
                 <hr>
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
-                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table3">
+                    <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table1">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear [attr.rowspan]="2">
                                 <mat-checkbox (change)="$event ? masterToggle() : null"

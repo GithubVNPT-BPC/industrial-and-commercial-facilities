@@ -146,7 +146,7 @@
 
                 <div class="layout" *ngIf="filteredDataSource.data.length; else ShowEmpty" #TABLE>
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout"
-                        id="{{displayedColumns.length == 7 ? 'small-table1': 'small-table2'}}">
+                        id="{{displayedColumns.length == 7 ? 'small-table1': 'small-table'}}">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
                                 <mat-checkbox (change)="$event ? masterToggle() : null"
