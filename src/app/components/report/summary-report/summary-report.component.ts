@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { LinkModel } from "src/app/_models/link.model";
 import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
 import { InformationService } from 'src/app/shared/information/information.service';
 
@@ -77,8 +76,10 @@ export class SummaryReportComponent implements OnInit {
     // id_chi_tieu == 190: Tổng mức bán lẻ hàng hóa
     this.sctService.GetDanhSachBLHH(time_id).subscribe((result) => {
       if (result && result.data[0] && result.data[0].length) {
-        let fileredIndicators = result.data[0].filter(x => [189, 190].includes(x.id_chi_tieu));
-        
+        let fileredIndicators = result.data[0].filter(x => [189, 190].includes(x.id_chi_tieu) && x.time_id == time_id);
+        for (let ind of fileredIndicators) {
+          ind['bao_cao'] = 'Tổng mức bán lẻ hàng hoá';
+        }
         this.displayedDatas = [...this.displayedDatas, ...fileredIndicators];
       } 
     });
@@ -112,5 +113,19 @@ export class SummaryReportComponent implements OnInit {
 
     this.month = this.time.substring(5, 6);
     
+  }
+
+  transform(value: any): string {
+    if(typeof value === 'number'){
+        value = value.toString();
+    }
+    if(value && value.trim() != "-"){
+        value = value.toString().replace(',', '').replace(',', '').replace(',', '');
+        return new Intl.NumberFormat('vi-VN', {
+            minimumFractionDigits: 0
+        }).format(Number(value));
+    } else{
+        return "-";
+    }
   }
 }

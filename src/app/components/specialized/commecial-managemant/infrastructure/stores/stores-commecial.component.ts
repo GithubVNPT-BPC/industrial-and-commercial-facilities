@@ -94,8 +94,8 @@ export class StoreManagementComponent extends BaseComponent {
           results => {
             if (results && results.data && results.data[0].length) {
               self.mstOptions = results.data[0];
-              self.giayCndkkdList = results.data[2];
-              self.giayAtvstpList = results.data[2];
+              self.giayCndkkdList = results.data[2].filter(x => [1,2].includes(x.id_loai_giay_phep));
+              self.giayAtvstpList = results.data[2].filter(x => x.id_loai_giay_phep == 4);
             }
           },
           error => this.errorMessage = <any>error

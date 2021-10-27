@@ -225,7 +225,7 @@ export class IipMonthNewComponent implements OnInit {
         return this.excelService.mappingDataSource78911(data);
 
       case 10:
-        return this.excelService.mappingDataSource78911(data);
+        return this.excelService.mappingDataSource10(data);
 
       case 12:
         return this.excelService.mappingDataSource12(data);

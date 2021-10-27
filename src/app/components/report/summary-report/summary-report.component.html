@@ -34,7 +34,7 @@
         </div>
 
         <div class="layout">
-            <table class="table mat-table business-table-layout" id="small-table">
+            <table class="table mat-table table-layout table-bordered" id="small-table">
                 <thead>
                     <tr class="table-header mat-header-row ng-star-inserted">
                         <th class="mat-header-cell">
@@ -69,24 +69,33 @@
                             <div class="th-inner " title="">Thực hiện so cùng kỳ</div>
                             <div class="fht-cell" style="width: 50px;"></div>
                         </th>
+                        <th class="mat-header-cell">
+                            <div class="th-inner " title="">Báo cáo</div>
+                            <div class="fht-cell" style="width: 10px;"></div>
+                        </th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr *ngFor="let item of displayedDatas; let i = index">
-                        <td>{{ i + 1 }}</td>
+                        <td class="text-center">{{ i + 1 }}</td>
                         <td><strong>{{ item.ten_chi_tieu }}</strong></td>
                         <td>{{ item.don_vi_tinh }}</td>
-                        <td>{{ item.thuc_hien_cung_ky }}</td>
-                        <td>{{ item.thuc_hien_ky_truoc }}</td>
-                        <td>{{ item.thuc_hien_thang }}</td>
-                        <td>{{ item.so_sanh_ky_truoc }}</td>
-                        <td>{{ item.so_sanh_cung_ky }}</td>
+                        <td>{{ transform(item.thuc_hien_cung_ky) }}</td>
+                        <td>{{ transform(item.thuc_hien_ky_truoc) }}</td>
+                        <td>{{ transform(item.thuc_hien_thang) }}</td>
+                        <td>{{ transform(item.so_sanh_ky_truoc) }}</td>
+                        <td>{{ transform(item.so_sanh_cung_ky) }}</td>
+                        <td>{{ item.bao_cao }}</td>
                     </tr>
-
+                    <tr *ngIf="!displayedDatas.length">
+                        <td class="text-center" colspan="9" >
+                            <h5  class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU</h5>
+                        </td>
+                        
+                    </tr>
                 </tbody>
 
-                <!-- <h5 *ngIf="!displayedDatas.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU</h5> -->
 
             </table>
         </div>
