@@ -177,7 +177,7 @@ export class IipMonthNewComponent implements OnInit {
           const bstr: string = e.target.result;
           const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
 
-          const wsname: string = wb.SheetNames[0];
+          const wsname: string = wb.SheetNames[1];
           const ws: XLSX.WorkSheet = wb.Sheets[wsname];
 
           data = XLSX.utils.sheet_to_json(ws);
