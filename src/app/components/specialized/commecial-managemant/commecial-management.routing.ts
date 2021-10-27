@@ -245,14 +245,14 @@ const routes: Routes = [
       }
     ]
   },
-  // {
-  //   path: 'retail',
-  //   component: RetailMonthNewComponent,
-  // },
   {
     path: 'retail',
-    component: RetailComponent,
+    component: RetailMonthNewComponent,
   },
+  // {
+  //   path: 'retail',
+  //   component: RetailComponent,
+  // },
   {
     path: 'retail/retail-detail',
     component: RetailMonthNewComponent

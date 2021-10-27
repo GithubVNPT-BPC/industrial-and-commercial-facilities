@@ -30,6 +30,7 @@ import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { formatDate } from '@angular/common';
+import { ElementSchemaRegistry } from "@angular/compiler";
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -77,6 +78,13 @@ export class RetailMonthNewComponent implements OnInit {
   public timechange: number
   public month: string
 
+  public duLieuKyBaoCao: Array<new_model> = [];
+  public duLieuKyTruoc: Array<new_model> = [];
+  public duLieuCungKy: Array<new_model> = [];
+  public duLieuThang6CungKy: Array<new_model> = [];
+  public duLieuThang12CungKy: Array<new_model> = [];
+  public defaultDatasource: Array<new_model> = [];
+
   public chosenYearHandler(normalizedYear: Moment) {
     this.date = this.newdate
     const ctrlValue = this.date.value;
@@ -101,7 +109,7 @@ export class RetailMonthNewComponent implements OnInit {
     this.time = this.theYear.toString() + this.stringmonth
     this.timechange = parseInt(this.time)
 
-    this.GetDanhSachBLHH(this.timechange)
+    this.GetDanhSachBLHH(this.timechange);
     this.lineChart.config.data.datasets = []
     this.lineChartMethod(this.theYear);
 
@@ -147,6 +155,7 @@ export class RetailMonthNewComponent implements OnInit {
   dataSheet = new Subject();
   @ViewChild('inputFile', { static: true }) inputFile: ElementRef;
   isExcelFile: boolean;
+
   uploadExcel(evt: any) {
     let isExcelFile: boolean;
     let spinnerEnabled = false;
@@ -204,37 +213,38 @@ export class RetailMonthNewComponent implements OnInit {
     }
   }
 
-  mappingData(data){
+  mappingData(data) {
     switch (this.theMonth) {
       case 1:
-        return this.excelService.mappingDataSource1(data);
+        return this.excelService.mappingDataSource1(data, this.timechange);
 
       case 2:
       case 3:
       case 4:
-        return this.excelService.mappingDataSource234(data);
+        return this.excelService.mappingDataSource234(data, this.timechange);
 
       case 5:
       case 6:
-        return this.excelService.mappingDataSource56(data);
+        return this.excelService.mappingDataSource56(data, this.timechange);
 
       case 7:
       case 8:
       case 9:
       case 11:
-        return this.excelService.mappingDataSource78911(data);
+        return this.excelService.mappingDataSource78911(data, this.timechange);
 
       case 10:
-        return this.excelService.mappingDataSource78911(data);
+        return this.excelService.mappingDataSource10(data, this.timechange);
 
       case 12:
-        return this.excelService.mappingDataSource12(data);
+        return this.excelService.mappingDataSource12(data, this.timechange);
       default:
         break;
     }
   }
 
   public save(month: number, prototype: Array<new_model>) {
+    this.dataSource = new MatTableDataSource<new_model>(prototype);
     this.sctService.CapNhatDuLieuBLHHThang(month, prototype).subscribe(
       next => {
         if (next.id == -1) {
@@ -261,6 +271,13 @@ export class RetailMonthNewComponent implements OnInit {
   ngOnInit() {
     this.month = this.getCurrentMonth().substring(5, 6)
     this.timechange = parseInt(this.getCurrentMonth())
+
+    this.defaultDatasource.push(
+      new new_model("A", this.timechange, "Triệu đồng", "TỔNG MỨC BLHH VÀ DTDVTD", 189),
+      new new_model("I", this.timechange, "Triệu đồng", "Tổng mức bán lẻ hàng hóa", 190),
+      new new_model("II", this.timechange, "Triệu đồng", "Doanh thu hoạt động dịch vụ (trừ lưu trú, ăn uống, dịch vụ lữ hành)", 191),
+      new new_model("III", this.timechange, "Triệu đồng", "Doanh thu DV ăn uống, lưu trú, du lịch lữ hành", 192)
+    )
     this.GetDanhSachBLHH(this.timechange);
     this.autoOpen();
     this.sendLinkToNext(true);
@@ -268,7 +285,7 @@ export class RetailMonthNewComponent implements OnInit {
       this.authorize = false
     }
 
-    this.displayedColumns = this.excelService.initialdisplayedColumns(new Date().getMonth()+1);
+    this.displayedColumns = this.excelService.initialdisplayedColumns(new Date().getMonth() + 1);
     this.fields = this.excelService.fields;
     this.href_file = this.excelService.getHref();
   }
@@ -297,31 +314,75 @@ export class RetailMonthNewComponent implements OnInit {
   GetDanhSachBLHH(time_id: number) {
     this.sctService.GetDanhSachBLHH(time_id).subscribe((result) => {
       result.data[0].forEach(x => {
-        x.san_luong_thang = x.san_luong_thang == 0 ? null : x.san_luong_thang
-        x.tri_gia_thang = x.tri_gia_thang == 0 ? null : x.tri_gia_thang
-        x.uoc_thang_so_voi_ki_truoc = x.uoc_thang_so_voi_ki_truoc == 0 ? null : x.uoc_thang_so_voi_ki_truoc
-        x.uoc_thang_so_voi_thang_truoc = x.uoc_thang_so_voi_thang_truoc == 0 ? null : x.uoc_thang_so_voi_thang_truoc
-        x.san_luong_cong_don = x.san_luong_cong_don == 0 ? null : x.san_luong_cong_don
-        x.tri_gia_cong_don = x.tri_gia_cong_don == 0 ? null : x.tri_gia_cong_don
-        x.uoc_cong_don_so_voi_ki_truoc = x.uoc_cong_don_so_voi_ki_truoc == 0 ? null : x.uoc_cong_don_so_voi_ki_truoc
-        x.uoc_cong_don_so_voi_cong_don_truoc = x.uoc_cong_don_so_voi_cong_don_truoc == 0 ? null : x.uoc_cong_don_so_voi_cong_don_truoc
+        // x.san_luong_thang = x.san_luong_thang == 0 ? null : x.san_luong_thang
+        // x.tri_gia_thang = x.tri_gia_thang == 0 ? null : x.tri_gia_thang
+        // x.uoc_thang_so_voi_ki_truoc = x.uoc_thang_so_voi_ki_truoc == 0 ? null : x.uoc_thang_so_voi_ki_truoc
+        // x.uoc_thang_so_voi_thang_truoc = x.uoc_thang_so_voi_thang_truoc == 0 ? null : x.uoc_thang_so_voi_thang_truoc
+        // x.san_luong_cong_don = x.san_luong_cong_don == 0 ? null : x.san_luong_cong_don
+        // x.tri_gia_cong_don = x.tri_gia_cong_don == 0 ? null : x.tri_gia_cong_don
+        // x.uoc_cong_don_so_voi_ki_truoc = x.uoc_cong_don_so_voi_ki_truoc == 0 ? null : x.uoc_cong_don_so_voi_ki_truoc
+        // x.uoc_cong_don_so_voi_cong_don_truoc = x.uoc_cong_don_so_voi_cong_don_truoc == 0 ? null : x.uoc_cong_don_so_voi_cong_don_truoc
+        x.ten_chi_tieu = x.ten_chi_tieu == 0 ? null : x.ten_chi_tieu;
+        x.id_chi_tieu = x.id_chi_tieu == 0 ? null : x.id_chi_tieu;
+        x.thuc_hien_ky_truoc = x.thuc_hien_ky_truoc == 0 ? null : x.thuc_hien_ky_truoc;
+        x.thuc_hien_cung_ky = x.thuc_hien_cung_ky == 0 ? null : x.thuc_hien_cung_ky;
+        x.thuc_hien_thang = x.thuc_hien_thang == 0 ? null : x.thuc_hien_thang;
+        x.thuc_hien_6_thang_dau_nam_cung_ky = x.thuc_hien_6_thang_dau_nam_cung_ky == 0 ? null : x.thuc_hien_6_thang_dau_nam_cung_ky;
+        x.thuc_hien_nam_truoc = x.thuc_hien_nam_truoc == 0 ? null : x.thuc_hien_nam_truoc;
+        x.luy_ke_thang = x.luy_ke_thang == 0 ? null : x.luy_ke_thang;
+        x.luy_ke_cung_ky = x.luy_ke_cung_ky == 0 ? null : x.luy_ke_cung_ky;
+        x.ke_hoach_nam = x.ke_hoach_nam == 0 ? null : x.ke_hoach_nam;
+        x.ke_hoach_nam_sau = x.ke_hoach_nam_sau == 0 ? null : x.ke_hoach_nam_sau;
+        x.uoc_thuc_hien_nam = x.uoc_thuc_hien_nam == 0 ? null : x.uoc_thuc_hien_nam;
+        x.uoc_thuc_hien_thang_6 = x.uoc_thuc_hien_thang_6 == 0 ? null : x.uoc_thuc_hien_thang_6;
+        x.uoc_thuc_hien_6_thang = x.uoc_thuc_hien_6_thang == 0 ? null : x.uoc_thuc_hien_6_thang;
+        x.so_sanh_uoc_6_thang_cung_ky = x.so_sanh_uoc_6_thang_cung_ky == 0 ? null : x.so_sanh_uoc_6_thang_cung_ky;
+        x.so_sanh_uoc_6_thang_ke_hoach_nam = x.so_sanh_uoc_6_thang_ke_hoach_nam == 0 ? null : x.so_sanh_uoc_6_thang_ke_hoach_nam;
+        x.so_sanh_ky_truoc = x.so_sanh_ky_truoc == 0 ? null : x.so_sanh_ky_truoc;
+        x.so_sanh_cung_ky = x.so_sanh_cung_ky == 0 ? null : x.so_sanh_cung_ky;
+        x.so_sanh_luy_ke_cung_ky = x.so_sanh_luy_ke_cung_ky == 0 ? null : x.so_sanh_luy_ke_cung_ky;
+        x.so_sanh_luy_ke_ke_hoach_nam = x.so_sanh_luy_ke_ke_hoach_nam == 0 ? null : x.so_sanh_luy_ke_ke_hoach_nam;
+        x.so_sanh_uoc_thuc_hien_nam_cung_ky = x.so_sanh_uoc_thuc_hien_nam_cung_ky == 0 ? null : x.so_sanh_uoc_thuc_hien_nam_cung_ky;
+        x.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam = x.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam == 0 ? null : x.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam;
+        x.so_sanh_ke_hoach_nam_sau_thuc_hien_nam = x.so_sanh_ke_hoach_nam_sau_thuc_hien_nam == 0 ? null : x.so_sanh_ke_hoach_nam_sau_thuc_hien_nam;
+        x.time_id = x.time_id == 0 ? null : x.time_id;
+        x.thoi_gian_chinh_sua_cuoi = x.thoi_gian_chinh_sua_cuoi == 0 ? null : x.thoi_gian_chinh_sua_cuoi;
+        x.don_vi_tinh = x.don_vi_tinh == 0 ? null : x.don_vi_tinh;
+        x.stt = x.stt == 0 ? null : x.stt;
       });
 
-      this.setDataExport(result.data[0]);
-      this.setSumaryData(result.data[0] ? result.data[0] : 0);
+      this.duLieuKyBaoCao = result.data[0].filter(x => x.time_id == time_id);
+
+      if (this.duLieuKyBaoCao.length == 0)
+        this.duLieuKyBaoCao = this.defaultDatasource;
+
+      let time_id_ky_truoc = time_id % 100 == 1 ? (time_id / 100 - 1) * 100 + 12 : time_id - 1;
+      this.duLieuKyTruoc = result.data[0].filter(x => x.time_id == time_id_ky_truoc);
+
+      let time_id_cung_ky = time_id - 100;
+      this.duLieuCungKy = result.data[0].filter(x => x.time_id == time_id_cung_ky);
+
+      let time_id_thang_6_cung_ky = (time_id / 100 - 1) * 100 + 6;
+      this.duLieuThang6CungKy = result.data[0].filter(x => x.time_id == time_id_thang_6_cung_ky);
+
+      let time_id_thang_12_cung_ky = (time_id / 100 - 1) * 100 + 12;
+      this.duLieuThang12CungKy = result.data[0].filter(x => x.time_id == time_id_thang_12_cung_ky);
+
+      this.setDataExport(this.duLieuKyBaoCao);
+      this.setSumaryData(this.duLieuKyBaoCao ? this.duLieuKyBaoCao : 0);
     });
   }
 
-  TongGiaTriThangThucHien: number = 0;
-  uth_so_cungky: number = 0;
-  TongGiaTriCongDon: number = 0;
-  uth_so_khn: number = 0;
+  ThucHienThang: number = 0;
+  ThucHienSoVoiCungKy: number = 0;
+  LuyKeKyBaoCao: number = 0;
+  LuyKeSoVoiKeHoachNam: number = 0;
 
   setSumaryData(data) {
-    this.TongGiaTriThangThucHien = data != 0 ? data[0].tri_gia_thang : 0;
-    this.uth_so_cungky = data != 0 ? data[0].uoc_thang_so_voi_ki_truoc : 0;
-    this.TongGiaTriCongDon = data != 0 ? data[0].tri_gia_cong_don : 0;
-    this.uth_so_khn = data != 0 ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
+    this.ThucHienThang = data != 0 ? data[0].thuc_hien_thang : 0;
+    this.ThucHienSoVoiCungKy = data != 0 ? data[0].so_sanh_cung_ky : 0;
+    this.LuyKeKyBaoCao = data != 0 ? data[0].luy_ke_thang : 0;
+    this.LuyKeSoVoiKeHoachNam = data != 0 ? data[0].so_sanh_luy_ke_ke_hoach_nam : 0;
   }
 
   setDataExport(data) {
@@ -337,10 +398,10 @@ export class RetailMonthNewComponent implements OnInit {
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
-    if(this.table){
+    if (this.table) {
       this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    }else{
-      
+    } else {
+
     }
   }
 
@@ -404,4 +465,55 @@ export class RetailMonthNewComponent implements OnInit {
       })
   }
 
+  DataSynthesize() {
+    this.duLieuKyBaoCao.forEach(row => {
+      if (this.duLieuKyTruoc.length != 0) {
+        let rowToCopy = this.duLieuKyTruoc.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_ky_truoc = rowToCopy.thuc_hien_thang;
+
+        if (rowToCopy.luy_ke_thang)
+          row.luy_ke_thang = row.thuc_hien_thang + rowToCopy.luy_ke_thang;
+        else
+          row.luy_ke_thang = row.thuc_hien_thang;
+      }
+
+      if (this.duLieuCungKy.length != 0) {
+        let rowToCopy = this.duLieuCungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_cung_ky = rowToCopy.thuc_hien_thang;
+        row.luy_ke_cung_ky = row.luy_ke_cung_ky;
+      }
+
+      if (this.duLieuThang6CungKy.length != 0) {
+        let rowToCopy = this.duLieuThang6CungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_6_thang_dau_nam_cung_ky = rowToCopy.luy_ke_thang;
+      }
+
+      if (this.duLieuThang12CungKy.length != 0) {
+        let rowToCopy = this.duLieuThang12CungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
+
+        row.thuc_hien_nam_truoc = rowToCopy.luy_ke_thang;
+        row.ke_hoach_nam = rowToCopy.ke_hoach_nam_sau;
+      }
+
+      row.so_sanh_ky_truoc = this.CalculateDivision(row.thuc_hien_thang, row.thuc_hien_ky_truoc);
+      row.so_sanh_cung_ky = this.CalculateDivision(row.thuc_hien_thang, row.thuc_hien_cung_ky);
+      row.so_sanh_luy_ke_cung_ky = this.CalculateDivision(row.luy_ke_thang, row.luy_ke_cung_ky);
+      row.so_sanh_luy_ke_ke_hoach_nam = this.CalculateDivision(row.luy_ke_thang, row.ke_hoach_nam);
+      row.so_sanh_uoc_6_thang_cung_ky = this.CalculateDivision(row.uoc_thuc_hien_6_thang, row.thuc_hien_6_thang_dau_nam_cung_ky);
+      row.so_sanh_uoc_6_thang_ke_hoach_nam = this.CalculateDivision(row.uoc_thuc_hien_6_thang, row.ke_hoach_nam);
+      row.so_sanh_uoc_thuc_hien_nam_cung_ky = this.CalculateDivision(row.uoc_thuc_hien_nam, row.thuc_hien_nam_truoc);
+      row.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam = this.CalculateDivision(row.ke_hoach_nam_sau, row.uoc_thuc_hien_nam);
+      row.so_sanh_ke_hoach_nam_sau_thuc_hien_nam = this.CalculateDivision(row.ke_hoach_nam_sau, row.luy_ke_thang);
+    });
+  }
+
+  CalculateDivision(devidend: number, devisor: number) {
+    if (!devidend || !devisor || devisor == 0)
+      return null;
+    else
+      return Math.round(devidend / devisor * 100) / 100;
+  }
 }
