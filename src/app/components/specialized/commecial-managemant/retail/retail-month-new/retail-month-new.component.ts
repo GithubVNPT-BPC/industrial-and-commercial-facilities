@@ -155,6 +155,7 @@ export class RetailMonthNewComponent implements OnInit {
   dataSheet = new Subject();
   @ViewChild('inputFile', { static: true }) inputFile: ElementRef;
   isExcelFile: boolean;
+
   uploadExcel(evt: any) {
     let isExcelFile: boolean;
     let spinnerEnabled = false;
@@ -215,34 +216,35 @@ export class RetailMonthNewComponent implements OnInit {
   mappingData(data) {
     switch (this.theMonth) {
       case 1:
-        return this.excelService.mappingDataSource1(data);
+        return this.excelService.mappingDataSource1(data, this.timechange);
 
       case 2:
       case 3:
       case 4:
-        return this.excelService.mappingDataSource234(data);
+        return this.excelService.mappingDataSource234(data, this.timechange);
 
       case 5:
       case 6:
-        return this.excelService.mappingDataSource56(data);
+        return this.excelService.mappingDataSource56(data, this.timechange);
 
       case 7:
       case 8:
       case 9:
       case 11:
-        return this.excelService.mappingDataSource78911(data);
+        return this.excelService.mappingDataSource78911(data, this.timechange);
 
       case 10:
-        return this.excelService.mappingDataSource10(data);
+        return this.excelService.mappingDataSource10(data, this.timechange);
 
       case 12:
-        return this.excelService.mappingDataSource12(data);
+        return this.excelService.mappingDataSource12(data, this.timechange);
       default:
         break;
     }
   }
 
   public save(month: number, prototype: Array<new_model>) {
+    this.dataSource = new MatTableDataSource<new_model>(prototype);
     this.sctService.CapNhatDuLieuBLHHThang(month, prototype).subscribe(
       next => {
         if (next.id == -1) {
@@ -465,27 +467,31 @@ export class RetailMonthNewComponent implements OnInit {
 
   DataSynthesize() {
     this.duLieuKyBaoCao.forEach(row => {
-      if (this.duLieuKyTruoc) {
+      if (this.duLieuKyTruoc.length != 0) {
         let rowToCopy = this.duLieuKyTruoc.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
 
         row.thuc_hien_ky_truoc = rowToCopy.thuc_hien_thang;
-        row.luy_ke_thang = row.thuc_hien_thang + rowToCopy.luy_ke_thang;
+
+        if (rowToCopy.luy_ke_thang)
+          row.luy_ke_thang = row.thuc_hien_thang + rowToCopy.luy_ke_thang;
+        else
+          row.luy_ke_thang = row.thuc_hien_thang;
       }
 
-      if (this.duLieuCungKy) {
+      if (this.duLieuCungKy.length != 0) {
         let rowToCopy = this.duLieuCungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
 
         row.thuc_hien_cung_ky = rowToCopy.thuc_hien_thang;
         row.luy_ke_cung_ky = row.luy_ke_cung_ky;
       }
 
-      if (this.duLieuThang6CungKy) {
+      if (this.duLieuThang6CungKy.length != 0) {
         let rowToCopy = this.duLieuThang6CungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
 
         row.thuc_hien_6_thang_dau_nam_cung_ky = rowToCopy.luy_ke_thang;
       }
 
-      if (this.duLieuThang12CungKy) {
+      if (this.duLieuThang12CungKy.length != 0) {
         let rowToCopy = this.duLieuThang12CungKy.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
 
         row.thuc_hien_nam_truoc = rowToCopy.luy_ke_thang;
@@ -508,6 +514,6 @@ export class RetailMonthNewComponent implements OnInit {
     if (!devidend || !devisor || devisor == 0)
       return null;
     else
-      return devidend / devisor;
+      return Math.round(devidend / devisor * 100) / 100;
   }
 }

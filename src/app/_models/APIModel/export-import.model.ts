@@ -17,30 +17,30 @@ export class chartmodel {
 export class new_model {
     ten_chi_tieu: string;
     id_chi_tieu : number;
-    thuc_hien_ky_truoc : number;
-    thuc_hien_cung_ky : number;
-    thuc_hien_thang : number;
-    thuc_hien_6_thang_dau_nam_cung_ky : number;
-    thuc_hien_nam_truoc : number;
+    thuc_hien_ky_truoc? : number;
+    thuc_hien_cung_ky? : number;
+    thuc_hien_thang? : number;
+    thuc_hien_6_thang_dau_nam_cung_ky? : number;
+    thuc_hien_nam_truoc? : number;
     
-    luy_ke_thang : number;
-    luy_ke_cung_ky : number;
+    luy_ke_thang? : number;
+    luy_ke_cung_ky? : number;
 
-    ke_hoach_nam : number;
-    ke_hoach_nam_sau : number;
-    uoc_thuc_hien_nam : number;
-    uoc_thuc_hien_thang_6 : number;
-    uoc_thuc_hien_6_thang : number;
+    ke_hoach_nam? : number;
+    ke_hoach_nam_sau? : number;
+    uoc_thuc_hien_nam? : number;
+    uoc_thuc_hien_thang_6? : number;
+    uoc_thuc_hien_6_thang? : number;
 
-    so_sanh_uoc_6_thang_cung_ky : number;
-    so_sanh_uoc_6_thang_ke_hoach_nam : number;
-    so_sanh_ky_truoc : number;
-    so_sanh_cung_ky : number;
-    so_sanh_luy_ke_cung_ky : number;
-    so_sanh_luy_ke_ke_hoach_nam : number;
-    so_sanh_uoc_thuc_hien_nam_cung_ky : number;
-    so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam : number;
-    so_sanh_ke_hoach_nam_sau_thuc_hien_nam : number;
+    so_sanh_uoc_6_thang_cung_ky? : number;
+    so_sanh_uoc_6_thang_ke_hoach_nam? : number;
+    so_sanh_ky_truoc? : number;
+    so_sanh_cung_ky? : number;
+    so_sanh_luy_ke_cung_ky? : number;
+    so_sanh_luy_ke_ke_hoach_nam? : number;
+    so_sanh_uoc_thuc_hien_nam_cung_ky? : number;
+    so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam? : number;
+    so_sanh_ke_hoach_nam_sau_thuc_hien_nam? : number;
 
     time_id : number;
     thoi_gian_chinh_sua_cuoi: Date;

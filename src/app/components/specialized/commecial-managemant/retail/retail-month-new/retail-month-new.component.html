@@ -132,8 +132,6 @@
                 </h5>
                 <div class="layout" #TABLE *ngIf="dataSource.data.length">
                     <table mat-table [dataSource]="dataSource" matSort class="table-layout" style="min-width: 900px !important;" id="small-table">
-
-
                         <ng-container *ngFor="let item of displayedColumns" matColumnDef="{{item}}">
                             <th mat-header-cell *matHeaderCellDef class="fillColor">
                                 {{fields[item]}}

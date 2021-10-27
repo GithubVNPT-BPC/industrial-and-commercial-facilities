@@ -2,8 +2,7 @@
     <mat-card-content>
         <div class="row button-control" *ngIf="object[0]">
             <div class="col-lg-6 text-left">
-                <button mat-raised-button class="blue" [matMenuTriggerFor]="menu"
-                    aria-label="Example icon-button with a menu">
+                <button mat-raised-button class="blue" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>attach_file</mat-icon> Nhập/Xuất Excel
                 </button>
                 <mat-menu #menu="matMenu">
@@ -77,22 +76,18 @@
                         'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
                         <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
                             nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
-                        <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}"
-                            *ngIf="column.is_default == 1||(column.is_default != 1 && row.ind_type!= TYPE_INDICATOR_INPUT);else other_content">
-                            {{row[column.is_default === 1? column.attr_code.toLowerCase():
-                            column.fld_code.toLowerCase()]}}
+                        <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}" *ngIf="column.is_default == 1||(column.is_default != 1 && row.ind_type!= TYPE_INDICATOR_INPUT);else other_content">
+                            {{row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]}}
                         </div>
                         <!-- && indicators[rowIndex].ind_type_id != '1' -->
                         <ng-template #other_content>
                             <span class="d-none">{{ row[column.is_default === 1? column.attr_code.toLowerCase():
                                 column.fld_code.toLowerCase()] }}</span>
                             <ng-container *ngIf="column.fld_code.substr(0,2) == 'fc'; else elseTemplate">
-                                <input appReport
-                                    [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                                <input appReport [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
                             </ng-container>
                             <ng-template #elseTemplate>
-                                <input appReport currencyMask
-                                    [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                                <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
                             </ng-template>
                         </ng-template>
                     </td>
@@ -100,8 +95,7 @@
 
                 <div *ngFor="let table of tableMergeHader">
                     <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
-                        <th mat-header-cell *matHeaderCellDef class="text-center"
-                            [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
                     </ng-container>
 
                     <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName;"> </tr>

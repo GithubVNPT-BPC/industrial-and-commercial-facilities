@@ -18,7 +18,7 @@ export class ExcelService {
     constructor() { }
 
     public exportJsonAsExcelFile(filename: string, sheetname: string, datas: any) {
-        if (!datas || datas.length == 0 ) throw new Error("Không có dữ liệu trên bảng");
+        if (!datas || datas.length == 0) throw new Error("Không có dữ liệu trên bảng");
 
         let parseDatas = XLSX.utils.json_to_sheet(datas);
 
@@ -37,12 +37,12 @@ export class ExcelService {
 
     public exportDomTableAsExcelFile(filename: string, sheetname: string, DOMtable: any) {
         // Get data from DOM and ignore data from source
-        if (!DOMtable || DOMtable === undefined ) throw new Error("Không có dữ liệu trên bảng");
+        if (!DOMtable || DOMtable === undefined) throw new Error("Không có dữ liệu trên bảng");
         let table = this.formatNumberInDOM(DOMtable);
         let datas = XLSX.utils.table_to_sheet(table);
         this.setDOMtable(DOMtable);
 
-        if (!datas || datas.length == 0 ) throw new Error("Lỗi khi truy xuất thông tin trên bảng");
+        if (!datas || datas.length == 0) throw new Error("Lỗi khi truy xuất thông tin trên bảng");
 
         sheetname = this.formatSheetname(sheetname);
         let workbook = new Workbook();
@@ -62,12 +62,12 @@ export class ExcelService {
     public formatNumberInDOM(table) {
         var rows = table.getElementsByTagName('tr');
         var R = 0, _C = 0, C = 0;
-        for(; R < rows.length; ++R) {
+        for (; R < rows.length; ++R) {
             var row = rows[R];
             var elts = row.children;
-            for(_C = C = 0; _C < elts.length; ++_C) {
-                var elt = elts[_C], 
-                v = elt.innerText;
+            for (_C = C = 0; _C < elts.length; ++_C) {
+                var elt = elts[_C],
+                    v = elt.innerText;
                 if (v != null && v.length && !isNaN(Number(v))) {
                     elt.innerHTML = String(v).replace('.', ',');
                 }
@@ -76,7 +76,7 @@ export class ExcelService {
         return table;
     }
 
-    private formatSheetname(sheetname: string): string{
+    private formatSheetname(sheetname: string): string {
         if (sheetname.includes('/')) sheetname = sheetname.replace('/', '_').replace('/', '_');
         return sheetname;
     }
@@ -87,11 +87,11 @@ export class ExcelService {
             let thead = this.DOMtable.getElementsByTagName('thead');
             headerLen = thead ? thead[0].getElementsByTagName('tr').length : 0;
         }
-    
+
         let headerRows = worksheet.getRows(1, headerLen);
         for (let h in headerRows) {
             headerRows[h].eachCell((cell, number) => {
-                cell.font = { bold: true, color: { argb: '000000'}};
+                cell.font = { bold: true, color: { argb: '000000' } };
                 cell.alignment = { wrapText: true };
             });
         }
@@ -103,13 +103,13 @@ export class ExcelService {
                 let cell = worksheet.getCell(cVal);
                 cell.value = bodyDatas[cVal]['v'];
                 cell.border = {
-                    top: { style:'thin' },
-                    left: { style:'thin' },
-                    bottom: { style:'thin'},
-                    right: { style:'thin'}
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
                 }
                 cell.alignment = { wrapText: true };
-            } 
+            }
         }
     }
 
@@ -136,9 +136,9 @@ export class ExcelService {
         ws.columns.forEach((column, i) => {
             let maxLength = 0;
             column["eachCell"]({ includeEmpty: true }, (cell) => {
-                if (!cell.isMerged) {   
+                if (!cell.isMerged) {
                     let columnLength = cell.value ? (cell.value.toString().length) - 10 : 10;
-                    if (columnLength > maxLength ) {
+                    if (columnLength > maxLength) {
                         maxLength = columnLength;
                     }
                 }
@@ -157,7 +157,7 @@ export class ExcelService {
 
 
     // reported common functions 
-    public setHref(href: string){
+    public setHref(href: string) {
         this.href = href;
     }
 
@@ -334,7 +334,7 @@ export class ExcelService {
         return displayedColumns
     }
 
-    mappingDataSource1(data) {
+    mappingDataSource1(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -344,12 +344,17 @@ export class ExcelService {
             datarow['thuc_hien_thang'] = item['Thực hiện kỳ báo cáo'] ? item['Thực hiện kỳ báo cáo'] : 0;
             datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
             datarow['so_sanh_cung_ky'] = item['Thực hiện so với cùng kỳ  năm trước'] ? item['Thực hiện so với cùng kỳ  năm trước'] : 0;
+            
+            datarow['don_vi_tinh'] = item['ĐVT'];
+            datarow['stt'] = item['STT'];
+            datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
+            datarow['time_id'] = time_id;
             ls.push(datarow);
         });
         return ls;
     }
 
-    mappingDataSource234(data) {
+    mappingDataSource234(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -363,12 +368,17 @@ export class ExcelService {
             datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
             datarow['so_sanh_cung_ky'] = item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] ? item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_cung_ky'] = item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] : 0;
+            
+            datarow['don_vi_tinh'] = item['ĐVT'];
+            datarow['stt'] = item['STT'];
+            datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
+            datarow['time_id'] = time_id;
             ls.push(datarow);
         });
         return ls;
     }
 
-    mappingDataSource56(data) {
+    mappingDataSource56(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -383,12 +393,17 @@ export class ExcelService {
             datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
             datarow['so_sanh_uoc_6_thang_cung_ky'] = item['Ước thực hiện 6 tháng so với cùng kỳ'] ? item['Ước thực hiện 6 tháng so với cùng kỳ'] : 0;
             datarow['so_sanh_uoc_6_thang_ke_hoach_nam'] = item['Ước thực hiện 6 tháng so với kế hoạch năm'] ? item['Ước thực hiện 6 tháng so với kế hoạch năm'] : 0;
+            
+            datarow['don_vi_tinh'] = item['ĐVT'];
+            datarow['stt'] = item['STT'];
+            datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
+            datarow['time_id'] = time_id;
             ls.push(datarow);
         });
         return ls;
     }
 
-    mappingDataSource78911(data) {
+    mappingDataSource78911(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -403,12 +418,17 @@ export class ExcelService {
             datarow['so_sanh_cung_ky'] = item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] ? item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_cung_ky'] = item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_ke_hoach_nam'] = item['Lũy kế kỳ báo cáo so với kế hoạch năm'] ? item['Lũy kế kỳ báo cáo so với kế hoạch năm'] : 0;
+            
+            datarow['don_vi_tinh'] = item['ĐVT'];
+            datarow['stt'] = item['STT'];
+            datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
+            datarow['time_id'] = time_id;
             ls.push(datarow);
         });
         return ls;
     }
 
-    mappingDataSource10(data) {
+    mappingDataSource10(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -427,12 +447,17 @@ export class ExcelService {
             datarow['so_sanh_luy_ke_cung_ky'] = item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_uoc_thuc_hien_nam_cung_ky'] = item['Ước thực hiện năm so với cùng kỳ năm trước'] ? item['Ước thực hiện năm so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam'] = item['Kế hoạch năm sau so với ước thực hiện năm'] ? item['Kế hoạch năm sau so với ước thực hiện năm'] : 0;
+
+            datarow['don_vi_tinh'] = item['ĐVT'];
+            datarow['stt'] = item['STT'];
+            datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
+            datarow['time_id'] = time_id;
             ls.push(datarow);
         });
         return ls;
     }
 
-    mappingDataSource12(data) {
+    mappingDataSource12(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: object = {};
@@ -446,6 +471,11 @@ export class ExcelService {
             datarow['so_sanh_luy_ke_cung_ky'] = item['Thực hiện năm so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo'] : 0;
             datarow['so_sanh_luy_ke_ke_hoach_nam'] = item['Thực hiện năm so với kế hoặch năm'] ? item['Thực hiện năm so với kế hoặch năm'] : 0;
             datarow['so_sanh_ke_hoach_nam_sau_thuc_hien_nam'] = item['Kế hoạch năm sau so với thực hiện năm'] ? item['Kế hoạch năm sau so với thực hiện năm'] : 0;
+            
+            datarow['don_vi_tinh'] = item['ĐVT'];
+            datarow['stt'] = item['STT'];
+            datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
+            datarow['time_id'] = time_id;
             ls.push(datarow);
         });
         return ls;
