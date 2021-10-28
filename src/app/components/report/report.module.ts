@@ -14,6 +14,7 @@ import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { ConfirmationDialogComponent } from 'src/app/shared/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
 import { SummaryReportComponent } from './summary-report/summary-report.component';
+import { LrisIntegrationComponent } from './lris-integration/lris-integration.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -45,7 +46,8 @@ export const customCurrencyMaskConfig = {
     ViewReportComponent,
     ViewSelectReportComponent,
     ReportDirective,
-    SummaryReportComponent
+    SummaryReportComponent,
+    LrisIntegrationComponent
   ],
   providers: [  ],
   entryComponents: [  ],

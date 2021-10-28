@@ -31,7 +31,7 @@ export const MY_FORMATS = {
 @Component({
   selector: 'app-lris-integration',
   templateUrl: './lris-integration.component.html',
-  styleUrls: ['../../../special_layout.scss'],
+  styleUrls: ['../report_layout.scss'],
   providers: [
       {
           provide: DateAdapter,
@@ -46,7 +46,7 @@ export const MY_FORMATS = {
 export class LrisIntegrationComponent implements OnInit {
   private _linkOutput: LinkModel = new LinkModel();
 
-  private readonly LINK_DEFAULT: string ="/specialized/commecial-management/lris";
+  private readonly LINK_DEFAULT: string ="/report/lris";
   private readonly TITLE_DEFAULT: string = "Báo cáo Kinh Tế Xã Hội";
   private readonly TEXT_DEFAULT: string = "Báo cáo Kinh Tế Xã Hội";
 
