@@ -6,6 +6,7 @@ import {FillSelectReportComponent} from '../report/fill-report/fill-select-repor
 import {ViewReportComponent} from '../report/view-report/view-detail/view-detail.component';
 import {ViewSelectReportComponent} from '../report/view-report/select-report/select-report.component';
 import {SummaryReportComponent} from '../report/summary-report/summary-report.component';
+import {LrisIntegrationComponent} from '../report/lris-integration/lris-integration.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,13 @@ const routes: Routes = [
         component: SummaryReportComponent,
         data: {
           title: 'Tổng hợp báo cáo'
+        }
+      },
+      {
+        path: 'lris',
+        component: LrisIntegrationComponent,
+        data: {
+          title: 'Báo cáo Kinh tế - Xã hội'
         }
       },
     ]

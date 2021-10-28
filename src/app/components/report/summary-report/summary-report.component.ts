@@ -1,6 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
-import { InformationService } from 'src/app/shared/information/information.service';
+import { Component, Injector } from "@angular/core";
+import { MatTableDataSource } from '@angular/material/table';
 
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -11,7 +10,7 @@ import { defaultFormat as _rollupMoment, Moment } from 'moment';
 
 import { SCTService } from 'src/app/_services/APIService/sct.service';
 
-import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -41,7 +40,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
 ],
 })
-export class SummaryReportComponent implements OnInit {
+export class SummaryReportComponent extends BaseComponent {
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
@@ -52,16 +51,31 @@ export class SummaryReportComponent implements OnInit {
   public timechange: number = parseInt(_moment().format('YYYYMM'));
   public month: string
 
+  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+  filteredDataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+
   private displayedDatas = [];
 
+  displayedFields = {
+    ten_chi_tieu: "Tên chỉ tiêu",
+    don_vi_tinh: "Đơn vị tính",
+    thuc_hien_cung_ky: "Thực hiện cùng kỳ",
+    thuc_hien_ky_truoc: "Thực hiện tháng trước",
+    thuc_hien_thang: "Thực hiện tháng",
+    so_sanh_ky_truoc: "Thực hiện so với tháng trước",
+    so_sanh_cung_ky: "Thực hiện so cùng kỳ",
+    bao_cao: "Báo cáo"
+  }
+
   constructor(
-    public sctService: SCTService,
-    public _breadCrumService: BreadCrumService,
-    public logger: InformationService,
-    public confirmationDialogService: ConfirmationDialogService
-    ) { }
+      private injector: Injector,
+      public sctService: SCTService,
+    ) {
+      super(injector);
+  }
 
   ngOnInit() {
+    super.ngOnInit();
     this.getData();
   }
 
@@ -78,6 +92,8 @@ export class SummaryReportComponent implements OnInit {
           ind['bao_cao'] = 'Tổng mức bán lẻ hàng hoá';
         }
         this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+        this.dataSource = new MatTableDataSource<any>(this.displayedDatas);
+        this.filteredDataSource.data = [...this.dataSource.data];
       }
     });
   }
@@ -90,6 +106,8 @@ export class SummaryReportComponent implements OnInit {
           ind['bao_cao'] = 'Chỉ số SXCN';
         }
         this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+        this.dataSource = new MatTableDataSource<any>(this.displayedDatas);
+        this.filteredDataSource.data = [...this.dataSource.data];
       }
     });
   }
