@@ -67,21 +67,30 @@ export class SummaryReportComponent implements OnInit {
 
   public getData() {
     this.displayedDatas = [];
+    this.GetDanhSachCSSXCN(this.timechange);
     this.GetDanhSachBLHH(this.timechange);
   }
 
   GetDanhSachBLHH(time_id: number) {
-    // FIXME: Hardcode getting data from the report table
-    // id_chi_tieu == 189: TỔNG MỨC BLHH VÀ DTDVTD
-    // id_chi_tieu == 190: Tổng mức bán lẻ hàng hóa
     this.sctService.GetDanhSachBLHH(time_id).subscribe((result) => {
       if (result && result.data[0] && result.data[0].length) {
-        let fileredIndicators = result.data[0].filter(x => [189, 190].includes(x.id_chi_tieu) && x.time_id == time_id);
-        for (let ind of fileredIndicators) {
+        for (let ind of result.data[0]) {
           ind['bao_cao'] = 'Tổng mức bán lẻ hàng hoá';
         }
-        this.displayedDatas = [...this.displayedDatas, ...fileredIndicators];
-      } 
+        this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+      }
+    });
+  }
+
+  GetDanhSachCSSXCN(time_id: number) {
+    this.sctService.GetDanhSachCSSX(time_id).subscribe((result) => {
+      result.data[0].filter(x => x.time_id == time_id);
+      if (result && result.data[0] && result.data[0].length) {
+        for (let ind of result.data[0]) {
+          ind['bao_cao'] = 'Chỉ số SXCN';
+        }
+        this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+      }
     });
   }
 
