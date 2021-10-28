@@ -136,7 +136,7 @@ export class FoodManagementComponent extends BaseComponent {
       id: new FormControl(),
       mst: new FormControl('', Validators.required),
       id_spkd: new FormControl('', Validators.required),
-      id_giay_phep: new FormControl('', Validators.required),
+      id_giay_phep: new FormControl(''),
     }
   }
 

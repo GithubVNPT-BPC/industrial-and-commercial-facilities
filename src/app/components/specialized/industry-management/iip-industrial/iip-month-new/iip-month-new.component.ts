@@ -61,9 +61,9 @@ export const MY_FORMATS = {
 })
 export class IipMonthNewComponent implements OnInit {
 
-  private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip/iip-detail";
-  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp xxx";
-  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp xxx";
+  private readonly LINK_DEFAULT: string ="/specialized/industry-management/iip/iip-detail";
+  private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
+  private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
 
   public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
@@ -233,7 +233,7 @@ export class IipMonthNewComponent implements OnInit {
         return this.excelService.mappingDataSource78911(data, this.timechange);
 
       case 10:
-        return this.excelService.mappingDataSource78911(data, this.timechange);
+        return this.excelService.mappingDataSource10(data, this.timechange);
 
       case 12:
         return this.excelService.mappingDataSource12(data, this.timechange);

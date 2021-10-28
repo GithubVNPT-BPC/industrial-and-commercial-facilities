@@ -1,83 +1,140 @@
-//Import Library
-import { Component, Injector } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from "@angular/core";
+import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
+import { InformationService } from 'src/app/shared/information/information.service';
 
-import { SummaryReportModel } from 'src/app/_models/APIModel/report.model';
-import { BaseComponent } from 'src/app/components/specialized/base.component';
-import { ReportService } from 'src/app/_services/APIService/report.service';
+import { FormControl } from '@angular/forms';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import _moment from 'moment';
+import { defaultFormat as _rollupMoment, Moment } from 'moment';
 
-import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
-import { FilterService } from 'src/app/_services/filter.service';
-import { LoginService } from 'src/app/_services/APIService/login.service';
+import { SCTService } from 'src/app/_services/APIService/sct.service';
+
+import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+
+const moment = _rollupMoment || _moment;
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'MM/YYYY',
+    },
+    display: {
+        dateInput: 'MM/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
 
 @Component({
   selector: 'app-summary-report',
   templateUrl: './summary-report.component.html',
   styleUrls: ['../report_layout.scss'],
+  providers: [
+    {
+        provide: DateAdapter,
+        useClass: MomentDateAdapter,
+        deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'vi' },
+],
 })
-export class SummaryReportComponent extends BaseComponent {
-  public dataSource: MatTableDataSource<SummaryReportModel> = new MatTableDataSource<SummaryReportModel>();
-  public filteredDataSource: MatTableDataSource<SummaryReportModel> = new MatTableDataSource<SummaryReportModel>();
+export class SummaryReportComponent implements OnInit {
 
-  displayedColumns = ['index', 'ma_chi_tieu', 'ten_chi_tieu', 'don_vi_tinh', 'thuc_hien_cung_ki_nam_truoc', 'thuc_hien_ki_truoc', 'thuc_hien_thang', 'so_sanh_thuc_hien_voi_ki_truoc', 'thuc_hien_thang_12_nam_truoc'];
+  public date = new FormControl(_moment());
+  public newdate = new FormControl(_moment());
+  public theYear: number = parseInt(_moment().format('YYYY'));
+  public theMonth: number = parseInt(_moment().format('MM'));
+  public stringmonth: string
+  public time: string
+  public timechange: number = parseInt(_moment().format('YYYYMM'));
+  public month: string
 
-  displayedFields = {
-    ma_chi_tieu: "MÃ CHỈ TIÊU",
-    ten_chi_tieu: "TÊN CHỈ TIÊU",
-    don_vi_tinh: "ĐƠN VỊ TÍNH",
-    thuc_hien_cung_ki_nam_truoc: "Thực hiện cùng kỳ",
-    thuc_hien_ki_truoc: "Thực hiện tháng trước",
-    thuc_hien_thang: "Thực hiện tháng",
-    so_sanh_thuc_hien_voi_ki_truoc: "Thực hiện so với tháng trước",
-    thuc_hien_thang_12_nam_truoc: "Thực hiện so cùng kỳ",
-  }
+  private displayedDatas = [];
 
   constructor(
-    private injector: Injector,
-    public reportSevice: ReportService,    
-    public filterService: FilterService,
-    public enterpriseService: EnterpriseService,
-    public _login: LoginService
-  ) {
-    super(injector);
+    public sctService: SCTService,
+    public _breadCrumService: BreadCrumService,
+    public logger: InformationService,
+    public confirmationDialogService: ConfirmationDialogService
+    ) { }
+
+  ngOnInit() {
+    this.getData();
   }
 
-  authorize: boolean = true;
+  public getData() {
+    this.displayedDatas = [];
+    this.GetDanhSachCSSXCN(this.timechange);
+    this.GetDanhSachBLHH(this.timechange);
+  }
 
-  ngOnInit(): void {
-    super.ngOnInit();
-    this.initDistrictWard();
-    this.getSummaryReportData(this.currentYear, this.currentMonth);
+  GetDanhSachBLHH(time_id: number) {
+    this.sctService.GetDanhSachBLHH(time_id).subscribe((result) => {
+      if (result && result.data[0] && result.data[0].length) {
+        for (let ind of result.data[0]) {
+          ind['bao_cao'] = 'Tổng mức bán lẻ hàng hoá';
+        }
+        this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+      }
+    });
+  }
 
-    if (this._login.userValue.user_role_id == 3  || this._login.userValue.user_role_id == 1) {
-      this.authorize = false
+  GetDanhSachCSSXCN(time_id: number) {
+    this.sctService.GetDanhSachCSSX(time_id).subscribe((result) => {
+      result.data[0].filter(x => x.time_id == time_id);
+      if (result && result.data[0] && result.data[0].length) {
+        for (let ind of result.data[0]) {
+          ind['bao_cao'] = 'Chỉ số SXCN';
+        }
+        this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+      }
+    });
+  }
+
+  public chosenYearHandler(normalizedYear: Moment) {
+    this.date = this.newdate
+    const ctrlValue = this.date.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date.setValue(ctrlValue);
+    this.theYear = normalizedYear.year();
+  }
+
+  public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date.setValue(ctrlValue);
+    this.theMonth = normalizedMonth.month() + 1;
+    datepicker.close();
+
+    if (this.theMonth >= 10) {
+        this.stringmonth = this.theMonth.toString();;
+    }
+    else {
+        this.stringmonth = "0" + this.theMonth.toString();
+    }
+    this.time = this.theYear.toString() + this.stringmonth;
+    this.timechange = parseInt(this.time);
+
+    this.getData();
+
+    this.month = this.time.substring(5, 6);
+    
+  }
+
+  transform(value: any): string {
+    if(typeof value === 'number'){
+        value = value.toString();
+    }
+    if(value && value.trim() != "-"){
+        value = value.toString().replace(',', '').replace(',', '').replace(',', '');
+        return new Intl.NumberFormat('vi-VN', {
+            minimumFractionDigits: 0
+        }).format(Number(value));
+    } else{
+        return "-";
     }
   }
-
-  getLinkDefault() {
-    this.LINK_DEFAULT = "/report/summary";
-    this.TITLE_DEFAULT = "Tổng hợp số liệu báo cáo";
-    this.TEXT_DEFAULT = "Tổng hợp số liệu báo cáo";
-  }
-
-  getSummaryReportData(year, month) {
-    this.reportSevice.GetSummaryReport(year, month).subscribe(
-      allrecords => {
-        this.filteredDataSource.data = [];
-        if (allrecords.data && allrecords.data.length > 0) {
-          let data = allrecords.data;
-          this.dataSource = new MatTableDataSource<SummaryReportModel>(data);
-
-          // this.dataSource.data.map(x => {
-          //   x.
-          // });
-          this.filteredDataSource.data = [...this.dataSource.data];
-        }
-        this._prepareData();
-        this.paginatorAgain();
-      },
-      error => this.errorMessage = <any>error
-    );
-  }
-
 }

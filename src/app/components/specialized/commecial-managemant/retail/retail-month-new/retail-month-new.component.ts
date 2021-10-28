@@ -14,6 +14,7 @@ import { LinkModel } from "src/app/_models/link.model";
 import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
+import { ActivatedRoute } from "@angular/router";
 
 import { ExcelServicesService } from "src/app/shared/services/excel-services.service";
 import { LoginService } from "src/app/_services/APIService/login.service";
@@ -27,8 +28,6 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
-import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
-import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { formatDate } from '@angular/common';
 import { ElementSchemaRegistry } from "@angular/compiler";
 
@@ -140,6 +139,7 @@ export class RetailMonthNewComponent implements OnInit {
   constructor(
     public sctService: SCTService,
     public matDialog: MatDialog,
+    public route: ActivatedRoute,
     public marketService: MarketService,
     public excelService: ExcelService,
     private _breadCrumService: BreadCrumService,
@@ -184,19 +184,6 @@ export class RetailMonthNewComponent implements OnInit {
           data = XLSX.utils.sheet_to_json(ws);
           this.dataSource.data = [];
           this.prototype = this.mappingData(data);
-          // data.forEach(item => {
-          //   let datarow: new_model = new new_model();
-          //   datarow.id_chi_tieu = item['ID'];
-          //   datarow.san_luong_thang = 0;
-          //   datarow.tri_gia_thang = item['TH tháng'] ? item['TH tháng'] : 0;
-          //   datarow.uoc_thang_so_voi_ki_truoc = item['ƯTH so Tháng cùng kỳ'] ? item['ƯTH so Tháng cùng kỳ'] : 0;
-          //   datarow.uoc_thang_so_voi_thang_truoc = item['ƯTH so tháng trước'] ? item['ƯTH so tháng trước'] : 0;
-          //   datarow.san_luong_cong_don = 0;
-          //   datarow.tri_gia_cong_don = item['TH tháng (Cộng dồn)'] ? item['TH tháng (Cộng dồn)'] : 0;
-          //   datarow.uoc_cong_don_so_voi_ki_truoc = item['ƯTH so với cùng kỳ (Cộng dồn)'] ? item['ƯTH so với cùng kỳ (Cộng dồn)'] : 0;
-          //   datarow.uoc_cong_don_so_voi_cong_don_truoc = item['ƯTH so kế hoạch năm (Cộng dồn)'] ? item['ƯTH so kế hoạch năm (Cộng dồn)'] : 0;
-          //   this.prototype.push(datarow)
-          // });
           this.save(this.timechange, this.prototype)
         };
 

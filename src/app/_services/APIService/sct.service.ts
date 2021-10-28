@@ -71,6 +71,7 @@ export class SCTService {
     // end api quan huyen
 
     private urlUpdateRecord = environment.apiEndpoint + 'api/update-record';
+    private urlLrisApi = environment.apiEndpoint + "api/bao-cao/lris";;
 
     token: any;
     username: any;
@@ -495,6 +496,28 @@ export class SCTService {
         var apiUrl = this.urlUpdateRecord;
         let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         return this.http.put<any>(apiUrl, datas, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetLrisReportData(payload) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let requestData = {
+            "method" : "get",
+            "body" : payload
+        }
+        return this.http.post<any>(this.urlLrisApi, requestData, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostLrisReportData(payload) {
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let requestData = {
+            "method" : "post",
+            "body" : payload
+        }
+        return this.http.post<any>(this.urlLrisApi, requestData, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
