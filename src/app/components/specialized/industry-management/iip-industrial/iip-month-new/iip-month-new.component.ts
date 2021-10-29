@@ -66,7 +66,16 @@ export class IipMonthNewComponent implements OnInit {
   private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
   private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
 
-  public date = new FormControl(_moment());
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = 1
+
+    let date = new Date(year, month - 1, day);
+    return date
+  }
+
+  public date =  new FormControl(_moment());
   public newdate = new FormControl(_moment());
   d = new Date();
   public theYear: number = this.d.getFullYear();
@@ -268,9 +277,15 @@ export class IipMonthNewComponent implements OnInit {
     return formatDate(date, 'yyyyMM', 'en-US');
   }
 
+  timeparam: number
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-        let time_id = params['time_id'];
+        this.timeparam = params['time_id']
+      this.date = new FormControl(this.convertstringtodate(this.timeparam.toString()))
+      this.theYear = this.date.value.getFullYear();
+      this.theMonth = this.date.value.getMonth() + 1;
+      let time_id = params['time_id'];
         if (time_id) {
             this.month = time_id.toString().substring(5, 6);
             this.timechange = Number(time_id);

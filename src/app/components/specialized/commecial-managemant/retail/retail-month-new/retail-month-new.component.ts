@@ -84,13 +84,22 @@ export class RetailMonthNewComponent implements OnInit {
   public duLieuThang12CungKy: Array<new_model> = [];
   public defaultDatasource: Array<new_model> = [];
 
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = 1
+
+    let date = new Date(year, month - 1, day);
+    return date
+  }
+
   public chosenYearHandler(normalizedYear: Moment) {
     this.date = this.newdate
     const ctrlValue = this.date.value;
     ctrlValue.year(normalizedYear.year());
     this.date.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
-  }
+  } 
 
   public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
     const ctrlValue = this.date.value;
@@ -255,8 +264,14 @@ export class RetailMonthNewComponent implements OnInit {
     return formatDate(date, 'yyyyMM', 'en-US');
   }
 
+  timeparam: number
+
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
+      this.timeparam = params['time_id']
+      this.date = new FormControl(this.convertstringtodate(this.timeparam.toString()))
+      this.theYear = this.date.value.getFullYear();
+      this.theMonth = this.date.value.getMonth() + 1;
         let time_id = params['time_id'];
         if (time_id) {
             this.month = time_id.toString().substring(5, 6);
