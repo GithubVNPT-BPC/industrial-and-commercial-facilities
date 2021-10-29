@@ -433,7 +433,7 @@ export class IipMonthNewComponent implements OnInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.lineChartMethod(parseInt(this.getCurrentYear()));
+    // this.lineChartMethod(parseInt(this.getCurrentYear()));
   }
 
   public getCurrentYear(): string {
