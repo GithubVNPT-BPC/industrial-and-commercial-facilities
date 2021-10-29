@@ -118,8 +118,8 @@ export class RetailMonthNewComponent implements OnInit {
     this.timechange = parseInt(this.time)
 
     this.GetDanhSachBLHH(this.timechange);
-    this.lineChart.config.data.datasets = []
-    this.lineChartMethod(this.theYear);
+    // this.lineChart.config.data.datasets = []
+    // this.lineChartMethod(this.theYear);
 
     this.month = this.time.substring(5, 6)
     this.displayedColumns = this.excelService.initialdisplayedColumns(this.theMonth);
