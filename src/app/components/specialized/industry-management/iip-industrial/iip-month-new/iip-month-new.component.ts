@@ -30,6 +30,7 @@ import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { formatDate } from '@angular/common';
+import { ActivatedRoute } from "@angular/router";
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -140,6 +141,7 @@ export class IipMonthNewComponent implements OnInit {
   constructor(
     public sctService: SCTService,
     public matDialog: MatDialog,
+    public route: ActivatedRoute,
     public marketService: MarketService,
     public excelService: ExcelService,
     private _breadCrumService: BreadCrumService,
@@ -267,8 +269,17 @@ export class IipMonthNewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.month = this.getCurrentMonth().substring(5, 6)
-    this.timechange = parseInt(this.getCurrentMonth())
+    this.route.queryParams.subscribe(params => {
+        let time_id = params['time_id'];
+        if (time_id) {
+            this.month = time_id.toString().substring(5, 6);
+            this.timechange = Number(time_id);
+        }
+        else{
+          this.month = this.getCurrentMonth().substring(5, 6);
+          this.timechange = parseInt(this.getCurrentMonth());
+        }
+    });
 
     this.defaultDatasource.push(
       new new_model("I", this.timechange, "%", "Chỉ số sản xuất công nghiệp (IIP) so với cùng kỳ theo giá so sánh năm 2010", 165),

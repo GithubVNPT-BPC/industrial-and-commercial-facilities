@@ -58,18 +58,11 @@ const routes: Routes = [
             },
             {
                 path: 'iip',
-                component: IipMonthNewComponent,
+                component: IIPIndustrialComponent,
                 data: {
                     title: 'Chỉ số sản xuất công nghiệp',
                 },
             },
-            // {
-            //     path: 'iip',
-            //     component: IIPIndustrialComponent,
-            //     data: {
-            //         title: 'Chỉ số sản xuất công nghiệp',
-            //     },
-            // },
             {
                 path: 'iip-detail',
                 component: IipMonthNewComponent,

@@ -33,14 +33,7 @@ export class FoodManagementComponent extends BaseComponent {
     id_quan_huyen: [],
   };
 
-  businessProducts = [
-    { id_spkd: 1, ten_san_pham: "Bán buôn thực phẩm" },
-    { id_spkd: 2, ten_san_pham: "Bán buôn bán lẻ thực phẩm" },
-    { id_spkd: 3, ten_san_pham: "Phân phối gạo" },
-    { id_spkd: 4, ten_san_pham: "Bán buôn đồ uống" },
-    { id_spkd: 5, ten_san_pham: "Đại lý gạo" },
-    { id_spkd: 6, ten_san_pham: "Bán buôn thực phẩm" },
-  ];
+  businessProducts = [];
 
   displayedFields = {
     mst: "Mã số thuế",
@@ -73,6 +66,7 @@ export class FoodManagementComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.getFoodCommerceProductList();
     this.getFoodCommerceData();
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
@@ -84,6 +78,17 @@ export class FoodManagementComponent extends BaseComponent {
     this.LINK_DEFAULT = "/specialized/commecial-management/domestic";
     this.TITLE_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
+  }
+
+  getFoodCommerceProductList() {
+    this.commerceManagementService.getFoodCommerceProductList().subscribe(
+      allrecords => {
+        if (allrecords.data) {
+          this.businessProducts = allrecords.data;
+        }
+      },
+      error => this.errorMessage = <any>error
+    );
   }
 
   getFoodCommerceData() {

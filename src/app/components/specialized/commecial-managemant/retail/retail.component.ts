@@ -13,6 +13,7 @@ import { RetailModel } from 'src/app/_models/commecial.model';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { ReportService } from 'src/app/_services/APIService/report.service';
 import { formatDate } from '@angular/common';
+import { SCTService } from 'src/app/_services/APIService/sct.service';
 
 @Component({
     selector: 'retail',
@@ -49,7 +50,8 @@ export class RetailComponent implements OnInit {
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService,
         private _router: Router,
-        private _reportService: ReportService,
+        // private _reportService: ReportService,
+        private _sctService: SCTService
     ) { }
 
     ngOnInit() {
@@ -76,9 +78,10 @@ export class RetailComponent implements OnInit {
     retail: Array<RetailModel> = new Array<RetailModel>();
 
     lineChartMethod(time_id: number) {
-        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(
+        //this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(
+        this._sctService.GetDanhSachBLHHTongHop(time_id).subscribe(
             res => {
-                this.retail = res.data
+                this.retail = res.data[0]
 
                 this.lineChart = new Chart(this.lineCanvas.nativeElement, {
                     type: 'line',
@@ -119,15 +122,26 @@ export class RetailComponent implements OnInit {
     }
 
     private getData(time_id: number) {
-        this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(res => {
-            this.dataSource = new MatTableDataSource<RetailModel>(res.data);
-            this.dataSource.paginator = this.paginator;
-            this.paginator._intl.itemsPerPageLabel = 'Số hàng';
-            this.paginator._intl.firstPageLabel = "Trang Đầu";
-            this.paginator._intl.lastPageLabel = "Trang Cuối";
-            this.paginator._intl.previousPageLabel = "Trang Trước";
-            this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        })
+        // this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(res => {
+        //     this.dataSource = new MatTableDataSource<RetailModel>(res.data);
+        //     this.dataSource.paginator = this.paginator;
+        //     this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+        //     this.paginator._intl.firstPageLabel = "Trang Đầu";
+        //     this.paginator._intl.lastPageLabel = "Trang Cuối";
+        //     this.paginator._intl.previousPageLabel = "Trang Trước";
+        //     this.paginator._intl.nextPageLabel = "Trang Tiếp";
+        // })
+        this._sctService.GetDanhSachBLHHTongHop(time_id).subscribe(
+            response => {
+                this.dataSource = new MatTableDataSource<RetailModel>(response.data[0]);
+                this.dataSource.paginator = this.paginator;
+                this.paginator._intl.itemsPerPageLabel = 'Số hàng';
+                this.paginator._intl.firstPageLabel = "Trang Đầu";
+                this.paginator._intl.lastPageLabel = "Trang Cuối";
+                this.paginator._intl.previousPageLabel = "Trang Trước";
+                this.paginator._intl.nextPageLabel = "Trang Tiếp";
+            }
+        );
     }
 
     //HTML & TS Function ----------------------------------------------------------

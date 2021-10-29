@@ -71,12 +71,12 @@
                         </mat-card>
                     </div>
                 </div>
-                <hr color="red">
-                <div class="container-fluid">
+                <!-- <hr color="red"> -->
+                <!-- <div class="container-fluid">
                     <h5 *ngIf="!chart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN TẠI
                     </h5>
                     <canvas #lineCanvas style="height:15vh; width:20vw"></canvas>
-                </div>
+                </div> -->
             </mat-expansion-panel>
 
             <mat-expansion-panel>
@@ -90,7 +90,7 @@
                 </mat-expansion-panel-header>
 
                 <div class="row">
-                    <div class="col-4 col-md-3 col-lg-3">
+                    <div class="col-4 col-md-3 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian</mat-label>
                             <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
@@ -123,7 +123,7 @@
                 <div class="row mt-3">
                     <div class="col-12 col-lg-12">
                         <h5 class="text-center">
-                            TỔNG MỨC BÁN LẺ HÀNG HÓA VÀ DỊCH VỤ {{theMonth}}/{{theYear}}
+                            TỔNG MỨC BÁN LẺ HÀNG HÓA VÀ DỊCH VỤ THÁNG {{theMonth}}/{{theYear}}
                         </h5>
                     </div>
                 </div>

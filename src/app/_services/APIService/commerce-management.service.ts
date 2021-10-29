@@ -25,6 +25,7 @@ export class CommerceManagementService {
     private urlGetCountrSide = 'api/qltm/dsNTM';
     private urlGetInformWebsite = this.prefix + '/danh-sach-website';
     private urlGetRegisWebsite = this.prefix + '/danh-sach-dang-ki-tmdt';
+    private urlGetFoodCommerceProductList= 'api/qltm/httm/kdtp-dssp';
 
     // POST
     private urlPostExpo = "api/qltm/cap-nhat-hoi-cho-trien-lam";
@@ -121,6 +122,14 @@ export class CommerceManagementService {
 
     public getFoodCommerceData() {
         let apiUrl = this.apiHome + this.urlGetFoodCommerce;
+        let headers = new HttpHeaders(HEADERS);
+        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public getFoodCommerceProductList() {
+        let apiUrl = this.apiHome + this.urlGetFoodCommerceProductList;
         let headers = new HttpHeaders(HEADERS);
         return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
             catchError(this.handleError)

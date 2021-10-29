@@ -256,8 +256,17 @@ export class RetailMonthNewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.month = this.getCurrentMonth().substring(5, 6)
-    this.timechange = parseInt(this.getCurrentMonth())
+    this.route.queryParams.subscribe(params => {
+        let time_id = params['time_id'];
+        if (time_id) {
+            this.month = time_id.toString().substring(5, 6);
+            this.timechange = Number(time_id);
+        }
+        else{
+          this.month = this.getCurrentMonth().substring(5, 6);
+          this.timechange = parseInt(this.getCurrentMonth());
+        }
+    });
 
     this.defaultDatasource.push(
       new new_model("A", this.timechange, "Triệu đồng", "TỔNG MỨC BLHH VÀ DTDVTD", 189),
@@ -399,7 +408,7 @@ export class RetailMonthNewComponent implements OnInit {
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    this.lineChartMethod(parseInt(this.getCurrentYear()));
+    // this.lineChartMethod(parseInt(this.getCurrentYear()));
   }
 
   public getCurrentYear(): string {
