@@ -256,6 +256,7 @@ export class ExcelService {
                 ]
                 break;
 
+            case 6:
             case 7:
             case 8:
             case 9:
@@ -344,7 +345,7 @@ export class ExcelService {
             datarow['thuc_hien_thang'] = item['Thực hiện kỳ báo cáo'] ? item['Thực hiện kỳ báo cáo'] : 0;
             datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
             datarow['so_sanh_cung_ky'] = item['Thực hiện so với cùng kỳ  năm trước'] ? item['Thực hiện so với cùng kỳ  năm trước'] : 0;
-            
+
             datarow['don_vi_tinh'] = item['ĐVT'];
             datarow['stt'] = item['STT'];
             datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
@@ -368,7 +369,7 @@ export class ExcelService {
             datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
             datarow['so_sanh_cung_ky'] = item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] ? item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_cung_ky'] = item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] : 0;
-            
+
             datarow['don_vi_tinh'] = item['ĐVT'];
             datarow['stt'] = item['STT'];
             datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
@@ -393,7 +394,7 @@ export class ExcelService {
             datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
             datarow['so_sanh_uoc_6_thang_cung_ky'] = item['Ước thực hiện 6 tháng so với cùng kỳ'] ? item['Ước thực hiện 6 tháng so với cùng kỳ'] : 0;
             datarow['so_sanh_uoc_6_thang_ke_hoach_nam'] = item['Ước thực hiện 6 tháng so với kế hoạch năm'] ? item['Ước thực hiện 6 tháng so với kế hoạch năm'] : 0;
-            
+
             datarow['don_vi_tinh'] = item['ĐVT'];
             datarow['stt'] = item['STT'];
             datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
@@ -418,7 +419,7 @@ export class ExcelService {
             datarow['so_sanh_cung_ky'] = item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] ? item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_cung_ky'] = item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_ke_hoach_nam'] = item['Lũy kế kỳ báo cáo so với kế hoạch năm'] ? item['Lũy kế kỳ báo cáo so với kế hoạch năm'] : 0;
-            
+
             datarow['don_vi_tinh'] = item['ĐVT'];
             datarow['stt'] = item['STT'];
             datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
@@ -471,7 +472,7 @@ export class ExcelService {
             datarow['so_sanh_luy_ke_cung_ky'] = item['Thực hiện năm so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo'] : 0;
             datarow['so_sanh_luy_ke_ke_hoach_nam'] = item['Thực hiện năm so với kế hoặch năm'] ? item['Thực hiện năm so với kế hoặch năm'] : 0;
             datarow['so_sanh_ke_hoach_nam_sau_thuc_hien_nam'] = item['Kế hoạch năm sau so với thực hiện năm'] ? item['Kế hoạch năm sau so với thực hiện năm'] : 0;
-            
+
             datarow['don_vi_tinh'] = item['ĐVT'];
             datarow['stt'] = item['STT'];
             datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
