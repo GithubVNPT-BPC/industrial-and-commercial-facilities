@@ -39,15 +39,16 @@ export class StoreManagementComponent extends BaseComponent {
   public soCuaHangDauTuNamTruoc: number = 0;
 
   displayedFields = {
+    mst: "Mã số thuế",
     ten_cua_hang: "Tên cửa hàng",
     dia_chi_day_du: "Địa chỉ",
-    mst: "Mã số thuế",
+    nguoi_dai_dien: "Người đại diện",
+    // ten_san_pham: "Sản phẩm kinh doanh",
+    so_chung_nhan: "Mã số thuế/mã địa điểm kinh doanh",
+    ngay_cap_giay_chung_nhan: "Ngày cấp giấy đăng ký kinh doanh",
     so_dien_thoai: "Điện thoại",
-    ten_san_pham: "Sản phẩm kinh doanh",
-    so_chung_nhan: "Số chứng nhận ĐKKD",
-    ngay_cap_giay_chung_nhan: "Ngày cấp",
-    noi_cap_giay_chung_nhan: "Nơi cấp",
-    so_giay_phep: "Số giấy phép",
+    // noi_cap_giay_chung_nhan: "Nơi cấp",
+    so_giay_phep: "Số GCN ATTP",
     ngay_cap_giay_phep: "Ngày cấp",
     ngay_het_han_giay_phep: "Ngày hết hạn",
     thoi_gian_chinh_sua_cuoi: "Thời gian cập nhật",
