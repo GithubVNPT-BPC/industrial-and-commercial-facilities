@@ -28,7 +28,7 @@ export class RetailComponent implements OnInit {
     private readonly TITLE_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
     private readonly TEXT_DEFAULT: string = "Tổng mức bán lẻ hàng hoá và dịch vụ";
     public readonly DISPLAY_COLS: string[] = ['index', 'chi_tieu', 'don_vi', 'thang_01', 'thang_02', 'thang_03',
-        'thang_04', 'thang_05', 'thang_06', 'thang_07', 'thang_08', 'thang_09', 'thang_10', 'thang_11', 'thang_12'];
+        'thang_04', 'thang_05', 'thang_06', 'thang_07', 'thang_08', 'thang_09', 'thang_10', 'thang_11', 'thang_12', 'thuc_hien_nam'];
     //TS & HTML variable -----------------------------------------------------------
     public dataSource: MatTableDataSource<RetailModel> = new MatTableDataSource<RetailModel>();
     public year: number = new Date().getFullYear();

@@ -14,15 +14,15 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
-    parse: {
-        dateInput: 'MM/YYYY',
-    },
-    display: {
-        dateInput: 'MM/YYYY',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
-    },
+  parse: {
+    dateInput: 'MM/YYYY',
+  },
+  display: {
+    dateInput: 'MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
 };
 
 @Component({
@@ -31,14 +31,14 @@ export const MY_FORMATS = {
   styleUrls: ['../report_layout.scss'],
   providers: [
     {
-        provide: DateAdapter,
-        useClass: MomentDateAdapter,
-        deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
-],
+  ],
 })
 export class SummaryReportComponent extends BaseComponent {
 
@@ -68,10 +68,10 @@ export class SummaryReportComponent extends BaseComponent {
   }
 
   constructor(
-      private injector: Injector,
-      public sctService: SCTService,
-    ) {
-      super(injector);
+    private injector: Injector,
+    public sctService: SCTService,
+  ) {
+    super(injector);
   }
 
   ngOnInit() {
@@ -83,15 +83,18 @@ export class SummaryReportComponent extends BaseComponent {
     this.displayedDatas = [];
     this.GetDanhSachCSSXCN(this.timechange);
     this.GetDanhSachBLHH(this.timechange);
+    this.GetImportData(this.timechange);
+    this.GetExportData(this.timechange);
   }
 
   GetDanhSachBLHH(time_id: number) {
     this.sctService.GetDanhSachBLHH(time_id).subscribe((result) => {
-      if (result && result.data[0] && result.data[0].length) {
-        for (let ind of result.data[0]) {
+      let data = result.data[0].filter(x => x.time_id == time_id);
+      if (result && data && data.length) {
+        for (let ind of data) {
           ind['bao_cao'] = 'Tổng mức bán lẻ hàng hoá';
         }
-        this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+        this.displayedDatas = [...this.displayedDatas, ...data];
         this.dataSource = new MatTableDataSource<any>(this.displayedDatas);
         this.filteredDataSource.data = [...this.dataSource.data];
       }
@@ -100,15 +103,53 @@ export class SummaryReportComponent extends BaseComponent {
 
   GetDanhSachCSSXCN(time_id: number) {
     this.sctService.GetDanhSachCSSX(time_id).subscribe((result) => {
-      result.data[0].filter(x => x.time_id == time_id);
-      if (result && result.data[0] && result.data[0].length) {
-        for (let ind of result.data[0]) {
+      let data = result.data[0].filter(x => x.time_id == time_id);
+      if (result && data && data.length) {
+        for (let ind of data) {
           ind['bao_cao'] = 'Chỉ số SXCN';
         }
-        this.displayedDatas = [...this.displayedDatas, ...result.data[0]];
+        this.displayedDatas = [...this.displayedDatas, ...data];
         this.dataSource = new MatTableDataSource<any>(this.displayedDatas);
         this.filteredDataSource.data = [...this.dataSource.data];
       }
+    });
+  }
+
+  GetImportData(time_id: number) {
+    this.sctService.GetDanhSachNhapKhau(time_id).subscribe((result) => {
+      if (result.data[0] && result.data[0].length) {
+        let data = result.data[0][0];
+        data = {...data, ...{
+          'bao_cao': "Nhập khẩu",
+          'ten_chi_tieu': data['ten_san_pham'],
+          'thuc_hien_cung_ky': 0,
+          'thuc_hien_ky_truoc': 0,
+          'thuc_hien_thang': data['tri_gia_thang'],
+          'so_sanh_ky_truoc': data['uoc_thang_so_voi_thang_truoc'],
+          'so_sanh_cung_ky': data['uoc_thang_so_voi_ki_truoc'],
+        }}
+        this.displayedDatas = [...this.displayedDatas, ...[data]];
+        this.dataSource = new MatTableDataSource<any>(this.displayedDatas);
+        this.filteredDataSource.data = [...this.dataSource.data];
+      }
+    });
+  }
+
+  GetExportData(time_id: number) {
+    this.sctService.GetDanhSachXuatKhau(time_id).subscribe((result) => {
+          let data = result.data[0][0];
+        data = {...data, ...{
+          'bao_cao': "Xuất khẩu",
+          'ten_chi_tieu': data['ten_san_pham'],
+          'thuc_hien_cung_ky': 0,
+          'thuc_hien_ky_truoc': 0,
+          'thuc_hien_thang': data['tri_gia_thang'],
+          'so_sanh_ky_truoc': data['uoc_thang_so_voi_thang_truoc'],
+          'so_sanh_cung_ky': data['uoc_thang_so_voi_ki_truoc'],
+        }};
+        this.displayedDatas = [...this.displayedDatas, ...[data]];
+        this.dataSource = new MatTableDataSource<any>(this.displayedDatas);
+        this.filteredDataSource.data = [...this.dataSource.data];
     });
   }
 
@@ -128,10 +169,10 @@ export class SummaryReportComponent extends BaseComponent {
     datepicker.close();
 
     if (this.theMonth >= 10) {
-        this.stringmonth = this.theMonth.toString();;
+      this.stringmonth = this.theMonth.toString();;
     }
     else {
-        this.stringmonth = "0" + this.theMonth.toString();
+      this.stringmonth = "0" + this.theMonth.toString();
     }
     this.time = this.theYear.toString() + this.stringmonth;
     this.timechange = parseInt(this.time);
@@ -139,20 +180,20 @@ export class SummaryReportComponent extends BaseComponent {
     this.getData();
 
     this.month = this.time.substring(5, 6);
-    
+
   }
 
   transform(value: any): string {
-    if(typeof value === 'number'){
-        value = value.toString();
+    if (typeof value === 'number') {
+      value = value.toString();
     }
-    if(value && value.trim() != "-"){
-        value = value.toString().replace(',', '').replace(',', '').replace(',', '');
-        return new Intl.NumberFormat('vi-VN', {
-            minimumFractionDigits: 0
-        }).format(Number(value));
-    } else{
-        return "-";
+    if (value && value.trim() != "-") {
+      value = value.toString().replace(',', '').replace(',', '').replace(',', '');
+      return new Intl.NumberFormat('vi-VN', {
+        minimumFractionDigits: 0
+      }).format(Number(value));
+    } else {
+      return "-";
     }
   }
 }
