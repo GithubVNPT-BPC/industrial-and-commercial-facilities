@@ -99,7 +99,7 @@ export class RetailMonthNewComponent implements OnInit {
     ctrlValue.year(normalizedYear.year());
     this.date.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
-  } 
+  }
 
   public chosenMonthHandler(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
     const ctrlValue = this.date.value;
@@ -220,14 +220,14 @@ export class RetailMonthNewComponent implements OnInit {
         return this.excelService.mappingDataSource234(data, this.timechange);
 
       case 5:
-      case 6:
-        return this.excelService.mappingDataSource56(data, this.timechange);
+        return this.excelService.mappingDataSource5(data, this.timechange);
 
+      case 6:
       case 7:
       case 8:
       case 9:
       case 11:
-        return this.excelService.mappingDataSource78911(data, this.timechange);
+        return this.excelService.mappingDataSource678911(data, this.timechange);
 
       case 10:
         return this.excelService.mappingDataSource10(data, this.timechange);
@@ -272,16 +272,16 @@ export class RetailMonthNewComponent implements OnInit {
       this.date = new FormControl(this.convertstringtodate(this.timeparam.toString()))
       this.theYear = this.date.value.getFullYear();
       this.theMonth = this.date.value.getMonth() + 1;
-        let time_id = params['time_id'];
-        if (time_id) {
-            this.month = time_id.toString().substring(5, 6);
-            this.timechange = Number(time_id);
-        }
-        else{
-          this.month = this.getCurrentMonth().substring(5, 6);
-          this.timechange = parseInt(this.getCurrentMonth());
-        }
-    });
+      let time_id = params['time_id'];
+      if (time_id) {
+        this.month = time_id.toString().substring(5, 6);
+        this.timechange = Number(time_id);
+      }
+      else {
+        this.month = this.getCurrentMonth().substring(5, 6);
+        this.timechange = parseInt(this.getCurrentMonth());
+      }
+    });this.duLieuKyBaoCao
 
     this.defaultDatasource.push(
       new new_model("A", this.timechange, "Triệu đồng", "TỔNG MỨC BLHH VÀ DTDVTD", 189),
@@ -296,7 +296,7 @@ export class RetailMonthNewComponent implements OnInit {
       this.authorize = false
     }
 
-    this.displayedColumns = this.excelService.initialdisplayedColumns(new Date().getMonth() + 1);
+    this.displayedColumns = this.excelService.initialdisplayedColumns(Number(this.month));
     this.fields = this.excelService.fields;
     this.href_file = this.excelService.getHref();
   }

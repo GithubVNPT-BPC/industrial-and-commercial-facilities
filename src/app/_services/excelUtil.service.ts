@@ -206,6 +206,8 @@ export class ExcelService {
                     "thuc_hien_ky_truoc",
                     "thuc_hien_cung_ky",
                     "thuc_hien_thang",
+                    'so_sanh_ky_truoc',
+                    'so_sanh_cung_ky'
                 ];
                 break;
 
@@ -233,8 +235,7 @@ export class ExcelService {
                 break;
 
             case 5:
-            case 6:
-                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/56.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/5.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
@@ -261,24 +262,24 @@ export class ExcelService {
             case 8:
             case 9:
             case 11:
-                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/78911.xlsx');
+                this.setHref('/assets/ExcelSample/BLHH_CSSXCN/678911.xlsx');
                 displayedColumns = [
                     "stt",
                     "ten_chi_tieu",
                     "don_vi_tinh",
 
                     "thuc_hien_cung_ky",
-                    "thuc_hien_6_thang_dau_nam_cung_ky",
+                    "luy_ke_cung_ky",
                     "ke_hoach_nam",
 
                     "thuc_hien_ky_truoc",
                     "thuc_hien_thang",
-                    "uoc_thuc_hien_thang_6",
+                    "luy_ke_thang",
 
-                    "uoc_thuc_hien_6_thang",
                     "so_sanh_ky_truoc",
-                    "so_sanh_uoc_6_thang_cung_ky",
-                    "so_sanh_uoc_6_thang_ke_hoach_nam"
+                    "so_sanh_cung_ky",
+                    "so_sanh_luy_ke_cung_ky",
+                    "so_sanh_luy_ke_ke_hoach_nam"
                 ]
                 break;
 
@@ -379,7 +380,7 @@ export class ExcelService {
         return ls;
     }
 
-    mappingDataSource56(data, time_id) {
+    mappingDataSource5(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -404,7 +405,7 @@ export class ExcelService {
         return ls;
     }
 
-    mappingDataSource78911(data, time_id) {
+    mappingDataSource678911(data, time_id) {
         let ls = [];
         data.forEach(item => {
             let datarow: new_model = new new_model();
@@ -469,7 +470,7 @@ export class ExcelService {
             datarow['thuc_hien_thang'] = item['Thực hiện kỳ báo cáo'] ? item['Thực hiện kỳ báo cáo'] : 0;
             datarow['luy_ke_thang'] = item['Thực hiện năm'] ? item['Thực hiện năm'] : 0;
             datarow['ke_hoach_nam_sau'] = item['Kế hoạch năm sau'] ? item['Kế hoạch năm sau'] : 0;
-            datarow['so_sanh_luy_ke_cung_ky'] = item['Thực hiện năm so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo'] : 0;
+            datarow['so_sanh_luy_ke_cung_ky'] = item['Thực hiện năm so với cùng kỳ năm trước'] ? item['Thực hiện năm so với cùng kỳ năm trước'] : 0;
             datarow['so_sanh_luy_ke_ke_hoach_nam'] = item['Thực hiện năm so với kế hoặch năm'] ? item['Thực hiện năm so với kế hoặch năm'] : 0;
             datarow['so_sanh_ke_hoach_nam_sau_thuc_hien_nam'] = item['Kế hoạch năm sau so với thực hiện năm'] ? item['Kế hoạch năm sau so với thực hiện năm'] : 0;
 

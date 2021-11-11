@@ -62,7 +62,7 @@ export const MY_FORMATS = {
 })
 export class IipMonthNewComponent implements OnInit {
 
-  private readonly LINK_DEFAULT: string ="/specialized/industry-management/iip/iip-detail";
+  private readonly LINK_DEFAULT: string = "/specialized/industry-management/iip/iip-detail";
   private readonly TITLE_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
   private readonly TEXT_DEFAULT: string = "Chỉ số sản xuất công nghiệp";
 
@@ -75,7 +75,7 @@ export class IipMonthNewComponent implements OnInit {
     return date
   }
 
-  public date =  new FormControl(_moment());
+  public date = new FormControl(_moment());
   public newdate = new FormControl(_moment());
   d = new Date();
   public theYear: number = this.d.getFullYear();
@@ -234,14 +234,14 @@ export class IipMonthNewComponent implements OnInit {
         return this.excelService.mappingDataSource234(data, this.timechange);
 
       case 5:
-      case 6:
-        return this.excelService.mappingDataSource56(data, this.timechange);
+        return this.excelService.mappingDataSource5(data, this.timechange);
 
+      case 6:
       case 7:
       case 8:
       case 9:
       case 11:
-        return this.excelService.mappingDataSource78911(data, this.timechange);
+        return this.excelService.mappingDataSource678911(data, this.timechange);
 
       case 10:
         return this.excelService.mappingDataSource10(data, this.timechange);
@@ -281,19 +281,19 @@ export class IipMonthNewComponent implements OnInit {
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-        this.timeparam = params['time_id']
+      this.timeparam = params['time_id']
       this.date = new FormControl(this.convertstringtodate(this.timeparam.toString()))
       this.theYear = this.date.value.getFullYear();
       this.theMonth = this.date.value.getMonth() + 1;
       let time_id = params['time_id'];
-        if (time_id) {
-            this.month = time_id.toString().substring(5, 6);
-            this.timechange = Number(time_id);
-        }
-        else{
-          this.month = this.getCurrentMonth().substring(5, 6);
-          this.timechange = parseInt(this.getCurrentMonth());
-        }
+      if (time_id) {
+        this.month = time_id.toString().substring(5, 6);
+        this.timechange = Number(time_id);
+      }
+      else {
+        this.month = this.getCurrentMonth().substring(5, 6);
+        this.timechange = parseInt(this.getCurrentMonth());
+      }
     });
 
     this.defaultDatasource.push(
@@ -330,7 +330,7 @@ export class IipMonthNewComponent implements OnInit {
       this.authorize = false
     }
 
-    this.displayedColumns = this.excelService.initialdisplayedColumns(new Date().getMonth() + 1);
+    this.displayedColumns = this.excelService.initialdisplayedColumns(Number(this.month));
     this.fields = this.excelService.fields;
     this.href_file = this.excelService.getHref();
   }
@@ -406,8 +406,8 @@ export class IipMonthNewComponent implements OnInit {
       this.duLieuThang12CungKy = result.data[0].filter(x => x.time_id == time_id_thang_12_cung_ky);
 
 
-      this.setDataExport(result.data[0]);
-      this.setSumaryData(result.data[0] ? result.data[0] : 0)
+      this.setDataExport(this.duLieuKyBaoCao);
+      this.setSumaryData(this.duLieuKyBaoCao ? this.duLieuKyBaoCao : 0)
     });
   }
 
