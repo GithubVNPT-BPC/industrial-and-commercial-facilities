@@ -346,6 +346,14 @@ export class ConditionBusinessService {
       catchError(this.handleError)
     );
   }
+  public GetALLCompany(mst: string) {
+    var apiUrl = this.apiHome + this.urlCer;
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    let params = new HttpParams().set('mst', mst);
+    return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+      catchError(this.handleError)
+    );
+  }
   public DeleteCertificate(deletemodel: Array<DeleteModel>) {
     var apiUrl = this.apiHome + this.DeleteCer
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });

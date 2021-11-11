@@ -161,7 +161,7 @@ export class CertificateListComponent implements OnInit {
   dataSource: MatTableDataSource<CertificateViewModel> = new MatTableDataSource<CertificateViewModel>();
 
   getBusinessList() {
-    this._Service.GetCertificate('').subscribe(all => {
+    this._Service.GetCertificate('FILTER').subscribe(all => {
       this.dataSource.data = all.data
       this.dataSource.data.forEach(x => {
         x.ngay_cap = x.ngay_cap ? this.Convertdate(x.ngay_cap) : null

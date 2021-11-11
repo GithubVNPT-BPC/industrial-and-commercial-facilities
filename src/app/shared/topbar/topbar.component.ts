@@ -73,7 +73,7 @@ export class TopbarComponent implements OnInit {
   expirenumber: number;
 
   getBusinessList() {
-    this._Service.GetCertificate('').subscribe(all => {
+    this._Service.GetCertificate('FILTER').subscribe(all => {
       this.certificate = all.data
 
       this.certificate.forEach(element => {

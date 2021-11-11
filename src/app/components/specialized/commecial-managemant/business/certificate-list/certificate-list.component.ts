@@ -207,7 +207,7 @@ export class CertificateListComponent implements OnInit {
   certificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
 
   getBusinessList() {
-    this._Service.GetCertificate('').subscribe(all => {
+    this._Service.GetCertificate('FILTER').subscribe(all => {
       this.certificate = all.data
 
       this.certificate.forEach(element => {

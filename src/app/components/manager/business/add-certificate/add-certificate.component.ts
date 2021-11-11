@@ -223,7 +223,7 @@ export class AddCertificateComponent implements OnInit {
   ngayhethan: Date;
 
   getCertificateList() {
-    this._Service.GetCertificate('').subscribe(all => {
+    this._Service.GetCertificate('FILTER').subscribe(all => {
       this.dataSource = new MatTableDataSource<CertificateModel>(all.data);
       this.dataSource1.data = this.dataSource.data.filter(x => x.id_giay_phep == this.id)
       this.CertificateModelobject = this.dataSource1.data[0]

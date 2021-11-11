@@ -98,7 +98,7 @@ export class AddStoreComponent implements OnInit {
   allcertificate: Array<CertificateModel> = new Array<CertificateModel>();
   public filterallcertificate: ReplaySubject<CertificateModel[]> = new ReplaySubject<CertificateModel[]>(1);
   GetAllGiayPhep() {
-    this._Service.GetCertificate('').subscribe((allrecords) => {
+    this._Service.GetCertificate('FILTER').subscribe((allrecords) => {
       this.allcertificate = allrecords.data as CertificateModel[];
       this.filterallcertificate.next(this.allcertificate.slice());
     });

@@ -126,7 +126,7 @@ export class CertificateRegulationComponent extends BaseComponent {
   allcertificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
   public filterallcertificate: ReplaySubject<CertificateViewModel[]> = new ReplaySubject<CertificateViewModel[]>(1);
   GetAllGiayPhep() {
-    this._Service.GetCertificate('').subscribe((allrecords) => {
+    this._Service.GetALLCompany('ALL').subscribe((allrecords) => {
       this.allcertificate = allrecords.data as CertificateViewModel[];
       this.filterallcertificate.next(this.allcertificate.slice());
     });
