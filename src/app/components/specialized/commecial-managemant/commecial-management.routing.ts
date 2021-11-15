@@ -215,14 +215,14 @@ const routes: Routes = [
     path: 'trade-development',
     children: [
       {
-        path: 'TFE',
+        path: 'tradefairs',
         component: TradeFairsExhibitionsComponent,
         data: {
           title: 'Hội trợ triển lãm',
         }
       },
       {
-        path: 'SD',
+        path: 'subscribe',
         component: SubscribeDiscountComponent,
         data: {
           title: 'Đăng ký khuyến mãi',
