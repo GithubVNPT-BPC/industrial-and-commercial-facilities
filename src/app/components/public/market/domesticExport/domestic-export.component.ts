@@ -115,7 +115,7 @@ export class DomesticExportComponent extends BaseComponent {
       this.getDanhSachXuatKhauTC(this.timechange)
     }
 
-    this.month = this.time.substring(5, 6)
+    this.month = this.time.substring(4, 6)
   }
 
   dataTargets: any[] = [
@@ -172,7 +172,7 @@ export class DomesticExportComponent extends BaseComponent {
     this.denthang = this.presentmonth.value
     this.productcode = 42
 
-    this.month = this.getCurrentMonth().substring(5, 6)
+    this.month = this.getCurrentMonth().substring(4, 6)
     this.timechange = parseInt(this.getCurrentMonth())
     this.getDanhSachXuatKhau(this.timechange);
     super.ngOnInit();

@@ -115,7 +115,7 @@ export class DomesticImportComponent extends BaseComponent {
       this.getDanhSachNhapKhauTC(this.timechange)
     }
 
-    this.month = this.time.substring(5, 6)
+    this.month = this.time.substring(4, 6)
   }
 
   dataTargets: any[] = [
@@ -172,7 +172,7 @@ export class DomesticImportComponent extends BaseComponent {
     this.denthang = this.presentmonth.value
     this.productcode = 55
 
-    this.month = this.getCurrentMonth().substring(5, 6)
+    this.month = this.getCurrentMonth().substring(4, 6)
     this.timechange = parseInt(this.getCurrentMonth())
     this.getDanhSachNhapKhau(this.timechange);
     super.ngOnInit();
@@ -230,6 +230,13 @@ export class DomesticImportComponent extends BaseComponent {
     else {
       this.getDanhSachNhapKhauTC(this.timechange)
     }
+  }
+
+  applyDataTarget1(event) {
+    this.dataTargetId1 = event.value
+
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
