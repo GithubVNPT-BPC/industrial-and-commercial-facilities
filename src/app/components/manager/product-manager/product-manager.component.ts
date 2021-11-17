@@ -59,7 +59,9 @@ export const MY_FORMATS = {
 export class ProductManagerComponent implements OnInit {
     public dataSource: MatTableDataSource<ProductValueModel> = new MatTableDataSource<ProductValueModel>();
     public displayedColumns: string[] =
-        ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 'tri_gia', 'time_id',
+        ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 
+        // 'tri_gia', 
+        'time_id',
             // 'top_san_xuat', 'them_top_san_xuat'
         ];
 
