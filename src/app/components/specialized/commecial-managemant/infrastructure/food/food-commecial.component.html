@@ -44,7 +44,7 @@
                     <div class="col-6 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Địa bàn</mat-label>
-                            <mat-select (selectionChange)="applyFilter(event)" [(ngModel)]="filterModel.id_quan_huyen" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen" multiple>
                                 <mat-option *ngFor='let district of districts' [value]='district.id'>
                                     {{district.ten_quan_huyen}}
                                 </mat-option>
@@ -54,7 +54,7 @@
                     <div class="col-6 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Sản phẩm kinh doanh</mat-label>
-                            <mat-select (selectionChange)="applyFilter(event)" [(ngModel)]="filterModel.id_spkd" multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_spkd" multiple>
                                 <mat-option *ngFor='let product of businessProducts' [value]='product.id_spkd'>
                                     {{product.ten_san_pham}}
                                 </mat-option>
