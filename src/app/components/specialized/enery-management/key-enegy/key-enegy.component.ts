@@ -1,9 +1,11 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { KeyEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
 import { BaseComponent } from '../../base.component';
 
 @Component({
@@ -17,7 +19,9 @@ export class KeyEnegyComponent extends BaseComponent {
   constructor(
     private injector: Injector,
     private energyService: EnergyService,
-    public _login: LoginService
+    public _login: LoginService,
+    public matDialog: MatDialog,
+    private dialogService: DialogService,
   ) {
     super(injector);
   }
@@ -38,12 +42,12 @@ export class KeyEnegyComponent extends BaseComponent {
 
   authorize: boolean = true
 
-  currentYear: number = new Date().getFullYear() -1;
+  currentYear: number = new Date().getFullYear() - 1;
   ngOnInit() {
     super.ngOnInit();
     this.laydulieuNLTD();
 
-    if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 4 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -61,13 +65,13 @@ export class KeyEnegyComponent extends BaseComponent {
         this.dataSource = new MatTableDataSource<KeyEnergyModel>(res.data);
         this.filteredDataSource = new MatTableDataSource<KeyEnergyModel>(res.data);
       }
-      
+
       this._prepareData();
       this.paginatorAgain();
     })
   }
 
-  _prepareData(){
+  _prepareData() {
     let data = this.filteredDataSource.data;
     this.soLuongDoanhNghiep = data.length;
     this.TongDienTieuThu = data.length ? data.map(item => item.dien).reduce((a, b) => a + b) : 0;
@@ -93,22 +97,22 @@ export class KeyEnegyComponent extends BaseComponent {
   }
   setFormParams() {
     if (this.selection.selected.length) {
-     let selectedRecord = this.selection.selected[0];
-     this.formData.controls['ten_khach_hang'].setValue(selectedRecord.ten_khach_hang);
-     this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
-     this.formData.controls['nganh_nghe'].setValue(selectedRecord.nganh_nghe);
-     this.formData.controls['dien'].setValue(selectedRecord.dien);
-     this.formData.controls['than'].setValue(selectedRecord.than);
-     this.formData.controls['DO'].setValue(selectedRecord.DO);
-     this.formData.controls['FO'].setValue(selectedRecord.FO);
-     this.formData.controls['xang'].setValue(selectedRecord.xang);
-     this.formData.controls['LPG'].setValue(selectedRecord.LPG);
-     this.formData.controls['_go'].setValue(selectedRecord._go);
-     this.formData.controls['nang_luong_quy_doi'].setValue(selectedRecord.nang_luong_quy_doi);
-     this.formData.controls['time_id'].setValue(selectedRecord.time_id);
-     this.formData.controls['id'].setValue(selectedRecord.id);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['ten_khach_hang'].setValue(selectedRecord.ten_khach_hang);
+      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+      this.formData.controls['nganh_nghe'].setValue(selectedRecord.nganh_nghe);
+      this.formData.controls['dien'].setValue(selectedRecord.dien);
+      this.formData.controls['than'].setValue(selectedRecord.than);
+      this.formData.controls['DO'].setValue(selectedRecord.DO);
+      this.formData.controls['FO'].setValue(selectedRecord.FO);
+      this.formData.controls['xang'].setValue(selectedRecord.xang);
+      this.formData.controls['LPG'].setValue(selectedRecord.LPG);
+      this.formData.controls['_go'].setValue(selectedRecord._go);
+      this.formData.controls['nang_luong_quy_doi'].setValue(selectedRecord.nang_luong_quy_doi);
+      this.formData.controls['time_id'].setValue(selectedRecord.time_id);
+      this.formData.controls['id'].setValue(selectedRecord.id);
     }
-}
+  }
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.filteredDataSource.filter = filterValue.trim().toLowerCase();
@@ -123,7 +127,58 @@ export class KeyEnegyComponent extends BaseComponent {
     return datas;
   }
 
-  callRemoveService(IDs: any){
+  callRemoveService(IDs: any) {
     this.energyService.XoaDuLieuNangLuongTrongDiem(IDs).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
+
+  uploadExcel(e) {
+    // open dialog upload excel file 
+    this.openDialog("Năng lượng trọng điểm");
+  }
+
+  openDialog(nameSheet) {
+    const dialogConfig = new MatDialogConfig();
+    if (window.innerWidth > 375) {
+      dialogConfig.width = window.innerWidth * 0.7 + 'px';
+      dialogConfig.height = window.innerHeight * 0.4 + 'px';
+    } else {
+      dialogConfig.width = window.innerWidth * 0.8 + 'px';
+      dialogConfig.height = window.innerHeight * 0.2 + 'px';
+    }
+    dialogConfig.data = {
+      nameSheet: nameSheet,
+    };
+    let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        const body = this.handleData(res);
+        this.energyService.ThemDuLieuNangLuongTrongDiem(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
+      }
+
+    })
+  }
+
+  handleData(time_id) {
+    let ls: any[] = [];
+    let dataExcel = this.dialogService.getDataTransform();
+    for (let i = 1; i < dataExcel.length; i++) {
+      let body: any = {};
+      body['ten_khach_hang'] = dataExcel[i]['__EMPTY'];
+      body['dia_chi'] = dataExcel[i]['__EMPTY_1'];
+      body['nganh_nghe'] = dataExcel[i]['__EMPTY_2'];
+      body['dien'] = dataExcel[i]['__EMPTY_5'];
+      body['than'] = dataExcel[i]['__EMPTY_6'];
+      body['san_luong_nam'] = dataExcel[i]['__EMPTY_7'];
+      body['doanh_thu'] = dataExcel[i]['__EMPTY_8'];
+      body['xang'] = dataExcel[i]['__EMPTY_9'];
+      body['LPG'] = time_id;
+      body['_go'] = 1;
+      body['nang_luong_quy_doi'] = dataExcel[i]['__EMPTY_3'];
+      body['time_id'] = time_id;
+      ls.push(body)
+    }
+    return ls;
+  }
+
 }
