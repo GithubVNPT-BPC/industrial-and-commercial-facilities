@@ -38,7 +38,7 @@ export class CountrysideComponent extends BaseComponent {
   filterModel = {
     id_quan_huyen: [],
     nam_dat_TC_7: [],
-    nam_dat_NTM: [],
+    nam_dat_NTM: []
   };
 
   displayedFields = {

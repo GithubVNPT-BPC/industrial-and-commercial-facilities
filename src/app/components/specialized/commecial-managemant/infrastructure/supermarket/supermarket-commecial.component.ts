@@ -41,6 +41,8 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   public VonNgoaiNhaNuoc = 0;
   public VonNuocNgoai = 0;
   public VonKhac = 0;
+
+  public businessType = 0;
   //
   public filterModel = {
     id_dia_ban: [],
@@ -48,11 +50,24 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
     business_area_id: [],
     nam_xay_dung: [],
     nam_ngung_hoat_dong: [],
+    chuyen_doanh: [],
+    tong_hop: []
   }
   public marketTypeList: MarketTypeModel[] = [
     { id: 1, name: "Hạng I" },
     { id: 2, name: "Hạng II" },
     { id: 3, name: "Hạng III" }
+  ]
+
+  public businessTypeList: MarketTypeModel[] = [
+    { id: 1, name: "Tổng hợp" },
+    { id: 2, name: "Chuyên doanh" },
+    { id: 3, name: "Tổng hợp/Chuyên doanh" }
+  ]
+
+  public businessTypeFilterList: MarketTypeModel[] = [
+    { id: 1, name: "Tổng hợp" },
+    { id: 2, name: "Chuyên doanh" }
   ]
 
   public businessAreaList = [
@@ -98,6 +113,7 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
   ngOnInit(): void {
     super.ngOnInit();
     this.getSuperMarketData();
+    this.businessType = 0;
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -139,8 +155,8 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
     this.sieuThiHangIII = data.filter(x => x.id_phan_hang == 3).length;
     this.sieuThiDangXayDung = data.length - this.sieuThiHangI - this.sieuThiHangII - this.sieuThiHangIII;
 
-    this.sieuThiChuyenDanh = data.filter(x => x.chuyen_doanh != null).length;
-    this.sieuThiTongHop = data.filter(x => x.tong_hop != null).length;
+    this.sieuThiChuyenDanh = data.filter(x => x.chuyen_doanh != null && x.chuyen_doanh == '1').length;
+    this.sieuThiTongHop = data.filter(x => x.tong_hop != null && x.tong_hop == '1').length;
 
     this.sieuThi_ThanhLapMoi = this.dataSource.data.filter(x => x.nam_xay_dung == this.currentYear.toString()).length;
     this.sieuThi_NgungHoatDong = this.dataSource.data.filter(x => x.nam_ngung_hoat_dong == this.currentYear.toString()).length;
@@ -206,6 +222,12 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
       this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
       this.formData.controls['tong_hop'].setValue(selectedRecord.tong_hop);
       this.formData.controls['chuyen_doanh'].setValue(selectedRecord.chuyen_doanh);
+      if (selectedRecord.tong_hop == '1' && selectedRecord.chuyen_doanh == '0')
+        this.businessType = 1;
+      if (selectedRecord.tong_hop == '0' && selectedRecord.chuyen_doanh == '1')
+        this.businessType = 2;
+      if (selectedRecord.tong_hop == '1' && selectedRecord.chuyen_doanh == '1')
+        this.businessType = 3;
       this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
       this.formData.controls['nam_ngung_hoat_dong'].setValue(selectedRecord.nam_ngung_hoat_dong);
       this.formData.controls['dien_tich_dat'].setValue(selectedRecord.dien_tich_dat);
@@ -240,5 +262,37 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
 
   callRemoveService(data) {
     this.commerceManagementService.deleteSuperMarket(data).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+  }
+
+  changeBussinessType(event) {
+    if (event.value == 1) {
+      this.formData.controls['tong_hop'].setValue('1');
+      this.formData.controls['chuyen_doanh'].setValue('0');
+    }
+    if (event.value == 2) {
+      this.formData.controls['tong_hop'].setValue('0');
+      this.formData.controls['chuyen_doanh'].setValue('1');
+    }
+    if (event.value == 3) {
+      this.formData.controls['tong_hop'].setValue('1');
+      this.formData.controls['chuyen_doanh'].setValue('1');
+    }
+  }
+
+  applyBusinessFilter(event) {
+    if (event.value){
+    if (event.value == 1) {
+      this.filterModel.tong_hop = ['1'];
+      this.filterModel.chuyen_doanh = [];
+    }
+    else {
+      this.filterModel.tong_hop = [];
+      this.filterModel.chuyen_doanh = ['1'];
+    }}
+    else{
+      this.filterModel.tong_hop = [];
+      this.filterModel.chuyen_doanh = [];
+    }
+    this.applyFilter(event);
   }
 }

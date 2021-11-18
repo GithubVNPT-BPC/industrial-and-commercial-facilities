@@ -38,6 +38,8 @@ export class ShoppingcentreComponent extends BaseComponent {
   public VonNgoaiNhaNuoc = 0;
   public VonNuocNgoai = 0;
   public VonKhac = 0;
+
+  public businessType = 0;
   //
   public filterModel = {
     id_dia_ban: [],
@@ -45,6 +47,8 @@ export class ShoppingcentreComponent extends BaseComponent {
     business_area_id: [],
     nam_xay_dung: [],
     nam_ngung_hoat_dong: [],
+    chuyen_doanh: [],
+    tong_hop: []
   }
 
   public businessAreaList = [
@@ -52,6 +56,17 @@ export class ShoppingcentreComponent extends BaseComponent {
     { id: 2, name: "Ngoài nhà nước" },
     { id: 3, name: "Có vốn đầu tư nước ngoài" },
     { id: 4, name: "Vốn khác" },
+  ]
+
+  public businessTypeList = [
+    { id: 1, name: "Tổng hợp" },
+    { id: 2, name: "Chuyên doanh" },
+    { id: 3, name: "Tổng hợp/Chuyên doanh" }
+  ]
+
+  public businessTypeFilterList = [
+    { id: 1, name: "Tổng hợp" },
+    { id: 2, name: "Chuyên doanh" }
   ]
 
   private builtYears = [];
@@ -91,6 +106,7 @@ export class ShoppingcentreComponent extends BaseComponent {
   ngOnInit(): void {
     super.ngOnInit();
     this.getShoppingCenterData();
+    this.businessType = 0;
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -170,6 +186,12 @@ export class ShoppingcentreComponent extends BaseComponent {
       this.formData.controls['von_khac'].setValue(selectedRecord.von_khac);
       this.formData.controls['tong_hop'].setValue(selectedRecord.tong_hop);
       this.formData.controls['chuyen_doanh'].setValue(selectedRecord.chuyen_doanh);
+      if (selectedRecord.tong_hop == '1' && selectedRecord.chuyen_doanh == '0')
+        this.businessType = 1;
+      if (selectedRecord.tong_hop == '0' && selectedRecord.chuyen_doanh == '1')
+        this.businessType = 2;
+      if (selectedRecord.tong_hop == '1' && selectedRecord.chuyen_doanh == '1')
+        this.businessType = 3;
       this.formData.controls['nam_xay_dung'].setValue(selectedRecord.nam_xay_dung);
       this.formData.controls['nam_ngung_hoat_dong'].setValue(selectedRecord.nam_ngung_hoat_dong);
       this.formData.controls['dien_tich_dat'].setValue(selectedRecord.dien_tich_dat);
@@ -217,8 +239,8 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.HoatDong = this.dataSource.data.filter(x => x.nam_xay_dung == this.currentYear.toString()).length;
     this.NgungHoatDong = this.dataSource.data.filter(x => x.nam_ngung_hoat_dong == this.currentYear.toString()).length;
 
-    this.loaihinh_ChuyenDoanh = data.filter(x => x.chuyen_doanh != null).length;
-    this.loaihinh_TongHop = data.filter(x => x.tong_hop != null).length;
+    this.loaihinh_ChuyenDoanh = data.filter(x => x.chuyen_doanh != null && x.chuyen_doanh == '1').length;
+    this.loaihinh_TongHop = data.filter(x => x.tong_hop != null && x.tong_hop == '1').length;
 
     // Compute Business Area ID
     data.map(x => {
@@ -233,5 +255,38 @@ export class ShoppingcentreComponent extends BaseComponent {
     this.VonNgoaiNhaNuoc = data.map(x => x.ngoai_nha_nuoc).reduce((a, b) => a + b, 0);
     this.VonNuocNgoai = data.map(x => x.co_von_dau_tu_nuoc_ngoai).reduce((a, b) => a + b, 0);
     this.VonKhac = data.map(x => x.von_khac).reduce((a, b) => a + b, 0);
+  }
+
+  changeBussinessType(event) {
+    if (event.value == 1) {
+      this.formData.controls['tong_hop'].setValue('1');
+      this.formData.controls['chuyen_doanh'].setValue('0');
+    }
+    if (event.value == 2) {
+      this.formData.controls['tong_hop'].setValue('0');
+      this.formData.controls['chuyen_doanh'].setValue('1');
+    }
+    if (event.value == 3) {
+      this.formData.controls['tong_hop'].setValue('1');
+      this.formData.controls['chuyen_doanh'].setValue('1');
+    }
+  }
+
+  applyBusinessFilter(event) {
+    if (event.value) {
+      if (event.value == 1) {
+        this.filterModel.tong_hop = ['1'];
+        this.filterModel.chuyen_doanh = [];
+      }
+      else {
+        this.filterModel.tong_hop = [];
+        this.filterModel.chuyen_doanh = ['1'];
+      }
+    }
+    else {
+      this.filterModel.tong_hop = [];
+      this.filterModel.chuyen_doanh = [];
+    }
+    this.applyFilter(event);
   }
 }

@@ -176,8 +176,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Khu vực kinh tế</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.business_area_id"
-                                multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.business_area_id" multiple>
                                 <mat-option *ngFor='let type of businessAreaList' [value]='type.id'>
                                     {{type.name}}
                                 </mat-option>
@@ -188,8 +187,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Phân hạng</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_phan_hang"
-                                multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_phan_hang" multiple>
                                 <mat-option *ngFor='let type of marketTypeList' [value]='type.id'>
                                     {{type.name}}
                                 </mat-option>
@@ -200,8 +198,7 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm xây dựng</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_xay_dung"
-                                multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_xay_dung" multiple>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
                                 </mat-option>
@@ -212,10 +209,21 @@
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
                             <mat-label>Năm ngừng hoạt động</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_ngung_hoat_dong"
-                                multiple>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_ngung_hoat_dong" multiple>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>
                                     {{year}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Loại hình KD</mat-label>
+                            <mat-select (selectionChange)="applyBusinessFilter($event)">
+                                <mat-option [value]="null"></mat-option>
+                                <mat-option *ngFor='let type of businessTypeFilterList' [value]='type.id'>
+                                    {{type.name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -225,21 +233,17 @@
                 <hr>
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-xs-12 button-control text-left my-auto">
-                        <button mat-raised-button class="green"
-                        (click)="ExportTOExcel('DỮ LIỆU TRUNG TÂM THƯƠNG MẠI','DỮ LIỆU TRUNG TÂM THƯƠNG MẠI')">Xuất
+                        <button mat-raised-button class="green" (click)="ExportTOExcel('DỮ LIỆU TRUNG TÂM THƯƠNG MẠI','DỮ LIỆU TRUNG TÂM THƯƠNG MẠI')">Xuất
                         Excel</button>
                     </div>
                     <div class="col-lg-6 col-md-6 col-xs-12 button-control my-auto">
-                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()"
-                            [hidden]=authorize>
+                        <button mat-raised-button matTooltip="Thêm mới" class="green" (click)="switchView()" [hidden]=authorize>
                             <mat-icon>add_circle_outline</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button
-                            (click)="openRemoveDialog()" [hidden]=authorize>
+                        <button *ngIf="selection.selected.length != 0" class="red" matTooltip="Xóa" mat-raised-button (click)="openRemoveDialog()" [hidden]=authorize>
                             <mat-icon>delete</mat-icon>
                         </button>
-                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" [hidden]=authorize
-                            mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
+                        <button *ngIf="selection.selected.length == 1" matTooltip="Chỉnh sửa" [hidden]=authorize mat-raised-button (click)="switchEditMode()"><mat-icon>edit</mat-icon></button>
                     </div>
                 </div>
                 <hr>
@@ -248,16 +252,11 @@
                     <table mat-table [dataSource]="filteredDataSource" class="table-layout" id="small-table2">
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef disableClear>
-                                <mat-checkbox (change)="$event ? masterToggle() : null"
-                                    [checked]="selection.hasValue() && isAllSelected()"
-                                    [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                    [aria-label]="checkboxLabel()">
+                                <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                                 </mat-checkbox>
                             </th>
                             <td mat-cell *matCellDef="let element" class="center-cell">
-                                <mat-checkbox (click)="$event.stopPropagation()"
-                                    (change)="$event ? selection.toggle(element) : null"
-                                    [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+                                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(element) : null" [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
                                 </mat-checkbox>
                             </td>
                         </ng-container>
@@ -265,9 +264,7 @@
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef> STT </th>
                             <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
-                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i
-                                + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex *
-                                this.filteredDataSource.paginator.pageSize}}
+                                {{this.filteredDataSource.paginator.pageIndex == 0 ? i + 1 : 1 + i + this.filteredDataSource.paginator.pageIndex * this.filteredDataSource.paginator.pageSize}}
                             </td>
                         </ng-container>
 
@@ -289,14 +286,12 @@
 
                         <ng-container matColumnDef="nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Nhà nước </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc |
-                                formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.nha_nuoc | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ngoai_nha_nuoc">
                             <th mat-header-cell *matHeaderCellDef> Ngoài <br> nhà nước </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.ngoai_nha_nuoc |
-                                formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.ngoai_nha_nuoc | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="co_von_dau_tu_nuoc_ngoai">
@@ -307,8 +302,7 @@
 
                         <ng-container matColumnDef="von_khac">
                             <th mat-header-cell *matHeaderCellDef> Vốn khác </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.von_khac |
-                                formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.von_khac | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="tong_hop">
@@ -333,8 +327,7 @@
 
                         <ng-container matColumnDef="dien_tich_dat">
                             <th mat-header-cell *matHeaderCellDef> Diện tích <br> (m2) </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat |
-                                formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.dien_tich_dat | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="phan_hang">
@@ -344,8 +337,7 @@
 
                         <ng-container matColumnDef="so_lao_dong">
                             <th mat-header-cell *matHeaderCellDef> Số <br> lao động </th>
-                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.so_lao_dong |
-                                formatNumber}} </td>
+                            <td mat-cell *matCellDef="let element" class="right-cell"> {{element.so_lao_dong | formatNumber}} </td>
                         </ng-container>
 
                         <ng-container matColumnDef="ten_chu_dau_tu">
@@ -415,8 +407,7 @@
                             <th mat-header-cell *matHeaderCellDef [attr.colspan]="3"></th>
                         </ng-container>
 
-                        <tr mat-header-row class="table-row"
-                            *matHeaderRowDef="['merge1','merge2', 'merge3','merge4','merge5','merge6','merge7', 'merge8']; sticky:true">
+                        <tr mat-header-row class="table-row" *matHeaderRowDef="['merge1','merge2', 'merge3','merge4','merge5','merge6','merge7', 'merge8']; sticky:true">
                         </tr>
 
                         <tr mat-header-row class="table-header" *matHeaderRowDef="headerArray; sticky:true"></tr>
@@ -440,8 +431,7 @@
             <mat-card-header>
                 <mat-card-title>
                     <strong class="mt-3">CHỈNH SỬA DỮ LIỆU</strong>
-                    <button mat-raised-button color="primary" matTooltip="Trở về danh sách"
-                        class="float-right set-bg-color-primary" (click)="switchView()">
+                    <button mat-raised-button color="primary" matTooltip="Trở về danh sách" class="float-right set-bg-color-primary" (click)="switchView()">
                         <mat-icon>menu</mat-icon> &nbsp;Danh sách
                     </button>
                 </mat-card-title>
@@ -462,8 +452,7 @@
                                 <div class="col-md-12">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên TTTM</mat-label>
-                                        <input matInput formControlName="ten_sieu_thi_TTTM" type="text"
-                                            placeholder="Siêu thị Coopmart ...">
+                                        <input matInput formControlName="ten_sieu_thi_TTTM" type="text" placeholder="Siêu thị Coopmart ...">
                                     </mat-form-field>
                                 </div>
 
@@ -561,7 +550,17 @@
                         </mat-card-header>
                         <mat-card-content>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Loại hình</mat-label>
+                                        <mat-select (selectionChange)="changeBussinessType($event)" [(ngModel)]="businessType" [ngModelOptions]="{standalone: true}">
+                                            <mat-option *ngFor='let type of businessTypeList' [value]='type.id'>
+                                                {{type.name}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <!-- <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tổng hợp</mat-label>
                                         <input matInput type="text" formControlName="tong_hop">
@@ -573,7 +572,7 @@
                                         <mat-label>Chuyên doanh</mat-label>
                                         <input matInput type="text" formControlName="chuyen_doanh">
                                     </mat-form-field>
-                                </div>
+                                </div> -->
                             </div>
                         </mat-card-content>
                     </div>
@@ -589,20 +588,14 @@
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm xây dựng</mat-label>
-                                        <mat-select formControlName="nam_xay_dung">
-                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
-                                            </mat-option>
-                                        </mat-select>
+                                        <input matInput type="number" formControlName="nam_xay_dung">
                                     </mat-form-field>
                                 </div>
 
                                 <div class="col-md-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Năm ngừng hoạt động</mat-label>
-                                        <mat-select formControlName="nam_ngung_hoat_dong">
-                                            <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}
-                                            </mat-option>
-                                        </mat-select>
+                                        <input matInput type="number" formControlName="nam_ngung_hoat_dong">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -682,8 +675,7 @@
 
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success float-right">Lưu</button>
-                        <button class="btn btn-danger set-bg-color-danger float-left"
-                            (click)="clearTable($event)">Xóa</button>
+                        <button class="btn btn-danger set-bg-color-danger float-left" (click)="clearTable($event)">Xóa</button>
                     </div>
                 </div>
             </form>
