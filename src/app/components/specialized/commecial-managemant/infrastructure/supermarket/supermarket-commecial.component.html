@@ -173,7 +173,7 @@
 
                     <div class="col-3 col-lg-3">
                         <mat-form-field appearance="outline">
-                            <mat-label>Phân loại</mat-label>
+                            <mat-label>Phân hạng</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_phan_hang"
                                 multiple>
                                 <mat-option *ngFor='let type of marketTypeList' [value]='type.id'>

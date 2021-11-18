@@ -36,6 +36,7 @@ export class CountrysideComponent extends BaseComponent {
   private yearOfStd = [];
 
   filterModel = {
+    id_quan_huyen: [],
     nam_dat_TC_7: [],
     nam_dat_NTM: [],
   };

@@ -50,9 +50,9 @@ export class SuperMarketCommecialManagementComponent extends BaseComponent {
     nam_ngung_hoat_dong: [],
   }
   public marketTypeList: MarketTypeModel[] = [
-    { id: 1, name: "Loại I" },
-    { id: 2, name: "Loại II" },
-    { id: 3, name: "Loại III" }
+    { id: 1, name: "Hạng I" },
+    { id: 2, name: "Hạng II" },
+    { id: 3, name: "Hạng III" }
   ]
 
   public businessAreaList = [

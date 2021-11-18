@@ -114,6 +114,17 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <mat-form-field appearance="outline">
+                            <mat-label>Địa bàn</mat-label>
+                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.id_quan_huyen" multiple>
+                                <mat-option *ngFor='let district of districts' [value]='district.id'>
+                                    {{district.ten_quan_huyen}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="col-sm-12 col-md-4 col-lg-4">
+                        <mat-form-field appearance="outline">
                             <mat-label>Năm đạt TC số 7</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.nam_dat_TC_7"
                                 multiple>
