@@ -71,7 +71,7 @@ export class ExportManagementComponent implements OnInit {
     private readonly TITLE_DEFAULT: string = "Thông tin xuất khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin xuất khẩu";
 
-    public date = new FormControl(_moment());
+    public date = new FormControl();
     public newdate = new FormControl(_moment());
     public theYear: number;
     public theMonth: number;
@@ -79,6 +79,15 @@ export class ExportManagementComponent implements OnInit {
     public time: string
     public timechange: number
     public month: string
+
+    convertstringtodate(time: string): Date {
+        let year = parseInt(time.substring(0, 4));
+        let month = parseInt(time.substring(4, 6));
+        let day = parseInt(time.substring(6, 8));
+    
+        let date = new Date(year, month - 1, day);
+        return date
+      }
 
     public chosenYearHandler(normalizedYear: Moment) {
         this.date = this.newdate
@@ -469,9 +478,9 @@ export class ExportManagementComponent implements OnInit {
         this.denthang = this.presentmonth.value
         this.productcode = 42
 
-        this.month = this.getCurrentMonth().substring(4, 6)
-        this.timechange = parseInt(this.getCurrentMonth())
-        this.getDanhSachXuatKhau(this.timechange);
+        // this.month = this.getCurrentMonth().substring(4, 6)
+        // this.timechange = parseInt(this.getCurrentMonth())
+        this.getDanhSachXuatKhau(0);
         this.autoOpen();
         this.sendLinkToNext(true);
         if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
@@ -562,6 +571,10 @@ export class ExportManagementComponent implements OnInit {
             this.setDataExport(result.data[0]);
             this.setDatabusiness(result.data[1]);
             this.setDataExportDetail(result.data[2]);
+            if(time_id == 0){
+                this.month = result.data[3][0].timechange.toString().substring(4, 6)
+                this.date = new FormControl(_moment(this.convertstringtodate((result.data[3][0].timechange.toString() + '01'))))
+            }
         });
     }
 
@@ -598,15 +611,22 @@ export class ExportManagementComponent implements OnInit {
     uth_so_khn: number = 0;
 
     setSumaryData(data) {
-        this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
-        this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
-        this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
-        this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
+        if(data.length != 0){
+            this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
+            this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
+            this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
+            this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
+        }
+        else{
+            this.TongGiaTriThangThucHien = 0;
+            this.uth_so_cungky = 0;
+            this.TongGiaTriCongDon = 0;
+            this.uth_so_khn = 0;
+        }
     }
 
     setDataExport(data) {
         this.dataSource = new MatTableDataSource<new_import_export_model>(data);
-        if (data.length) {
             this.setSumaryData(data);
             this.dataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = "Số hàng";
@@ -614,7 +634,6 @@ export class ExportManagementComponent implements OnInit {
             this.paginator._intl.lastPageLabel = "Trang Cuối";
             this.paginator._intl.previousPageLabel = "Trang Trước";
             this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        }
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {

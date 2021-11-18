@@ -247,7 +247,7 @@
 
                         <ng-container matColumnDef="uoc_th_so_cungky_tht">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                so với tháng {{curentmonth}} cùng kỳ</th>
+                                so với tháng {{month}} cùng kỳ</th>
                             <td mat-cell *matCellDef="let element"
                                 [ngClass]="{'hidecolor': element.tt == null, 'highlight': element.tt == '1', 'highlight1': element.tt == null}">
                                 {{ element.uoc_thang_so_voi_ki_truoc | formatNumber }}
@@ -280,7 +280,7 @@
 
                         <ng-container matColumnDef="uoc_th_so_cungky_cong_don">
                             <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">ƯTH
-                                so với {{curentmonth}} tháng cùng kỳ</th>
+                                so với {{month}} tháng cùng kỳ</th>
                             <td mat-cell *matCellDef="let element"
                                 [ngClass]="{'hidecolor': element.tt == null, 'highlight': element.tt == '1', 'highlight1': element.tt == null}">
                                 {{ element.uoc_cong_don_so_voi_ki_truoc | formatNumber }}

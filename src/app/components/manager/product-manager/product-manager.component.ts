@@ -170,7 +170,8 @@ export class ProductManagerComponent implements OnInit {
     public getListProduct(): void {
         this.marketService.GetProductList().subscribe(
             allrecords => {
-                this.products = allrecords.data as ProductModel[];
+                this.products = allrecords.data.filter(x=>x.id_san_pham == 26 || x.id_san_pham == 269 || x.id_san_pham == 270 
+                    || x.id_san_pham == 271 || x.id_san_pham == 272 || x.id_san_pham == 273 || x.id_san_pham == 274) as ProductModel[];
                 this.filterproducts.next(this.products.slice());
             },
         );
@@ -246,10 +247,13 @@ export class ProductManagerComponent implements OnInit {
     public getProductValueList(time: string) {
         this.marketService.GetProductValue(time).subscribe(
             allrecords => {
-                allrecords.data[0].forEach(element => {
+                let temp =  allrecords.data[0].filter(x=>x.id_san_pham == 26 || x.id_san_pham == 269 || x.id_san_pham == 270 
+                    || x.id_san_pham == 271 || x.id_san_pham == 272 || x.id_san_pham == 273 || x.id_san_pham == 274)
+
+                temp.forEach(element => {
                     element.time_id = this.Convertdate(element.time_id.toString())
                 });
-                this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
+                this.dataSource = new MatTableDataSource<ProductValueModel>(temp);
                 this.paginatorAgain();
 
                 this._rows = this.dataSource.filteredData.length;
@@ -260,10 +264,12 @@ export class ProductManagerComponent implements OnInit {
     public getALLProductValueList() {
         this.marketService.GetAllProductValue().subscribe(
             allrecords => {
-                allrecords.data[0].forEach(element => {
+                let temp =  allrecords.data[0].filter(x=>x.id_san_pham == 26 || x.id_san_pham == 269 || x.id_san_pham == 270 
+                    || x.id_san_pham == 271 || x.id_san_pham == 272 || x.id_san_pham == 273 || x.id_san_pham == 274)
+                temp.forEach(element => {
                     element.time_id = this.Convertdate(element.time_id.toString())
                 });
-                this.dataSource = new MatTableDataSource<ProductValueModel>(allrecords.data[0]);
+                this.dataSource = new MatTableDataSource<ProductValueModel>(temp);
                 this.paginatorAgain();
 
                 this._rows = this.dataSource.filteredData.length;

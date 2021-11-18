@@ -82,7 +82,8 @@ export class DomesticProductComponent extends BaseComponent {
     this.denthang = this.presentmonth.value
     this.productcode = 1
 
-    this.getDomesticMarketProduct(this.currentTime.format('YYYYMM'));
+    // this.getDomesticMarketProduct(this.currentTime.format('YYYYMM'));
+    this.getDomesticMarketProduct('0')
 
     this.profilter.valueChanges
     .pipe(takeUntil(this._onDestroy))
@@ -99,6 +100,10 @@ export class DomesticProductComponent extends BaseComponent {
   public getDomesticMarketProduct(time: string) {
     this.marketService.GetProductValue(time).subscribe(
       allrecords => {
+        if(time == '0'){
+          this.date2 = new FormControl(_moment(this.convertstringtodate((allrecords.data[2][0].timechange.toString() + '01'))))
+        }
+
         this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
           let data = allrecords.data[0];
@@ -297,7 +302,16 @@ export class DomesticProductComponent extends BaseComponent {
     this.lineChartMethod(this.tuthang, this.denthang, this.productcode);
   }
 
-  public date2 = new FormControl(_moment());
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = parseInt(time.substring(6, 8));
+
+    let date = new Date(year, month - 1, day);
+    return date
+}
+
+  public date2 = new FormControl();
   public newdate2 = new FormControl(_moment());
 
   public chosenYearHandler2(normalizedYear: Moment) {
