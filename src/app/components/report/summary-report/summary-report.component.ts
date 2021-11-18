@@ -179,7 +179,7 @@ export class SummaryReportComponent extends BaseComponent {
 
     this.getData();
 
-    this.month = this.time.substring(5, 6);
+    this.month = this.time.substring(4, 6);
 
   }
 

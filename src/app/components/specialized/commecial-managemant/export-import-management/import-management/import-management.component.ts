@@ -17,6 +17,10 @@ import { InformationService } from 'src/app/shared/information/information.servi
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 
+import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
+import { exportimportchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
+import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
+
 import { FormControl } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -61,7 +65,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     private readonly TITLE_DEFAULT: string = "Thông tin nhập khẩu";
     private readonly TEXT_DEFAULT: string = "Thông tin nhập khẩu";
 
-    public date = new FormControl(_moment());
+    public date = new FormControl();
     public newdate = new FormControl(_moment());
     public theYear: number;
     public theMonth: number;
@@ -69,6 +73,15 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     public time: string
     public timechange: number
     public month: string
+
+    convertstringtodate(time: string): Date {
+        let year = parseInt(time.substring(0, 4));
+        let month = parseInt(time.substring(4, 6));
+        let day = parseInt(time.substring(6, 8));
+    
+        let date = new Date(year, month - 1, day);
+        return date
+    }
 
     public chosenYearHandler(normalizedYear: Moment) {
         this.date = this.newdate
@@ -101,7 +114,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
             this.getDanhSachNhapKhauTC(this.timechange)
         }
 
-        this.month = this.time.substring(5, 6)
+        this.month = this.time.substring(4, 6)
     }
 
     displayedColumns = [
@@ -155,6 +168,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         { id: 2, unit: "Tổng cục hải quan" },
     ];
     dataTargetId = 1;
+    dataTargetId1 = 1;
 
     constructor(
         public sctService: SCTService,
@@ -165,6 +179,7 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
         private excelServices: ExcelServicesService,
         public _login: LoginService,
         public _infor: InformationService,
+        public dashboardService: DashboardService
     ) { }
 
     public importvalue: Array<new_import_export_model> = new Array<new_import_export_model>();
@@ -392,7 +407,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
                         datarow.time_id = this.timechange.toString()
                         this.importcompany.push(datarow)
                     });
-                    console.log(this.importcompany)
                     this.save2(this.importcompany)
                 };
 
@@ -452,9 +466,15 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.month = this.getCurrentMonth().substring(5, 6)
-        this.timechange = parseInt(this.getCurrentMonth())
-        this.getDanhSachNhapKhau(this.timechange);
+        this.GetProduct();
+        this.defaultcode = 55
+        this.tuthang = this.firstmonth.value
+        this.denthang = this.presentmonth.value
+        this.productcode = 55
+
+        // this.month = this.getCurrentMonth().substring(4, 6)
+        // this.timechange = parseInt(this.getCurrentMonth())
+        this.getDanhSachNhapKhau(0);
         this.autoOpen();
         this.sendLinkToNext(true);
         if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
@@ -472,11 +492,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
 
     autoOpen() {
         setTimeout(() => this.accordion.openAll(), 1000);
-    }
-
-    ngAfterViewInit(): void {
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
     }
 
     applyFilter(event: Event) {
@@ -550,6 +565,10 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
             this.setDataImport(result.data[0]);
             this.setDatabusiness(result.data[1]);
             this.setDataImportDetail(result.data[2]);
+            if(time_id == 0){
+                this.month = result.data[3][0].timechange.toString().substring(4, 6)
+                this.date = new FormControl(_moment(this.convertstringtodate((result.data[3][0].timechange.toString() + '01'))))
+            }
         });
     }
 
@@ -586,15 +605,22 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     uth_so_khn: number = 0;
 
     setSumaryData(data) {
-        this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
-        this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
-        this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
-        this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
+        if(data.length != 0){
+            this.TongGiaTriThangThucHien = data[0].tri_gia_thang ? data[0].tri_gia_thang : 0;
+            this.uth_so_cungky = data[0].uoc_thang_so_voi_ki_truoc ? data[0].uoc_thang_so_voi_ki_truoc : 0;
+            this.TongGiaTriCongDon = data[0].tri_gia_cong_don ? data[0].tri_gia_cong_don : 0;
+            this.uth_so_khn = data[0].uoc_cong_don_so_voi_cong_don_truoc ? data[0].uoc_cong_don_so_voi_cong_don_truoc : 0;
+        }
+        else{
+            this.TongGiaTriThangThucHien = 0;
+            this.uth_so_cungky = 0;
+            this.TongGiaTriCongDon = 0;
+            this.uth_so_khn = 0;
+        }
     }
 
     setDataImport(data) {
         this.dataSource = new MatTableDataSource<new_import_export_model>(data);
-        if (data.length) {
             this.setSumaryData(data);
             this.dataSource.paginator = this.paginator;
             this.paginator._intl.itemsPerPageLabel = "Số hàng";
@@ -602,7 +628,6 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
             this.paginator._intl.lastPageLabel = "Trang Cuối";
             this.paginator._intl.previousPageLabel = "Trang Trước";
             this.paginator._intl.nextPageLabel = "Trang Tiếp";
-        }
     }
 
     public ExportTOExcel(filename: string, sheetname: string) {
@@ -626,4 +651,197 @@ export class ImportManagementComponent implements OnInit, AfterViewInit {
     AddImport(event) {
         this.addimport = event.checked
     }
+
+    applyDataTarget1(event) {
+        this.dataTargetId1 = event.value
+    
+        this.lineChart.config.data.datasets = []
+        this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
+    }
+
+    public firstmonth = new FormControl(_moment().startOf('year').format('yyyyMM'));
+    public presentmonth = new FormControl(_moment().format('yyyyMM'));
+
+  @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
+  lineChart: any;
+
+  defaultcode: number
+  tuthang: string
+  denthang: string
+  productcode: number
+
+  timelist: string[]
+  trigiathang: number[]
+  trigiacongdon: number[]
+
+  ngAfterViewInit(): void {
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  importchart: Array<exportimportchart> = new Array<exportimportchart>();
+
+  lineChartMethod(tuthang: string, denthang: string, productcode: number, istongcuc: number) {
+    this.dashboardService.GetImportChart(tuthang, denthang, productcode, istongcuc).subscribe(
+      all => {
+        this.importchart = all.data
+        this.timelist = this.importchart.map(x => this.Convertdate(x.time_id.toString()))
+        this.trigiathang = this.importchart.map(x => x.tri_gia_thang)
+        this.trigiacongdon = this.importchart.map(x => x.tri_gia_cong_don)
+
+        this.lineChart = new Chart(this.lineCanvas.nativeElement, {
+          type: 'line',
+          data: {
+            labels: this.timelist,
+            datasets: [
+              {
+                label: 'Thực hiện tháng ' + this.month,
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgb(255, 0, 0)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgb(255, 0, 0)',
+                pointHoverBorderColor: 'rgb(255, 0, 0)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: this.trigiathang,
+                spanGaps: false,
+              },
+              {
+                label: 'Thực hiện ' + this.month + ' tháng',
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: 'rgb(0, 0, 255)',
+                borderColor: 'rgb(0, 0, 255)',
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: 'rgb(0, 0, 255)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgb(0, 0, 255)',
+                pointHoverBorderColor: 'rgb(0, 0, 255)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: this.trigiacongdon,
+                spanGaps: false,
+              }
+            ]
+          }
+        });
+      },
+    );
+  }
+
+  products: Array<ProductModel> = new Array<ProductModel>();
+  filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
+  GetProduct() {
+    this.dashboardService.GetProductListAll().subscribe((allrecords) => {
+      this.products = allrecords.data.filter(x => x.xnk == 2) as ProductModel[];
+      this.filterproducts.next(this.products.slice());
+    });
+  }
+  public profilter: FormControl = new FormControl();
+  public filterThuongnhan() {
+    if (!this.products) {
+      return;
+    }
+    let search = this.profilter.value;
+    if (!search) {
+      this.filterproducts.next(this.products.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterproducts.next(
+      this.products.filter(x => x.ten_san_pham.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+  applyfilter(event) {
+    this.productcode = event.value
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
+  }
+
+  Convertdate(text: string): string {
+    let date: string
+    date = text.substr(4, 2) + "-" + text.substring(0, 4)
+    return date
+  }
+
+  public date1 = new FormControl(_moment().startOf('year').format('yyyyMM'));
+  public newdate1 = new FormControl(_moment());
+
+  public chosenYearHandler1(normalizedYear: Moment) {
+    this.date1 = this.newdate1
+    const ctrlValue = this.date1.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date1.setValue(ctrlValue);
+    this.theYear = normalizedYear.year();
+  }
+
+  public chosenMonthHandler1(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date1.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date1.setValue(ctrlValue);
+    this.theMonth = normalizedMonth.month() + 1;
+    datepicker.close();
+
+    if (this.theMonth >= 10) {
+      this.stringmonth = this.theMonth.toString();
+    }
+    else {
+      this.stringmonth = "0" + this.theMonth.toString()
+    }
+    this.time = this.theYear.toString() + this.stringmonth
+
+    this.tuthang = this.time
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
+  }
+
+  public date2 = new FormControl(_moment());
+  public newdate2 = new FormControl(_moment());
+
+  public chosenYearHandler2(normalizedYear: Moment) {
+    this.date2 = this.newdate2
+    const ctrlValue = this.date2.value;
+    ctrlValue.year(normalizedYear.year());
+    this.date1.setValue(ctrlValue);
+    this.theYear = normalizedYear.year();
+  }
+
+  public chosenMonthHandler2(normalizedMonth: Moment, datepicker: MatDatepicker<Moment>) {
+    const ctrlValue = this.date2.value;
+    ctrlValue.month(normalizedMonth.month());
+    this.date2.setValue(ctrlValue);
+    this.theMonth = normalizedMonth.month() + 1;
+    datepicker.close();
+
+    if (this.theMonth >= 10) {
+      this.stringmonth = this.theMonth.toString();
+    }
+    else {
+      this.stringmonth = "0" + this.theMonth.toString()
+    }
+    this.time = this.theYear.toString() + this.stringmonth
+
+    this.denthang = this.time
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
+  }
 }

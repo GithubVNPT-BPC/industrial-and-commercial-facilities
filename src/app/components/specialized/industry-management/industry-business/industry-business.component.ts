@@ -28,8 +28,8 @@ export class IndustryBusinessComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   protected LINK_DEFAULT: string = "";
-  protected TITLE_DEFAULT: string = "QUẢN LÝ DOANH NGHIỆP";
-  protected TEXT_DEFAULT: string = "QUẢN LÝ DOANH NGHIỆP";
+  protected TITLE_DEFAULT: string = "QUẢN LÝ DOANH NGHIỆP CÔNG NGHIỆP";
+  protected TEXT_DEFAULT: string = "QUẢN LÝ DOANH NGHIỆP CÔNG NGHIỆP";
   private _linkOutput: LinkModel = new LinkModel();
 
   private sendLinkToNext(type: boolean): void {

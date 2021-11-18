@@ -100,7 +100,7 @@ export class BorderTradeNewComponent implements OnInit {
 
     this.GetDanhSachTMBG(this.timechange)
 
-    this.month = this.time.substring(5, 6)
+    this.month = this.time.substring(4, 6)
   }
 
   displayedColumns = [
@@ -244,7 +244,7 @@ export class BorderTradeNewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.month = this.getCurrentMonth().substring(5, 6)
+    this.month = this.getCurrentMonth().substring(4, 6)
     this.timechange = parseInt(this.getCurrentMonth())
     this.GetDanhSachTMBG(this.timechange);
     this.autoOpen();

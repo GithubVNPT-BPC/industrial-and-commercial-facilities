@@ -305,7 +305,7 @@ export class LrisIntegrationComponent implements OnInit {
 
     this.getDataFromLris()
 
-    this.month = this.time.substring(5, 6)
+    this.month = this.time.substring(4, 6)
   }
 
 }

@@ -75,7 +75,7 @@ export class DomesticImportComponent extends BaseComponent {
     super(injector);
   }
 
-  public date = new FormControl(_moment());
+  public date = new FormControl();
   public newdate = new FormControl(_moment());
   public theYear: number;
   public theMonth: number;
@@ -83,6 +83,15 @@ export class DomesticImportComponent extends BaseComponent {
   public time: string
   public timechange: number
   public month: string
+
+  convertstringtodate(time: string): Date {
+    let year = parseInt(time.substring(0, 4));
+    let month = parseInt(time.substring(4, 6));
+    let day = parseInt(time.substring(6, 8));
+
+    let date = new Date(year, month - 1, day);
+    return date
+}
 
   public chosenYearHandler(normalizedYear: Moment) {
     this.date = this.newdate
@@ -115,7 +124,7 @@ export class DomesticImportComponent extends BaseComponent {
       this.getDanhSachNhapKhauTC(this.timechange)
     }
 
-    this.month = this.time.substring(5, 6)
+    this.month = this.time.substring(4, 6)
   }
 
   dataTargets: any[] = [
@@ -172,9 +181,9 @@ export class DomesticImportComponent extends BaseComponent {
     this.denthang = this.presentmonth.value
     this.productcode = 55
 
-    this.month = this.getCurrentMonth().substring(5, 6)
-    this.timechange = parseInt(this.getCurrentMonth())
-    this.getDanhSachNhapKhau(this.timechange);
+    // this.month = this.getCurrentMonth().substring(4, 6)
+    // this.timechange = parseInt(this.getCurrentMonth())
+    this.getDanhSachNhapKhau(0);
     super.ngOnInit();
 
     this.profilter.valueChanges
@@ -191,6 +200,10 @@ export class DomesticImportComponent extends BaseComponent {
       this.setDataExport(result.data[0]);
       this.setDatabusiness(result.data[1]);
       this.setDataExportDetail(result.data[2]);
+      if(time_id == 0){
+        this.month = result.data[3][0].timechange.toString().substring(4, 6)
+        this.date = new FormControl(_moment(this.convertstringtodate((result.data[3][0].timechange.toString() + '01'))))
+      }
     });
   }
 
@@ -230,6 +243,13 @@ export class DomesticImportComponent extends BaseComponent {
     else {
       this.getDanhSachNhapKhauTC(this.timechange)
     }
+  }
+
+  applyDataTarget1(event) {
+    this.dataTargetId1 = event.value
+
+    this.lineChart.config.data.datasets = []
+    this.lineChartMethod(this.tuthang, this.denthang, this.productcode, this.dataTargetId1);
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
