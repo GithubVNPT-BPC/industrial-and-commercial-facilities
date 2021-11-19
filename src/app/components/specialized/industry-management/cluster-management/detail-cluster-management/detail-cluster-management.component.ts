@@ -11,6 +11,9 @@ import { IndustryManagementService } from 'src/app/_services/APIService/industry
 import { environment } from 'src/environments/environment';
 import { MatCarousel, MatCarouselComponent } from '@ngmodule/material-carousel';
 import { Router } from '@angular/router';
+import { ClusterBusinessComponent } from '../cluster-business/cluster-business.component';
+import { MatDialog } from '@angular/material';
+import { SAVE } from 'src/app/_enums/save.enum';
 
 @Component({
     selector: 'detail-cluster-management',
@@ -41,6 +44,7 @@ export class DetailClusterManagementComponent implements OnInit {
         public route: ActivatedRoute,
         private indService: IndustryManagementService,
         public router: Router,
+        public dialog: MatDialog
     ) {
         this.route.params.subscribe(params => {
             this._id = params['id'];
@@ -101,6 +105,26 @@ export class DetailClusterManagementComponent implements OnInit {
 
     public DownloadFile() {
         this.indService.Downloadfile(this.fileSource).subscribe(res => {
+        });
+    }
+
+    public addclusterbusiness() {
+        const dialogRef = this.dialog.open(ClusterBusinessComponent, {
+            data: {
+                message: 'Thêm DN thuộc CCN',
+                cluster_data: this._id,
+                typeOfSave: SAVE.ADD,
+            }
+        });
+    }
+
+    public editclusterbusiness() {
+        const dialogRef = this.dialog.open(ClusterBusinessComponent, {
+            data: {
+                message: 'Danh sách DN thuộc CCN',
+                cluster_data: this._id,
+                typeOfSave: SAVE.CLUSTER,
+            }
         });
     }
 }

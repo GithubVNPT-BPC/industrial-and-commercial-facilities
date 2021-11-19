@@ -5,6 +5,11 @@ import { BaseComponent } from '../../base.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IndustryManagementService } from 'src/app/_services/APIService/industry-management.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import {
+  CertificateViewModel
+} from 'src/app/_models/APIModel/conditional-business-line.model';
+
+import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 
 import { ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -81,6 +86,8 @@ export class SupportBusinessComponent extends BaseComponent {
     private injector: Injector,
     public _login: LoginService,
     public commerceManagementService: CommerceManagementService,
+    public _Service: ConditionBusinessService,
+    // public _Service1: MarketService,
   ) {
     super(injector)
   }
@@ -100,14 +107,47 @@ export class SupportBusinessComponent extends BaseComponent {
       .subscribe(() => {
         this.filterPhuongxa();
       });
+
+      this.GetAllGiayPhep();
+
+      this.mstfilter.valueChanges
+        .pipe(takeUntil(this._onDestroy))
+        .subscribe(() => {
+          this.filterMST();
+        });
+  }
+
+  allcertificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
+  public filterallcertificate: ReplaySubject<CertificateViewModel[]> = new ReplaySubject<CertificateViewModel[]>(1);
+  GetAllGiayPhep() {
+    this._Service.GetALLCompany('ALL').subscribe((allrecords) => {
+      this.allcertificate = allrecords.data as CertificateViewModel[];
+      this.filterallcertificate.next(this.allcertificate.slice());
+    });
+  }
+  public mstfilter: FormControl = new FormControl();
+  public filterMST() {
+    if (!this.allcertificate) {
+      return;
+    }
+    let search = this.mstfilter.value;
+    if (!search) {
+      this.filterallcertificate.next(this.allcertificate.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterallcertificate.next(
+      this.allcertificate.filter(x => x.combine.toLowerCase().indexOf(search) > -1)
+    );
   }
 
   public _onDestroy = new Subject<void>();
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/specialized/industry-management/supportbusiness";
-    this.TITLE_DEFAULT = "Doanh nghiệp hỗ trợ";
-    this.TEXT_DEFAULT = "Doanh nghiệp hỗ trợ";
+    this.TITLE_DEFAULT = "Doanh nghiệp công nghiệp hỗ trợ";
+    this.TEXT_DEFAULT = "Doanh nghiệp công nghiệp hỗ trợ";
   }
 
   getSPBusiness() {
@@ -123,6 +163,12 @@ export class SupportBusinessComponent extends BaseComponent {
       }
       this.paginatorAgain();
     })
+  }
+
+  GetCompanyInfoById() {
+    // this._Service1.GetCompanyInfoById(this.mst).subscribe(
+    //   allrecords => {
+    //   });
   }
 
   setFormParams() {

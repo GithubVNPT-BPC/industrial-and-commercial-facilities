@@ -19,7 +19,9 @@ import { ClusterBusinessComponent } from './cluster-business/cluster-business.co
 
 export class ClusterManagementComponent extends BaseComponent {
 
-    totalColumns: string[] = ['select', 'index', 'cap_nhat_dn_ccn', 'them_dn_ccn', 'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
+    totalColumns: string[] = ['select', 'index', 
+    // 'cap_nhat_dn_ccn', 'them_dn_ccn', 
+    'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
 

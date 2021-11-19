@@ -2,9 +2,15 @@
     <div>
         <mat-card-content>
             <h3 class="text-center"><strong>Cụm công nghiệp: {{_clusterDetail.ten_cum}}</strong></h3>
-            <button mat-raised-button matTooltip="Tải xuống tài liệu chi tiết" (click)="DownloadFile()">
-                <mat-icon>file_download</mat-icon>
-            </button>
+                <button mat-raised-button matTooltip="Tải xuống tài liệu chi tiết" (click)="DownloadFile()" style="margin-right: 3px;">
+                    <mat-icon>file_download</mat-icon>
+                </button>
+                <button mat-raised-button (click)="addclusterbusiness()" style="margin-right: 3px;">
+                     <mat-icon>update</mat-icon> Thêm Doanh nghiệp thuộc CCN
+                </button>
+                <button mat-raised-button (click)="editclusterbusiness(element)">
+                    <mat-icon>emoji_events</mat-icon> Danh sách doanh nghiệp thuộc CCN
+               </button>
             <hr>
             <mat-carousel timings="250ms ease-in" [autoplay]="true" interval="5000" color="accent" maxWidth="auto"
                 proportion="25" slides="5" [loop]="true" [hideArrows]="false" [hideIndicators]="false"

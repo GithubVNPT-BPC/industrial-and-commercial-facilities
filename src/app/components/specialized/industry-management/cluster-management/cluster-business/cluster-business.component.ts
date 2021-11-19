@@ -22,10 +22,10 @@ export class ClusterBusinessComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'dia_chi', 'dien_thoai', 'chi_tiet_doanh_nghiep', 'id_ccn'];
+  public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst', 'dia_chi', 'so_dien_thoai', 'nganh_nghe_kd_chinh', 'cong_suat', 'chi_tiet_doanh_nghiep', 'id_ccn'];
 
   field: string;
-  public clustermodel: ClusterModel;
+  // public clustermodel: ClusterModel;
   typeOfSave: SAVE;
   deletestatus: boolean = false;
 
@@ -42,7 +42,7 @@ export class ClusterBusinessComponent implements OnInit {
 
   ngOnInit(): void {
     this.field = this.data.message;
-    this.clustermodel = this.data.cluster_data;
+    // this.clustermodel = this.data.cluster_data;
 
     this.typeOfSave = this.data.typeOfSave;
     switch (this.typeOfSave) {
@@ -63,16 +63,30 @@ export class ClusterBusinessComponent implements OnInit {
     window.open('/#/public/partner/search/' + mst, "_blank");
   }
 
-  public exportTOExcel(filename: string, sheetname: string) {
+  public ExportTOExcel(filename, sheetname) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
 
   clusterbusinesslist: Array<ClusterBusiness> = new Array<ClusterBusiness>();
 
   public GetExistClusterBusiness() {
-    this.indService.GetClusterBusiness(this.clustermodel.id).subscribe(
+    this.indService.GetClusterBusiness(this.data.cluster_data).subscribe(
       allrecords => {
-        this.clusterbusinesslist = allrecords.data[0]
+        let companytemp = allrecords.data[0].map(a => {
+          let temp = allrecords.data[1].filter(b => b.mst === a.mst)
+
+          let temp3 = temp.map(c => c.nganh_nghe_kd_chinh)
+          if (temp3 == undefined || temp3 == null) {
+            a.nganh_nghe_kd_chinh = null
+          }
+          else {
+            a.nganh_nghe_kd_chinh = temp3.join('; ')
+          }
+
+          return a
+        })
+
+        this.clusterbusinesslist = companytemp
         this.dataSource = new MatTableDataSource<ClusterBusiness>(allrecords.data[0]);
         this.dataSource.paginator = this.paginator;
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -84,7 +98,7 @@ export class ClusterBusinessComponent implements OnInit {
   }
 
   public GetClusterBusiness() {
-    this.indService.GetClusterBusiness(this.clustermodel.id).subscribe(
+    this.indService.GetClusterBusiness(this.data.cluster_data).subscribe(
       allrecords => {
         this.clusterbusinesslist = allrecords.data[0]
       });
@@ -96,7 +110,22 @@ export class ClusterBusinessComponent implements OnInit {
   GetAllCompany() {
     this.marketService.GetAllCompany().subscribe(
       allrecords => {
-        this.filtercompany = allrecords.data[0].filter(x => this.clusterbusinesslist.map(y => y.mst).indexOf(x.mst) < 0)
+
+        let companytemp = allrecords.data[0].map(a => {
+          let temp = allrecords.data[1].filter(b => b.mst === a.mst)
+
+          let temp3 = temp.map(c => c.nganh_nghe_kd_chinh)
+          if (temp3 == undefined || temp3 == null) {
+            a.nganh_nghe_kd_chinh = null
+          }
+          else {
+            a.nganh_nghe_kd_chinh = temp3.join('; ')
+          }
+
+          return a
+        })
+
+        this.filtercompany = companytemp.filter(x => this.clusterbusinesslist.map(y => y.mst).indexOf(x.mst) < 0)
         this.dataSource = new MatTableDataSource<ClusterBusiness>(this.filtercompany);
 
         this.dataSource.paginator = this.paginator;
@@ -113,7 +142,7 @@ export class ClusterBusinessComponent implements OnInit {
       case SAVE.ADD:
         let temp = this.selection.selected.map(x => new Object({
           id: null,
-          id_ccn: this.clustermodel.id,
+          id_ccn: this.data.cluster_data,
           mst: x.mst,
         }))
 

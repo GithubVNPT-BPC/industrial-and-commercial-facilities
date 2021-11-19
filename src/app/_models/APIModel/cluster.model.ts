@@ -33,6 +33,8 @@ export class ClusterBusiness {
     public ten_doanh_nghiep: string;
     public dia_chi: string;
     public so_dien_thoai: string;
+    public nganh_nghe_kd_chinh: string;
+    public cong_suat: number
 }
 
 export class PostClusterBusiness {

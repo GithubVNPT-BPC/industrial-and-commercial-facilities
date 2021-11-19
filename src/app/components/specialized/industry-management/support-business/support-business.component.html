@@ -224,7 +224,24 @@
                 <div class="form-group row">
                     <div class="col-md-12">
                         <mat-card-content>
-                            <div class="row">
+                            <mat-form-field appearance="outline">
+                                <mat-label>MST</mat-label>
+                                <mat-select formControlName="mst">
+                                    <mat-option>
+                                        <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                            noEntriesFoundLabel="Giá trị không có trong danh sách"
+                                            [formControl]="mstfilter">
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+
+                                    <mat-option *ngFor="let item of filterallcertificate | async"
+                                        [value]="item.mst">
+                                        {{item.combine}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <!-- <div class="row">
                                 <div class="col-6 col-lg-6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Tên doanh nghiệp</mat-label>
@@ -293,7 +310,7 @@
                                         <mat-datepicker #datePicker1></mat-datepicker>
                                     </mat-form-field>
                                 </div>
-                            </div>
+                            </div> -->
                         </mat-card-content>
                     </div>
 
