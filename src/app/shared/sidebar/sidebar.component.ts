@@ -169,4 +169,8 @@ export class SidebarComponent implements OnInit {
       return false;
     }
   }
+
+  navigate(url : string){
+    this._router.navigateByUrl(url);
+  }
 }

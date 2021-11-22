@@ -4,7 +4,7 @@ import { ReportService } from '../../../../_services/APIService/report.service';
 
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject } from '../../../../_models/APIModel/report.model';
 import { MatPaginator } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { formatDate } from '@angular/common';
 import { MatTableFilter } from 'mat-table-filter';
@@ -18,6 +18,8 @@ import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/co
 })
 
 export class ViewSelectReportComponent implements OnInit {
+
+  title: string = "Danh sách báo cáo";
 
   displayedColumns: string[] = ['index', "obj_code", "obj_name", "org_name", "submit_type", "status_name", "time_id", "edit"];
   dataSource: MatTableDataSource<any>;
@@ -43,16 +45,22 @@ export class ViewSelectReportComponent implements OnInit {
   orgarnizations: string[] = ['', 'Sở Công thương', /**'Văn Phòng Sở Công Thương', 'Thanh Tra Sở Công Thương',**/ 'Phòng Quản Lý Công Nghiệp', 'Phòng Quản Lý Thương Mại', 'Phòng Quản Lý Năng Lượng'];
   periods: Object[];
   selectedPeriod: number = 0;
+  submit_type: number = 0;
 
   constructor(
     public reportSevice: ReportService,
     public router: Router,
-    public confirmationDialogService: ConfirmationDialogService
+    public confirmationDialogService: ConfirmationDialogService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     this.filterObject = new ReportOject();
     this.tempObject = new ReportOject();
+    this.route.queryParams.subscribe((params) => {
+      this.tempObject.submit_type = Number.parseInt(params['submit_type'] ? params['submit_type'] : 1);
+    });
+    this.changeReportType();
     this.filterType = MatTableFilter.ANYWHERE;
 
     this.years = this.InitialYears();
@@ -67,7 +75,8 @@ export class ViewSelectReportComponent implements OnInit {
         element.time_id_text = this.TimeIDToText(element.time_id.toString());
       })
       this.dataSource = null;
-      this.dataSource = new MatTableDataSource<ReportOject>(response.data.filter(x => this.org_id != 1 ? x.org_id == this.org_id : x));
+      this.dataSource = new MatTableDataSource<ReportOject>(response.data.filter(x => x.submit_type == this.tempObject.submit_type)
+        .filter(x => this.org_id != 1 ? x.org_id == this.org_id : x));
       this.dataSource.paginator = this.paginator;
       if (this.paginator) {
         this.paginator._intl.itemsPerPageLabel = 'Số hàng';
@@ -140,15 +149,19 @@ export class ViewSelectReportComponent implements OnInit {
     switch (this.tempObject.submit_type) {
       case 1: this.periods = this.months;
         this.tempObject.submit_type_name = 'Báo cáo tháng';
+        this.title = "Danh sách báo cáo tháng";
         break;
       case 2: this.periods = this.quarters;
         this.tempObject.submit_type_name = 'Báo cáo quý';
+        this.title = "Danh sách báo cáo quý";
         break;
       case 3: this.periods = null;
         this.tempObject.submit_type_name = 'Báo cáo 6 tháng';
+        this.title = "Danh sách báo cáo 6 tháng";
         break;
       case 4: this.periods = null;
         this.tempObject.submit_type_name = 'Báo cáo năm';
+        this.title = "Danh sách báo cáo năm";
         break;
       default: this.periods = [];
         this.tempObject.submit_type_name = '';

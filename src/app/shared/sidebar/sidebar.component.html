@@ -1,76 +1,73 @@
 <div class="{{styleOfScss}}">
-  <div class="sidenav_container mat-elevation-z5" [@onSideNavChange]="sideNavState ? 'open' : 'close'">
-    <ngx-simplebar [options]="options" class="sct-sidebar">
-      <div class="user_menu">
-        <mat-nav-list>
-          <a mat-list-item *ngIf="logon">
-            <img class="jim" src="{{img_avatar}}" alt="{{usertext}}">
-            <span data-toggle="tooltip" title={{usertext}} id="thongtinUser"
-              [@animateText]="linkText ? 'show' : 'hide'"><strong> {{ username }} </strong></span>
-          </a>
-        </mat-nav-list>
-      </div>
+    <div class="sidenav_container mat-elevation-z5" [@onSideNavChange]="sideNavState ? 'open' : 'close'">
+        <ngx-simplebar [options]="options" class="sct-sidebar">
+            <div class="user_menu">
+                <mat-nav-list>
+                    <a mat-list-item *ngIf="logon">
+                        <img class="jim" src="{{img_avatar}}" alt="{{usertext}}">
+                        <span data-toggle="tooltip" title={{usertext}} id="thongtinUser" [@animateText]="linkText ? 'show' : 'hide'"><strong> {{ username }} </strong></span>
+                    </a>
+                </mat-nav-list>
+            </div>
 
-      <div>
-        <mat-nav-list>
-          <div *ngFor="let navItem of navItems; let i = index">
-            <div *ngIf="(!navItem.manager)||(navItem.manager && logon)">
-              <a mat-list-item *ngIf="navItem.children;else normalSideBar" (click)="OpenSubChildren(i, navItem)"
-                class="parent">
-                <mat-icon>{{navItem.icon}}</mat-icon>
-                <span [@animateText]="linkText ? 'show' : 'hide'">{{navItem.name}}</span>
-                <mat-icon class="menu-button" [ngClass]="{'rotated' : navItem.expand}">expand_more</mat-icon>
-              </a>
-              <mat-divider class="line"></mat-divider>
-              <div *ngFor="let child of navItem.children">
-                <ng-container *ngIf="child.manager; else elseTemplate">
-                  <mat-nav-list #elem [id]="child.id" class="submenu" *ngIf="navItem.expand">
-                    <a mat-list-item id={{child?.icon}} (click)="OpenSubChildren(i, child)" class="child">
-                      <mat-icon>{{child.icon}}</mat-icon>
-                      <span [@animateText]="linkText ? 'show' : 'hide'">{{child.name}}</span>
-                      <mat-icon class="menu-button" [ngClass]="{'rotated' : child.expand}">expand_more</mat-icon>
-                    </a>
-                    <div *ngFor="let subchild of child.children">
-                      <a mat-list-item id={{subchild?.icon}} [routerLink]='subchild.url' *ngIf="child.expand"
-                        class="small">
-                        <mat-icon>{{subchild.icon}}</mat-icon>
-                        <span [@animateText]="linkText ? 'show' : 'hide'">{{subchild.name}}</span>
-                        <mat-icon mat-list-icon></mat-icon>
-                      </a>
-                    </div>
-                  </mat-nav-list>
-                </ng-container>
-                <ng-template #elseTemplate>
-                  <mat-nav-list #elem [id]="child.id" class="submenu" *ngIf="navItem.expand">
-                    <a mat-list-item id={{child?.icon}} [routerLink]="child.url" class="child">
-                      <mat-icon mat-list-icon>{{child.icon}}</mat-icon>
-                      <span [@animateText]="linkText ? 'show' : 'hide'">{{child.name}}</span>
-                      <mat-icon class="menu-button" [ngClass]="{'rotated' : child.expand}">
-                      </mat-icon>
-                    </a>
-                    <mat-divider class="line"></mat-divider>
-                  </mat-nav-list>
-                </ng-template>
-              </div>
-              <ng-template #normalSideBar>
-                <a mat-list-item id="child.icon" *ngIf="!navItem.title" [routerLink]="[navItem.url]" class="child">
-                  <span [@animateText]="linkText ? 'show' : 'hide'">{{navItem.name}}</span>
-                  <mat-icon mat-list-icon>{{navItem.icon}}</mat-icon>
-                </a>
-                <!-- <div mat-list-item *ngIf="navItem.title">
+            <div>
+                <mat-nav-list>
+                    <div *ngFor="let navItem of navItems; let i = index">
+                        <div *ngIf="(!navItem.manager)||(navItem.manager && logon)">
+                            <a mat-list-item *ngIf="navItem.children;else normalSideBar" (click)="OpenSubChildren(i, navItem)" class="parent">
+                                <mat-icon>{{navItem.icon}}</mat-icon>
+                                <span [@animateText]="linkText ? 'show' : 'hide'">{{navItem.name}}</span>
+                                <mat-icon class="menu-button" [ngClass]="{'rotated' : navItem.expand}">expand_more</mat-icon>
+                            </a>
+                            <mat-divider class="line"></mat-divider>
+                            <div *ngFor="let child of navItem.children">
+                                <ng-container *ngIf="child.manager; else elseTemplate">
+                                    <mat-nav-list #elem [id]="child.id" class="submenu" *ngIf="navItem.expand">
+                                        <a mat-list-item id={{child?.icon}} (click)="OpenSubChildren(i, child)" class="child">
+                                            <mat-icon>{{child.icon}}</mat-icon>
+                                            <span [@animateText]="linkText ? 'show' : 'hide'">{{child.name}}</span>
+                                            <mat-icon class="menu-button" [ngClass]="{'rotated' : child.expand}">expand_more</mat-icon>
+                                        </a>
+                                        <div *ngFor="let subchild of child.children">
+                                            <a mat-list-item id={{subchild?.icon}} (click)="navigate(subchild.url)" *ngIf="child.expand" class="small">
+                                                <mat-icon>{{subchild.icon}}</mat-icon>
+                                                <span [@animateText]="linkText ? 'show' : 'hide'">{{subchild.name}}</span>
+                                                <mat-icon mat-list-icon></mat-icon>
+                                            </a>
+                                        </div>
+                                    </mat-nav-list>
+                                </ng-container>
+                                <ng-template #elseTemplate>
+                                    <mat-nav-list #elem [id]="child.id" class="submenu" *ngIf="navItem.expand">
+                                        <a mat-list-item id={{child?.icon}} (click)="navigate(child.url)" class="child">
+                                            <mat-icon mat-list-icon>{{child.icon}}</mat-icon>
+                                            <span [@animateText]="linkText ? 'show' : 'hide'">{{child.name}}</span>
+                                            <mat-icon class="menu-button" [ngClass]="{'rotated' : child.expand}">
+                                            </mat-icon>
+                                        </a>
+                                        <mat-divider class="line"></mat-divider>
+                                    </mat-nav-list>
+                                </ng-template>
+                            </div>
+                            <ng-template #normalSideBar>
+                                <a mat-list-item id="child.icon" *ngIf="!navItem.title" (click)="navigate(navItem.url)" class="child">
+                                    <span [@animateText]="linkText ? 'show' : 'hide'">{{navItem.name}}</span>
+                                    <mat-icon mat-list-icon>{{navItem.icon}}</mat-icon>
+                                </a>
+                                <!-- <div mat-list-item *ngIf="navItem.title">
                   <span class="showTitle text-left" [@animateText]="linkText ? 'show' : 'hide'">{{navItem.text}}</span>
                 </div> -->
-              </ng-template>
+                            </ng-template>
+                        </div>
+                    </div>
+                </mat-nav-list>
             </div>
-          </div>
-        </mat-nav-list>
-      </div>
-    </ngx-simplebar>
-    <div style="text-align: center;">
-      <button mat-icon-button (click)="onSinenavToggle()">
+        </ngx-simplebar>
+        <div style="text-align: center;">
+            <button mat-icon-button (click)="onSinenavToggle()">
         <mat-icon *ngIf="sideNavState">arrow_back_ios</mat-icon>
         <mat-icon *ngIf="!sideNavState">arrow_forward_ios</mat-icon>
       </button>
+        </div>
     </div>
-  </div>
 </div>

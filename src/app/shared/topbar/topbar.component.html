@@ -1,9 +1,9 @@
 <div class="{{styleOfScss}}">
     <mat-toolbar class="mat-elevation-z5 main-contain">
         <mat-toolbar-row>
-            <div class="toggle-sidebar" (click)="toggleSidebar($event)" matTooltip="Ẩn/ Hiện Menu"> 
-                <a mat-icon-button class="btn-sct-page ml-4 mt-2" >
-                    <mat-icon >{{menuIcon}}</mat-icon>
+            <div class="toggle-sidebar" (click)="toggleSidebar($event)" matTooltip="Ẩn/ Hiện Menu">
+                <a mat-icon-button class="btn-sct-page">
+                    <mat-icon>{{menuIcon}}</mat-icon>
                 </a>
             </div>
 
@@ -19,8 +19,7 @@
             </div>
             <div class="spacer"></div>
             <div *ngIf="!checkLogin() else divUser" class="btn-color d-none d-lg-block">
-                <button mat-raised-button class="blue"
-                [matMenuTriggerFor]="menu" aria-label="Login/Logout menu">
+                <button mat-raised-button class="blue" [matMenuTriggerFor]="menu" aria-label="Login/Logout menu">
                     <mat-icon>account_circle</mat-icon> Đăng nhập/Đăng ký
                 </button>
                 <mat-menu #menu="matMenu">
@@ -28,19 +27,17 @@
                         <mat-icon>contacts</mat-icon>
                         <span>Đăng nhập</span>
                     </button>
-                    <a mat-menu-item [routerLink]="['/register']" >
+                    <a mat-menu-item [routerLink]="['/register']">
                         <mat-icon>perm_contact_calendar</mat-icon>
                         <span>Doanh nghiệp đăng ký</span>
-                    </a> 
+                    </a>
                 </mat-menu>
             </div>
             <ng-template #divUser>
                 <div class="btn-color">
 
                     <div hidden>
-                        userrole={{userrole}}
-                        mst={{mst}}
-                        id={{id}}
+                        userrole={{userrole}} mst={{mst}} id={{id}}
                     </div>
 
                     <a class="check-expired-btn" href="/#/specialized/commecial-management/domestic/certificate/1" title="Doanh nghiệp hết hạn" target="_blank">
@@ -183,5 +180,5 @@
             <i class="fa fa-home fa-2x float-icon"></i>
         </a>
     </div>
-    
+
 </div>

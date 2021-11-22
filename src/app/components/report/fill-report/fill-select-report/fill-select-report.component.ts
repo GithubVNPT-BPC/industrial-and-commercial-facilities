@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ReportService } from '../../../../_services/APIService/report.service';
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject } from '../../../../_models/APIModel/report.model';
 import { MatPaginator } from '@angular/material/paginator';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { formatDate } from '@angular/common';
 
@@ -14,6 +14,8 @@ import { formatDate } from '@angular/common';
 
 export class FillSelectReportComponent implements OnInit {
 
+  title: string = "Danh sách báo cáo";
+
   displayedColumns: string[] = ['index', "obj_code", "obj_name", "org_name", "start_date", "end_date", "edit"];
   dataSource: MatTableDataSource<ReportOject> = new MatTableDataSource();
   applyFilter(event: Event) {
@@ -24,8 +26,9 @@ export class FillSelectReportComponent implements OnInit {
   public readonly DEFAULT_PERIOD = "Tháng";
   public readonly format = 'dd/MM/yyyy';
   public readonly locale = 'en-US';
-  selectedPeriod: string = "Tháng";
-  periods = ['Tháng', 'Quý', '6 Tháng', 'Năm'];
+  // selectedPeriod: string = "Tháng";
+  // periods = ['Tháng', 'Quý', '6 Tháng', 'Năm'];
+  selectedPeriod: number = 1;
   selectedobject: any;
   selectedMonth: number = 1;
   months: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -42,22 +45,29 @@ export class FillSelectReportComponent implements OnInit {
   constructor(
     public reportSevice: ReportService,
     public router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
     let data: any = JSON.parse(localStorage.getItem('currentUser'));
     this.org_id = parseInt(data.org_id);
+    this.route.queryParams.subscribe((params) => {
+      this.selectedPeriod = Number.parseInt(params['submit_type'] ? params['submit_type'] : 1);
+    });
+    this.changePeriod();
 
-    this.selectedPeriod = this.DEFAULT_PERIOD;
+    // this.selectedPeriod = this.DEFAULT_PERIOD;
     this.selectedYear = this.GetCurrentYear();
     this.selectedMonth = this.GetCurrentMonth();
     this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);
     this.years = this.InitialYears();
   }
 
-  GetReportByPeriod(period: string, year: number, detailPeriod: number) {
+  // GetReportByPeriod(period: string, year: number, detailPeriod: number) {
+  GetReportByPeriod(period: number, year: number, detailPeriod: number) {
     switch (period) {
-      case "Tháng":
+      case 1:
+        // case "Tháng":
         this.reportSevice.GetList_ReportMonth(detailPeriod, year, this.org_id).subscribe(
           allrecords => {
             this.dataSource = new MatTableDataSource<ReportOject>(allrecords.data);
@@ -75,7 +85,8 @@ export class FillSelectReportComponent implements OnInit {
           error => this.errorMessage = <any>error
         );
         break;
-      case "Quý":
+      case 2:
+        // case "Quý":
         this.reportSevice.GetList_ReportQuarter(detailPeriod, year, this.org_id).subscribe(
           allrecords => {
             this.dataSource = new MatTableDataSource<ReportOject>(allrecords.data);
@@ -93,7 +104,8 @@ export class FillSelectReportComponent implements OnInit {
           error => this.errorMessage = <any>error
         );
         break;
-      case "Năm":
+      case 3:
+        // case "Năm":
         this.reportSevice.GetList_ReportYear(year, this.org_id).subscribe(
           allrecords => {
             this.dataSource = new MatTableDataSource<ReportOject>(allrecords.data);
@@ -111,7 +123,8 @@ export class FillSelectReportComponent implements OnInit {
           error => this.errorMessage = <any>error
         );
         break;
-      case "6 Tháng":
+      case 4:
+        // case "6 Tháng":
         this.reportSevice.GetList_ReportHalf(year, this.org_id).subscribe(
           allrecords => {
             this.dataSource = new MatTableDataSource<ReportOject>(allrecords.data);
@@ -140,18 +153,22 @@ export class FillSelectReportComponent implements OnInit {
     this.selectedQuarter = 0;
     this.selectedYear = 0;
     switch (this.selectedPeriod) {
-      case "Tháng":
+      case 1:
+        // case "Tháng":
         this.selectedMonth = this.GetCurrentMonth();
         this.selectedYear = this.GetCurrentYear();
         break;
-      case "Quý":
+      case 2:
+        // case "Quý":
         this.selectedQuarter = this.GetCurrentQuarter();
         this.selectedYear = this.GetCurrentYear();
         break;
-      case "Năm":
+      case 3:
+        // case "Năm":
         this.selectedYear = this.GetCurrentYear();
         break;
-      case "6 Tháng":
+      case 4:
+        // case "6 Tháng":
         this.selectedYear = this.GetCurrentYear();
         this.selectedHalf = 1;
         break;
@@ -163,17 +180,21 @@ export class FillSelectReportComponent implements OnInit {
   OpenDetailObject(obj_id: number) {
     var time_id = "";
     switch (this.selectedPeriod) {
-      case "Năm":
+      case 1:
+        // case "Năm":
         time_id = this.selectedYear.toString();
         break;
-      case "Tháng":
+      case 2:
+        // case "Tháng":
         let month = this.selectedMonth <= 9 ? '0' + this.selectedMonth : this.selectedMonth;
         time_id = this.selectedYear.toString() + month;
         break;
-      case "Quý":
+      case 3:
+        // case "Quý":
         time_id = this.selectedYear.toString() + this.selectedQuarter;
         break;
-      case "6 Tháng":
+      case 4:
+        // case "6 Tháng":
         time_id = this.selectedYear.toString();
         break;
       default:
@@ -207,9 +228,11 @@ export class FillSelectReportComponent implements OnInit {
     return returnYear;
   }
   filter() {
-    if (this.selectedPeriod == 'Quý')
+    // if (this.selectedPeriod == 'Quý')
+    if (this.selectedPeriod == 2)
       this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedQuarter);
-    if (this.selectedPeriod == '6 Tháng')
+    // if (this.selectedPeriod == '6 Tháng')
+    if (this.selectedPeriod == 3)
       this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedHalf);
     else
       this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);

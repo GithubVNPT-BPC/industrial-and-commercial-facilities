@@ -10,15 +10,15 @@
     <hr />
     <mat-card-content>
         <div class="row">
-            <div class="col-12 col-sm-6 col-lg-3">
+            <!-- <div class="col-12 col-sm-6 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Kỳ báo cáo</mat-label>
                     <mat-select (selectionChange)="changePeriod()" [(ngModel)]="selectedPeriod">
                         <mat-option *ngFor="let period of periods" [value]="period">{{period}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-            </div>
-            <div class="col-12 col-sm-6 col-lg-3" *ngIf="selectedMonth > 0">
+            </div> -->
+            <div class="col-12 col-sm-6 col-lg-3" *ngIf="selectedPeriod == 1">
                 <mat-form-field appearance="outline">
                     <mat-label>Tháng báo cáo</mat-label>
                     <mat-select [(ngModel)]="selectedMonth">
@@ -26,7 +26,7 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="col-12 col-sm-6 col-lg-3" *ngIf="selectedQuarter > 0">
+            <div class="col-12 col-sm-6 col-lg-3" *ngIf="selectedPeriod == 2">
                 <mat-form-field appearance="outline">
                     <mat-label>Quý báo cáo</mat-label>
                     <mat-select [(ngModel)]="selectedQuarter">
@@ -43,7 +43,7 @@
                     </mat-select>
                 </mat-form-field>
             </div> -->
-            <div class="col-12 col-sm-6 col-lg-3" *ngIf="selectedYear >0">
+            <div class="col-12 col-sm-6 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Năm báo cáo</mat-label>
                     <mat-select [(ngModel)]="selectedYear">
@@ -63,7 +63,7 @@
                 </mat-form-field>
             </div>
         </div>
-        
+
         <hr />
         <div class="layout" id="special" *ngIf="dataSource.data.length;else ShowList">
             <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">

@@ -22,6 +22,25 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MAT_DATE_FORMATS } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DialogContainerComponent } from './shared/dialog/dialog-container/dialog-container.component';
+import { ActivatedRouteSnapshot, RouteReuseStrategy } from '@angular/router';
+
+export class AARouteReuseStrategy extends RouteReuseStrategy {
+  shouldDetach(route: ActivatedRouteSnapshot): boolean {
+    return false;
+  }
+  store(route: ActivatedRouteSnapshot, handle: {}): void {
+
+  }
+  shouldAttach(route: ActivatedRouteSnapshot): boolean {
+    return false;
+  }
+  retrieve(route: ActivatedRouteSnapshot): {} {
+     return null;
+ }
+ shouldReuseRoute(future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot): boolean {
+   return false; // default is true if configuration of current and future route are the same
+ }
+}
 
 const MY_FORMATS = {
   parse: {
@@ -68,6 +87,10 @@ const MY_FORMATS = {
     ConfirmationDialogService,
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    {
+      provide: RouteReuseStrategy,
+      useClass: AARouteReuseStrategy
+    }
   ],
   entryComponents: [
     InformationComponent,
