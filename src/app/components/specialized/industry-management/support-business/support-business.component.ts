@@ -108,13 +108,21 @@ export class SupportBusinessComponent extends BaseComponent {
         this.filterPhuongxa();
       });
 
-      this.GetAllGiayPhep();
+    this.GetAllGiayPhep();
 
-      this.mstfilter.valueChanges
-        .pipe(takeUntil(this._onDestroy))
-        .subscribe(() => {
-          this.filterMST();
-        });
+    this.mstfilter.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterMST();
+      });
+
+    this.GetAllGiayPhep1();
+
+    this.mstfilter1.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterMST1();
+      });
   }
 
   allcertificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
@@ -142,6 +150,31 @@ export class SupportBusinessComponent extends BaseComponent {
     );
   }
 
+  allcertificate1: Array<CertificateViewModel> = new Array<CertificateViewModel>();
+  public filterallcertificate1: ReplaySubject<CertificateViewModel[]> = new ReplaySubject<CertificateViewModel[]>(1);
+  GetAllGiayPhep1() {
+    this._Service.GetALLCompany('FILTER').subscribe((allrecords) => {
+      this.allcertificate1 = allrecords.data as CertificateViewModel[];
+      this.filterallcertificate1.next(this.allcertificate1.slice());
+    });
+  }
+  public mstfilter1: FormControl = new FormControl();
+  public filterMST1() {
+    if (!this.allcertificate1) {
+      return;
+    }
+    let search = this.mstfilter1.value;
+    if (!search) {
+      this.filterallcertificate1.next(this.allcertificate1.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    this.filterallcertificate1.next(
+      this.allcertificate1.filter(x => x.combine1.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
   public _onDestroy = new Subject<void>();
 
   getLinkDefault() {
@@ -153,14 +186,26 @@ export class SupportBusinessComponent extends BaseComponent {
   getSPBusiness() {
     this.indService.GetSupportBusiness().subscribe(result => {
       this.filteredDataSource.data = [];
-      if (result.data && result.data.length > 0) {
-        result.data[0].forEach(element => {
-          element.ngay_cap = this.formatDate(element.ngay_cap)
-          element.ngay_het_han = this.formatDate(element.ngay_het_han)
-        });
-        this.dataSource = new MatTableDataSource<supportbusiness>(result.data[0]);
-        this.filteredDataSource.data = [...this.dataSource.data];
-      }
+      let companytemp = result.data[0].map(a => {
+        let temp = result.data[1].filter(b => b.mst === a.mst)
+
+        let temp3 = temp.map(c => c.nganh_nghe_kd_chinh)
+        if (temp3 == undefined || temp3 == null) {
+          a.nganh_nghe = null
+        }
+        else {
+          a.nganh_nghe = temp3.join('; ')
+        }
+
+        return a
+      })
+
+      companytemp.forEach(element => {
+        element.ngay_cap = this.formatDate(element.ngay_cap)
+        element.ngay_het_han = this.formatDate(element.ngay_het_han)
+      });
+      this.dataSource = new MatTableDataSource<supportbusiness>(companytemp);
+      this.filteredDataSource.data = [...this.dataSource.data];
       this.paginatorAgain();
     })
   }
