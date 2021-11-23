@@ -59,7 +59,11 @@ export class FillSelectReportComponent implements OnInit {
     // this.selectedPeriod = this.DEFAULT_PERIOD;
     this.selectedYear = this.GetCurrentYear();
     this.selectedMonth = this.GetCurrentMonth();
+    this.selectedQuarter = Math.floor((this.selectedMonth - 1) / 3) + 1;
+    if (this.selectedPeriod != 2)
     this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);
+    else
+    this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedQuarter);
     this.years = this.InitialYears();
   }
 
@@ -228,13 +232,15 @@ export class FillSelectReportComponent implements OnInit {
     return returnYear;
   }
   filter() {
+    console.log(this.selectedPeriod);
     // if (this.selectedPeriod == 'Quý')
     if (this.selectedPeriod == 2)
       this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedQuarter);
-    // if (this.selectedPeriod == '6 Tháng')
-    if (this.selectedPeriod == 3)
-      this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedHalf);
     else
-      this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);
+      // if (this.selectedPeriod == '6 Tháng')
+      if (this.selectedPeriod == 3)
+        this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedHalf);
+      else
+        this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);
   }
 }
