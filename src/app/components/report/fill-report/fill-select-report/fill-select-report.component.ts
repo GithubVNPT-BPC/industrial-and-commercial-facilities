@@ -161,20 +161,24 @@ export class FillSelectReportComponent implements OnInit {
         // case "Tháng":
         this.selectedMonth = this.GetCurrentMonth();
         this.selectedYear = this.GetCurrentYear();
+        this.title = "Danh sách báo cáo tháng";
         break;
       case 2:
         // case "Quý":
         this.selectedQuarter = this.GetCurrentQuarter();
         this.selectedYear = this.GetCurrentYear();
+        this.title = "Danh sách báo cáo quý";
         break;
       case 3:
         // case "Năm":
         this.selectedYear = this.GetCurrentYear();
+        this.title = "Danh sách báo cáo năm";
         break;
       case 4:
         // case "6 Tháng":
         this.selectedYear = this.GetCurrentYear();
         this.selectedHalf = 1;
+        this.title = "Danh sách báo cáo 6 tháng";
         break;
       default:
         break;
@@ -184,20 +188,20 @@ export class FillSelectReportComponent implements OnInit {
   OpenDetailObject(obj_id: number) {
     var time_id = "";
     switch (this.selectedPeriod) {
-      case 1:
+      case 4:
         // case "Năm":
         time_id = this.selectedYear.toString();
         break;
-      case 2:
+      case 1:
         // case "Tháng":
         let month = this.selectedMonth <= 9 ? '0' + this.selectedMonth : this.selectedMonth;
         time_id = this.selectedYear.toString() + month;
         break;
-      case 3:
+      case 2:
         // case "Quý":
         time_id = this.selectedYear.toString() + this.selectedQuarter;
         break;
-      case 4:
+      case 3:
         // case "6 Tháng":
         time_id = this.selectedYear.toString();
         break;
@@ -238,7 +242,7 @@ export class FillSelectReportComponent implements OnInit {
       this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedQuarter);
     else
       // if (this.selectedPeriod == '6 Tháng')
-      if (this.selectedPeriod == 3)
+      if (this.selectedPeriod == 4)
         this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedHalf);
       else
         this.GetReportByPeriod(this.selectedPeriod, this.selectedYear, this.selectedMonth);

@@ -155,11 +155,11 @@ export class ViewSelectReportComponent implements OnInit {
         this.tempObject.submit_type_name = 'Báo cáo quý';
         this.title = "Danh sách báo cáo quý";
         break;
-      case 3: this.periods = null;
+      case 4: this.periods = null;
         this.tempObject.submit_type_name = 'Báo cáo 6 tháng';
         this.title = "Danh sách báo cáo 6 tháng";
         break;
-      case 4: this.periods = null;
+      case 3: this.periods = null;
         this.tempObject.submit_type_name = 'Báo cáo năm';
         this.title = "Danh sách báo cáo năm";
         break;
