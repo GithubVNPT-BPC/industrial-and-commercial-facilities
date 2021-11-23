@@ -129,6 +129,7 @@ export class DomesticPriceComponent extends BaseComponent {
   domesticchart: Array<domesticchart> = new Array<domesticchart>();
 
   lineChartMethod(tungay: string, denngay: string, productcode: number) {
+    let self = this;
     this.dashboardService.GetDomesticChart(tungay, denngay, productcode).subscribe(
       all => {
         this.domesticchart = all.data
@@ -163,10 +164,25 @@ export class DomesticPriceComponent extends BaseComponent {
                 spanGaps: false,
               }
             ]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(value, index, values) {
+                    return self.numberWithDot(value) + ' đ';
+                  }
+                },
+              }],
+            }
           }
         });
       },
     );
+  }
+
+  numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   products: Array<ProductModel> = new Array<ProductModel>();
@@ -201,7 +217,7 @@ export class DomesticPriceComponent extends BaseComponent {
   }
 
   Convertdate(text: string): string {
-    return text ? text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4) : "";
+    return text ? text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4) : "";
   }
 
   public pickedDate = new FormControl(_moment().startOf('year'));

@@ -1,27 +1,22 @@
-import { Component, Injector, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   MatTableDataSource,
-  MatAccordion,
-  MatPaginator,
   MatDialog,
   MatDialogConfig,
 } from "@angular/material";
 
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { SCTService } from "src/app/_services/APIService/sct.service";
-import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
+import { Chart } from 'chart.js';
 import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
 
-import { new_import_export_model, Task, data_detail_model } from "src/app/_models/APIModel/export-import.model";
+import { new_import_export_model } from "src/app/_models/APIModel/export-import.model";
 import { exportimportchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { SAVE } from 'src/app/_enums/save.enum';
-
-import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
 
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -30,7 +25,6 @@ import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { formatDate } from '@angular/common';
-import { ModalComponent } from 'src/app/components/specialized/commecial-managemant/export-import-management/dialog-import-export/modal.component';
 import { DialogImportExportComponent } from '../dialog-import-export/dialog-import-export.component';
 
 export const MY_FORMATS = {
@@ -317,6 +311,7 @@ export class DomesticImportComponent extends BaseComponent {
   importchart: Array<exportimportchart> = new Array<exportimportchart>();
 
   lineChartMethod(tuthang: string, denthang: string, productcode: number, istongcuc: number) {
+    let self = this;
     this.dashboardService.GetImportChart(tuthang, denthang, productcode, istongcuc).subscribe(
       all => {
         this.importchart = all.data
@@ -330,7 +325,7 @@ export class DomesticImportComponent extends BaseComponent {
             labels: this.timelist,
             datasets: [
               {
-                label: 'Thực hiện tháng ' + this.month,
+                label: 'Thực hiện tháng ' + self.month,
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: 'rgb(255, 0, 0)',
@@ -352,7 +347,7 @@ export class DomesticImportComponent extends BaseComponent {
                 spanGaps: false,
               },
               {
-                label: 'Thực hiện ' + this.month + ' tháng',
+                label: 'Thực hiện ' + self.month + ' tháng',
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: 'rgb(0, 0, 255)',
@@ -374,10 +369,25 @@ export class DomesticImportComponent extends BaseComponent {
                 spanGaps: false,
               }
             ]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(value, index, values) {
+                    return self.numberWithDot(value) + ' tr $';
+                  }
+                },
+              }],
+            }
           }
         });
       },
     );
+  }
+
+  numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   products: Array<ProductModel> = new Array<ProductModel>();
