@@ -57,7 +57,7 @@
             </div>
         </div>
         <hr />
-        <div class="layout" #TABLE>
+        <div class="layout" *ngIf="dataSource.data.length; else ShowEmpty" #TABLE>
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
                 style="min-width:  900px !important;" [filterType]="filterType" [dataSource]="dataSource" matSort
                 matSortDisableClear matSortDirection="asc">
@@ -260,5 +260,8 @@
             </table>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100, 5000, 10000]" showFirstLastButtons></mat-paginator>
+        <ng-template #ShowEmpty>
+            <h3 class="text-center">Không có dữ liệu</h3>
+        </ng-template>
     </mat-card-content>
 </mat-card>

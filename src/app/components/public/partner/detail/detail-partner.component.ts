@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChild, QueryList, ViewChildren } from "@angular/core";
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from "@angular/router";
-import { FormBuilder} from "@angular/forms";
 import { InformationService } from 'src/app/shared/information/information.service';
-import { MarketService } from "src/app/_services/APIService/market.service";
-import { MatDialog } from "@angular/material/dialog";
-import { KeyboardService } from 'src/app/shared/services/keyboard.service';
-import { formatDate } from '@angular/common';
+import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 import { ManagerDirective } from 'src/app/shared/manager.directive';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -15,21 +11,14 @@ import {
 	CareerModel,
 	DistrictModel,
 	SubDistrictModel,
-	BusinessTypeModel,
 	Career,
-	FieldModel
 } from "src/app/_models/APIModel/domestic-market.model";
-
-import { FormControl } from '@angular/forms';
-import { ReplaySubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS, MatDatepicker } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { defaultFormat as _rollupMoment } from 'moment';
 import _moment from 'moment';
-import { LoginService } from "src/app/_services/APIService/login.service";
 const moment = _rollupMoment || _moment;
 export const DDMMYY_FORMAT = {
 	parse: {
@@ -88,14 +77,11 @@ export class CompanyDetailComponent implements OnInit {
 	}
 
 	constructor(
+		public marketService: MarketServicePublic,
 		public route: ActivatedRoute,
 		public router: Router,
 		public datepipe: DatePipe,
-		public dialog: MatDialog,
-		public _Service: MarketService,
 		public info: InformationService,
-		public _keyboardservice: KeyboardService,
-		public _login: LoginService
 	) {
 		this.route.params.subscribe((params) => {
 			this.mst = params["mst"];
@@ -104,30 +90,36 @@ export class CompanyDetailComponent implements OnInit {
 
 	public district: Array<DistrictModel> = new Array<DistrictModel>();
 	getAllQuanHuyen() {
-		this._Service.GetAllDistrict().subscribe((allDistrict) => {
+		this.marketService.GetAllDistrict().subscribe((allDistrict) => {
 			this.district = allDistrict["data"] as DistrictModel[];
-
 		});
 	}
 
 	public workingTypes = [];
 	GetAllLoaiHinh() {
-		this._Service.GetAllBusinessType().subscribe((allrecords) => {
+		this.marketService.GetAllBusinessType().subscribe((allrecords) => {
 			this.workingTypes = allrecords.data;
 		});
 	}
 
 	public subdistrict: Array<SubDistrictModel> = new Array<SubDistrictModel>();
 	GetAllPhuongXa() {
-		this._Service.GetAllSubDistrict().subscribe((allrecords) => {
+		this.marketService.GetAllSubDistrict().subscribe((allrecords) => {
 			this.subdistrict = allrecords.data as SubDistrictModel[];
 		});
 	}
 
 	public fieldsList = [];
 	GetLinhVuc() {
-		this._Service.GetAllField().subscribe((allrecords) => {
+		this.marketService.GetAllField().subscribe((allrecords) => {
 			this.fieldsList = allrecords.data;
+		});
+	}
+
+	public career: Array<CareerModel> = new Array<CareerModel>();
+	GetAllNganhNghe() {
+		this.marketService.GetAllCareer().subscribe((allrecords) => {
+			this.career = allrecords.data as CareerModel[];
 		});
 	}
 
@@ -138,13 +130,6 @@ export class CompanyDetailComponent implements OnInit {
 		this.GetAllLoaiHinh();
 		this.GetLinhVuc();
 		if (this.mst != undefined) this.GetCompanyInfoById();
-	}
-
-	public career: Array<CareerModel> = new Array<CareerModel>();
-	GetAllNganhNghe() {
-		this._Service.GetAllCareer().subscribe((allrecords) => {
-			this.career = allrecords.data as CareerModel[];
-		});
 	}
 
 	dataSource: MatTableDataSource<Career> = new MatTableDataSource<Career>();
@@ -165,7 +150,7 @@ export class CompanyDetailComponent implements OnInit {
 	company = {};
 
 	GetCompanyInfoById() {
-		this._Service.GetCompanyInfoById(this.mst).subscribe(
+		this.marketService.GetCompanyInfoById(this.mst).subscribe(
 			allrecords => {
 				this.companyList1 = allrecords.data[0]
 				this.companyList2 = allrecords.data[1]

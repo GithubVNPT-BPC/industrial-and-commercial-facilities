@@ -144,7 +144,7 @@ export class SearchPartnerComponent implements OnInit {
 
   public openDetailedBusiness(mst) {
     let url = '/#/public/partner/search/' + mst.trim();
-    window.open(url, '_blank');
+    window.open(url, '_self');
   }
 
   GetAllCompany() {

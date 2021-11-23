@@ -15,9 +15,6 @@ import { DashboardService } from 'src/app/_services/APIService/dashboard.service
 
 import { new_import_export_model, Task, data_detail_model } from "src/app/_models/APIModel/export-import.model";
 import { exportimportchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { SAVE } from 'src/app/_enums/save.enum';
-
-import { CompanyTopPopup } from '../company-top-popup/company-top-popup.component';
 
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -30,7 +27,6 @@ import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { formatDate } from '@angular/common';
-import { ModalComponent } from 'src/app/components/specialized/commecial-managemant/export-import-management/dialog-import-export/modal.component';
 import { DialogImportExportComponent } from '../dialog-import-export/dialog-import-export.component';
 
 export const MY_FORMATS = {
@@ -318,6 +314,7 @@ export class DomesticExportComponent extends BaseComponent {
   exportchart: Array<exportimportchart> = new Array<exportimportchart>();
 
   lineChartMethod(tuthang: string, denthang: string, productcode: number, istongcuc: number) {
+    let self = this;
     this.dashboardService.GetExportChart(tuthang, denthang, productcode, istongcuc).subscribe(
       all => {
         this.exportchart = all.data
@@ -331,7 +328,7 @@ export class DomesticExportComponent extends BaseComponent {
             labels: this.timelist,
             datasets: [
               {
-                label: 'Thực hiện tháng ' + this.month,
+                label: 'Thực hiện tháng ' + self.month,
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: 'rgb(255, 0, 0)',
@@ -353,7 +350,7 @@ export class DomesticExportComponent extends BaseComponent {
                 spanGaps: false,
               },
               {
-                label: 'Thực hiện ' + this.month + ' tháng',
+                label: 'Thực hiện ' + self.month + ' tháng',
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: 'rgb(0, 0, 255)',
@@ -375,10 +372,25 @@ export class DomesticExportComponent extends BaseComponent {
                 spanGaps: false,
               }
             ]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(value, index, values) {
+                    return self.numberWithDot(value) + ' tr $';
+                  }
+                },
+              }],
+            }
           }
         });
       },
     );
+  }
+
+  numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   products: Array<ProductModel> = new Array<ProductModel>();
@@ -414,7 +426,7 @@ export class DomesticExportComponent extends BaseComponent {
 
   Convertdate(text: string): string {
     let date: string
-    date = text.substr(4, 2) + "-" + text.substring(0, 4)
+    date = text.substr(4, 2) + "/" + text.substring(0, 4)
     return date
   }
 

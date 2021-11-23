@@ -161,6 +161,17 @@ export class ForeignMarketPriceComponent extends BaseComponent {
                 spanGaps: false,
               }
             ]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(value, index, values) {
+                    return "$" + value;
+                  }
+                },
+              }],
+            }
           }
         });
       },

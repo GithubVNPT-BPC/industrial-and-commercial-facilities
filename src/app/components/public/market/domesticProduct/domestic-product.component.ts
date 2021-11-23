@@ -1,12 +1,11 @@
-import { Component, Injector, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
+import { Chart} from 'chart.js';
 import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
 import { productchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
-import { formatDate } from '@angular/common';
 
 import { ProductValueModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { SAVE } from 'src/app/_enums/save.enum';
@@ -136,6 +135,7 @@ export class DomesticProductComponent extends BaseComponent {
   productchart: Array<productchart> = new Array<productchart>();
 
   lineChartMethod(tuthang: string, denthang: string, productcode: number) {
+    let self = this;
     this.dashboardService.GetProductChart(tuthang, denthang, productcode).subscribe(
       all => {
         this.productchart = all.data
@@ -193,10 +193,25 @@ export class DomesticProductComponent extends BaseComponent {
                 spanGaps: false,
               }
             ]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(value, index, values) {
+                    return self.numberWithDot(value) + ' k Tấn';
+                  }
+                },
+              }],
+            }
           }
         });
       },
     );
+  }
+
+  numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   products: Array<ProductModel> = new Array<ProductModel>();
