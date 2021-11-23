@@ -77,7 +77,7 @@ export class CertificateListComponent implements OnInit {
   @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  status: boolean;
+  status: string;
 
   constructor(
     public excelService: ExcelService,
@@ -174,8 +174,9 @@ export class CertificateListComponent implements OnInit {
   showbutton: boolean
 
   ngOnInit() {
+    console.log(this.status)
     this.sendLinkToNext(true)
-    if (this.status == false) {
+    if (this.status == 'false') {
       this.isChecked = false
       this.showbutton = false
     }
@@ -221,8 +222,8 @@ export class CertificateListComponent implements OnInit {
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
       });
 
-      if (this.status == true) {
-        this.dataSource.data = this.certificate.filter(x => x.is_het_han == this.status)
+      if (this.status == 'true') {
+        this.dataSource.data = this.certificate.filter(x => x.is_het_han == true)
       }
       else {
         this.dataSource.data = this.certificate

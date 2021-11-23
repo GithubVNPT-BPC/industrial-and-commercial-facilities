@@ -99,6 +99,7 @@ export class SearchBusinessComponent implements OnInit {
   ) { }
 
   authorize: boolean = true;
+  status: boolean
 
   ngOnInit(): void {
     this.GetAllCompany();
@@ -106,6 +107,7 @@ export class SearchBusinessComponent implements OnInit {
     this.tempFilter = new CompanyDetailModel();
     this.filterType = MatTableFilter.ANYWHERE;
     this.sendLinkToNext(true);
+    this.status = false
 
     if (this._login.userValue.user_role_id == 1 || this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 4
       || this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 7) {
@@ -171,8 +173,8 @@ export class SearchBusinessComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  AddCertificate(status: boolean) {
-    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + status]);
+  AddCertificate() {
+    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + this.status]);
   }
 
   selected_field: string = 'mst';

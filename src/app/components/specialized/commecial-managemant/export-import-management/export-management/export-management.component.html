@@ -73,7 +73,58 @@
                     </div>
                 </div>
 
-                <hr>
+                <hr class="mt-3">
+
+                <div class="row">
+                    <div class="col-6 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Từ tháng</mat-label>
+                            <input matInput [matDatepicker]="dp1" [formControl]="date1" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
+                            <mat-datepicker #dp1 startView="multi-year" (yearSelected)="chosenYearHandler1($event)"
+                                (monthSelected)="chosenMonthHandler1($event, dp1)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-6 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Đến tháng</mat-label>
+                            <input matInput [matDatepicker]="dp2" [formControl]="date2" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
+                            <mat-datepicker #dp2 startView="multi-year" (yearSelected)="chosenYearHandler2($event)"
+                                (monthSelected)="chosenMonthHandler2($event, dp2)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-6 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Nguồn dữ liệu: </mat-label>
+                            <mat-select (selectionChange)="applyDataTarget1($event)" [(ngModel)]="dataTargetId1">
+                                <mat-option *ngFor="let item of dataTargets" [value]="item.id">
+                                    {{ item.unit }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+        
+                    <div class="col-6 col-lg-3 my-auto">
+                        <mat-form-field appearance="outline">
+                            <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
+                                <mat-option>
+                                    <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
+                                        noEntriesFoundLabel="Giá trị không có trong danh sách" [formControl]="profilter">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+        
+                                <mat-option *ngFor="let item of filterproducts | async" [value]="item.id_san_pham">
+                                    {{item.ten_san_pham}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>       
 
                 <div class="container-fluid">
                     <h5 *ngIf="!exportchart.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG KHOẢNG THỜI GIAN HIỆN
@@ -338,60 +389,7 @@
                     <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
                     </h5>
                 </div>
-                <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50]" showFirstLastButtons></mat-paginator>
-
-                <hr class="mt-3">
-
-                <div class="row">
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Từ tháng</mat-label>
-                            <input matInput [matDatepicker]="dp1" [formControl]="date1" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
-                            <mat-datepicker #dp1 startView="multi-year" (yearSelected)="chosenYearHandler1($event)"
-                                (monthSelected)="chosenMonthHandler1($event, dp1)" panelClass="example-month-picker">
-                            </mat-datepicker>
-                        </mat-form-field>
-                    </div>
-        
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Đến tháng</mat-label>
-                            <input matInput [matDatepicker]="dp2" [formControl]="date2" readonly>
-                            <mat-datepicker-toggle matSuffix [for]="dp2"></mat-datepicker-toggle>
-                            <mat-datepicker #dp2 startView="multi-year" (yearSelected)="chosenYearHandler2($event)"
-                                (monthSelected)="chosenMonthHandler2($event, dp2)" panelClass="example-month-picker">
-                            </mat-datepicker>
-                        </mat-form-field>
-                    </div>
-        
-                    <div class="col-6 col-lg-3">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Nguồn dữ liệu: </mat-label>
-                            <mat-select (selectionChange)="applyDataTarget1($event)" [(ngModel)]="dataTargetId1">
-                                <mat-option *ngFor="let item of dataTargets" [value]="item.id">
-                                    {{ item.unit }}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-        
-                    <div class="col-6 col-lg-3 my-auto">
-                        <mat-form-field appearance="outline">
-                            <mat-select [(ngModel)]="defaultcode" (selectionChange)="applyfilter($event)">
-                                <mat-option>
-                                    <ngx-mat-select-search placeholderLabel="Nhập giá trị tìm kiếm"
-                                        noEntriesFoundLabel="Giá trị không có trong danh sách" [formControl]="profilter">
-                                    </ngx-mat-select-search>
-                                </mat-option>
-        
-                                <mat-option *ngFor="let item of filterproducts | async" [value]="item.id_san_pham">
-                                    {{item.ten_san_pham}}
-                                </mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>        
+                <mat-paginator #paginator [pageSizeOptions]="[20, 25, 50]" showFirstLastButtons></mat-paginator> 
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>
