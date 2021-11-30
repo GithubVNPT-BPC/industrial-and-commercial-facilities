@@ -1,0 +1,15 @@
+<h2 mat-dialog-title style="text-align:center;">Import dữ liệu</h2>
+
+<mat-dialog-content class="mat-typography">
+    <div class="container">
+        <label class="btn btn-success" for="customFile">
+            Chọn file
+        </label>
+        <input class="btn btn-success" id="customFile" type="file" (change)="uploadExcel($event)" hidden #inputFile>
+        {{name}}
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <div class="btn btn-primary" style="margin-right: 5px;" (click)="save()">Lưu</div>
+    <button mat-raised-button mat-dialog-close color="warn">Hủy</button>
+</mat-dialog-actions>

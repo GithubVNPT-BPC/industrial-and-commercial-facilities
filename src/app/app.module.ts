@@ -22,7 +22,9 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MAT_DATE_FORMATS } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DialogContainerComponent } from './shared/dialog/dialog-container/dialog-container.component';
+import { DialogContainerYearComponent } from './shared/dialog/dialog-container/dialog-container-year.component';
 import { ActivatedRouteSnapshot, RouteReuseStrategy } from '@angular/router';
+import { DialogContainerNoConditionComponent } from './shared/dialog/dialog-container/dialog-container-noCondition.component';
 
 export class AARouteReuseStrategy extends RouteReuseStrategy {
   shouldDetach(route: ActivatedRouteSnapshot): boolean {
@@ -95,7 +97,9 @@ const MY_FORMATS = {
   entryComponents: [
     InformationComponent,
     ConfirmationDialogComponent,
-    DialogContainerComponent
+    DialogContainerComponent,
+    DialogContainerYearComponent,
+    DialogContainerNoConditionComponent
   ],
   bootstrap: [RoutingComponent]
 })

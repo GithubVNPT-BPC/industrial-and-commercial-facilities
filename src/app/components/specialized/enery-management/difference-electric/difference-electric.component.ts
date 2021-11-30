@@ -10,6 +10,7 @@ import { BaseComponent } from 'src/app/components/specialized/base.component';
 import { LoginService } from 'src/app/_services/APIService/login.service';
 import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { DialogService } from 'src/app/_services/injectable-service/dialog.service';
+import { DialogContainerYearComponent } from 'src/app/shared/dialog/dialog-container/dialog-container-year.component';
 
 @Component({
     selector: 'app-difference-electric',
@@ -167,17 +168,18 @@ export class DifferenceElectricComponent extends BaseComponent {
     openDialog(nameSheet) {
         const dialogConfig = new MatDialogConfig();
         console.log(window.innerWidth);
-        if (window.innerWidth > 375) {
-            dialogConfig.width = window.innerWidth * 0.7 + 'px';
-            dialogConfig.height = window.innerHeight * 0.4 + 'px';
-        } else {
-            dialogConfig.width = window.innerWidth * 0.8 + 'px';
-            dialogConfig.height = window.innerHeight * 0.2 + 'px';
-        }
+        dialogConfig.width = window.innerWidth * 0.5 + 'px';
+        // if (window.innerWidth > 375) {
+        //   dialogConfig.width = window.innerWidth * 0.7 + 'px';
+        //   dialogConfig.height = window.innerHeight * 0.4 + 'px';
+        // } else {
+        //   dialogConfig.width = window.innerWidth * 0.8 + 'px';
+        //   dialogConfig.height = window.innerHeight * 0.2 + 'px';
+        // }
         dialogConfig.data = {
             nameSheet: nameSheet,
         };
-        let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+        let dialogRef = this.matDialog.open(DialogContainerYearComponent, dialogConfig);
 
         dialogRef.afterClosed().subscribe(res => {
             console.log(res);
