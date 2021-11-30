@@ -1,6 +1,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerYearComponent } from 'src/app/shared/dialog/dialog-container/dialog-container-year.component';
 import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { KeyEnergyModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
@@ -93,6 +94,7 @@ export class KeyEnegyComponent extends BaseComponent {
       _go: new FormControl('', Validators.required),
       nang_luong_quy_doi: new FormControl('', Validators.required),
       time_id: new FormControl('', Validators.required),
+      ghi_chu: new FormControl('')
     }
   }
   setFormParams() {
@@ -111,6 +113,7 @@ export class KeyEnegyComponent extends BaseComponent {
       this.formData.controls['nang_luong_quy_doi'].setValue(selectedRecord.nang_luong_quy_doi);
       this.formData.controls['time_id'].setValue(selectedRecord.time_id);
       this.formData.controls['id'].setValue(selectedRecord.id);
+      this.formData.controls['ghi_chu'].setValue(selectedRecord.ghi_chu);
     }
   }
   applyFilter(event: Event) {
@@ -138,21 +141,23 @@ export class KeyEnegyComponent extends BaseComponent {
 
   openDialog(nameSheet) {
     const dialogConfig = new MatDialogConfig();
-    if (window.innerWidth > 375) {
-      dialogConfig.width = window.innerWidth * 0.7 + 'px';
-      dialogConfig.height = window.innerHeight * 0.4 + 'px';
-    } else {
-      dialogConfig.width = window.innerWidth * 0.8 + 'px';
-      dialogConfig.height = window.innerHeight * 0.2 + 'px';
-    }
+    dialogConfig.width = window.innerWidth * 0.5 + 'px';
+    // if (window.innerWidth > 375) {
+    //   dialogConfig.width = window.innerWidth * 0.7 + 'px';
+    //   dialogConfig.height = window.innerHeight * 0.4 + 'px';
+    // } else {
+    //   dialogConfig.width = window.innerWidth * 0.8 + 'px';
+    //   dialogConfig.height = window.innerHeight * 0.2 + 'px';
+    // }
     dialogConfig.data = {
       nameSheet: nameSheet,
     };
-    let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+    let dialogRef = this.matDialog.open(DialogContainerYearComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         const body = this.handleData(res);
+        // console.log(body);
         this.energyService.ThemDuLieuNangLuongTrongDiem(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
       }
 
@@ -167,15 +172,16 @@ export class KeyEnegyComponent extends BaseComponent {
       body['ten_khach_hang'] = dataExcel[i]['__EMPTY'];
       body['dia_chi'] = dataExcel[i]['__EMPTY_1'];
       body['nganh_nghe'] = dataExcel[i]['__EMPTY_2'];
-      body['dien'] = dataExcel[i]['__EMPTY_5'];
-      body['than'] = dataExcel[i]['__EMPTY_6'];
-      body['san_luong_nam'] = dataExcel[i]['__EMPTY_7'];
-      body['doanh_thu'] = dataExcel[i]['__EMPTY_8'];
-      body['xang'] = dataExcel[i]['__EMPTY_9'];
-      body['LPG'] = time_id;
-      body['_go'] = 1;
-      body['nang_luong_quy_doi'] = dataExcel[i]['__EMPTY_3'];
+      body['dien'] = dataExcel[i]['__EMPTY_3'];
+      body['than'] = dataExcel[i]['__EMPTY_4'];
+      body['DO'] = dataExcel[i]['__EMPTY_5'];
+      body['FO'] = dataExcel[i]['__EMPTY_6'];
+      body['xang'] = dataExcel[i]['__EMPTY_7'];
+      body['LPG'] = dataExcel[i]['__EMPTY_8'];
+      body['_go'] = dataExcel[i]['__EMPTY_9'];
+      body['nang_luong_quy_doi'] = dataExcel[i]['__EMPTY_10'];
       body['time_id'] = time_id;
+      body['ghi_chu'] = dataExcel[i]['__EMPTY_11'];
       ls.push(body)
     }
     return ls;

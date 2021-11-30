@@ -3,7 +3,7 @@
 <mat-dialog-content class="mat-typography">
     <div class="row">
         <div class="col-lg col-md col-xs">
-            <mat-form-field appearance="outline" class="col-lg col-md col-xs-4">
+            <mat-form-field appearance="outline" class="col-lg col-md col-xs">
                 <mat-label>Năm dữ liệu</mat-label>
                 <mat-select [(ngModel)]="selectedYear" (selectionChange)="changePeriod()">
                     <mat-option *ngFor="let item of years" [value]="item">
@@ -12,18 +12,9 @@
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="col-lg col-md col-xs">
-            <mat-form-field appearance="outline" class="col-lg col-md col-xs-4">
-                <mat-label>Kỳ dữ liệu</mat-label>
-                <mat-select [(ngModel)]="selectedPeriod" (selectionChange)="changePeriod()">
-                    <mat-option *ngFor="let p of periods" [value]="p.id">
-                        {{p.title}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-        </div>
+        
     </div>
-    <div class="container">
+    <div class="container col-lg col-md col-xs">
         <label class="btn btn-success" for="customFile">
             Chọn file
         </label>

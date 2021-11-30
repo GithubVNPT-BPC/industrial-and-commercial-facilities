@@ -1,6 +1,7 @@
 import { Component, Injector } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatTableDataSource } from '@angular/material';
+import { DialogContainerYearComponent } from 'src/app/shared/dialog/dialog-container/dialog-container-year.component';
 import { DialogContainerComponent } from 'src/app/shared/dialog/dialog-container/dialog-container.component';
 import { ElectricityDevelopment35KVModel } from 'src/app/_models/APIModel/electric-management.module';
 import { EnergyService } from 'src/app/_services/APIService/energy.service';
@@ -175,17 +176,18 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
   openDialog(nameSheet) {
     const dialogConfig = new MatDialogConfig();
     console.log(window.innerWidth);
-    if (window.innerWidth > 375) {
-      dialogConfig.width = window.innerWidth * 0.7 + 'px';
-      dialogConfig.height = window.innerHeight * 0.4 + 'px';
-    } else {
-      dialogConfig.width = window.innerWidth * 0.8 + 'px';
-      dialogConfig.height = window.innerHeight * 0.2 + 'px';
-    }
+    dialogConfig.width = window.innerWidth * 0.5 + 'px';
+    // if (window.innerWidth > 375) {
+    //   dialogConfig.width = window.innerWidth * 0.7 + 'px';
+    //   dialogConfig.height = window.innerHeight * 0.4 + 'px';
+    // } else {
+    //   dialogConfig.width = window.innerWidth * 0.8 + 'px';
+    //   dialogConfig.height = window.innerHeight * 0.2 + 'px';
+    // }
     dialogConfig.data = {
       nameSheet: nameSheet,
     };
-    let dialogRef = this.matDialog.open(DialogContainerComponent, dialogConfig);
+    let dialogRef = this.matDialog.open(DialogContainerYearComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(res => {
       console.log(res);

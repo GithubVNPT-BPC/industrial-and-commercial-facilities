@@ -15,6 +15,8 @@ import { SimplebarAngularModule } from 'simplebar-angular';
 import { FilterByTextPipe } from './pipes/filterByText.pipe';
 import { HeaderComponent } from './header/header.component';
 import { DialogContainerComponent } from './dialog/dialog-container/dialog-container.component';
+import { DialogContainerYearComponent } from './dialog/dialog-container/dialog-container-year.component';
+import { DialogContainerNoConditionComponent } from './dialog/dialog-container/dialog-container-noCondition.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { DialogContainerComponent } from './dialog/dialog-container/dialog-conta
     SidebarComponent,
     FilterByTextPipe,
     DialogContainerComponent,
+    DialogContainerYearComponent,
+    DialogContainerNoConditionComponent
   ],
   imports: [
     CommonModule,
