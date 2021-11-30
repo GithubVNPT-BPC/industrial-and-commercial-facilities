@@ -135,7 +135,7 @@ export class TopbarComponent implements OnInit {
     this.open = this._eventService.getValue();
   }
   public openSpecializedModule() {
-    this._router.navigate(['/specialized/home']);
+    this._router.navigate(['/specialized/commecial-management/domestic']);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }

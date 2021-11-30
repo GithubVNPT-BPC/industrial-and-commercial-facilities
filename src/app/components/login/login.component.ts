@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         if (response.data.user_role_id == 1 || response.data.user_role_id == 6 || response.data.user_role_id == 3
           || response.data.user_role_id == 4 || response.data.user_role_id == 5) {
           this.info.msgSuccess("Đăng nhập thành công");
-          this.returnUrl = '/specialized/home'
+          this.returnUrl = '/specialized/commecial-management/domestic'
           this.router.navigateByUrl(this.returnUrl);
         }
         else if (response.data.user_role_id == 2) {
