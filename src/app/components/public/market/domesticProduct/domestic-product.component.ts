@@ -218,7 +218,7 @@ export class DomesticProductComponent extends BaseComponent {
   filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
   GetProduct() {
     this.dashboardService.GetProductList().subscribe((allrecords) => {
-      this.products = allrecords.data as ProductModel[];
+      this.products = allrecords.data.filter( x => x.id_field == 2) as ProductModel[];
       this.filterproducts.next(this.products.slice());
     });
   }
