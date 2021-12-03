@@ -120,7 +120,7 @@ export class TopbarComponent implements OnInit {
     this.open = this._eventService.getValue();
   }
   public openReportModule() {
-    this._router.navigate(['/report/view-all']);
+    this._router.navigate(['/report/']);
     this._eventService.setvalue(false);
     this.open = this._eventService.getValue();
   }
