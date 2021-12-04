@@ -21,7 +21,27 @@
             </div>
         </div>
         <div class="row" *ngIf="isEditPage">
-            <div class="col-12 button-control my-auto">
+            <div class="col-6 text-left">
+                <button mat-raised-button class="blue" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>attach_file</mat-icon> Nhập/Xuất Excel
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="exportTOExcel()">
+                        <mat-icon>insert_chart</mat-icon>
+                        <span>Tải file kèm dữ liệu</span>
+                    </button>
+                    <button mat-menu-item (click)="exportTOExcel(false)">
+                        <mat-icon>insert_chart_outlined</mat-icon>
+                        <span>Tải file không dữ liệu</span>
+                    </button>
+                    <label mat-menu-item>
+                        <mat-icon>cloud_upload</mat-icon>
+                        <span>Cập nhật dữ liệu</span>
+                        <input id="inputFile" type="file" (change)="uploadExcel($event)" hidden #inputFile />
+                    </label>
+                </mat-menu>
+            </div>
+            <div class="col-6 button-control my-auto">
                 <button mat-raised-button (click)="dataSynthesis()" title="Tổng hợp dữ liệu">Tổng hợp số liệu</button>
                 <button mat-raised-button (click)="SaveReport()" class="green" title="Lưu">
                     <mat-icon>save</mat-icon> Lưu

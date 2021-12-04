@@ -24,27 +24,27 @@ const routes: Routes = [
           title: 'Nhập báo cáo'
         }
       },
-      {
-        path: 'edit',
-        component: FillReportComponent,
-        data: {
-          title: 'Nhập liệu báo cáo'
-        }
-      },
-      {
-        path: 'view-all',
-        component: ViewSelectReportComponent,
-        data: {
-          title: 'Xem báo cáo'
-        }
-      },
-      {
-        path: 'view',
-        component: ViewReportComponent,
-        data: {
-          title: 'Xem báo cáo'
-        }
-      },
+      // {
+      //   path: 'edit',
+      //   component: FillReportComponent,
+      //   data: {
+      //     title: 'Nhập liệu báo cáo'
+      //   }
+      // },
+      // {
+      //   path: 'view-all',
+      //   component: ViewSelectReportComponent,
+      //   data: {
+      //     title: 'Xem báo cáo'
+      //   }
+      // },
+      // {
+      //   path: 'view',
+      //   component: ViewReportComponent,
+      //   data: {
+      //     title: 'Xem báo cáo'
+      //   }
+      // },
       {
         path: 'summary',
         component: SummaryReportComponent,

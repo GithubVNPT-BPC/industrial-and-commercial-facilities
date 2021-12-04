@@ -623,4 +623,127 @@ export class StandardReportComponent implements OnInit {
         return time_id - 1;
     }
   }
+
+  
+  // ========= EXCEL PROCESSING =========
+
+  private getExposedTable() {
+    let headers = ['STT', 'CODE'].concat(this.attributes.map(att => att.attr_name));
+    let exposedData = [];
+    for (let record of this.dataSource.data) {
+      let data = {};
+      for (let header of headers) {
+        if (header == 'STT') data[header] = record.ind_index;
+        else if (header == "CODE") data[header] = record.ind_id;
+        else if (header == "TÊN CHỈ TIÊU") data[header] = record.ind_name;
+        else if (header == "ĐƠN VỊ TÍNH") data[header] = record.ind_unit;
+        else data[header] = "";
+      } 
+      exposedData.push(data);
+    }
+    return exposedData;
+  }
+
+  public exportTOExcel(withData=true) {
+    let filename = this.tenbaocao + " - " + this.thoigianbaocao;
+    let sheetname = this.thoigianbaocao;
+  
+    if (withData) this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    else this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
+  }
+
+  @ViewChild('inputFile', { static: false }) inputFile: ElementRef;
+  uploadExcel(event) {
+    function prepareFileData(ws) {
+      function findHeaderIdx(recordList) {
+        let idxList = recordList.map(x => x.length);
+        return idxList.indexOf(Math.max(...idxList));
+      }
+
+      let recordList = XLSX.utils.sheet_to_json(ws, {header: 1});
+      let headerIdx = findHeaderIdx(recordList);
+      if (headerIdx === 0) return XLSX.utils.sheet_to_json(ws);
+
+      let headers = recordList[headerIdx] as Array<any>;
+      let datas = recordList.slice(headerIdx + 1) as Array<any>;
+      let results = [];
+      for (let data of datas) {
+        let res = {};
+        for (let [idx, r] of data.entries()) {
+          res[headers[idx]] = r
+        }
+        results.push(res);
+      }
+      return results;
+    }
+
+    let self = this;
+    const target: DataTransfer = <DataTransfer>(event.target);
+    let isExcelFile = !!target.files[0].name.match(/(.xls|.xlsx)/);
+    if (!isExcelFile) this.info.msgError("Bạn cần phải sử dụng file tệp có dạng là .xls hoặc .xlsx");
+    if (target.files.length != 1)  this.inputFile.nativeElement.value = '';
+    
+    const reader: FileReader = new FileReader();
+    reader.onload = (e: any) => {
+      const bstr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(bstr, { type: 'binary' });
+
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      let importedRecords = [];
+
+      let fileDatas = prepareFileData(ws);
+
+      try {
+        let dataDict = this.getDataDict();
+        let attrCodesDict = this.getAttrCodeDictByName();
+        for (let record of fileDatas) {
+
+          let ind_id = record['CODE'];
+          let displayedData = dataDict[ind_id];
+          
+          let attrNames = Object.keys(record);
+          for (let name of attrNames) {
+            if (['STT', 'CODE', 'TÊN CHỈ TIÊU', 'ĐƠN VỊ TÍNH'].includes(name)) continue;
+            if (record[name] === "") record[name] = null;
+            displayedData[attrCodesDict[name]] = record[name];
+          }
+
+          importedRecords.push(displayedData);
+        }
+        
+        this.dataSource = new MatTableDataSource(importedRecords);
+        this.info.msgSuccess("Nhập dữ liệu từ excel thành công!");
+      } catch (error) {
+        this.info.msgError("Gặp lỗi khi import dữ liệu: \n " + error);
+      } finally {
+        self.inputFile.nativeElement.value = '';
+      }
+    };
+
+    reader.readAsBinaryString(target.files[0]);
+
+    reader.onloadend = (e) => {
+      self.inputFile.nativeElement.value = '';
+    }
+  }
+
+  getDataDict() {
+    let dataList = this.dataSource.data;
+    let dataDict = {};
+    for (let data of dataList) {
+      dataDict[data.ind_id] = data;
+    }
+    return dataDict;
+  }
+
+  getAttrCodeDictByName() {
+    let attributes = this.attributes;
+    let attrCodesDict = {};
+    for (let attr of attributes) {
+      attrCodesDict[attr.attr_name] = attr.fld_code;
+    }
+    return attrCodesDict;
+  }
 }
