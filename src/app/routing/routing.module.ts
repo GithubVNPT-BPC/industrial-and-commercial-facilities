@@ -116,7 +116,7 @@ const routes: Routes = [
   },
   {
     path: 'report',
-    component: SpecializedLayoutComponent,
+    component: ReportLayoutComponent,
     loadChildren: () => import('../components/report/report.module').then(m => m.ReportModule)
   },
   {
