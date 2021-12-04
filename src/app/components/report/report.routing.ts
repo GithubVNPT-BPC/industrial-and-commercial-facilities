@@ -7,18 +7,16 @@ import {ViewReportComponent} from '../report/view-report/view-detail/view-detail
 import {ViewSelectReportComponent} from '../report/view-report/select-report/select-report.component';
 import {SummaryReportComponent} from '../report/summary-report/summary-report.component';
 import {LrisIntegrationComponent} from '../report/lris-integration/lris-integration.component';
+import { StandardReportComponent } from './standard-report/standard-report.component';
 
 const routes: Routes = [
   {
     path: '',
+    component: StandardReportComponent,
     data: {
       title: 'Báo cáo'
     },
     children: [
-      {
-        path: '',
-        redirectTo: 'all',
-      },
       {
         path: 'all',
         component: FillSelectReportComponent,
@@ -26,27 +24,27 @@ const routes: Routes = [
           title: 'Nhập báo cáo'
         }
       },
-      {
-        path: 'edit',
-        component: FillReportComponent,
-        data: {
-          title: 'Nhập liệu báo cáo'
-        }
-      },
-      {
-        path: 'view-all',
-        component: ViewSelectReportComponent,
-        data: {
-          title: 'Xem báo cáo'
-        }
-      },
-      {
-        path: 'view',
-        component: ViewReportComponent,
-        data: {
-          title: 'Xem báo cáo'
-        }
-      },
+      // {
+      //   path: 'edit',
+      //   component: FillReportComponent,
+      //   data: {
+      //     title: 'Nhập liệu báo cáo'
+      //   }
+      // },
+      // {
+      //   path: 'view-all',
+      //   component: ViewSelectReportComponent,
+      //   data: {
+      //     title: 'Xem báo cáo'
+      //   }
+      // },
+      // {
+      //   path: 'view',
+      //   component: ViewReportComponent,
+      //   data: {
+      //     title: 'Xem báo cáo'
+      //   }
+      // },
       {
         path: 'summary',
         component: SummaryReportComponent,

@@ -1,0 +1,165 @@
+<mat-card class="material" *ngIf="!isBlankPage; else BlankPage">
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <mat-form-field appearance="outline">
+                    <mat-label>Kỳ báo cáo</mat-label>
+                    <mat-select [(value)]="time_id" (selectionChange)="selectionChange($event)">
+                        <mat-option *ngFor="let year of years" [value]="year.time_id">{{year.text}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-6 col-sm-12 button-control my-auto">
+                <button mat-raised-button (click)="exportToExcel('','Sheet1')" class="green">
+                    <mat-icon>file_download</mat-icon>Xuất Excel</button>
+                <!-- <button type="button" mat-raised-button (click)="Back()">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                </button> -->
+                <button *ngIf="editPermission && !isEditPage" matTooltip="Chỉnh sửa" mat-raised-button (click)="switchMode()">
+                            <mat-icon>edit</mat-icon> Chỉnh sửa
+                </button>
+            </div>
+        </div>
+        <div class="row" *ngIf="isEditPage">
+            <div class="col-6 text-left">
+                <button mat-raised-button class="blue" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>attach_file</mat-icon> Nhập/Xuất Excel
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="exportTOExcel()">
+                        <mat-icon>insert_chart</mat-icon>
+                        <span>Tải file kèm dữ liệu</span>
+                    </button>
+                    <button mat-menu-item (click)="exportTOExcel(false)">
+                        <mat-icon>insert_chart_outlined</mat-icon>
+                        <span>Tải file không dữ liệu</span>
+                    </button>
+                    <label mat-menu-item>
+                        <mat-icon>cloud_upload</mat-icon>
+                        <span>Cập nhật dữ liệu</span>
+                        <input id="inputFile" type="file" (change)="uploadExcel($event)" hidden #inputFile />
+                    </label>
+                </mat-menu>
+            </div>
+            <div class="col-6 button-control my-auto">
+                <button mat-raised-button (click)="dataSynthesis()" title="Tổng hợp dữ liệu">Tổng hợp số liệu</button>
+                <button mat-raised-button (click)="SaveReport()" class="green" title="Lưu">
+                    <mat-icon>save</mat-icon> Lưu
+                </button>
+                <button mat-raised-button (click)="SendReport()" title="Trình lãnh đạo">
+                    <mat-icon>send</mat-icon> Trình lãnh đạo
+                </button>
+                <button mat-raised-button (click)="switchMode()" class="red">Hủy</button>
+            </div>
+        </div>
+
+        <hr/>
+
+        <mat-card-header *ngIf="object[0]">
+            <mat-card-title>
+                <h5>{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong></h5>
+            </mat-card-title>
+            <mat-card-subtitle>
+                <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến ngày
+                    <strong>{{ngayketthucbaocao}}</strong>
+                </p>
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <div class="layout" *ngIf="!isEditPage; else EditPage" #TABLE>
+            <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+                <ng-container matColumnDef="index" sticky>
+                    <th mat-header-cell *matHeaderCellDef>STT</th>
+                    <td mat-cell *matCellDef="let element;">{{element.ind_index}}</td>
+                </ng-container>
+
+                <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
+                            column.attr_code.toLowerCase() : 
+                            column.fld_code.toLowerCase()">
+                    <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
+                                ngược lại thì lấy cột fld_code (cột dữ liệu) -->
+                    <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
+                    <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
+                            'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
+                        <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
+                                nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
+                        <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                            {{row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]}}
+                        </div>
+                        <!-- && indicators[rowIndex].ind_type_id != '1' -->
+                        <!-- <ng-template #other_content>
+                                    <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                                </ng-template> -->
+                    </td>
+                </ng-container>
+
+                <div *ngFor="let table of tableMergeHader">
+                    <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                    </ng-container>
+
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName;"> </tr>
+                </div>
+
+                <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
+                <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index"></tr>
+            </table>
+        </div>
+        <ng-template #EditPage>
+            <div class="layout" #TABLE>
+                <table mat-table [dataSource]="dataSource" class="table-layout" id="small-table">
+                    <ng-container matColumnDef="index" sticky>
+                        <th mat-header-cell *matHeaderCellDef>STT</th>
+                        <!-- <td mat-cell *matCellDef="let element; let i = index" class="stt1">{{ i + 1 }}</td> -->
+                        <td mat-cell *matCellDef="let element;" class="stt1">{{element.ind_index}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ind_id">
+                        <th mat-header-cell *matHeaderCellDef>CODE</th>
+                        <td mat-cell *matCellDef="let element;">{{element.ind_id}}</td>
+                    </ng-container>
+
+                    <ng-container *ngFor="let column of attributes; let colIndex = index" [cdkColumnDef]="column.is_default === ATTRIBUTE_DEFAULT? 
+                            column.attr_code.toLowerCase() : 
+                            column.fld_code.toLowerCase()">
+                        <!-- Nếu là cột default thì lấy attr_code (cột chỉ  tiêu và đơn vị), 
+                                ngược lại thì lấy cột fld_code (cột dữ liệu) -->
+                        <th mat-header-cell *cdkHeaderCellDef> {{ column.attr_name }}</th>
+                        <td [ngClass]="column.attr_code == ATTRIBUTE_CODE ? 'chitieu' : column.is_default == 1 ? 
+                            'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
+                            <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
+                                nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
+                            <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}" *ngIf="column.is_default == 1||(column.is_default != 1 && row.ind_type!= TYPE_INDICATOR_INPUT);else other_content">
+                                {{row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]}}
+                            </div>
+                            <!-- && indicators[rowIndex].ind_type_id != '1' -->
+                            <ng-template #other_content>
+                                <span class="d-none">{{ row[column.is_default === 1? column.attr_code.toLowerCase():
+                                    column.fld_code.toLowerCase()] }}</span>
+                                <ng-container *ngIf="column.fld_code.substr(0,2) == 'fc'; else elseTemplate">
+                                    <input appReport [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                                </ng-container>
+                                <ng-template #elseTemplate>
+                                    <input appReport currencyMask [(ngModel)]="row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]" />
+                                </ng-template>
+                            </ng-template>
+                        </td>
+                    </ng-container>
+
+                    <div *ngFor="let table of tableMergeHader">
+                        <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
+                            <th mat-header-cell *matHeaderCellDef class="text-center" [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName;"> </tr>
+                    </div>
+
+                    <tr mat-header-row class="table-header" *matHeaderRowDef="attributeHeaders; sticky: true"></tr>
+                    <tr mat-row class="table-row" *matRowDef="let row; columns: attributeHeaders; let i = index"></tr>
+                </table>
+            </div>
+        </ng-template>
+    </mat-card-content>
+</mat-card>
+<ng-template #BlankPage>
+</ng-template>
