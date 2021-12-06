@@ -229,6 +229,15 @@ export class CertificateListComponent implements OnInit {
         this.dataSource.data = this.certificate
       }
 
+      this.dataSource.filterPredicate = (data: CertificateViewModel, filter: string): boolean => {
+        const dataStr = Object.keys(data).reduce((currentTerm: string, key: string) => {
+          return (currentTerm + (data as { [key: string]: any })[key] + '◬');
+        }, '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  
+        const transformedFilter = filter.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  
+        return dataStr.indexOf(transformedFilter) != -1;
+      }
       this.dataSource.paginator = this.paginator;
       this.paginator._intl.itemsPerPageLabel = 'Số hàng';
       this.paginator._intl.firstPageLabel = "Trang Đầu";

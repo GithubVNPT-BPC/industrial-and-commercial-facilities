@@ -170,6 +170,13 @@ export class CompanyDetailModel {
     public co_quan_cap: string;
     public ghi_chu: string;
     public ten_giay_phep: string;
+    nganh_nghe: string;
+
+    ten_doanh_nghiep_latin: string;
+    nguoi_dai_dien_latin: string;
+    dia_chi_day_du_latin: string;
+    ten_nganh_nghe_latin: string;
+    nganh_nghe_kd_chinh_latin: string;
 }
 
 export class CompanyPost {

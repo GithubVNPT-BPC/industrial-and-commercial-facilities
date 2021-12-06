@@ -55,38 +55,38 @@ export class SearchBusinessComponent implements OnInit {
 
   public filterList = [
     { filed_name: 'mst', detail_name: 'Mã số thuế' },
-    { filed_name: 'ten_doanh_nghiep', detail_name: 'Tên doanh nghiệp' },
-    { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
-    { filed_name: 'nguoi_dai_dien', detail_name: 'Người đại diện' },
-    { filed_name: 'dia_chi_day_du', detail_name: 'Địa chỉ đầy đủ' },
+    { filed_name: 'ten_doanh_nghiep_latin', detail_name: 'Tên doanh nghiệp' },
+    // { filed_name: 'ten_loai_hinh_hoat_dong', detail_name: 'Tên loại hình hoạt động' },
+    { filed_name: 'nguoi_dai_dien_latin', detail_name: 'Người đại diện' },
+    { filed_name: 'dia_chi_day_du_latin', detail_name: 'Địa chỉ đầy đủ' },
     { filed_name: 'ma_nganh_nghe', detail_name: 'Mã ngành nghề' },
-    { filed_name: 'ten_nganh_nghe', detail_name: 'Tên ngành nghề' },
-    { filed_name: 'nganh_nghe_kd_chinh', detail_name: 'Ngành nghề kinh doanh chính' },
+    { filed_name: 'ten_nganh_nghe_latin', detail_name: 'Ngành nghề' },
+    { filed_name: 'nganh_nghe_kd_chinh_latin', detail_name: 'Ngành nghề kinh doanh chính' },
     { filed_name: 'so_giay_phep', detail_name: 'Số giấy phép' },
     { filed_name: 'ngay_cap', detail_name: 'Ngày cấp giấy phép' },
     { filed_name: 'ngay_het_han', detail_name: 'Ngày hết hạn giấy phép' },
-    { filed_name: 'noi_cap', detail_name: 'Nơi cấp giấy phép' },
-    { filed_name: 'co_quan_cap', detail_name: 'Cơ quan cấp' },
-    { filed_name: 'ghi_chu', detail_name: 'Ghi chú giấy phép' },
+    // { filed_name: 'noi_cap', detail_name: 'Nơi cấp giấy phép' },
+    // { filed_name: 'co_quan_cap', detail_name: 'Cơ quan cấp' },
+    // { filed_name: 'ghi_chu', detail_name: 'Ghi chú giấy phép' },
     { filed_name: 'so_dien_thoai', detail_name: 'Số điện thoại' },
-    { filed_name: 'email', detail_name: 'Email' },
+    // { filed_name: 'email', detail_name: 'Email' },
     { filed_name: 'email_sct', detail_name: 'Email (Nguồn: SCT)' },
     { filed_name: 'ngay_bd_kd', detail_name: 'Ngày bắt đầu kinh doanh' },
-    { filed_name: 'von_dieu_le', detail_name: 'Vốn điều lệ' },
-    { filed_name: 'quy_mo_tai_san', detail_name: 'Quy mô tài sản' },
-    { filed_name: 'doanh_thu', detail_name: 'Doanh thu' },
-    { filed_name: 'loi_nhuan', detail_name: 'Lơi nhuận' },
-    { filed_name: 'cong_suat_thiet_ke', detail_name: 'Công suất thiết kế' },
-    { filed_name: 'cong_suat_thiet_ke_sct', detail_name: 'Công suất thiết kế (Nguồn: SCT)' },
-    { filed_name: 'so_lao_dong', detail_name: 'Số lao động' },
-    { filed_name: 'so_lao_dong_sct', detail_name: 'Số lao động (Nguồn: SCT)' },
-    { filed_name: 'san_luong', detail_name: 'Sản lượng' },
-    { filed_name: 'san_luong_sct', detail_name: 'Sản lượng (Nguồn: SCT)' },
-    { filed_name: 'nhu_cau_ban', detail_name: 'Nhu cầu bán' },
-    { filed_name: 'nhu_cau_mua', detail_name: 'Nhu cầu mua' },
-    { filed_name: 'nhu_cau_hop_tac', detail_name: 'Nhu cầu hợp tác' },
-    { filed_name: 'tieu_chuan_san_pham', detail_name: 'Tiêu chuẩn sản phẩm' },
-    { filed_name: 'hoat_dong', detail_name: 'Hoạt động' },
+    // { filed_name: 'von_dieu_le', detail_name: 'Vốn điều lệ' },
+    // { filed_name: 'quy_mo_tai_san', detail_name: 'Quy mô tài sản' },
+    // { filed_name: 'doanh_thu', detail_name: 'Doanh thu' },
+    // { filed_name: 'loi_nhuan', detail_name: 'Lơi nhuận' },
+    // { filed_name: 'cong_suat_thiet_ke', detail_name: 'Công suất thiết kế' },
+    // { filed_name: 'cong_suat_thiet_ke_sct', detail_name: 'Công suất thiết kế (Nguồn: SCT)' },
+    // { filed_name: 'so_lao_dong', detail_name: 'Số lao động' },
+    // { filed_name: 'so_lao_dong_sct', detail_name: 'Số lao động (Nguồn: SCT)' },
+    // { filed_name: 'san_luong', detail_name: 'Sản lượng' },
+    // { filed_name: 'san_luong_sct', detail_name: 'Sản lượng (Nguồn: SCT)' },
+    // { filed_name: 'nhu_cau_ban', detail_name: 'Nhu cầu bán' },
+    // { filed_name: 'nhu_cau_mua', detail_name: 'Nhu cầu mua' },
+    // { filed_name: 'nhu_cau_hop_tac', detail_name: 'Nhu cầu hợp tác' },
+    // { filed_name: 'tieu_chuan_san_pham', detail_name: 'Tiêu chuẩn sản phẩm' },
+    // { filed_name: 'hoat_dong', detail_name: 'Hoạt động' },
   ];
 
   constructor(
@@ -191,7 +191,8 @@ export class SearchBusinessComponent implements OnInit {
     let temp = [...this.countNumberCondition];
     for (let i = 0; i < temp.length; i++) {
       let element = temp[i];
-      this.tempFilter[element.filed_name] = element.filed_value;
+      let temp1 = element.filed_value.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+      this.tempFilter[element.filed_name] = temp1.replace('đ', 'd').toLowerCase();
     }
     this.filterEntity = Object.assign({}, this.tempFilter);
   }
@@ -318,12 +319,17 @@ export class SearchBusinessComponent implements OnInit {
         })
 
         this.companyList5.forEach(x => {
-          if (x.ngay_bd_kd) {
-            x.ngay_bd_kd = this.Convertdate(x.ngay_bd_kd)
-          }
-          else {
-            x.ngay_bd_kd = ''
-          }
+          x.ngay_bd_kd = x.ngay_bd_kd ? this.Convertdate(x.ngay_bd_kd) : ''
+          x.ten_doanh_nghiep_latin = x.ten_doanh_nghiep ? x.ten_doanh_nghiep.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
+          x.ten_doanh_nghiep_latin = x.ten_doanh_nghiep_latin ? x.ten_doanh_nghiep_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.nguoi_dai_dien_latin = x.nguoi_dai_dien ? x.nguoi_dai_dien.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
+          x.nguoi_dai_dien_latin = x.nguoi_dai_dien_latin ? x.nguoi_dai_dien_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.dia_chi_day_du_latin = x.dia_chi_day_du ? x.dia_chi_day_du.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
+          x.dia_chi_day_du_latin = x.dia_chi_day_du_latin ? x.dia_chi_day_du_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.ten_nganh_nghe_latin = x.ten_nganh_nghe ? x.ten_nganh_nghe.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
+          x.ten_nganh_nghe_latin = x.ten_nganh_nghe_latin ? x.ten_nganh_nghe_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.nganh_nghe_kd_chinh_latin = x.nganh_nghe_kd_chinh ? x.nganh_nghe_kd_chinh.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
+          x.nganh_nghe_kd_chinh_latin = x.nganh_nghe_kd_chinh_latin ? x.nganh_nghe_kd_chinh_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
         })
 
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);
