@@ -104,6 +104,16 @@ export class ReportDatarow {
     fn28: number;
     fn29: number;
     fn30: number;
+    fn31: number;
+    fn32: number;
+    fn33: number;
+    fn34: number;
+    fn35: number;
+    fn36: number;
+    fn37: number;
+    fn38: number;
+    fn39: number;
+    fn40: number;
     fc01: string;
     fc02: string;
     fc03: string;
@@ -124,6 +134,11 @@ export class ReportDatarow {
     fc18: string;
     fc19: string;
     fc20: string;
+    fc21: string;
+    fc22: string;
+    fc23: string;
+    fc24: string;
+    fc25: string;
     parent_id: number;
 }
 
@@ -180,6 +195,16 @@ export class ReportTable {
     fn28: number;
     fn29: number;
     fn30: number;
+    fn31: number;
+    fn32: number;
+    fn33: number;
+    fn34: number;
+    fn35: number;
+    fn36: number;
+    fn37: number;
+    fn38: number;
+    fn39: number;
+    fn40: number;
     fc01: string;
     fc02: string;
     fc03: string;
@@ -200,6 +225,11 @@ export class ReportTable {
     fc18: string;
     fc19: string;
     fc20: string;
+    fc21: string;
+    fc22: string;
+    fc23: string;
+    fc24: string;
+    fc25: string;
 }
 
 export class HeaderMerge {
