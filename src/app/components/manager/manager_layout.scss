@@ -1,3 +1,7 @@
+$blue: #1f7ed0;
+$white: white;
+$green: #28a745;
+$red: #f44336;
 .mat-card.material {
   .mat-paginator {
     margin-top: 10px;
@@ -27,6 +31,66 @@
         margin-left: 10px;
       }
     }
+
+            //card1 dùng 3 cards mỗi dòng
+            .card1 {
+              margin-top: 5px;
+              min-height: 90px;
+              .mat-card-header .mat-card-title {
+                  margin-bottom: 15px;
+                  font-size: 17px;
+              }
+              .mat-card-content {
+                  font-size: 17px;
+                  text-align: center;
+                  font-weight: bolder;
+                  color: $blue;
+              }
+              .mat-card-subtitle {
+                  font-size: 10px;
+                  text-align: center;
+                  font-weight: bold;
+              }
+              span {
+                  font-weight: bolder;
+                  color: $blue;
+                  text-align: center;
+              }
+          }
+  
+          //card2 dùng 4 cards mỗi dòng
+          .card2 {
+              margin-top: 5px;
+              min-height: 120px;
+              .mat-card-header .mat-card-title {
+                  margin-bottom: 5px;
+                  font-size: 15px;
+              }
+              .mat-card-content {
+                  font-size: 15px;
+                  text-align: center;
+                  font-weight: bolder;
+                  color: $blue;
+              }
+              .mat-card-subtitle {
+                  font-size: 10px;
+                  text-align: center;
+                  font-weight: bold;
+              }
+              span {
+                  font-weight: bolder;
+                  color: $blue;
+                  text-align: center;
+              }
+          }
+  
+          .card3 {
+              margin-top: 5px;
+              .detail-img {
+                  width: 500px;
+                  height: 300px;
+              }
+          }
 
     .mat-raised-button {
       background-color: #1f7ed0 !important;
@@ -350,4 +414,6 @@
   .alert {
     color: red;
   }
+
+  
 }

@@ -55,15 +55,16 @@ export class SidebarComponent implements OnInit {
     public _sidebarService: SidebarService,
     public _loginService: LoginService,
     public _router: Router,
-  ) { }
+  ) {
+    this.getMenu();
+    this.getIP();
+   }
 
   ngOnInit() {
     this.styleOfScss = this.STYLE_SCSS_DEFAULTL;
     this._loginService.refreshToken();
     this.onSinenavToggle();
     this.logon = this._checkLocalStorage();
-    this.getMenu();
-    this.getIP();
   }
 
   public getMenu() {

@@ -11,6 +11,7 @@ import { MatTableFilter } from 'mat-table-filter';
 import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
+import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-search-business',
@@ -23,6 +24,7 @@ export class SearchBusinessComponent implements OnInit {
   @ViewChild('new_element', { static: false }) ele: ElementRef;
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatAccordion, { static: false }) accordion: MatAccordion;
 
   public displayedColumns: string[] = ['select', 'index', 'ten_doanh_nghiep', 'mst',
     // 'ten_loai_hinh_hoat_dong', 
@@ -80,7 +82,12 @@ export class SearchBusinessComponent implements OnInit {
     public info: InformationService,
   ) { }
 
+  autoOpen() {
+    setTimeout(() => this.accordion.openAll(), 1000);
+  }
+
   ngOnInit(): void {
+    this.autoOpen();
     this.GetAllCompany();
     this.filterEntity = new CompanyDetailModel();
     this.tempFilter = new CompanyDetailModel();
@@ -292,6 +299,11 @@ export class SearchBusinessComponent implements OnInit {
           return d
         })
 
+        let temp = allrecords.data[3]
+        this.slqltm = temp[0].slqltm
+        this.slqlnl = temp[0].slqlnl
+        this.slqlcn = temp[0].slqlcn
+
         this.companyList5.forEach(x => {
           x.ngay_bd_kd = x.ngay_bd_kd ? this.Convertdate(x.ngay_bd_kd) : ''
           x.ten_doanh_nghiep_latin = x.ten_doanh_nghiep ? x.ten_doanh_nghiep.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
@@ -317,4 +329,8 @@ export class SearchBusinessComponent implements OnInit {
 
       });
   }
+
+  slqltm: number
+  slqlnl: number
+  slqlcn: number
 }
