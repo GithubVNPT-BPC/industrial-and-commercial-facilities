@@ -105,8 +105,10 @@ export class IndustryBusinessComponent implements OnInit {
   ) { }
 
   authorize: boolean = true;
+  status: boolean
 
   ngOnInit(): void {
+    this.status = false
     this.GetAllCompany();
     this.filterEntity = new CompanyDetailModel();
     this.tempFilter = new CompanyDetailModel();
@@ -177,8 +179,8 @@ export class IndustryBusinessComponent implements OnInit {
     window.open(url, '_blank');
   }
 
-  AddCertificate(status: boolean) {
-    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + status]);
+  AddCertificate() {
+    this.router.navigate(['specialized/commecial-management/domestic/certificate/' + this.status]);
   }
 
   selected_field: string = 'mst';
