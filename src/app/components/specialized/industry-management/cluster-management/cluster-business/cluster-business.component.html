@@ -14,9 +14,9 @@
                     <mat-icon>file_download</mat-icon>
                     </button>
                     <button mat-raised-button class="red" (click)="removeRows()" [hidden]="deletestatus">Xóa DN thuộc
-                        CNN</button>
+                        CCN</button>
                     <button mat-raised-button mat-dialog-close>Đóng</button>
-                    <button mat-raised-button (click)="save()" cdkFocusInitial>Lưu</button>
+                    <button mat-raised-button (click)="save()" cdkFocusInitial [hidden]="savestatus">Lưu</button>
                 </div>
             </div>
             <mat-form-field>

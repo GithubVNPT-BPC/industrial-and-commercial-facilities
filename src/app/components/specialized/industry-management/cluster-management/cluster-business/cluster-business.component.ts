@@ -28,6 +28,7 @@ export class ClusterBusinessComponent implements OnInit {
   // public clustermodel: ClusterModel;
   typeOfSave: SAVE;
   deletestatus: boolean = false;
+  savestatus: boolean = false
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -47,6 +48,7 @@ export class ClusterBusinessComponent implements OnInit {
     this.typeOfSave = this.data.typeOfSave;
     switch (this.typeOfSave) {
       case SAVE.CLUSTER:
+        this.savestatus = true
         this.GetExistClusterBusiness()
         break;
       case SAVE.ADD:
@@ -108,7 +110,7 @@ export class ClusterBusinessComponent implements OnInit {
   dataSource: MatTableDataSource<ClusterBusiness> = new MatTableDataSource();
 
   GetAllCompany() {
-    this.marketService.GetAllCompany().subscribe(
+    this.marketService.GetAllIndustryCompany().subscribe(
       allrecords => {
 
         let companytemp = allrecords.data[0].map(a => {
