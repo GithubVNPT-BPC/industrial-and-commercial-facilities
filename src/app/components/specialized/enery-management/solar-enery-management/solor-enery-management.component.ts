@@ -182,7 +182,6 @@ export class SolarEneryManagementComponent extends BaseComponent {
 
   openDialog(nameSheet) {
     const dialogConfig = new MatDialogConfig();
-    console.log(window.innerWidth);
     dialogConfig.width = window.innerWidth * 0.5 + 'px';
     // if (window.innerWidth > 375){
     //   dialogConfig.width = window.innerWidth*0.6 + 'px';
@@ -197,9 +196,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
     let dialogRef = this.matDialog.open(DialogContainerYearComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(res => {
-      console.log(res);
       if(res){
-        console.log(this.handleData(res));
         const body = this.handleData(res);
         this.energyService.PostSolarEnergyData(body).subscribe(res => this.successNotify(res), err => this.errorNotify(err));
       }
@@ -210,6 +207,7 @@ export class SolarEneryManagementComponent extends BaseComponent {
   handleData(time_id){
     let ls: any[] = [];
     let dataExcel = this.dialogService.getDataTransform();
+    
     for (let i = 1; i < dataExcel.length; i++) {
       let body: any = {};
       body['ten_doanh_nghiep'] = dataExcel[i]['__EMPTY'];

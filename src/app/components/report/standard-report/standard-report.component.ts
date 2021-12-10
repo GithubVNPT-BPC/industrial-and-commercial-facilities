@@ -85,6 +85,8 @@ export class StandardReportComponent implements OnInit {
     'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30',
     'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40'];
 
+  public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10', 'fn01', 'fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09', 'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05'];
+
   constructor(
     public reportSevice: ReportService,
     public route: ActivatedRoute,
@@ -96,6 +98,7 @@ export class StandardReportComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.obj_id = params['obj_id'];
       this.org_id = params['org_id'];
+      this.time_id = params['time_id'];
     });
   }
 
@@ -126,7 +129,8 @@ export class StandardReportComponent implements OnInit {
   ngOnInit(): void {
     let data: any = JSON.parse(localStorage.getItem('currentUser'));
     this.years = this.InitialYears();
-    this.time_id = new Date().getFullYear();
+    if (!this.time_id)
+      this.time_id = new Date().getFullYear();
     if (this.org_id) {
       this.isBlankPage = false;
       this.role_org_id = parseInt(data.org_id);
@@ -204,9 +208,17 @@ export class StandardReportComponent implements OnInit {
   }
 
   //Xuất excel
-  exportToExcel(filename: string, sheetname: string) {
-    filename = "Dữ liệu - " + this.tenbaocao + " - " + this.thoigianbaocao
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  // exportToExcel(filename: string, sheetname: string) {
+  //   filename = "Dữ liệu - " + this.tenbaocao + " - " + this.thoigianbaocao
+  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  // }
+
+  public exportTOExcel(withData = true) {
+    let filename = this.tenbaocao + " - " + this.thoigianbaocao;
+    let sheetname = this.thoigianbaocao;
+
+    if (withData) this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    else this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {
@@ -218,7 +230,7 @@ export class StandardReportComponent implements OnInit {
         this.datarows = allRecord.data[3] as ReportDatarow[];
         this.object = allRecord.data[0];
         if (this.object[0]) {
-          this.editPermission = (this.role_org_id == this.org_id) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
+          this.editPermission = (this.role_org_id == this.org_id || this.role_org_id == 1) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
           this.formatFrameReport(this.object[0]);
         }
         this.CreateMergeHeaderTable(this.attributes);
@@ -249,27 +261,31 @@ export class StandardReportComponent implements OnInit {
   }
 
   countChildNode(attr_id: number, attributes: ReportAttribute[]): number {
-    var temp = attributes.filter(x => x.parent_id == attr_id);
-    if (temp.length == 0)
-      return 1;
+    var temp = attributes.filter((x) => x.parent_id == attr_id);
+    if (temp.length == 0) return 1;
     else {
       let sum = 0;
-      temp.forEach(attr => {
+      temp.forEach((attr) => {
         sum += this.countChildNode(attr.attr_id, attributes);
-      })
+      });
       return sum;
     }
   }
 
   CreateMergeHeaderTable(attributesValue: ReportAttribute[]) {
+    // Swallow copy 'attributesValue' to 'attributes'
     let attributes: ReportAttribute[] = [];
-    attributesValue.forEach(val => attributes.push(Object.assign({}, val)));
-    let hashTableParentLength: HashTableNumber<number> = {};
-    attributes = attributes.filter(a => a.attr_code.toLowerCase() != 'rn');
+    attributesValue.forEach((val) => attributes.push(Object.assign({}, val)));
 
-    attributes.forEach(element => {
-      hashTableParentLength[element.attr_id] = this.countChildNode(element.attr_id, attributes);
+    // Get the merge length for the parent
+    let hashTableParentLength: HashTableNumber<number> = {};
+    attributes.forEach((element) => {
+      hashTableParentLength[element.attr_id] = this.countChildNode(
+        element.attr_id,
+        attributes
+      );
     });
+
     let loopCount: number = 0;
     this.tableMergeHader = [];
     while (attributes.length > 3) {
@@ -277,30 +293,49 @@ export class StandardReportComponent implements OnInit {
       this.indexOftableMergeHader += 1;
       let totlmerge: ToltalHeaderMerge = new ToltalHeaderMerge();
       let mergerHaders: HeaderMerge[] = [];
-      let layerTop: ReportAttribute[] = attributes.filter(element => element.parent_id == null);
+      let layerTop: ReportAttribute[] = attributes.filter(
+        (element) => element.parent_id == null
+      );
       let lengthBeforeOfAttributes: number = attributes.length;
-      attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1);
-      attributes.forEach(attribute => {
+      attributes = attributes.filter(
+        (e) =>
+          e.parent_id != null ||
+          e.is_default == 1 ||
+          hashTableParentLength[e.attr_id] == 1
+      );
+      attributes.forEach((attribute) => {
         //if (attribute.is_default == 1) {
         attribute.attr_code = attribute.attr_code + loopCount.toString();
         //}
       });
-      layerTop.forEach(layer => {
+
+      layerTop.forEach((layer) => {
         let mergeHeader: HeaderMerge = new HeaderMerge();
-        mergeHeader.colLenght = hashTableParentLength[layer.attr_id] ? hashTableParentLength[layer.attr_id] : 1;
+        mergeHeader.colLenght = hashTableParentLength[layer.attr_id]
+          ? hashTableParentLength[layer.attr_id]
+          : 1;
         mergeHeader.colName = (layer.attr_code + "_TEST").toLowerCase();
-        mergeHeader.colText = hashTableParentLength[layer.attr_id] > 1 && hashTableParentLength[layer.attr_id] ? layer.attr_name : "";
+        mergeHeader.colText =
+          hashTableParentLength[layer.attr_id] > 1 &&
+            hashTableParentLength[layer.attr_id]
+            ? layer.attr_name
+            : "";
         mergeHeader.colDefault = layer.is_default;
         mergerHaders.push(mergeHeader);
       });
-      this.mergeHeadersColumn = mergerHaders.sort((a, b) => b.colDefault - a.colDefault)
-        .map(c => c.colName.toLowerCase());
+
+      this.mergeHeadersColumn = mergerHaders
+        .sort((a, b) => b.colDefault - a.colDefault)
+        .map((c) => c.colName.toLowerCase());
+
       totlmerge.headerColName = this.mergeHeadersColumn;
-      this.mergeHeadersColumn = [];
       totlmerge.headerMerge = mergerHaders;
+
+      this.mergeHeadersColumn = [];
       this.tableMergeHader.push(totlmerge);
-      attributes.forEach(element => {
-        layerTop.forEach(layer => {
+
+      attributes.forEach((element) => {
+        layerTop.forEach((layer) => {
           if (element.parent_id == layer.attr_id) {
             element.parent_id = null;
           }
@@ -314,18 +349,31 @@ export class StandardReportComponent implements OnInit {
   }
 
   CreateReportTable() {
-    this.dataSource = new MatTableDataSource<ReportTable>();
-    this.attributes = this.attributes.filter(a => a.fld_code && a.fld_code.toLowerCase() != 'null'
-      && a.attr_code.toLowerCase() != 'ind_code'
-      && a.attr_code.toLowerCase() != 'rn');
-    this.attributeHeaders = this.attributes.sort((a, b) => b.is_default - a.is_default)
-      .filter(a => a.fld_code.toLowerCase() != null)
-      .map(c => c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase());
-    this.attributeHeaders = this.attributeHeaders.filter(a => a.toLowerCase() != 'ind_code' && a.toLowerCase() != 'rn')
-    this.attributeHeaders.unshift('index');
+    this.attributes = this.attributes.filter(
+      (a) =>
+        a.fld_code &&
+        a.fld_code.toLowerCase() != "null" &&
+        a.attr_code.toLowerCase() != "ind_code" &&
+        a.attr_code.toLowerCase() != "rn"
+    );
+    this.attributeHeaders = this.attributes
+      .sort((a, b) => b.is_default - a.is_default)
+      .filter((a) => a.fld_code.toLowerCase() != null)
+      .map((c) =>
+        c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase()
+      );
+    this.attributeHeaders = this.attributeHeaders.filter(
+      (a) => a.toLowerCase() != "ind_code" && a.toLowerCase() != "rn"
+    );
+
+    this.attributeHeaders.unshift("ind_id");
+    this.attributeHeaders.unshift("index");
     for (let index = 0; index < this.indicators.length; index++) {
-      const elementDatarow = this.datarows[index];
       const elementIndicator = this.indicators[index];
+      const elementDatarow = this.datarows.find(
+        (e) => e.ind_id == elementIndicator.ind_id
+      );
+
       let tableRow: ReportTable = new ReportTable();
       tableRow.ind_formula = elementIndicator.formula;
       tableRow.ind_id = elementIndicator.ind_id;
@@ -334,158 +382,15 @@ export class StandardReportComponent implements OnInit {
       tableRow.ind_unit = elementIndicator.ind_unit;
       tableRow.ind_parent_id = elementIndicator.parent_id;
       tableRow.ind_index = elementIndicator.ind_index;
-      if (elementDatarow) {
-        tableRow.fc01 = elementDatarow.fc01 ? elementDatarow.fc01 : "";
-        tableRow.fc02 = elementDatarow.fc02 ? elementDatarow.fc02 : "";
-        tableRow.fc03 = elementDatarow.fc03 ? elementDatarow.fc03 : "";
-        tableRow.fc04 = elementDatarow.fc04 ? elementDatarow.fc04 : "";
-        tableRow.fc05 = elementDatarow.fc05 ? elementDatarow.fc05 : "";
-        tableRow.fc06 = elementDatarow.fc06 ? elementDatarow.fc06 : "";
-        tableRow.fc07 = elementDatarow.fc07 ? elementDatarow.fc07 : "";
-        tableRow.fc08 = elementDatarow.fc08 ? elementDatarow.fc08 : "";
-        tableRow.fc09 = elementDatarow.fc09 ? elementDatarow.fc09 : "";
-        tableRow.fc10 = elementDatarow.fc10 ? elementDatarow.fc10 : "";
-        tableRow.fc11 = elementDatarow.fc11 ? elementDatarow.fc11 : "";
-        tableRow.fc12 = elementDatarow.fc12 ? elementDatarow.fc12 : "";
-        tableRow.fc13 = elementDatarow.fc13 ? elementDatarow.fc13 : "";
-        tableRow.fc14 = elementDatarow.fc14 ? elementDatarow.fc14 : "";
-        tableRow.fc15 = elementDatarow.fc15 ? elementDatarow.fc15 : "";
-        tableRow.fc16 = elementDatarow.fc16 ? elementDatarow.fc16 : "";
-        tableRow.fc17 = elementDatarow.fc17 ? elementDatarow.fc17 : "";
-        tableRow.fc18 = elementDatarow.fc18 ? elementDatarow.fc18 : "";
-        tableRow.fc19 = elementDatarow.fc19 ? elementDatarow.fc19 : "";
-        tableRow.fc20 = elementDatarow.fc20 ? elementDatarow.fc20 : "";
-        tableRow.fc21 = elementDatarow.fc21 ? elementDatarow.fc21 : "";
-        tableRow.fc22 = elementDatarow.fc22 ? elementDatarow.fc22 : "";
-        tableRow.fc23 = elementDatarow.fc23 ? elementDatarow.fc23 : "";
-        tableRow.fc24 = elementDatarow.fc24 ? elementDatarow.fc24 : "";
-        tableRow.fc25 = elementDatarow.fc25 ? elementDatarow.fc25 : "";
-        tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
-        tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
-        tableRow.fn02 = elementDatarow.fn02 ? elementDatarow.fn02 : null;
-        tableRow.fn03 = elementDatarow.fn03 ? elementDatarow.fn03 : null;
-        tableRow.fn04 = elementDatarow.fn04 ? elementDatarow.fn04 : null;
-        tableRow.fn05 = elementDatarow.fn05 ? elementDatarow.fn05 : null;
-        tableRow.fn06 = elementDatarow.fn06 ? elementDatarow.fn06 : null;
-        tableRow.fn07 = elementDatarow.fn07 ? elementDatarow.fn07 : null;
-        tableRow.fn08 = elementDatarow.fn08 ? elementDatarow.fn08 : null;
-        tableRow.fn09 = elementDatarow.fn09 ? elementDatarow.fn09 : null;
-        tableRow.fn10 = elementDatarow.fn10 ? elementDatarow.fn10 : null;
-        tableRow.fn11 = elementDatarow.fn11 ? elementDatarow.fn11 : null;
-        tableRow.fn12 = elementDatarow.fn12 ? elementDatarow.fn12 : null;
-        tableRow.fn13 = elementDatarow.fn13 ? elementDatarow.fn13 : null;
-        tableRow.fn14 = elementDatarow.fn14 ? elementDatarow.fn14 : null;
-        tableRow.fn15 = elementDatarow.fn15 ? elementDatarow.fn15 : null;
-        tableRow.fn16 = elementDatarow.fn16 ? elementDatarow.fn16 : null;
-        tableRow.fn17 = elementDatarow.fn17 ? elementDatarow.fn17 : null;
-        tableRow.fn18 = elementDatarow.fn18 ? elementDatarow.fn18 : null;
-        tableRow.fn19 = elementDatarow.fn19 ? elementDatarow.fn19 : null;
-        tableRow.fn20 = elementDatarow.fn20 ? elementDatarow.fn20 : null;
-        tableRow.fn21 = elementDatarow.fn21 ? elementDatarow.fn21 : null;
-        tableRow.fn21 = elementDatarow.fn21 ? elementDatarow.fn21 : null;
-        tableRow.fn22 = elementDatarow.fn22 ? elementDatarow.fn22 : null;
-        tableRow.fn23 = elementDatarow.fn23 ? elementDatarow.fn23 : null;
-        tableRow.fn24 = elementDatarow.fn24 ? elementDatarow.fn24 : null;
-        tableRow.fn25 = elementDatarow.fn25 ? elementDatarow.fn25 : null;
-        tableRow.fn26 = elementDatarow.fn26 ? elementDatarow.fn26 : null;
-        tableRow.fn27 = elementDatarow.fn27 ? elementDatarow.fn27 : null;
-        tableRow.fn28 = elementDatarow.fn28 ? elementDatarow.fn28 : null;
-        tableRow.fn29 = elementDatarow.fn29 ? elementDatarow.fn29 : null;
-        tableRow.fn30 = elementDatarow.fn30 ? elementDatarow.fn30 : null;
-        tableRow.fn31 = elementDatarow.fn31 ? elementDatarow.fn31 : null;
-        tableRow.fn32 = elementDatarow.fn32 ? elementDatarow.fn32 : null;
-        tableRow.fn33 = elementDatarow.fn33 ? elementDatarow.fn33 : null;
-        tableRow.fn34 = elementDatarow.fn34 ? elementDatarow.fn34 : null;
-        tableRow.fn35 = elementDatarow.fn35 ? elementDatarow.fn35 : null;
-        tableRow.fn36 = elementDatarow.fn36 ? elementDatarow.fn36 : null;
-        tableRow.fn37 = elementDatarow.fn37 ? elementDatarow.fn37 : null;
-        tableRow.fn38 = elementDatarow.fn38 ? elementDatarow.fn38 : null;
-        tableRow.fn39 = elementDatarow.fn39 ? elementDatarow.fn39 : null;
-        tableRow.fn40 = elementDatarow.fn40 ? elementDatarow.fn40 : null;
-        tableRow.fd01 = elementDatarow.fd01 ? elementDatarow.fd01 : new Date();
-        tableRow.fd02 = elementDatarow.fd02 ? elementDatarow.fd02 : new Date();
-        tableRow.fd03 = elementDatarow.fd03 ? elementDatarow.fd03 : new Date();
-        tableRow.fd04 = elementDatarow.fd04 ? elementDatarow.fd04 : new Date();
-        tableRow.fd05 = elementDatarow.fd05 ? elementDatarow.fd05 : new Date();
-      } else {
-        tableRow.fc01 = '';
-        tableRow.fc02 = '';
-        tableRow.fc03 = '';
-        tableRow.fc04 = '';
-        tableRow.fc05 = '';
-        tableRow.fc06 = '';
-        tableRow.fc07 = '';
-        tableRow.fc08 = '';
-        tableRow.fc09 = '';
-        tableRow.fc10 = '';
-        tableRow.fc11 = '';
-        tableRow.fc12 = '';
-        tableRow.fc13 = '';
-        tableRow.fc14 = '';
-        tableRow.fc15 = '';
-        tableRow.fc16 = '';
-        tableRow.fc17 = '';
-        tableRow.fc18 = '';
-        tableRow.fc19 = '';
-        tableRow.fc20 = '';
-        tableRow.fc21 = '';
-        tableRow.fc22 = '';
-        tableRow.fc23 = '';
-        tableRow.fc24 = '';
-        tableRow.fc25 = '';
-        tableRow.fn01 = null;
-        tableRow.fn01 = null;
-        tableRow.fn02 = null;
-        tableRow.fn03 = null;
-        tableRow.fn04 = null;
-        tableRow.fn05 = null;
-        tableRow.fn06 = null;
-        tableRow.fn07 = null;
-        tableRow.fn08 = null;
-        tableRow.fn09 = null;
-        tableRow.fn10 = null;
-        tableRow.fn11 = null;
-        tableRow.fn12 = null;
-        tableRow.fn13 = null;
-        tableRow.fn14 = null;
-        tableRow.fn15 = null;
-        tableRow.fn16 = null;
-        tableRow.fn17 = null;
-        tableRow.fn18 = null;
-        tableRow.fn19 = null;
-        tableRow.fn20 = null;
-        tableRow.fn21 = null;
-        tableRow.fn21 = null;
-        tableRow.fn22 = null;
-        tableRow.fn23 = null;
-        tableRow.fn24 = null;
-        tableRow.fn25 = null;
-        tableRow.fn26 = null;
-        tableRow.fn27 = null;
-        tableRow.fn28 = null;
-        tableRow.fn29 = null;
-        tableRow.fn30 = null;
-        tableRow.fn31 = null;
-        tableRow.fn32 = null;
-        tableRow.fn33 = null;
-        tableRow.fn34 = null;
-        tableRow.fn35 = null;
-        tableRow.fn36 = null;
-        tableRow.fn37 = null;
-        tableRow.fn38 = null;
-        tableRow.fn39 = null;
-        tableRow.fn40 = null;
-        tableRow.fd01 = new Date();
-        tableRow.fd02 = new Date();
-        tableRow.fd03 = new Date();
-        tableRow.fd04 = new Date();
-        tableRow.fd05 = new Date();
+
+      for (let code of this.cellCodes) {
+        let assignVal = null;
+        if (code.includes('fc')) assignVal = '';
+        else if (code.includes('fd')) assignVal = new Date();
+        tableRow[code] = elementDatarow ? (elementDatarow[code] ? elementDatarow[code] : assignVal) : assignVal
       }
       this.dataSource.data.push(tableRow);
     }
-    this.dataSource.data.forEach(element => {
-      if (element.ind_formula == null && element.ind_type == 1) this.rows++;
-    });
   }
 
   applyFilter(event: Event) {
@@ -716,19 +621,11 @@ export class StandardReportComponent implements OnInit {
     return exposedData;
   }
 
-  public exportTOExcel(withData = true) {
-    let filename = this.tenbaocao + " - " + this.thoigianbaocao;
-    let sheetname = this.thoigianbaocao;
-
-    if (withData) this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    else this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
-  }
-
   @ViewChild('inputFile', { static: false }) inputFile: ElementRef;
   uploadExcel(event) {
     function prepareFileData(ws) {
       function findHeaderIdx(recordList) {
-        let idxList = recordList.map(x => x.length);
+        let idxList = recordList.map(x => Object.keys(x).length);
         return idxList.indexOf(Math.max(...idxList));
       }
 
@@ -777,9 +674,11 @@ export class StandardReportComponent implements OnInit {
 
           let attrNames = Object.keys(record);
           for (let name of attrNames) {
-            if (['STT', 'CODE', 'TÊN CHỈ TIÊU', 'ĐƠN VỊ TÍNH'].includes(name)) continue;
-            if (record[name] === "") record[name] = null;
-            displayedData[attrCodesDict[name]] = record[name];
+            if (name && name != "") {
+              if (['STT', 'CODE', 'TÊN CHỈ TIÊU', 'ĐƠN VỊ TÍNH'].includes(name)) continue;
+              if (record[name] === "") record[name] = null;
+              displayedData[attrCodesDict[name]] = record[name];
+            }
           }
 
           importedRecords.push(displayedData);

@@ -29,7 +29,7 @@ export class KeyEnegyComponent extends BaseComponent {
 
   //Constant variable
   public readonly displayedColumns: string[] = ['select', 'index', 'ten_khach_hang', 'dia_chi', 'nganh_nghe', 'dien', 'than',
-    'DO', 'FO', 'xang', 'LPG', 'go', 'nang_luong_quy_doi', 'thoi_gian_chinh_sua_cuoi'];
+    'DO', 'FO', 'xang', 'LPG', 'go', 'nang_luong_quy_doi', 'thoi_gian_chinh_sua_cuoi', 'ghi_chu'];
 
   //TS & HTML Variable
   public dataSource: MatTableDataSource<KeyEnergyModel>;

@@ -24,7 +24,7 @@
             <div class="col-3 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Kỳ dữ liệu</mat-label>
-                    <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedMonth">
+                    <mat-select (selectionChange)="changeObject()" [(ngModel)]="selectedObject">
                         <mat-option *ngFor="let month of months" [value]="month.id">{{ month.value }}
                         </mat-option>
                     </mat-select>
@@ -33,10 +33,8 @@
 
             <div class="col-lg-6 button-control my-auto text-right button-control">
                 <button mat-raised-button (click)="GetReportById(this.time_id)"><mat-icon>search</mat-icon>Tra dữ liệu</button>
-                <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401"
-                    (click)="OpenDetail()"><mat-icon>edit</mat-icon>Sửa dữ liệu</button>
-                <button mat-raised-button class="green"
-                    (click)="exportToExcel('Điện sản xuất và điện thương phẩm - ' + this.thoigianbaocao, this.thoigianbaocao)"><mat-icon>file_download</mat-icon>Xuất Excel</button>
+                <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401" (click)="OpenDetail()"><mat-icon>edit</mat-icon>Sửa dữ liệu</button>
+                <button mat-raised-button class="green" (click)="exportToExcel('Điện sản xuất và điện thương phẩm - ' + this.thoigianbaocao, this.thoigianbaocao)"><mat-icon>file_download</mat-icon>Xuất Excel</button>
             </div>
         </div>
         <hr/>
@@ -44,12 +42,11 @@
             <div class="col-12">
                 <mat-card-header *ngIf="this.object[0]">
                     <mat-card-title>
-                        <h2 >{{tenbaocao}} <br /> Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
+                        <h2>{{tenbaocao}} <br /> Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong>
                         </h2>
                     </mat-card-title>
                     <mat-card-subtitle>
-                        <p >Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
-                            ngày <strong>{{ngayketthucbaocao}}</strong></p>
+                        <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến ngày <strong>{{ngayketthucbaocao}}</strong></p>
                     </mat-card-subtitle>
                 </mat-card-header>
             </div>
@@ -78,10 +75,8 @@
                         'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
                         <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
                             nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
-                        <div
-                            [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
-                            {{row[column.is_default === 1? column.attr_code.toLowerCase():
-                            column.fld_code.toLowerCase()]}}
+                        <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                            {{row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]}}
                         </div>
                         <!-- && indicators[rowIndex].ind_type_id != '1' -->
                         <!-- <ng-template #other_content>
@@ -92,8 +87,7 @@
 
                 <div *ngFor="let table of tableMergeHader">
                     <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
-                        <th mat-header-cell *matHeaderCellDef style="text-align: center;"
-                            [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="mergeHeader.colLenght">{{mergeHeader.colText}} </th>
                     </ng-container>
 
                     <tr mat-header-row class="table-header" *matHeaderRowDef="table.headerColName;"> </tr>

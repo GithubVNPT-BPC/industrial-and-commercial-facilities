@@ -24,7 +24,7 @@
             <div class="col-3 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Kỳ thực hiện</mat-label>
-                    <mat-select (selectionChange)="calculateTimeId()" [(ngModel)]="selectedMonth">
+                    <mat-select (selectionChange)="changeObjectId()" [(ngModel)]="selectedObject">
                         <mat-option *ngFor="let month of months" [value]="month.id">{{ month.value }}
                         </mat-option>
                     </mat-select>
@@ -38,8 +38,7 @@
                 <button mat-raised-button *ngIf="this.state_id == 101 || this.state_id == 401" (click)="OpenDetail()">
                     <mat-icon>edit</mat-icon>Sửa dữ liệu
                 </button>
-                <button mat-raised-button class="green"
-                    (click)="exportToExcel('Điện nông thôn - ' + this.thoigianbaocao, this.thoigianbaocao)">
+                <button mat-raised-button class="green" (click)="exportToExcel('Điện nông thôn - ' + this.thoigianbaocao, this.thoigianbaocao)">
                     <mat-icon>file_download</mat-icon>Xuất Excel
                 </button>
             </div>
@@ -53,8 +52,7 @@
                         </h2>
                     </mat-card-title>
                     <mat-card-subtitle>
-                        <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến
-                            ngày <strong>{{ngayketthucbaocao}}</strong></p>
+                        <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến ngày <strong>{{ngayketthucbaocao}}</strong></p>
                     </mat-card-subtitle>
                 </mat-card-header>
             </div>
@@ -83,10 +81,8 @@
                               'not-input' : 'input'" mat-cell *cdkCellDef="let row; let rowIndex = index">
                         <!-- Trường hợp cột tên chỉ tiêu thì  dùngclass chitieu,
                                   nếu là cột default khác thì dùng not-input, các cột chỉ tiêu bình thường thì input-->
-                        <div
-                            [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
-                            {{row[column.is_default === 1? column.attr_code.toLowerCase():
-                            column.fld_code.toLowerCase()]}}
+                        <div [ngClass]="{'not-input-r': column.attr_code != ATTRIBUTE_CODE && column.attr_code != UNIT_CODE}">
+                            {{row[column.is_default === 1? column.attr_code.toLowerCase(): column.fld_code.toLowerCase()]}}
                         </div>
                         <!-- && indicators[rowIndex].ind_type_id != '1' -->
                         <!-- <ng-template #other_content>
@@ -97,8 +93,7 @@
 
                 <div *ngFor="let table of tableMergeHader">
                     <ng-container *ngFor="let mergeHeader of table.headerMerge;" [cdkColumnDef]="mergeHeader.colName">
-                        <th mat-header-cell *matHeaderCellDef style="text-align: center;"
-                            [attr.colspan]="mergeHeader.colLenght">
+                        <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="mergeHeader.colLenght">
                             {{mergeHeader.colText}} </th>
                     </ng-container>
 

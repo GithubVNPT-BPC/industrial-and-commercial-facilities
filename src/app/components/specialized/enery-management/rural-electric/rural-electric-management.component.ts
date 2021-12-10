@@ -66,9 +66,9 @@ export class RuralElectricManagementComponent implements OnInit {
   ngayketthucbaocao: string = "";
 
   years: Array<number> = [];
-  months: Array<object> = [{id: 1, value: '6 tháng đầu năm'},{id: 2, value: '6 tháng cuối năm'}];
+  months: Array<object> = [{ id: 29, value: '6 tháng đầu năm' }, { id: 113, value: '6 tháng cuối năm' }];
   selectedYear: number;
-  selectedMonth: number;
+  selectedObject: number;
 
   private _linkOutput: LinkModel = new LinkModel();
 
@@ -91,9 +91,10 @@ export class RuralElectricManagementComponent implements OnInit {
     public excelService: ExcelService,
     private _breadCrumService: BreadCrumService
   ) {
-    this.route.queryParams.subscribe(params => {
-      this.time_id = params['time_id'];
-    });
+    this.time_id = new Date().getFullYear();
+    // this.route.queryParams.subscribe(params => {
+    //   this.time_id = params['time_id'];
+    // });
   }
 
   move(object) {
@@ -126,7 +127,8 @@ export class RuralElectricManagementComponent implements OnInit {
     this.org_id = 5;
     this.years = this.InitialYears();
     this.selectedYear = new Date().getFullYear();
-    this.selectedMonth = new Date().getMonth() < 6 ? 1 : 2;
+    this.selectedObject = new Date().getMonth() < 7 ? 29 : 113;
+    this.obj_id = this.selectedObject;
     this.calculateTimeId();
 
     this.sendLinkToNext(true);
@@ -142,27 +144,27 @@ export class RuralElectricManagementComponent implements OnInit {
   }
 
   GetReportById(time_id: number) {
-      this.reportSevice.GetReportByKey(this.obj_id, time_id, this.org_id).subscribe(
-          allRecord => {
-              if (allRecord.data && allRecord.data.length) {
-                  this.attributes = allRecord.data[1] as ReportAttribute[];
-                  this.attributes.sort((a, b) => a.attr_id - b.attr_id);
-                  // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
-                  this.indicators = allRecord.data[2] as ReportIndicator[];
-                  this.datarows = allRecord.data[3] as ReportDatarow[];
-                  this.object = allRecord.data[0];
-                  if (this.object[0]) {
-                      this.state_id = this.object[0].state_id;
-                      this.formatFrameReport(this.object[0]);
-                  }
-                  this.CreateMergeHeaderTable(this.attributes);
-                  this.CreateReportTable();
-                  this.sendLinkToNext(true);
-              }
+    this.reportSevice.GetReportByKey(this.obj_id, time_id, this.org_id).subscribe(
+      allRecord => {
+        if (allRecord.data && allRecord.data.length) {
+          this.attributes = allRecord.data[1] as ReportAttribute[];
+          this.attributes.sort((a, b) => a.attr_id - b.attr_id);
+          // this.attributes.sort((a, b) => a.attr_code.localeCompare(b.attr_code));
+          this.indicators = allRecord.data[2] as ReportIndicator[];
+          this.datarows = allRecord.data[3] as ReportDatarow[];
+          this.object = allRecord.data[0];
+          if (this.object[0]) {
+            this.state_id = this.object[0].state_id;
+            this.formatFrameReport(this.object[0]);
           }
-      )
+          this.CreateMergeHeaderTable(this.attributes);
+          this.CreateReportTable();
+          this.sendLinkToNext(true);
+        }
+      }
+    )
   }
-  
+
   formatFrameReport(report: ReportOject) {
     this.tenbaocao = report.obj_name;
     this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));
@@ -198,166 +200,165 @@ export class RuralElectricManagementComponent implements OnInit {
   }
 
   CreateMergeHeaderTable(attributesValue: ReportAttribute[]) {
-      let attributes: ReportAttribute[] = []; //  Tạo mảng cột clone
-      attributesValue.forEach(val => attributes.push(Object.assign({}, val)));  //  Clone từng cột bỏ vào mảng cột trên
-      let hashTableParentLength: HashTableNumber<number> = {};  //  Tạo mảng băm tính chiều rộng của cột gộp
-      attributes = attributes.filter(a => a.attr_code.toLowerCase() != 'rn'); //  Loại trừ cột thứ tự
+    let attributes: ReportAttribute[] = []; //  Tạo mảng cột clone
+    attributesValue.forEach(val => attributes.push(Object.assign({}, val)));  //  Clone từng cột bỏ vào mảng cột trên
+    let hashTableParentLength: HashTableNumber<number> = {};  //  Tạo mảng băm tính chiều rộng của cột gộp
+    attributes = attributes.filter(a => a.attr_code.toLowerCase() != 'rn'); //  Loại trừ cột thứ tự
 
-      attributes.forEach(element => {
-          // if (element.parent_id != null){
-          //   if (!hashTableParentLength[element.parent_id]){
-          //     hashTableParentLength[element.parent_id] = 0;
-          //   }
-          //   hashTableParentLength[element.parent_id]  +=1;
-          // }
-          hashTableParentLength[element.attr_id] = this.countChildNode(element.attr_id, attributes);  //  Tính toán số lượng cột con
+    attributes.forEach(element => {
+      // if (element.parent_id != null){
+      //   if (!hashTableParentLength[element.parent_id]){
+      //     hashTableParentLength[element.parent_id] = 0;
+      //   }
+      //   hashTableParentLength[element.parent_id]  +=1;
+      // }
+      hashTableParentLength[element.attr_id] = this.countChildNode(element.attr_id, attributes);  //  Tính toán số lượng cột con
+    });
+    let loopCount: number = 0;
+    this.tableMergeHader = [];
+    while (attributes.length > 3) { //  
+      loopCount += 1;
+      // this.indexOftableMergeHader += 1;
+      let totlmerge: ToltalHeaderMerge = new ToltalHeaderMerge(); //  Mảng tổng cột gộp
+      let mergerHaders: HeaderMerge[] = []; //  Mảng cột gộp
+      let layerTop: ReportAttribute[] = attributes.filter(element => element.parent_id == null);  //  Mảng lấy tầng hiện tại của bảng
+      let lengthBeforeOfAttributes: number = attributes.length; //  Mảng đếm số lượng các cột clone
+      attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1); //  Lọc lấy các cột con hoặc các cột mặc định hoặc các cột không có con
+      attributes.forEach(attribute => {
+        //if (attribute.is_default == 1) {
+        attribute.attr_code = attribute.attr_code + loopCount.toString(); //  Thêm số để phân tầng khi lặp
+        //}
       });
-      let loopCount: number = 0;
-      this.tableMergeHader = [];
-      while (attributes.length > 3) { //  
-          loopCount += 1;
-          // this.indexOftableMergeHader += 1;
-          let totlmerge: ToltalHeaderMerge = new ToltalHeaderMerge(); //  Mảng tổng cột gộp
-          let mergerHaders: HeaderMerge[] = []; //  Mảng cột gộp
-          let layerTop: ReportAttribute[] = attributes.filter(element => element.parent_id == null);  //  Mảng lấy tầng hiện tại của bảng
-          let lengthBeforeOfAttributes: number = attributes.length; //  Mảng đếm số lượng các cột clone
-          attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1); //  Lọc lấy các cột con hoặc các cột mặc định hoặc các cột không có con
-          attributes.forEach(attribute => {
-              //if (attribute.is_default == 1) {
-              attribute.attr_code = attribute.attr_code + loopCount.toString(); //  Thêm số để phân tầng khi lặp
-              //}
-          });
-          layerTop.forEach(layer => { //  Duyệt từng cột của tầng hiện tại
-              let mergeHeader: HeaderMerge = new HeaderMerge();
-              mergeHeader.colLenght = hashTableParentLength[layer.attr_id] ? hashTableParentLength[layer.attr_id] : 1;  //  Lấy độ rộng của cột, mặc định bằng 1, hoặc theo số lượng cột con
-              mergeHeader.colName = (layer.attr_code + "_TEST").toLowerCase();  //  Tên cột gộp + _test ghi thường
-              mergeHeader.colText = hashTableParentLength[layer.attr_id] > 1 && hashTableParentLength[layer.attr_id] ? layer.attr_name : "";  //  Nếu cột là cột gộp thì lấy tên thuộc tính của cột, hoặc là bỏ trống
-              mergeHeader.colDefault = layer.is_default;
-              mergerHaders.push(mergeHeader); //  Thêm vào mảng cột gộp
-          });
-          this.mergeHeadersColumn = mergerHaders.sort((a, b) => b.colDefault - a.colDefault)
-              .map(c => c.colName.toLowerCase());
-          totlmerge.headerColName = this.mergeHeadersColumn;
-          this.mergeHeadersColumn = [];
-          totlmerge.headerMerge = mergerHaders;
-          this.tableMergeHader.push(totlmerge);
-          attributes.forEach(element => {
-              layerTop.forEach(layer => {
-                  if (element.parent_id == layer.attr_id) {
-                      element.parent_id = null;
-                  }
-              });
-          });
-          if (lengthBeforeOfAttributes == attributes.length) {
-              break;
+      layerTop.forEach(layer => { //  Duyệt từng cột của tầng hiện tại
+        let mergeHeader: HeaderMerge = new HeaderMerge();
+        mergeHeader.colLenght = hashTableParentLength[layer.attr_id] ? hashTableParentLength[layer.attr_id] : 1;  //  Lấy độ rộng của cột, mặc định bằng 1, hoặc theo số lượng cột con
+        mergeHeader.colName = (layer.attr_code + "_TEST").toLowerCase();  //  Tên cột gộp + _test ghi thường
+        mergeHeader.colText = hashTableParentLength[layer.attr_id] > 1 && hashTableParentLength[layer.attr_id] ? layer.attr_name : "";  //  Nếu cột là cột gộp thì lấy tên thuộc tính của cột, hoặc là bỏ trống
+        mergeHeader.colDefault = layer.is_default;
+        mergerHaders.push(mergeHeader); //  Thêm vào mảng cột gộp
+      });
+      this.mergeHeadersColumn = mergerHaders.sort((a, b) => b.colDefault - a.colDefault)
+        .map(c => c.colName.toLowerCase());
+      totlmerge.headerColName = this.mergeHeadersColumn;
+      this.mergeHeadersColumn = [];
+      totlmerge.headerMerge = mergerHaders;
+      this.tableMergeHader.push(totlmerge);
+      attributes.forEach(element => {
+        layerTop.forEach(layer => {
+          if (element.parent_id == layer.attr_id) {
+            element.parent_id = null;
           }
+        });
+      });
+      if (lengthBeforeOfAttributes == attributes.length) {
+        break;
       }
-      this.tableMergeHader.pop();
+    }
+    this.tableMergeHader.pop();
   }
 
   CreateReportTable() {
     this.attributes = this.attributes.filter(a => a.fld_code && a.fld_code.toLowerCase() != 'null'
-        && a.attr_code.toLowerCase() != 'ind_code'
-        && a.attr_code.toLowerCase() != 'rn');
+      && a.attr_code.toLowerCase() != 'ind_code'
+      && a.attr_code.toLowerCase() != 'rn');
     this.attributeHeaders = this.attributes.sort((a, b) => b.is_default - a.is_default)
-        .filter(a => a.fld_code.toLowerCase() != null)
-        .map(c => c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase());
+      .filter(a => a.fld_code.toLowerCase() != null)
+      .map(c => c.is_default == 1 ? c.attr_code.toLowerCase() : c.fld_code.toLowerCase());
     this.attributeHeaders = this.attributeHeaders.filter(a => a.toLowerCase() != 'ind_code' && a.toLowerCase() != 'rn')
     this.attributeHeaders.unshift('index');
-    console.log(this.attributes);
     this.dataSource = new MatTableDataSource<ReportTable>();
     for (let index = 0; index < this.indicators.length; index++) {
-        const elementDatarow = this.datarows[index];
-        const elementIndicator = this.indicators[index];
-        let tableRow: ReportTable = new ReportTable();
-        tableRow.ind_formula = elementIndicator.formula;
-        tableRow.ind_id = elementIndicator.ind_id;
-        tableRow.ind_name = elementIndicator.ind_name;
-        tableRow.ind_type = elementIndicator.ind_type;
-        tableRow.ind_unit = elementIndicator.ind_unit;
-        tableRow.ind_parent_id = elementIndicator.parent_id;
-        tableRow.ind_index = elementIndicator.ind_index;
-        if (elementDatarow) {
-            tableRow.fc01 = elementDatarow.fc01 ? elementDatarow.fc01 : "";
-            tableRow.fc02 = elementDatarow.fc02 ? elementDatarow.fc02 : "";
-            tableRow.fc03 = elementDatarow.fc03 ? elementDatarow.fc03 : "";
-            tableRow.fc04 = elementDatarow.fc04 ? elementDatarow.fc04 : "";
-            tableRow.fc05 = elementDatarow.fc05 ? elementDatarow.fc05 : "";
-            tableRow.fc06 = elementDatarow.fc06 ? elementDatarow.fc06 : "";
-            tableRow.fc07 = elementDatarow.fc07 ? elementDatarow.fc07 : "";
-            tableRow.fc08 = elementDatarow.fc08 ? elementDatarow.fc08 : "";
-            tableRow.fc09 = elementDatarow.fc09 ? elementDatarow.fc09 : "";
-            tableRow.fc10 = elementDatarow.fc10 ? elementDatarow.fc10 : "";
-            tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
-            tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
-            tableRow.fn02 = elementDatarow.fn02 ? elementDatarow.fn02 : null;
-            tableRow.fn03 = elementDatarow.fn03 ? elementDatarow.fn03 : null;
-            tableRow.fn04 = elementDatarow.fn04 ? elementDatarow.fn04 : null;
-            tableRow.fn05 = elementDatarow.fn05 ? elementDatarow.fn05 : null;
-            tableRow.fn06 = elementDatarow.fn06 ? elementDatarow.fn06 : null;
-            tableRow.fn07 = elementDatarow.fn07 ? elementDatarow.fn07 : null;
-            tableRow.fn08 = elementDatarow.fn08 ? elementDatarow.fn08 : null;
-            tableRow.fn09 = elementDatarow.fn09 ? elementDatarow.fn09 : null;
-            tableRow.fn10 = elementDatarow.fn10 ? elementDatarow.fn10 : null;
-            tableRow.fn11 = elementDatarow.fn11 ? elementDatarow.fn11 : null;
-            tableRow.fn12 = elementDatarow.fn12 ? elementDatarow.fn12 : null;
-            tableRow.fn13 = elementDatarow.fn13 ? elementDatarow.fn13 : null;
-            tableRow.fn14 = elementDatarow.fn14 ? elementDatarow.fn14 : null;
-            tableRow.fn15 = elementDatarow.fn15 ? elementDatarow.fn15 : null;
-            tableRow.fn16 = elementDatarow.fn16 ? elementDatarow.fn16 : null;
-            tableRow.fn17 = elementDatarow.fn17 ? elementDatarow.fn17 : null;
-            tableRow.fn18 = elementDatarow.fn18 ? elementDatarow.fn18 : null;
-            tableRow.fn19 = elementDatarow.fn19 ? elementDatarow.fn19 : null;
-            tableRow.fn20 = elementDatarow.fn20 ? elementDatarow.fn20 : null;
-            tableRow.fd01 = elementDatarow.fd01 ? elementDatarow.fd01 : new Date();
-            tableRow.fd02 = elementDatarow.fd02 ? elementDatarow.fd02 : new Date();
-            tableRow.fd03 = elementDatarow.fd03 ? elementDatarow.fd03 : new Date();
-            tableRow.fd04 = elementDatarow.fd04 ? elementDatarow.fd04 : new Date();
-            tableRow.fd05 = elementDatarow.fd05 ? elementDatarow.fd05 : new Date();
-        } else {
-            tableRow.fc01 = '';
-            tableRow.fc02 = '';
-            tableRow.fc03 = '';
-            tableRow.fc04 = '';
-            tableRow.fc05 = '';
-            tableRow.fc06 = '';
-            tableRow.fc07 = '';
-            tableRow.fc08 = '';
-            tableRow.fc09 = '';
-            tableRow.fc10 = '';
-            tableRow.fn01 = null;
-            tableRow.fn01 = null;
-            tableRow.fn02 = null;
-            tableRow.fn03 = null;
-            tableRow.fn04 = null;
-            tableRow.fn05 = null;
-            tableRow.fn06 = null;
-            tableRow.fn07 = null;
-            tableRow.fn08 = null;
-            tableRow.fn09 = null;
-            tableRow.fn10 = null;
-            tableRow.fn11 = null;
-            tableRow.fn12 = null;
-            tableRow.fn13 = null;
-            tableRow.fn14 = null;
-            tableRow.fn15 = null;
-            tableRow.fn16 = null;
-            tableRow.fn17 = null;
-            tableRow.fn18 = null;
-            tableRow.fn19 = null;
-            tableRow.fn20 = null;
-            tableRow.fd01 = new Date();
-            tableRow.fd02 = new Date();
-            tableRow.fd03 = new Date();
-            tableRow.fd04 = new Date();
-            tableRow.fd05 = new Date();
-        }
-        this.dataSource.data.push(tableRow);
+      const elementDatarow = this.datarows[index];
+      const elementIndicator = this.indicators[index];
+      let tableRow: ReportTable = new ReportTable();
+      tableRow.ind_formula = elementIndicator.formula;
+      tableRow.ind_id = elementIndicator.ind_id;
+      tableRow.ind_name = elementIndicator.ind_name;
+      tableRow.ind_type = elementIndicator.ind_type;
+      tableRow.ind_unit = elementIndicator.ind_unit;
+      tableRow.ind_parent_id = elementIndicator.parent_id;
+      tableRow.ind_index = elementIndicator.ind_index;
+      if (elementDatarow) {
+        tableRow.fc01 = elementDatarow.fc01 ? elementDatarow.fc01 : "";
+        tableRow.fc02 = elementDatarow.fc02 ? elementDatarow.fc02 : "";
+        tableRow.fc03 = elementDatarow.fc03 ? elementDatarow.fc03 : "";
+        tableRow.fc04 = elementDatarow.fc04 ? elementDatarow.fc04 : "";
+        tableRow.fc05 = elementDatarow.fc05 ? elementDatarow.fc05 : "";
+        tableRow.fc06 = elementDatarow.fc06 ? elementDatarow.fc06 : "";
+        tableRow.fc07 = elementDatarow.fc07 ? elementDatarow.fc07 : "";
+        tableRow.fc08 = elementDatarow.fc08 ? elementDatarow.fc08 : "";
+        tableRow.fc09 = elementDatarow.fc09 ? elementDatarow.fc09 : "";
+        tableRow.fc10 = elementDatarow.fc10 ? elementDatarow.fc10 : "";
+        tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
+        tableRow.fn01 = elementDatarow.fn01 ? elementDatarow.fn01 : null;
+        tableRow.fn02 = elementDatarow.fn02 ? elementDatarow.fn02 : null;
+        tableRow.fn03 = elementDatarow.fn03 ? elementDatarow.fn03 : null;
+        tableRow.fn04 = elementDatarow.fn04 ? elementDatarow.fn04 : null;
+        tableRow.fn05 = elementDatarow.fn05 ? elementDatarow.fn05 : null;
+        tableRow.fn06 = elementDatarow.fn06 ? elementDatarow.fn06 : null;
+        tableRow.fn07 = elementDatarow.fn07 ? elementDatarow.fn07 : null;
+        tableRow.fn08 = elementDatarow.fn08 ? elementDatarow.fn08 : null;
+        tableRow.fn09 = elementDatarow.fn09 ? elementDatarow.fn09 : null;
+        tableRow.fn10 = elementDatarow.fn10 ? elementDatarow.fn10 : null;
+        tableRow.fn11 = elementDatarow.fn11 ? elementDatarow.fn11 : null;
+        tableRow.fn12 = elementDatarow.fn12 ? elementDatarow.fn12 : null;
+        tableRow.fn13 = elementDatarow.fn13 ? elementDatarow.fn13 : null;
+        tableRow.fn14 = elementDatarow.fn14 ? elementDatarow.fn14 : null;
+        tableRow.fn15 = elementDatarow.fn15 ? elementDatarow.fn15 : null;
+        tableRow.fn16 = elementDatarow.fn16 ? elementDatarow.fn16 : null;
+        tableRow.fn17 = elementDatarow.fn17 ? elementDatarow.fn17 : null;
+        tableRow.fn18 = elementDatarow.fn18 ? elementDatarow.fn18 : null;
+        tableRow.fn19 = elementDatarow.fn19 ? elementDatarow.fn19 : null;
+        tableRow.fn20 = elementDatarow.fn20 ? elementDatarow.fn20 : null;
+        tableRow.fd01 = elementDatarow.fd01 ? elementDatarow.fd01 : new Date();
+        tableRow.fd02 = elementDatarow.fd02 ? elementDatarow.fd02 : new Date();
+        tableRow.fd03 = elementDatarow.fd03 ? elementDatarow.fd03 : new Date();
+        tableRow.fd04 = elementDatarow.fd04 ? elementDatarow.fd04 : new Date();
+        tableRow.fd05 = elementDatarow.fd05 ? elementDatarow.fd05 : new Date();
+      } else {
+        tableRow.fc01 = '';
+        tableRow.fc02 = '';
+        tableRow.fc03 = '';
+        tableRow.fc04 = '';
+        tableRow.fc05 = '';
+        tableRow.fc06 = '';
+        tableRow.fc07 = '';
+        tableRow.fc08 = '';
+        tableRow.fc09 = '';
+        tableRow.fc10 = '';
+        tableRow.fn01 = null;
+        tableRow.fn01 = null;
+        tableRow.fn02 = null;
+        tableRow.fn03 = null;
+        tableRow.fn04 = null;
+        tableRow.fn05 = null;
+        tableRow.fn06 = null;
+        tableRow.fn07 = null;
+        tableRow.fn08 = null;
+        tableRow.fn09 = null;
+        tableRow.fn10 = null;
+        tableRow.fn11 = null;
+        tableRow.fn12 = null;
+        tableRow.fn13 = null;
+        tableRow.fn14 = null;
+        tableRow.fn15 = null;
+        tableRow.fn16 = null;
+        tableRow.fn17 = null;
+        tableRow.fn18 = null;
+        tableRow.fn19 = null;
+        tableRow.fn20 = null;
+        tableRow.fd01 = new Date();
+        tableRow.fd02 = new Date();
+        tableRow.fd03 = new Date();
+        tableRow.fd04 = new Date();
+        tableRow.fd05 = new Date();
+      }
+      this.dataSource.data.push(tableRow);
     }
     this.dataSource.data.forEach(element => {
-        if (element.ind_formula == null && element.ind_type == 1) this.rows++;
+      if (element.ind_formula == null && element.ind_type == 1) this.rows++;
     });
-}
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -378,7 +379,7 @@ export class RuralElectricManagementComponent implements OnInit {
 
   private sendLinkToNext(type: boolean): void {
     this._linkOutput.link = this.LINK_DEFAULT;
-    this._linkOutput.title = this.TITLE_DEFAULT ;
+    this._linkOutput.title = this.TITLE_DEFAULT;
     this._linkOutput.text = this.TEXT_DEFAULT;
     this._linkOutput.type = type;
     this._breadCrumService.sendLink(this._linkOutput);
@@ -395,10 +396,14 @@ export class RuralElectricManagementComponent implements OnInit {
   }
 
   calculateTimeId() {
-    this.time_id = this.selectedYear * 10 + this.selectedMonth;
+    this.time_id = this.selectedYear;
+  }
+
+  changeObjectId() {
+    this.obj_id = this.selectedObject;
   }
 
   OpenDetail() {
-    this._router.navigate(['/report/edit'], { queryParams: { obj_id: this.obj_id, org_id: this.org_id, time_id: this.time_id } });
+    this._router.navigate(['/report'], { queryParams: { obj_id: this.obj_id, org_id: this.org_id, time_id: this.time_id } });
   }
 }

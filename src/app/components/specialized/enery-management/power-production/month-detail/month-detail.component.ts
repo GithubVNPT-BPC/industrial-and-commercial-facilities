@@ -67,9 +67,10 @@ export class MonthDetailComponent implements OnInit {
     ngayketthucbaocao: string = "";
 
     years: Array<number> = [];
-    months: Array<object> = [{ id: 1, value: '6 tháng đầu năm' }, { id: 2, value: '6 tháng cuối năm' }];
+    months: Array<object> = [{ id: 28, value: '6 tháng đầu năm' }, { id: 112, value: '6 tháng cuối năm' }];
     selectedYear: number;
     selectedMonth: number = 1;
+    selectedObject: number;
 
     private _linkOutput: LinkModel = new LinkModel();
 
@@ -85,16 +86,17 @@ export class MonthDetailComponent implements OnInit {
     constructor(
         public reportSevice: ReportService,
         public route: ActivatedRoute,
-        public _router : Router,
+        public _router: Router,
         public keyboardservice: KeyboardService,
         public info: InformationService,
         public location: Location,
         public excelService: ExcelService,
         private _breadCrumService: BreadCrumService
     ) {
-        this.route.queryParams.subscribe(params => {
-            this.time_id = params['time_id'];
-        });
+        this.time_id = new Date().getFullYear();
+        // this.route.queryParams.subscribe(params => {
+        //     this.time_id = params['time_id'];
+        // });
     }
 
     move(object) {
@@ -127,7 +129,9 @@ export class MonthDetailComponent implements OnInit {
         this.org_id = 5;
         this.years = this.InitialYears();
         this.selectedYear = new Date().getFullYear();
-        
+        this.selectedObject = new Date().getMonth() < 7 ? 28 : 112;
+        this.obj_id = this.selectedObject;
+
         this.calculateTimeId();
 
         this.sendLinkToNext(true);
@@ -279,7 +283,7 @@ export class MonthDetailComponent implements OnInit {
             attributes = attributes.filter(e => e.parent_id != null || e.is_default == 1 || hashTableParentLength[e.attr_id] == 1);
             attributes.forEach(attribute => {
                 if (attribute.is_default == 1) {
-                attribute.attr_code = attribute.attr_code + loopCount.toString();
+                    attribute.attr_code = attribute.attr_code + loopCount.toString();
                 }
             });
             layerTop.forEach(layer => {
@@ -449,10 +453,15 @@ export class MonthDetailComponent implements OnInit {
     }
 
     calculateTimeId() {
-        this.time_id = this.selectedYear * 10 + this.selectedMonth;
+        this.time_id = this.selectedYear;
+    }
+
+    changeObject() {
+        this.obj_id = this.selectedObject;
     }
 
     OpenDetail() {
-        this._router.navigate(['/report/edit'], { queryParams: { obj_id: this.obj_id, org_id: this.org_id, time_id: this.time_id } });
+        console.log(this.obj_id)
+        this._router.navigate(['/report'], { queryParams: { obj_id: this.obj_id, org_id: this.org_id, time_id: this.time_id } });
     }
 }

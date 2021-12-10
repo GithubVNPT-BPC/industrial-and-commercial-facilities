@@ -24,7 +24,7 @@ interface HashTableNumber<T> {
 
 export class ReportExplosivesComponent extends BaseComponent {
   //Constant
-  public readonly LINK_REPORT: string = '/report/edit';
+  public readonly LINK_REPORT: string = '/report';
   public readonly OBJ_ID_6TH: number = 9;
   public readonly OBJ_ID_12TH: number = 10;
   public TIME_ID: number = new Date().getFullYear();

@@ -112,7 +112,6 @@ export class DialogContainerYearComponent implements OnInit, AfterViewInit  {
   }
 
   save(){
-    console.log(this.dialogService.getDataTransform())
     this.dialogService.getDataTransform() ? this.dialog.close(this.time_id) : this.dialog.close(false);
   }
 
@@ -154,7 +153,8 @@ export class DialogContainerYearComponent implements OnInit, AfterViewInit  {
         this.time_id = Number(this.selectedYear + this.selectedPeriod.toString());
         break;
       case 3:
-        this.time_id = Number(this.selectedYear + this.selectedPeriod.toString());;
+        // this.time_id = Number(this.selectedYear + this.selectedPeriod.toString());;
+        this.time_id = this.selectedYear;
         break;
       case 4:
         this.time_id = this.selectedYear;

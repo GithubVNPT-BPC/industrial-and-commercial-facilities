@@ -396,6 +396,6 @@ export class UseFocusedEnergyComponent implements OnInit {
   }
 
   OpenDetail() {
-    this._router.navigate(['/report/edit'], { queryParams: { obj_id: this.obj_id, org_id: this.org_id, time_id: this.time_id } });
+    this._router.navigate(['/report'], { queryParams: { obj_id: this.obj_id, org_id: this.org_id, time_id: this.time_id } });
   }
 }
