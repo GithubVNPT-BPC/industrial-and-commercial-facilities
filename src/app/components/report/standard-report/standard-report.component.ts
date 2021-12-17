@@ -85,8 +85,11 @@ export class StandardReportComponent implements OnInit {
     'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30',
     'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40'];
 
-  public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10', 'fn01', 'fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09', 'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05'];
-
+    public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10', 
+    'fc11', 'fc12', 'fc13', 'fc14', 'fc15', 'fc16', 'fc17', 'fc18', 'fc19', 'fc20', 'fc21', 'fc22', 'fc23', 'fc24', 'fc25',
+    'fn01', 'fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09', 'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20',
+    'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30', 'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40', 
+    'fd01', 'fd02', 'fd03', 'fd04', 'fd05'];
   constructor(
     public reportSevice: ReportService,
     public route: ActivatedRoute,
@@ -222,6 +225,7 @@ export class StandardReportComponent implements OnInit {
   }
 
   GetReportById(obj_id: number, time_id: number, org_id: number) {
+    this.dataSource = new MatTableDataSource<ReportTable>();
     this.reportSevice.GetReportByKey(obj_id, time_id, org_id).subscribe(
       allRecord => {
         this.attributes = allRecord.data[1] as ReportAttribute[];
@@ -349,6 +353,7 @@ export class StandardReportComponent implements OnInit {
   }
 
   CreateReportTable() {
+    this.dataSource.data = [];
     this.attributes = this.attributes.filter(
       (a) =>
         a.fld_code &&
@@ -391,6 +396,7 @@ export class StandardReportComponent implements OnInit {
       }
       this.dataSource.data.push(tableRow);
     }
+    this.dataSource.data = this.dataSource.data;
   }
 
   applyFilter(event: Event) {
@@ -399,18 +405,19 @@ export class StandardReportComponent implements OnInit {
   }
 
   SaveReport() {
+    let temp_org_id = this.role_org_id == 1? this.org_id : this.role_org_id;
     this.reportSevice
       .PostReportData(
         this.obj_id,
         this.time_id,
-        this.role_org_id,
+        temp_org_id,
         this.dataSource.data
       )
       .subscribe(
         (response) => {
           this.info.msgSuccess("Đã lưu báo cáo thành công!");
           this.switchMode();
-          this.editPermission = false;
+          this.editPermission = (this.role_org_id == this.org_id || this.role_org_id == 1) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
         },
         (error) => {
           this.info.msgError("Xảy ra lỗi: " + error.message);
@@ -425,7 +432,7 @@ export class StandardReportComponent implements OnInit {
         (response) => {
           this.info.msgSuccess("Đã trình lãnh đạo thành công!");
           this.switchMode();
-          this.editPermission = false;
+          this.editPermission = (this.role_org_id == this.org_id || this.role_org_id == 1) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
         },
         (error) => {
           this.info.msgError("Xảy ra lỗi: " + error.message);

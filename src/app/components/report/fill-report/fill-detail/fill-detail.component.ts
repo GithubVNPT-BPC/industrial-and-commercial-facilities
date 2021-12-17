@@ -38,7 +38,11 @@ export class FillReportComponent implements OnInit {
   public readonly numberFieldProperty: string[] = ['fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09',
     'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20'];
   
-  public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10', 'fn01', 'fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09', 'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20', 'fd01', 'fd02', 'fd03', 'fd04', 'fd05'];
+  public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10', 
+  'fc11', 'fc12', 'fc13', 'fc14', 'fc15', 'fc16', 'fc17', 'fc18', 'fc19', 'fc20', 'fc21', 'fc22', 'fc23', 'fc24', 'fc25',
+  'fn01', 'fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09', 'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20',
+  'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30', 'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40', 
+  'fd01', 'fd02', 'fd03', 'fd04', 'fd05'];
 
   public readonly oldDataReg = /^\{\{\d\}\}\{\{\w+\}\}$/;
   public readonly operatorReg = /\+|\-|\*|\//;
