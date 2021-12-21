@@ -22,31 +22,24 @@ $red: #f44336;
     .set-color-primary {
         color: $blue !important;
     }
-
     .set-bg-color-primary {
         background-color: $blue !important;
     }
-
     .set-color-success {
         color: $green !important;
     }
-
     .set-color-danger {
         color: $red !important;
     }
-
     .set-bg-color-danger {
         background-color: $red !important;
     }
-
     .no-space-top {
         top: 0 !important;
     }
-
-    ::ng-deep .mat-expansion-panel-body {
+     ::ng-deep .mat-expansion-panel-body {
         padding: 0 10px 16px;
     }
-
     .mat-paginator {
         margin-top: 10px;
         margin-bottom: 15px;
@@ -69,7 +62,6 @@ $red: #f44336;
             padding: 0 5px 5px !important;
         }
     }
-
     .mat-card-header {
         text-align: center;
         display: initial;
@@ -89,8 +81,7 @@ $red: #f44336;
                 margin-left: 10px;
             }
         }
-
-        ::ng-deep .mat-form-field-wrapper {
+         ::ng-deep .mat-form-field-wrapper {
             margin-bottom: -0.75em;
         }
         padding-bottom: 10px !important;
@@ -122,7 +113,6 @@ $red: #f44336;
                 }
             }
         }
-
         //card1 dùng 3 cards mỗi dòng
         .card1 {
             margin-top: 5px;
@@ -148,7 +138,6 @@ $red: #f44336;
                 text-align: center;
             }
         }
-
         //card2 dùng 4 cards mỗi dòng
         .card2 {
             margin-top: 5px;
@@ -174,7 +163,6 @@ $red: #f44336;
                 text-align: center;
             }
         }
-
         .card3 {
             margin-top: 5px;
             .detail-img {
@@ -182,7 +170,6 @@ $red: #f44336;
                 height: 300px;
             }
         }
-
         .mat-form-field {
             width: 100%;
         }
@@ -198,8 +185,7 @@ $red: #f44336;
             color: white !important;
             margin: auto 3px;
             margin-bottom: 5px;
-            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                0 1px 5px 0 rgba(0, 0, 0, 0.12);
+            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
         }
         .button-control {
             text-align: right;
@@ -209,8 +195,7 @@ $red: #f44336;
                 color: white !important;
                 margin: auto 3px;
                 margin-bottom: 5px;
-                box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+                box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
             }
             button.mat-raised-button.white {
                 background-color: white !important;
@@ -245,12 +230,10 @@ $red: #f44336;
                 // .mat-table-sticky:first-child {
                 //     border-right: 1px solid blue;
                 // }
-
                 // .mat-table-sticky:last-child {
                 //     border-left: 1px solid blue;
                 // }
                 border-collapse: separate;
-
                 width: 550%;
                 table-layout: initial;
                 th,
@@ -291,7 +274,7 @@ $red: #f44336;
                     border-width: 1px;
                     border: 0.01em solid rgb(192, 192, 192);
                     font-size: 12px;
-                    text-align: left;
+                    text-align: center;
                     max-width: 350px;
                     padding: 2px !important;
                     input {
@@ -325,12 +308,10 @@ $red: #f44336;
                 // .mat-table-sticky:first-child {
                 //     border-right: 1px solid blue;
                 // }
-
                 // .mat-table-sticky:last-child {
                 //     border-left: 1px solid blue;
                 // }
                 border-collapse: separate;
-
                 width: 100%;
                 table-layout: initial;
                 th,
@@ -403,7 +384,6 @@ $red: #f44336;
             }
         }
     }
-
     #import_excel {
         background-color: $blue !important;
         color: $white !important;
@@ -429,28 +409,22 @@ $red: #f44336;
             vertical-align: middle;
         }
     }
-
     .table-layout#small-table {
         width: 100%;
     }
-
     .table-layout#small-table1 {
         width: 150%;
     }
-
     .table-layout#small-table2 {
         width: 200%;
     }
-
     .table-layout#small-table3 {
         width: 300%;
     }
-
     form .form-group .container {
         margin-right: 0;
         margin-left: 0;
     }
-
     #small {
         height: 300px !important;
     }
@@ -467,7 +441,7 @@ $red: #f44336;
     display: inline-flex;
 }
 
-table.sjs-table > tbody > tr > td {
+table.sjs-table>tbody>tr>td {
     // background-color: lightgreen;
     border: 1px solid;
 }
@@ -479,6 +453,7 @@ table.sjs-table > tbody > tr > td {
     font-family: sans-serif;
     box-shadow: none;
 }
+
 a:link {
     text-decoration: underline;
 }
@@ -528,6 +503,7 @@ a:hover {
     overflow: hidden;
     background-color: #1f7ed0;
 }
+
 .btn-file input[type="file"] {
     position: absolute;
     top: 0;
@@ -545,11 +521,9 @@ a:hover {
 
 .export-btn {
     cursor: default;
-
     &:hover .export-area {
         display: block;
     }
-
     .export-area {
         display: none;
         position: absolute;
@@ -562,11 +536,9 @@ a:hover {
         padding: 10px 15px 10px 15px;
         z-index: 1000;
         transition: 0.3s;
-
         &:hover {
             display: block;
         }
-
         span {
             display: block;
             cursor: pointer;

@@ -260,3 +260,15 @@ export class SummaryReportModel {
     so_sanh_luy_ke_voi_cung_ki: number;
     so_sanh_luy_ke_voi_ke_hoach_nam: number;
 }
+
+export class AnnualEcommerceReportModel{
+    id : number;
+    ten_chi_tieu : string;
+    ma_so : string;
+    tong_so : number;
+    nha_nuoc : number;
+    ngoai_nha_nuoc : number;
+    von_dau_tu_nuoc_ngoai : number;
+    khu_vuc_khac : number;
+    time_id : number;
+}

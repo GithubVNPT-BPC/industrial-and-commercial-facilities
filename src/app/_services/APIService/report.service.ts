@@ -27,6 +27,7 @@ export class ReportService {
     public urlOldData = "/du-lieu-qua-khu";
 
     public urlGetSummaryReport = '/tong-hop';
+    public urlAnnualEcommerceReport = '/tmdt';
 
     token: any;
     username: any;
@@ -214,6 +215,24 @@ export class ReportService {
         let params = new HttpParams().set('year', year);
         params = params.append('month', month);
         return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetAnnualEcommerceReport(year) {
+        var apiUrl = this.apiReport + this.urlAnnualEcommerceReport;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('year', year);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public PostAnnualEcommerceReport(year : number, data : any) {
+        var apiUrl = this.apiReport + this.urlAnnualEcommerceReport;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('year', year.toString());
+        return this.http.post<any>(apiUrl, data, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

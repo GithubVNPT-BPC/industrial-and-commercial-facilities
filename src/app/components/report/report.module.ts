@@ -16,6 +16,7 @@ import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/co
 import { SummaryReportComponent } from './summary-report/summary-report.component';
 import { LrisIntegrationComponent } from './lris-integration/lris-integration.component';
 import { StandardReportComponent } from './standard-report/standard-report.component';
+import { AnnualEcommerceReportComponent } from './annual-ecommerce-report/annual-ecommer-report.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -49,7 +50,8 @@ export const customCurrencyMaskConfig = {
     ReportDirective,
     SummaryReportComponent,
     LrisIntegrationComponent,
-    StandardReportComponent
+    StandardReportComponent,
+    AnnualEcommerceReportComponent
   ],
   providers: [  ],
   entryComponents: [  ],

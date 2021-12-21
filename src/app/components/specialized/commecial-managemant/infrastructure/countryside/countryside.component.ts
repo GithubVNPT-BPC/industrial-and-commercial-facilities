@@ -139,7 +139,7 @@ export class CountrysideComponent extends BaseComponent {
     this.yearOfTC7 = data.map(x => x.nam_dat_TC_7).filter(this.filterService.onlyUnique);
     this.yearOfStd = data.map(x => x.nam_dat_NTM).filter(this.filterService.onlyUnique);
 
-    this.sumOfMarket = data.map(x => x.cho_truyen_thong).length;
+    this.sumOfMarket = data.filter(x => x.cho_truyen_thong != "").length;
     this.sumOfWards = data.map(x => x.id_phuong_xa).length;
 
     // Tiêu chí NTM

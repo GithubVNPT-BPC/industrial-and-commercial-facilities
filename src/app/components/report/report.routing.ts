@@ -8,6 +8,7 @@ import { ViewSelectReportComponent } from '../report/view-report/select-report/s
 import { SummaryReportComponent } from '../report/summary-report/summary-report.component';
 import { LrisIntegrationComponent } from '../report/lris-integration/lris-integration.component';
 import { StandardReportComponent } from './standard-report/standard-report.component';
+import { AnnualEcommerceReportComponent } from './annual-ecommerce-report/annual-ecommer-report.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,13 @@ const routes: Routes = [
       component: LrisIntegrationComponent,
       data: {
         title: 'Báo cáo Kinh tế - Xã hội'
+      }
+    },
+    {
+      path: 'annual-ecommerce-report',
+      component: AnnualEcommerceReportComponent,
+      data: {
+        title: 'Báo cáo năm Số đơn vị có giao dịch TMĐT'
       }
     }
       // {
