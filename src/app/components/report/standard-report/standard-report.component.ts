@@ -17,6 +17,8 @@ import { element } from 'protractor';
 import { merge } from 'rxjs';
 import moment from 'moment';
 import { TreeviewModule } from 'ngx-treeview';
+import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
+import { Dictionary } from 'highcharts';
 
 
 interface HashTableNumber<T> {
@@ -75,6 +77,14 @@ export class StandardReportComponent implements OnInit {
   isEditPage: boolean = false;
   years: Array<any> = [];
   editPermission: boolean = true;
+  approvePermission: boolean = false;
+  status: string;
+  reportStatuses = [
+    { id: 101, status: "Báo cáo đang chờ nhập" },
+    { id: 201, status: "Báo cáo đang chờ phê duyệt" },
+    { id: 301, status: "Báo cáo đã được duyệt" },
+    { id: 401, status: "Báo cáo bị từ chối, chờ nhập lại" }
+  ]
 
   public readonly oldDataReg = /^\{\{\d\}\}\{\{\w+\}\}$/;
   public readonly operatorReg = /\+|\-|\*|\//;
@@ -85,10 +95,10 @@ export class StandardReportComponent implements OnInit {
     'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30',
     'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40'];
 
-    public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10', 
+  public readonly cellCodes = ['fc01', 'fc02', 'fc03', 'fc04', 'fc05', 'fc06', 'fc07', 'fc08', 'fc09', 'fc10',
     'fc11', 'fc12', 'fc13', 'fc14', 'fc15', 'fc16', 'fc17', 'fc18', 'fc19', 'fc20', 'fc21', 'fc22', 'fc23', 'fc24', 'fc25',
     'fn01', 'fn01', 'fn02', 'fn03', 'fn04', 'fn05', 'fn06', 'fn07', 'fn08', 'fn09', 'fn10', 'fn11', 'fn12', 'fn13', 'fn14', 'fn15', 'fn16', 'fn17', 'fn18', 'fn19', 'fn20',
-    'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30', 'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40', 
+    'fn21', 'fn22', 'fn23', 'fn24', 'fn25', 'fn26', 'fn27', 'fn28', 'fn29', 'fn30', 'fn31', 'fn32', 'fn33', 'fn34', 'fn35', 'fn36', 'fn37', 'fn38', 'fn39', 'fn40',
     'fd01', 'fd02', 'fd03', 'fd04', 'fd05'];
   constructor(
     public reportSevice: ReportService,
@@ -97,6 +107,7 @@ export class StandardReportComponent implements OnInit {
     public info: InformationService,
     public location: Location,
     public excelService: ExcelService,
+    public confirmationDialogService: ConfirmationDialogService,
   ) {
     this.route.queryParams.subscribe(params => {
       this.obj_id = params['obj_id'];
@@ -235,6 +246,9 @@ export class StandardReportComponent implements OnInit {
         this.object = allRecord.data[0];
         if (this.object[0]) {
           this.editPermission = (this.role_org_id == this.org_id || this.role_org_id == 1) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
+          this.approvePermission = (this.role_org_id == 1 || this.role_org_id == 2 || this.role_org_id == 9) && this.object[0].state_id == 201;
+
+          this.status = this.reportStatuses.find(x => x.id == this.object[0].state_id)['status'];
           this.formatFrameReport(this.object[0]);
         }
         this.CreateMergeHeaderTable(this.attributes);
@@ -405,7 +419,7 @@ export class StandardReportComponent implements OnInit {
   }
 
   SaveReport() {
-    let temp_org_id = this.role_org_id == 1? this.org_id : this.role_org_id;
+    let temp_org_id = this.role_org_id == 1 ? this.org_id : this.role_org_id;
     this.reportSevice
       .PostReportData(
         this.obj_id,
@@ -417,7 +431,7 @@ export class StandardReportComponent implements OnInit {
         (response) => {
           this.info.msgSuccess("Đã lưu báo cáo thành công!");
           this.switchMode();
-          this.editPermission = (this.role_org_id == this.org_id || this.role_org_id == 1) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
+          this.GetReportById(this.obj_id, this.time_id, this.org_id);
         },
         (error) => {
           this.info.msgError("Xảy ra lỗi: " + error.message);
@@ -426,13 +440,14 @@ export class StandardReportComponent implements OnInit {
   }
 
   SendReport() {
+    let temp_org_id = this.role_org_id == 1 ? this.org_id : this.role_org_id;
     this.reportSevice
-      .SendReport(this.obj_id, this.role_org_id, this.time_id.toString())
+      .SendReport(this.obj_id, temp_org_id, this.time_id.toString())
       .subscribe(
         (response) => {
           this.info.msgSuccess("Đã trình lãnh đạo thành công!");
           this.switchMode();
-          this.editPermission = (this.role_org_id == this.org_id || this.role_org_id == 1) && (this.object[0].state_id == 101 || this.object[0].state_id == 401);
+          this.GetReportById(this.obj_id, this.time_id, this.org_id);
         },
         (error) => {
           this.info.msgError("Xảy ra lỗi: " + error.message);
@@ -608,7 +623,38 @@ export class StandardReportComponent implements OnInit {
     }
   }
 
+  OpenDialog() {
+    this.confirmationDialogService.confirm('Xác nhận', 'Bạn muốn phê duyệt hay từ chối báo cáo này?', 'Phê duyệt', 'Từ chối')
+      .then(confirm => {
+        if (confirm) {
+          this.ApproveReport();
+        }
+        else {
+          this.DeclineReport();
+        }
+      })
+      .catch(() => console.log('Hủy không thao tác'));
+  }
 
+  ApproveReport() {
+    let temp_org_id = (this.role_org_id == 1 || this.role_org_id == 2 || this.role_org_id == 9) ? this.org_id : this.role_org_id;
+
+    this.reportSevice.ApproveReport(this.obj_id, temp_org_id, this.time_id.toString()).subscribe(
+      () => {
+        this.info.msgSuccess("Phê duyệt báo cáo thành công");
+        this.GetReportById(this.obj_id, this.time_id, this.org_id);
+      });
+  }
+
+  DeclineReport() {
+    let temp_org_id = (this.role_org_id == 1 || this.role_org_id == 2 || this.role_org_id == 9) ? this.org_id : this.role_org_id;
+
+    this.reportSevice.DeclineReport(this.obj_id, temp_org_id, this.time_id.toString()).subscribe(
+      () => {
+        this.info.msgSuccess("Từ chối báo cáo thành công");
+        this.GetReportById(this.obj_id, this.time_id, this.org_id);
+      });
+  }
   // ========= EXCEL PROCESSING =========
 
   private getExposedTable() {

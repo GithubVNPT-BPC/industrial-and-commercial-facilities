@@ -16,8 +16,11 @@
                 <!-- <button type="button" mat-raised-button (click)="Back()">
                     <mat-icon>keyboard_backspace</mat-icon>
                 </button> -->
-                <button *ngIf="editPermission && !isEditPage" matTooltip="Chỉnh sửa" mat-raised-button (click)="switchMode()">
+                <button matTooltip="Chỉnh sửa" mat-raised-button (click)="switchMode()" *ngIf="editPermission && !isEditPage">
                             <mat-icon>edit</mat-icon> Chỉnh sửa
+                </button>
+                <button mat-raised-button (click)="OpenDialog()" title="Phê duyệt" *ngIf="approvePermission && !isEditPage">
+                    <mat-icon>done_all</mat-icon> Phê duyệt
                 </button>
             </div>
         </div>
@@ -59,6 +62,9 @@
         <mat-card-header *ngIf="object[0]">
             <mat-card-title>
                 <h5>{{tenbaocao}} | Kỳ báo cáo: <strong>{{thoigianbaocao}}</strong></h5>
+            </mat-card-title>
+            <mat-card-title>
+                <h6>Trạng thái báo cáo: <strong>{{status}}</strong></h6>
             </mat-card-title>
             <mat-card-subtitle>
                 <p>Thời hạn thực hiện từ : <strong>{{ngaybatdaubaocao}}</strong> đến ngày
