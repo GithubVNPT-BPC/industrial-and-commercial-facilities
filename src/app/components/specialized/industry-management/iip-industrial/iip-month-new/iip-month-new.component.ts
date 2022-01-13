@@ -208,6 +208,7 @@ export class IipMonthNewComponent implements OnInit {
           //   this.prototype.push(datarow)
           // });
           this.save(this.timechange, this.prototype)
+
         };
 
         reader.readAsBinaryString(target.files[0]);
@@ -358,6 +359,8 @@ export class IipMonthNewComponent implements OnInit {
 
   GetDanhSachCSSXCN(time_id: number) {
     this.sctService.GetDanhSachCSSX(time_id).subscribe((result) => {
+console.log(result.data[0])
+
       result.data[0].forEach(x => {
         x.ten_chi_tieu = x.ten_chi_tieu == 0 ? null : x.ten_chi_tieu;
         x.id_chi_tieu = x.id_chi_tieu == 0 ? null : x.id_chi_tieu;

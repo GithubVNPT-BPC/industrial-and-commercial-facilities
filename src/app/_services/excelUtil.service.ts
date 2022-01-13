@@ -464,16 +464,16 @@ export class ExcelService {
         data.forEach(item => {
             let datarow: object = {};
             datarow['id_chi_tieu'] = item['ID'];
-            datarow['thuc_hien_nam_truoc'] = item['Thực hiện năm trước'] ? item['Thực hiện năm trước'] : 0;
+            datarow['thuc_hien_cung_ky'] = item['Thực hiện cùng kỳ'] ? item['Thực hiện cùng kỳ'] : 0;
+            datarow['luy_ke_cung_ky'] = item['Lũy kế cùng kỳ'] ? item['Lũy kế cùng kỳ'] : 0;
             datarow['ke_hoach_nam'] = item['Kế hoạch năm'] ? item['Kế hoạch năm'] : 0;
             datarow['thuc_hien_ky_truoc'] = item['Thực hiện kỳ trước'] ? item['Thực hiện kỳ trước'] : 0;
             datarow['thuc_hien_thang'] = item['Thực hiện kỳ báo cáo'] ? item['Thực hiện kỳ báo cáo'] : 0;
-            datarow['luy_ke_thang'] = item['Thực hiện năm'] ? item['Thực hiện năm'] : 0;
-            datarow['ke_hoach_nam_sau'] = item['Kế hoạch năm sau'] ? item['Kế hoạch năm sau'] : 0;
-            datarow['so_sanh_luy_ke_cung_ky'] = item['Thực hiện năm so với cùng kỳ năm trước'] ? item['Thực hiện năm so với cùng kỳ năm trước'] : 0;
-            datarow['so_sanh_luy_ke_ke_hoach_nam'] = item['Thực hiện năm so với kế hoặch năm'] ? item['Thực hiện năm so với kế hoặch năm'] : 0;
-            datarow['so_sanh_ke_hoach_nam_sau_thuc_hien_nam'] = item['Kế hoạch năm sau so với thực hiện năm'] ? item['Kế hoạch năm sau so với thực hiện năm'] : 0;
-
+            datarow['luy_ke_thang'] = item['Lũy kế kỳ báo cáo'] ? item['Lũy kế kỳ báo cáo'] : 0;
+            datarow['so_sanh_ky_truoc'] = item['Thực hiện kỳ báo cáo so với kỳ trước'] ? item['Thực hiện kỳ báo cáo so với kỳ trước'] : 0;
+            datarow['so_sanh_cung_ky'] = item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] ? item['Thực hiện kỳ báo cáo so với cùng kỳ năm trước'] : 0;
+            datarow['so_sanh_luy_ke_cung_ky'] = item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] ? item['Lũy kế kỳ báo cáo so với cùng kỳ năm trước'] : 0;
+        
             datarow['don_vi_tinh'] = item['ĐVT'];
             datarow['stt'] = item['STT'];
             datarow['ten_chi_tieu'] = item['Chỉ tiêu chủ yếu'];
