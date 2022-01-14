@@ -378,7 +378,6 @@ export class ProductManagerComponent implements OnInit {
                         let datarow: ProductValueModel = new ProductValueModel();
                         datarow.id_san_pham = item['ID sản phẩm'];
                         datarow.san_luong = item['Sản lượng'];
-                        datarow.tri_gia = item['Trị giá'];
                         datarow.time_id = this.getCurrentMonth();
                         this.dataSource.data.push(datarow);
                     });
