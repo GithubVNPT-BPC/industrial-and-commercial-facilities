@@ -137,10 +137,15 @@ export class DomesticManagerComponent implements OnInit {
   public filterproducts: ReplaySubject<ProductModel[]> = new ReplaySubject<ProductModel[]>(1);
   public getListProduct(): void {
     this.marketService.GetProductList().subscribe(
+      // allrecords => {
+      //   this.products = allrecords.data as ProductModel[];
+      //   this.filterproducts.next(this.products.slice());
+      // },
       allrecords => {
-        this.products = allrecords.data as ProductModel[];
+        this.products = allrecords.data.filter(x=>x.id_san_pham == 28 || x.id_san_pham == 24 || x.id_san_pham == 25 
+            || x.id_san_pham == 23 || x.id_san_pham == 4) as ProductModel[];
         this.filterproducts.next(this.products.slice());
-      },
+    },
     );
   }
   public sanphamfilter: FormControl = new FormControl();

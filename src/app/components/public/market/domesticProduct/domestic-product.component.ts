@@ -333,7 +333,7 @@ export class DomesticProductComponent extends BaseComponent {
     this.date2 = this.newdate2
     const ctrlValue = this.date2.value;
     ctrlValue.year(normalizedYear.year());
-    this.date1.setValue(ctrlValue);
+    this.date2.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
   }
 
