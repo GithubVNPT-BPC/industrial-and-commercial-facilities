@@ -1,11 +1,11 @@
 <div>
     <app-topbar [sidebar]="sidebar" [typeOfUser]=1 [module]=MODULE01></app-topbar>
 
-    <mat-sidenav-container class="sidenav-container" [hasBackdrop]="1">
-        <mat-sidenav #sidebar mode="side" typeOfSideBar="0">
+    <mat-sidenav-container class="sidenav-container" hasBackdrop="false">
+        <mat-sidenav #sidebar mode="push" typeOfSideBar="0" [(opened)]="_opened" >
             <app-sidebar [typeOfSideBar]=1></app-sidebar>
         </mat-sidenav>
-        <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'open': 'close'" >
+        <mat-sidenav-content [@onMainContentChange]="onSideNavChange ? 'close' : 'open'" >
             <div class="container" >
                 <div class="main_content" >
                     <router-outlet></router-outlet>
