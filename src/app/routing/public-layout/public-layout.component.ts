@@ -18,6 +18,7 @@ export class PublicLayoutComponent implements OnInit {
   public readonly MODULE01: MODULE_CONTROL = MODULE_CONTROL.MODULE01;
 
   public pageYoffset = 0;
+  public numberOfClicks = 0;
   public onSideNavChange: boolean;
   private _opened = true;
   @Input() sidebar: MatSidenav;
@@ -41,13 +42,6 @@ export class PublicLayoutComponent implements OnInit {
     });
   }
 
-  numberOfClicks = 0;
-
-  @HostListener('click', ['$event.target'])
-  onClick(btn) {
-  }
-  private scrollToTop(): void {
-  }
   public scrollEvent = (event: any): void => {
     this.pageYoffset = event.srcElement.scrollTop;
   }

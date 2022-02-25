@@ -23,7 +23,8 @@ export class SearchPartnerComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 'mst',
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 
+  // 'mst',
     'dia_chi_tong_hop',
     // 'dia_chi_day_du', 'so_dien_thoai', 'email',
     'nganh_nghe',
@@ -33,7 +34,7 @@ export class SearchPartnerComponent implements OnInit {
     // 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'noi_cap', 'co_quan_cap', 'ghi_chu',
     // 'email_sct', 'ngay_bd_kd', 'von_dieu_le', 'quy_mo_tai_san', 'doanh_thu', 'loi_nhuan', 'cong_suat_thiet_ke', 'cong_suat_thiet_ke_sct',
     // 'so_lao_dong', 'so_lao_dong_sct', 'san_luong', 'san_luong_sct', 'nhu_cau_ban', 'nhu_cau_mua', 'nhu_cau_hop_tac', 'tieu_chuan_san_pham', 
-    'hoat_dong',
+    // 'hoat_dong',
   ];
 
   public filterList: filter[] = [
@@ -144,7 +145,7 @@ export class SearchPartnerComponent implements OnInit {
 
   public openDetailedBusiness(mst) {
     let url = '/#/public/partner/search/' + mst.trim();
-    window.open(url, '_self');
+    window.open(url, '_blank');
   }
 
   GetAllCompany() {

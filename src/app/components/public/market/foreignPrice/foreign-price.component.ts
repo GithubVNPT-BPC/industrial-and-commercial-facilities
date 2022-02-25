@@ -51,7 +51,7 @@ export const DDMMYY_FORMAT = {
 })
 
 export class ForeignMarketPriceComponent extends BaseComponent {
-  public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'don_vi_tinh', 'thi_truong', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
+  public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'thi_truong', 'ngay_cap_nhat'];
   public dataSource: MatTableDataSource<ForeignMarketModel>;
 
   public ExportTOExcel(filename: string, sheetname: string) {
