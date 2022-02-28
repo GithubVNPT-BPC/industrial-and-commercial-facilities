@@ -179,6 +179,12 @@
     .button-control.-align-left {
       text-align: left;
     }
+
+    th {
+      text-align: center;
+      text-transform: capitalize;
+    }
+
     .layout {
       .table-header {
         height: 30px !important;
@@ -200,6 +206,7 @@
           padding-left: 5px !important;
           padding-right: 5px !important;
         }
+
         .mat-header-cell {
           border: 0.01em solid rgb(192, 192, 192);
           background-color: #1f7ed0;
@@ -246,7 +253,7 @@
           text-align: right !important;
         }
         .jump {
-          cursor: zoom-in;
+          cursor: pointer;
           text-align: center;
           color: blue !important;
         }
@@ -310,3 +317,11 @@
     color: black;
   }
 }
+
+.mat-spinner {
+  position: relative;
+  transform: translateX(-50%);
+  margin-left: 50%;
+  margin-right: 50%;
+}
+

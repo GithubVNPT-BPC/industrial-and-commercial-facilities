@@ -10,7 +10,7 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-3 col-lg-3">
+            <div class="col-6 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
                     <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
@@ -21,7 +21,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-3 col-lg-3">
+            <div class="col-6 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Nguồn dữ liệu: </mat-label>
                     <mat-select (selectionChange)="applyDataTarget($event)" [(ngModel)]="dataTargetId">
@@ -32,7 +32,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-6 col-lg-6 button-control my-auto">
+            <div class="col-12 col-lg-6 button-control my-auto">
                 <button mat-raised-button
                     (click)="ExportTOExcel('Thông tin tình hình nhập khẩu','Thông tin tình hình nhập khẩu')">
                     <mat-icon>cloud_download</mat-icon> Xuất dữ liệu
@@ -41,7 +41,7 @@
         </div>
         <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU TRONG THÁNG HIỆN TẠI
         </h5>
-        <div class="layout" #TABLE>
+        <div class="layout mt-3" #TABLE>
             <table mat-table [dataSource]="dataSource" matSort class="table-layout" id="small-table">
 
                 <ng-container matColumnDef="index">
