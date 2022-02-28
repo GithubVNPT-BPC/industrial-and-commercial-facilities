@@ -25,9 +25,9 @@ export class SearchPartnerComponent implements OnInit {
 
   public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 
   // 'mst',
-    'dia_chi_tong_hop',
+    // 'dia_chi_tong_hop',
     // 'dia_chi_day_du', 'so_dien_thoai', 'email',
-    'nganh_nghe',
+    // 'nganh_nghe',
     // 'ma_nganh_nghe', 'ten_nganh_nghe', 'nganh_nghe_kd_chinh',
     // 'ten_loai_hinh_hoat_dong',
     // 'nguoi_dai_dien',

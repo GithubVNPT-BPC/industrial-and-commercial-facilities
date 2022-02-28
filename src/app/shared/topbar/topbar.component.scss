@@ -1,3 +1,6 @@
+$upPos: 10px;
+$downPos: 10px;
+
 .material {
     $blue: #1f7ed0;
     $white: white;
@@ -40,6 +43,7 @@
             }
         }
     }
+
     .toggle-sidebar {
         color: white;
         transition: 0.3s;
@@ -48,12 +52,36 @@
             color: white;
             border-radius: 50%;
         }
-        // a {
-        //     &:hover {
-        //         color: white;
-        //     }
-        // }
     }
+
+    .floating-noti {
+        .fa-chevron-up {
+            -moz-animation: bounceUp 2s infinite;
+            -webkit-animation: bounceUp 2s infinite;
+            animation: bounceUp 2s infinite;
+            text-align: center;
+            display :block;
+            top: 35px;
+            left: 25px;
+            position: absolute;
+            color: lightslategray;
+        }
+
+        .floating-popup {
+            -moz-animation: bounceLeft 2s infinite;
+            -webkit-animation: bounceLeft 2s infinite;
+            animation: bounceLeft 2s infinite;
+            position: absolute;
+            font-size: 12px;
+            background-color: lightslategray;
+            color: white;
+            padding: 0px 12px;
+            border-radius: 200px;
+            top: 67px;
+            left: 15px;
+        }
+    }
+
     .mat-elevation-z5.main-contain {
         background: linear-gradient(to left, #003fb3, #5bcaff);
         color: $white;
@@ -155,4 +183,106 @@
             }
         }
     }
+
+    @-moz-keyframes bounceUp {
+        0%, 20%, 50%, 80%, 100% {
+          -moz-transform: translateY(0);
+          transform: translateY(0);
+        }
+        40% {
+          -moz-transform: translateY($upPos);
+          transform: translateY($upPos);
+        }
+        60% {
+          -moz-transform: translateY($downPos);
+          transform: translateY($downPos);
+        }
+      }
+    @-webkit-keyframes bounceUp {
+        0%, 20%, 50%, 80%, 100% {
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+        40% {
+            -webkit-transform: translateY($upPos);
+            transform: translateY($upPos);
+        }
+        60% {
+            -webkit-transform: translateY($downPos);
+            transform: translateY($downPos);
+        }
+    }
+    @keyframes bounceUp {
+        0%, 20%, 50%, 80%, 100% {
+            -moz-transform: translateY(0);
+            -ms-transform: translateY(0);
+            -webkit-transform: translateY(0);
+            transform: translateY(0);
+        }
+        40% {
+            -moz-transform: translateY($upPos);
+            -ms-transform: translateY($upPos);
+            -webkit-transform: translateY($upPos);
+            transform: translateY($upPos);
+        }
+        60% {
+            -moz-transform: translateY($downPos);
+            -ms-transform: translateY($downPos);
+            -webkit-transform: translateY($downPos);
+            transform: translateY($downPos);
+        }
+    }
+
+    @-webkit-keyframes bounceLeft {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          -webkit-transform: translateX(0);
+          transform: translateX(0);
+        }
+        40% {
+          -webkit-transform: translateX($upPos);
+          transform: translateX($upPos);
+        }
+        60% {
+          -webkit-transform: translateX($downPos);
+          transform: translateX($downPos);
+        }
+      }
+      @-moz-keyframes bounceLeft {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          transform: translateX(0);
+        }
+        40% {
+          transform: translateX($upPos);
+        }
+        60% {
+          transform: translateX($downPos);
+        }
+    }      
+
+    @keyframes bounceLeft {
+        0%,
+        20%,
+        50%,
+        80%,
+        100% {
+          -ms-transform: translateX(0);
+          transform: translateX(0);
+        }
+        40% {
+          -ms-transform: translateX($upPos);
+          transform: translateX($upPos);
+        }
+        60% {
+          -ms-transform: translateX($downPos);
+          transform: translateX($downPos);
+        }
+      }
 }

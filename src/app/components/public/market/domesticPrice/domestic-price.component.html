@@ -10,7 +10,7 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-3">
+            <div class="col-6 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Ngày cập nhật giá</mat-label>
                     <input matInput readonly [matDatepicker]="datePicker2" [(ngModel)]="pickedDate2.value._d"
@@ -20,7 +20,7 @@
                 </mat-form-field>
             </div>
 
-            <div class="col-9 button-control my-auto">
+            <div class="col-6 col-lg-9 button-control my-auto">
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Thông tin về giá cả trong nước','Thông tin về giá cả trong nước')">Xuất
                     Excel</button>

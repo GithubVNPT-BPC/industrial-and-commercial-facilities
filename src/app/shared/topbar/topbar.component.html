@@ -7,6 +7,11 @@
                 </a>
             </div>
 
+            <div class="floating-noti" *ngIf="_showFloatingNoti">
+                <i class="fa fa-chevron-up"></i>
+                <span class="floating-popup">Thông tin thị trường & Tìm kiếm đối tác</span>
+            </div>
+
             <div class="navbar-brand">
                 <a class="navbar-item" (click)="openHome()" [routerLink]="['/']" routerLinkActive="router-link-active">
                     <img class="logo" src="assets/img/brand/logo.svg">

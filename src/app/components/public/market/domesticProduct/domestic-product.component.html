@@ -10,7 +10,7 @@
     <hr>
     <mat-card-content>
         <div class="row">
-            <div class="col-3 col-lg-3">
+            <div class="col-6 col-lg-3">
                 <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
                     <input matInput [matDatepicker]="dp2" [formControl]="date2" readonly>
@@ -20,7 +20,7 @@
                     </mat-datepicker>
                 </mat-form-field>
             </div>
-            <div class="col-9 col-lg-9 button-control my-auto">
+            <div class="col-6 col-lg-9 button-control my-auto">
                 <button mat-raised-button class="green"
                     (click)="ExportTOExcel('Thông tin về tình hình sản xuất','Thông tin về tình hình sản xuất')">Xuất
                     Excel</button>

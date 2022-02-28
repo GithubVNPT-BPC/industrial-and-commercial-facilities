@@ -59,7 +59,7 @@
         <hr />
         <div class="layout" *ngIf="dataSource.data.length; else ShowEmpty" #TABLE>
             <table class="table-layout" mat-table matTableFilter [exampleEntity]="filterEntity"
-                style="min-width:  900px !important;" [filterType]="filterType" [dataSource]="dataSource" matSort
+                [filterType]="filterType" [dataSource]="dataSource" matSort
                 matSortDisableClear matSortDirection="asc">
 
                 <ng-container matColumnDef="index">
@@ -69,15 +69,20 @@
                 </ng-container>
 
                 <ng-container matColumnDef="ten_doanh_nghiep">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Tên doanh nghiệp </th>
-                    <td mat-cell *matCellDef="let element" style="width: 420px;">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear> Thông tin doanh nghiệp </th>
+                    <td mat-cell *matCellDef="let element">
                         <a (click)="openDetailedBusiness(element.mst)" class="jump">
                             {{element.ten_doanh_nghiep}}
                         </a>
                         <ul class="mb-0 pl-3">
                             <li><b class="mb-0">Mã số thuế: </b><span >{{element.mst}}</span></li>
+                            <li><b class="mb-0">SĐT: </b><span >{{element.so_dien_thoai}}</span></li>
+                            <li><b class="mb-0">Email: </b><span >{{element.email}}</span></li>
                             <li><b class="mb-0">Tình trạng: </b><span >{{element.hoat_dong && 'Còn hoạt động' || 'Ngưng hoạt
                                 động'}}</span></li>
+                            <li><b class="mb-0">Địa chỉ: </b><span >{{element.dia_chi_day_du}} </span></li>
+                            <li><b class="mb-0">Ngành nghề: </b><span >{{element.ma_nganh_nghe}} - {{element.ten_nganh_nghe}} <br>
+                                {{element.nganh_nghe_kd_chinh}}</span></li>
                         </ul>
                     </td>
                 </ng-container>
