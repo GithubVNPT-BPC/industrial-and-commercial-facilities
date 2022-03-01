@@ -224,14 +224,18 @@
                         </ng-container>
 
                         <ng-container matColumnDef="merge1">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="10">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="9">
                         </ng-container>
 
                         <ng-container matColumnDef="merge2">
-                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">Tình hình đầu tư hạ tầng CCN</th>
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Tình hình đầu tư hạ tầng CCN</th>
                         </ng-container>
 
-                        <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2']; sticky : true">
+                        <ng-container matColumnDef="merge3">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="1"></th>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="['merge1', 'merge2', 'merge3']; sticky : true">
                         </tr>
                         <tr mat-header-row class="table-header" *matHeaderRowDef="totalColumns; sticky:true"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">

@@ -21,22 +21,21 @@ export class ClusterManagementComponent extends BaseComponent {
 
     totalColumns: string[] = ['select', 'index', 
     // 'cap_nhat_dn_ccn', 'them_dn_ccn', 
-    'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'thoi_gian_chinh_sua_cuoi', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu'];
+    'ten_cum_cn', 'dien_tich_qh', 'dien_tich_tl', 'chu_dau_tu', 'dien_tich_qhct', 'dien_tich_da_dang_dau_tu', 'ten_hien_trang_ha_tang', 'ten_hien_trang_xlnt', 'tong_von_dau_tu', 'thoi_gian_chinh_sua_cuoi'];
     dataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
     filteredDataSource: MatTableDataSource<ClusterModel> = new MatTableDataSource<ClusterModel>();
 
     hienTrangHaTang: any[] = [
-        { id: 1, ten_hien_trang_ha_tang: 'Đang hoạt động' },
-        { id: 2, ten_hien_trang_ha_tang: 'Có quy hoạch chi tiết' },
-        { id: 3, ten_hien_trang_ha_tang: 'Có Giấy phép xây dựng' },
-        { id: 4, ten_hien_trang_ha_tang: 'Đang xây dựng' },
-        { id: 5, ten_hien_trang_ha_tang: 'Có Quyết định thành lập' }
+        { id: 1, ten_hien_trang_ha_tang: 'Xong' },
+        { id: 2, ten_hien_trang_ha_tang: 'Cơ bản xong' },
+        { id: 3, ten_hien_trang_ha_tang: 'Đang đầu tư' },
+        { id: 4, ten_hien_trang_ha_tang: 'Chưa đầu tư' },
     ];
 
-    hienTrangXLNT: any[] = [{ id: 1, ten_hien_trang_xlnt: 'Chưa có' },
-    { id: 2, ten_hien_trang_xlnt: 'Có' },
-    { id: 3, ten_hien_trang_xlnt: 'Đang xây dựng' }];
-
+    hienTrangXLNT: any[] = [{ id: 1, ten_hien_trang_xlnt: 'Đã hoạt động' },
+    { id: 2, ten_hien_trang_xlnt: 'Đã đầu tư, chưa hoạt động' },
+    { id: 3, ten_hien_trang_xlnt: 'Đang đầu tư' },
+    { id: 4, ten_hien_trang_xlnt: 'Chưa đầu tư' }];
 
     filterModel: ClusterFilterModel = { id_htdtht: [], id_htdthtxlnt: [], id_quan_huyen: [] };
 
