@@ -1,4 +1,4 @@
-import { Component, Injector, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Injector, ViewChild, ElementRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
@@ -11,7 +11,7 @@ import { formatDate } from '@angular/common';
 
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -53,7 +53,7 @@ export const DDMMYY_FORMAT = {
 })
 
 export class DomesticPriceComponent extends BaseComponent {
-  public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'don_vi_tinh1', 'gia_ca', 'nguon_so_lieu', 'ngay_cap_nhat'];
+  public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'nguon_so_lieu', 'ngay_cap_nhat'];
   public dataSource: MatTableDataSource<DomesticPriceModel>;
 
   public ExportTOExcel(filename: string, sheetname: string) {

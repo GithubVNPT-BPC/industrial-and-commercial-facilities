@@ -9,6 +9,7 @@ import { SidebarService } from '../../_services/sidebar.service'
 import { ConditionBusinessService } from 'src/app/_services/APIService/Condition-Business.service';
 import { CertificateViewModel } from 'src/app/_models/APIModel/conditional-business-line.model';
 import { formatDate, Location } from '@angular/common';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-topbar',
@@ -31,6 +32,7 @@ export class TopbarComponent implements OnInit {
   public userrole: number;
   public mst: string
   public menuIcon = 'menu';
+  private _showFloatingNoti = false;
 
   @Input() open: boolean = this._eventService.open;
   @Input('typeOfUser') typeOfUser: TYPE_OF_NAV;
@@ -42,6 +44,7 @@ export class TopbarComponent implements OnInit {
     public _eventService: EventService,
     public _sidebarService: SidebarService,
     public _Service: ConditionBusinessService,
+    private observer: BreakpointObserver
   ) { }
 
   ngOnInit() {
@@ -55,6 +58,13 @@ export class TopbarComponent implements OnInit {
 
     this.id = '0'
   }
+
+  ngAfterViewInit() {
+    this.observer.observe([`(max-width: 800px)`]).subscribe((res) => {
+      this._showFloatingNoti = res.matches
+    });
+  }
+
   ngAfterViewChecked(): void {
   }
 
@@ -176,6 +186,7 @@ export class TopbarComponent implements OnInit {
 
   public toggleSidebar() {
     this.sidebar.toggle();
+    this._showFloatingNoti = false;
     // this.menuIcon = this.menuIcon == 'arrow_forward_ios' ? 'arrow_back_ios': 'arrow_forward_ios';
   }
 }
