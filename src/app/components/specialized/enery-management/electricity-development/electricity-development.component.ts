@@ -47,15 +47,22 @@ export class ElectricDevelopmentManagementComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.getDataQuyHoachDienDuoi35KV();
+    this.getDataQuyHoachDienDuoi35KV(0);
 
     if (this._login.userValue.user_role_id == 4 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
 
-  getDataQuyHoachDienDuoi35KV() {
-    this.energyService.LayDuLieuQuyHoachDien35KV(this.currentYear).subscribe(result => {
+  getDataQuyHoachDienDuoi35KV(time) {
+    if(time != 0){
+      time = this.currentYear
+    }
+    else
+    {
+      this.currentYear = null
+    }
+    this.energyService.LayDuLieuQuyHoachDien35KV(time).subscribe(result => {
       this.filteredDataSource.data = [];
       if (result.data && result.data.length > 0) {
         this.dataSource = new MatTableDataSource<ElectricityDevelopment35KVModel>(result['data']);

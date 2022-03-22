@@ -66,7 +66,8 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.getPostExplosiveMatData(this.currentYear);
+        // this.getPostExplosiveMatData(this.currentYear);
+        this.getPostExplosiveMatData(0);
         this.initDistrictWard();
         if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false

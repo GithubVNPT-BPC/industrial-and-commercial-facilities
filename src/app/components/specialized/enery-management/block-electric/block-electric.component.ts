@@ -49,7 +49,8 @@ export class BlockElectricComponent extends BaseComponent {
 
   ngOnInit() {
     super.ngOnInit();
-    this.getDataBlockElectric(this.currentYear);
+    // this.getDataBlockElectric(this.currentYear);
+    this.getDataBlockElectric(0);
 
     if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
       this.authorize = false

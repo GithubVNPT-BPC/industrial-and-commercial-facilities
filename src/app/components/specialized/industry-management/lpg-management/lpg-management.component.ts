@@ -66,7 +66,8 @@ export class LPGManagementComponent extends BaseComponent {
     name_report: string = 'QLCN - LPG'
     ngOnInit() {
         super.ngOnInit();
-        this.GetLGPManagementData(this.currentYear);
+        // this.GetLGPManagementData(this.currentYear);
+        this.GetLGPManagementData(0);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
 

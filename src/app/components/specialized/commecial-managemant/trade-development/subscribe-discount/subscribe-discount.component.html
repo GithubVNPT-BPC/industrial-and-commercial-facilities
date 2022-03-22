@@ -75,7 +75,7 @@
                     <div class="col-2 col-lg-2">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="year">
+                            <mat-select (selectionChange)="applyFilter($event)">
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>

@@ -94,7 +94,8 @@ export class TradeFairsExhibitionsComponent extends BaseComponent {
   ngOnInit() {
     super.ngOnInit();
     // this.displayedColumns = this.displayedColumns.concat(Object.keys(this.displayedFields));
-    this.getTFEList(new Date().getFullYear());
+    // this.getTFEList(new Date().getFullYear());
+    this.getTFEList(0)
     this.GetAllPhuongXa()
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {

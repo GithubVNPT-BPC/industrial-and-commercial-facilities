@@ -75,7 +75,8 @@ export class ChemicalManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.getChemicalManagementData(this.currentYear);
+        // this.getChemicalManagementData(this.currentYear);
+        this.getChemicalManagementData(0);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
 

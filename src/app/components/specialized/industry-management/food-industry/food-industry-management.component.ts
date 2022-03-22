@@ -76,7 +76,8 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
     ngOnInit() {
         super.ngOnInit();
-        this.GetFoodIndustryData(this.currentYear);
+        // this.GetFoodIndustryData(this.currentYear);
+        this.GetFoodIndustryData(0);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
 

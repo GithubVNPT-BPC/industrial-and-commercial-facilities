@@ -81,8 +81,7 @@
                     <div class="col-sm-12 col-md-4 col-lg-4">
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
-                            <mat-select (selectionChange)="getChemicalManagementData($event.value)"
-                                [(value)]="currentYear">
+                            <mat-select (selectionChange)="getChemicalManagementData($event.value)">
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
