@@ -8,6 +8,7 @@ import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
 import { DashboardService } from 'src/app/_services/APIService/dashboard.service';
 import { domesticchart, ProductModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { formatDate } from '@angular/common';
+import { numberWithDot } from 'src/app/_services/stringUtils.service';
 
 import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -56,8 +57,27 @@ export class DomesticPriceComponent extends BaseComponent {
   public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'nguon_so_lieu', 'ngay_cap_nhat'];
   public dataSource: MatTableDataSource<DomesticPriceModel>;
 
-  public ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.filteredDataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Sản phẩm": record["ten_san_pham"],
+        "Đơn vị tính": record["don_vi_tinh1"],
+        "Giá cả": numberWithDot(record["gia_ca"]),
+        "Nguồn số liệu": record["nguon_so_lieu"],
+        "Ngày cập nhật": record["ngay_cap_nhat"],
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
+  }
+
+  public ExportToExcel() {
+    let filename = 'Thông tin về giá cả trong nước';
+    let sheetname = 'Thông tin về giá cả trong nước';
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
   }
 
   constructor(
@@ -170,7 +190,7 @@ export class DomesticPriceComponent extends BaseComponent {
               yAxes: [{
                 ticks: {
                   callback: function(value, index, values) {
-                    return self.numberWithDot(value) + ' đ';
+                    return numberWithDot(value) + ' đ';
                   }
                 },
               }],
@@ -179,10 +199,6 @@ export class DomesticPriceComponent extends BaseComponent {
         });
       },
     );
-  }
-
-  numberWithDot(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 
   products: Array<ProductModel> = new Array<ProductModel>();

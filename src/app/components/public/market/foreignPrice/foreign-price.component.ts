@@ -11,6 +11,7 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { numberWithDot } from 'src/app/_services/stringUtils.service';
 import { ForeignMarketModel } from 'src/app/_models/APIModel/domestic-market.model';
 import { DatePipe } from '@angular/common';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
@@ -54,8 +55,28 @@ export class ForeignMarketPriceComponent extends BaseComponent {
   public displayedColumns: string[] = ['index', 'id_san_pham', 'ten_san_pham', 'thi_truong', 'ngay_cap_nhat'];
   public dataSource: MatTableDataSource<ForeignMarketModel>;
 
-  public ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.filteredDataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Sản phẩm": record["ten_san_pham"],
+        "Đơn vị tính": record["don_vi_tinh"],
+        "Giá cả": numberWithDot(record["gia_ca"]),
+        "Nguồn số liệu": record["nguon_so_lieu"],
+        "Thị trường": record["thi_truong"],
+        "Ngày cập nhật": record["ngay_cap_nhat"],
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
+  }
+
+  public ExportToExcel() {
+    let filename = 'Thông tin về giá cả quốc tế';
+    let sheetname = 'Thông tin về giá cả quốc tế';
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
   }
 
   constructor(
