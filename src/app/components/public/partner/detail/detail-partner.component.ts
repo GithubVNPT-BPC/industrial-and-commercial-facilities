@@ -238,8 +238,10 @@ export class CompanyDetailComponent implements OnInit {
 					return d
 				})
 
-				this.companyList2.map(record => {
-					record['linh_vuc'] = this.fieldsList.find(x => x.id_linh_vuc == record.id_linh_vuc).ten_linh_vuc;
+				this.companyList2.forEach(x=>{
+					if(x.id_linh_vuc != null){
+							x['linh_vuc'] = this.fieldsList.find(y => y.id_linh_vuc == x.id_linh_vuc).ten_linh_vuc;
+					}
 				});
 
 				this.company = this.companyList5[0];
