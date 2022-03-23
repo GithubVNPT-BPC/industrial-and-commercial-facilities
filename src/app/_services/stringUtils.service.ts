@@ -13,3 +13,6 @@ export function unicodeToAZ(str: string): string {
     return str;
 }
 
+export function numberWithDot(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}

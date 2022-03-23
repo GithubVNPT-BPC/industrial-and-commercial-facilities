@@ -8,6 +8,7 @@ import { CompanyDetailModel, filter } from '../../../../_models/APIModel/domesti
 import { MatTableFilter } from 'mat-table-filter';
 
 import { ExcelService } from 'src/app/_services/excelUtil.service';
+import { numberWithDot } from 'src/app/_services/stringUtils.service';
 import { FilterService } from 'src/app/_services/filter.service';
 import { MarketServicePublic } from 'src/app/_services/APIService/market.service public';
 
@@ -87,8 +88,29 @@ export class SearchPartnerComponent implements OnInit {
     this.filterType = MatTableFilter.ANYWHERE;
   }
 
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.dataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Tên doanh nghiệp": record["ten_doanh_nghiep"],
+        "Địa chỉ": record["dia_chi_day_du"],
+        "Mã số thuế": record["mst"],
+        "Email": record["email"],
+        "SĐT": record["so_dien_thoai"],
+        "Ngành nghề": record["ten_nganh_nghe"],
+        "Tình trạng": record["hoat_dong"] ? "Còn hoạt động" : "Ngừng hoạt động",
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
+  }
+
+  public ExportToExcel() {
+    let filename = 'Danh sách doanh nghiệp';
+    let sheetname = 'Danh sách doanh nghiệp';
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
   }
 
   temDataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
