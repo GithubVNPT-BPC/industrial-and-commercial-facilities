@@ -91,7 +91,7 @@ export class StoreManagementComponent extends BaseComponent {
        window.clearTimeout(this._timeout);
      }
      this._timeout = window.setTimeout(() => {
-        self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+        self.enterpriseService.GetLikeEnterpriseByMst(mst, 4).subscribe(
           results => {
             if (results && results.data && results.data[0].length) {
               self.mstOptions = results.data[0];

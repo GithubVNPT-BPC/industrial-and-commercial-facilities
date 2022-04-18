@@ -186,6 +186,7 @@ export abstract class AbstractBaseComponent implements OnInit {
     }
 
     public initDistrictWard(sorted=true) {
+        if (Object.keys(this.districtWardSorted).length == 0)
         this.sctService.LayDanhSachPhuongXaQuanHuyen().subscribe(res => {
             if(res['success']) {
                 let districtWardData = res['data'];
@@ -208,6 +209,11 @@ export abstract class AbstractBaseComponent implements OnInit {
                 }
             }   
         })
+    }
+
+    public findDistrictId(wardId : number){
+        var district = this.filteredDistrictWards.find(x => x.id_phuong_xa == wardId);
+        return district.id_quan_huyen;
     }
 
     getLinkDefault(){}

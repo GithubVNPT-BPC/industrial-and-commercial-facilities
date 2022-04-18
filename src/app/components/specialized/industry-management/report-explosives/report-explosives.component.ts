@@ -92,6 +92,10 @@ export class ReportExplosivesComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
+    
+    this.route.queryParams.subscribe((params) => {
+      this.term = parseInt(params["term"]);
+    });
     let data: any = JSON.parse(localStorage.getItem("currentUser"));
     this._org_id = 3;
     this._obj_id = this.getMaBC(this.term);

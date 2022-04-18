@@ -68,11 +68,18 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         super.ngOnInit();
         // this.getPostExplosiveMatData(this.currentYear);
         this.getPostExplosiveMatData(0);
-        this.initDistrictWard();
+            this.initDistrictWard();
         if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
         this.filterModel.is_expired = false
+        this.enterpriseService.GetLikeEnterpriseByMst('', 33).subscribe(
+            results => {
+              if (results && results.data && results.data[0].length) {
+                this.mstOptions = results.data[0];
+                this.giayCndkkdList = results.data[2];
+              }
+            });
     }
 
     ngAfterViewInit() {
@@ -111,6 +118,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
     }
 
     setFormParams() {
+        console.log(this.selection.selected)
         if (this.selection.selected.length) {
             let selectedRecord = this.selection.selected[0];
             this.formData.controls['id'].setValue(selectedRecord.id);
@@ -119,7 +127,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
             this.formData.controls['time_id'].setValue(selectedRecord.time_id);
             this.formData.controls['id_so_giay_phep'].setValue(selectedRecord.id_so_giay_phep);
-            this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.tinh_trang_hoat_dong);
+            this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.id_tinh_trang_hoat_dong);
 
             this.formData.controls['thuoc_no'].setValue(selectedRecord.thuoc_no);
             this.formData.controls['kip_no'].setValue(selectedRecord.kip_no);
@@ -142,7 +150,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
 
     callEditService(data) {
         let body = Object.assign({}, this.formData.value);
-        // console.log(this.formData.value);
         this.industryManagementService.PostExplosiveMat([body], body.time_id).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
@@ -189,7 +196,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
            window.clearTimeout(this._timeout);
          }
          this._timeout = window.setTimeout(() => {
-            self.enterpriseService.GetLikeEnterpriseByMst(mst).subscribe(
+            self.enterpriseService.GetLikeEnterpriseByMst(mst, 33).subscribe(
               results => {
                 if (results && results.data && results.data[0].length) {
                   self.mstOptions = results.data[0];

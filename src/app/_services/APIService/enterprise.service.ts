@@ -35,9 +35,10 @@ export class EnterpriseService {
         );
     }
 
-    public GetLikeEnterpriseByMst(mst) {
+    public GetLikeEnterpriseByMst(mst, id_linh_vuc) {
         var apiUrl = this.endpoint + this.urlGetEnterpriseByMst;
         let params = new HttpParams().set('mst', mst.toString());
+        params = params.append('id_linh_vuc', id_linh_vuc);
         return this.http.get<any>(apiUrl, { headers: HEADERS, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );

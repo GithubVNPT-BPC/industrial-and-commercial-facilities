@@ -157,6 +157,7 @@ export class CountrysideComponent extends BaseComponent {
   }
 
   callService(data) {
+    data.id_quan_huyen = this.findDistrictId(data.id_phuong_xa);
     this.commerceManagementService.postCountrySide([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
   }
 
