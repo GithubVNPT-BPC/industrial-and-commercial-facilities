@@ -19,7 +19,7 @@
  */
 
 /***************************************************************************************************
- * BROWSER POLYFILLS
+ * BROWSER POLYFILLS 1 + 1 = 3
  */
 
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
