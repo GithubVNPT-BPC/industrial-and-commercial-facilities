@@ -68,7 +68,6 @@ export class CertificateListComponent implements OnInit {
     'noi_cap',
     'co_quan_cap',
     'ghi_chu',
-
     'id_giay_phep',
     'thoi_gian_chinh_sua_cuoi'
   ];
@@ -120,7 +119,6 @@ export class CertificateListComponent implements OnInit {
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    // const numRows = this.dataSource.data.length;
     const numRows = this.dataSource.connect().value.length;
     return numSelected === numRows;
   }
@@ -174,7 +172,6 @@ export class CertificateListComponent implements OnInit {
   showbutton: boolean
 
   ngOnInit() {
-    console.log(this.status)
     this.sendLinkToNext(true)
     if (this.status == 'false') {
       this.isChecked = false
@@ -205,6 +202,7 @@ export class CertificateListComponent implements OnInit {
   }
 
   dataSource: MatTableDataSource<CertificateViewModel> = new MatTableDataSource<CertificateViewModel>();
+  filteredDataSource: MatTableDataSource<CertificateViewModel> = new MatTableDataSource<CertificateViewModel>();
   certificate: Array<CertificateViewModel> = new Array<CertificateViewModel>();
 
   getBusinessList() {
@@ -255,32 +253,12 @@ export class CertificateListComponent implements OnInit {
 
   applyExpireCheck(event) {
     this.showbutton = event.checked
-    if (event.checked == true) {
+    if (event.checked) {
       this.dataSource.data = this.certificate.filter(x => x.is_het_han == event.checked)
-    }
-    else {
+    } else {
       this.dataSource.data = this.certificate
     }
   }
-
-  // @ViewChild('dSelect', { static: false }) dSelect: MatSelect;
-  // allSelected = false;
-  // toggleAllSelection() {
-  //     this.allSelected = !this.allSelected;
-
-  //     if (this.allSelected) {
-  //         this.dSelect.options.forEach((item: MatOption) => item.select());
-  //     } else {
-  //         this.dSelect.options.forEach((item: MatOption) => item.deselect());
-  //     }
-  //     this.dSelect.close();
-  // }
-
-  // OpenDetailPetrol(id: number, mst: string) {
-  //     let url = this.router.serializeUrl(
-  //         this.router.createUrlTree(['specialized/commecial-management/domestic/add-petrol/' + id + '/' + mst]));
-  //     window.open(url, "_blank");
-  // }
 
   public getCurrentDate() {
     let date = new Date;
@@ -307,16 +285,11 @@ export class CertificateListComponent implements OnInit {
     this.date.setValue(ctrlValue);
     this.theYear = normalizedYear.year();
     datepicker.close();
-    // this.getPetrolListbyYear(this.theYear.toString())
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
-
-  // Back() {
-  //   this._location.back();
-  // }
 
   AddCertificate(id: number) {
     this.router.navigate(['/specialized/commecial-management/domestic/add-certificate/' + id]);

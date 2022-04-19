@@ -1,11 +1,11 @@
-import { Component, ViewChild, ElementRef, OnInit, AfterViewInit, OnDestroy, Attribute, QueryList, ViewChildren, Input } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import * as XLSX from 'xlsx';
 
 import { ReportService } from '../../../_services/APIService/report.service';
 
 import { ReportAttribute, ReportDatarow, ReportIndicator, ReportOject, ReportTable, HeaderMerge, ToltalHeaderMerge } from '../../../_models/APIModel/report.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { ReportDirective } from '../../../shared/report.directive';
 import { KeyboardService } from '../../../shared/services/keyboard.service';
@@ -13,12 +13,8 @@ import { InformationService } from 'src/app/shared/information/information.servi
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 
 import { Location } from '@angular/common';
-import { element } from 'protractor';
-import { merge } from 'rxjs';
 import moment from 'moment';
-import { TreeviewModule } from 'ngx-treeview';
 import { ConfirmationDialogService } from 'src/app/shared/confirmation-dialog/confirmation-dialog.service';
-import { Dictionary } from 'highcharts';
 
 
 interface HashTableNumber<T> {
@@ -136,19 +132,18 @@ export class StandardReportComponent implements OnInit {
 
     if (index >= 0 && index < this.inputs.length) {
       inputToArray[index].element.nativeElement.focus();
-      // inputToArray[index].element.nativeElement.style.backgroundColor = '#5789D8';
     }
   }
 
   ngOnInit(): void {
     let data: any = JSON.parse(localStorage.getItem('currentUser'));
     this.years = this.InitialYears();
-    if (!this.time_id)
-      this.time_id = new Date().getFullYear();
+    // NOTE: time_id - 1 means getting the previous year data
+    if (!this.time_id) this.time_id = new Date().getFullYear() - 1;      
     if (this.org_id) {
       this.isBlankPage = false;
       this.role_org_id = parseInt(data.org_id);
-
+      
       this.GetReportById(this.obj_id, this.time_id, this.org_id);
       this.keyboardservice.keyBoard.subscribe(res => {
         this.move(res)
@@ -166,66 +161,7 @@ export class StandardReportComponent implements OnInit {
     return returnYear;
   }
 
-  checkAccessObj() {
-    var ret = 0;
-    if (ret > 0) {
-      return true;
-    }
-    switch (ret) {
-      case -2:
-        //alertify.error('Đã trình lãnh đạo!');
-        break;
-      case -3:
-        //alertify.error('Đã trình đơn vị giao!');
-        break;
-      case -4:
-        //alertify.error('Đơn vị giao đã phê duyệt!');
-        break;
-      case -7:
-        //alertify.error('Đã gửi yêu cầu đính chính đến đơn vị giao!');
-        break;
-      case -9:
-        //alertify.error('Đơn vị giao từ chối yêu cầu đính chính!');
-        break;
-      case -10:
-        //alertify.error('Không hoàn thành!');
-        break;
-      case -19:
-        //alertify.error('Báo cáo không tồn tại!');
-        break;
-      case -20:
-        //alertify.error('Báo cáo chưa được giao!');
-        break;
-      case -21:
-        //alertify.error('Báo cáo đã hết hạn!');
-        break;
-      case -22:
-        //alertify.error('Báo cáo là nhóm báo cáo!');
-        break;
-      case -23:
-        //alertify.error('Báo cáo chưa được kích hoạt!');
-        break;
-      case -24:
-        //alertify.error('Tài khoản không có quyền thực hiện báo cáo!');
-        break;
-      case -25:
-        //alertify.error('Báo cáo không phải là báo cáo số liệu, báo cáo danh sách!');
-        break;
-      case -26:
-        //alertify.error('Báo cáo đột xuất không được thực hiện liên kết báo cáo!');
-        break;
-      case -99:
-        //alertify.error('Có lỗi xảy ra!');
-        break;
-    }
-    return false;
-  }
-
   //Xuất excel
-  // exportToExcel(filename: string, sheetname: string) {
-  //   filename = "Dữ liệu - " + this.tenbaocao + " - " + this.thoigianbaocao
-  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-  // }
 
   public exportTOExcel(withData = true) {
     let filename = this.tenbaocao + " - " + this.thoigianbaocao;
@@ -257,6 +193,7 @@ export class StandardReportComponent implements OnInit {
       }
     )
   }
+
   formatFrameReport(report: ReportOject) {
     this.tenbaocao = report.obj_name;
     this.thoigianbaocao = this.convertTimeIdToTimePeriod(parseInt(report.time_id));

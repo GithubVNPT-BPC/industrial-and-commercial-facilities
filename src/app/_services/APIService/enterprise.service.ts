@@ -35,7 +35,7 @@ export class EnterpriseService {
         );
     }
 
-    public GetLikeEnterpriseByMst(mst, id_linh_vuc) {
+    public SearchLikeEnterpriseByMst(mst, id_linh_vuc) {
         var apiUrl = this.endpoint + this.urlGetEnterpriseByMst;
         let params = new HttpParams().set('mst', mst.toString());
         params = params.append('id_linh_vuc', id_linh_vuc);

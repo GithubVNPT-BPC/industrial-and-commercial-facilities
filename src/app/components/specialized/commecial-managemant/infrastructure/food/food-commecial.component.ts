@@ -118,7 +118,7 @@ export class FoodManagementComponent extends BaseComponent {
       window.clearTimeout(this._timeout);
     }
     this._timeout = window.setTimeout(() => {
-      self.enterpriseService.GetLikeEnterpriseByMst(mst, 5).subscribe(
+      self.enterpriseService.SearchLikeEnterpriseByMst(mst, 5).subscribe(
         results => {
           if (results && results.data && results.data[0].length) {
             self.mstOptions = results.data[0];
@@ -151,7 +151,17 @@ export class FoodManagementComponent extends BaseComponent {
       this.formData.controls['id'].setValue(selectedRecord.id);
       this.formData.controls['mst'].setValue(selectedRecord.mst);
       this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
-      this.formData.controls['id_giay_phep'].setValue(selectedRecord.id_giay_phep);
+
+      this.enterpriseService.SearchLikeEnterpriseByMst(selectedRecord.mst, 5).subscribe(
+        results => {
+          if (results && results.data && results.data[0].length) {
+            this.mstOptions = results.data[0];
+            this.giayCndkkdList = results.data[2];
+          }
+        },
+        error => this.errorMessage = <any>error
+      );
+      
     }
   }
 

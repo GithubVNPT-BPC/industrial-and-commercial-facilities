@@ -78,7 +78,7 @@ export class BaseComponent extends AbstractBaseComponent {
     }
 
     // ========================================================
-    // =========== ACTIONS FUNCTIONS ===========
+    // =================== ACTIONS FUNCTIONS ==================
     // ========================================================
 
     public switchView() {

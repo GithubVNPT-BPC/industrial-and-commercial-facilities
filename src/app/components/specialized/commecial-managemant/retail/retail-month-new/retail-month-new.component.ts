@@ -4,7 +4,6 @@ import {
   MatAccordion,
   MatPaginator,
   MatDialog,
-  MatDialogConfig,
 } from "@angular/material";
 import { SCTService } from "src/app/_services/APIService/sct.service";
 import { new_model, chartmodel } from "src/app/_models/APIModel/export-import.model";
@@ -13,12 +12,12 @@ import { MatSort } from "@angular/material/sort";
 import { LinkModel } from "src/app/_models/link.model";
 import { BreadCrumService } from "src/app/_services/injectable-service/breadcrums.service";
 import { ExcelService } from 'src/app/_services/excelUtil.service';
-import { ChartOptions, ChartDataSets, ChartType, Chart } from 'chart.js';
+import { Chart } from 'chart.js';
 import { ActivatedRoute } from "@angular/router";
 
 import { ExcelServicesService } from "src/app/shared/services/excel-services.service";
 import { LoginService } from "src/app/_services/APIService/login.service";
-import { ReplaySubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import * as XLSX from 'xlsx';
 import { InformationService } from 'src/app/shared/information/information.service';
 
@@ -29,7 +28,6 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import _moment from 'moment';
 import { defaultFormat as _rollupMoment, Moment } from 'moment';
 import { formatDate } from '@angular/common';
-import { ElementSchemaRegistry } from "@angular/compiler";
 
 const moment = _rollupMoment || _moment;
 export const MY_FORMATS = {
@@ -59,6 +57,7 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_LOCALE, useValue: 'vi' },
   ],
 })
+
 export class RetailMonthNewComponent implements OnInit {
   public fields: object = {};
   public href_file: string = '';
@@ -118,8 +117,6 @@ export class RetailMonthNewComponent implements OnInit {
     this.timechange = parseInt(this.time)
 
     this.GetDanhSachBLHH(this.timechange);
-    // this.lineChart.config.data.datasets = []
-    // this.lineChartMethod(this.theYear);
 
     this.month = this.time.substring(5, 6)
     this.displayedColumns = this.excelService.initialdisplayedColumns(this.theMonth);
@@ -152,7 +149,6 @@ export class RetailMonthNewComponent implements OnInit {
     public marketService: MarketService,
     public excelService: ExcelService,
     private _breadCrumService: BreadCrumService,
-    private excelServices: ExcelServicesService,
     public _login: LoginService,
     public _infor: InformationService,
   ) { }
@@ -258,12 +254,6 @@ export class RetailMonthNewComponent implements OnInit {
   }
 
   authorize: boolean = true
-
-  public getCurrentMonth(): string {
-    let date = new Date;
-    return formatDate(date, 'yyyyMM', 'en-US');
-  }
-
   timeparam: number
 
   ngOnInit() {
@@ -281,7 +271,7 @@ export class RetailMonthNewComponent implements OnInit {
         this.month = this.getCurrentMonth().substring(5, 6);
         this.timechange = parseInt(this.getCurrentMonth());
       }
-    });this.duLieuKyBaoCao
+    });
 
     this.defaultDatasource.push(
       new new_model("A", this.timechange, "Triệu đồng", "TỔNG MỨC BLHH VÀ DTDVTD", 189),
@@ -409,21 +399,17 @@ export class RetailMonthNewComponent implements OnInit {
   }
 
   public ExportTOExcel(filename: string, sheetname: string) {
-    if (this.table) {
-      this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
-    } else {
-
-    }
+    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
   }
-
-  @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
-  lineChart: any;
-  timelist: string[] = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-    // this.lineChartMethod(parseInt(this.getCurrentYear()));
+  }
+
+  public getCurrentMonth(): string {
+    let date = new Date;
+    return formatDate(date, 'yyyyMM', 'en-US');
   }
 
   public getCurrentYear(): string {
@@ -431,6 +417,9 @@ export class RetailMonthNewComponent implements OnInit {
     return formatDate(date, 'yyyy', 'en-US');
   }
 
+  @ViewChild('lineCanvas', { static: false }) lineCanvas: ElementRef;
+  lineChart: any;
+  timelist: string[] = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12']
   chart: Array<chartmodel> = new Array<chartmodel>();
 
   lineChartMethod(time_id: number) {
