@@ -91,7 +91,7 @@ export class StoreManagementComponent extends BaseComponent {
        window.clearTimeout(this._timeout);
      }
      this._timeout = window.setTimeout(() => {
-        self.enterpriseService.GetLikeEnterpriseByMst(mst, 4).subscribe(
+        self.enterpriseService.SearchLikeEnterpriseByMst(mst, 4).subscribe(
           results => {
             if (results && results.data && results.data[0].length) {
               self.mstOptions = results.data[0];
@@ -167,9 +167,21 @@ export class StoreManagementComponent extends BaseComponent {
       this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
       this.formData.controls['so_dien_thoai'].setValue(selectedRecord.so_dien_thoai);
       this.formData.controls['id_spkd'].setValue(selectedRecord.id_spkd);
-      this.formData.controls['id_giay_cndkkd'].setValue(selectedRecord.id_giay_cndkkd);
-      this.formData.controls['id_giay_atvstp'].setValue(selectedRecord.id_giay_atvstp);
+      
       this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
+
+      this.enterpriseService.SearchLikeEnterpriseByMst(selectedRecord.mst, 4).subscribe(
+        results => {
+          if (results && results.data && results.data[0].length) {
+            this.mstOptions = results.data[0];
+            this.giayCndkkdList = results.data[2].filter(x => [1,2].includes(x.id_loai_giay_phep));
+            this.giayAtvstpList = results.data[2].filter(x => x.id_loai_giay_phep == 4);
+            this.formData.controls['id_giay_cndkkd'].setValue(selectedRecord.id_giay_cndkkd);
+            this.formData.controls['id_giay_atvstp'].setValue(selectedRecord.id_giay_atvstp);
+          }
+        },
+        error => this.errorMessage = <any>error
+      );
     }
   }
 

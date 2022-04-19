@@ -68,12 +68,12 @@ export class IndustrialExplosivesComponent extends BaseComponent {
         super.ngOnInit();
         // this.getPostExplosiveMatData(this.currentYear);
         this.getPostExplosiveMatData(0);
-            this.initDistrictWard();
+        this.initDistrictWard();
         if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
         this.filterModel.is_expired = false
-        this.enterpriseService.GetLikeEnterpriseByMst('', 33).subscribe(
+        this.enterpriseService.SearchLikeEnterpriseByMst('', 33).subscribe(
             results => {
               if (results && results.data && results.data[0].length) {
                 this.mstOptions = results.data[0];
@@ -126,7 +126,6 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
             this.formData.controls['id_phuong_xa'].setValue(selectedRecord.id_phuong_xa);
             this.formData.controls['time_id'].setValue(selectedRecord.time_id);
-            this.formData.controls['id_so_giay_phep'].setValue(selectedRecord.id_so_giay_phep);
             this.formData.controls['id_tinh_trang_hoat_dong'].setValue(selectedRecord.id_tinh_trang_hoat_dong);
 
             this.formData.controls['thuoc_no'].setValue(selectedRecord.thuoc_no);
@@ -137,6 +136,15 @@ export class IndustrialExplosivesComponent extends BaseComponent {
             this.formData.controls['kip_no_6thang'].setValue(selectedRecord.kip_no_6thang);
             this.formData.controls['moi_no_6thang'].setValue(selectedRecord.moi_no_6thang);
             this.formData.controls['day_no_6thang'].setValue(selectedRecord.day_no_6thang);
+
+            this.enterpriseService.SearchLikeEnterpriseByMst(selectedRecord.mst, 33).subscribe(
+            results => {
+                if (results && results.data && results.data[0].length) {
+                    this.mstOptions = results.data[0];
+                    this.giayCndkkdList = results.data[2];
+                    this.formData.controls['id_so_giay_phep'].setValue(selectedRecord.id_so_giay_phep);
+                }
+            });
         }
     }
 
@@ -196,7 +204,7 @@ export class IndustrialExplosivesComponent extends BaseComponent {
            window.clearTimeout(this._timeout);
          }
          this._timeout = window.setTimeout(() => {
-            self.enterpriseService.GetLikeEnterpriseByMst(mst, 33).subscribe(
+            self.enterpriseService.SearchLikeEnterpriseByMst(mst, 33).subscribe(
               results => {
                 if (results && results.data && results.data[0].length) {
                   self.mstOptions = results.data[0];

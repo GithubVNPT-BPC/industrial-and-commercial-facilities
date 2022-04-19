@@ -93,6 +93,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="GetFoodIndustryData($event.value)">
+                                <mat-option value='0' >Tất cả</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -112,7 +113,6 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCN</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap" multiple>
-                                <mat-option value='0'>-- Tất cả --</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>

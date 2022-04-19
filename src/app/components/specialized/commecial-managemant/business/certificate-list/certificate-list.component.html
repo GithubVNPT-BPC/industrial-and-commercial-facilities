@@ -1,20 +1,11 @@
 <mat-card class="material">
     <mat-card-header>
-        <!-- <mat-card-title><strong></strong></mat-card-title> -->
         <mat-card-subtitle hidden>
             type={{type}}
             id_linh_vuc={{id_linh_vuc}}
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <!-- <div class="button-control">
-            <button mat-raised-button (click)="accordion.openAll()">
-                <mat-icon>flip_to_front</mat-icon> Mở Tất Cả
-            </button>
-            <button mat-raised-button (click)="accordion.closeAll()">
-                <mat-icon>flip_to_back</mat-icon> Đóng tất cả
-            </button>
-        </div> -->
         <mat-accordion class="accord" multi>
             <mat-expansion-panel>
                 <mat-expansion-panel-header>
@@ -49,12 +40,6 @@
                         <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Giấy phép hết hạn
                         </mat-checkbox>
                     </div>
-
-                    <!-- <div class="col-4 button-control -align-right my-auto">
-                        <button mat-raised-button (click)="Back()">
-                            <mat-icon>keyboard_backspace</mat-icon>
-                        </button>
-                    </div> -->
 
                     <div class="col-12 col-lg-12 mt-2">
                         <mat-form-field outline="appearance">

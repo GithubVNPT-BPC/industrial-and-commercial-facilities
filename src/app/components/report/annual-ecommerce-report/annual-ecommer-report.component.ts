@@ -45,8 +45,8 @@ export class AnnualEcommerceReportComponent extends BaseComponent {
 
   getLinkDefault() {
     this.LINK_DEFAULT = "/report/annual-ecommerce-report";
-    this.TITLE_DEFAULT = "Báo cáo năm Số đơn vị có giao dich TMĐT";
-    this.TEXT_DEFAULT = "Báo cáo năm Số đơn vị có giao dich TMĐT";
+    this.TITLE_DEFAULT = "Báo cáo năm số đơn vị có giao dịch TMĐT";
+    this.TEXT_DEFAULT = "Báo cáo năm số đơn vị có giao dịch TMĐT";
   }
 
   prepareData(data) {

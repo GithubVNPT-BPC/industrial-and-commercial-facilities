@@ -72,6 +72,7 @@
                             <mat-label>Kỳ dữ liệu</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" multiple
                                 [(ngModel)]="filterModel.thoi_gian_bat_dau">
+                                <mat-option value='0' >Tất cả</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>

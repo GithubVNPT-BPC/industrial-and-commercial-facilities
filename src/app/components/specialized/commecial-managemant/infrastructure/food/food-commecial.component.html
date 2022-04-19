@@ -148,27 +148,6 @@
                             </ng-container>
                         </div>
 
-                        <!-- <ng-container matColumnDef="general">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6">
-                        </ng-container>
-
-                        <ng-container matColumnDef="businessLicense">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">Chứng
-                                nhận đăng ký KD </th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="representInfo">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="2">Người
-                                đại diện pháp lý </th>
-                        </ng-container>
-
-                        <ng-container matColumnDef="thoigian">
-                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="1"></th>
-                        </ng-container> -->
-
-                        <!-- <tr mat-header-row class="table-header"
-                            *matHeaderRowDef="['general','businessLicense', 'representInfo', 'thoigian']; sticky: true">
-                        </tr> -->
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns;sticky: true"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
@@ -248,29 +227,6 @@
                             </div>
                         </mat-card-content>
                     </div>
-
-                    <!-- <div class="col-md-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Chứng nhận đăng ký kinh doanh </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Số chứng nhận</mat-label>
-                                        <mat-select formControlName="id_giay_phep">
-                                            <mat-option *ngFor="let item of giayCndkkdList" [value]="item.id_giay_phep">
-                                                {{item.so_giay_phep}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-
-                            </div>
-                        </mat-card-content>
-                    </div> -->
 
                     <div class="col-md-12">
                         <p>

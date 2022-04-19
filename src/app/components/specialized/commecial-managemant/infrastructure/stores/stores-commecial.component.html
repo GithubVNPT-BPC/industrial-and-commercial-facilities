@@ -105,7 +105,7 @@
                         <mat-form-field appearance="outline">
                             <mat-label>Thời gian đăng ký GCNATTP</mat-label>
                             <mat-select (selectionChange)="applyFilter($event)" [(ngModel)]="filterModel.ngay_cap_giay_chung_nhan" multiple>
-                                <mat-option value='0'>-- Tất cả --</mat-option>
+                                <mat-option value='0' >-- Tất cả --</mat-option>
                                 <mat-option *ngFor='let year of yearSelection' [value]='year'>{{year}}</mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -234,7 +234,7 @@
 
                         <!-- <tr mat-header-row class="table-header"
                             *matHeaderRowDef="['general','businessLicense', 'foodSafetyLicense', 'thoigian']; sticky: true">
-                        </tr> -->1
+                        </tr> -->
                         <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                         <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
@@ -274,12 +274,6 @@
                         <mat-card-content>
                             <div class="row">
                                 <input matInput formControlName="id" type="text" class="o_invisible">
-                                <!-- <div class="col-12 col-lg-9">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Mã số thuế (*)</mat-label>
-                                        <input matInput formControlName="mst">
-                                    </mat-form-field>
-                                </div> -->
 
                                 <div class="col-12 col-lg-12">
                                     <mat-form-field appearance="outline">
@@ -292,17 +286,6 @@
                                         </mat-autocomplete>
                                     </mat-form-field>
                                 </div>
-
-                                <!-- <div class="col-6 col-md-6">
-                                    <button mat-raised-button color="primary" (click)="findLicenseInfo($event)"
-                                        class="mt-2">
-                                        <mat-icon>search</mat-icon>Tìm kiếm
-                                    </button>
-                                    <button *ngIf="isAddLicense" mat-raised-button color="primary"
-                                        (click)="addLicenseInfo($event)" class="mt-2 green">
-                                        <mat-icon>add</mat-icon>Thêm giấy phép cho doanh nghiệp
-                                    </button>
-                                </div> -->
                             </div>
 
                             <div class="row">
@@ -375,51 +358,6 @@
                             </div>
                         </mat-card-content>
                     </div>
-
-                    <!-- <div class="col-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Chứng nhận đăng ký kinh doanh </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Số chứng nhận</mat-label>
-                                        <mat-select formControlName="id_giay_cndkkd">
-                                            <mat-option *ngFor="let item of giayCndkkdList" [value]="item.id_giay_phep">
-                                                {{item.ten_giay_phep}} - {{item.so_giay_phep}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-
-                            </div>
-                        </mat-card-content>
-                    </div> -->
-
-                    <!-- <div class="col-12">
-                        <mat-card-header>
-                            <mat-card-title class="text-left">
-                                <span class="pt-2"> Giấy chứng nhận đủ điều kiện ATTP </span>
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <div class="row">
-                                <div class="col-12 col-lg-6">
-                                    <mat-form-field appearance="outline">
-                                        <mat-label>Số chứng nhận</mat-label>
-                                        <mat-select formControlName="id_giay_atvstp">
-                                            <mat-option *ngFor="let item of giayAtvstpList" [value]="item.id_giay_phep">
-                                                {{item.ten_giay_phep}} - {{item.so_giay_phep}}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </div> -->
 
                     <div class="col-12">
                         <p>
