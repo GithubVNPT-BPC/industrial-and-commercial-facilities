@@ -252,7 +252,9 @@ export class UpdatePetrolComponent implements OnInit {
       id_giay_phep: 0,
       san_luong: null,
       ghi_chu: '',
-      time_id: ''
+      time_id: '',
+      kinh_do: '',
+      vi_do: ''
     }
   }
 
@@ -401,7 +403,9 @@ export class UpdatePetrolComponent implements OnInit {
         id_giay_phep: this.petrolobject.id_giay_phep,
         time_id: this.petrolobject.time_id,
         ghi_chu: this.petrolobject.ghi_chu,
-        san_luong: this.petrolobject.san_luong
+        san_luong: this.petrolobject.san_luong,
+        kinh_do : this.petrolobject.kinh_do,
+        vi_do : this.petrolobject.vi_do
       }
     })
   }

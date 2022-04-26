@@ -136,6 +136,9 @@ export class MarketCommecialManagementComponent extends BaseComponent {
       doanh_nghiep: new FormControl(0, Validators.required),
       hop_tac_xa: new FormControl(0, Validators.required),
       ho_kinh_doanh: new FormControl(0, Validators.required),
+      
+      kinh_do: new FormControl(''),
+      vi_do: new FormControl('')
     }
   }
 
@@ -170,6 +173,8 @@ export class MarketCommecialManagementComponent extends BaseComponent {
       this.formData.controls['doanh_nghiep'].setValue(selectedRecord.doanh_nghiep);
       this.formData.controls['hop_tac_xa'].setValue(selectedRecord.hop_tac_xa);
       this.formData.controls['ho_kinh_doanh'].setValue(selectedRecord.ho_kinh_doanh);
+      this.formData.controls['kinh_do'].setValue(selectedRecord.kinh_do);
+      this.formData.controls['vi_do'].setValue(selectedRecord.vi_do);
     }
   }
 

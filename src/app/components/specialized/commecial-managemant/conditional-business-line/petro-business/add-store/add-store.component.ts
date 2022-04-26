@@ -151,7 +151,9 @@ export class AddStoreComponent implements OnInit {
       id_giay_phep: 0,
       san_luong: 0,
       ghi_chu: '',
-      time_id: ''
+      time_id: '',
+      kinh_do: '',
+      vi_do: ''
     }
   }
 
@@ -176,7 +178,9 @@ export class AddStoreComponent implements OnInit {
       id_tinh_trang_hoat_dong: 1,
       ten_quan_ly: '',
       ten_nhan_vien: '',
-      id_giay_phep: 0
+      id_giay_phep: 0,
+      kinh_do: '',
+      vi_do: ''
     })
 
     this.find_mst = this.formbuilder.group({
@@ -236,7 +240,9 @@ export class AddStoreComponent implements OnInit {
         id_giay_phep: this.petrolobject.id_giay_phep,
         time_id: this.petrolobject.time_id,
         ghi_chu: this.petrolobject.ghi_chu,
-        san_luong: this.petrolobject.san_luong
+        san_luong: this.petrolobject.san_luong,
+        kinh_do : this.petrolobject.kinh_do,
+        vi_do : this.petrolobject.vi_do
       }
     })
   }

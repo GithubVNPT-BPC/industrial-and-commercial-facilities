@@ -169,6 +169,8 @@ export class ShoppingcentreComponent extends BaseComponent {
       ho_va_ten: new FormControl(),
       dia_chi1: new FormControl(),
       dien_thoai1: new FormControl(),
+      kinh_do: new FormControl(''),
+      vi_do: new FormControl('')
     }
   }
 
@@ -203,6 +205,8 @@ export class ShoppingcentreComponent extends BaseComponent {
       this.formData.controls['ho_va_ten'].setValue(selectedRecord.ho_va_ten);
       this.formData.controls['dia_chi1'].setValue(selectedRecord.dia_chi1);
       this.formData.controls['dien_thoai1'].setValue(selectedRecord.dien_thoai1);
+      this.formData.controls['kinh_do'].setValue(selectedRecord.kinh_do);
+      this.formData.controls['vi_do'].setValue(selectedRecord.vi_do);
     }
   }
 

@@ -732,7 +732,30 @@
                             </div>
                         </mat-card-content>
                     </div>
+                    <div class="col-md-12">
+                        <mat-card-header>
+                            <mat-card-title class="text-left">
+                                <span class="pt-2"> Thông tin địa lý GIS </span>
+                            </mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="row">
+                                <div class="col-md-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Kinh độ</mat-label>
+                                        <input matInput type="string" formControlName="kinh_do">
+                                    </mat-form-field>
+                                </div>
 
+                                <div class="col-md-3 col-lg-3">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Vĩ độ</mat-label>
+                                        <input matInput type="string" formControlName="vi_do">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </div>
                     <div class="col-md-12">
                         <button type="submit" class="btn btn-success float-right">Lưu</button>
                         <button class="btn btn-danger set-bg-color-danger float-left"

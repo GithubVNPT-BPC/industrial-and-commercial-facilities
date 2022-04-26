@@ -34,6 +34,8 @@ export class PetrolList {
     id: string;
 
     thoi_gian_chinh_sua_cuoi: Date;
+    kinh_do: string;
+    vi_do: string;
 }
 
 export class SumStore {
@@ -145,6 +147,8 @@ export class PetrolPost {
     time_id: string;
     san_luong: number;
     ghi_chu: string;
+    kinh_do: string;
+    vi_do: string;
 }
 
 export class PetrolStore {
@@ -158,6 +162,8 @@ export class PetrolStore {
     ten_quan_ly: string;
     ten_nhan_vien: string;
     id_giay_phep: number;
+    kinh_do: string;
+    vi_do: string;
 }
 
 export class PetrolValuePost {

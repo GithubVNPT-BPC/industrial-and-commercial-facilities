@@ -155,6 +155,9 @@ export class StoreManagementComponent extends BaseComponent {
       id_giay_cndkkd: new FormControl('', Validators.required),
       id_giay_atvstp: new FormControl('', Validators.required),
       id_phuong_xa: new FormControl('', Validators.required),
+      
+      kinh_do: new FormControl(''),
+      vi_do: new FormControl('')
     }
   }
 
@@ -182,6 +185,9 @@ export class StoreManagementComponent extends BaseComponent {
         },
         error => this.errorMessage = <any>error
       );
+      
+      this.formData.controls['kinh_do'].setValue(selectedRecord.kinh_do);
+      this.formData.controls['vi_do'].setValue(selectedRecord.vi_do);
     }
   }
 
