@@ -59,12 +59,11 @@ export const MY_FORMATS = {
 export class ProductManagerComponent implements OnInit {
     public dataSource: MatTableDataSource<ProductValueModel> = new MatTableDataSource<ProductValueModel>();
     public displayedColumns: string[] =
-        ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 
-        // 'tri_gia', 
-        'time_id',
-            // 'top_san_xuat', 'them_top_san_xuat'
+        ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 'time_id',
+        // 'tri_gia', 'top_san_xuat', 'them_top_san_xuat'
         ];
-
+    
+    public queryProductIds = [26, 269, 270, 271, 272, 273, 274]
     @ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild("TABLE", { static: true }) table: ElementRef;
@@ -170,8 +169,7 @@ export class ProductManagerComponent implements OnInit {
     public getListProduct(): void {
         this.marketService.GetProductList().subscribe(
             allrecords => {
-                this.products = allrecords.data.filter(x=>x.id_san_pham == 26 || x.id_san_pham == 269 || x.id_san_pham == 270 
-                    || x.id_san_pham == 271 || x.id_san_pham == 272 || x.id_san_pham == 273 || x.id_san_pham == 274) as ProductModel[];
+                this.products = allrecords.data.filter(x => this.queryProductIds.includes(x.id_san_pham)) as ProductModel[];
                 this.filterproducts.next(this.products.slice());
             },
         );
@@ -247,8 +245,7 @@ export class ProductManagerComponent implements OnInit {
     public getProductValueList(time: string) {
         this.marketService.GetProductValue(time).subscribe(
             allrecords => {
-                let temp =  allrecords.data[0].filter(x=>x.id_san_pham == 26 || x.id_san_pham == 269 || x.id_san_pham == 270 
-                    || x.id_san_pham == 271 || x.id_san_pham == 272 || x.id_san_pham == 273 || x.id_san_pham == 274)
+                let temp =  allrecords.data[0].filter(x => this.queryProductIds.includes(x.id_san_pham))
 
                 temp.forEach(element => {
                     element.time_id = this.Convertdate(element.time_id.toString())
@@ -264,12 +261,11 @@ export class ProductManagerComponent implements OnInit {
     public getALLProductValueList() {
         this.marketService.GetAllProductValue().subscribe(
             allrecords => {
-                let temp =  allrecords.data[0].filter(x=>x.id_san_pham == 26 || x.id_san_pham == 269 || x.id_san_pham == 270 
-                    || x.id_san_pham == 271 || x.id_san_pham == 272 || x.id_san_pham == 273 || x.id_san_pham == 274)
-                temp.forEach(element => {
+                let displayedRecords =  allrecords.data[0].filter(x => this.queryProductIds.includes(x.id_san_pham))
+                displayedRecords.forEach(element => {
                     element.time_id = this.Convertdate(element.time_id.toString())
                 });
-                this.dataSource = new MatTableDataSource<ProductValueModel>(temp);
+                this.dataSource = new MatTableDataSource<ProductValueModel>(displayedRecords);
                 this.paginatorAgain();
 
                 this._rows = this.dataSource.filteredData.length;

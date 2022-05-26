@@ -5,7 +5,7 @@
     </mat-card-header>
     <mat-card-content>
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-12 col-lg-6">
                 <mat-form-field appearance="outline">
                     <mat-label>Thời gian</mat-label>
                     <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
@@ -15,7 +15,7 @@
                     </mat-datepicker>
                 </mat-form-field>
             </div>
-            <div class="col-lg-10 button-control -align-right my-auto">
+            <div class="col-12 col-lg-6 button-control -align-right my-auto">
                 <button mat-raised-button (click)="resetAll()">
                     Lấy tất cả dữ liệu
                 </button>
@@ -56,7 +56,7 @@
                 </label>
 
                 <button mat-raised-button (click)="save(dataSource.data)">
-                    <mat-icon>save</mat-icon>Lưu
+                    <mat-icon>save</mat-icon> Lưu
                 </button>
             </div>
         </div>
@@ -150,6 +150,7 @@
                 <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;let i = index; "
                     (click)="changeRow(i)">
             </table>
+                    <h5 *ngIf="!dataSource.data.length" class="text-center mt-3 mb-3">KHÔNG CÓ DỮ LIỆU</h5>
         </div>
         <mat-paginator [pageSizeOptions]="[10, 50, 100]" showFirstLastButtons></mat-paginator>
     </mat-card-content>

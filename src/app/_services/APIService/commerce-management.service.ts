@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs'
 import { catchError, tap } from 'rxjs/operators'
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { time } from 'console';
 
 export const HEADERS = { 'Content-Type': 'application/json' }
 
@@ -144,10 +145,11 @@ export class CommerceManagementService {
         );
     }
 
-    public getCountrySideData() {
+    public getCountrySideData(time_id : number) {
         let apiUrl = this.apiHome + this.urlGetCountrSide;
+        let params = new HttpParams().set('time_id', time_id.toString());
         let headers = new HttpHeaders(HEADERS);
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+        return this.http.get<any>(apiUrl, { headers: headers, params : params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }

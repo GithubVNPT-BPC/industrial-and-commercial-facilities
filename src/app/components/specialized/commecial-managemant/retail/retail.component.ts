@@ -75,13 +75,18 @@ export class RetailComponent implements OnInit {
         return formatDate(date, 'yyyy', 'en-US');
     }
 
-    retail: Array<RetailModel> = new Array<RetailModel>();
+    retailCurrentYear: Array<RetailModel> = new Array<RetailModel>();
+    retailPreviousYear: Array<RetailModel> = new Array<RetailModel>();
+    retailOtherYear: Array<RetailModel> = new Array<RetailModel>();
 
     lineChartMethod(time_id: number) {
         //this._reportService.Get12MonthReports(this.obj_id, time_id, 'SCT_CUS_TMBLHHDV_ATTR_THT').subscribe(
         this._sctService.GetDanhSachBLHHTongHop(time_id).subscribe(
             res => {
-                this.retail = res.data[0]
+                if (res){
+                this.retailCurrentYear = res.data[0]
+                this.retailPreviousYear = res.data[1]
+                this.retailOtherYear = res.data[2]
 
                 this.lineChart = new Chart(this.lineCanvas.nativeElement, {
                     type: 'line',
@@ -89,7 +94,7 @@ export class RetailComponent implements OnInit {
                         labels: this.timelist,
                         datasets: [
                             {
-                                label: 'TỔNG MỨC BLHH VÀ DTDVTD',
+                                label: 'Năm ' + this.retailCurrentYear[0].time_id,
                                 fill: false,
                                 lineTension: 0.1,
                                 backgroundColor: 'rgb(255, 0, 0)',
@@ -107,17 +112,71 @@ export class RetailComponent implements OnInit {
                                 pointHoverBorderWidth: 2,
                                 pointRadius: 1,
                                 pointHitRadius: 10,
-                                data: [this.retail[0].thang_01 ? this.retail[0].thang_01 : 0, this.retail[0].thang_02 ? this.retail[0].thang_02 : 0,
-                                this.retail[0].thang_03 ? this.retail[0].thang_03 : 0, this.retail[0].thang_04 ? this.retail[0].thang_04 : 0,
-                                this.retail[0].thang_05 ? this.retail[0].thang_05 : 0, this.retail[0].thang_06 ? this.retail[0].thang_06 : 0,
-                                this.retail[0].thang_07 ? this.retail[0].thang_07 : 0, this.retail[0].thang_08 ? this.retail[0].thang_08 : 0,
-                                this.retail[0].thang_09 ? this.retail[0].thang_09 : 0, this.retail[0].thang_10 ? this.retail[0].thang_10 : 0,
-                                this.retail[0].thang_11 ? this.retail[0].thang_11 : 0, this.retail[0].thang_12 ? this.retail[0].thang_12 : 0],
+                                data: [this.retailCurrentYear[0].thang_01 ? this.retailCurrentYear[0].thang_01 : 0, this.retailCurrentYear[0].thang_02 ? this.retailCurrentYear[0].thang_02 : 0,
+                                this.retailCurrentYear[0].thang_03 ? this.retailCurrentYear[0].thang_03 : 0, this.retailCurrentYear[0].thang_04 ? this.retailCurrentYear[0].thang_04 : 0,
+                                this.retailCurrentYear[0].thang_05 ? this.retailCurrentYear[0].thang_05 : 0, this.retailCurrentYear[0].thang_06 ? this.retailCurrentYear[0].thang_06 : 0,
+                                this.retailCurrentYear[0].thang_07 ? this.retailCurrentYear[0].thang_07 : 0, this.retailCurrentYear[0].thang_08 ? this.retailCurrentYear[0].thang_08 : 0,
+                                this.retailCurrentYear[0].thang_09 ? this.retailCurrentYear[0].thang_09 : 0, this.retailCurrentYear[0].thang_10 ? this.retailCurrentYear[0].thang_10 : 0,
+                                this.retailCurrentYear[0].thang_11 ? this.retailCurrentYear[0].thang_11 : 0, this.retailCurrentYear[0].thang_12 ? this.retailCurrentYear[0].thang_12 : 0],
+                                spanGaps: false,
+                            },
+                            {
+                                label: 'Năm ' + this.retailPreviousYear[0].time_id,
+                                fill: false,
+                                lineTension: 0.1,
+                                backgroundColor: 'rgb(255, 255, 0)',
+                                borderColor: 'rgb(255, 255, 0)',
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: 'rgb(255, 255, 0)',
+                                pointBackgroundColor: '#fff',
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: 'rgb(255, 255, 0)',
+                                pointHoverBorderColor: 'rgb(255, 255, 0)',
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                data: [this.retailPreviousYear[0].thang_01 ? this.retailPreviousYear[0].thang_01 : 0, this.retailPreviousYear[0].thang_02 ? this.retailPreviousYear[0].thang_02 : 0,
+                                this.retailPreviousYear[0].thang_03 ? this.retailPreviousYear[0].thang_03 : 0, this.retailPreviousYear[0].thang_04 ? this.retailPreviousYear[0].thang_04 : 0,
+                                this.retailPreviousYear[0].thang_05 ? this.retailPreviousYear[0].thang_05 : 0, this.retailPreviousYear[0].thang_06 ? this.retailPreviousYear[0].thang_06 : 0,
+                                this.retailPreviousYear[0].thang_07 ? this.retailPreviousYear[0].thang_07 : 0, this.retailPreviousYear[0].thang_08 ? this.retailPreviousYear[0].thang_08 : 0,
+                                this.retailPreviousYear[0].thang_09 ? this.retailPreviousYear[0].thang_09 : 0, this.retailPreviousYear[0].thang_10 ? this.retailPreviousYear[0].thang_10 : 0,
+                                this.retailPreviousYear[0].thang_11 ? this.retailPreviousYear[0].thang_11 : 0, this.retailPreviousYear[0].thang_12 ? this.retailPreviousYear[0].thang_12 : 0],
+                                spanGaps: false,
+                            },
+                            {
+                                label: 'Năm ' + this.retailOtherYear[0].time_id,
+                                fill: false,
+                                lineTension: 0.1,
+                                backgroundColor: 'rgb(0, 0, 255)',
+                                borderColor: 'rgb(0, 0, 255)',
+                                borderCapStyle: 'butt',
+                                borderDash: [],
+                                borderDashOffset: 0.0,
+                                borderJoinStyle: 'miter',
+                                pointBorderColor: 'rgb(0, 0, 255)',
+                                pointBackgroundColor: '#fff',
+                                pointBorderWidth: 1,
+                                pointHoverRadius: 5,
+                                pointHoverBackgroundColor: 'rgb(0, 0, 255)',
+                                pointHoverBorderColor: 'rgb(0, 0, 255)',
+                                pointHoverBorderWidth: 2,
+                                pointRadius: 1,
+                                pointHitRadius: 10,
+                                data: [this.retailOtherYear[0].thang_01 ? this.retailOtherYear[0].thang_01 : 0, this.retailOtherYear[0].thang_02 ? this.retailOtherYear[0].thang_02 : 0,
+                                this.retailOtherYear[0].thang_03 ? this.retailOtherYear[0].thang_03 : 0, this.retailOtherYear[0].thang_04 ? this.retailOtherYear[0].thang_04 : 0,
+                                this.retailOtherYear[0].thang_05 ? this.retailOtherYear[0].thang_05 : 0, this.retailOtherYear[0].thang_06 ? this.retailOtherYear[0].thang_06 : 0,
+                                this.retailOtherYear[0].thang_07 ? this.retailOtherYear[0].thang_07 : 0, this.retailOtherYear[0].thang_08 ? this.retailOtherYear[0].thang_08 : 0,
+                                this.retailOtherYear[0].thang_09 ? this.retailOtherYear[0].thang_09 : 0, this.retailOtherYear[0].thang_10 ? this.retailOtherYear[0].thang_10 : 0,
+                                this.retailOtherYear[0].thang_11 ? this.retailOtherYear[0].thang_11 : 0, this.retailOtherYear[0].thang_12 ? this.retailOtherYear[0].thang_12 : 0],
                                 spanGaps: false,
                             }
                         ]
                     }
-                });
+                });}
             })
     }
 

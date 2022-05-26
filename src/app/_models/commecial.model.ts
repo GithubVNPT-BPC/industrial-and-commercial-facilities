@@ -14,6 +14,7 @@ export class RetailModel{
     thang_10: number;
     thang_11: number;
     thang_12: number;
+    time_id: number;
 }
 export class RetailPercentModel{
     ke_hoach: number;
