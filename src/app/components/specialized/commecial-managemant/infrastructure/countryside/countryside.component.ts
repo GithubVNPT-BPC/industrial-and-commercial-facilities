@@ -35,6 +35,9 @@ export class CountrysideComponent extends BaseComponent {
   private yearOfTC7 = [];
   private yearOfStd = [];
 
+  private time_id: number
+  private new_data_time_id: number
+
   filterModel = {
     id_quan_huyen: [],
     nam_dat_TC_7: [],
@@ -86,6 +89,7 @@ export class CountrysideComponent extends BaseComponent {
       this.formData.controls['nam_bc_kh_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_kh_6_thang_nam_cho_dat_NTM);
       this.formData.controls['nam_bc_ut_6_thang_nam_dat_TC_7'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_dat_TC_7);
       this.formData.controls['nam_bc_ut_6_thang_nam_cho_dat_NTM'].setValue(selectedRecord.nam_bc_ut_6_thang_nam_cho_dat_NTM);
+      this.new_data_time_id = this.time_id
     }
   }
 
@@ -103,8 +107,10 @@ export class CountrysideComponent extends BaseComponent {
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.time_id = new Date().getFullYear() - 1
+    this.new_data_time_id = this.time_id + 1
     this.initDistrictWard();
-    this.getCountrySideData();
+    this.getCountrySideData(this.time_id);
 
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
@@ -117,8 +123,8 @@ export class CountrysideComponent extends BaseComponent {
     this.TEXT_DEFAULT = "Thương mại nội địa - Hạ tầng thương mại";
   }
 
-  getCountrySideData() {
-    this.commerceManagementService.getCountrySideData().subscribe(
+  getCountrySideData(time_id) {
+    this.commerceManagementService.getCountrySideData(time_id).subscribe(
       allrecords => {
         this.filteredDataSource.data = [];
         if (allrecords.data && allrecords.data.length > 0) {
@@ -144,7 +150,7 @@ export class CountrysideComponent extends BaseComponent {
 
     // Tiêu chí NTM
     this.sumOf7thStandard = data.filter(x => x.nam_dat_TC_7).length;
-    this.sumOfImplStandard = data.filter(x => x.nam_dat_NTM).length;
+    this.sumOfImplStandard = data.filter(x => x.nam_dat_NTM && x.cho_truyen_thong).length;
     // Thực hiện 6 tháng/năm cùng ký năm trước
     this.sumOf7thStandardPrevYear = data.filter(x => x.th_6_thang_nam_cung_ky_dat_TC_7).length;
     this.sumOfImplStandardPrevYear = data.filter(x => x.th_6_thang_nam_cung_ky_cho_dat_NTM).length;
@@ -158,7 +164,15 @@ export class CountrysideComponent extends BaseComponent {
 
   callService(data) {
     data.id_quan_huyen = this.findDistrictId(data.id_phuong_xa);
-    this.commerceManagementService.postCountrySide([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    var finalData = {
+      time_id: this.new_data_time_id,
+      data: [data]
+    }
+    console.log(finalData)
+    this.commerceManagementService.postCountrySide(finalData).subscribe(response => {
+      this.successNotify(response)
+      this.new_data_time_id = new Date().getFullYear()
+    }, error => this.errorNotify(error));
   }
 
   prepareRemoveData(data) {
