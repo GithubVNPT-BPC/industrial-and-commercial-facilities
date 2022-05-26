@@ -59,7 +59,7 @@ export class CountrysideComponent extends BaseComponent {
   getFormParams() {
     return {
       id: new FormControl(),
-      cho_truyen_thong: new FormControl('', Validators.required),
+      cho_truyen_thong: new FormControl(''),
       id_phuong_xa: new FormControl('', Validators.required),
       nam_dat_TC_7: new FormControl(),
       nam_dat_NTM: new FormControl(),

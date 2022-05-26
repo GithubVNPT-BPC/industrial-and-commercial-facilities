@@ -41,7 +41,9 @@ export class MarketModel {
     ten_loai_cho: string;
     ten_hinh_thuc_quan_ly: string;
     ten_tinh_chat_kinh_doanh: string;
-    thoi_gian_chinh_sua_cuoi: Date
+    thoi_gian_chinh_sua_cuoi: Date;
+    kinh_do: string;
+    vi_do: string;
 }
 
 export class SuperMarketCommonModel {
@@ -69,7 +71,9 @@ export class SuperMarketCommonModel {
     dia_chi1: string;
     dien_thoai1: string;
     business_area_id: number;
-    thoi_gian_chinh_sua_cuoi: Date
+    thoi_gian_chinh_sua_cuoi: Date;
+    kinh_do: string;
+    vi_do: string;
 }
 
 export class ConvenienceStoreModel {
@@ -92,7 +96,9 @@ export class ConvenienceStoreModel {
     ten_san_pham: string;
     id_quan_huyen: number;
     is_expired: boolean;
-    thoi_gian_chinh_sua_cuoi: Date
+    thoi_gian_chinh_sua_cuoi: Date;
+    kinh_do: string;
+    vi_do: string;
 }
 
 export class FoodCommerceModel {
