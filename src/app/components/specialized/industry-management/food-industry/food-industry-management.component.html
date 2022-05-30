@@ -124,13 +124,13 @@
                             <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
                         </mat-form-field>
                     </div>
-
-                    <div class="col-2 col-lg-2 my-auto">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Doanh nghiệp hết hạn
+                    <div class="col-sm-3 col-md-2 col-lg-2 my-auto">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="isExpired">Doanh nghiệp hết hạn
                         </mat-checkbox>
-
-                        <!-- <mat-checkbox (change)="showMoreDetail($event)">Chi tiết
-                        </mat-checkbox> -->
+                    </div>
+                    <div class="col-sm-3 col-md-2 col-lg-2 my-auto">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="isNearlyExpired">Doanh nghiệp sắp hết hạn
+                        </mat-checkbox>
                     </div>
                 </div>
                 <hr />

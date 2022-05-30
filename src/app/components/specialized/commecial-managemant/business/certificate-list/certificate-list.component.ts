@@ -170,16 +170,20 @@ export class CertificateListComponent implements OnInit {
 
   isChecked: boolean
   showbutton: boolean
+  isExpired : boolean = false
+  isNearlyExpired : boolean = false
 
   ngOnInit() {
     this.sendLinkToNext(true)
     if (this.status == 'false') {
       this.isChecked = false
       this.showbutton = false
+      this.isExpired = false
     }
     else {
       this.isChecked = true
       this.showbutton = true
+      this.isExpired = true
     }
     this.getBusinessList();
     this.autoOpen();
@@ -212,9 +216,11 @@ export class CertificateListComponent implements OnInit {
       this.certificate.forEach(element => {
         if (element.ngay_het_han) {
           element.is_het_han = element.ngay_het_han < this.getCurrentDate()
+          element.is_gan_het_han = element.ngay_het_han < this.getDate2Months()
         }
         else {
           element.is_het_han = false
+          element.is_gan_het_han = false
         }
         element.ngay_cap = element.ngay_cap ? this.Convertdate(element.ngay_cap) : null
         element.ngay_het_han = element.ngay_het_han ? this.Convertdate(element.ngay_het_han) : null
@@ -252,17 +258,32 @@ export class CertificateListComponent implements OnInit {
   }
 
   applyExpireCheck(event) {
-    this.showbutton = event.checked
+    this.showbutton = this.isExpired || this.isNearlyExpired
     if (event.checked) {
       this.dataSource.data = this.certificate.filter(x => x.is_het_han == event.checked)
     } else {
       this.dataSource.data = this.certificate
     }
+
+    this.dataSource.data = this.isExpired ? [...this.certificate.filter(d => d.is_het_han)] : [...this.certificate];
+
+    if (this.isExpired)
+      this.dataSource.data = this.isNearlyExpired ? [...this.certificate.filter(d => d.is_gan_het_han || d.is_het_han)]
+        : [...this.dataSource.data];
+    else
+      this.dataSource.data = this.isNearlyExpired ? [...this.certificate.filter(d => d.is_gan_het_han && !d.is_het_han)] : [...this.certificate];
+
   }
 
   public getCurrentDate() {
     let date = new Date;
     return formatDate(date, 'yyyyMMdd', 'en-US');
+  }
+
+  public getDate2Months(){
+      let date = new Date;
+      date.setMonth(date.getMonth() + 2)
+      return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 
   public getCurrentYear() {

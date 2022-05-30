@@ -18,8 +18,8 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     DB_TABLE = 'QLCN_CNTP';
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index'];
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du', 
-    'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'nganh_nghe_kd_chinh', 'dia_chi_day_du',
+        'so_lao_dong_sct', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
 
     filterModel = {
         id_quan_huyen: [],
@@ -46,15 +46,17 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     foodTypeList = [
-        { id_thuc_pham: 1, ten_thuc_pham: 'Bột mỳ'},
-        { id_thuc_pham: 2, ten_thuc_pham: 'Rượu'},
-        { id_thuc_pham: 3, ten_thuc_pham: 'Bánh ngọt'},
+        { id_thuc_pham: 1, ten_thuc_pham: 'Bột mỳ' },
+        { id_thuc_pham: 2, ten_thuc_pham: 'Rượu' },
+        { id_thuc_pham: 3, ten_thuc_pham: 'Bánh ngọt' },
     ]
 
     dataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
     filteredDataSource: MatTableDataSource<FoodIndustryModel> = new MatTableDataSource<FoodIndustryModel>();
 
     isChecked: boolean;
+    isExpired: boolean;
+    isNearlyExpired: boolean;
     sanLuongBotMy: number = 0;
     sanLuongRuou: number = 0;
     sanLuongBanhNgot: number = 0;
@@ -80,8 +82,10 @@ export class FoodIndustryManagementComponent extends BaseComponent {
         this.GetFoodIndustryData(0);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
+        this.isExpired = false
+        this.isNearlyExpired = false
 
-        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
         }
     }
@@ -97,8 +101,11 @@ export class FoodIndustryManagementComponent extends BaseComponent {
 
                 this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
 
+                let date = new Date()
+                date.setMonth(date.getMonth() + 2)
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+                    element.is_nearly_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < date : false;
                 });
 
                 this.filteredDataSource.data = [...this.dataSource.data];
@@ -156,10 +163,14 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     callService(data) {
-        this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostFoodIndustry([data], this.currentYear).subscribe(response => {
+            this.successNotify(response)
+            this.isExpired = false
+            this.isNearlyExpired = false
+        }, error => this.errorNotify(error));
     }
 
-    callEditService(data){
+    callEditService(data) {
         this.industryManagementService.PostFoodIndustry([this.formData.value], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
     }
 
@@ -190,7 +201,14 @@ export class FoodIndustryManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+        this.filteredDataSource.data = this.isExpired ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+
+        if (this.isExpired)
+            this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_nearly_expired || d.is_expired)]
+                : [...this.filteredDataSource.data];
+        else
+            this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_nearly_expired && !d.is_expired)] : [...this.dataSource.data];
+
         this._prepareData();
         this.paginatorAgain();
     }

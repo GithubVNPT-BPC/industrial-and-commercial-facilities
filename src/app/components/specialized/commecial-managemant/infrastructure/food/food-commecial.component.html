@@ -62,8 +62,13 @@
                         </mat-form-field>
                     </div>
 
-                    <div class="col-2 col-lg-4 checkbox">
-                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Doanh nghiệp hết hạn
+                    <div class="col-2 col-lg-2 checkbox">
+                        <mat-checkbox (change)="applyExpireCheck()" [(ngModel)]="isExpired">Doanh nghiệp hết hạn
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="col-2 col-lg-2 checkbox">
+                        <mat-checkbox (change)="applyExpireCheck()" [(ngModel)]="isNearlyExpired">Doanh nghiệp sắp hết hạn
                         </mat-checkbox>
                     </div>
 

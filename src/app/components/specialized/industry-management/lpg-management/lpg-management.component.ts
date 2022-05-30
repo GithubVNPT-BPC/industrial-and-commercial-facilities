@@ -18,13 +18,15 @@ import { LoginService } from 'src/app/_services/APIService/login.service';
 export class LPGManagementComponent extends BaseComponent {
     displayedColumns: string[] = [];
     fullFieldList: string[] = ['select', 'index']
-    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh', 
-    'email', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
+    reducedFieldList: string[] = ['select', 'index', 'mst', 'ten_doanh_nghiep', 'dia_chi_day_du', 'nganh_nghe_kd_chinh',
+        'email', 'cong_suat', 'san_luong', 'so_giay_phep', 'ngay_cap', 'ngay_het_han', 'tinh_trang_hoat_dong', 'thoi_gian_chinh_sua_cuoi'];
 
     dataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
     filteredDataSource: MatTableDataSource<LPGManagementModel> = new MatTableDataSource<LPGManagementModel>();
 
     isChecked: boolean;
+    isExpired: boolean;
+    isNearlyExpired: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
     selectedFile: File = null;
@@ -70,10 +72,12 @@ export class LPGManagementComponent extends BaseComponent {
         this.GetLGPManagementData(0);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.length == 2 ? this.fullFieldList.concat(Object.keys(this.displayedFields)) : this.fullFieldList;
+        this.isExpired = false
+        this.isNearlyExpired = false
 
-        if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
+        if (this._login.userValue.user_role_id == 5 || this._login.userValue.user_role_id == 1) {
             this.authorize = false
-        }        
+        }
     }
 
     getLinkDefault() {
@@ -125,7 +129,11 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     callService(data) {
-        this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+        this.industryManagementService.PostLPGManagement([data], this.currentYear).subscribe(response => {
+            this.successNotify(response)
+            this.isExpired = false
+            this.isNearlyExpired = false
+        }, error => this.errorNotify(error));
     }
 
     callEditService(data) {
@@ -145,9 +153,12 @@ export class LPGManagementComponent extends BaseComponent {
                     element.ngay_het_han = this.formatDate(element.ngay_het_han);
                 });
 
+                let date = new Date()
+                date.setMonth(date.getMonth() + 2)
                 this.dataSource = new MatTableDataSource<LPGManagementModel>(result.data);
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+                    element.is_nearly_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < date : false;
                 });
 
                 this.filteredDataSource.data = [...this.dataSource.data];
@@ -185,7 +196,14 @@ export class LPGManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+        this.filteredDataSource.data = this.isExpired ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+
+        if (this.isExpired)
+            this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_nearly_expired || d.is_expired)]
+                : [...this.filteredDataSource.data];
+        else
+            this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_nearly_expired && !d.is_expired)] : [...this.dataSource.data];
+
         this._prepareData();
         this.paginatorAgain();
     }

@@ -337,6 +337,7 @@ export class CertificateViewModel {
     ten_linh_vuc: string;
     ten_doanh_nghiep: string;
     is_het_han: boolean;
+    is_gan_het_han: boolean;
     combine: string;
     combine1: string;
     thoi_gian_chinh_sua_cuoi: Date

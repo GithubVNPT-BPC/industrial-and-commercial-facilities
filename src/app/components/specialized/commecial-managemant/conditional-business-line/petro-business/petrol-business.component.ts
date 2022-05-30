@@ -182,7 +182,8 @@ export class PetrolBusinessComponent implements OnInit {
             this.dataSource.data = all.data
             this.dataSource.data.forEach(element => {
                 if (element.ngay_het_han) {
-                    element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : "Doanh nghiệp còn hạn"
+                    element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : 
+                    (element.ngay_het_han < this.getDate2Months()? "Doanh nghiệp sắp hết hạn" : "Doanh nghiệp còn hạn")
                 }
                 else {
                     element.is_expired = "Doanh nghiệp còn hạn"
@@ -203,6 +204,12 @@ export class PetrolBusinessComponent implements OnInit {
 
     public getCurrentDate() {
         let date = new Date;
+        return formatDate(date, 'yyyyMMdd', 'en-US');
+    }
+
+    public getDate2Months(){
+        let date = new Date;
+        date.setMonth(date.getMonth() + 2)
         return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
@@ -228,7 +235,7 @@ export class PetrolBusinessComponent implements OnInit {
         this.router.navigate(['specialized/commecial-management/domestic/petrol']);
     }
 
-    status: any[] = ["Doanh nghiệp còn hạn", "Doanh nghiệp hết hạn"]
+    status: any[] = ["Doanh nghiệp còn hạn", "Doanh nghiệp hết hạn", "Doanh nghiệp sắp hết hạn"]
 
     filterModel = {
         ten_quan_huyen: [],

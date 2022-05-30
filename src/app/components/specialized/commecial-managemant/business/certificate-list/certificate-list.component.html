@@ -33,11 +33,17 @@
                         </button>
                     </div>
 
-                    <div class="col-6 checkbox">
+                    <div class="col-2">
                         <button *ngIf="showbutton" mat-raised-button (click)="SendEmail()" class="mr-3">Gửi mail thông
-                            báo GP sắp hết hạn</button>
-
-                        <mat-checkbox (change)="applyExpireCheck($event)" [ngModel]="isChecked">Giấy phép hết hạn
+                            báo GP (sắp) hết hạn</button>
+                    </div>
+                    <div class="col-2">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="isExpired">Giấy phép hết hạn
+                        </mat-checkbox>
+                    </div>
+                    <div class="col-2">
+                        <mat-checkbox (change)="applyExpireCheck($event)" [(ngModel)]="isNearlyExpired">Giấy phép sắp
+                            hết hạn
                         </mat-checkbox>
                     </div>
 

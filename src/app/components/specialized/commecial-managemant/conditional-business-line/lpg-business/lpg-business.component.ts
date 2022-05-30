@@ -235,7 +235,8 @@ export class LPGBusinessComponent implements OnInit {
 
             LPGList2.forEach(element => {
                 if (element.ngay_het_han) {
-                    element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : "Doanh nghiệp còn hạn"
+                    element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : 
+                    (element.ngay_het_han < this.getDate2Months()? "Doanh nghiệp sắp hết hạn" : "Doanh nghiệp còn hạn")
                 }
                 else {
                     element.is_expired = "Doanh nghiệp còn hạn"
@@ -279,6 +280,12 @@ export class LPGBusinessComponent implements OnInit {
         return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
+    public getDate2Months(){
+        let date = new Date;
+        date.setMonth(date.getMonth() + 2)
+        return formatDate(date, 'yyyyMMdd', 'en-US');
+    }
+
     Convertdate(text: string): string {
         let date: string
         date = text.substring(6, 8) + "-" + text.substring(4, 6) + "-" + text.substring(0, 4)
@@ -305,7 +312,7 @@ export class LPGBusinessComponent implements OnInit {
         this.router.navigate(['specialized/commecial-management/domestic/cbl']);
     }
 
-    status: any[] = ["Doanh nghiệp còn hạn", "Doanh nghiệp hết hạn"]
+    status: any[] = ["Doanh nghiệp còn hạn", "Doanh nghiệp hết hạn", "Doanh nghiệp sắp hết hạn"]
 
     filterModel = {
         nam_cap: [],

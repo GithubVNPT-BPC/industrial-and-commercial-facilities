@@ -55,11 +55,16 @@ export class ConsultantElectricComponent extends BaseComponent {
 
   authorize: boolean = true
 
+  is_expired: boolean = false;
+  is_nearly_expired: boolean = false;
+
   ngOnInit() {
     super.ngOnInit();
     this.getDataConsultantElectric();
+    this.is_expired = false;
+    this.is_nearly_expired = false;
 
-    if (this._login.userValue.user_role_id == 4  || this._login.userValue.user_role_id == 1) {
+    if (this._login.userValue.user_role_id == 4 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
   }
@@ -69,10 +74,13 @@ export class ConsultantElectricComponent extends BaseComponent {
       this.filteredDataSource.data = [];
       if (result.data && result.data.length > 0) {
         let data = result.data.filter(item => item.id_group == 1);
+        let date = new Date()
+        date.setMonth(new Date().getMonth() + 2)
         data.forEach(element => {
           element.ngay_cap = this.formatDate(element.ngay_cap);
           element.ngay_het_han = this.formatDate(element.ngay_het_han);
           element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+          element.is_nearly_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < date : false;
         });
         this.dataSource = new MatTableDataSource<ManageAproveElectronic>(data);
         this.filteredDataSource = new MatTableDataSource<ManageAproveElectronic>(data);
@@ -106,13 +114,14 @@ export class ConsultantElectricComponent extends BaseComponent {
   }
 
   applyActionCheck(event) {
-    if (event.checked) {
-      this.filteredDataSource.data = this.filteredDataSource.data.filter(e => {
-        return new Date(e.ngay_het_han) < new Date();
-      });
-    } else {
-      this.filteredDataSource.data = [...this.dataSource.data];
-    }
+    this.filteredDataSource.data = this.is_expired ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+
+    if (this.is_expired)
+      this.filteredDataSource.data = this.is_nearly_expired ? [...this.dataSource.data.filter(d => d.is_nearly_expired || d.is_expired)]
+        : [...this.filteredDataSource.data];
+    else
+      this.filteredDataSource.data = this.is_nearly_expired ? [...this.dataSource.data.filter(d => d.is_nearly_expired && !d.is_expired)] : [...this.dataSource.data];
+
     this._prepareData();
     this.paginatorAgain();
   }
@@ -132,14 +141,14 @@ export class ConsultantElectricComponent extends BaseComponent {
 
   setFormParams() {
     if (this.selection.selected.length) {
-     let selectedRecord = this.selection.selected[0];
-     this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
-     this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
-     this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
-     this.formData.controls['so_giay_phep'].setValue(selectedRecord.so_giay_phep);
-     this.formData.controls['ngay_cap'].setValue(selectedRecord.ngay_cap.toDate());
-     this.formData.controls['ngay_het_han'].setValue(selectedRecord.ngay_het_han.toDate());
-     this.formData.controls['id'].setValue(selectedRecord.id);
+      let selectedRecord = this.selection.selected[0];
+      this.formData.controls['ten_doanh_nghiep'].setValue(selectedRecord.ten_doanh_nghiep);
+      this.formData.controls['dia_chi'].setValue(selectedRecord.dia_chi);
+      this.formData.controls['dien_thoai'].setValue(selectedRecord.dien_thoai);
+      this.formData.controls['so_giay_phep'].setValue(selectedRecord.so_giay_phep);
+      this.formData.controls['ngay_cap'].setValue(selectedRecord.ngay_cap.toDate());
+      this.formData.controls['ngay_het_han'].setValue(selectedRecord.ngay_het_han.toDate());
+      this.formData.controls['id'].setValue(selectedRecord.id);
     }
   }
 
@@ -161,7 +170,11 @@ export class ConsultantElectricComponent extends BaseComponent {
   }
 
   public callService(data) {
-    this.energyService.CapNhatDuLieuCapPhepHoatDong([data]).subscribe(response => this.successNotify(response), error => this.errorNotify(error));
+    this.energyService.CapNhatDuLieuCapPhepHoatDong([data]).subscribe(response => {
+      this.successNotify(response)
+      this.is_expired = false;
+      this.is_nearly_expired = false;
+    }, error => this.errorNotify(error));
   }
 
   prepareRemoveData(data) {

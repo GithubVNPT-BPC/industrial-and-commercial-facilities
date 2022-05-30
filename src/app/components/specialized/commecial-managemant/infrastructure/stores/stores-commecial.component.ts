@@ -29,6 +29,8 @@ export class StoreManagementComponent extends BaseComponent {
   filterModel = {
     id_quan_huyen: [],
     ngay_cap_giay_chung_nhan: [],
+    is_expired : false,
+    is_nearly_expired: false
   };
   //
   public tongCuaHang: number;
@@ -82,6 +84,12 @@ export class StoreManagementComponent extends BaseComponent {
     if (this._login.userValue.user_role_id == 3 || this._login.userValue.user_role_id == 1) {
       this.authorize = false
     }
+    this.filterModel = {
+      id_quan_huyen: [],
+      ngay_cap_giay_chung_nhan: [],
+      is_expired : false,
+      is_nearly_expired: false
+    };
   }
 
   findEnterpriseByMst(mst) {
@@ -133,6 +141,7 @@ export class StoreManagementComponent extends BaseComponent {
           data.map(x => {
             let expiredDate = moment(x.ngay_het_han_giay_phep, "DD/MM/YYYY");
             x.is_expired = currentDate.isAfter(expiredDate, 'day');
+            x.is_nearly_expired = currentDate.isAfter(expiredDate.add(-2, 'M'), 'day')
           });
           this.dataSource = new MatTableDataSource<ConvenienceStoreModel>(data);
           this.filteredDataSource.data = [...this.dataSource.data];
@@ -246,8 +255,15 @@ export class StoreManagementComponent extends BaseComponent {
     return filteredData;
   }
 
-  applyExpireCheck(event) {
-    this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+  applyExpireCheck() {
+    this.filteredDataSource.data = this.filterModel.is_expired ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+
+    if (this.filterModel.is_expired)
+      this.filteredDataSource.data = this.filterModel.is_nearly_expired ? [...this.dataSource.data.filter(d => d.is_nearly_expired || d.is_expired)] 
+      : [...this.filteredDataSource.data];
+    else
+      this.filteredDataSource.data = this.filterModel.is_nearly_expired ? [...this.dataSource.data.filter(d => d.is_nearly_expired && !d.is_expired)] : [...this.dataSource.data];
+    
     this._prepareData();
     this.paginatorAgain();
   }

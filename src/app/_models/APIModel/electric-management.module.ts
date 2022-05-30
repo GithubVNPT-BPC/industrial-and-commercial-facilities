@@ -176,7 +176,7 @@ export class ManageAproveElectronic {
     id_group?: number;
     dien_thoai?: string;
     is_expired: boolean;
-
+    is_nearly_expired: boolean;
     thoi_gian_chinh_sua_cuoi: Date;
 }
 

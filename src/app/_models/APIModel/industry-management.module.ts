@@ -47,6 +47,7 @@ export class FoodIndustryModel {
     ten_thuc_pham: string;
     don_vi: string;
     is_expired: boolean;
+    is_nearly_expired: boolean;
 
     thoi_gian_chinh_sua_cuoi: Date
 }
@@ -72,6 +73,7 @@ export class LPGManagementModel {
     ngay_cap: string;
     ngay_het_han: string;
     is_expired: boolean;
+    is_nearly_expired: boolean;
 
     thoi_gian_chinh_sua_cuoi: Date
 }
@@ -96,6 +98,7 @@ export class ChemicalManagementModel {
     cong_suat: string;
     san_luong: string;
     is_expired: boolean;
+    is_nearly_expired: boolean;
     id_loai_hinh: number;
     ten_loai_hinh: string;
 

@@ -53,6 +53,8 @@ export class ChemicalManagementComponent extends BaseComponent {
     filteredDataSource: MatTableDataSource<ChemicalManagementModel> = new MatTableDataSource<ChemicalManagementModel>();
 
     isChecked: boolean;
+    isExpired: boolean;
+    isNearlyExpired: boolean;
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
 
@@ -79,6 +81,8 @@ export class ChemicalManagementComponent extends BaseComponent {
         this.getChemicalManagementData(0);
         this.displayedColumns = this.reducedFieldList;
         this.fullFieldList = this.fullFieldList.concat(Object.keys(this.displayedFields));
+        this.isExpired = false
+        this.isNearlyExpired = false
 
         if (this._login.userValue.user_role_id == 5  || this._login.userValue.user_role_id == 1) {
             this.authorize = false
@@ -261,11 +265,13 @@ export class ChemicalManagementComponent extends BaseComponent {
                     c.cong_suat = matchingList.length ? matchingList.map(x => x.cong_suat ? parseInt(x.cong_suat) : 0).reduce((a, b) => a + b) : 0;
                     c.chemistryQtyIds = matchingList.map(element => new Object({ id: element.id }));
                 });
-
+                let date = new Date()
+                date.setMonth(date.getMonth() + 2)
                 chemicalManagementData.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
                     element.ngay_het_han = this.formatDate(element.ngay_het_han);
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
+                    element.is_nearly_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < date : false;
                 });
 
                 this.dataSource = new MatTableDataSource<ChemicalManagementModel>(chemicalManagementData);
@@ -290,7 +296,14 @@ export class ChemicalManagementComponent extends BaseComponent {
     }
 
     applyExpireCheck(event) {
-        this.filteredDataSource.data = event.checked ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+        this.filteredDataSource.data = this.isExpired ? [...this.dataSource.data.filter(d => d.is_expired)] : [...this.dataSource.data];
+
+        if (this.isExpired)
+          this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_nearly_expired || d.is_expired)] 
+          : [...this.filteredDataSource.data];
+        else
+          this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_nearly_expired && !d.is_expired)] : [...this.dataSource.data];
+      
         this._prepareData();
     }
 
@@ -316,6 +329,8 @@ export class ChemicalManagementComponent extends BaseComponent {
             if (response.id != -1) {
                 self.industryManagementService.DeleteChemistry(chemistryIds).subscribe(response => self.successNotify(response), error => self.errorNotify(error));
             }
+            this.isExpired = false
+            this.isNearlyExpired = false
         }, error => this.errorNotify(error));
     }
 

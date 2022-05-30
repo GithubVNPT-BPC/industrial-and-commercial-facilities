@@ -10,6 +10,7 @@ import { CommerceManagementService } from 'src/app/_services/APIService/commerce
 import { EnterpriseService } from 'src/app/_services/APIService/enterprise.service';
 import { FilterService } from 'src/app/_services/filter.service';
 import { LoginService } from 'src/app/_services/APIService/login.service';
+import { throwToolbarMixedModesError } from '@angular/material';
 
 @Component({
   selector: 'app-countryside',
@@ -137,6 +138,11 @@ export class CountrysideComponent extends BaseComponent {
       },
       error => this.errorMessage = <any>error
     );
+    this.filterModel = {
+      id_quan_huyen: [],
+      nam_dat_TC_7: [],
+      nam_dat_NTM: []
+    };
   }
 
   _prepareData() {

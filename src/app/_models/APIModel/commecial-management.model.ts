@@ -96,6 +96,7 @@ export class ConvenienceStoreModel {
     ten_san_pham: string;
     id_quan_huyen: number;
     is_expired: boolean;
+    is_nearly_expired: boolean;
     thoi_gian_chinh_sua_cuoi: Date;
     kinh_do: string;
     vi_do: string;
@@ -119,6 +120,7 @@ export class FoodCommerceModel {
     nguoi_dai_dien: string;
     id_quan_huyen: number;
     is_het_han: boolean;
+    is_gan_het_han: boolean;
     ngay_het_han: string;
     thoi_gian_chinh_sua_cuoi: Date
 }

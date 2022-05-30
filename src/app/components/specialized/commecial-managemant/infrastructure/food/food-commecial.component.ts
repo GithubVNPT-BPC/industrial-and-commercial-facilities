@@ -32,6 +32,8 @@ export class FoodManagementComponent extends BaseComponent {
     id_spkd: [],
     id_quan_huyen: [],
   };
+  isExpired: boolean = false;
+  isNearlyExpired: boolean = false;
 
   businessProducts = [];
 
@@ -100,9 +102,10 @@ export class FoodManagementComponent extends BaseComponent {
             element.ngay_cap = element.ngay_cap ? this.formatDate(element.ngay_cap) : '';
             element.ngay_het_han = element.ngay_het_han ? this.formatDate(element.ngay_het_han) : '';
             element.is_het_han = element.ngay_het_han ? element.ngay_het_han.toDate() < Date.parse(this.getCurrentDate()) : false;
+            element.is_gan_het_han = element.ngay_het_han ? element.ngay_het_han.toDate().setMonth(element.ngay_het_han.toDate().getMonth() - 2) < Date.parse(this.getCurrentDate()) : false;
           });
           this.dataSource = new MatTableDataSource<FoodCommerceModel>(allrecords.data);
-          this.filteredDataSource.data = [...this.dataSource.data].filter(x => !x.is_het_han)
+          this.filteredDataSource.data = [...this.dataSource.data]
         }
         this._prepareData();
         this.paginatorAgain();
@@ -193,8 +196,14 @@ export class FoodManagementComponent extends BaseComponent {
     this.tongDoanhNghiep = this.dataSource.data.length;
   }
 
-  applyExpireCheck(event) {
-    this.filteredDataSource.data = this.dataSource.data.filter(x => x.is_het_han == event.checked)
+  applyExpireCheck() {
+    this.filteredDataSource.data = this.isExpired ? [...this.dataSource.data.filter(d => d.is_het_han)] : [...this.dataSource.data];
+
+    if (this.isExpired)
+      this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_gan_het_han || d.is_het_han)] 
+      : [...this.filteredDataSource.data];
+    else
+      this.filteredDataSource.data = this.isNearlyExpired ? [...this.dataSource.data.filter(d => d.is_gan_het_han && !d.is_het_han)] : [...this.dataSource.data];
   }
 
   addLicenseInfo(event) {
