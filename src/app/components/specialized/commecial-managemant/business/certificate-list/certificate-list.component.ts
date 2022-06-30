@@ -216,7 +216,7 @@ export class CertificateListComponent implements OnInit {
       this.certificate.forEach(element => {
         if (element.ngay_het_han) {
           element.is_het_han = element.ngay_het_han < this.getCurrentDate()
-          element.is_gan_het_han = element.ngay_het_han < this.getDate2Months()
+          element.is_gan_het_han = element.ngay_het_han < this.getDate3Months()
         }
         else {
           element.is_het_han = false
@@ -280,9 +280,9 @@ export class CertificateListComponent implements OnInit {
     return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 
-  public getDate2Months(){
+  public getDate3Months(){
       let date = new Date;
-      date.setMonth(date.getMonth() + 2)
+      date.setMonth(date.getMonth() + 3)
       return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 

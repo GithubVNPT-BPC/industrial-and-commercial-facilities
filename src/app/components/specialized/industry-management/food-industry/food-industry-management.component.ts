@@ -102,7 +102,7 @@ export class FoodIndustryManagementComponent extends BaseComponent {
                 this.dataSource = new MatTableDataSource<FoodIndustryModel>(result.data);
 
                 let date = new Date()
-                date.setMonth(date.getMonth() + 2)
+                date.setMonth(date.getMonth() + 3)
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;
                     element.is_nearly_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < date : false;

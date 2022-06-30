@@ -154,7 +154,7 @@ export class LPGManagementComponent extends BaseComponent {
                 });
 
                 let date = new Date()
-                date.setMonth(date.getMonth() + 2)
+                date.setMonth(date.getMonth() + 3)
                 this.dataSource = new MatTableDataSource<LPGManagementModel>(result.data);
                 this.dataSource.data.forEach(element => {
                     element.is_expired = element.ngay_het_han ? new Date(element.ngay_het_han) < new Date() : false;

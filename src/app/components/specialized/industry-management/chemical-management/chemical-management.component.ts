@@ -266,7 +266,7 @@ export class ChemicalManagementComponent extends BaseComponent {
                     c.chemistryQtyIds = matchingList.map(element => new Object({ id: element.id }));
                 });
                 let date = new Date()
-                date.setMonth(date.getMonth() + 2)
+                date.setMonth(date.getMonth() + 3)
                 chemicalManagementData.forEach(element => {
                     element.ngay_cap = this.formatDate(element.ngay_cap);
                     element.ngay_het_han = this.formatDate(element.ngay_het_han);

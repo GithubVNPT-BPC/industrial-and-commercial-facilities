@@ -141,7 +141,7 @@ export class StoreManagementComponent extends BaseComponent {
           data.map(x => {
             let expiredDate = moment(x.ngay_het_han_giay_phep, "DD/MM/YYYY");
             x.is_expired = currentDate.isAfter(expiredDate, 'day');
-            x.is_nearly_expired = currentDate.isAfter(expiredDate.add(-2, 'M'), 'day')
+            x.is_nearly_expired = currentDate.isAfter(expiredDate.add(-3, 'M'), 'day')
           });
           this.dataSource = new MatTableDataSource<ConvenienceStoreModel>(data);
           this.filteredDataSource.data = [...this.dataSource.data];

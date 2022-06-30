@@ -236,7 +236,7 @@ export class LPGBusinessComponent implements OnInit {
             LPGList2.forEach(element => {
                 if (element.ngay_het_han) {
                     element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : 
-                    (element.ngay_het_han < this.getDate2Months()? "Doanh nghiệp sắp hết hạn" : "Doanh nghiệp còn hạn")
+                    (element.ngay_het_han < this.getDate3Months()? "Doanh nghiệp sắp hết hạn" : "Doanh nghiệp còn hạn")
                 }
                 else {
                     element.is_expired = "Doanh nghiệp còn hạn"
@@ -280,9 +280,9 @@ export class LPGBusinessComponent implements OnInit {
         return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
-    public getDate2Months(){
+    public getDate3Months(){
         let date = new Date;
-        date.setMonth(date.getMonth() + 2)
+        date.setMonth(date.getMonth() + 3)
         return formatDate(date, 'yyyyMMdd', 'en-US');
     }
 
