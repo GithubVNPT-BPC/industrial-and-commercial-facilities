@@ -75,7 +75,7 @@ export class ConsultantElectricComponent extends BaseComponent {
       if (result.data && result.data.length > 0) {
         let data = result.data.filter(item => item.id_group == 1);
         let date = new Date()
-        date.setMonth(new Date().getMonth() + 2)
+        date.setMonth(new Date().getMonth() + 3)
         data.forEach(element => {
           element.ngay_cap = this.formatDate(element.ngay_cap);
           element.ngay_het_han = this.formatDate(element.ngay_het_han);
