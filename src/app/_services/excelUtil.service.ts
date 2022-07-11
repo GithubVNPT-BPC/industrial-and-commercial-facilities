@@ -39,7 +39,7 @@ export class ExcelService {
         // Get data from DOM and ignore data from source
         if (!DOMtable || DOMtable === undefined) throw new Error("Không có dữ liệu trên bảng");
         let table = this.formatNumberInDOM(DOMtable);
-        let datas = XLSX.utils.table_to_sheet(table);
+        let datas = XLSX.utils.table_to_sheet(table,{raw: true});
         this.setDOMtable(DOMtable);
 
         if (!datas || datas.length == 0) throw new Error("Lỗi khi truy xuất thông tin trên bảng");
@@ -121,7 +121,7 @@ export class ExcelService {
         }
     }
 
-    private saveAsExcelFile(workbook: any, filename: string): void {
+    private saveAsExcelFile(workbook: Workbook, filename: string): void {
         if (!filename.includes(EXCEL_EXTENSION)) {
             filename = filename + EXCEL_EXTENSION
         }
