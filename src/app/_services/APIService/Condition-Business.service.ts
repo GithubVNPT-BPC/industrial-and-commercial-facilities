@@ -71,10 +71,11 @@ export class ConditionBusinessService {
   }
 
   //SendEmail
-  public SendEmail() {
+  public SendEmail(cond : number) {
     var apiUrl = this.apiHome + this.urlSendEmail;
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
+    let params = new HttpParams().set('cond', cond.toString());
+    return this.http.get<any>(apiUrl, { headers: headers, params: params  }).pipe(tap(data => data),
       catchError(this.handleError)
     );
   }

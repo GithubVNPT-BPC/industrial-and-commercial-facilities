@@ -465,7 +465,7 @@ export class RetailMonthNewComponent implements OnInit {
       })
   }
 
-  DataSynthesize() {
+  dataSynthesize() {
     this.duLieuKyBaoCao.forEach(row => {
       if (this.duLieuKyTruoc.length != 0) {
         let rowToCopy = this.duLieuKyTruoc.filter(x => x.id_chi_tieu == row.id_chi_tieu)[0];
@@ -498,22 +498,26 @@ export class RetailMonthNewComponent implements OnInit {
         row.ke_hoach_nam = rowToCopy.ke_hoach_nam_sau;
       }
 
-      row.so_sanh_ky_truoc = this.CalculateDivision(row.thuc_hien_thang, row.thuc_hien_ky_truoc);
-      row.so_sanh_cung_ky = this.CalculateDivision(row.thuc_hien_thang, row.thuc_hien_cung_ky);
-      row.so_sanh_luy_ke_cung_ky = this.CalculateDivision(row.luy_ke_thang, row.luy_ke_cung_ky);
-      row.so_sanh_luy_ke_ke_hoach_nam = this.CalculateDivision(row.luy_ke_thang, row.ke_hoach_nam);
-      row.so_sanh_uoc_6_thang_cung_ky = this.CalculateDivision(row.uoc_thuc_hien_6_thang, row.thuc_hien_6_thang_dau_nam_cung_ky);
-      row.so_sanh_uoc_6_thang_ke_hoach_nam = this.CalculateDivision(row.uoc_thuc_hien_6_thang, row.ke_hoach_nam);
-      row.so_sanh_uoc_thuc_hien_nam_cung_ky = this.CalculateDivision(row.uoc_thuc_hien_nam, row.thuc_hien_nam_truoc);
-      row.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam = this.CalculateDivision(row.ke_hoach_nam_sau, row.uoc_thuc_hien_nam);
-      row.so_sanh_ke_hoach_nam_sau_thuc_hien_nam = this.CalculateDivision(row.ke_hoach_nam_sau, row.luy_ke_thang);
+      row.so_sanh_ky_truoc = this.calculateDivision(row.thuc_hien_thang, row.thuc_hien_ky_truoc);
+      row.so_sanh_cung_ky = this.calculateDivision(row.thuc_hien_thang, row.thuc_hien_cung_ky);
+      row.so_sanh_luy_ke_cung_ky = this.calculateDivision(row.luy_ke_thang, row.luy_ke_cung_ky);
+      row.so_sanh_luy_ke_ke_hoach_nam = this.calculateDivision(row.luy_ke_thang, row.ke_hoach_nam);
+      row.so_sanh_uoc_6_thang_cung_ky = this.calculateDivision(row.uoc_thuc_hien_6_thang, row.thuc_hien_6_thang_dau_nam_cung_ky);
+      row.so_sanh_uoc_6_thang_ke_hoach_nam = this.calculateDivision(row.uoc_thuc_hien_6_thang, row.ke_hoach_nam);
+      row.so_sanh_uoc_thuc_hien_nam_cung_ky = this.calculateDivision(row.uoc_thuc_hien_nam, row.thuc_hien_nam_truoc);
+      row.so_sanh_ke_hoach_nam_sau_uoc_thuc_hien_nam = this.calculateDivision(row.ke_hoach_nam_sau, row.uoc_thuc_hien_nam);
+      row.so_sanh_ke_hoach_nam_sau_thuc_hien_nam = this.calculateDivision(row.ke_hoach_nam_sau, row.luy_ke_thang);
     });
   }
 
-  CalculateDivision(devidend: number, devisor: number) {
+  calculateDivision(devidend: number, devisor: number) {
     if (!devidend || !devisor || devisor == 0)
       return null;
     else
       return Math.round(devidend / devisor * 100) / 100;
+  }
+
+  isNumber(any){
+    return !isNaN(any)
   }
 }

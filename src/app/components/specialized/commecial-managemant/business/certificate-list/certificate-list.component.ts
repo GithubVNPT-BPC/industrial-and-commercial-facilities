@@ -252,7 +252,15 @@ export class CertificateListComponent implements OnInit {
   }
 
   SendEmail() {
-    this._Service.SendEmail().subscribe(all => {
+    var cond = 1;
+    if (this.isExpired && this.isNearlyExpired)
+      cond = 1
+    if (this.isExpired && !this.isNearlyExpired)
+      cond = 2
+    if (!this.isExpired && this.isNearlyExpired)
+      cond = 3
+      
+    this._Service.SendEmail(cond).subscribe(all => {
       this._info.msgSuccess('Gửi mail thành công')
     })
   }
