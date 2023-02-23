@@ -241,8 +241,8 @@ export class ManagePetrolValueComponent implements OnInit {
 
       petrollist2.forEach(element => {
         if (element.ngay_het_han) {
-          element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" : 
-          (element.ngay_het_han < this.getDate3Months()? "Doanh nghiệp sắp hết hạn" : "Doanh nghiệp còn hạn")
+          element.is_expired = element.ngay_het_han < this.getCurrentDate() ? "Doanh nghiệp hết hạn" :
+            (element.ngay_het_han < this.getDate3Months() ? "Doanh nghiệp sắp hết hạn" : "Doanh nghiệp còn hạn")
         }
         else {
           element.is_expired = "Doanh nghiệp còn hạn"
@@ -289,10 +289,10 @@ export class ManagePetrolValueComponent implements OnInit {
     return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 
-  public getDate3Months(){
-      let date = new Date;
-      date.setMonth(date.getMonth() + 3)
-      return formatDate(date, 'yyyyMMdd', 'en-US');
+  public getDate3Months() {
+    let date = new Date;
+    date.setMonth(date.getMonth() + 3)
+    return formatDate(date, 'yyyyMMdd', 'en-US');
   }
 
   Convertdate(text: string): string {
@@ -301,9 +301,41 @@ export class ManagePetrolValueComponent implements OnInit {
     return date
   }
 
-  public ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.dataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Mã số thuế": record["mst"],
+        "Tên doanh nghiệp": record["ten_doanh_nghiep"],
+        "Tên cửa hàng": record["ten_cua_hang"],
+        "Địa chỉ": record["dia_chi"],
+        "Số điện thoại": record["so_dien_thoai"],
+        "Số GCN": record["so_giay_phep"],
+        "Ngày cấp": record["ngay_cap"],
+        "Ngày hết hạn": record["ngay_het_han"],
+        "Người đại diện theo pháp luật": record["nguoi_dai_dien"],
+        "Cán bộ quản lý": record["ten_quan_ly"],
+        "Nhân viên bán hàng": record["ten_nhan_vien"],
+        "Thương nhân cung cấp": record["ten_thuong_nhan"],
+        "Sản lượng tiêu thụ (m3/năm)": record["san_luong"],
+        "Trạng thái hoạt động": record["tinh_trang_hoat_dong"],
+        "Ghi chú": record["ghi_chu"],
+        "Thời gian cập nhật": record["thoi_gian_chinh_sua_cuoi"]
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
   }
+
+  public ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
+  }
+
+  // public ExportTOExcel(filename: string, sheetname: string) {
+  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  // }
 
   AddSupplyBusiness(id: string, time: string) {
     this.router.navigate(['specialized/commecial-management/domestic/supplybusiness/' + id + '/' + time]);
