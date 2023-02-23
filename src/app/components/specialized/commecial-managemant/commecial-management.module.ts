@@ -77,6 +77,8 @@ import { BorderTradeNewOverviewComponent } from './border-trade-new-overview/bor
 import { RetailMonthNewComponent } from './retail/retail-month-new/retail-month-new.component';
 import { GeneralAddComponent } from './general-add/general-add.component';
 
+import { MatTableExporterModule } from 'mat-table-exporter';
+
 export const customCurrencyMaskConfig = {
   align: "right",
   allowNegative: true,
@@ -103,7 +105,8 @@ export const customCurrencyMaskConfig = {
     PipeModule,
     MatTabsModule,
     NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
-    NgxMatSelectSearchModule
+    NgxMatSelectSearchModule,
+    MatTableExporterModule
   ],
   exports: [
     MatPaginatorModule,

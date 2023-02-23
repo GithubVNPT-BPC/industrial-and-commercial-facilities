@@ -60,9 +60,9 @@ export class ProductManagerComponent implements OnInit {
     public dataSource: MatTableDataSource<ProductValueModel> = new MatTableDataSource<ProductValueModel>();
     public displayedColumns: string[] =
         ['select', 'index', 'ten_san_pham', 'id_san_pham', 'san_luong', 'time_id',
-        // 'tri_gia', 'top_san_xuat', 'them_top_san_xuat'
+            // 'tri_gia', 'top_san_xuat', 'them_top_san_xuat'
         ];
-    
+
     public queryProductIds = [26, 269, 270, 271, 272, 273, 274]
     @ViewChildren(ManagerDirective) inputs: QueryList<ManagerDirective>
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -245,7 +245,7 @@ export class ProductManagerComponent implements OnInit {
     public getProductValueList(time: string) {
         this.marketService.GetProductValue(time).subscribe(
             allrecords => {
-                let temp =  allrecords.data[0].filter(x => this.queryProductIds.includes(x.id_san_pham))
+                let temp = allrecords.data[0].filter(x => this.queryProductIds.includes(x.id_san_pham))
 
                 temp.forEach(element => {
                     element.time_id = this.Convertdate(element.time_id.toString())
@@ -261,7 +261,7 @@ export class ProductManagerComponent implements OnInit {
     public getALLProductValueList() {
         this.marketService.GetAllProductValue().subscribe(
             allrecords => {
-                let displayedRecords =  allrecords.data[0].filter(x => this.queryProductIds.includes(x.id_san_pham))
+                let displayedRecords = allrecords.data[0].filter(x => this.queryProductIds.includes(x.id_san_pham))
                 displayedRecords.forEach(element => {
                     element.time_id = this.Convertdate(element.time_id.toString())
                 });
@@ -332,8 +332,28 @@ export class ProductManagerComponent implements OnInit {
         );
     }
 
+    // public exportTOExcel(filename: string, sheetname: string) {
+    //     this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    // }
+
+    private getExposedTable() {
+        let self = this;
+        let exposedData = [];
+        this.dataSource.data.forEach(function (record, index) {
+            let data = {
+                "STT": index + 1,
+                "Tên sản phẩm": record["ten_san_pham"],
+                "Đơn vị tính": record["don_vi_tinh"],
+                "Sản lượng": record["san_luong"],
+                "Thời gian cập nhật": record["time_id"]
+            };
+            exposedData.push(data);
+        });
+        return exposedData;
+    }
+
     public exportTOExcel(filename: string, sheetname: string) {
-        this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+        this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
     }
 
     public productvalue: Array<ProductValueModel> = new Array<ProductValueModel>();

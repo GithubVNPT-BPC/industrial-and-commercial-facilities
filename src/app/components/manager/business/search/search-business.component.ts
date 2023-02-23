@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Injectable } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { MarketService } from 'src/app/_services/APIService/market.service';
 import { ExcelService } from 'src/app/_services/excelUtil.service';
 import { InformationService } from 'src/app/shared/information/information.service';
 import { MatAccordion } from '@angular/material/expansion';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-search-business',
@@ -19,6 +20,7 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['../../manager_layout.scss'],
 })
 
+@Injectable()
 export class SearchBusinessComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild('new_element', { static: false }) ele: ElementRef;
@@ -131,9 +133,49 @@ export class SearchBusinessComponent implements OnInit {
     }
   }
 
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
+  // ExportTOExcel(filename: string, sheetname: string) {
+  //   const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(this.table.nativeElement);
+  //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //   /* save to file */
+  //   XLSX.writeFile(wb, 'SheetJS.xlsx');
+
+  //   // this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
+  // }
+
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.dataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Tên doanh nghiệp": record["ten_doanh_nghiep"],
+        "Địa chỉ": record["dia_chi_day_du"],
+        "Mã số thuế": record["mst"],
+        "Email": record["email"],
+        "SĐT": record["so_dien_thoai"],
+        "Ngành nghề": record["ma_nganh_nghe"]+" - "+record["ten_nganh_nghe"]+ " - " + record["nganh_nghe_kd_chinh"],
+        "Tình trạng": record["hoat_dong"] ? "Còn hoạt động" : "Ngừng hoạt động",
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
   }
+
+  public ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
+  }
+
+  // static toExportFileName(excelFileName: string): string {
+  //   return `${excelFileName}_export_${new Date().getTime()}.xlsx`;
+  // }
+
+  // public exportAsExcelFile(excelFileName: string): void {
+  //   const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.dataSource.data);
+  //   const workbook: XLSX.WorkBook = {Sheets: {'data': worksheet}, SheetNames: ['data']};
+  //   XLSX.writeFile(workbook, SearchBusinessComponent.toExportFileName(excelFileName));
+  // }
 
   OpenDetailCompany(mst: string) {
     let url = '/#/manager/business/edit/' + mst;
@@ -199,16 +241,16 @@ export class SearchBusinessComponent implements OnInit {
     }
   }
 
+  Convertdate(text: string): string {
+    return text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4);
+  }
+
   dataSource: MatTableDataSource<CompanyDetailModel> = new MatTableDataSource();
   companyList1: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList2: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
-
-  Convertdate(text: string): string {
-    return text.substring(6, 8) + "/" + text.substring(4, 6) + "/" + text.substring(0, 4);
-  }
 
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(
@@ -307,15 +349,15 @@ export class SearchBusinessComponent implements OnInit {
         this.companyList5.forEach(x => {
           x.ngay_bd_kd = x.ngay_bd_kd ? this.Convertdate(x.ngay_bd_kd) : ''
           x.ten_doanh_nghiep_latin = x.ten_doanh_nghiep ? x.ten_doanh_nghiep.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
-          x.ten_doanh_nghiep_latin = x.ten_doanh_nghiep_latin ? x.ten_doanh_nghiep_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.ten_doanh_nghiep_latin = x.ten_doanh_nghiep_latin ? x.ten_doanh_nghiep_latin.trim().normalize("NFD").replace('đ', 'd').toLowerCase() : ''
           x.nguoi_dai_dien_latin = x.nguoi_dai_dien ? x.nguoi_dai_dien.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
-          x.nguoi_dai_dien_latin = x.nguoi_dai_dien_latin ? x.nguoi_dai_dien_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.nguoi_dai_dien_latin = x.nguoi_dai_dien_latin ? x.nguoi_dai_dien_latin.trim().normalize("NFD").replace('đ', 'd').toLowerCase() : ''
           x.dia_chi_day_du_latin = x.dia_chi_day_du ? x.dia_chi_day_du.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
-          x.dia_chi_day_du_latin = x.dia_chi_day_du_latin ? x.dia_chi_day_du_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.dia_chi_day_du_latin = x.dia_chi_day_du_latin ? x.dia_chi_day_du_latin.trim().normalize("NFD").replace('đ', 'd').toLowerCase() : ''
           x.ten_nganh_nghe_latin = x.ten_nganh_nghe ? x.ten_nganh_nghe.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
-          x.ten_nganh_nghe_latin = x.ten_nganh_nghe_latin ? x.ten_nganh_nghe_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.ten_nganh_nghe_latin = x.ten_nganh_nghe_latin ? x.ten_nganh_nghe_latin.trim().normalize("NFD").replace('đ', 'd').toLowerCase() : ''
           x.nganh_nghe_kd_chinh_latin = x.nganh_nghe_kd_chinh ? x.nganh_nghe_kd_chinh.trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : ''
-          x.nganh_nghe_kd_chinh_latin = x.nganh_nghe_kd_chinh_latin ? x.nganh_nghe_kd_chinh_latin.trim().normalize("NFD").replace('đ','d').toLowerCase() : ''
+          x.nganh_nghe_kd_chinh_latin = x.nganh_nghe_kd_chinh_latin ? x.nganh_nghe_kd_chinh_latin.trim().normalize("NFD").replace('đ', 'd').toLowerCase() : ''
         })
 
         this.dataSource = new MatTableDataSource<CompanyDetailModel>(this.companyList5);

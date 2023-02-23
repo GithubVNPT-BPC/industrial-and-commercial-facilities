@@ -158,9 +158,32 @@ export class IndustryBusinessComponent implements OnInit {
     }
   }
 
-  ExportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.dataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Tên doanh nghiệp": record["ten_doanh_nghiep"],
+        "Địa chỉ": record["dia_chi_day_du"],
+        "Mã số thuế": record["mst"],
+        "Email": record["email"],
+        "SĐT": record["so_dien_thoai"],
+        "Ngành nghề": record["ma_nganh_nghe"]+" - "+record["ten_nganh_nghe"]+ " - " + record["nganh_nghe_kd_chinh"],
+        "Tình trạng": record["hoat_dong"] ? "Còn hoạt động" : "Ngừng hoạt động",
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
   }
+
+  public ExportTOExcel(filename: string, sheetname: string) {
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
+  }
+
+  // ExportTOExcel(filename: string, sheetname: string) {
+  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement)
+  // }
 
   OpenDetailCompany(mst: string) {
     let url = '/#/specialized/commecial-management/domestic/edit/' + mst

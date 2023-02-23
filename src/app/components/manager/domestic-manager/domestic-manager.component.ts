@@ -120,10 +120,10 @@ export class DomesticManagerComponent implements OnInit {
     this.pickedDate = null
 
     this.sanphamfilter.valueChanges
-    .pipe(takeUntil(this._onDestroy))
-    .subscribe(() => {
-      this.filterSanpham();
-    });
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterSanpham();
+      });
   }
 
   public _onDestroy = new Subject<void>();
@@ -142,10 +142,10 @@ export class DomesticManagerComponent implements OnInit {
       //   this.filterproducts.next(this.products.slice());
       // },
       allrecords => {
-        this.products = allrecords.data.filter(x=>x.id_san_pham == 28 || x.id_san_pham == 24 || x.id_san_pham == 25 
-            || x.id_san_pham == 23 || x.id_san_pham == 4) as ProductModel[];
+        this.products = allrecords.data.filter(x => x.id_san_pham == 28 || x.id_san_pham == 24 || x.id_san_pham == 25
+          || x.id_san_pham == 23 || x.id_san_pham == 4) as ProductModel[];
         this.filterproducts.next(this.products.slice());
-    },
+      },
     );
   }
   public sanphamfilter: FormControl = new FormControl();
@@ -269,8 +269,28 @@ export class DomesticManagerComponent implements OnInit {
     );
   }
 
+  // public exportTOExcel(filename: string, sheetname: string) {
+  //   this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+  // }
+
+  private getExposedTable() {
+    let self = this;
+    let exposedData = [];
+    this.dataSource.data.forEach(function (record, index) {
+      let data = {
+        "STT": index + 1,
+        "Tên sản phẩm": record["ten_san_pham"],
+        "Giá cả": record["gia_ca"],
+        "Nguồn số liệu": record["nguon_so_lieu"],
+        "Ngày cập nhật": record["ngay_cap_nhat"]
+      };
+      exposedData.push(data);
+    });
+    return exposedData;
+  }
+
   public exportTOExcel(filename: string, sheetname: string) {
-    this.excelService.exportDomTableAsExcelFile(filename, sheetname, this.table.nativeElement);
+    this.excelService.exportJsonAsExcelFile(filename, sheetname, this.getExposedTable());
   }
 
   public domestic: Array<DomesticPriceModel> = new Array<DomesticPriceModel>();

@@ -330,7 +330,7 @@
                         <tr mat-row class="table-row" *matRowDef="let row; columns: totalColumns;let i = index; ">
                     </table>
                 </div>
-                <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons #paginator></mat-paginator>
+                <mat-paginator [pageSizeOptions]="[100, 1000, 10000]" showFirstLastButtons #paginator></mat-paginator>
                 <ng-template #ShowEmpty>
                     <h3 class="text-center">Không có dữ liệu</h3>
                 </ng-template>
