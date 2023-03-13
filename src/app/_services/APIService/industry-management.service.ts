@@ -198,10 +198,7 @@ export class IndustryManagementService {
 
     public Downloadfile(filesource: string) {
         var apiUrl = environment.apiEndpoint + filesource;
-        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-        return this.http.get<any>(apiUrl, { headers: headers }).pipe(tap(data => data),
-            catchError(this.handleError)
-        );
+        return apiUrl
     }
 
     public PostImageGroupCompany(body: any, id_cnn) {

@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { MatDialog } from '@angular/material';
 import { SAVE } from 'src/app/_enums/save.enum';
 import { ClusterBusinessComponent } from './cluster-business/cluster-business.component';
+import { InformationService } from 'src/app/shared/information/information.service';
 
 @Component({
     selector: 'cluster-management',
@@ -47,6 +48,7 @@ export class ClusterManagementComponent extends BaseComponent {
 
     constructor(
         public indService: IndustryManagementService,
+        public _info: InformationService,
         public router: Router,
         private injector: Injector,
         public _login: LoginService,
@@ -75,12 +77,19 @@ export class ClusterManagementComponent extends BaseComponent {
     imagesSource: string[] = [];
     sanLuongSanXuat: number = 0;
     sanLuongKinhDoanh: number = 0;
+    soccn_thanhlap: number = 0;
+    tongso_dn: number = 0;
 
     getDanhSachQuanLyCumCongNghiep() {
         this.indService.GetDanhSachQuanLyCumCongNghiep().subscribe(result => {
             this.filteredDataSource.data = [];
             if (result.data && result.data.length > 0) {
                 this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
+                let temp = (result.data[0].map(x=>x.chu_dau_tu)).filter(s=>s != null)
+                let temp1 = temp.filter(function(elem, index, self) {
+                    return index === self.indexOf(elem);}).length
+                this.soccn_thanhlap = temp1
+                this.tongso_dn = result.data[2].length    
                 this.filteredDataSource.data = [...this.dataSource.data];
                 this.imagesSource = result.data[1];
             }

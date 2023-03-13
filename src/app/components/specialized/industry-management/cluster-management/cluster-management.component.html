@@ -22,23 +22,48 @@
 
                 <div class="row">
                     <div class="col-4 col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    Tổng số cụm CN được thành lập:
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{soccn_thanhlap}} Cụm CN
+                            </mat-card-content>
+                        </mat-card>
                     </div>
 
                     <div class="col-4 col-lg-4">
                         <mat-card class="card1">
                             <mat-card-header>
                                 <mat-card-title>
-                                    <mat-icon> business</mat-icon> Số lượng doanh nghiệp trên địa bàn:
+                                    Tổng số lượng cụm CN theo quy hoạch:
                                 </mat-card-title>
                                 <mat-card-subtitle>
                                 </mat-card-subtitle>
                             </mat-card-header>
                             <mat-card-content>
-                                {{dataSource.data.length}} doanh nghiệp
+                                {{dataSource.data.length}} Cụm CN
                             </mat-card-content>
                         </mat-card>
                     </div>
+
                     <div class="col-4 col-lg-4">
+                        <mat-card class="card1">
+                            <mat-card-header>
+                                <mat-card-title>
+                                    Tổng số lượng DN nằm trong các cụm CN:
+                                </mat-card-title>
+                                <mat-card-subtitle>
+                                </mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                {{tongso_dn}} doanh nghiệp
+                            </mat-card-content>
+                        </mat-card>
                     </div>
                 </div>
             </mat-expansion-panel>

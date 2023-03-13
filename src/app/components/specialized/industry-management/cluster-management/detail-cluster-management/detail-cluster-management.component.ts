@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { ClusterBusinessComponent } from '../cluster-business/cluster-business.component';
 import { MatDialog } from '@angular/material';
 import { SAVE } from 'src/app/_enums/save.enum';
+import { InformationService } from 'src/app/shared/information/information.service';
 
 @Component({
     selector: 'detail-cluster-management',
@@ -44,7 +45,8 @@ export class DetailClusterManagementComponent implements OnInit {
         public route: ActivatedRoute,
         private indService: IndustryManagementService,
         public router: Router,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        public _info: InformationService,
     ) {
         this.route.params.subscribe(params => {
             this._id = params['id'];
@@ -104,8 +106,13 @@ export class DetailClusterManagementComponent implements OnInit {
     }
 
     public DownloadFile() {
-        this.indService.Downloadfile(this.fileSource).subscribe(res => {
-        });
+        if (this.fileSource != null) {
+            // window.location.href = this.indService.Downloadfile(this.fileSource)
+            window.open(this.indService.Downloadfile(this.fileSource), "_blank");
+        }
+        else {
+            this._info.msgWaring('Chưa upload file cho CCN này')
+        }
     }
 
     public addclusterbusiness() {
@@ -126,5 +133,9 @@ export class DetailClusterManagementComponent implements OnInit {
                 typeOfSave: SAVE.CLUSTER,
             }
         });
+    }
+
+    public Back() {
+        this.router.navigate(['/specialized/industry-management/cluster/']);
     }
 }
