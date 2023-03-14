@@ -70,12 +70,13 @@ export class DetailClusterManagementComponent implements OnInit {
     imageUrl: string[]
     imagesSource: string[]
     fileSource: string
+    ts_doanh_nghiep: any
 
     _getClusterDetail(id_cluster: number) {
         this.indService.GetDetailGroupCompany(id_cluster).subscribe(res => {
             this._clusterDetail = res['data'][0][0];
+            this.ts_doanh_nghiep = res.data[2].length
             this.fileSource = this._clusterDetail.duong_dan;
-
             this.imagesSource = res.data[1];
 
             let temList = [];
@@ -95,13 +96,22 @@ export class DetailClusterManagementComponent implements OnInit {
         let dataTableTemp: ClusterDetailShortModel[] = [];
         dataTableTemp.push(new ClusterDetailShortModel("Tên cụm công nghiệp", this._clusterDetail.ten_cum));
         dataTableTemp.push(new ClusterDetailShortModel("Chủ đầu tư", this._clusterDetail.chu_dau_tu));
-        dataTableTemp.push(new ClusterDetailShortModel("Địa chỉ", this._clusterDetail.dia_chi));
-        dataTableTemp.push(new ClusterDetailShortModel("Cơ sở pháp lý", this._clusterDetail.quyet_dinh_thanh_lap));
-        dataTableTemp.push(new ClusterDetailShortModel("Điều kiện Kinh doanh", this._clusterDetail.dieu_kien_kinh_doanh));
+        dataTableTemp.push(new ClusterDetailShortModel("Đăng ký doanh nghiệp", this._clusterDetail.dieu_kien_kinh_doanh));
+        dataTableTemp.push(new ClusterDetailShortModel("Địa chỉ trụ sở", ""));
+        dataTableTemp.push(new ClusterDetailShortModel("Điện thoại/fax", ""));
+        dataTableTemp.push(new ClusterDetailShortModel("Email", ""));
+        dataTableTemp.push(new ClusterDetailShortModel("Địa chỉ CCN", this._clusterDetail.dia_chi));
+        dataTableTemp.push(new ClusterDetailShortModel("Quyết định Thành lập", this._clusterDetail.quyet_dinh_thanh_lap));
+        dataTableTemp.push(new ClusterDetailShortModel("Chủ trương đầu tư", ""));
+        dataTableTemp.push(new ClusterDetailShortModel("Quy hoạch chi tiết", this._clusterDetail.dien_giai));
+        dataTableTemp.push(new ClusterDetailShortModel("Môi trường", ""));
         dataTableTemp.push(new ClusterDetailShortModel("Vị trí, quy mô", this._clusterDetail.vi_tri_quy_mo));
         dataTableTemp.push(new ClusterDetailShortModel("Tổng mức đầu tư", this._clusterDetail.tong_muc_dau_tu));
         dataTableTemp.push(new ClusterDetailShortModel("Quy mô, diện tích", this._clusterDetail.quy_mo_dien_tich));
-        dataTableTemp.push(new ClusterDetailShortModel("Diễn giải", this._clusterDetail.dien_giai));
+        dataTableTemp.push(new ClusterDetailShortModel("Ngành nghề", ""));
+        dataTableTemp.push(new ClusterDetailShortModel("Tình hình đầu tư/ hoạt động", ""));
+        dataTableTemp.push(new ClusterDetailShortModel("Số doanh nghiệp đang hoạt động trong CCN", this.ts_doanh_nghiep));
+        dataTableTemp.push(new ClusterDetailShortModel("Thời gian hoạt động CCN", ""));
         this.dataSource.data = dataTableTemp;
     }
 

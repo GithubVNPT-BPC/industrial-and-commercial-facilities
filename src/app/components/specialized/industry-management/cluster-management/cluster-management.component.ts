@@ -85,10 +85,10 @@ export class ClusterManagementComponent extends BaseComponent {
             this.filteredDataSource.data = [];
             if (result.data && result.data.length > 0) {
                 this.dataSource = new MatTableDataSource<ClusterModel>(result.data[0]);
-                let temp = (result.data[0].map(x=>x.chu_dau_tu)).filter(s=>s != null)
-                let temp1 = temp.filter(function(elem, index, self) {
-                    return index === self.indexOf(elem);}).length
-                this.soccn_thanhlap = temp1
+                let temp = (result.data[0].map(x=>x.chu_dau_tu)).filter(s=>s != null && s != "")
+                // let temp1 = temp.filter(function(elem, index, self) {
+                //     return index === self.indexOf(elem);}).length
+                this.soccn_thanhlap = temp.length
                 this.tongso_dn = result.data[2].length    
                 this.filteredDataSource.data = [...this.dataSource.data];
                 this.imagesSource = result.data[1];

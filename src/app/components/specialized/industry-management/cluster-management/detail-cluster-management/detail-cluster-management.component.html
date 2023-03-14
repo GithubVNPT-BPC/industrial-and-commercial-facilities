@@ -23,17 +23,17 @@
                 </mat-carousel-slide>
             </mat-carousel>
             <hr>
-            <div class="layout">
+            <div class="layout1">
                 <table mat-table [dataSource]="dataSource" #table class="table-layout" id="small-table">
                     <ng-container matColumnDef="index">
-                        <th mat-header-cell *matHeaderCellDef> STT </th>
+                        <th mat-header-cell *matHeaderCellDef style="width: 50px !important;"> STT </th>
                         <td mat-cell *matCellDef="let element; let i = index;" class="center-cell" class='stt'>{{i+1}}
                         </td>
                     </ng-container>
 
                     <ng-container matColumnDef="chi_tieu">
-                        <th mat-header-cell *matHeaderCellDef class="indicator"> Chỉ tiêu </th>
-                        <td mat-cell *matCellDef="let element" class="indicator">
+                        <th mat-header-cell *matHeaderCellDef class="indicator" style="width: 200px !important;"> Chỉ tiêu </th>
+                        <td mat-cell *matCellDef="let element" class="indicator" style="font-weight: bold;">
                             {{element.chi_tieu}}
                         </td>
                     </ng-container>

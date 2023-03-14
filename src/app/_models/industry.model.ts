@@ -13,6 +13,7 @@ export class ClusterDetailModel{
     quy_mo_dien_tich : string;
     tong_muc_dau_tu : string;
     duong_dan: string;
+    nhu_cau_von: string;    
 }
 
 export class ClusterDetailShortModel{
