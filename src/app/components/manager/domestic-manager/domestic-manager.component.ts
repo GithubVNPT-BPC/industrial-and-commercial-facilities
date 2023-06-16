@@ -276,7 +276,7 @@ export class DomesticManagerComponent implements OnInit {
   private getExposedTable() {
     let self = this;
     let exposedData = [];
-    this.dataSource.data.forEach(function (record, index) {
+    this.dataSource.filteredData.forEach(function (record, index) {
       let data = {
         "STT": index + 1,
         "Tên sản phẩm": record["ten_san_pham"],

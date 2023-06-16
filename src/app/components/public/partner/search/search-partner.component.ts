@@ -24,8 +24,8 @@ export class SearchPartnerComponent implements OnInit {
   @ViewChild('TABLE', { static: false }) table: ElementRef;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep', 
-  // 'mst',
+  public displayedColumns: string[] = ['index', 'ten_doanh_nghiep',
+    // 'mst',
     // 'dia_chi_tong_hop',
     // 'dia_chi_day_du', 'so_dien_thoai', 'email',
     // 'nganh_nghe',
@@ -91,7 +91,7 @@ export class SearchPartnerComponent implements OnInit {
   private getExposedTable() {
     let self = this;
     let exposedData = [];
-    this.dataSource.data.forEach(function (record, index) {
+    this.dataSource.filteredData.forEach(function (record, index) {
       let data = {
         "STT": index + 1,
         "Tên doanh nghiệp": record["ten_doanh_nghiep"],

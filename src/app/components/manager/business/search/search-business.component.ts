@@ -147,7 +147,7 @@ export class SearchBusinessComponent implements OnInit {
   private getExposedTable() {
     let self = this;
     let exposedData = [];
-    this.dataSource.data.forEach(function (record, index) {
+    this.dataSource.filteredData.forEach(function (record, index) {
       let data = {
         "STT": index + 1,
         "Tên doanh nghiệp": record["ten_doanh_nghiep"],
@@ -155,7 +155,7 @@ export class SearchBusinessComponent implements OnInit {
         "Mã số thuế": record["mst"],
         "Email": record["email"],
         "SĐT": record["so_dien_thoai"],
-        "Ngành nghề": record["ma_nganh_nghe"]+" - "+record["ten_nganh_nghe"]+ " - " + record["nganh_nghe_kd_chinh"],
+        "Ngành nghề": record["ma_nganh_nghe"] + " - " + record["ten_nganh_nghe"] + " - " + record["nganh_nghe_kd_chinh"],
         "Tình trạng": record["hoat_dong"] ? "Còn hoạt động" : "Ngừng hoạt động",
       };
       exposedData.push(data);
@@ -251,6 +251,7 @@ export class SearchBusinessComponent implements OnInit {
   companyList3: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList4: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
   companyList5: Array<CompanyDetailModel> = new Array<CompanyDetailModel>();
+  firstdata: number
 
   GetAllCompany() {
     this._marketService.GetAllCompany().subscribe(

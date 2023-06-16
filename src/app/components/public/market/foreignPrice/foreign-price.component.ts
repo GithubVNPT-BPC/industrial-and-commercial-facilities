@@ -58,7 +58,7 @@ export class ForeignMarketPriceComponent extends BaseComponent {
   private getExposedTable() {
     let self = this;
     let exposedData = [];
-    this.filteredDataSource.data.forEach(function (record, index) {
+    this.filteredDataSource.filteredData.forEach(function (record, index) {
       let data = {
         "STT": index + 1,
         "Sản phẩm": record["ten_san_pham"],
