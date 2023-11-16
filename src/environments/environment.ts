@@ -5,7 +5,7 @@
 
 export const environment = {
   production: false,
-  apiEndpoint: 'https://apicongthongtin.vnptbinhphuoc.vn/',
+  apiEndpoint: 'https://milbp_api.vnptbinhphuoc.vn/',
   // apiEndpoint: 'http://10.77.160.66:82/',
   // apiEndpoint: 'http://localhost:54961/',
   // apiEndpoint: 'http://10.77.129.40:8080/',
