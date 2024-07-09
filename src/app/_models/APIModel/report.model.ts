@@ -261,14 +261,35 @@ export class SummaryReportModel {
     so_sanh_luy_ke_voi_ke_hoach_nam: number;
 }
 
-export class AnnualEcommerceReportModel{
-    id : number;
-    ten_chi_tieu : string;
-    ma_so : string;
-    tong_so : number;
-    nha_nuoc : number;
-    ngoai_nha_nuoc : number;
-    von_dau_tu_nuoc_ngoai : number;
-    khu_vuc_khac : number;
-    time_id : number;
+export class AnnualEcommerceReportModel {
+    id: number;
+    ten_chi_tieu: string;
+    ma_so: string;
+    tong_so: number;
+    nha_nuoc: number;
+    ngoai_nha_nuoc: number;
+    von_dau_tu_nuoc_ngoai: number;
+    khu_vuc_khac: number;
+    time_id: number;
+}
+
+export class bcskhdt_thang {
+    idx: string;
+    indicator: string;
+    indicatorname: string;
+    indunit: string;
+    th_nam_truoc: string;
+    kh_nam: string;
+    th_thang_truoc: string;
+    gc_th_thang_truoc: string;
+    th_thang: string;
+    gc_th_thang: string;
+    luy_ke: string;
+    ck_th_thang: string;
+    ck_gc_th_thang: string;
+    ck_luy_ke: string;
+    ss_th_thang_sck: string;
+    ss_th_thang_skh: string;
+    ss_luy_ke_sck: string;
+    ss_luy_ke_skh: string;
 }

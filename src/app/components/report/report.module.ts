@@ -1,6 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localevi from '@angular/common/locales/vi';
+registerLocaleData(localevi, 'vi');
 
 import {FillReportComponent} from '../report/fill-report/fill-detail/fill-detail.component';
 import {FillSelectReportComponent} from '../report/fill-report/fill-select-report/fill-select-report.component';
@@ -17,6 +20,7 @@ import { SummaryReportComponent } from './summary-report/summary-report.componen
 import { LrisIntegrationComponent } from './lris-integration/lris-integration.component';
 import { StandardReportComponent } from './standard-report/standard-report.component';
 import { AnnualEcommerceReportComponent } from './annual-ecommerce-report/annual-ecommer-report.component';
+import { LrisIntegrationSkhdtComponent } from './lris-integration-skhdt/lris-integration-skhdt.component';
 
 export const customCurrencyMaskConfig = {
   align: "right",
@@ -51,7 +55,8 @@ export const customCurrencyMaskConfig = {
     SummaryReportComponent,
     LrisIntegrationComponent,
     StandardReportComponent,
-    AnnualEcommerceReportComponent
+    AnnualEcommerceReportComponent,
+    LrisIntegrationSkhdtComponent
   ],
   providers: [  ],
   entryComponents: [  ],

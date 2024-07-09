@@ -9,6 +9,7 @@ import { SummaryReportComponent } from '../report/summary-report/summary-report.
 import { LrisIntegrationComponent } from '../report/lris-integration/lris-integration.component';
 import { StandardReportComponent } from './standard-report/standard-report.component';
 import { AnnualEcommerceReportComponent } from './annual-ecommerce-report/annual-ecommer-report.component';
+import { LrisIntegrationSkhdtComponent } from './lris-integration-skhdt/lris-integration-skhdt.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,13 @@ const routes: Routes = [
       component: LrisIntegrationComponent,
       data: {
         title: 'Báo cáo Kinh tế - Xã hội'
+      }
+    },
+    {
+      path: 'lris-skhdt',
+      component: LrisIntegrationSkhdtComponent,
+      data: {
+        title: 'Báo cáo KTXH - Sở Kế hoạch và Đầu Tư'
       }
     },
     {

@@ -1,0 +1,225 @@
+<mat-card class="material">
+    <mat-card-content>
+        <mat-accordion class="accord" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon> show_chart</mat-icon>
+                        &nbsp;
+                        <strong>DỮ LIỆU TỔNG HỢP</strong>
+                    </mat-panel-title>
+                    <mat-panel-description> </mat-panel-description>
+                </mat-expansion-panel-header>
+
+                <div class="row">
+                    <!-- <div class="col-12 col-md-12 col-lg-12">
+                        <mat-form-field appearance="outline" style="width: 100%;">
+                            <mat-label>Báo cáo</mat-label>
+                            <mat-select (selectionChange)="getData()" [(ngModel)]="selectedReport">
+                                <mat-option *ngFor="let item of reportList" [value]="item.id">
+                                    {{ item.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div> -->
+
+                    <div class="col-12 col-md-3 col-lg-3">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Kỳ dữ liệu</mat-label>
+                            <input matInput [matDatepicker]="dp" [formControl]="date" readonly>
+                            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+                            <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                                (monthSelected)="chosenMonthHandler($event, dp)" panelClass="example-month-picker">
+                            </mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-md-12 col-lg-12 button-control my-auto">
+                        <!-- <button mat-raised-button (click)="getDataFromLris()" class="blue" matTooltip="Gửi dữ liệu">
+                            <mat-icon>cloud_download</mat-icon> Lấy dữ liệu từ KTXH
+                        </button>
+                        <button mat-raised-button (click)="getDataFromSystem()" class="blue" matTooltip="Gửi dữ liệu">
+                            <mat-icon>sync</mat-icon> Lấy dữ liệu từ hệ thống
+                        </button>
+                        <button mat-raised-button (click)="sendData()" class="green" matTooltip="Gửi dữ liệu">
+                            <mat-icon>send</mat-icon> Gửi dữ liệu
+                        </button> -->
+
+                        <button mat-raised-button (click)="getDataFromSystem()" class="blue"
+                            matTooltip="Đồng bộ dữ liệu">
+                            <mat-icon>sync</mat-icon> Đồng bộ dữ liệu
+                        </button>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <h5>{{ getReportName() }}</h5>
+                    </div>
+                </div>
+
+                <div class="layout" *ngIf="dataSource.data.length; else ShowEmpty" #TABLE>
+                    <table class="business-table-layout" mat-table [dataSource]="dataSource" matSort matSortDisableClear
+                        matSortDirection="asc">
+
+                        <!-- <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef> STT </th>
+                            <td mat-cell *matCellDef="let element; let i = index;" class="center-cell">
+                                {{i + 1 + (paginator.pageIndex * paginator.pageSize)}}</td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="idx">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thứ tự </th>
+                            <td mat-cell *matCellDef="let element"> {{element.idx}} </td>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="indicator">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Mã chỉ tiêu </th>
+                            <td mat-cell *matCellDef="let element"> {{element.indicator}} </td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="indicatorname">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 20%;"> Tên chỉ tiêu
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.indicatorname}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="indunit">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Đơn vị tính </th>
+                            <td mat-cell *matCellDef="let element"> {{element.indunit}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="th_nam_truoc">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thực hiện năm trước </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.th_nam_truoc |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="kh_nam">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Kế hoạch năm </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: burlywood;">
+                                {{element.kh_nam | number:
+                                '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="th_thang_truoc">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thực hiện tháng trước </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.th_thang_truoc |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gc_th_thang_truoc">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi chú thực hiện tháng trước </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.gc_th_thang_truoc
+                                | number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="th_thang">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thực hiện tháng </th>
+                            <td mat-cell *matCellDef="let element"> {{element.th_thang | number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="gc_th_thang">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi chú thực hiện tháng </th>
+                            <td mat-cell *matCellDef="let element"> {{element.gc_th_thang | number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="luy_ke">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Lũy kế </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.luy_ke | number:
+                                '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ck_th_thang">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thực hiện tháng </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ck_th_thang |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ck_gc_th_thang">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ghi chú thực hiện tháng </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ck_gc_th_thang |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ck_luy_ke">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Luỹ kế </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ck_luy_ke |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ss_th_thang_sck">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thực hiện tháng so cùng kỳ </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ss_th_thang_sck |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ss_th_thang_skh">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Thực hiện so với kế hoạch </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ss_th_thang_skh |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ss_luy_ke_sck">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Luỹ kế so với cùng kỳ </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ss_luy_ke_sck |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ss_luy_ke_skh">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Luỹ kế so với kế hoạch </th>
+                            <td mat-cell *matCellDef="let element" style="background-color: rgb(255, 240, 225);">
+                                {{element.ss_luy_ke_skh |
+                                number: '1.0-4':'vi'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="thong_tin_chung">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="4"></th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="ky_bc">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="6">Kỳ báo
+                                cáo</th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="cung_ky">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="3">Cùng kỳ
+                            </th>
+                        </ng-container>
+
+                        <ng-container matColumnDef="so_sanh">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.colspan]="4">So sánh
+                            </th>
+                        </ng-container>
+
+                        <tr mat-header-row class="table-header"
+                            *matHeaderRowDef="['thong_tin_chung', 'ky_bc', 'cung_ky', 'so_sanh']; sticky: true">
+                        </tr>
+
+                        <tr mat-header-row class="table-header" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                        <tr mat-row class="table-row" *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <mat-paginator [pageSizeOptions]="[100, 500, 1000]" showFirstLastButtons></mat-paginator>
+                <ng-template #ShowEmpty>
+                    <h3 class="text-center">Không có dữ liệu</h3>
+                </ng-template>
+
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>
