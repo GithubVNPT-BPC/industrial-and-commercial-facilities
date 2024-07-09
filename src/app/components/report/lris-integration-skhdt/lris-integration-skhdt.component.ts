@@ -91,7 +91,7 @@ export class LrisIntegrationSkhdtComponent implements OnInit {
   selectedReport = 0;
   reportList = [{
     id: 0,
-    name: 'Báo cáo các chỉ tiêu kinh tế xã hội SKHDT | Thực hiện Tháng'
+    name: 'Báo cáo các chỉ tiêu Kinh tế Xã hội SKHDT | Thực hiện Tháng'
   }]
 
   constructor(
@@ -172,7 +172,6 @@ export class LrisIntegrationSkhdtComponent implements OnInit {
             }
             bcdata.push(object)
           });
-          console.log(bcdata)
           this.dataSource = new MatTableDataSource<bcskhdt_thang>(bcdata);
           this.dataSource.sort = this.sort;
           this.dataSource.paginator = this.paginator;
@@ -220,6 +219,7 @@ export class LrisIntegrationSkhdtComponent implements OnInit {
     this.exportRecord = { ...this.getDefaultValues() };
     this.getCurrentMonthData();
     // this.getPlanningData();
+    this.getThucHienThang(this.timechange);
   }
 
   getImportData(time_id: number) {
@@ -231,6 +231,12 @@ export class LrisIntegrationSkhdtComponent implements OnInit {
   getExportData(time_id: number) {
     this.sctService.GetDanhSachXuatKhau(time_id).subscribe((result) => {
       this.exportRecord['thuc_hien_thang'] = result.data[0] && result.data[0].length ? result.data[0][0].tri_gia_thang || 0 : 0;
+    });
+  }
+
+  getThucHienThang(time_id: number){
+    this.sctService.GetMonthlyReportSKHDT(time_id).subscribe((result) => {
+      console.log(result);
     });
   }
 

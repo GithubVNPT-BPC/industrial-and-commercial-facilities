@@ -71,7 +71,8 @@ export class SCTService {
     // end api quan huyen
 
     private urlUpdateRecord = environment.apiEndpoint + 'api/update-record';
-    private urlLrisApi = environment.apiEndpoint + "api/bao-cao/lris";;
+    private urlLrisApi = environment.apiEndpoint + "api/bao-cao/lris";
+    public urlMonthlyReportSKHDT = environment.apiEndpoint + "api/bao-cao/thuc-hien-thang-skhdt";
 
     token: any;
     username: any;
@@ -518,6 +519,15 @@ export class SCTService {
             "body" : payload
         }
         return this.http.post<any>(this.urlLrisApi, requestData, { headers: headers }).pipe(tap(data => data),
+            catchError(this.handleError)
+        );
+    }
+
+    public GetMonthlyReportSKHDT(time_id) {
+        var apiUrl = this.urlMonthlyReportSKHDT;
+        let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+        let params = new HttpParams().set('time_id', time_id);
+        return this.http.get<any>(apiUrl, { headers: headers, params: params }).pipe(tap(data => data),
             catchError(this.handleError)
         );
     }
